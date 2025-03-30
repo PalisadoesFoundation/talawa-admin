@@ -50,7 +50,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             posts: {
               edges: [
@@ -155,7 +155,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'orgId',
             advertisements: {

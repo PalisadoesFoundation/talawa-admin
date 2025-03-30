@@ -456,7 +456,7 @@ describe('Testing Advertisement Entry Component', () => {
         },
         result: {
           data: {
-            organization: [
+            organizations: [
               {
                 _id: '1',
                 advertisements: {

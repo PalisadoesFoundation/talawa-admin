@@ -21,7 +21,6 @@ import type { ApolloLink } from '@apollo/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { vi } from 'vitest';
-import dayjs from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -40,9 +39,9 @@ const translations = JSON.parse(
 
 const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
-      <Provider store={store}>
-        <MemoryRouter initialEntries={['/orgfunds/orgId']}>
+    <MockedProvider addTypename={false} link={link}>
+      <MemoryRouter initialEntries={['/orgfunds/orgId']}>
+        <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
@@ -51,20 +50,18 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
                   element={<OrganizationFunds />}
                 />
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
-                  element={
-                    <div data-testid="campaignScreen">Campaign Screen</div>
-                  }
+                  path="/orgfundcampaign/orgId/fundId"
+                  element={<div data-testid="campaignScreen"></div>}
                 />
                 <Route
                   path="/"
-                  element={<div data-testid="paramsError">Error Page</div>}
+                  element={<div data-testid="paramsError"></div>}
                 />
               </Routes>
             </I18nextProvider>
           </LocalizationProvider>
-        </MemoryRouter>
-      </Provider>
+        </Provider>
+      </MemoryRouter>
     </MockedProvider>,
   );
 };
@@ -124,23 +121,17 @@ describe('OrganizationFunds Screen =>', () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-    });
-
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
     await userEvent.click(createFundBtn);
 
-    await waitFor(() => {
-      const modalTitle = screen.getByTestId('modalTitle');
-      expect(modalTitle).toHaveTextContent(translations.fundCreate);
-    });
-
+    await waitFor(() =>
+      expect(screen.getAllByText(translations.fundCreate)).toHaveLength(3),
+    );
     await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
-    await waitFor(() => {
-      expect(screen.queryByTestId('fundModalCloseBtn')).not.toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
+    );
   });
 
   it('open and close update fund modal', async () => {
@@ -169,27 +160,16 @@ describe('OrganizationFunds Screen =>', () => {
   it('Search the Funds list by name', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    const searchField = await screen.findByTestId('searchByName');
+    fireEvent.change(searchField, {
+      target: { value: '2' },
     });
 
-    // Get the search field and type into it
-    const searchField = await screen.findByTestId('searchByName');
-    await userEvent.clear(searchField);
-    await userEvent.type(searchField, '2');
-    await userEvent.click(screen.getByTestId('searchBtn'));
-
-    // Wait and verify search results
-    await waitFor(
-      () => {
-        const fund1Elements = screen.queryAllByText('Fund 1');
-        const fund2Elements = screen.queryAllByText('Fund 2');
-        expect(fund1Elements.length).toBe(0);
-        expect(fund2Elements.length).toBe(1);
-      },
-      { timeout: 3000 },
-    );
+    fireEvent.click(screen.getByTestId('searchBtn'));
+    await waitFor(() => {
+      expect(screen.getByText('Fund 2')).toBeInTheDocument();
+      expect(screen.queryByText('Fund 1')).toBeNull();
+    });
   });
 
   it('should render the Fund screen with error', async () => {
@@ -212,17 +192,43 @@ describe('OrganizationFunds Screen =>', () => {
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
+    const sortBtn = await screen.findByTestId('filter');
+    expect(sortBtn).toBeInTheDocument();
+
+    fireEvent.click(sortBtn);
+    fireEvent.click(screen.getByTestId('createdAt_DESC'));
+
     await waitFor(() => {
-      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      expect(screen.getByText('Fund 1')).toBeInTheDocument();
+      expect(screen.queryByText('Fund 2')).toBeInTheDocument();
     });
 
-    await userEvent.click(await screen.findByTestId('filter'));
-    await userEvent.click(screen.getByTestId('createdAt_DESC'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('createdOn')[0]).toHaveTextContent(
+        '22/06/2024',
+      );
+    });
+  });
+
+  it('Sort the Pledges list by Earliest created Date', async () => {
+    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
+
+    const sortBtn = await screen.findByTestId('filter');
+    expect(sortBtn).toBeInTheDocument();
+
+    fireEvent.click(sortBtn);
+    fireEvent.click(screen.getByTestId('createdAt_ASC'));
 
     await waitFor(() => {
-      const rows = screen.getAllByTestId('fundName');
-      expect(rows[0]).toHaveTextContent('Fund 1');
-      expect(rows[1]).toHaveTextContent('Fund 2');
+      expect(screen.getByText('Fund 1')).toBeInTheDocument();
+      expect(screen.queryByText('Fund 2')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('createdOn')[0]).toHaveTextContent(
+        '21/06/2024',
+      );
     });
   });
 

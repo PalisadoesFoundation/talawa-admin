@@ -83,7 +83,7 @@ const NULL_RESPONSE_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: null,
@@ -105,7 +105,7 @@ const INFINITE_SCROLL_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             name: 'Test Organization',
@@ -127,7 +127,7 @@ const INFINITE_SCROLL_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: Array(8)
@@ -159,7 +159,7 @@ const INFINITE_SCROLL_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: Array(4)
@@ -692,7 +692,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organization: [
+            organizations: [
               {
                 _id: 'org1',
                 name: 'Test Organization',
@@ -713,7 +713,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organization: [
+            organizations: [
               {
                 _id: '',
                 membershipRequests: Array(8).fill({
@@ -742,7 +742,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organization: [
+            organizations: [
               {
                 _id: '',
                 membershipRequests: null,
@@ -853,7 +853,7 @@ describe('Testing Requests screen', () => {
         },
         result: {
           data: {
-            organization: [
+            organizations: [
               {
                 _id: '',
                 membershipRequests: [],

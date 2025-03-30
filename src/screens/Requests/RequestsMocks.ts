@@ -7,7 +7,7 @@ export const EMPTY_REQUEST_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             image: null,
@@ -54,7 +54,7 @@ export const EMPTY_REQUEST_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             membershipRequests: [],
@@ -72,7 +72,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             image: null,
@@ -119,7 +119,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: [
@@ -156,7 +156,7 @@ export const MOCKS4 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             image: null,
@@ -203,7 +203,7 @@ export const MOCKS4 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: [
@@ -297,7 +297,7 @@ export const MOCKS4 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: '',
             membershipRequests: [
@@ -388,7 +388,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             image: null,
@@ -435,7 +435,7 @@ export const MOCKS2 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             membershipRequests: [
@@ -463,7 +463,7 @@ export const MOCKS3 = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             image: null,
@@ -510,7 +510,7 @@ export const MOCKS3 = [
     },
     result: {
       data: {
-        organization: [],
+        organizations: [],
       },
     },
   },
@@ -529,7 +529,7 @@ export const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org1',
             membershipRequests: [],
@@ -544,7 +544,7 @@ export const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        organization: [],
+        organizations: [],
       },
     },
   },

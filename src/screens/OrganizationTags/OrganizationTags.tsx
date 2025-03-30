@@ -102,16 +102,16 @@ function OrganizationTags(): JSX.Element {
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          orgUserTagsData?.organization[0]?.userTags?.pageInfo?.endCursor ??
+          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
           null,
       },
       updateQuery: (
-        prevResult: { organization: InterfaceQueryOrganizationUserTags[] },
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult?: {
-            organization: InterfaceQueryOrganizationUserTags[];
+            organizations: InterfaceQueryOrganizationUserTags[];
           };
         },
       ) => {
@@ -120,16 +120,16 @@ function OrganizationTags(): JSX.Element {
         }
 
         return {
-          organization: [
+          organizations: [
             {
-              ...prevResult.organization[0],
+              ...prevResult.organizations[0],
               userTags: {
-                ...prevResult.organization[0].userTags,
+                ...prevResult.organizations[0].userTags,
                 edges: [
-                  ...prevResult.organization[0].userTags.edges,
-                  ...fetchMoreResult.organization[0].userTags.edges,
+                  ...prevResult.organizations[0].userTags.edges,
+                  ...fetchMoreResult.organizations[0].userTags.edges,
                 ],
-                pageInfo: fetchMoreResult.organization[0].userTags.pageInfo,
+                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
               },
             },
           ],
@@ -186,7 +186,7 @@ function OrganizationTags(): JSX.Element {
   }
 
   const userTagsList =
-    orgUserTagsData?.organization[0]?.userTags?.edges?.map(
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
       (edge) => edge.node,
     ) || [];
 
@@ -377,7 +377,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organization[0]?.userTags?.pageInfo
+                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}

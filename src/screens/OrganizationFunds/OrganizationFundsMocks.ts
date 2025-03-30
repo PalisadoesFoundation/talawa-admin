@@ -9,39 +9,45 @@ export const MOCKS = [
     request: {
       query: FUND_LIST,
       variables: {
-        input: { id: 'orgId' },
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     result: {
       data: {
-        organization: {
-          funds: {
-            edges: [
-              {
-                node: {
-                  creator: { name: 'John Doe' },
-                  id: '1',
-                  isTaxDeductible: false,
-                  name: 'Fund 1',
-                  organization: { name: 'Org 1' },
-                  updater: null,
-                  createdAt: '2024-06-22T00:00:00Z', // Later date
-                },
-              },
-              {
-                node: {
-                  creator: { name: 'Jane Doe' },
-                  id: '2',
-                  isTaxDeductible: true,
-                  name: 'Fund 2',
-                  organization: { name: 'Org 1' },
-                  updater: null,
-                  createdAt: '2024-06-21T00:00:00Z', // Earlier date
-                },
-              },
-            ],
+        fundsByOrganization: [
+          {
+            _id: 'fundId',
+            name: 'Fund 1',
+            refrenceNumber: '1111',
+            taxDeductible: true,
+            isArchived: false,
+            isDefault: false,
+            createdAt: '2024-06-22',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
           },
-        },
+          {
+            _id: 'fundId2',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
+            taxDeductible: true,
+            isArchived: true,
+            isDefault: false,
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
       },
     },
   },
@@ -49,39 +55,76 @@ export const MOCKS = [
     request: {
       query: FUND_LIST,
       variables: {
-        input: { id: 'orgId' },
+        organizationId: 'orgId',
+        orderBy: 'createdAt_ASC',
+        filter: '',
       },
     },
     result: {
       data: {
-        organization: {
-          funds: {
-            edges: [
-              {
-                node: {
-                  creator: { name: 'John Doe' },
-                  id: '2',
-                  isTaxDeductible: true,
-                  name: 'Fund 2',
-                  organization: { name: 'Org 1' },
-                  updater: null,
-                  createdAt: '2024-06-21T00:00:00Z', // Earlier date
-                },
-              },
-              {
-                node: {
-                  creator: { name: 'Jane Doe' },
-                  id: '1',
-                  isTaxDeductible: false,
-                  name: 'Fund 1',
-                  organization: { name: 'Org 1' },
-                  updater: null,
-                  createdAt: '2024-06-22T00:00:00Z', // Later date
-                },
-              },
-            ],
+        fundsByOrganization: [
+          {
+            _id: 'fundId',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
+            taxDeductible: true,
+            isArchived: true,
+            isDefault: false,
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
           },
-        },
+          {
+            _id: 'fundId2',
+            name: 'Fund 1',
+            refrenceNumber: '1111',
+            taxDeductible: true,
+            isArchived: false,
+            isDefault: false,
+            createdAt: '2024-06-22',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: FUND_LIST,
+      variables: {
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '2',
+      },
+    },
+    result: {
+      data: {
+        fundsByOrganization: [
+          {
+            _id: 'fundId',
+            name: 'Fund 2',
+            refrenceNumber: '2222',
+            taxDeductible: true,
+            isArchived: true,
+            isDefault: false,
+            createdAt: '2024-06-21',
+            organizationId: 'orgId',
+            creator: {
+              _id: 'creatorId1',
+              firstName: 'John',
+              lastName: 'Doe',
+            },
+          },
+        ],
       },
     },
   },
@@ -90,16 +133,17 @@ export const MOCKS = [
       query: CREATE_FUND_MUTATION,
       variables: {
         name: 'Fund 2',
-        organizationId: 'orgId',
-        isTaxDeductible: false,
+        refrenceNumber: '2222',
+        taxDeductible: false,
         isArchived: false,
         isDefault: true,
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
         createFund: {
-          id: '01959665-9bda-7d65-906d-e37c4a821f39',
+          _id: '2222',
         },
       },
     },
@@ -108,17 +152,18 @@ export const MOCKS = [
     request: {
       query: UPDATE_FUND_MUTATION,
       variables: {
-        input: {
-          id: 'fundId',
-          name: 'Fund 2',
-          isTaxDeductible: false,
-        },
+        id: 'fundId',
+        name: 'Fund 2',
+        refrenceNumber: '2222',
+        taxDeductible: false,
+        isArchived: true,
+        isDefault: true,
       },
     },
     result: {
       data: {
         updateFund: {
-          id: 'fundId',
+          _id: 'fundId',
         },
       },
     },
@@ -130,16 +175,14 @@ export const NO_FUNDS = [
     request: {
       query: FUND_LIST,
       variables: {
-        input: { id: 'orgId' },
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     result: {
       data: {
-        organization: {
-          funds: {
-            edges: [],
-          },
-        },
+        fundsByOrganization: [],
       },
     },
   },
@@ -150,7 +193,9 @@ export const MOCKS_ERROR = [
     request: {
       query: FUND_LIST,
       variables: {
-        input: { id: 'orgId' },
+        organizationId: 'orgId',
+        orderBy: 'createdAt_DESC',
+        filter: '',
       },
     },
     error: new Error('Mock graphql error'),
@@ -160,10 +205,11 @@ export const MOCKS_ERROR = [
       query: CREATE_FUND_MUTATION,
       variables: {
         name: 'Fund 2',
-        organizationId: 'orgId',
-        isTaxDeductible: false,
+        refrenceNumber: '2222',
+        taxDeductible: false,
         isArchived: false,
         isDefault: true,
+        organizationId: 'orgId',
       },
     },
     error: new Error('Mock graphql error'),
@@ -172,11 +218,12 @@ export const MOCKS_ERROR = [
     request: {
       query: UPDATE_FUND_MUTATION,
       variables: {
-        input: {
-          id: 'fundId',
-          name: 'Fund 2',
-          isTaxDeductible: false,
-        },
+        id: 'fundId',
+        name: 'Fund 2',
+        refrenceNumber: '2222',
+        taxDeductible: false,
+        isArchived: true,
+        isDefault: true,
       },
     },
     error: new Error('Mock graphql error'),

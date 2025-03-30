@@ -21,6 +21,7 @@ import {
   TextField,
 } from '@mui/material';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
+
 /**
  * Props for the CampaignModal component.
  *
@@ -71,19 +72,19 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
-    campaignCurrency: campaign?.currencyCode ?? 'USD',
-    campaignGoal: campaign?.goalAmount ?? 0,
-    campaignStartDate: campaign?.startAt ?? new Date(),
-    campaignEndDate: campaign?.endAt ?? new Date(),
+    campaignCurrency: campaign?.currency ?? 'USD',
+    campaignGoal: campaign?.fundingGoal ?? 0,
+    campaignStartDate: campaign?.startDate ?? new Date(),
+    campaignEndDate: campaign?.endDate ?? new Date(),
   });
 
   useEffect(() => {
     setFormState({
-      campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt ?? new Date(),
-      campaignGoal: campaign?.goalAmount ?? 0,
+      campaignCurrency: campaign?.currency ?? 'USD',
+      campaignEndDate: campaign?.endDate ?? new Date(),
+      campaignGoal: campaign?.fundingGoal ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startAt ?? new Date(),
+      campaignStartDate: campaign?.startDate ?? new Date(),
     });
   }, [campaign]);
 
@@ -112,10 +113,11 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       await createCampaign({
         variables: {
           name: formState.campaignName,
-          currencyCode: formState.campaignCurrency,
-          goalAmount: parseInt(formState.campaignGoal.toString()),
-          startAt: dayjs(formState.campaignStartDate).toISOString(),
-          endAt: dayjs(formState.campaignEndDate).toISOString(),
+          currency: formState.campaignCurrency,
+          fundingGoal: formState.campaignGoal,
+          organizationId: orgId,
+          startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
+          endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
           fundId,
         },
       });
@@ -150,25 +152,22 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName;
       }
-      if (campaign?.currencyCode !== campaignCurrency) {
-        updatedFields.currencyCode = campaignCurrency;
+      if (campaign?.currency !== campaignCurrency) {
+        updatedFields.currency = campaignCurrency;
       }
-      if (campaign?.goalAmount !== campaignGoal) {
-        updatedFields.goalAmount = campaignGoal;
+      if (campaign?.fundingGoal !== campaignGoal) {
+        updatedFields.fundingGoal = campaignGoal;
       }
-      if (campaign?.startAt !== campaignStartDate) {
-        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
+      if (campaign?.startDate !== campaignStartDate) {
+        updatedFields.startDate = dayjs(campaignStartDate).format('YYYY-MM-DD');
       }
-      if (campaign?.endAt !== formState.campaignEndDate) {
-        updatedFields.endAt = dayjs(formState.campaignEndDate).toISOString();
+      if (campaign?.endDate !== formState.campaignEndDate) {
+        updatedFields.endDate = dayjs(formState.campaignEndDate).format(
+          'YYYY-MM-DD',
+        );
       }
       await updateCampaign({
-        variables: {
-          input: {
-            id: campaign?.id, // Ensure the id field is the campaign id
-            ...updatedFields,
-          },
-        },
+        variables: { id: campaign?._id, ...updatedFields },
       });
       setFormState({
         campaignName: '',
