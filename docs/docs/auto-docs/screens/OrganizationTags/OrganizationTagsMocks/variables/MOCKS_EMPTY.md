@@ -58,6 +58,6 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:344](https://
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`[]

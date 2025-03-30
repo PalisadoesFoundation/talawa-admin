@@ -34,6 +34,6 @@ Defined in: [src/screens/OrganizationActionItems/testObject.mocks.ts:184](https:
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`[]

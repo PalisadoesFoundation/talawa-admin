@@ -6,7 +6,7 @@
 
 > `const` **NO\_FUNDS**: `object`[]
 
-Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/OrganizationFundsMocks.ts#L173)
+Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/OrganizationFundsMocks.ts#L128)
 
 ## Type declaration
 
@@ -22,17 +22,13 @@ Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:173](https:
 
 > **variables**: `object`
 
-#### request.variables.filter
+#### request.variables.input
 
-> **filter**: `string` = `''`
+> **input**: `object`
 
-#### request.variables.orderBy
+#### request.variables.input.id
 
-> **orderBy**: `string` = `'createdAt_DESC'`
-
-#### request.variables.organizationId
-
-> **organizationId**: `string` = `'orgId'`
+> **id**: `string` = `'orgId'`
 
 ### result
 
@@ -42,6 +38,14 @@ Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:173](https:
 
 > **data**: `object`
 
-#### result.data.fundsByOrganization
+#### result.data.organization
 
-> **fundsByOrganization**: `any`[] = `[]`
+> **organization**: `object`
+
+#### result.data.organization.funds
+
+> **funds**: `object`
+
+#### result.data.organization.funds.edges
+
+> **edges**: `any`[] = `[]`

@@ -106,8 +106,8 @@ export const MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: ''
-      }
+        name_contains: '',
+      },
     },
     result: {
       data: {
@@ -159,7 +159,6 @@ export const MOCKS = [
       loading: false,
     },
   },
-
 ];
 
 export const EMPTY_MOCKS = [
@@ -215,8 +214,8 @@ export const EMPTY_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: ''
-      }
+        name_contains: '',
+      },
     },
     result: {
       data: {
@@ -270,8 +269,8 @@ export const ERROR_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: ''
-      }
+        name_contains: '',
+      },
     },
     error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
   },

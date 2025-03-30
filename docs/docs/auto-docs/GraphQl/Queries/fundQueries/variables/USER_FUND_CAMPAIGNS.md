@@ -6,4 +6,4 @@
 
 > `const` **USER\_FUND\_CAMPAIGNS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/fundQueries.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L91)
+Defined in: [src/GraphQl/Queries/fundQueries.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L92)

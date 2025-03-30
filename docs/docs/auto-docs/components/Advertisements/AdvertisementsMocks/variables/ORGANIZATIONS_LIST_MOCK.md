@@ -34,6 +34,6 @@ Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:145](https://g
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`[]

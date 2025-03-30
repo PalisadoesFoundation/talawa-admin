@@ -8,9 +8,9 @@ Defined in: [src/utils/interfaces.ts:395](https://github.com/PalisadoesFoundatio
 
 ## Properties
 
-### organizations
+### organization
 
-> **organizations**: `object`[]
+> **organization**: `object`[]
 
 Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L396)
 

@@ -4,7 +4,7 @@
 
 # Type Alias: QueryOrganizationInput
 
-> **OrganizationInput**: `object`
+> **QueryOrganizationInput**: `object`
 
 Defined in: [src/types/Organization/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L54)
 

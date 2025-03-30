@@ -8,8 +8,8 @@ Defined in: [src/utils/interfaces.ts:437](https://github.com/PalisadoesFoundatio
 
 ## Properties
 
-### organizations
+### organization
 
-> **organizations**: [`InterfaceOrgInfoTypePG`](InterfaceOrgInfoTypePG.md)[]
+> **organization**: [`InterfaceOrgInfoTypePG`](InterfaceOrgInfoTypePG.md)[]
 
 Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L438)
