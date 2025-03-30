@@ -1,39 +1,3 @@
-/**
- * Component representing the left drawer for organization-related navigation and actions.
- *
- * @component
- * @param {InterfaceLeftDrawerProps} props - The props for the component.
- * @param {Array} props.targets - List of navigation targets with names and URLs.
- * @param {string} props.orgId - The ID of the organization to fetch data for.
- * @param {boolean | null} props.hideDrawer - State indicating whether the drawer is hidden.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer - Function to toggle the drawer visibility.
- * @returns {JSX.Element} The rendered LeftDrawerOrg component.
- *
- * @remarks
- * - Uses `useTranslation` for internationalization of text.
- * - Fetches organization data using the `GET_ORGANIZATION_DATA_PG` GraphQL query.
- * - Determines if the current page is the admin profile page based on the URL path.
- * - Adjusts drawer visibility for smaller screens when navigation links are clicked.
- *
- * @example
- * ```tsx
- * <LeftDrawerOrg
- *   targets={[{ name: 'Dashboard', url: '/dashboard' }]}
- *   orgId="12345"
- *   hideDrawer={false}
- *   setHideDrawer={setHideDrawerFunction}
- * />
- * ```
- *
- * @dependencies
- * - `useTranslation` from `react-i18next` for translations.
- * - `useQuery` from `@apollo/client` for fetching GraphQL data.
- * - `useLocalStorage` for accessing user data from local storage.
- * - `useLocation` from `react-router-dom` for accessing the current URL path.
- *
- * @internal
- * This component is part of the Talawa Admin Portal and is styled using `styles` imported from a CSS module.
- */
 import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -55,6 +19,16 @@ export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
+
+/**
+ * LeftDrawerOrg component for displaying organization details and  options.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer with organization details.
+ */
 
 const leftDrawerOrg = ({
   targets,

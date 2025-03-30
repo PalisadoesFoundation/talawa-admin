@@ -1,39 +1,3 @@
-/**
- * @file UpdateSession.tsx
- * @description A React component that allows users to update the session timeout for a community.
- *              It fetches the current timeout value from the server, displays it, and provides
- *              a slider to update the timeout value. The updated value is submitted to the server
- *              via a GraphQL mutation.
- *
- * @module UpdateTimeout
- *
- * @interface TestInterfaceUpdateTimeoutProps
- * @description Props for the `UpdateTimeout` component.
- * @property {function} [onValueChange] - Optional callback function triggered when the slider value changes.
- * @component
- * @name UpdateTimeout
- * @description A React functional component that manages and updates the session timeout for a community.
- *
- * @param {TestInterfaceUpdateTimeoutProps} props - Component props.
- * @returns {JSX.Element} The rendered component.
- *
- * @example
- * <UpdateTimeout onValueChange={(value) => console.log(value)} />
- *
- * @remarks
- * - Fetches the current session timeout using a GraphQL query.
- * - Allows users to update the timeout using a slider.
- * - Submits the updated timeout value to the server using a GraphQL mutation.
- * - Displays a success toast on successful update or handles errors gracefully.
- *
- * @dependencies
- * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `components/Loader/Loader`
- *
- * @todo
- * - Add additional validation for slider input if needed.
- * - Improve error handling for edge cases.
- */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Button, Form } from 'react-bootstrap';
@@ -46,6 +10,34 @@ import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
+
+/**
+ * Component for updating the session timeout for a community.
+ *
+ * This component fetches the current session timeout value from the server
+ * and allows the user to update it using a slider.
+ *
+ * The component also handles form submission, making a mutation request to update the session timeout.
+ *
+ * @returns JSX.Element - The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 interface TestInterfaceUpdateTimeoutProps {
   onValueChange?: (value: number) => void;

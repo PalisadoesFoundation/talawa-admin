@@ -1,44 +1,6 @@
-/**
- * OrgListCard Component
- *
- * This component represents a card displaying information about an organization.
- * It includes the organization's name, description, address, avatar, and the number of members.
- * A button is provided to navigate to the organization's dashboard for management.
- *
- * @component
- * @param {InterfaceOrgListCardPropsPG} props - The props for the component.
- * @param {InterfaceOrgInfoTypePG} props.data - The organization data.
- * @param {string} props.data.id - The unique identifier for the organization.
- * @param {string} props.data.avatarURL - The URL of the organization's avatar image.
- * @param {string} props.data.addressLine1 - The primary address of the organization.
- * @param {string} props.data.name - The name of the organization.
- * @param {string} props.data.description - A brief description of the organization.
- * @param {object} props.data.members - The members of the organization.
- * @param {Array} props.data.members.edges - The list of members in the organization.
- *
- * @returns {JSX.Element} A JSX element representing the organization card.
- *
- * @remarks
- * - The component uses `react-bootstrap` for the button and `@mui/material` for the tooltip.
- * - The `useNavigate` hook from `react-router-dom` is used for navigation.
- * - The `useTranslation` hook from `react-i18next` is used for localization.
- *
- * @example
- * ```tsx
- * <OrgListCard
- *   data={{
- *     id: '1',
- *     avatarURL: 'https://example.com/avatar.png',
- *     addressLine1: '123 Main St',
- *     name: 'Example Org',
- *     description: 'An example organization',
- *     members: { edges: [{ id: '1' }, { id: '2' }] },
- *   }}
- * />
- * ```
- */
 import React from 'react';
 import TruncatedText from './TruncatedText';
+// import {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
@@ -47,17 +9,38 @@ import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * Props for the OrgListCard component
+ */
 export interface InterfaceOrgListCardPropsPG {
   data: InterfaceOrgInfoTypePG;
 }
 
+/**
+ * Component for displaying a list card for an organization
+ *
+ * This component renders a card that displays information about an organization,
+ * including its name, addressLine1, members, and admins. It also provides a button
+ * to manage the organization, navigating to the organization's dashboard.
+ *
+ * @param props - The properties passed to the component
+ * @returns JSX.Element representing an organization list card
+ */
 function OrgListCard({
   data: { id, avatarURL, addressLine1, name, description, members },
 }: InterfaceOrgListCardPropsPG): JSX.Element {
   const navigate = useNavigate();
+  // Query to check if the organization is a sample organization
+  // const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
+  //   variables: {
+  //     isSampleOrganizationId: id,
+  //   },
+  // });
 
+  // Handle click event to navigate to the organization dashboard
   function handleClick(): void {
     const url = `/orgdash/${id}`;
+    // // Dont change the below two lines
     navigate(url);
   }
 

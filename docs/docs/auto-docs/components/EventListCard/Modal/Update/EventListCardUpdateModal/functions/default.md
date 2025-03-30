@@ -6,7 +6,9 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventListCard/Modal/Update/EventListCardUpdateModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Update/EventListCardUpdateModal.tsx#L50)
+Defined in: [src/components/EventListCard/Modal/Update/EventListCardUpdateModal.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Update/EventListCardUpdateModal.tsx#L12)
+
+UpdateModal: A modal displaying the recurring event update options.
 
 ## Parameters
 

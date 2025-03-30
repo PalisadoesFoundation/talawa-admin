@@ -4,16 +4,22 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestCard.tsx#L51)
+Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestCard.tsx#L24)
+
+Component for displaying and managing member requests.
 
 ## Parameters
 
-### \_\_namedParameters
+### props
 
 [`InterfaceMemberRequestCardProps`](../../../../types/Member/interface/interfaces/InterfaceMemberRequestCardProps.md)
+
+Properties for the member request card.
 
 ## Returns
 
 `JSX.Element`
+
+JSX element for member request card.

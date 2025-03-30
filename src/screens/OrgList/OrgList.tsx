@@ -1,49 +1,3 @@
-/**
- * The `orgList` component is responsible for rendering a list of organizations
- * and providing functionality for searching, sorting, and creating new organizations.
- * It also includes modals for creating organizations and managing features after creation.
- *
- * @component
- * @returns {JSX.Element} The rendered organization list component.
- *
- * @remarks
- * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
- * - Includes search and sorting functionality for better user experience.
- * - Displays loading states and handles errors gracefully.
- *
- * @dependencies
- * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
- * - `useTranslation` from `react-i18next` for localization.
- * - `useLocalStorage` for accessing local storage data.
- * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `react-toastify` for notifications.
- * - `react-bootstrap` and `@mui/material` for modal and button components.
- *
- * @state
- * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
- * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
- * - `isLoading` - Indicates whether the organization data is loading.
- * - `sortingState` - Manages the sorting option and its label.
- * - `searchByName` - Stores the search query for filtering organizations.
- * - `showModal` - Controls the visibility of the organization creation modal.
- * - `formState` - Manages the state of the organization creation form.
- *
- * @methods
- * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
- * - `closeDialogModal(): void` - Closes the plugin notification modal.
- * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
- * - `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>` - Handles organization creation.
- * - `handleSearch(value: string): void` - Filters organizations based on the search query.
- * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
- *
- * @errorHandling
- * - Handles errors from GraphQL queries and mutations using `errorHandler`.
- * - Clears local storage and redirects to the home page on critical errors.
- *
- * @modals
- * - `OrganizationModal` - For creating new organizations.
- * - `Modal` - For managing features after organization creation.
- */
 import React, { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -69,6 +23,31 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.btnsBlock`
+ * - `.dropdown`
+ * - `.modalHeader`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 interface InterfaceFormStateType {
   addressLine1: string;

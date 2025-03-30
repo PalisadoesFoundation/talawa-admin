@@ -6,7 +6,10 @@
 
 > **EventStats**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/EventStats.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/EventStats.tsx#L50)
+Defined in: [src/components/EventStats/Statistics/EventStats.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/EventStats.tsx#L27)
+
+Component that displays event statistics in a modal.
+Shows feedback, reviews, and average rating for the event.
 
 ## Parameters
 
@@ -17,3 +20,5 @@ Defined in: [src/components/EventStats/Statistics/EventStats.tsx:50](https://git
 ## Returns
 
 `Element`
+
+JSX element representing the event statistics modal.

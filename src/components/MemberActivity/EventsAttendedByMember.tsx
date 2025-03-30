@@ -1,33 +1,13 @@
-/**
- * Component to display the details of events attended by a member.
- *
- * This component fetches event details using the `EVENT_DETAILS` GraphQL query
- * and displays the information in a card format using the `EventAttendedCard` component.
- * It handles loading and error states gracefully.
- *
- * @component
- * @param {InterfaceEventsAttendedByMember} props - The props for the component.
- * @param {string} props.eventsId - The ID of the event to fetch details for.
- *
- * @returns {JSX.Element} A React component that displays event details or appropriate
- * loading/error messages.
- *
- * @example
- * ```tsx
- * <EventsAttendedByMember eventsId="12345" />
- * ```
- *
- * @remarks
- * - Uses the `useQuery` hook from Apollo Client to fetch event details.
- * - Displays a loading spinner while the data is being fetched.
- * - Shows an error message if the query fails.
- */
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
-
+/**
+ * Component to display events attended by a specific member
+ * @param eventsId - ID of the event to fetch and display details for
+ * @returns Event card component with event details
+ */
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
 }

@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L49)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L41)
 
 ## Parameters
 

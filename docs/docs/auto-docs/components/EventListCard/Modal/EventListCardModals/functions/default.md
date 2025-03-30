@@ -4,16 +4,23 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L76)
+Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L86)
+
+The `EventListCardModals` component displays the modals related to events, such as viewing,
+updating, and deleting events.
 
 ## Parameters
 
-### \_\_namedParameters
+### props
 
 `InterfaceEventListCardModalProps`
+
+The properties for the component.
 
 ## Returns
 
 `JSX.Element`
+
+A JSX element containing the event modals.

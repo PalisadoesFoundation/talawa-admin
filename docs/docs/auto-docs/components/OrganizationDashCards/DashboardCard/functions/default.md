@@ -6,7 +6,9 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/DashboardCard.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/DashboardCard.tsx#L35)
+Defined in: [src/components/OrganizationDashCards/DashboardCard.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/DashboardCard.tsx#L13)
+
+Dashboard card component is used to display the card with icon, title and count.
 
 ## Parameters
 
@@ -27,3 +29,5 @@ Defined in: [src/components/OrganizationDashCards/DashboardCard.tsx:35](https://
 ## Returns
 
 `Element`
+
+Dashboard card component

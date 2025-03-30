@@ -1,42 +1,14 @@
-/**
- * CustomTableCell Component
- *
- * This component is a custom table cell that displays event details
- * fetched from a GraphQL query. It handles loading, error, and empty
- * states gracefully and renders event information in a table row.
- *
- * @component
- * @param {Object} props - Component props.
- * @param {string} props.eventId - The unique identifier of the event to fetch details for.
- *
- * @returns {JSX.Element} A table row containing event details or appropriate
- * fallback UI for loading, error, or missing event states.
- *
- * @remarks
- * - Uses Apollo Client's `useQuery` hook to fetch event details.
- * - Displays a loading spinner while fetching data.
- * - Shows an error message if the query fails.
- * - Renders event details including title, start date, recurrence status,
- *   and the number of attendees.
- *
- * @example
- * ```tsx
- * <CustomTableCell eventId="12345" />
- * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL queries.
- * - `@mui/material` for UI components like `TableCell` and `CircularProgress`.
- * - `react-router-dom` for navigation links.
- * - `style/app-fixed.module.css` for custom styles.
- *
- */
 import { useQuery } from '@apollo/client';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Link } from 'react-router-dom';
+/**
+ * Custom table cell component to display event details
+ * @param eventId - ID of the event to fetch and display
+ * @returns TableRow component with event information
+ */
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {

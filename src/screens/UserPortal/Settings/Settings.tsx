@@ -1,42 +1,3 @@
-/**
- * The `Settings` component is a user profile settings page that allows users to
- * view and update their personal information, including profile picture, contact
- * details, and other settings. It also includes responsive behavior for different
- * screen sizes.
- *
- * @component
- *
- * @remarks
- * - Utilizes Apollo Client for GraphQL queries and mutations.
- * - Includes form validation for fields like password strength and file upload restrictions.
- * - Provides a responsive layout with a collapsible sidebar.
- * - Displays toast notifications for success and error messages.
- *
- * @requires
- * - `react`, `react-i18next` for translations.
- * - `react-bootstrap` for UI components.
- * - `@apollo/client` for GraphQL integration.
- * - `react-toastify` for toast notifications.
- * - Custom utilities like `useLocalStorage`, `urlToFile`, and `validatePassword`.
- *
- * @example
- * ```tsx
- * <Settings />
- * ```
- *
- * @returns {JSX.Element} The rendered settings page.
- *
- * @function
- * @name Settings
- *
- * @internal
- * - Handles window resize events to toggle the sidebar visibility.
- * - Fetches current user data using the `CURRENT_USER` query.
- * - Updates user details using the `UPDATE_CURRENT_USER_MUTATION` mutation.
- *
- * @todo
- * - Integrate `EventsAttendedByUser` component once event queries are functional.
- */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
@@ -56,6 +17,12 @@ import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
 
+/**
+ * The Settings component allows users to view and update their profile settings.
+ * It includes functionality to handle image uploads, reset changes, and save updated user details.
+ *
+ * @returns The Settings component.
+ */
 export default function Settings(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');

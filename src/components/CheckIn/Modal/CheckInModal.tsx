@@ -1,40 +1,3 @@
-/**
- * Component for managing event check-ins in a modal.
- *
- * This component displays a modal that allows users to view and manage
- * the check-in status of attendees for a specific event. It fetches
- * attendee data using a GraphQL query and displays it in a searchable
- * and filterable table using the Material-UI DataGrid.
- *
- * @component
- * @param {InterfaceModalProp} props - The properties for the modal.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {string} props.eventId - The ID of the event for which check-ins are managed.
- * @param {() => void} props.handleClose - Callback to close the modal.
- *
- * @state {InterfaceTableData[]} tableData - Holds the data for the table rows.
- * @state {string} userFilterQuery - Stores the search input for filtering attendees.
- * @state {object} filterQueryModel - Defines the filter model for the DataGrid.
- *
- * @query {EVENT_CHECKINS} Fetches the check-in data for the specified event.
- *
- * @returns {JSX.Element} A modal containing a searchable and filterable table
- * of attendees and their check-in statuses.
- *
- * @dependencies
- * - React for state management and rendering.
- * - Apollo Client for GraphQL queries.
- * - Material-UI for UI components like DataGrid and TextField.
- * - React-Bootstrap for modal styling.
- * - Custom components like `TableRow` for rendering check-in status.
- *
- * @example
- * <CheckInModal
- *   show={true}
- *   eventId="event123"
- *   handleClose={() => console.log('Modal closed')}
- * />
- */
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
@@ -50,6 +13,16 @@ import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
 
+/**
+ * Modal component for managing event check-ins. Displays a list of attendees
+ * and their check-in statuses, allowing for filtering by user name.
+ *
+ * @param show - Boolean indicating whether the modal is visible.
+ * @param eventId - ID of the event whose check-ins are to be displayed.
+ * @param handleClose - Function to call when the modal is closed.
+ *
+ * @returns JSX.Element - The rendered modal component.
+ */
 export const CheckInModal = ({
   show,
   eventId,

@@ -1,39 +1,3 @@
-/**
- * EventsAttendedMemberModal Component
- *
- * This component renders a modal displaying a paginated list of events attended by a member.
- * It uses Material-UI's Table and Pagination components for displaying and navigating through
- * the events. The modal is styled using Bootstrap and custom CSS classes.
- *
- * @component
- * @param {InterfaceEventsAttendedMemberModalProps} props - The props for the component.
- * @param {Array} props.eventsAttended - List of events attended by the member.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {Function} props.setShow - Function to toggle the visibility of the modal.
- * @param {number} [props.eventsPerPage=5] - Number of events to display per page.
- *
- * @returns {React.FC} A modal component displaying the events attended by a member.
- *
- * @example
- * <EventsAttendedMemberModal
- *   eventsAttended={events}
- *   show={isModalVisible}
- *   setShow={setModalVisibility}
- *   eventsPerPage={10}
- * />
- *
- * @remarks
- * - The component uses `useMemo` for memoizing the paginated events and total pages.
- * - The `CustomTableCell` component is used to render individual event details.
- * - The `Pagination` component allows navigation between pages.
- *
- * @dependencies
- * - React
- * - Material-UI (Table, Pagination)
- * - React-Bootstrap (Modal)
- * - i18next (for translations)
- * - Custom styles from `style/app.module.css`
- */
 import React, { useState, useMemo } from 'react';
 import {
   Table,
@@ -50,6 +14,14 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
 import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
+/**
+ * Modal component to display paginated list of events attended by a member
+ * @param eventsAttended - Array of events attended by the member
+ * @param setShow - Function to control modal visibility
+ * @param show - Boolean to control modal visibility
+ * @param eventsPerPage - Number of events to display per page
+ * @returns Modal component with paginated events list
+ */
 
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps

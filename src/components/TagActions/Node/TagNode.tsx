@@ -1,35 +1,3 @@
-/**
- * Component: TagNode
- *
- * This component renders a tag node that can be expanded to display its subtags.
- * It supports infinite scrolling for loading subtags and allows users to select tags
- * using checkboxes. The component is recursive, enabling nested subtags to be displayed.
- *
- * @component
- * @param {InterfaceTagNodeProps} props - The props for the TagNode component.
- * @param {InterfaceTagData} props.tag - The tag data to be displayed.
- * @param {Set<string>} props.checkedTags - A set of tag IDs that are currently selected.
- * @param {(tag: InterfaceTagData, isSelected: boolean) => void} props.toggleTagSelection -
- *        Callback function to toggle the selection state of a tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for i18n.
- *
- * @remarks
- * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
- * - Infinite scrolling is implemented using the `react-infinite-scroll-component` library.
- * - Displays a loader while fetching subtags and handles errors gracefully.
- *
- * @example
- * ```tsx
- * <TagNode
- *   tag={tagData}
- *   checkedTags={selectedTags}
- *   toggleTagSelection={handleToggleTag}
- *   t={t}
- * />
- * ```
- *
- * @returns {React.FC} A React functional component that renders a tag node with optional subtags.
- */
 import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
@@ -45,6 +13,25 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import { WarningAmberRounded } from '@mui/icons-material';
 import type { TFunction } from 'i18next';
 
+/**
+ * Props for the `TagNode` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;

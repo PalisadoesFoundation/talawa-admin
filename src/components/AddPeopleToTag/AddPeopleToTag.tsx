@@ -1,43 +1,3 @@
-/**
- * AddPeopleToTag Component
- *
- * This component provides a modal interface for assigning members to a specific tag.
- * It allows users to search for members by first name or last name, select members,
- * and assign them to the tag. The component uses Apollo Client for GraphQL queries
- * and mutations, and Material-UI's DataGrid for displaying member data.
- *
- * @props
- * - `addPeopleToTagModalIsOpen` (boolean): Controls the visibility of the modal.
- * - `hideAddPeopleToTagModal` (function): Callback to close the modal.
- * - `refetchAssignedMembersData` (function): Callback to refetch the assigned members data.
- * - `t` (function): Translation function for component-specific strings.
- * - `tCommon` (function): Translation function for common strings.
- *
- * @state
- * - `assignToMembers` (InterfaceMemberData[]): List of members selected for assignment.
- * - `memberToAssignToSearchFirstName` (string): Search filter for first name.
- * - `memberToAssignToSearchLastName` (string): Search filter for last name.
- *
- * @queries
- * - `USER_TAGS_MEMBERS_TO_ASSIGN_TO`: Fetches members available for assignment to the tag.
- *
- * @mutations
- * - `ADD_PEOPLE_TO_TAG`: Assigns selected members to the tag.
- *
- * @features
- * - Infinite scrolling for loading more members.
- * - Search functionality for filtering members by name.
- * - Displays selected members with the ability to remove them.
- * - Handles errors and loading states with appropriate UI feedback.
- *
- * @dependencies
- * - React, Apollo Client, Material-UI, React-Bootstrap, React-Toastify, React-Infinite-Scroll.
- *
- * @usage
- * This component is used in the context of managing tags and their associated members.
- * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
- */
-
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
@@ -61,6 +21,30 @@ import type {
   InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
+
+/** TSDOC
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -361,7 +345,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
-                  style={{ height: 300, overflow: 'auto' }}
+                  style={{
+                    height: 300,
+                    overflow: 'auto',
+                  }}
                 >
                   <InfiniteScroll
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
@@ -391,7 +378,9 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       }}
                       sx={{
                         ...dataGridStyle,
-                        '& .MuiDataGrid-topContainer': { position: 'static' },
+                        '& .MuiDataGrid-topContainer': {
+                          position: 'static',
+                        },
                         '& .MuiDataGrid-virtualScrollerContent': {
                           marginTop: '0',
                         },

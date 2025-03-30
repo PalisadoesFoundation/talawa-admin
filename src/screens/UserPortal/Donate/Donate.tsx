@@ -1,49 +1,3 @@
-/**
- * Donate Component
- *
- * This component allows users to make donations to an organization and view their previous donations.
- * It includes features such as currency selection, donation amount validation, and pagination for donation history.
- *
- * @component
- * @returns {JSX.Element} The Donate component.
- *
- * @remarks
- * - Uses `react-bootstrap` for UI components and `react-router-dom` for routing.
- * - Integrates with GraphQL queries and mutations to fetch and update donation data.
- * - Includes localization support using `react-i18next`.
- *
- * @requires
- * - `ORGANIZATION_DONATION_CONNECTION_LIST` (GraphQL Query): Fetches donation data for the organization.
- * - `ORGANIZATION_LIST` (GraphQL Query): Fetches organization details.
- * - `DONATE_TO_ORGANIZATION` (GraphQL Mutation): Handles donation submission.
- *
- * @example
- * ```tsx
- * <Donate />
- * ```
- *
- * @state
- * - `amount` (string): The donation amount entered by the user.
- * - `organizationDetails` (object): Details of the organization being donated to.
- * - `donations` (array): List of previous donations.
- * - `selectedCurrency` (number): Index of the selected currency.
- * - `page` (number): Current page for pagination.
- * - `rowsPerPage` (number): Number of rows per page for pagination.
- *
- * @methods
- * - `donateToOrg`: Validates and submits the donation.
- * - `handleChangePage`: Handles pagination page changes.
- * - `handleChangeRowsPerPage`: Handles changes in rows per page for pagination.
- *
- * @dependencies
- * - `DonationCard`: Displays individual donation details.
- * - `OrganizationSidebar`: Sidebar component for organization-related actions.
- * - `PaginationList`: Handles pagination controls.
- * - `SearchBar`: Search input for filtering donations.
- *
- * @accessibility
- * - Includes ARIA attributes and test IDs for better accessibility and testing.
- */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -70,6 +24,49 @@ import {
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
 
+/**
+ * `donate` component allows users to make donations to an organization and view their previous donations.
+ *
+ * This component fetches donation-related data using GraphQL queries and allows users to make donations
+ * using a mutation. It supports currency selection, donation amount input, and displays a paginated list
+ * of previous donations.
+ *
+ * It includes:
+ * - An input field for searching donations.
+ * - A dropdown to select currency.
+ * - An input field for entering donation amount.
+ * - A button to submit the donation.
+ * - A list of previous donations displayed in a paginated format.
+ * - An organization sidebar for navigation.
+ *
+ * ### GraphQL Queries
+ * - `ORGANIZATION_DONATION_CONNECTION_LIST`: Fetches the list of donations for the organization.
+ * - `ORGANIZATION_LIST`: Fetches organization details.
+ *
+ * ### GraphQL Mutations
+ * - `DONATE_TO_ORGANIZATION`: Performs the donation action.
+ *
+ * @returns The rendered component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
 
