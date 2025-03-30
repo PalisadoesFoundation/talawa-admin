@@ -6,9 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L41)
-
-A modal dialog for viewing volunteer group information for an event.
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L64)
 
 ## Parameters
 
@@ -29,11 +27,3 @@ A modal dialog for viewing volunteer group information for an event.
 ## Returns
 
 `ReactNode`
-
-The rendered modal component.
-
-The `VolunteerGroupViewModal` component displays all the fields of a volunteer group in a modal dialog.
-
-The modal includes:
-- A header with a title and a close button.
-- fields for volunteer name, status, hours volunteered, groups, and assignments.

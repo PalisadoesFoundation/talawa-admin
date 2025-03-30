@@ -1,3 +1,35 @@
+/**
+ * MemberDetail Component
+ *
+ * This component renders the detailed view of a member's profile, allowing users to view and update personal and contact information.
+ * It includes features such as avatar upload, form validation, and dynamic dropdowns for various fields.
+ *
+ * @component
+ * @param {MemberDetailProps} props - The props for the component.
+ * @param {string} [props.id] - Optional member ID to fetch and display details.
+ *
+ * @returns {JSX.Element} The rendered MemberDetail component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and updating user data.
+ * - Includes form validation for fields like password and avatar upload.
+ * - Utilizes `react-bootstrap` and `@mui/x-date-pickers` for UI components.
+ * - Handles localization using `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <MemberDetail id="12345" />
+ * ```
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries and mutations.
+ * - `react-bootstrap` for UI components.
+ * - `@mui/x-date-pickers` for date selection.
+ * - `react-toastify` for toast notifications.
+ * - `dayjs` for date manipulation.
+ *
+ *
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
@@ -39,14 +71,6 @@ import { useTranslation } from 'react-i18next';
 import { getNavItems } from './config';
 type MemberDetailProps = { id?: string };
 
-/**
- * MemberDetail component is used to display the details of a user.
- * It also allows the user to update the details. It uses the UPDATE_CURRENT_USER_MUTATION to update the user details.
- * It uses the CURRENT_USER query to get the user details. It uses the useLocalStorage hook to store the user details in the local storage.
- * @param id - The id of the user whose details are to be displayed.
- * @returns  React component
- *
- */
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const navItems = getNavItems(t);

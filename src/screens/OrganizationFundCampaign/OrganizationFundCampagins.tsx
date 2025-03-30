@@ -1,43 +1,3 @@
-import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import { Button, Row } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import React, { useCallback, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
-import CampaignModal from './modal/CampaignModal';
-import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from 'style/app.module.css';
-import { currencySymbols } from 'utils/currency';
-import type {
-  InterfaceCampaignInfo,
-  InterfaceQueryOrganizationFundCampaigns,
-} from 'utils/interfaces';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
-
-const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
-  '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    '&:focus-within': { outline: 'none' },
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
-};
-
 /**
  * `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
  * It allows users to search, sort, view and edit campaigns.
@@ -94,6 +54,47 @@ const dataGridStyle = {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+
+import { useQuery } from '@apollo/client';
+import { WarningAmberRounded } from '@mui/icons-material';
+import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Button, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
+import Loader from 'components/Loader/Loader';
+import CampaignModal from './modal/CampaignModal';
+import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
+import styles from 'style/app.module.css';
+import { currencySymbols } from 'utils/currency';
+import type {
+  InterfaceCampaignInfo,
+  InterfaceQueryOrganizationFundCampaigns,
+} from 'utils/interfaces';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
+const dataGridStyle = {
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
+  '& .MuiDataGrid-row': {
+    backgroundColor: 'var(--row-background)',
+    '&:focus-within': { outline: 'none' },
+  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'var(--row-background)',
+  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
+};
+
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
