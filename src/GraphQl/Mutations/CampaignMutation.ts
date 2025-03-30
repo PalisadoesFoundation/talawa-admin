@@ -5,33 +5,35 @@ import gql from 'graphql-tag';
  *
  * @param name - The name of the fund.
  * @param fundId - The fund ID the campaign is associated with.
- * @param goalAmount - The funding goal of the campaign.
- * @param startAt - The start date of the campaign.
- * @param endAt - The end date of the campaign.
- * @param currencyCode - The currency of the campaign.
+ * @param fundingGoal - The funding goal of the campaign.
+ * @param startDate - The start date of the campaign.
+ * @param endDate - The end date of the campaign.
+ * @param currency - The currency of the campaign.
  * @returns The ID of the created campaign.
  */
 
 export const CREATE_CAMPAIGN_MUTATION = gql`
-  mutation createFundCampaign(
-    $name: String!
+  mutation createFundraisingCampaign(
     $fundId: ID!
-    $goalAmount: Int!
-    $startAt: DateTime!
-    $endAt: DateTime!
-    $currencyCode: Iso4217CurrencyCode!
+    $organizationId: ID!
+    $name: String!
+    $fundingGoal: Float!
+    $startDate: Date!
+    $endDate: Date!
+    $currency: Currency!
   ) {
-    createFundCampaign(
-      input: {
+    createFundraisingCampaign(
+      data: {
         fundId: $fundId
+        organizationId: $organizationId
         name: $name
-        goalAmount: $goalAmount
-        startAt: $startAt
-        endAt: $endAt
-        currencyCode: $currencyCode
+        fundingGoal: $fundingGoal
+        startDate: $startDate
+        endDate: $endDate
+        currency: $currency
       }
     ) {
-      id
+      _id
     }
   }
 `;
@@ -41,17 +43,33 @@ export const CREATE_CAMPAIGN_MUTATION = gql`
  *
  * @param id - The ID of the campaign being updated.
  * @param name - The name of the campaign.
- * @param goalAmount - The funding goal of the campaign.
- * @param startAt - The start date of the campaign.
- * @param endAt - The end date of the campaign.
- * @param currencyCode - The currency of the campaign.
+ * @param fundingGoal - The funding goal of the campaign.
+ * @param startDate - The start date of the campaign.
+ * @param endDate - The end date of the campaign.
+ * @param currency - The currency of the campaign.
  * @returns The ID of the updated campaign.
  */
 
 export const UPDATE_CAMPAIGN_MUTATION = gql`
-  mutation updateFundCampaign($input: MutationUpdateFundCampaignInput!) {
-    updateFundCampaign(input: $input) {
-      id
+  mutation updateFundraisingCampaign(
+    $id: ID!
+    $name: String
+    $fundingGoal: Float
+    $startDate: Date
+    $endDate: Date
+    $currency: Currency
+  ) {
+    updateFundraisingCampaign(
+      id: $id
+      data: {
+        name: $name
+        fundingGoal: $fundingGoal
+        startDate: $startDate
+        endDate: $endDate
+        currency: $currency
+      }
+    ) {
+      _id
     }
   }
 `;

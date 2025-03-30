@@ -2,7 +2,7 @@
 
 ***
 
-# Type Alias: QueryOrganizationInput
+# Type Alias: OrganizationInput
 
 > **OrganizationInput**: `object`
 

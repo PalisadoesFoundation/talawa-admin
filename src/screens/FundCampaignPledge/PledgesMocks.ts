@@ -15,7 +15,7 @@ const memberList = {
   },
   result: {
     data: {
-      organization: [
+      organizations: [
         {
           _id: 'orgId',
           members: [
@@ -458,7 +458,6 @@ export const PLEDGE_MODAL_MOCKS = [
 
 // Add this to your PledgesMocks.js file
 export const PLEDGE_MODAL_ERROR_MOCKS = [
-  memberList,
   {
     request: {
       query: CREATE_PlEDGE,

@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -386,12 +386,6 @@ describe('Testing Organization Action Items Screen', () => {
       </MockedProvider>,
     );
 
-    // Wait for loading to complete
-    await waitFor(() => {
-      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
-    });
-
-    // Wait for data to be rendered
     const viewItemBtn = await screen.findByTestId('viewItemBtn1');
     expect(viewItemBtn).toBeInTheDocument();
     await userEvent.click(viewItemBtn);

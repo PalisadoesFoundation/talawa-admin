@@ -129,39 +129,27 @@ const orgFundCampaign = (): JSX.Element => {
     error: campaignError,
     refetch: refetchCampaign,
   }: {
-    data?: {
-      fund: InterfaceQueryOrganizationFundCampaigns;
-    };
+    data?: { getFundById: InterfaceQueryOrganizationFundCampaigns };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_CAMPAIGN, {
     variables: {
-      input: { id: fundId },
+      id: fundId,
+      orderBy: sortBy,
+      where: { name_contains: searchTerm },
     },
-    skip: !fundId,
-    onCompleted: (data) => console.log('GraphQL Data Received:', data),
-    onError: (error) => console.error('GraphQL Error:', error),
   });
-
-  const compaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
-  }, [campaignData]);
-
-  const filteredCampaigns = useMemo(() => {
-    return compaignsData.filter((campaign) =>
-      campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-  }, [compaignsData, searchTerm]);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const { fundName, isArchived } = useMemo(() => {
-    const fundName = campaignData?.fund?.name || 'Fund';
-    const isArchived = false; // Since isArchived is not in the new data structure
-    return { fundName, isArchived };
+  const { campaigns, fundName, isArchived } = useMemo(() => {
+    const fundName = campaignData?.getFundById?.name || 'Fund';
+    const isArchived = campaignData?.getFundById?.isArchived || false;
+    const campaigns = campaignData?.getFundById?.campaigns || [];
+    return { fundName, campaigns, isArchived };
   }, [campaignData]);
 
   if (campaignLoading) {
@@ -197,36 +185,39 @@ const orgFundCampaign = (): JSX.Element => {
       },
     },
     {
-      field: 'name',
+      field: 'campaignName',
       headerName: 'Campaign Name',
       flex: 2,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div
-          className={styles.hyperlinkText}
-          data-testid="campaignName"
-          onClick={() => handleClick(params.row.id as string)}
-        >
-          {params.row.name}
-        </div>
-      ),
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className={styles.hyperlinkText}
+            data-testid="campaignName"
+            onClick={() => handleClick(params.row.campaign._id as string)}
+          >
+            {params.row.campaign.name}
+          </div>
+        );
+      },
     },
     {
-      field: 'startAt',
+      field: 'startDate',
       headerName: 'Start Date',
       flex: 1,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.startAt).format('DD/MM/YYYY'),
+      renderCell: (params: GridCellParams) => {
+        return dayjs(params.row.campaign.startDate).format('DD/MM/YYYY');
+      },
     },
     {
-      field: 'endAt',
+      field: 'endDate',
       headerName: 'End Date',
       align: 'center',
       headerAlign: 'center',
@@ -236,13 +227,13 @@ const orgFundCampaign = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="endDateCell">
-            {dayjs(params.row.endAt).format('DD/MM/YYYY')}{' '}
+            {dayjs(params.row.campaign.endDate).format('DD/MM/YYYY')}{' '}
           </div>
         );
       },
     },
     {
-      field: 'goalAmount',
+      field: 'fundingGoal',
       headerName: 'Funding Goal',
       flex: 1,
       minWidth: 100,
@@ -258,10 +249,10 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+                params.row.campaign.currency as keyof typeof currencySymbols
               ]
             }
-            {params.row.goalAmount || 0}
+            {params.row.campaign.fundingGoal}
           </div>
         );
       },
@@ -283,7 +274,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+                params.row.campaign.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -300,19 +291,26 @@ const orgFundCampaign = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <Button
-          variant="success"
-          size="sm"
-          className={styles.editButton}
-          data-testid="editCampaignBtn"
-          onClick={() =>
-            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit')
-          }
-        >
-          <i className="fa fa-edit" />
-        </Button>
-      ),
+      renderCell: (params: GridCellParams) => {
+        return (
+          <>
+            <Button
+              variant="success"
+              size="sm"
+              className={styles.editButton}
+              data-testid="editCampaignBtn"
+              onClick={() =>
+                handleOpenModal(
+                  params.row.campaign as InterfaceCampaignInfo,
+                  'edit',
+                )
+              }
+            >
+              <i className="fa fa-edit" />
+            </Button>
+          </>
+        );
+      },
     },
     {
       field: 'assocPledge',
@@ -330,7 +328,7 @@ const orgFundCampaign = (): JSX.Element => {
             size="sm"
             className={styles.editButton}
             data-testid="viewBtn"
-            onClick={() => handleClick(params.row.id as string)}
+            onClick={() => handleClick(params.row.campaign._id as string)}
           >
             <i className="fa fa-eye me-1" />
             {t('viewPledges')}
@@ -371,15 +369,6 @@ const orgFundCampaign = (): JSX.Element => {
                 { label: t('latestEndDate'), value: 'endDate_DESC' },
                 { label: t('earliestEndDate'), value: 'endDate_ASC' },
               ]}
-              selectedOption={
-                sortBy === 'fundingGoal_ASC'
-                  ? tCommon('lowestGoal')
-                  : sortBy === 'fundingGoal_DESC'
-                    ? tCommon('highestGoal')
-                    : sortBy === 'endDate_DESC'
-                      ? tCommon('latestEndDate')
-                      : tCommon('earliestEndDate')
-              }
               onSortChange={(value) =>
                 setSortBy(
                   value as
@@ -412,7 +401,7 @@ const orgFundCampaign = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={8}
         hideFooter={true}
-        getRowId={(row) => row.id}
+        getRowId={(row) => row.campaign._id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -426,7 +415,7 @@ const orgFundCampaign = (): JSX.Element => {
         }
         autoHeight
         rowHeight={65}
-        rows={filteredCampaigns}
+        rows={campaigns.map((campaign, index) => ({ id: index + 1, campaign }))}
         columns={columns}
         isRowSelectable={() => false}
       />

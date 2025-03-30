@@ -310,7 +310,7 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 {/* <DashBoardCard
-                  count={data?.organization[0].blockedUsers?.length}
+                  count={data?.organizations[0].blockedUsers?.length}
                   title={t('blockedUsers')}
                   icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                 /> */}
@@ -325,7 +325,7 @@ function OrganizationDashboard(): JSX.Element {
                 // }}
               >
                 {/* <DashBoardCard
-                  count={data?.organization[0].membershipRequests?.length}
+                  count={data?.organizations[0].membershipRequests?.length}
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="var(--bs-primary)" />}
                 /> */}
@@ -448,7 +448,7 @@ function OrganizationDashboard(): JSX.Element {
               {/* [...Array(4)].map((_, index) => { */}
               {/* return <CardItemLoading key={`requestsLoading_${index}`} />; */}
               {/* }) */}
-              {/* ) : data?.organization[0].membershipRequests.length == 0 ? ( */}
+              {/* ) : data?.organizations[0].membershipRequests.length == 0 ? ( */}
               <div
                 className={styles.emptyContainer}
                 style={{ height: '150px' }}
@@ -456,7 +456,7 @@ function OrganizationDashboard(): JSX.Element {
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
               {/* ) : ( */}
-              {/* data?.organization[0]?.membershipRequests */}
+              {/* data?.organizations[0]?.membershipRequests */}
               {/* .slice(0, 8) */}
               {/* .map((request) => { */}
               {/* return ( */}
