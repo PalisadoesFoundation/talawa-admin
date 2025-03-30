@@ -13,6 +13,7 @@ import { I18nextProvider } from 'react-i18next';
 
 import OrganizationEvents from './OrganizationEvents';
 import { store } from 'state/store';
+import { MockLink } from '@apollo/react-testing';
 import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -368,6 +369,7 @@ describe('Organisation Events Page', () => {
       endTime: '06:00',
       allDay: false,
       recurring: false,
+      chat: true,
       isPublic: true,
       isRegisterable: true,
     };
@@ -429,6 +431,7 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(screen.getByTestId('alldayCheck'));
     await userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('createChat'));
     await userEvent.click(screen.getByTestId('ispublicCheck'));
     await userEvent.click(screen.getByTestId('registrableCheck'));
 
@@ -443,6 +446,7 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('recurringCheck')).toBeChecked();
     expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
+    expect(screen.getByTestId('createChat')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
     expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
@@ -544,14 +548,13 @@ describe('Organisation Events Page', () => {
 
   test('Testing Create event with error handling', async () => {
     // Create a custom link that will throw a network error for the CREATE_EVENT_MUTATION
-    const errorLink = new StaticMockLink(MOCKS, true);
 
-    // Override the query method to throw an error for CREATE_EVENT_MUTATION
-    errorLink.request = vi.fn().mockImplementation((operation) => {
-      if (operation.query === CREATE_EVENT_MUTATION) {
-        return Promise.reject(new Error('Failed to create event'));
-      }
-      return StaticMockLink.prototype.request.call(errorLink, operation);
+    const errorLink = new MockLink(MOCKS);
+
+    //  Override the request method to throw an error for CREATE_EVENT_MUTATION
+    errorLink.addMockedResponse({
+      request: { query: CREATE_EVENT_MUTATION },
+      error: new Error('Failed to create event'),
     });
 
     render(
@@ -596,18 +599,107 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    // Click the create event button to trigger the mutation
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
-    // Wait for the error handler to be called
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalled();
     });
 
-    // Verify the error handler was called with any error object
     expect(errorHandler).toHaveBeenCalledWith(
-      expect.anything(), // The t function
-      expect.any(Error), // Any error object, regardless of type
+      expect.anything(),
+      expect.any(Error),
     );
+  });
+
+  test('Testing handleChangeView function', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    // Get the view type dropdown button
+    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    expect(viewTypeDropdown).toBeInTheDocument();
+
+    // Click to open the dropdown
+    await userEvent.click(viewTypeDropdown);
+
+    // Select "Day" view option
+    const dayOption = await screen.findByTestId('Day');
+    expect(dayOption).toBeInTheDocument();
+    await userEvent.click(dayOption);
+
+    // Open dropdown again
+    await userEvent.click(viewTypeDropdown);
+
+    // Select "Month View" option
+    const monthOption = await screen.findByTestId('Month View');
+    expect(monthOption).toBeInTheDocument();
+    await userEvent.click(monthOption);
+
+    // Open dropdown again
+    await userEvent.click(viewTypeDropdown);
+
+    // Select "Year View" option
+    const yearOption = await screen.findByTestId('Year View');
+    expect(yearOption).toBeInTheDocument();
+    await userEvent.click(yearOption);
+  });
+
+  test('Testing view type dropdown selection', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // First, get the view type dropdown button
+    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    expect(viewTypeDropdown).toBeInTheDocument();
+    expect(viewTypeDropdown.textContent).toContain('Month View');
+
+    // Click to open the dropdown
+    await userEvent.click(viewTypeDropdown);
+
+    // Find and click on the "Day" option using the data-testid
+    const dayOption = await screen.findByTestId('Day');
+    expect(dayOption).toBeInTheDocument();
+    expect(dayOption.textContent).toBe('Select Day');
+
+    await userEvent.click(dayOption);
+
+    // Verify the selection updated the dropdown button text
+    await waitFor(() => {
+      expect(viewTypeDropdown.textContent).toContain('Day');
+    });
   });
 });
