@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.tsx#L38)
+Defined in: [src/screens/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.tsx#L12)
 
 ## Parameters
 

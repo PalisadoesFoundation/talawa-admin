@@ -1,42 +1,3 @@
-/**
- * UserSidebarOrg Component
- *
- * This component represents the sidebar for the user portal, providing
- * navigation options and user-related functionalities. It includes branding,
- * menu options, and user profile actions.
- *
- * @component
- * @param {InterfaceUserSidebarOrgProps} props - The props for the component.
- * @param {string} props.orgId - The ID of the organization (currently unused).
- * @param {TargetsType[]} props.targets - Array of navigation targets, each containing
- *   a name and URL or nested dropdown options.
- * @param {boolean | null} props.hideDrawer - State to determine the visibility of the sidebar.
- *   `null` hides the sidebar by default, `true` hides it, and `false` shows it.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer - Function
- *   to update the `hideDrawer` state.
- *
- * @returns {JSX.Element} The rendered UserSidebarOrg component.
- *
- * @remarks
- * - The sidebar includes branding with the Talawa logo and text.
- * - Navigation links are dynamically generated based on the `targets` prop.
- * - The sidebar auto-hides on smaller screens (viewport width <= 820px) when a link is clicked.
- * - The organization section is currently commented out and not in use.
- *
- * @example
- * ```tsx
- * <UserSidebarOrg
- *   orgId="123"
- *   targets={[
- *     { name: 'dashboard', url: '/dashboard' },
- *     { name: 'settings', url: '/settings' },
- *   ]}
- *   hideDrawer={false}
- *   setHideDrawer={setHideDrawerFunction}
- * />
- * ```
- *
- */
 // import { useQuery } from '@apollo/client';
 // import { WarningAmberOutlined } from '@mui/icons-material';
 // import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
@@ -62,6 +23,22 @@ export interface InterfaceUserSidebarOrgProps {
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
+
+/**
+ * Sidebar component for user navigation within an organization.
+ *
+ * Provides:
+ * - Branding with the Talawa logo.
+ * - Displays the current organization's details.
+ * - Navigation options with links and collapsible dropdowns.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
+ * @param setHideDrawer - Function to update the `hideDrawer` state.
+ *
+ * @returns JSX.Element - The rendered sidebar component.
+ */
 
 const UserSidebarOrg = ({
   targets,

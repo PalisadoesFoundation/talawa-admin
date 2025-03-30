@@ -1,42 +1,3 @@
-/**
- * OrganizationModal Component
- *
- * This component renders a modal for creating or editing an organization.
- * It includes a form with fields for organization details such as name,
- * description, address, and an option to upload a display image.
- *
- * @component
- * @param {InterfaceOrganizationModalProps} props - The properties passed to the component.
- * @param {boolean} props.showModal - Determines whether the modal is visible.
- * @param {() => void} props.toggleModal - Function to toggle the visibility of the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState -
- * Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createOrg -
- * Function to handle form submission for creating an organization.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
- * @param {InterfaceCurrentUserTypePG | undefined} props.userData - Current user data.
- *
- * @remarks
- * - The form includes validation for input fields such as name, description, and address.
- * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
- * - Displays success or error messages using `react-toastify` for image upload feedback.
- *
- * @example
- * ```tsx
- * <OrganizationModal
- *   showModal={true}
- *   toggleModal={handleToggleModal}
- *   formState={formState}
- *   setFormState={setFormState}
- *   createOrg={handleCreateOrg}
- *   t={translate}
- *   tCommon={translateCommon}
- *   userData={currentUser}
- * />
- * ```
- */
 import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
@@ -46,6 +7,32 @@ import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import { toast } from 'react-toastify';
 import { validateFile } from 'utils/fileValidation';
+
+// import useLocalStorage from 'utils/useLocalstorage';
+
+/**
+ * Represents the state of the form in the organization modal.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.switch`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 interface InterfaceFormStateType {
   addressLine1: string;

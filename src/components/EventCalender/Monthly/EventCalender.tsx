@@ -1,39 +1,3 @@
-/**
- * Calendar Component
- *
- * This component renders a calendar view that supports multiple view types
- * (day, month, and year) and displays events and holidays. It provides
- * navigation between dates and months, and allows users to view event details.
- *
- * @component
- * @param {InterfaceCalendarProps} props - The props for the Calendar component.
- * @param {InterfaceEvent[]} props.eventData - Array of event data to display.
- * @param {() => void} props.refetchEvents - Function to refetch events.
- * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
- * @param {string} [props.userRole] - Role of the current user (e.g., SUPERADMIN, ADMIN).
- * @param {string} [props.userId] - ID of the current user.
- * @param {ViewType} props.viewType - The current view type (DAY, MONTH, YEAR).
- *
- * @returns {JSX.Element} The rendered Calendar component.
- *
- * @remarks
- * - The component dynamically adjusts its layout based on the screen width.
- * - Events are filtered based on user role and organization data.
- * - Holidays are displayed for the current month.
- *
- * @example
- * ```tsx
- * <Calendar
- *   eventData={events}
- *   refetchEvents={fetchEvents}
- *   orgData={organizationData}
- *   userRole="ADMIN"
- *   userId="12345"
- *   viewType={ViewType.MONTH}
- * />
- * ```
- *
- */
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
@@ -51,6 +15,25 @@ import type {
 } from 'types/Event/interface';
 import { Role } from 'types/Event/interface';
 import { type User } from 'types/User/type';
+
+/**
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,

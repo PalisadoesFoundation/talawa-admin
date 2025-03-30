@@ -6,7 +6,9 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/OrganizationCardStart/OrganizationCardStart.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationCardStart/OrganizationCardStart.tsx#L32)
+Defined in: [src/components/OrganizationCardStart/OrganizationCardStart.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationCardStart/OrganizationCardStart.tsx#L13)
+
+Component to display a simplified card for an organization.
 
 ## Parameters
 
@@ -17,3 +19,5 @@ Defined in: [src/components/OrganizationCardStart/OrganizationCardStart.tsx:32](
 ## Returns
 
 `JSX.Element`
+
+JSX element representing the organization card.

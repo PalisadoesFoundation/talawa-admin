@@ -1,35 +1,3 @@
-/**
- * IconComponent - A React functional component that renders various icons
- * based on the provided `name` prop. The component supports both SVG icons
- * and Material-UI icons, along with customizable properties such as `fill`,
- * `height`, and `width`.
- *
- * @remarks
- * This component is designed to dynamically render icons based on the `name`
- * prop. It supports a wide range of icons, including organization-related,
- * dashboard, people, events, and more. If the `name` prop does not match any
- * predefined case, a default "Question Mark" icon is rendered.
- *
- * @param props - The properties for the IconComponent.
- * @param props.name - The name of the icon to render. This determines which
- * specific icon is displayed.
- * @param props.fill - (Optional) The fill color for the icon. Used for SVG icons.
- * @param props.height - (Optional) The height of the icon. Used for SVG icons.
- * @param props.width - (Optional) The width of the icon. Used for SVG icons.
- *
- * @returns A JSX.Element representing the requested icon.
- *
- * @example
- * ```tsx
- * <IconComponent name="Dashboard" fill="#000" />
- * <IconComponent name="Volunteer" height="24px" width="24px" />
- * ```
- *
- * @default
- * If the `name` prop does not match any case, a default "Question Mark" icon
- * is rendered with a large font size.
- *
- */
 import {
   QuestionMarkOutlined,
   ContactPageOutlined,
@@ -68,7 +36,12 @@ export interface InterfaceIconComponent {
   height?: string;
   width?: string;
 }
-
+/**
+ * Renders an icon based on the provided name.
+ *
+ * @param props - Contains the name of the icon and optional styles (fill, height, width).
+ * @returns JSX element representing the icon.
+ */
 const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
   switch (props.name) {
     case 'My Organizations':

@@ -1,40 +1,32 @@
-/**
- * EditUserTagModal Component
- *
- * This component renders a modal for editing user tags. It provides a form
- * where users can input a new tag name and submit it for editing. The modal
- * includes validation to ensure the tag name is not empty before submission.
- *
- * @component
- * @param {InterfaceEditUserTagModalProps} props - The props for the component.
- * @param {boolean} props.editUserTagModalIsOpen - Determines if the modal is visible.
- * @param {() => void} props.hideEditUserTagModal - Function to close the modal.
- * @param {string} props.newTagName - The current value of the tag name input field.
- * @param {(state: React.SetStateAction<string>) => void} props.setNewTagName - Function to update the tag name state.
- * @param {(e: FormEvent<HTMLFormElement>) => Promise<void>} props.handleEditUserTag - Function to handle the form submission for editing the tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
- * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
- *
- * @returns {React.FC} A React functional component that renders the edit user tag modal.
- *
- * @example
- * ```tsx
- * <EditUserTagModal
- *   editUserTagModalIsOpen={true}
- *   hideEditUserTagModal={closeModalHandler}
- *   newTagName={tagName}
- *   setNewTagName={setTagName}
- *   handleEditUserTag={submitHandler}
- *   t={t}
- *   tCommon={tCommon}
- * />
- * ```
- */
 import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+
+/**
+ * Edit UserTag Modal component for the Manage Tag screen.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.removeButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 export interface InterfaceEditUserTagModalProps {
   editUserTagModalIsOpen: boolean;

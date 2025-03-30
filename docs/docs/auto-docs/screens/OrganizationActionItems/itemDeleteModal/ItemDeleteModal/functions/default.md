@@ -6,13 +6,17 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L49)
+Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L26)
+
+A modal component for confirming the deletion of an action item.
 
 ## Parameters
 
 ### props
 
 [`InterfaceItemDeleteModalProps`](../interfaces/InterfaceItemDeleteModalProps.md)
+
+The properties passed to the component.
 
 ### deprecatedLegacyContext?
 
@@ -27,3 +31,5 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 ## Returns
 
 `ReactNode`
+
+The `ItemDeleteModal` component.

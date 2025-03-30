@@ -1,44 +1,20 @@
-/**
- * AgendaCategoryPreviewModal Component
- *
- * This component renders a modal to preview the details of an agenda category.
- * It displays the name, description, and creator of the agenda category, and
- * provides options to edit or delete the category.
- *
- * @component
- * @param {InterfaceAgendaCategoryPreviewModalProps} props - The props for the component.
- * @param {boolean} props.agendaCategoryPreviewModalIsOpen - Determines if the modal is visible.
- * @param {() => void} props.hidePreviewModal - Function to close the modal.
- * @param {() => void} props.showUpdateModal - Function to open the update modal.
- * @param {() => void} props.toggleDeleteModal - Function to toggle the delete modal.
- * @param {InterfaceFormStateType} props.formState - The state containing agenda category details.
- * @param {string} props.formState.name - The name of the agenda category.
- * @param {string} props.formState.description - The description of the agenda category.
- * @param {string} props.formState.createdBy - The creator of the agenda category.
- * @param {(key: string) => string} props.t - Translation function for localization.
- *
- * @returns {JSX.Element} The rendered AgendaCategoryPreviewModal component.
- *
- * @example
- * <AgendaCategoryPreviewModal
- *   agendaCategoryPreviewModalIsOpen={true}
- *   hidePreviewModal={handleHide}
- *   showUpdateModal={handleShowUpdate}
- *   toggleDeleteModal={handleToggleDelete}
- *   formState={{ name: 'Meeting', description: 'Monthly meeting', createdBy: 'Admin' }}
- *   t={(key) => key}
- * />
- */
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
+
 import styles from 'style/app-fixed.module.css';
 
+/**
+ * InterfaceFormStateType is an object containing the form state
+ */
 interface InterfaceFormStateType {
   name: string;
   description: string;
   createdBy: string;
 }
 
+/**
+ * InterfaceAgendaCategoryPreviewModalProps is an object containing the props for AgendaCategoryPreviewModal component
+ */
 interface InterfaceAgendaCategoryPreviewModalProps {
   agendaCategoryPreviewModalIsOpen: boolean;
   hidePreviewModal: () => void;
@@ -49,6 +25,16 @@ interface InterfaceAgendaCategoryPreviewModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * AgendaCategoryPreviewModal component is used to preview the agenda category details like name, description, createdBy
+ * @param  agendaCategoryPreviewModalIsOpen - boolean value to check if the modal is open or not
+ * @param  hidePreviewModal - function to hide the modal
+ * @param  showUpdateModal - function to show the update modal
+ * @param  toggleDeleteModal - function to toggle the delete modal
+ * @param  formState - object containing the form state
+ * @param  t - i18n function to translate the text
+ * @returns  returns the AgendaCategoryPreviewModal component
+ */
 const AgendaCategoryPreviewModal: React.FC<
   InterfaceAgendaCategoryPreviewModalProps
 > = ({

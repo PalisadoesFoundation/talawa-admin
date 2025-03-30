@@ -1,39 +1,3 @@
-/**
- * CommunityProfile Component
- *
- * This component renders a form to manage and update the community profile.
- * It includes fields for community name, website URL, logo, and various social media links.
- * The component fetches existing community data using GraphQL queries and allows
- * users to update or reset the profile information.
- *
- * Features:
- * - Fetches community data using the `GET_COMMUNITY_DATA_PG` query.
- * - Updates community data using the `UPDATE_COMMUNITY_PG` mutation.
- * - Resets community data using the `RESET_COMMUNITY` mutation.
- * - Displays a loader while data is being fetched.
- * - Provides form validation and disables buttons when inputs are empty.
- *
- * Dependencies:
- * - React, React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
- * - Custom components: `Loader` and `UpdateSession`.
- * - Utility functions: `convertToBase64` and `errorHandler`.
- *
- * @returns {JSX.Element} The rendered CommunityProfile component.
- *
- * @component
- * @example
- * // Usage in a parent component
- * import CommunityProfile from './CommunityProfile';
- *
- * function App() {
- *   return <CommunityProfile />;
- * }
- *
- * @remarks
- * - The component uses `useEffect` to populate the form with fetched data.
- * - Social media links are displayed with corresponding icons.
- * - Form submission and reset operations are handled asynchronously.
- */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
@@ -61,6 +25,40 @@ import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
+/**
+ * `CommunityProfile` component allows users to view and update their community profile details.
+ *
+ * It includes functionalities to:
+ * - Display current community profile information
+ * - Update profile details including social media links and logo
+ * - Reset profile changes to the initial state
+ *
+ * @returns JSX.Element - The `CommunityProfile` component.
+ *
+ * @example
+ * ```tsx
+ * <CommunityProfile />
+ * ```
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.outlineButton`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', {

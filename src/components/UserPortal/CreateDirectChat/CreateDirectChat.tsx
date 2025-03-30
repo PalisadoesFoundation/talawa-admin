@@ -1,34 +1,3 @@
-/**
- * This component renders a modal for creating a direct chat with a user.
- * It allows users to search for other users and initiate a direct chat.
- *
- * @file CreateDirectChat.tsx
- * @module components/UserPortal/CreateDirectChat
- *
- * @param {InterfaceCreateDirectChatProps} props - The props for the component.
- * @param {boolean} props.createDirectChatModalisOpen - Determines if the modal is open.
- * @param {() => void} props.toggleCreateDirectChatModal - Function to toggle the modal visibility.
- * @param {(variables?: Partial<{ id: string }>) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
- * @param {GroupChat[]} props.chats - List of existing group chats.
- *
- * @returns {JSX.Element} The rendered CreateDirectChat modal component.
- *
- * @remarks
- * - Uses Apollo Client for GraphQL queries and mutations.
- * - Integrates with Material-UI and React-Bootstrap for UI components.
- * - Includes a search functionality to filter users by name.
- *
- * @example
- * ```tsx
- * <CreateDirectChatModal
- *   toggleCreateDirectChatModal={toggleModal}
- *   createDirectChatModalisOpen={isModalOpen}
- *   chatsListRefetch={refetchChats}
- *   chats={existingChats}
- * />
- * ```
- *
- */
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
@@ -67,6 +36,10 @@ interface InterfaceCreateDirectChatProps {
   ) => Promise<ApolloQueryResult<unknown>>;
   chats: GroupChat[];
 }
+
+/**
+ * Styled table cell with custom styles.
+ */
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

@@ -1,50 +1,3 @@
-/**
- * OrganizationVenues Component
- *
- * This component displays a list of venues associated with an organization.
- * It provides functionalities for searching, sorting, creating, editing,
- * and deleting venues. The component uses GraphQL queries and mutations
- * to fetch and manipulate venue data.
- *
- * @Features
- * - Search venues by name or description.
- * - Sort venues by highest or lowest capacity.
- * - Create new venues or edit existing ones using a modal.
- * - Delete venues with confirmation.
- * - Displays a loader while fetching data and handles errors gracefully.
- *
- * @Hooks
- * - `useTranslation`: For internationalization (i18n) support.
- * - `useState`: To manage component state such as modal visibility, search term, etc.
- * - `useEffect`: To update the venue list when data changes.
- * - `useQuery`: To fetch venue data from the server.
- * - `useMutation`: To handle venue deletion.
- * - `useParams`: To retrieve the organization ID from the URL.
- *
- * @Props
- * - None (organization ID is derived from the URL parameters).
- *
- * @GraphQL
- * - Query: `VENUE_LIST` - Fetches the list of venues for the organization.
- * - Mutation: `DELETE_VENUE_MUTATION` - Deletes a specific venue by ID.
- *
- * @StateVariables
- * - `venueModal`: Controls the visibility of the venue modal.
- * - `venueModalMode`: Determines whether the modal is in 'edit' or 'create' mode.
- * - `searchTerm`: Stores the search term entered by the user.
- * - `searchBy`: Specifies the field to search by ('name' or 'desc').
- * - `sortOrder`: Specifies the sorting order ('highest' or 'lowest').
- * - `editVenueData`: Stores the data of the venue being edited.
- * - `venues`: Stores the list of venues fetched from the server.
- *
- * @ErrorHandling
- * - Uses `errorHandler` utility to display errors in a user-friendly manner.
- *
- * @Dependencies
- * - React, React Router, Apollo Client, Bootstrap, and custom components.
- *
- * @returns JSX.Element - The rendered OrganizationVenues component.
- */
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -61,7 +14,10 @@ import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
+/**
+ * Component to manage and display the list of organization venues.
+ * Handles searching, sorting, and CRUD operations for venues.
+ */
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
   const { t } = useTranslation('translation', {

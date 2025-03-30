@@ -1,43 +1,3 @@
-/**
- * EventRegistrantsModal Component
- *
- * This component renders a modal to manage event registrants. It allows users to:
- * - View the list of registered attendees for a specific event.
- * - Add new attendees from the organization's member list or through on-spot registration.
- * - Remove existing attendees from the event.
- *
- * @component
- * @param {ModalPropType} props - The properties passed to the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {string} props.eventId - The ID of the event for which registrants are being managed.
- * @param {string} props.orgId - The ID of the organization associated with the event.
- * @param {() => void} props.handleClose - Callback function to close the modal.
- *
- * @returns {JSX.Element} The rendered EventRegistrantsModal component.
- *
- * @remarks
- * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
- * - Displays a loading spinner while data is being fetched.
- * - Integrates with `react-toastify` for user notifications.
- * - Supports translations using `react-i18next`.
- *
- * @example
- * ```tsx
- * <EventRegistrantsModal
- *   show={true}
- *   eventId="event123"
- *   orgId="org456"
- *   handleClose={() => setShowModal(false)}
- * />
- * ```
- *
- * @dependencies
- * - `react-bootstrap` for modal and button components.
- * - `@apollo/client` for GraphQL queries and mutations.
- * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
- * - `react-toastify` for toast notifications.
- * - `react-i18next` for translations.
- */
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -56,7 +16,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import type { InterfaceUser } from 'types/User/interface';
-
+// Props for the EventRegistrantsModal component
 type ModalPropType = {
   show: boolean;
   eventId: string;
@@ -64,6 +24,16 @@ type ModalPropType = {
   handleClose: () => void;
 };
 
+/**
+ * Modal component for managing event registrants.
+ * Allows adding and removing attendees from an event.
+ *
+ * @param show - Whether the modal is visible or not.
+ * @param eventId - The ID of the event.
+ * @param orgId - The ID of the organization.
+ * @param handleClose - Function to close the modal.
+ * @returns JSX element representing the modal.
+ */
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);

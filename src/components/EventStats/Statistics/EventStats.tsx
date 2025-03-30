@@ -1,36 +1,3 @@
-/**
- * Component to display event statistics in a modal.
- *
- * This component fetches event feedback data using the `useQuery` hook
- * and displays various statistics such as feedback, reviews, and average ratings.
- *
- * @component
- * @param {ModalPropType} props - The properties passed to the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {string} props.eventId - The unique identifier of the event for which statistics are displayed.
- * @param {() => void} props.handleClose - Callback function to close the modal.
- *
- * @returns {JSX.Element} A modal containing event statistics.
- *
- * @remarks
- * - The component uses the `EVENT_FEEDBACKS` GraphQL query to fetch event feedback data.
- * - Displays a loading spinner while the data is being fetched.
- * - The modal is styled using `react-bootstrap` and custom CSS modules.
- *
- * @example
- * ```tsx
- * <EventStats
- *   show={true}
- *   eventId="12345"
- *   handleClose={() => console.log('Modal closed')}
- * />
- * ```
- *
- * @dependencies
- * - `react-bootstrap` for modal UI.
- * - `@apollo/client` for GraphQL query handling.
- * - Custom CSS modules for styling.
- */
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { FeedbackStats } from './Feedback/Feedback';
@@ -41,12 +8,22 @@ import eventStatsStyles from '../css/EventStats.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
+// Props for the EventStats component
 type ModalPropType = {
   show: boolean;
   eventId: string;
   handleClose: () => void;
 };
 
+/**
+ * Component that displays event statistics in a modal.
+ * Shows feedback, reviews, and average rating for the event.
+ *
+ * @param show - Whether the modal is visible or not.
+ * @param handleClose - Function to close the modal.
+ * @param eventId - The ID of the event.
+ * @returns JSX element representing the event statistics modal.
+ */
 export const EventStats = ({
   show,
   handleClose,

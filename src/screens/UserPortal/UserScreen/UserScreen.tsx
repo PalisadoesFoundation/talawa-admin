@@ -1,39 +1,3 @@
-/**
- * UserScreen component serves as the main layout for the user portal.
- * It manages the sidebar visibility, handles routing, and displays
- * the appropriate content based on the current route and organization ID.
- *
- * @component
- *
- * @remarks
- * - Redirects to the home page if `orgId` is not present in the URL.
- * - Dynamically updates the Redux store with targets based on the `orgId`.
- * - Adjusts the sidebar visibility based on the screen width.
- *
- * @returns {JSX.Element} The rendered UserScreen component.
- *
- * @example
- * ```tsx
- * <Route path="/user/:orgId/*" element={<UserScreen />} />
- * ```
- *
- * @property {string} orgId - The organization ID retrieved from the URL parameters.
- * @property {boolean | null} hideDrawer - State to manage the visibility of the sidebar.
- * @property {TargetsType[]} targets - List of user-specific routes fetched from the Redux store.
- *
- * @function handleResize
- * Toggles the sidebar visibility based on the screen width.
- *
- * @hook useEffect
- * - Updates targets in the Redux store when `orgId` changes.
- * - Sets up and cleans up the window resize event listener.
- *
- * @dependencies
- * - `react-router-dom` for routing and navigation.
- * - `react-redux` for state management.
- * - `react-bootstrap` for UI components.
- * - `react-i18next` for internationalization.
- */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
@@ -60,6 +24,13 @@ const map: InterfaceMapType = {
   leaveorg: 'leaveOrganization',
 };
 
+/**
+ * The UserScreen component serves as a container for user-specific pages
+ * within an organization context. It provides layout and sidebar navigation
+ * functionality based on the current organization ID and user roles.
+ *
+ * @returns The UserScreen component.
+ */
 const UserScreen = (): JSX.Element => {
   // Get the current location path for debugging or conditional rendering
   const location = useLocation();

@@ -1,34 +1,15 @@
-/**
- * Renders the `OrganizationCardStart` component, which displays an organization card
- * with an image, name, and a link to the organization's home page.
- *
- * @param props - The properties required to render the organization card.
- * @param props.id - The unique identifier for the organization. Used to construct the link URI.
- * @param props.name - The name of the organization to be displayed on the card.
- * @param props.image - The URL of the organization's image. If not provided, a placeholder image is used.
- *
- * @returns A JSX element representing the organization card.
- *
- * @remarks
- * - The component uses CSS modules for styling, with styles imported from `style/app-fixed.module.css`.
- * - If the `image` prop is not provided, a default placeholder image is displayed.
- * - The card is wrapped in an anchor (`<a>`) tag that navigates to the organization's home page.
- *
- * @example
- * Here's an example of how to use the `OrganizationCardStart` component:
- * ```tsx
- * <OrganizationCardStart
- *   id="123"
- *   name="Example Organization"
- *   image="https://example.com/logo.png"
- * />
- * ```
- *
- */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceOrganizationCardStartProps } from 'types/Organization/interface';
 
+/**
+ * Component to display a simplified card for an organization.
+ *
+ * @param image - URL of the organization's image.
+ * @param id - Unique identifier for the organization.
+ * @param name - Name of the organization.
+ * @returns JSX element representing the organization card.
+ */
 function organizationCardStart(
   props: InterfaceOrganizationCardStartProps,
 ): JSX.Element {

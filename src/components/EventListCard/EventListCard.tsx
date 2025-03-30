@@ -1,46 +1,22 @@
-/**
- * EventListCard component.
- *
- * This component represents a card that displays event details and allows users
- * to interact with it by opening a modal for more information. It uses translations
- * for localization and handles navigation based on the presence of an organization ID.
- *
- * @param props - The properties passed to the component.
- * @param props.title - The title of the event. Defaults to "Dogs Care" if not provided.
- * @param props.description - The description of the event.
- * @param props.date - The date of the event.
- * @param props.location - The location of the event.
- * @param props.refetchEvents - Optional callback function to refetch events.
- *
- * @returns A JSX element representing the event card and its associated modal.
- *
- * @remarks
- * - If the `orgId` parameter is missing from the URL, the user is redirected to the home page.
- * - Clicking on the card opens a modal with more details about the event.
- *
- * @example
- * ```tsx
- * <EventListCard
- *   title="Community Meetup"
- *   description="A meetup for the local community."
- *   date="2023-10-15"
- *   location="Community Hall"
- *   refetchEvents={fetchEvents}
- * />
- * ```
- *
- */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router-dom';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
-
+/**
+ * Props for the EventListCard component.
+ */
 interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
+/**
+ * Component that displays an event card with a modal for event details.
+ *
+ * @param props - The props for the EventListCard component.
+ * @returns  The rendered EventListCard component.
+ */
 function eventListCard(props: InterfaceEventListCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const { t: tCommon } = useTranslation('common');

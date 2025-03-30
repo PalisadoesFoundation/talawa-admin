@@ -1,39 +1,3 @@
-/**
- * OrganizationTags Component
- *
- * This component is responsible for managing and displaying organization tags.
- * It provides functionalities such as searching, sorting, creating, and managing tags.
- * The component integrates with GraphQL queries and mutations to fetch and update data.
- *
- * @component
- *
- * @remarks
- * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
- * - Implements infinite scrolling for loading tags in chunks.
- * - Uses Material-UI's `DataGrid` for displaying tags in a tabular format.
- * - Includes a modal for creating new tags.
- *
- *
- * @example
- * ```tsx
- * <OrganizationTags />
- * ```
- *
- * @returns {JSX.Element} The rendered OrganizationTags component.
- *
- * @property {boolean} createTagModalIsOpen - State to control the visibility of the create tag modal.
- * @property {string} tagSearchName - State to store the search term for filtering tags.
- * @property {SortedByType} tagSortOrder - State to store the sorting order of tags.
- * @property {string} tagName - State to store the name of the tag being created.
- *
- * @function showCreateTagModal - Opens the create tag modal.
- * @function hideCreateTagModal - Closes the create tag modal.
- * @function createTag - Handles the creation of a new tag.
- * @function loadMoreUserTags - Fetches more tags for infinite scrolling.
- * @function redirectToManageTag - Navigates to the manage tag page for a specific tag.
- * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
- * @function handleSortChange - Updates the sorting order of tags.
- */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
@@ -66,6 +30,32 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+
+/**
+ * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
+ *
+ * This component does not accept any props and is responsible for displaying
+ * the content associated with the corresponding route.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.inputField`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {

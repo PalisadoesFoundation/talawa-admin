@@ -1,35 +1,3 @@
-/**
- * ChatRoom Component
- *
- * This component represents a chat room interface where users can send and receive messages,
- * view chat details, and manage attachments. It supports both group and direct messaging.
- *
- * @component
- * @param {InterfaceChatRoomProps} props - The props for the ChatRoom component.
- * @param {string} props.selectedContact - The ID of the selected contact or chat.
- * @param {Function} props.chatListRefetch - A function to refetch the chat list.
- *
- * @returns {JSX.Element} The rendered ChatRoom component.
- *
- * @remarks
- * - Uses Apollo Client for GraphQL queries, mutations, and subscriptions.
- * - Supports message editing, replying, and attachments.
- * - Displays group chat details when applicable.
- *
- * @dependencies
- * - React, React-Bootstrap, Material-UI, and Apollo Client.
- * - Custom hooks: `useLocalStorage`.
- * - Utility functions: `convertToBase64`.
- *
- * @example
- * ```tsx
- * <ChatRoom
- *   selectedContact="12345"
- *   chatListRefetch={refetchChatList}
- * />
- * ```
- *
- */
 import React, { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
@@ -64,7 +32,19 @@ interface InterfaceChatRoomProps {
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
 
+/**
+ * A chat room component that displays messages and a message input field.
+ *
+ * This component shows a list of messages between the user and a selected contact.
+ * If no contact is selected, it displays a placeholder with an icon and a message asking the user to select a contact.
+ *
+ * @param  props - The properties passed to the component.
+ * @param selectedContact - The ID or name of the currently selected contact. If empty, a placeholder is shown.
+ *
+ * @returns The rendered chat room component.
+ */
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
+  // Translation hook for text in different languages
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });

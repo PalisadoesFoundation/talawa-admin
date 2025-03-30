@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerCreateModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L46)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **eventId**: `string`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L49)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L17)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L48)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L16)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L47)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L15)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **orgId**: `string`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L50)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L18)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **refetchVolunteers**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L51)
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L19)
 
 #### Returns
 

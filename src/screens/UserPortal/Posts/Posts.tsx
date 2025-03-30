@@ -1,51 +1,3 @@
-/**
- * The `home` component serves as the main user interface for displaying posts,
- * advertisements, and pinned posts within an organization. It also provides
- * functionality for creating new posts and interacting with existing ones.
- *
- * @returns {JSX.Element} The rendered home component.
- *
- * @remarks
- * - This component uses GraphQL queries to fetch posts, advertisements, and user details.
- * - It includes a post creation modal and a carousel for pinned posts.
- * - The component redirects to the user page if the organization ID is not available.
- *
- * @component
- * @category Screens
- *
- * @dependencies
- * - `@apollo/client` for GraphQL queries.
- * - `@mui/icons-material` for icons.
- * - `react-bootstrap` for UI components.
- * - `react-multi-carousel` for carousel functionality.
- * - Custom components like `PostCard`, `PromotedPost`, and `StartPostModal`.
- *
- * @example
- * ```tsx
- * <home />
- * ```
- *
- * @remarks
- * The component uses the following GraphQL queries:
- * - `ORGANIZATION_ADVERTISEMENT_LIST` to fetch advertisements.
- * - `ORGANIZATION_POST_LIST` to fetch posts.
- * - `USER_DETAILS` to fetch user details.
- *
- * @remarks
- * The component maintains the following state variables:
- * - `posts`: Stores the list of posts fetched from the server.
- * - `pinnedPosts`: Stores the list of pinned posts.
- * - `adContent`: Stores the list of advertisements.
- * - `showModal`: Controls the visibility of the post creation modal.
- * - `postImg`: Stores the base64-encoded image for a new post.
- *
- * @remarks
- * The component includes the following key functionalities:
- * - Fetching and displaying posts and advertisements.
- * - Filtering and displaying pinned posts in a carousel.
- * - Handling post creation through a modal.
- * - Redirecting to the user page if the organization ID is missing.
- */
 import { useQuery } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import SendIcon from '@mui/icons-material/Send';
@@ -90,6 +42,31 @@ type Ad = {
   startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
 };
 
+/**
+ * `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
+ *
+ * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
+ *
+ * @returns JSX.Element - The rendered `home` component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.inputField`
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 export default function home(): JSX.Element {
   // Translation hook for localized text
   const { t } = useTranslation('translation', { keyPrefix: 'home' });

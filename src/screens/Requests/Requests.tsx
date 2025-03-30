@@ -1,53 +1,3 @@
-/**
- * @file Requests.tsx
- * @description This file contains the implementation of the Requests component, which displays
- *              a list of membership requests for an organization. It includes features like
- *              infinite scrolling, search functionality, and role-based access control.
- *
- * @module Requests
- *
- * @requires react
- * @requires @apollo/client
- * @requires react-bootstrap
- * @requires react-i18next
- * @requires react-toastify
- * @requires react-router-dom
- * @requires @mui/material
- * @requires GraphQl/Queries/Queries
- * @requires components/TableLoader/TableLoader
- * @requires components/RequestsTableItem/RequestsTableItem
- * @requires subComponents/SearchBar
- * @requires utils/interfaces
- * @requires utils/useLocalstorage
- * @requires style/app-fixed.module.css
- *
- *
- * @typedef {Object} InterfaceRequestsListItem
- * @property {string} _id - The unique identifier for the request.
- * @property {Object} user - The user details associated with the request.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
- *
- * @component
- * @name Requests
- * @description Displays a list of membership requests for an organization. Includes search,
- *              infinite scrolling, and role-based access control. Redirects unauthorized users
- *              to the organization list page.
- *
- * @returns {JSX.Element} The rendered Requests component.
- *
- * @example
- * <Requests />
- *
- * @remarks
- * - Uses Apollo Client's `useQuery` for fetching data.
- * - Implements infinite scrolling using `react-infinite-scroll-component`.
- * - Displays a search bar for filtering requests by user name.
- * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
- * - Displays appropriate messages when no data is available.
- *
- */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
@@ -76,6 +26,11 @@ interface InterfaceRequestsListItem {
   user: { firstName: string; lastName: string; email: string };
 }
 
+/**
+ * The `Requests` component fetches and displays a paginated list of membership requests
+ * for an organization, with functionality for searching, filtering, and infinite scrolling.
+ *
+ */
 const Requests = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });

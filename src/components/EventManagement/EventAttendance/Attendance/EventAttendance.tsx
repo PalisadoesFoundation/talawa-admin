@@ -1,37 +1,3 @@
-/**
- * Component: EventAttendance
- *
- * This component is responsible for displaying and managing the attendance of members for a specific event.
- * It provides functionalities such as filtering, sorting, and searching attendees, as well as viewing attendance statistics.
- *
- * @component
- * @returns {JSX.Element} The rendered EventAttendance component.
- *
- * @remarks
- * - Utilizes Apollo Client's `useLazyQuery` to fetch event attendees data.
- * - Supports filtering attendees by time periods (e.g., This Month, This Year, All).
- * - Allows sorting attendees by name in ascending or descending order.
- * - Includes a search functionality to filter attendees by name or email.
- * - Displays attendance statistics in a modal.
- *
- * @dependencies
- * - React and React hooks (`useState`, `useEffect`, `useMemo`).
- * - Apollo Client for GraphQL queries.
- * - React Router's `useParams` for accessing route parameters.
- * - Material-UI and React-Bootstrap for UI components.
- * - `react-i18next` for internationalization.
- *
- * @example
- * ```tsx
- * <EventAttendance />
- * ```
- *
- *
- *
- * @todo
- * - Improve accessibility for tooltips and dropdowns.
- * - Optimize performance for large attendee lists.
- */
 import React, { useEffect, useMemo, useState } from 'react';
 import { BiSearch as Search } from 'react-icons/bi';
 import {
@@ -54,6 +20,11 @@ import AttendedEventList from '../AttendanceList/AttendedEventList';
 import SortingButton from 'subComponents/SortingButton';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 
+/**
+ * Component to manage and display event attendance information
+ * Includes filtering and sorting functionality for attendees
+ * @returns JSX element containing the event attendance interface
+ */
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { eventId } = useParams<{ eventId: string }>();

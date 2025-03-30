@@ -1,51 +1,3 @@
-/**
- * UpcomingEvents Component
- *
- * This component renders a list of upcoming events for volunteers in a specific organization.
- * It provides functionality for searching, sorting, and volunteering for events or groups.
- *
- * @component
- *
- * @remarks
- * - Redirects to the homepage if `orgId` or `userId` is missing.
- * - Displays a loader while fetching events and handles errors gracefully.
- * - Allows users to search events by title or location and sort the results.
- * - Users can volunteer for events or join specific volunteer groups.
- *
- * @returns {JSX.Element} The rendered UpcomingEvents component.
- *
- * @dependencies
- * - `react`, `react-bootstrap`, `react-router-dom`, `react-icons`, `@mui/material`
- * - `@apollo/client` for GraphQL queries and mutations
- * - `react-toastify` for notifications
- * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
- *
- * @example
- * ```tsx
- * <UpcomingEvents />
- * ```
- *
- * @functionality
- * - Fetches upcoming events using the `USER_EVENTS_VOLUNTEER` GraphQL query.
- * - Allows users to volunteer for events using the `CREATE_VOLUNTEER_MEMBERSHIP` mutation.
- * - Provides a search bar and sorting options for filtering events.
- * - Displays event details, including title, location, dates, and volunteer groups.
- *
- * @state
- * - `searchTerm` - The current search term entered by the user.
- * - `searchBy` - The field to search by, either "title" or "location".
- *
- * @hooks
- * - `useTranslation` - For multi-language support.
- * - `useLocalStorage` - To retrieve the stored user ID.
- * - `useQuery` - To fetch events data.
- * - `useMutation` - To handle volunteering actions.
- *
- * @errors
- * - Displays an error message if events fail to load.
- * - Handles errors during volunteering actions and shows appropriate notifications.
- */
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -82,6 +34,35 @@ import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
+/**
+ * The `UpcomingEvents` component displays list of upcoming events for the user to volunteer.
+ * It allows the user to search, sort, and volunteer for events/volunteer groups.
+ *
+ * @returns The rendered component displaying the upcoming events.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.head`
+ * - `.btnsContainer`
+ * - `.input`
+ * - `.inputField`
+ * - `.searchButton`
+ * - `.btnsBlock`
+ * - `.outlineBtn`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
   const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });

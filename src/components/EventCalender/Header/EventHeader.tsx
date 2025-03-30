@@ -1,38 +1,3 @@
-/**
- * EventHeader Component
- *
- * This component renders the header section for the event calendar, providing
- * functionality for searching, sorting, and creating events. It is designed
- * to be used within the organization events page.
- *
- * @param {InterfaceEventHeaderProps} props - The props for the EventHeader component.
- * @param {ViewType} props.viewType - The current view type of the calendar (e.g., Month, Day, Year).
- * @param {(viewType: ViewType) => void} props.handleChangeView - Callback function to handle changes in the calendar view type.
- * @param {() => void} props.showInviteModal - Callback function to display the modal for creating a new event.
- *
- * @returns {JSX.Element} The rendered EventHeader component.
- *
- * @remarks
- * - This component uses `SearchBar` for searching events by name.
- * - It includes two `SortingButton` components for selecting the calendar view type and event type.
- * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
- *
- * @dependencies
- * - `react-bootstrap` for the `Button` component.
- * - `@mui/icons-material` for the `AddIcon`.
- * - `react-i18next` for translations.
- * - Custom styles from `style/app-fixed.module.css`.
- * - Subcomponents: `SortingButton` and `SearchBar`.
- *
- * @example
- * ```tsx
- * <EventHeader
- *   viewType={ViewType.MONTH}
- *   handleChangeView={(viewType) => console.log(viewType)}
- *   showInviteModal={() => console.log('Show modal')}
- * />
- * ```
- */
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
@@ -43,6 +8,34 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
+/**
+ * EventHeader component displays the header for the event calendar.
+ * It includes a search field, view type dropdown, event type dropdown, and a button to create an event.
+ *
+ * @param viewType - The current view type of the calendar.
+ * @param handleChangeView - Function to handle changing the view type.
+ * @param showInviteModal - Function to show the invite modal for creating an event.
+ * @returns JSX.Element - The rendered EventHeader component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.dropdown`
+ * - `.btnsContainer`
+ * - `.btnsBlock`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 function eventHeader({
   viewType,
   handleChangeView,
