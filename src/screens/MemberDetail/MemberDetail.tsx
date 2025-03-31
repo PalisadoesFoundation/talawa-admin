@@ -214,19 +214,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   // to handle the change in the form fields
   const handleFieldChange = (
     fieldName: string,
-    value: string | boolean,
+    value: string,
   ): void => {
     // future birthdates are not possible to select.
 
     // Check if value is a string
-    if (typeof value === 'string') {
       // Password validation (only for string values)
       if (fieldName === 'password' && value) {
         if (!validatePassword(value)) {
           toast.error('Password must be at least 8 characters long.');
           return;
         }
-      }
     }
 
     setisUpdated(true);

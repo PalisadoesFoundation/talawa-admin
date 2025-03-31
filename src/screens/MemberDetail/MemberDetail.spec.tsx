@@ -61,11 +61,7 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   };
 });
 
-declare global {
-  interface Window {
-    validatePassword?: (password: string) => boolean;
-  }
-}
+
 
 vi.mock('@dicebear/core', () => ({
   createAvatar: vi.fn(() => ({
@@ -751,45 +747,6 @@ describe('MemberDetail', () => {
     });
   });
 
-  test('confirm delete button should call handleDeleteUser function', async () => {
-    // Mock the handleDeleteUser function
-    const handleDeleteUserMock = vi.fn();
-
-    // Mock window.location to avoid "pathname" error
-    Object.defineProperty(window, 'location', {
-      value: { pathname: '/mock-path' },
-      writable: true,
-    });
-
-    // Wrap in MemoryRouter to support useLocation()
-    renderMemberDetailScreen(link1);
-
-    // Wait for UI to render
-    await waitFor(() => {
-      expect(screen.getByTestId('deleteUserButton')).toBeInTheDocument();
-    });
-
-    // Click delete button to open modal
-    const deleteButton = screen.getByTestId('deleteUserButton');
-    fireEvent.click(deleteButton);
-
-    // Ensure modal is open
-    await waitFor(() => {
-      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
-    });
-
-    // Click confirm delete button
-    const confirmButton = screen.getByTestId('button-handleDeleteConfirmation');
-    fireEvent.click(confirmButton);
-
-    // Ensure handleDeleteUserMock was called once
-    await waitFor(() => {
-      expect(handleDeleteUserMock).toHaveBeenCalledTimes(0);
-    });
-  });
-
-  //new test for dle
-
   it('handles all form field changes', async () => {
     renderMemberDetailScreen(link1);
 
@@ -899,6 +856,7 @@ describe('MemberDetail', () => {
 
                 triggerDelete = () => (
                   <button
+                    type="button"
                     data-testid="trigger-delete"
                     onClick={mockHandleDeleteUser}
                   >
@@ -955,6 +913,7 @@ describe('MemberDetail', () => {
 
                 triggerDelete = () => (
                   <button
+                    type="button"
                     data-testid="trigger-delete-no-data"
                     onClick={mockHandleDeleteUser}
                   >
@@ -1296,6 +1255,10 @@ describe('MemberDetail', () => {
     // Mock the file input click
     const fileInput = screen.getByTestId('fileInput');
     const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+
+    await userEvent.click(uploadImageBtn);
+    expect(fileInputClickSpy).toHaveBeenCalled();
+    
   });
 
   test('handles profile picture edit button click', async () => {
@@ -1325,62 +1288,58 @@ describe('MemberDetail', () => {
   it('should only validate passwords when value is a string and fieldName is password', async () => {
     // Spy on toast.error
     const toastErrorSpy = vi.spyOn(toast, 'error');
-
+  
     // Store original validatePassword if it exists
     const originalValidatePassword = window.validatePassword;
-    // Create mock implementation
+    // Create mock implementation using vi.fn()
     window.validatePassword = vi.fn();
-
+  
     renderMemberDetailScreen(link1);
     await wait();
-
+  
     // CASE 1: String input for password field - invalid password
     // Configure validatePassword to return false (validation fails)
-    (window.validatePassword as jest.Mock).mockReturnValueOnce(false);
-
+    vi.mocked(window.validatePassword).mockReturnValueOnce(false);
+  
     // Try to set an invalid password
     const passwordInput = screen.getByTestId('inputPassword');
     fireEvent.change(passwordInput, { target: { value: 'short' } });
-
+  
     // Verify validatePassword was called and toast.error was shown
     expect(toastErrorSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters long.',
+      'Password must be at least 8 characters long.'
     );
-
+  
     // Reset mocks
     toastErrorSpy.mockClear();
-    (window.validatePassword as jest.Mock).mockClear();
-
+    vi.mocked(window.validatePassword).mockClear();
+  
     // CASE 2: String input for password field - valid password
     // Configure validatePassword to return true (validation passes)
-    (window.validatePassword as jest.Mock).mockReturnValueOnce(true);
-
+    vi.mocked(window.validatePassword).mockReturnValueOnce(true);
+  
     // Set a valid password
     fireEvent.change(passwordInput, {
       target: { value: 'ValidPassword12@ijewirg3' },
     });
-
+  
     // Verify validatePassword was called but toast.error was not shown
     expect(toastErrorSpy).not.toHaveBeenCalled();
-
+  
     // Reset mocks
-    (window.validatePassword as jest.Mock).mockClear();
-
+    vi.mocked(window.validatePassword).mockClear();
+  
     // CASE 3: String input for non-password field
     // Update a regular string field
     const nameInput = screen.getByTestId('inputName');
     fireEvent.change(nameInput, {
       target: { value: 'New@Namewdivbs988972345' },
     });
-
+  
     // Verify validatePassword was NOT called (should skip that code path)
     expect(window.validatePassword).not.toHaveBeenCalled();
     expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    // Verify validatePassword was NOT called (should skip that code path)
-    expect(window.validatePassword).not.toHaveBeenCalled();
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
+  
     // Clean up
     window.validatePassword = originalValidatePassword;
     toastErrorSpy.mockRestore();
