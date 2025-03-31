@@ -2,9 +2,9 @@
 
 ***
 
-# Type Alias: QueryOrganizationInput
+# Type Alias: OrganizationInput
 
-> **QueryOrganizationInput**: `object`
+> **OrganizationInput**: `object`
 
 Defined in: [src/types/Organization/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L54)
 

@@ -230,7 +230,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'orgId',
             members: [
@@ -390,7 +390,7 @@ export const MOCKS_ERROR = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'orgId',
             members: [

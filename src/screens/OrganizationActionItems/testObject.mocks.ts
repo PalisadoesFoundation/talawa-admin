@@ -188,7 +188,7 @@ export const memberListQuery = {
   },
   result: {
     data: {
-      organization: [
+      organizations: [
         {
           _id: 'orgId',
           members: [

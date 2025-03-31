@@ -157,7 +157,7 @@ function orgList(): JSX.Element {
     refetch: refetchOrgs,
   } = useQuery(ALL_ORGANIZATIONS_PG, { notifyOnNetworkStatusChange: true });
 
-  const orgsData = UsersOrgsData?.organization;
+  const orgsData = UsersOrgsData?.organizations;
 
   // To clear the search field and form fields on unmount
   // useEffect(() => {

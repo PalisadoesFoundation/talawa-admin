@@ -70,7 +70,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
   useEffect(() => {
     if (memberData) {
-      setMembers(memberData.organization[0].members);
+      setMembers(memberData.organizations[0].members);
     }
   }, [memberData]);
 

@@ -347,7 +347,7 @@ function OrganizationDashboard(): JSX.Element {
                 }}
               >
                 {/* <DashBoardCard
-                  count={data?.organization[0].blockedUsers?.length}
+                  count={data?.organizations[0].blockedUsers?.length}
                   title={t('blockedUsers')}
                   icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
                 /> */}

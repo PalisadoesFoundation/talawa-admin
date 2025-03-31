@@ -34,6 +34,6 @@ Defined in: [src/components/EventDashboardScreen/EventDashboardScreenMocks.ts:3]
 
 > **data**: `object`
 
-#### result.data.organization
+#### result.data.organizations
 
-> **organization**: `object`[]
+> **organizations**: `object`[]

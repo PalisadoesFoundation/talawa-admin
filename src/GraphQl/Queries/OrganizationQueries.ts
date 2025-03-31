@@ -193,7 +193,7 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
     $where: UserTagWhereInput
     $sortedBy: UserTagSortedByInput
   ) {
-    organization(id: $id) {
+    organizations(id: $id) {
       userTags(
         after: $after
         before: $before
@@ -242,7 +242,7 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
     $first: Int
     $last: Int
   ) {
-    organization(id: $id) {
+    organizations(id: $id) {
       _id
       advertisements(
         after: $after
@@ -316,7 +316,7 @@ export const USER_CREATED_ORGANIZATIONS = gql`
 
 export const ORGANIZATION_ADMINS_LIST = gql`
   query Organizations($id: ID!) {
-    organization(id: $id) {
+    organizations(id: $id) {
       _id
       admins {
         _id
@@ -337,7 +337,7 @@ export const ORGANIZATION_ADMINS_LIST = gql`
  */
 export const ORGANIZATION_FUNDS = gql`
   query Organizations($id: ID!) {
-    organization(id: $id) {
+    organizations(id: $id) {
       funds {
         _id
         name

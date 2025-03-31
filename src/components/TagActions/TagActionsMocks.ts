@@ -113,7 +113,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: userTagEdgesFirst,
@@ -142,7 +142,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: userTagEdgesNext,
@@ -170,7 +170,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: userTagEdgesSearch,
@@ -302,7 +302,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -346,7 +346,7 @@ export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: userTagEdgesFirst,

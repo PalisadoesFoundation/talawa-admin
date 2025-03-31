@@ -99,31 +99,31 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organization[0].userTags.pageInfo.endCursor,
+        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { organization: InterfaceQueryOrganizationUserTags[] },
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult?: {
-            organization: InterfaceQueryOrganizationUserTags[];
+            organizations: InterfaceQueryOrganizationUserTags[];
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          organization: [
+          organizations: [
             {
-              ...prevResult.organization[0],
+              ...prevResult.organizations[0],
               userTags: {
-                ...prevResult.organization[0].userTags,
+                ...prevResult.organizations[0].userTags,
                 edges: [
-                  ...prevResult.organization[0].userTags.edges,
-                  ...fetchMoreResult.organization[0].userTags.edges,
+                  ...prevResult.organizations[0].userTags.edges,
+                  ...fetchMoreResult.organizations[0].userTags.edges,
                 ],
-                pageInfo: fetchMoreResult.organization[0].userTags.pageInfo,
+                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
               },
             },
           ],
@@ -133,8 +133,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   };
 
   const userTagsList =
-    orgUserTagsData?.organization[0]?.userTags.edges.map((edge) => edge.node) ??
-    [];
+    orgUserTagsData?.organizations[0]?.userTags.edges.map(
+      (edge) => edge.node,
+    ) ?? [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -364,7 +365,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organization[0].userTags.pageInfo
+                      orgUserTagsData?.organizations[0].userTags.pageInfo
                         .hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}

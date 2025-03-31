@@ -15,7 +15,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -156,7 +156,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -208,7 +208,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -260,7 +260,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -354,7 +354,7 @@ export const MOCKS_EMPTY = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [],
@@ -384,7 +384,7 @@ export const MOCKS_UNDEFINED_USER_TAGS = [
         sortedBy: { id: 'DESCENDING' },
       },
     },
-    result: { data: { organization: [{ userTags: undefined }] } },
+    result: { data: { organizations: [{ userTags: undefined }] } },
   },
 ];
 
@@ -401,7 +401,7 @@ export const MOCKS_NULL_END_CURSOR = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -443,7 +443,7 @@ export const MOCKS_NULL_END_CURSOR = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [
@@ -487,7 +487,7 @@ export const MOCKS_NO_MORE_PAGES = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             userTags: {
               edges: [

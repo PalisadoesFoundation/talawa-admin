@@ -28,7 +28,7 @@ const adminUser: InterfaceUserType = {
   },
 };
 
-const organization: InterfaceOrgInfoTypePG[] = [
+const organizations: InterfaceOrgInfoTypePG[] = [
   {
     id: 'xyz',
     name: 'Dogs Care',
@@ -100,7 +100,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             id: 'org1',
             name: 'Organization 1',
@@ -148,7 +148,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             id: 'org3',
             name: 'Organization 3',
@@ -184,7 +184,7 @@ const MOCKS_EMPTY = [
     },
     result: {
       data: {
-        organization: [],
+        organizations: [],
       },
     },
   },
@@ -212,7 +212,7 @@ const MOCKS_WITH_ERROR = [
     },
     result: {
       data: {
-        organizationsConnection: organization,
+        organizations: organizations,
       },
     },
   },
@@ -248,7 +248,7 @@ const MOCKS_ADMIN = [
     },
     result: {
       data: {
-        organizationsConnection: organization,
+        organizations: organizations,
       },
     },
   },

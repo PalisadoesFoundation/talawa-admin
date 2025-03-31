@@ -155,7 +155,7 @@ const Requests = (): JSX.Element => {
     }
 
     // Add null check before accessing organizations.length
-    if (orgsData.organization?.length === 0) {
+    if (orgsData.organizations?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
   }, [orgsData, t]);
@@ -282,7 +282,7 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      {!isLoading && orgsData?.organization?.length === 0 ? (
+      {!isLoading && orgsData?.organizations?.length === 0 ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>

@@ -162,11 +162,11 @@ const LeaveOrganization = (): JSX.Element => {
   if (orgError)
     return <Alert variant="danger">Error: {orgError.message}</Alert>;
 
-  if (!orgData?.organization?.length) {
+  if (!orgData?.organizations?.length) {
     return <p>Organization not found</p>;
   }
 
-  const organization = orgData?.organization[0];
+  const organization = orgData?.organizations[0];
 
   return (
     <div>

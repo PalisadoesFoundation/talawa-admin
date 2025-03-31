@@ -69,7 +69,7 @@ const queryMockOrgMembers = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org123',
             members: [
@@ -97,7 +97,7 @@ const queryMockWithoutOrgMembers = [
     },
     result: {
       data: {
-        organization: [
+        organizations: [
           {
             _id: 'org123',
             members: [],
