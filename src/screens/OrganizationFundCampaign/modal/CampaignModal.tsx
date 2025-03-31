@@ -1,39 +1,3 @@
-/**
- * CampaignModal Component
- *
- * This component renders a modal for creating or editing a campaign.
- * It provides a form with fields for campaign details such as name, currency,
- * funding goal, start date, and end date. The modal supports two modes:
- * 'create' for creating a new campaign and 'edit' for updating an existing one.
- *
- * @component
- * @param {InterfaceCampaignModal} props - The props for the CampaignModal component.
- * @param {boolean} props.isOpen - Determines if the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {string} props.fundId - The ID of the fund associated with the campaign.
- * @param {string} props.orgId - The ID of the organization associated with the campaign.
- * @param {InterfaceCampaignInfo | null} props.campaign - The campaign data for editing (null for creation).
- * @param {() => void} props.refetchCampaign - Function to refetch the campaign data after changes.
- * @param {'create' | 'edit'} props.mode - The mode of the modal ('create' or 'edit').
- *
- * @returns {React.FC} A React functional component rendering the campaign modal.
- *
- * @remarks
- * - Uses `@mui/x-date-pickers` for date selection.
- * - Integrates with GraphQL mutations for creating and updating campaigns.
- * - Displays success or error messages using `react-toastify`.
- *
- * @example
- * <CampaignModal
- *   isOpen={true}
- *   hide={() => {}}
- *   fundId="123"
- *   orgId="456"
- *   campaign={null}
- *   refetchCampaign={() => {}}
- *   mode="create"
- * />
- */
 import { DatePicker } from '@mui/x-date-pickers';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
@@ -57,7 +21,26 @@ import {
   TextField,
 } from '@mui/material';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
-
+/**
+ * Props for the CampaignModal component.
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.addButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 export interface InterfaceCampaignModal {
   isOpen: boolean;
   hide: () => void;
@@ -68,6 +51,12 @@ export interface InterfaceCampaignModal {
   mode: 'create' | 'edit';
 }
 
+/**
+ * Modal component for creating or editing a campaign.
+ *
+ * @param props - The props for the CampaignModal component.
+ * @returns JSX.Element
+ */
 const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
@@ -82,19 +71,19 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
-    campaignCurrency: campaign?.currency ?? 'USD',
-    campaignGoal: campaign?.fundingGoal ?? 0,
-    campaignStartDate: campaign?.startDate ?? new Date(),
-    campaignEndDate: campaign?.endDate ?? new Date(),
+    campaignCurrency: campaign?.currencyCode ?? 'USD',
+    campaignGoal: campaign?.goalAmount ?? 0,
+    campaignStartDate: campaign?.startAt ?? new Date(),
+    campaignEndDate: campaign?.endAt ?? new Date(),
   });
 
   useEffect(() => {
     setFormState({
-      campaignCurrency: campaign?.currency ?? 'USD',
-      campaignEndDate: campaign?.endDate ?? new Date(),
-      campaignGoal: campaign?.fundingGoal ?? 0,
+      campaignCurrency: campaign?.currencyCode ?? 'USD',
+      campaignEndDate: campaign?.endAt ?? new Date(),
+      campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startDate ?? new Date(),
+      campaignStartDate: campaign?.startAt ?? new Date(),
     });
   }, [campaign]);
 
@@ -123,11 +112,10 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       await createCampaign({
         variables: {
           name: formState.campaignName,
-          currency: formState.campaignCurrency,
-          fundingGoal: formState.campaignGoal,
-          organizationId: orgId,
-          startDate: dayjs(formState.campaignStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.campaignEndDate).format('YYYY-MM-DD'),
+          currencyCode: formState.campaignCurrency,
+          goalAmount: parseInt(formState.campaignGoal.toString()),
+          startAt: dayjs(formState.campaignStartDate).toISOString(),
+          endAt: dayjs(formState.campaignEndDate).toISOString(),
           fundId,
         },
       });
@@ -162,22 +150,25 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName;
       }
-      if (campaign?.currency !== campaignCurrency) {
-        updatedFields.currency = campaignCurrency;
+      if (campaign?.currencyCode !== campaignCurrency) {
+        updatedFields.currencyCode = campaignCurrency;
       }
-      if (campaign?.fundingGoal !== campaignGoal) {
-        updatedFields.fundingGoal = campaignGoal;
+      if (campaign?.goalAmount !== campaignGoal) {
+        updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startDate !== campaignStartDate) {
-        updatedFields.startDate = dayjs(campaignStartDate).format('YYYY-MM-DD');
+      if (campaign?.startAt !== campaignStartDate) {
+        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
       }
-      if (campaign?.endDate !== formState.campaignEndDate) {
-        updatedFields.endDate = dayjs(formState.campaignEndDate).format(
-          'YYYY-MM-DD',
-        );
+      if (campaign?.endAt !== formState.campaignEndDate) {
+        updatedFields.endAt = dayjs(formState.campaignEndDate).toISOString();
       }
       await updateCampaign({
-        variables: { id: campaign?._id, ...updatedFields },
+        variables: {
+          input: {
+            id: campaign?.id, // Ensure the id field is the campaign id
+            ...updatedFields,
+          },
+        },
       });
       setFormState({
         campaignName: '',
