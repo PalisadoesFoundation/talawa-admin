@@ -217,7 +217,7 @@ describe('FundCampaigns Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     fireEvent.click(sortBtn);
-    const latestEndDateOption = screen.getByTestId('endDate_DESC');
+    const latestEndDateOption = screen.getByTestId('endAt_DESC');
     expect(latestEndDateOption).toBeInTheDocument();
 
     fireEvent.click(latestEndDateOption);
@@ -242,7 +242,7 @@ describe('FundCampaigns Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     fireEvent.click(sortBtn);
-    const earliestEndDateOption = screen.getByTestId('endDate_ASC');
+    const earliestEndDateOption = screen.getByTestId('endAt_DESC');
     expect(earliestEndDateOption).toBeInTheDocument();
 
     fireEvent.click(earliestEndDateOption);
@@ -259,7 +259,7 @@ describe('FundCampaigns Screen', () => {
     });
   });
 
-  it('should set sort by fundingGoal_ASC when Lowest Goal is selected', async () => {
+  it('should set sort by goalAmount_ASC when Lowest Goal is selected', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -267,7 +267,7 @@ describe('FundCampaigns Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     fireEvent.click(sortBtn);
-    const lowestGoalOption = screen.getByTestId('fundingGoal_ASC');
+    const lowestGoalOption = screen.getByTestId('goalAmount_ASC');
     expect(lowestGoalOption).toBeInTheDocument();
 
     fireEvent.click(lowestGoalOption);
@@ -282,7 +282,7 @@ describe('FundCampaigns Screen', () => {
     expect(screen.getByText('Campaign 1')).toBeInTheDocument();
   });
 
-  it('should set sort by fundingGoal_DESC when Highest Goal is selected', async () => {
+  it('should set sort by goalAmount_DESC when Highest Goal is selected', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -290,7 +290,7 @@ describe('FundCampaigns Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     fireEvent.click(sortBtn);
-    const highestGoalOption = screen.getByTestId('fundingGoal_DESC');
+    const highestGoalOption = screen.getByTestId('goalAmount_DESC');
     expect(highestGoalOption).toBeInTheDocument();
 
     fireEvent.click(highestGoalOption);
