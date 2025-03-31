@@ -140,8 +140,6 @@ const orgFundCampaign = (): JSX.Element => {
       input: { id: fundId },
     },
     skip: !fundId,
-    onCompleted: (data) => console.log('GraphQL Data Received:', data),
-    onError: (error) => console.error('GraphQL Error:', error),
   });
 
   const compaignsData = useMemo(() => {
@@ -160,7 +158,7 @@ const orgFundCampaign = (): JSX.Element => {
 
   const { fundName, isArchived } = useMemo(() => {
     const fundName = campaignData?.fund?.name || 'Fund';
-    const isArchived = false; // Since isArchived is not in the new data structure
+    const isArchived = false;
     return { fundName, isArchived };
   }, [campaignData]);
 
@@ -209,6 +207,13 @@ const orgFundCampaign = (): JSX.Element => {
           className={styles.hyperlinkText}
           data-testid="campaignName"
           onClick={() => handleClick(params.row.id as string)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleClick(params.row.id as string);
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           {params.row.name}
         </div>
@@ -366,27 +371,27 @@ const orgFundCampaign = (): JSX.Element => {
           <div className={styles.btnsBlock}>
             <SortingButton
               sortingOptions={[
-                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+                { label: t('lowestGoal'), value: 'goalAmount_ASC' },
+                { label: t('highestGoal'), value: 'goalAmount_DESC' },
+                { label: t('latestEndDate'), value: 'endAt_DESC' },
+                { label: t('earliestEndDate'), value: 'endAt_ASC' },
               ]}
               selectedOption={
-                sortBy === 'fundingGoal_ASC'
+                sortBy === 'goalAmount_ASC'
                   ? tCommon('lowestGoal')
-                  : sortBy === 'fundingGoal_DESC'
+                  : sortBy === 'goalAmount_DESC'
                     ? tCommon('highestGoal')
-                    : sortBy === 'endDate_DESC'
+                    : sortBy === 'endAt_DESC'
                       ? tCommon('latestEndDate')
                       : tCommon('earliestEndDate')
               }
               onSortChange={(value) =>
                 setSortBy(
                   value as
-                    | 'fundingGoal_ASC'
-                    | 'fundingGoal_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
+                    | 'goalAmount_ASC'
+                    | 'goalAmount_DESC'
+                    | 'endAt_ASC'
+                    | 'endAt_DESC',
                 )
               }
               dataTestIdPrefix="filter"
