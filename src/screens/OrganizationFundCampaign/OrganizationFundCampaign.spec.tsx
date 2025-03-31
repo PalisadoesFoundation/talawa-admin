@@ -242,7 +242,7 @@ describe('FundCampaigns Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     fireEvent.click(sortBtn);
-    const earliestEndDateOption = screen.getByTestId('endAt_DESC');
+    const earliestEndDateOption = screen.getByTestId('endAt_ASC');
     expect(earliestEndDateOption).toBeInTheDocument();
 
     fireEvent.click(earliestEndDateOption);
