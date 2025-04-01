@@ -240,6 +240,70 @@ export const EMPTY_MOCKS = [
   },
 ];
 
+export const MIXED_REQUESTS_MOCK = [
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        input: { id: 'orgId' },
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          membershipRequests: [
+            {
+              membershipRequestId: 'request1',
+              createdAt: '2023-01-01T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user1',
+                name: 'Pending User 1',
+                emailAddress: 'user1@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request2',
+              createdAt: '2023-01-02T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user2',
+                name: 'Pending User 2',
+                emailAddress: 'user2@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request3',
+              createdAt: '2023-01-03T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user3',
+                name: 'Pending User 3',
+                emailAddress: 'user3@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request4',
+              createdAt: '2023-01-04T00:00:00Z',
+              status: 'rejected',
+              user: {
+                id: 'user4',
+                name: 'Rejected User',
+                emailAddress: 'rejected@example.com',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST),
+];
+
 export const ERROR_MOCKS = [
   {
     request: {

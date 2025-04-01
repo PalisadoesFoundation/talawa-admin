@@ -1,14 +1,20 @@
 import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import type { RenderResult } from '@testing-library/react';
+import { RenderResult, within } from '@testing-library/react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import OrganizationDashboard from './OrganizationDashboard';
-import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
+import {
+  MOCKS,
+  EMPTY_MOCKS,
+  ERROR_MOCKS,
+  MIXED_REQUESTS_MOCK,
+} from './OrganizationDashboardMocks';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
+import { E } from 'graphql-ws/dist/common-DY-PBNYy';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -60,6 +66,27 @@ describe('OrganizationDashboard', () => {
     mockedNavigate.mockReset();
     (toast.error as jest.Mock).mockReset();
     (toast.success as jest.Mock).mockReset();
+  });
+
+  it('navigates to requests page when clicking on membership requests card', async () => {
+    renderWithProviders({ mocks: MOCKS });
+
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('requests')).toBeInTheDocument();
+    });
+
+    const requestsCard = screen.getByText('requests');
+
+    const requestsCardColumn = requestsCard.closest('[role="button"]');
+    expect(requestsCardColumn).not.toBeNull();
+
+    fireEvent.click(requestsCardColumn!);
+
+    expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
   });
 
   it('renders dashboard cards with correct data when GraphQL queries succeed', async () => {
@@ -205,20 +232,17 @@ it('handles multiple page loads without memory leaks', async () => {
 });
 
 it('renders membership requests section with proper states', async () => {
-  // 1. First test the loading state
   const LOADING_MOCKS = MOCKS.map((mock) =>
     mock.request.query === MEMBERSHIP_REQUEST ? { ...mock, delay: 500 } : mock,
   );
 
   const { rerender } = renderWithProviders({ mocks: LOADING_MOCKS });
 
-  // Check loading state
   await waitFor(() => {
     const fallbackUIs = screen.getAllByTestId('fallback-ui');
     expect(fallbackUIs.length).toBeGreaterThan(0);
   });
 
-  // 2. Test with no pending requests
   const EMPTY_REQUESTS_MOCK = MOCKS.map((mock) =>
     mock.request.query === MEMBERSHIP_REQUEST
       ? {
@@ -227,15 +251,13 @@ it('renders membership requests section with proper states', async () => {
             data: {
               organization: {
                 id: 'orgId',
-                membershipRequests: [], // Empty array to trigger "no requests" state
+                membershipRequests: [],
               },
             },
           },
         }
       : mock,
   );
-
-  // Re-render with empty requests
   rerender(
     <MockedProvider mocks={EMPTY_REQUESTS_MOCK} addTypename={false}>
       <MemoryRouter initialEntries={['/orgdash/orgId']}>
@@ -246,7 +268,6 @@ it('renders membership requests section with proper states', async () => {
     </MockedProvider>,
   );
 
-  // Check for empty state message with more flexible matching
   await waitFor(() => {
     expect(
       screen.getByText(
@@ -259,59 +280,40 @@ it('renders membership requests section with proper states', async () => {
   });
 });
 
-// it('properly filters and displays only pending membership requests', async () => {
-//   // Create mock with mixed request statuses
-//   const MIXED_REQUESTS_MOCK = MOCKS.map(mock =>
-//     mock.request.query === MEMBERSHIP_REQUEST
-//       ? {
-//           ...mock,
-//           result: {
-//             data: {
-//               organization: {
-//                 id: 'org1',
-//                 membershipRequests: [
-//                   {
-//                     membershipRequestId: '1',
-//                     status: 'pending',
-//                     user: { id: 'user1', name: 'Should Show' }
-//                   },
-//                   {
-//                     membershipRequestId: '2',
-//                     status: 'approved',
-//                     user: { id: 'user2', name: 'Should NOT Show' }
-//                   },
-//                   {
-//                     membershipRequestId: '3',
-//                     status: 'rejected',
-//                     user: { id: 'user3', name: 'Should NOT Show Either' }
-//                   },
-//                   {
-//                     membershipRequestId: '4',
-//                     status: 'pending',
-//                     user: { id: 'user4', name: 'Should Also Show' }
-//                   }
-//                 ]
-//               }
-//             }
-//           }
-//         }
-//       : mock
-//   );
+describe('Membership Requests Section Tests', () => {
+  it('correctly displays pending membership requests and filters out non-pending ones', async () => {
+    renderWithProviders({ mocks: MIXED_REQUESTS_MOCK });
 
-//   renderWithProviders({ mocks: MIXED_REQUESTS_MOCK });
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+    });
 
-//   // Wait for component to render
-//   await waitFor(() => {
-//     // Should show pending requests
-//     expect(screen.getByText('Should Show')).toBeInTheDocument();
-//     expect(screen.getByText('Should Also Show')).toBeInTheDocument();
+    const membershipRequestsHeader = screen.getByText('membershipRequests');
+    const membershipRequestsCard =
+      membershipRequestsHeader.closest('.card') ||
+      membershipRequestsHeader.closest(
+        '[data-testid="membership-requests-section"]',
+      );
 
-//     // Should NOT show non-pending requests
-//     expect(screen.queryByText('Should NOT Show')).not.toBeInTheDocument();
-//     expect(screen.queryByText('Should NOT Show Either')).not.toBeInTheDocument();
-//   });
+    await waitFor(() => {
+      if (!membershipRequestsCard) {
+        throw new Error('Membership requests section not found');
+      }
 
-//   // Verify the DashboardCard count shows only pending requests count (2)
-//   const requestCountElement = screen.getAllByText(/2/);
-//   expect(requestCountElement.length).toBeGreaterThan(0);
-// });
+      const { getAllByTestId } = within(membershipRequestsCard as HTMLElement);
+      const membershipCardItems = getAllByTestId('cardItem');
+
+      membershipCardItems.forEach((item, i) => {
+        console.log(`Membership Card ${i + 1}:`, item.textContent);
+      });
+
+      expect(membershipCardItems.length).toBe(3);
+
+      const sectionText = membershipRequestsCard.textContent || '';
+      expect(sectionText).toContain('Pending User 1');
+      expect(sectionText).toContain('Pending User 2');
+      expect(sectionText).toContain('Pending User 3');
+      expect(sectionText).not.toContain('Rejected User');
+    });
+  });
+});
