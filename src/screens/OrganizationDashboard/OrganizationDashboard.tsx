@@ -360,7 +360,7 @@ function OrganizationDashboard(): JSX.Element {
                     size="sm"
                     variant="light"
                     data-testid="viewAllEvents"
-                    onClick={(): void => navigate(eventsLink)}
+                    onClick={() => navigate(eventsLink)}
                   >
                     {t('viewAll')}
                   </Button>
@@ -401,7 +401,7 @@ function OrganizationDashboard(): JSX.Element {
                     variant="light"
                     data-testid="viewAllPosts"
                     className=""
-                    onClick={(): void => navigate(postsLink)}
+                    onClick={() => navigate(postsLink)}
                   >
                     {t('viewAll')}
                   </Button>

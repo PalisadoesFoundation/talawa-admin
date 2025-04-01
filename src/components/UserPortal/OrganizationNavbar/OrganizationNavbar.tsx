@@ -122,7 +122,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => navigate(homeLink)}
+                onClick={() => navigate(homeLink)}
               >
                 {t('home')}
               </Nav.Link>
