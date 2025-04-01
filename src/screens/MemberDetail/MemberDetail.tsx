@@ -192,7 +192,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   // Function to handle the deletion of a user
   const handleDeleteUser = async (): Promise<void> => {
-    
     try {
       // Call mutation with just the ID
       const { data: deleteData } = await deleteUser({
