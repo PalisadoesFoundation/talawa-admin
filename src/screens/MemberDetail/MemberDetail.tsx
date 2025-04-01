@@ -304,8 +304,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
         // wait for the toast to complete
         await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        window.location.reload();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -387,22 +385,32 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 <div className="text-center mb-3">
                   <div className="position-relative d-inline-block">
                     {formState?.avatarURL ? (
-                      <img
+                      <button
+                        type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="rounded-circle"
                         style={{
-                          width: '60px',
-                          height: '60px',
-                          objectFit: 'cover',
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
                         }}
-                        src={sanitizeAvatars(
-                          selectedAvatar,
-                          formState.avatarURL,
-                        )}
-                        alt="User"
+                        aria-label="Edit profile picture"
                         data-testid="profile-picture"
-                        crossOrigin="anonymous" // to avoid Cors
-                      />
+                      >
+                        <img
+                          className="rounded-circle"
+                          style={{
+                            width: '60px',
+                            height: '60px',
+                            objectFit: 'cover',
+                          }}
+                          src={sanitizeAvatars(
+                            selectedAvatar,
+                            formState.avatarURL,
+                          )}
+                          alt="User"
+                          crossOrigin="anonymous" // to avoid Cors
+                        />
+                      </button>
                     ) : (
                       <button
                         onClick={() => fileInputRef.current?.click()}
@@ -608,6 +616,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               data-testid="tagsAssignedScrollableDiv"
               className={`${styles.cardBody} pe-0`}
             >
+              <h3>User Information</h3>
+              <p>
+                This section provides a quick overview of the user's key
+                details, including their name, location, and contact number.
+                These details are displayed in a read-only format to ensure
+                clarity and prevent unintended modifications.
+              </p>
+
               <div className={styles.profileDetailItem}>
                 <span>{tCommon('name')}:</span>
                 <span>{formState.name}</span>
