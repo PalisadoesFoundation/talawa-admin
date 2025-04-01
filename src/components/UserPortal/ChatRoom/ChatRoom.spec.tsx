@@ -5662,6 +5662,22 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       },
     },
   },
+  {
+    request: {
+      query: MARK_CHAT_MESSAGES_AS_READ,
+      variables: {
+        userId: '8',
+        chatId: '',
+      },
+    },
+    result: {
+      data: {
+        markChatMessagesAsRead: {
+          _id: '1',
+        },
+      },
+    },
+  },
 ];
 
 describe('Testing Chatroom Component [User Portal]', () => {
