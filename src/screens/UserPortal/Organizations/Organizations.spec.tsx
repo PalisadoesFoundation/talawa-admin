@@ -12,7 +12,7 @@ import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
 import Organizations from './Organizations';
 import {
-  ALL_ORGANIZATIONS,
+  ALL_ORGANIZATIONS_PG,
   USER_JOINED_ORGANIZATIONS_PG,
   USER_CREATED_ORGANIZATIONS,
 } from 'GraphQl/Queries/OrganizationQueries';
@@ -30,7 +30,7 @@ async function wait(ms = 100) {
 const mocks = [
   // Mock for All Organizations (Happy Path)
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+    request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: '' } },
     result: {
       data: {
         organizations: [
@@ -175,7 +175,7 @@ const mocks = [
   },
   // Mock for All Organizations with Missing Fields
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'missing' } },
+    request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: 'missing' } },
     result: {
       data: {
         organizations: [
@@ -272,7 +272,7 @@ const mocks = [
   },
   // Mock for Empty All Organizations
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'empty' } },
+    request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: 'empty' } },
     result: { data: { organizations: [] } },
   },
   // Mock for Empty Joined Organizations
@@ -306,7 +306,7 @@ const mocks = [
   },
   // Mock for Error in All Organizations
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: 'error' } },
+    request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: 'error' } },
     error: new Error('Failed to fetch organizations'),
   },
   // Mock for Error in Joined Organizations
@@ -327,7 +327,7 @@ const mocks = [
   },
   // Mock for Filtered Search
   {
-    request: { query: ALL_ORGANIZATIONS, variables: { filter: '2' } },
+    request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: '2' } },
     result: {
       data: {
         organizations: [
@@ -417,7 +417,7 @@ const mocks = [
   },
   {
     request: {
-      query: ALL_ORGANIZATIONS,
+      query: ALL_ORGANIZATIONS_PG,
       variables: { filter: 'test' },
     },
     result: {
@@ -873,7 +873,7 @@ describe('Organizations Component', () => {
       ...mocks,
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: undefined, limit: 10, offset: 0 },
         },
         result: {
@@ -943,13 +943,13 @@ describe('Organizations Component', () => {
     const emptyMocks = [
       ...mocks.filter(
         (mock) =>
-          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== ALL_ORGANIZATIONS_PG &&
           mock.request.query !== USER_JOINED_ORGANIZATIONS_PG &&
           mock.request.query !== USER_CREATED_ORGANIZATIONS,
       ),
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: '', limit: 5, offset: 0 },
         },
         result: { data: { organizations: [] } },
@@ -1209,7 +1209,7 @@ describe('Organizations Component', () => {
       ...mocks,
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: undefined, limit: 10, offset: 0 },
         },
         result: {
@@ -1274,10 +1274,10 @@ describe('Organizations Component', () => {
 
   it('handles query errors gracefully', async () => {
     const errorMocks = [
-      ...mocks.filter((mock) => mock.request.query !== ALL_ORGANIZATIONS),
+      ...mocks.filter((mock) => mock.request.query !== ALL_ORGANIZATIONS_PG),
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: '', limit: 5, offset: 0 },
         },
         error: new Error('Failed to fetch organizations'),
@@ -1417,12 +1417,12 @@ describe('Organizations Component', () => {
     const testMocks = [
       ...mocks.filter(
         (mock) =>
-          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== ALL_ORGANIZATIONS_PG &&
           mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
       ),
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: '' }, // Consistent with mocks
         },
         result: {
@@ -1627,12 +1627,12 @@ describe('Organizations Component', () => {
     const testMocks = [
       ...mocks.filter(
         (mock) =>
-          mock.request.query !== ALL_ORGANIZATIONS &&
+          mock.request.query !== ALL_ORGANIZATIONS_PG &&
           mock.request.query !== USER_JOINED_ORGANIZATIONS_PG,
       ),
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: '' },
         },
         result: {
@@ -1751,7 +1751,7 @@ describe('Organizations Component', () => {
   it('handles all loading states simultaneously', async () => {
     const slowMocks = [
       {
-        request: { query: ALL_ORGANIZATIONS, variables: { filter: '' } },
+        request: { query: ALL_ORGANIZATIONS_PG, variables: { filter: '' } },
         delay: 1000,
         result: {
           data: {
@@ -1942,12 +1942,12 @@ describe('Organizations Component', () => {
     const undefinedMocks = [
       {
         request: {
-          query: ALL_ORGANIZATIONS,
+          query: ALL_ORGANIZATIONS_PG,
           variables: { filter: 'undefined' },
         },
         result: { data: { organizations: undefined } }, // Simulate missing field
       },
-      ...mocks.filter((m) => m.request.query !== ALL_ORGANIZATIONS),
+      ...mocks.filter((m) => m.request.query !== ALL_ORGANIZATIONS_PG),
     ];
     render(
       <MockedProvider mocks={undefinedMocks}>

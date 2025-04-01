@@ -1,13 +1,14 @@
+import { input } from '@testing-library/user-event/dist/types/event';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 export const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -145,9 +146,9 @@ export const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
@@ -198,9 +199,9 @@ export const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'DESCENDING' },
@@ -250,9 +251,9 @@ export const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'ASCENDING' },
@@ -319,9 +320,9 @@ export const MOCKS = [
 export const MOCKS_ERROR = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgIdError',
+        input: { id: 'orgIdError' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -344,9 +345,9 @@ export const MOCKS_ERROR_ERROR_TAG = [
 export const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -376,9 +377,9 @@ export const MOCKS_EMPTY = [
 export const MOCKS_UNDEFINED_USER_TAGS = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -391,9 +392,9 @@ export const MOCKS_UNDEFINED_USER_TAGS = [
 export const MOCKS_NULL_END_CURSOR = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -432,9 +433,9 @@ export const MOCKS_NULL_END_CURSOR = [
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         after: null,
@@ -477,7 +478,7 @@ export const MOCKS_NULL_END_CURSOR = [
 export const MOCKS_NO_MORE_PAGES = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
         id: 'orgId',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -518,15 +519,14 @@ export const MOCKS_NO_MORE_PAGES = [
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: 'orgId',
+        input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
-        after: '1',
         sortedBy: { id: 'DESCENDING' },
       },
     },
-    result: { data: undefined },
+    error: new Error('Mock Graphql Error'),
   },
 ];

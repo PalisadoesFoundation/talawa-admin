@@ -137,6 +137,23 @@ export const ALL_ORGANIZATIONS = gql`
     }
   }
 `;
+
+export const ALL_ORGANIZATIONS_PG = gql`
+  query GetOrganizations($filter: String) {
+    organizations(filter: $filter) {
+      id
+      name
+      description
+      addressLine1
+      avatarURL
+      city
+      state
+      postalCode
+      countryCode
+      description
+    }
+  }
+`;
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
@@ -156,8 +173,8 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
             state
             description
             avatarURL
-            membersCount
-            adminsCount
+            # membersCount
+            # adminsCount
             members(first: $first) {
               edges {
                 node {
@@ -229,6 +246,50 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
           hasPreviousPage
         }
         totalCount
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
+  query OrganizationTags(
+    $input: QueryOrganizationInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organization(input: $input) {
+      id
+      name
+      tags(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          cursor
+          node {
+            id
+            name
+            createdAt
+            updater {
+              id
+              name
+            }
+            folder {
+              id
+              name
+            }
+            # assignees(first: $first) {
+            #   edges {
+            #     cursor
+            #   }
+            # }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
       }
     }
   }
