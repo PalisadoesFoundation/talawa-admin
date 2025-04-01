@@ -481,8 +481,6 @@ export default function organizations(): JSX.Element {
                             ></div>
 
                             <OrganizationCard {...cardProps} />
-
-                            {/* Add hidden span with organization name for testing purposes */}
                             <span
                               data-testid={`org-name-${organization.name}`}
                               className="visually-hidden"

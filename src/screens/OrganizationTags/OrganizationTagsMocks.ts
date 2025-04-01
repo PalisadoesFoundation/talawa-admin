@@ -1,4 +1,3 @@
-import { input } from '@testing-library/user-event/dist/types/event';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';

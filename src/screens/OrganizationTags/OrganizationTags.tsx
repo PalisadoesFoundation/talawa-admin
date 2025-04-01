@@ -205,7 +205,7 @@ function OrganizationTags(): JSX.Element {
 
   const userTagsList =
     orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge: any) => edge.node,
+      (edge: { node: InterfaceTagData }) => edge.node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
