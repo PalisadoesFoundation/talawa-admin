@@ -51,6 +51,16 @@ Object.defineProperty(window, 'location', {
 async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
+    
+    // Mock navigation function if you're using a router
+    const mockNavigate = vi.fn();
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useNavigate: () => mockNavigate
+      };
+    });
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -669,7 +679,6 @@ describe('MemberDetail', () => {
     });
   });
 
-  //deetingf test
   test('delete user button should open confirmation modal', async () => {
     renderMemberDetailScreen(link2);
     await wait();
@@ -776,38 +785,48 @@ describe('MemberDetail', () => {
       expect(input).toHaveValue(field.value);
     }
   });
+  
 
-  // Add this test to your existing MemberDetail.test.js file
-  test('should show success toast when user is deleted successfully', async () => {
+  it('should show success toast, dismiss modal, and navigate when user is deleted successfully', async () => {
+
     // Spy on toast.success
     const toastSuccessSpy = vi.spyOn(toast, 'success');
-
-    // Use the mock with DELETE_USER_MOCK
+    
+    // Render the component
     renderMemberDetailScreen(link6);
     await wait();
-
+  
     // Find and click delete button
     const deleteButton = screen.getByTestId('deleteUserButton');
     fireEvent.click(deleteButton);
-
+  
     // Wait for confirmation modal to appear
     await waitFor(() => {
       expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
     });
-
+  
     // Confirm deletion
     const confirmButton = screen.getByTestId('button-handleDeleteConfirmation');
     fireEvent.click(confirmButton);
-
-    // Wait for the mutation to complete and toast to be called
+  
+    // Wait for the mutation to complete and verify success toast
     await waitFor(() => {
       expect(toastSuccessSpy).toHaveBeenCalledTimes(1);
-      // Verify toast contains the expected success message
-      // Note: Adjust the expected string based on your actual translation key/value
       expect(toastSuccessSpy.mock.calls[0][0]).toContain('User');
     });
-
-    // Clean up spy
+  
+    // Verify modal is dismissed
+    await waitFor(() => {
+      expect(screen.queryByTestId('confirmationToDelete')).not.toBeInTheDocument();
+    });
+  
+    // Verify navigation occurred (usually to the members list page)
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledTimes(1);
+      expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
+  
+    // Clean up spies and mocks
     toastSuccessSpy.mockRestore();
   });
 
@@ -1268,6 +1287,9 @@ describe('MemberDetail', () => {
     // Mock the file input click
     const fileInput = screen.getByTestId('fileInput');
     const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+
+      await userEvent.click(uploadImageBtn);
+      expect(fileInputClickSpy).toHaveBeenCalled();
   });
 
   test('handles country selection change', async () => {

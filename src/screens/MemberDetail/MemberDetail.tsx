@@ -192,6 +192,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   // Function to handle the deletion of a user
   const handleDeleteUser = async (): Promise<void> => {
+    
     try {
       // Call mutation with just the ID
       const { data: deleteData } = await deleteUser({
@@ -205,6 +206,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           tCommon('deletedSuccessfully', { item: 'User' }) as string,
         );
         setShowDeleteConfirm(false);
+        navigate('/');
       }
     } catch (error: unknown) {
       errorHandler(t, error);
