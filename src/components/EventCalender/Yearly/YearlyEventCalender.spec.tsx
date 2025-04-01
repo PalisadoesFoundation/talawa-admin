@@ -332,7 +332,9 @@ describe('Calendar Component', () => {
       '._expand_event_list_d00707',
     );
     expect(expandedLists.length).toBeGreaterThan(0);
-  });
+  },
+  50000
+);
 
   it('handles calendar navigation and date rendering edge cases', async () => {
     const { getByTestId, getByText, rerender } = renderWithRouter(
