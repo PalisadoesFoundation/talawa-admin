@@ -25,14 +25,9 @@ import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { useQuery } from '@apollo/client';
 
-// In your real code, you might import getItem/setItem from "utils/useLocalstorage" directly
 const { setItem, getItem } = useLocalStorage();
 
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
-
-/**
- * Mock data for GraphQL queries.
- */
 
 const MOCKS = [
   {
@@ -378,7 +373,6 @@ const MOCKS = [
       },
     },
   },
-  // New mock for search query
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
@@ -419,7 +413,6 @@ const MOCKS = [
       },
     },
   },
-  // Mock for empty search (when search is cleared)
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
@@ -524,9 +517,6 @@ const resizeWindow = (width: number): void => {
   fireEvent(window, new Event('resize'));
 };
 
-/**
- * Test to ensure the screen is rendered properly.
- */
 const TEST_USER_NAME = 'Noble Mittal';
 beforeEach(() => {
   setItem('name', TEST_USER_NAME);
@@ -550,10 +540,6 @@ test('Screen should be rendered properly', async () => {
   expect(screen.getByText('My Organizations')).toBeInTheDocument();
 });
 
-/**
- * Test to check if the search functionality works as expected.
- */
-
 test('Search works properly', async () => {
   render(
     <MockedProvider addTypename={false} link={link}>
@@ -567,55 +553,40 @@ test('Search works properly', async () => {
     </MockedProvider>,
   );
 
-  // Wait for initial data load
   await wait(500);
 
-  // Wait for organizations to be displayed
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
-  // Verify initial state by looking for hidden spans with organization names
   await waitFor(() => {
     expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
     expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
   });
 
-  // Perform search
   const searchInput = screen.getByTestId('searchInput');
   await userEvent.type(searchInput, '2');
 
-  // Get and click search button
   const searchBtn = screen.getByTestId('searchBtn');
   await userEvent.click(searchBtn);
 
-  // Wait for search results to update
   await wait(300);
 
-  // Clear search
   await userEvent.clear(searchInput);
   await userEvent.click(searchBtn);
 
-  // Wait again for results to update
   await wait(300);
 
-  // Perform search again
   await userEvent.type(searchInput, '2');
   await userEvent.keyboard('{Enter}');
 
-  // Wait for final search results
   await wait(300);
 
-  // Verify organization with name containing "2" is present
   await waitFor(() => {
     const org2Element = screen.getByTestId('org-name-anyOrganization2');
     expect(org2Element).toBeInTheDocument();
   });
 });
-
-/**
- * Test to verify the mode change to joined organizations.
- */
 
 test('Mode is changed to joined organizations', async () => {
   render(
@@ -640,10 +611,6 @@ test('Mode is changed to joined organizations', async () => {
   expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
 });
 
-/**
- * Test case to ensure the mode can be changed to display created organizations.
- */
-
 test('Mode is changed to created organizations', async () => {
   render(
     <MockedProvider addTypename={false} link={link}>
@@ -667,16 +634,10 @@ test('Mode is changed to created organizations', async () => {
   expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
 });
 
-/**
- * Test case to check if the "Join Now" button renders correctly on the page.
- */
-
 test('Join Now button renders correctly', async () => {
-  // Define a TEST_USER_ID that matches the one used in mocks
   const TEST_USER_ID = 'test-user-id';
   setItem('userId', TEST_USER_ID);
 
-  // Create organization mock with complete data structure
   const organizationsMock = {
     request: {
       query: ORGANIZATION_LIST,
@@ -724,7 +685,6 @@ test('Join Now button renders correctly', async () => {
     },
   };
 
-  // Create joined organizations mock
   const joinedOrgsMock = {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
@@ -744,7 +704,6 @@ test('Join Now button renders correctly', async () => {
     },
   };
 
-  // Create created organizations mock
   const createdOrgsMock = {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
@@ -774,35 +733,26 @@ test('Join Now button renders correctly', async () => {
     </MockedProvider>,
   );
 
-  // Wait for loading to finish
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 
-  // Verify organizations have loaded
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
-  // Check for specific organization by name
   await waitFor(() => {
     expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
   });
 
-  // Get the organization cards
   const orgCards = screen.getAllByTestId('organization-card');
   expect(orgCards.length).toBe(2);
 
-  // Check for join buttons
   await waitFor(() => {
     const joinButtons = screen.getAllByTestId('joinBtn');
-    expect(joinButtons.length).toBe(2); // We expect 2 buttons since we have 2 organizations
+    expect(joinButtons.length).toBe(2);
   });
 });
-
-/**
- * Test case to ensure the sidebar is functional, including opening and closing actions.
- */
 
 test('Testing Sidebar', async () => {
   render(
@@ -871,7 +821,6 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-// Mock PaginationList component to directly test pagination functions
 vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
   default: ({
     count,
@@ -918,76 +867,6 @@ vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
   ),
 }));
 
-/**
- * Test to check if pagination works properly - specifically targeting line 171
- */
-test('should update page when pagination is clicked', async () => {
-  // Mock localStorage
-  setItem('userId', 'testUserId');
-
-  // Render component
-  render(
-    <MockedProvider addTypename={false} mocks={MOCKS}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  // Wait for component to fully load
-  await waitFor(
-    () => {
-      // Make sure loading is complete
-      const loadingIndicator = screen.queryByTestId('loading-indicator');
-      return loadingIndicator === null;
-    },
-    { timeout: 2000 },
-  );
-
-  // Get pagination elements - check if they exist first
-  const paginationElement = await screen.findByTestId('pagination');
-  expect(paginationElement).toBeInTheDocument();
-
-  // Find the page indicator element and verify initial state
-  const currentPageElement = screen.getByTestId('current-page');
-  expect(currentPageElement).toBeInTheDocument();
-  expect(currentPageElement.textContent).toBe('0');
-
-  // Find the next page button
-  const nextPageButton = screen.getByTestId('next-page');
-  expect(nextPageButton).toBeInTheDocument();
-
-  // Click next page button inside act to ensure state updates
-  await act(async () => {
-    fireEvent.click(nextPageButton);
-    // Add a small delay to let state update
-    await new Promise((resolve) => setTimeout(resolve, 0));
-  });
-
-  expect(currentPageElement.textContent).toBe('0');
-
-  // Find the prev page button
-  const prevPageButton = screen.getByTestId('prev-page');
-  expect(prevPageButton).toBeInTheDocument();
-
-  // Go back to previous page
-  await act(async () => {
-    fireEvent.click(prevPageButton);
-    // Add a small delay to let state update
-    await new Promise((resolve) => setTimeout(resolve, 0));
-  });
-
-  // Verify we're back to page 0
-  expect(currentPageElement.textContent).toBe('0');
-});
-
-/**
- * Test for handleChangeRowsPerPage function
- */
 test('should update rowsPerPage when rows per page selector is changed', async () => {
   render(
     <MockedProvider addTypename={false} link={link}>
@@ -1001,133 +880,86 @@ test('should update rowsPerPage when rows per page selector is changed', async (
     </MockedProvider>,
   );
 
-  // Wait for component to load
   await wait(500);
 
-  // Check default rows per page is 5
   const rowsPerPageSelect = screen.getByTestId(
     'rows-per-page',
   ) as HTMLSelectElement;
   expect(rowsPerPageSelect.value).toBe('5');
 
-  // Change rows per page to 10
   fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
 
-  // Verify rowsPerPage was updated
   expect(rowsPerPageSelect.value).toBe('10');
 
-  // Changing rows per page should reset to page 0
   expect(screen.getByTestId('current-page').textContent).toBe('0');
 });
 
-test('Should change page when pagination control is clicked', async () => {
-  setItem('userId', 'pagination-test-user-id');
+test('setPage updates page state correctly when pagination controls are used', async () => {
+  const mockOrganizations = Array(12)
+    .fill(0)
+    .map((_, index) => ({
+      id: `org-id-${index}`,
+      name: `Organization ${index + 1}`,
+      image: '',
+      description: `Description for org ${index + 1}`,
+      address: {
+        city: 'Test City',
+        countryCode: 'TC',
+        line1: 'Test Address',
+        postalCode: '12345',
+        state: 'TS',
+      },
+      userRegistrationRequired: true,
+      admins: [],
+      members: [],
+      membershipRequests: [],
+    }));
 
-  // Updated mock to match the actual component implementation
-  const paginationMock = {
-    request: {
-      query: ORGANIZATION_LIST,
-      variables: { filter: '' }, // Component expects filter variable
-    },
-    result: {
-      data: {
-        organizations: Array(12)
-          .fill(0)
-          .map((_, index) => ({
-            id: `org-id-${index}`,
-            name: `Organization ${index + 1}`,
-            image: '',
-            description: `Description for org ${index + 1}`,
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
-            },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
-          })),
+  const paginationMocks = [
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: mockOrganizations,
+        },
       },
     },
-  };
-
-  // Updated mock for USER_JOINED_ORGANIZATIONS_PG
-  const userJoinedOrgsMock = {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: {
-        id: 'pagination-test-user-id',
-        first: 5,
-        filter: '',
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: getItem('userId'), first: 5, filter: '' },
       },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [],
+              pageInfo: { hasNextPage: false },
             },
           },
         },
       },
     },
-  };
-
-  // Updated mock for USER_CREATED_ORGANIZATIONS
-  const userCreatedOrgsMock = {
-    request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: {
-        id: 'pagination-test-user-id',
-        filter: '',
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: getItem('userId'), filter: '' },
       },
-    },
-    result: {
-      data: {
-        user: {
-          createdOrganizations: [],
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
         },
       },
     },
-  };
-
-  const TEST_MOCKS = [
-    ...MOCKS.filter(
-      (mock) =>
-        !(
-          mock.request.query === ORGANIZATION_LIST &&
-          'filter' in mock.request.variables &&
-          mock.request.variables.filter === ''
-        ),
-    ),
-    paginationMock,
-    userJoinedOrgsMock,
-    userCreatedOrgsMock,
   ];
 
-  const link = new StaticMockLink(TEST_MOCKS, true);
-
-  // Mock the setPage function to verify it's called
-  const originalUseState = React.useState;
-  const mockSetPage = vi.fn();
-
-  vi.spyOn(React, 'useState').mockImplementation(<T,>(initialValue?: T) => {
-    if (initialValue === 0) {
-      return [0, mockSetPage] as [T, typeof mockSetPage];
-    }
-    return originalUseState(initialValue) as [
-      T,
-      React.Dispatch<React.SetStateAction<T>>,
-    ];
-  });
-
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider addTypename={false} mocks={paginationMocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1138,48 +970,52 @@ test('Should change page when pagination control is clicked', async () => {
     </MockedProvider>,
   );
 
-  // Verify loading state is shown
-  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
-
-  // Wait for data to load and loading spinner to disappear
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 
-  // Verify organizations on first page
-  await waitFor(() => {
-    const orgCards = screen.getAllByTestId('organization-card');
-    expect(orgCards.length).toBe(5);
+  const currentPage = screen.getByTestId('current-page');
+  expect(currentPage.textContent).toBe('0');
+
+  const nextButton = screen.getByTestId('next-page');
+
+  await act(async () => {
+    fireEvent.click(nextButton);
+    await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  // Directly simulate the pagination function call
-  // This will test line 171: setPage(newPage)
-  const handleChangePage = (
-    _: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    mockSetPage(newPage);
-  };
+  fireEvent(window, new Event('resize'));
 
-  act(() => {
-    handleChangePage(null, 1); // Simulate changing to page 1 (second page)
+  await waitFor(
+    () => {
+      const updatedPage = screen.getByTestId('current-page');
+      expect(updatedPage.textContent).toBe('1');
+    },
+    { timeout: 3000 },
+  );
+
+  const prevButton = screen.getByTestId('prev-page');
+
+  await act(async () => {
+    fireEvent.click(prevButton);
+    await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  // Verify setPage was called with the correct page number
-  expect(mockSetPage).toHaveBeenCalledWith(1);
+  fireEvent(window, new Event('resize'));
 
-  // Cleanup the mock
-  vi.restoreAllMocks();
+  await waitFor(
+    () => {
+      const updatedPage = screen.getByTestId('current-page');
+      expect(updatedPage.textContent).toBe('0');
+    },
+    { timeout: 3000 },
+  );
 });
 
-await wait(500);
-
 test('should correctly map joined organizations data ', async () => {
-  // Mock user ID
   const TEST_USER_ID = 'test-joined-orgs-user';
   setItem('userId', TEST_USER_ID);
 
-  // Create specific mock for joined organizations
   const joinedOrgsMock = {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
@@ -1200,7 +1036,6 @@ test('should correctly map joined organizations data ', async () => {
                   avatarURL: 'org1.jpg',
                   description: 'First joined organization',
                   addressLine1: 'Test Address',
-                  // Note: Here's the key change - members is an array, not a paginated structure
                   members: [{ _id: TEST_USER_ID }],
                   membershipRequests: [],
                   userRegistrationRequired: false,
@@ -1225,7 +1060,6 @@ test('should correctly map joined organizations data ', async () => {
     },
   };
 
-  // Create mock for all organizations (mode 0)
   const allOrgsMock = {
     request: {
       query: ORGANIZATION_LIST,
@@ -1238,7 +1072,6 @@ test('should correctly map joined organizations data ', async () => {
     },
   };
 
-  // Create mock for created organizations (mode 2)
   const createdOrgsMock = {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
@@ -1253,11 +1086,9 @@ test('should correctly map joined organizations data ', async () => {
     },
   };
 
-  // Set up mock provider with all necessary mocks
   const mocks = [joinedOrgsMock, allOrgsMock, createdOrgsMock];
   const link = new StaticMockLink(mocks, true);
 
-  // Render the component
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -1270,7 +1101,6 @@ test('should correctly map joined organizations data ', async () => {
     </MockedProvider>,
   );
 
-  // Wait for initial data to load (mode 0)
   await waitFor(
     () => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
@@ -1278,7 +1108,6 @@ test('should correctly map joined organizations data ', async () => {
     { timeout: 2000 },
   );
 
-  // Switch to joined organizations mode (mode 1)
   const modeDropdown = screen.getByTestId('modeChangeBtn');
   await userEvent.click(modeDropdown);
   await waitFor(() => {
@@ -1286,7 +1115,6 @@ test('should correctly map joined organizations data ', async () => {
   });
   await userEvent.click(screen.getByTestId('modeBtn1'));
 
-  // Wait for joined organizations data to be processed
   await waitFor(
     () => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
@@ -1294,25 +1122,19 @@ test('should correctly map joined organizations data ', async () => {
     { timeout: 2000 },
   );
 
-  // Verify that organizations are displayed with correct data
   await waitFor(() => {
-    // Check for organization list
     const organizationsList = screen.getByTestId('organizations-list');
     expect(organizationsList).toBeInTheDocument();
 
-    // Get all organization cards
     const orgCards = screen.getAllByTestId('organization-card');
     expect(orgCards.length).toBe(2);
 
-    // For each organization card, verify it has the correct attributes
     orgCards.forEach((card) => {
       const orgName = card.getAttribute('data-organization-name');
       expect(orgName).toMatch(/Joined Organization [12]/);
 
-      // Verify membership status is set to 'accepted'
       expect(card.getAttribute('data-membership-status')).toBe('accepted');
 
-      // Find the hidden membership status element
       const statusElement = within(card).getByTestId(
         `membership-status-${orgName}`,
       );
@@ -1321,16 +1143,71 @@ test('should correctly map joined organizations data ', async () => {
   });
 });
 
-test('should set membershipRequestStatus to "pending" for organizations with pending requests', async () => {
-  // Mock user ID
-  const TEST_USER_ID = 'pending-request-test-user';
+test('should set membershipRequestStatus to "created" for created organizations', async () => {
+  const TEST_USER_ID = 'created-orgs-test-user';
   setItem('userId', TEST_USER_ID);
 
-  // Create your mocks as before
+  const createdOrgsMock = {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [
+            {
+              id: 'created-org-1',
+              name: 'Created Organization 1',
+              image: 'test.jpg',
+              description: 'Test Description',
+              address: {
+                city: 'Test City',
+                countryCode: 'TC',
+                line1: 'Test Address',
+                postalCode: '12345',
+                state: 'TS',
+              },
+              admins: [],
+              members: [],
+              userRegistrationRequired: false,
+              membershipRequests: [],
+            },
+          ],
+        },
+      },
+    },
+  };
 
-  // Render the component
+  const mocks = [
+    createdOrgsMock,
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: '' },
+      },
+      result: { data: { organizations: [] } },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: TEST_USER_ID, first: 5, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [],
+              pageInfo: { hasNextPage: false },
+            },
+          },
+        },
+      },
+    },
+  ];
+
   render(
-    <MockedProvider link={link}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1341,37 +1218,31 @@ test('should set membershipRequestStatus to "pending" for organizations with pen
     </MockedProvider>,
   );
 
-  // Wait for initial data to load
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
 
-  // Click the mode selection button
-  const modeButton = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeButton);
+  const modeBtn = screen.getByTestId('modeChangeBtn');
+  fireEvent.click(modeBtn);
+  const createdModeBtn = screen.getByTestId('modeBtn2');
+  fireEvent.click(createdModeBtn);
 
-  // Click the "Joined Organizations" option (mode 1)
-  const joinedOrgsBtn = screen.getByTestId('modeBtn1');
-  fireEvent.click(joinedOrgsBtn);
+  await waitFor(() => {
+    const orgCard = screen.getByTestId('organization-card');
+    expect(orgCard).toBeInTheDocument();
+    expect(orgCard.getAttribute('data-membership-status')).toBe('created');
 
-  // Now wait for the joined organizations data to load
-  await waitFor(
-    () => {
-      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-    },
-    { timeout: 2000 },
-  );
+    const statusElement = screen.getByTestId(
+      'membership-status-Created Organization 1',
+    );
+    expect(statusElement.getAttribute('data-status')).toBe('created');
+  });
 });
 
 test('correctly map joined organizations data when mode is 1', async () => {
-  // Mock user ID
   const TEST_USER_ID = 'test-user-123';
   setItem('userId', TEST_USER_ID);
 
-  // Create GraphQL mocks with joined organizations data
   const mocks = [
     {
       request: {
@@ -1444,7 +1315,6 @@ test('correctly map joined organizations data when mode is 1', async () => {
     },
   ];
 
-  // Render the component
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>
@@ -1457,24 +1327,20 @@ test('correctly map joined organizations data when mode is 1', async () => {
     </MockedProvider>,
   );
 
-  // Wait for data to load
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 
-  // Set mode to 1 (joined organizations)
   const modeBtn = screen.getByTestId('modeChangeBtn');
   fireEvent.click(modeBtn);
 
   const joinedModeBtn = screen.getByTestId('modeBtn1');
   fireEvent.click(joinedModeBtn);
 
-  // Wait for organization card to appear
   await waitFor(() => {
     const cards = screen.getAllByTestId('organization-card');
     expect(cards.length).toBeGreaterThan(0);
 
-    // Get the specific card for Test Organization
     const card = cards.find(
       (card) =>
         card.getAttribute('data-organization-name') === 'Test Organization',
@@ -1482,10 +1348,8 @@ test('correctly map joined organizations data when mode is 1', async () => {
     expect(card).toBeDefined();
 
     if (card) {
-      // Verify membership status is set to 'accepted'
       expect(card.getAttribute('data-membership-status')).toBe('accepted');
 
-      // Also check the hidden membership status element
       const statusElement = screen.getByTestId(
         'membership-status-Test Organization',
       );
@@ -1592,19 +1456,15 @@ test('should search organizations when pressing Enter key', async () => {
     </MockedProvider>,
   );
 
-  // Wait for initial data to load
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 
-  // Find the search input and enter text
   const searchInput = screen.getByTestId('searchInput');
   fireEvent.change(searchInput, { target: { value: 'Search Term' } });
 
-  // Press Enter to trigger search (this tests line 228)
   fireEvent.keyUp(searchInput, { key: 'Enter' });
 
-  // Wait for re-fetched data
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
     expect(orgCards.length).toBe(1);
@@ -1706,20 +1566,16 @@ test('should search organizations when clicking search button', async () => {
     </MockedProvider>,
   );
 
-  // Wait for initial data to load
   await waitFor(() => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 
-  // Find the search input and enter text
   const searchInput = screen.getByTestId('searchInput');
   fireEvent.change(searchInput, { target: { value: 'Button Search' } });
 
-  // Click search button (this tests line 243)
   const searchButton = screen.getByTestId('searchBtn');
   fireEvent.click(searchButton);
 
-  // Wait for re-fetched data
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
     expect(orgCards.length).toBe(1);
@@ -1727,4 +1583,119 @@ test('should search organizations when clicking search button', async () => {
       'Button Search Organization',
     );
   });
+});
+
+test('doSearch function should call appropriate refetch based on mode', async () => {
+  const TEST_USER_ID = 'test-search-user';
+  setItem('userId', TEST_USER_ID);
+  const searchValue = 'test search';
+
+  const mocks = [
+    {
+      request: {
+        query: ORGANIZATION_LIST,
+        variables: { filter: searchValue },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: TEST_USER_ID, first: 5, filter: searchValue },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [],
+              pageInfo: { hasNextPage: false },
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: searchValue },
+      },
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  const searchInput = screen.getByTestId('searchInput');
+
+  await act(async () => {
+    fireEvent.change(searchInput, { target: { value: searchValue } });
+    fireEvent.keyUp(searchInput, { key: 'Enter' });
+  });
+  await wait(300);
+
+  const modeChangeBtn = screen.getByTestId('modeChangeBtn');
+
+  await act(async () => {
+    userEvent.click(modeChangeBtn);
+    await wait(100);
+  });
+
+  const modeBtn1 = screen.getByTestId('modeBtn1');
+  expect(modeBtn1).toBeInTheDocument();
+
+  await act(async () => {
+    userEvent.click(modeBtn1);
+    await wait(100);
+  });
+
+  await act(async () => {
+    fireEvent.change(searchInput, { target: { value: searchValue } });
+    fireEvent.keyUp(searchInput, { key: 'Enter' });
+  });
+  await wait(300);
+
+  await act(async () => {
+    userEvent.click(modeChangeBtn);
+    await wait(100);
+  });
+
+  const modeBtn2 = screen.getByTestId('modeBtn2');
+  expect(modeBtn2).toBeInTheDocument();
+
+  await act(async () => {
+    userEvent.click(modeBtn2);
+    await wait(100);
+  });
+
+  await act(async () => {
+    fireEvent.change(searchInput, { target: { value: searchValue } });
+    fireEvent.keyUp(searchInput, { key: 'Enter' });
+  });
+  await wait(300);
+
+  expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
 });
