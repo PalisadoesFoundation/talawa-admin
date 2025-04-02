@@ -3,25 +3,31 @@ import MemberOrganizationIcon from 'assets/svgs/memberOrganization.svg?react';
 import MemberEvents from 'assets/svgs/memberEvents.svg?react';
 import OverviewIcon from 'assets/svgs/overview.svg?react';
 
-// Function to get navigation items
+/**
+ * Returns navigation items for the member detail screen
+ * @param {function} t - Translation function
+ * @returns {Array} Array of navigation item objects with route, icon, and label
+ */
+
 export const getNavItems = (t) => [
+
   {
     to: '/member',
-    icon: <OverviewIcon />, // ✅ JSX element
+    icon: <OverviewIcon />, 
     label: t('navigationOverview'),
   },
   {
-    to: '/orgList',
+    to: '/member/orgList',
     icon: <MemberOrganizationIcon />,
     label: t('navigationOrganizations'),
   },
   {
-    to: '/orgevents',
+    to: '/member/orgevents',
     icon: <MemberEvents />,
     label: t('navigationEvents'),
   },
   {
-    to: '/orgtags',
+    to: '/member/orgtags',
     icon: <TagIcon />,
     label: t('navigationTags'),
   },

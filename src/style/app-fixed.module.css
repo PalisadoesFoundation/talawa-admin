@@ -6436,7 +6436,7 @@ form {
 .navigationBox {
   display: flex;
   margin-top: 2rem;
-  width: max;
+  width: max-content; /* or width: 100%; depending on design requirements */
   padding: 2rem;
 }
 
