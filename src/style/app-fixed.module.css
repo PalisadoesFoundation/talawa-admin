@@ -6433,6 +6433,13 @@ form {
   margin-left: 5px;
 }
 
+.navigationBox {
+  display: flex;
+  margin-top: 2rem;
+  width: max;
+  padding: 2rem;
+}
+
 .contact {
   width: 100%;
 }

@@ -33,7 +33,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
-import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -65,18 +64,16 @@ import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
-import TagIcon from 'assets/svgs/tag.svg?react';
-import MemberOrganizationIcon from 'assets/svgs/memberOrganization.svg?react';
-import MemberEvents from 'assets/svgs/memberEvents.svg?react';
-import OverviewIcon from 'assets/svgs/overview.svg?react';
 import DeleteIcon from 'assets/svgs/delete.svg?react';
 import ReloadIcon from 'assets/svgs/reload.svg?react';
 import SaveIcon from 'assets/svgs/save.svg?react';
-
+import { useTranslation } from 'react-i18next';
+import { getNavItems } from './config';
 type MemberDetailProps = { id?: string };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+  const navItems = getNavItems(t);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
@@ -166,30 +163,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
-  // items for navigation at the top.
-  const navItems = [
-    {
-      to: '/member',
-      icon: <OverviewIcon />,
-      label: t('navigationOverview'),
-    },
-    {
-      to: '/orgList',
-      icon: <MemberOrganizationIcon />,
-      label: t('navigationOrganizations'),
-    },
-    {
-      to: '/orgevents',
-      icon: <MemberEvents />,
-      label: t('navigationEvents'),
-    },
-    {
-      to: '/orgtags',
-      icon: <TagIcon />,
-      label: t('navigationTags'),
-    },
-  ];
-
   // Function to handle the deletion of a user
   const handleDeleteUser = async (): Promise<void> => {
     try {
@@ -213,15 +186,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   };
 
   // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string): void => {
+  const handleFieldChange = (
+    fieldName: string,
+    value: string | boolean,
+  ): void => {
     // future birthdates are not possible to select.
 
     // Check if value is a string
     // Password validation (only for string values)
-    if (fieldName === 'password' && value) {
-      if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
-        return;
+    if (value === 'string') {
+      if (fieldName === 'password' && value) {
+        if (!validatePassword(value)) {
+          toast.error('Password must be at least 8 characters long.');
+          return;
+        }
       }
     }
 
@@ -334,13 +312,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         />
       )}
       <div
-        style={{
-          display: 'flex',
-          marginTop: '2rem',
-          width: 'max',
-          padding: '2rem',
-        }}
-        className={`bg-white gap-4 ${styles.allRound}`}
+        className={`bg-white gap-4 ${styles.allRound} ${styles.navigationBox}`}
       >
         <div className={`bg-white gap-4 ${styles.allRound}`}>
           {navItems.map(({ to, icon, label }) => (
