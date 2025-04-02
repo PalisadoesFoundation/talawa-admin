@@ -160,19 +160,9 @@ const Requests = (): JSX.Element => {
     }
   }, [orgsData, t]);
 
-  // Redirect to orgList page if the user is not an admin
-  // useEffect(() => {
-  //   if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
-  //     window.location.assign('/orglist');
-  //   }
-  // }, [userRole]);
-
   // new useEffect to check if user is authorized
   useEffect(() => {
-    const isAuthorized =
-      userRole?.toLowerCase() === 'administrator' ||
-      userRole?.toUpperCase() === 'ADMIN' ||
-      userRole?.toUpperCase() === 'SUPERADMIN';
+    const isAuthorized = userRole?.toLowerCase() === 'administrator';
     if (!isAuthorized) {
       window.location.assign('/orglist');
     }
