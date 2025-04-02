@@ -98,21 +98,7 @@ const MOCKS2 = [
     },
   },
 ];
-const MOCKS2 = [
-  {
-    request: {
-      query: RECAPTCHA_MUTATION,
-      variables: {
-        recaptchaToken: null,
-      },
-    },
-    result: {
-      data: {
-        recaptcha: true,
-      },
-    },
-  },
-];
+
 const MOCKS3 = [
   {
     request: { query: ORGANIZATION_LIST },
