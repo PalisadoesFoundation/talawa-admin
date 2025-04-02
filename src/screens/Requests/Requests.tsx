@@ -128,7 +128,6 @@ const Requests = (): JSX.Element => {
     }
 
     const allRequests = data.organization?.membershipRequests || [];
-    // Filter to only show pending requests
     const pendingRequests = allRequests.filter(
       (req: { status: string }) => req.status === 'pending',
     );
