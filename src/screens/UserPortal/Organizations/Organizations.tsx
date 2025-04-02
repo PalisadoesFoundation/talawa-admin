@@ -86,6 +86,8 @@ interface InterfaceOrganizationCardProps {
     };
   }[];
   isJoined: boolean;
+  membersCount: number; // Add this
+  adminsCount: number; // Add this
 }
 
 /**
@@ -452,6 +454,12 @@ export default function organizations(): JSX.Element {
                             organization.userRegistrationRequired,
                           membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
+                          membersCount: Array.isArray(organization.members)
+                            ? organization.members.length
+                            : 0,
+                          adminsCount: Array.isArray(organization.admins)
+                            ? organization.admins.length
+                            : 0,
                         };
                         return (
                           <div
