@@ -72,12 +72,12 @@ import {
 } from '@mui/material';
 
 interface InterfaceRequestsListItem {
-  membershipRequestId: string; // Changed from id
+  membershipRequestId: string; 
   createdAt: string;
   status: string;
   user: {
     id: string;
-    name: string; // Changed from firstName/lastName
+    name: string; 
     emailAddress: string;
   };
 }
@@ -122,7 +122,6 @@ const Requests = (): JSX.Element => {
     InterfaceRequestsListItem[]
   >([]);
 
-  // Manage loading more state
   useEffect(() => {
     if (!data) {
       return;

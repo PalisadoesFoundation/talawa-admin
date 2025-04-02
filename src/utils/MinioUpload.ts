@@ -52,6 +52,7 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
           headers: {
             'Content-Type': file.type || 'application/octet-stream', // Fallback for missing type
           },
+          
         });
 
         if (!response.ok) {
