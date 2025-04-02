@@ -36,6 +36,8 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './RequestsTableItem.module.css';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
@@ -125,7 +127,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           }}
           className={styles.acceptButton}
         >
-          {t('accept')}
+          <CheckIcon className={styles.buttonIcon} />
         </Button>
       </td>
       <td>
@@ -137,7 +139,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
           }}
           className={styles.rejectButton}
         >
-          {t('reject')}
+          <DeleteIcon className={styles.buttonIcon} />
         </Button>
       </td>
     </tr>
