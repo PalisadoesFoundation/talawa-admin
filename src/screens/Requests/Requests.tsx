@@ -72,12 +72,12 @@ import {
 } from '@mui/material';
 
 interface InterfaceRequestsListItem {
-  membershipRequestId: string; 
+  membershipRequestId: string;
   createdAt: string;
   status: string;
   user: {
     id: string;
-    name: string; 
+    name: string;
     emailAddress: string;
   };
 }
@@ -122,12 +122,14 @@ const Requests = (): JSX.Element => {
     InterfaceRequestsListItem[]
   >([]);
 
+  // Manage loading more state
   useEffect(() => {
     if (!data) {
       return;
     }
 
     const allRequests = data.organization?.membershipRequests || [];
+    // Filter to only show pending requests
     const pendingRequests = allRequests.filter(
       (req: { status: string }) => req.status === 'pending',
     );
