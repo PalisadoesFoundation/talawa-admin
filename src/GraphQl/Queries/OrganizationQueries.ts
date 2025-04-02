@@ -137,23 +137,6 @@ export const ALL_ORGANIZATIONS = gql`
     }
   }
 `;
-
-export const ALL_ORGANIZATIONS_PG = gql`
-  query GetOrganizations($filter: String) {
-    organizations(filter: $filter) {
-      id
-      name
-      description
-      addressLine1
-      avatarURL
-      city
-      state
-      postalCode
-      countryCode
-      description
-    }
-  }
-`;
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
