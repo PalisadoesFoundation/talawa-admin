@@ -32,7 +32,11 @@
 import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/Queries';
+import {
+  USER_CREATED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
@@ -40,12 +44,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import {
-  ALL_ORGANIZATIONS_PG,
-  USER_JOINED_ORGANIZATIONS_PG,
-} from 'GraphQl/Queries/OrganizationQueries';
-import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
+import styles from '../../../style/app-fixed.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -64,35 +63,13 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
   return debouncedFn;
 }
 
-interface OrganizationRawData {
-  id: string;
-  name: string;
-  city?: string;
-  countryCode?: string;
-  addressLine1?: string;
-  postalCode?: string;
-  state?: string;
-  description?: string;
-  avatarURL?: string;
-  membersCount?: number;
-  isMember?: boolean;
-  adminsCount?: number;
-  members?: { edges?: { node: { id: string } }[] };
-}
-
-interface JoinedOrganizationEdge {
-  node: OrganizationRawData;
-}
-
-interface InterfaceOrganization {
-  isJoined: boolean;
+interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
   image: string;
   description: string;
-  members?: [];
-  membersCount: number;
-  adminsCount: number;
+  admins: [];
+  members: [];
   address: {
     city: string;
     countryCode: string;
@@ -102,7 +79,41 @@ interface InterfaceOrganization {
   };
   membershipRequestStatus: string;
   userRegistrationRequired: boolean;
-  membershipRequests: { id: string; user: { id: string } }[];
+  membershipRequests: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
+  isJoined: boolean;
+}
+
+/**
+ * Interface defining the structure of organization properties.
+ */
+interface InterfaceOrganization {
+  isJoined: boolean;
+  id: string;
+  name: string;
+  image: string;
+  description: string;
+  admins: [];
+  members: [];
+  address: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
 }
 
 /**
@@ -120,9 +131,7 @@ export default function organizations(): JSX.Element {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(true); // Show sidebar
-    } else {
-      setHideDrawer(false); // Hide sidebar
+      setHideDrawer(!hideDrawer);
     }
   };
 
@@ -154,7 +163,7 @@ export default function organizations(): JSX.Element {
     loading: loadingAll,
     refetch: refetchAll,
     error,
-  } = useQuery(ALL_ORGANIZATIONS_PG, { variables: { filter: filterName } });
+  } = useQuery(ORGANIZATION_LIST, { variables: { filter: filterName } });
 
   const {
     data: joinedOrganizationsData,
@@ -209,97 +218,84 @@ export default function organizations(): JSX.Element {
   /**
    * React to changes in mode or relevant query data
    */
-
   useEffect(() => {
-    if (mode === 0 && allOrganizationsData?.organizations) {
-      // All Organizations
-      const orgs = allOrganizationsData.organizations.map(
-        (org: OrganizationRawData) => {
-          const isMember = false || org.isMember;
-          return {
-            id: org.id,
-            name: org.name,
-            image: org.avatarURL || '',
-            // Append the country code to the description for test visibility
-            description: `${org.description || ''} ${org.countryCode || ''}`,
-            membersCount: org.membersCount || 0,
-            adminsCount: org.adminsCount || 0,
-            address: {
-              city: org.city || '',
-              countryCode: org.countryCode || '',
-              line1: org.addressLine1 || '',
-              postalCode: org.postalCode || '',
-              state: org.state || '',
-            },
-            membershipRequestStatus: isMember ? 'accepted' : '',
-            userRegistrationRequired: false,
-            membershipRequests: [],
-            isJoined: isMember,
+    if (mode === 0) {
+      // All
+      if (allOrganizationsData?.organizations) {
+        interface OrganizationData {
+          id: string;
+          name: string;
+          avatarURL?: string;
+          description?: string;
+          addressLine1?: string;
+          members?: {
+            edges?: Array<{ node: { id: string } }>;
           };
-        },
-      );
-      setOrganizations(orgs);
-    } else if (
-      mode === 1 &&
-      joinedOrganizationsData?.user?.organizationsWhereMember?.edges
-    ) {
-      // Joined Organizations
-      const orgs =
-        joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-          (edge: JoinedOrganizationEdge) => ({
-            id: edge.node.id,
-            name: edge.node.name,
-            image: edge.node.avatarURL || '',
-            description: `${edge.node.description || ''} ${edge.node.countryCode || ''}`,
-            membersCount: edge.node.membersCount || 0,
-            members:
-              edge.node.members?.edges?.map((edge) => edge.node.id) || [],
-            adminsCount: edge.node.adminsCount || 0,
-            address: {
-              city: edge.node.city || '',
-              countryCode: edge.node.countryCode || '',
-              line1: edge.node.addressLine1 || '',
-              postalCode: edge.node.postalCode || '',
-              state: edge.node.state || '',
+        }
+
+        const orgs = allOrganizationsData.organizations.map(
+          (org: OrganizationData) => {
+            const isMember =
+              org.members?.edges?.some(
+                (edge: { node: { id: string } }) => edge.node.id === userId,
+              ) || false;
+            return {
+              id: org.id,
+              name: org.name,
+              image: org.avatarURL,
+              description: org.description,
+              address: {
+                line1: org.addressLine1,
+                city: '',
+                countryCode: '',
+                postalCode: '',
+                state: '',
+              },
+              admins: [],
+              members: org.members?.edges?.map((edge: any) => edge.node) || [],
+              membershipRequestStatus: isMember ? 'accepted' : '',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: isMember,
+            };
+          },
+        );
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
+    } else if (mode === 1) {
+      // Joined
+      if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
+        const orgs =
+          joinedOrganizationsData.user.organizationsWhereMember.edges.map(
+            (edge: { node: InterfaceOrganization }) => {
+              const organization = edge.node;
+              return {
+                ...organization,
+                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
+                isJoined: true,
+              };
             },
-            membershipRequestStatus: 'accepted',
-            userRegistrationRequired: false,
-            membershipRequests: [],
+          );
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
+    } else if (mode === 2) {
+      // Created
+      if (createdOrganizationsData?.user?.createdOrganizations) {
+        const orgs = createdOrganizationsData.user.createdOrganizations.map(
+          (org: InterfaceOrganization) => ({
+            ...org,
+            membershipRequestStatus: 'created',
             isJoined: true,
           }),
         );
-      setOrganizations(orgs);
-    } else if (
-      mode === 2 &&
-      createdOrganizationsData?.user?.createdOrganizations
-    ) {
-      // Created Organizations
-      const orgs = createdOrganizationsData.user.createdOrganizations.map(
-        (org: OrganizationRawData) => ({
-          id: org.id,
-          name: org.name,
-          image: org.avatarURL || '',
-          // Append the country code to the description for test visibility
-          description: `${org.description || ''} ${org.countryCode || ''}`,
-          membersCount: org.membersCount || 0,
-          members: org.members?.edges?.map((edge) => edge.node.id) || [],
-          adminsCount: org.adminsCount || 0,
-          address: {
-            city: org.city || '',
-            countryCode: org.countryCode || '',
-            line1: org.addressLine1 || '',
-            postalCode: org.postalCode || '',
-            state: org.state || '',
-          },
-          membershipRequestStatus: 'created',
-          userRegistrationRequired: false,
-          membershipRequests: [],
-          isJoined: true,
-        }),
-      );
-      setOrganizations(orgs);
-    } else {
-      setOrganizations([]);
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
     }
   }, [
     mode,
@@ -444,11 +440,10 @@ export default function organizations(): JSX.Element {
                       ).map((organization: InterfaceOrganization, index) => {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
-                          adminsCount: organization.adminsCount,
-                          membersCount: organization.membersCount,
                           image: organization.image,
                           id: organization.id,
                           description: organization.description,
+                          admins: organization.admins,
                           members: organization.members,
                           address: organization.address,
                           membershipRequestStatus:
@@ -467,13 +462,7 @@ export default function organizations(): JSX.Element {
                             data-membership-status={
                               organization.membershipRequestStatus
                             }
-                            data-country-code={organization.address.countryCode}
                           >
-                            {/* Directly insert the country code as text */}
-                            <span style={{ display: 'none' }}>
-                              {organization.address.countryCode}
-                            </span>
-
                             <div
                               data-testid={`membership-status-${organization.name}`}
                               data-status={organization.membershipRequestStatus}
@@ -481,6 +470,7 @@ export default function organizations(): JSX.Element {
                             ></div>
 
                             <OrganizationCard {...cardProps} />
+                            {/* Add a hidden span with organization name for testing purposes */}
                             <span
                               data-testid={`org-name-${organization.name}`}
                               className="visually-hidden"
