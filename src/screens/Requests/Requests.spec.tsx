@@ -1097,4 +1097,3 @@ describe('Testing Requests screen', () => {
     unmount();
   });
 });
-

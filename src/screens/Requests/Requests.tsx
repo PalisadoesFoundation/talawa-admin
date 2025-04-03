@@ -83,7 +83,6 @@ interface InterfaceRequestsListItem {
 }
 
 const Requests = (): JSX.Element => {
-  // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { t: tCommon } = useTranslation('common');
 
