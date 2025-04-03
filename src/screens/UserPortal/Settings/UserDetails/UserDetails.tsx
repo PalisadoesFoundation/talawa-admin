@@ -326,7 +326,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         />
       </Col>
     </Row>
-    {!isUpdated && (
+    {isUpdated && (
       <div className="d-flex justify-content-between mt-4">
         <Button
           onClick={handleResetChanges}
