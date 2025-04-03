@@ -1097,3 +1097,43 @@ describe('Testing Requests screen', () => {
     unmount();
   });
 });
+
+test('should handle fetchMore with search term applied', async () => {
+  const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
+
+  render(
+    <MockedProvider addTypename={false} link={linkInfiniteScroll}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Requests />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait(500);
+
+  expect(screen.getByTestId('testComp')).toBeInTheDocument();
+  expect(screen.getByRole('grid')).toBeInTheDocument();
+
+  const searchInput = screen.getByTestId('searchByName');
+  await userEvent.clear(searchInput);
+  await userEvent.type(searchInput, 'User');
+
+  const searchButton = screen.getByTestId('searchButton');
+  await userEvent.click(searchButton);
+
+  await wait(300);
+
+  fireEvent.scroll(window, {
+    target: {
+      scrollY: document.documentElement.scrollHeight,
+      innerHeight: window.innerHeight,
+      scrollHeight: document.documentElement.scrollHeight,
+    },
+  });
+
+  await wait(500);
+});
