@@ -31,7 +31,10 @@ describe('refreshToken', () => {
   }
 
   delete (window as TestInterfacePartialWindow).location;
-  global.window.location = { ...location, reload: vi.fn() };
+  Object.defineProperty(global.window, 'location', {
+    value: { ...location, reload: vi.fn() },
+    writable: true,
+  });
 
   // Create storage mock
   const localStorageMock = {
