@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFundModal
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L15)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L61)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:15](https://githu
 
 > **fund**: [`InterfaceFundInfo`](../../../../../utils/interfaces/interfaces/InterfaceFundInfo.md)
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L19)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L65)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:19](https://githu
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L17)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L63)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:17](https://githu
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L16)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L62)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:16](https://githu
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L21)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L67)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:21](https://githu
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L20)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L66)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:20](https://githu
 
 > **refetchFunds**: () => `void`
 
-Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L18)
+Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L64)
 
 #### Returns
 
