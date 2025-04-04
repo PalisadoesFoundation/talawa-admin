@@ -6,13 +6,17 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L71)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L60)
+
+Modal component for creating or editing a campaign.
 
 ## Parameters
 
 ### props
 
 [`InterfaceCampaignModal`](../interfaces/InterfaceCampaignModal.md)
+
+The props for the CampaignModal component.
 
 ### deprecatedLegacyContext?
 
@@ -27,3 +31,5 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:71](ht
 ## Returns
 
 `ReactNode`
+
+JSX.Element
