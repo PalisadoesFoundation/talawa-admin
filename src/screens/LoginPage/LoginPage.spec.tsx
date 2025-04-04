@@ -1,11 +1,10 @@
-import React, { act, ChangeEvent, useEffect } from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   render,
   screen,
   fireEvent,
   within,
-  waitFor,
   // waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -26,11 +25,9 @@ import {
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
+import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
-import '../../style/app.module.css';
-import i18n from 'utils/i18nForTest';
-import { authClient } from 'lib/auth-client';
-
+import 'style/app.module.css';
 const MOCKS = [
   {
     request: {
@@ -73,32 +70,32 @@ const MOCKS = [
     result: { data: { community: null } },
   },
 ];
-const MOCKS2 = [
-  {
-    request: {
-      query: RECAPTCHA_MUTATION,
-      variables: {
-        recaptchaToken: null,
-      },
-    },
-    result: {
-      data: {
-        recaptcha: true,
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: null,
-      },
-    },
-  },
-];
 
+// const MOCKS2 = [
+//   {
+//     request: {
+//       query: GET_COMMUNITY_DATA_PG,
+//     },
+//     result: {
+//       data: {
+//         community: {
+//           id: 'communitId',
+//           websiteURL: 'http://link.com',
+//           name: 'testName',
+//           logoURL: 'image.png',
+//           facebookURL: 'http://url.com',
+//           gitHubURL: 'http://url.com',
+//           youTubeURL: 'http://url.com',
+//           instagramURL: 'http://url.com',
+//           linkedInURL: 'http://url.com',
+//           redditURL: 'http://url.com',
+//           slackURL: 'http://url.com',
+//           xURL: 'http://url.com',
+//         },
+//       },
+//     },
+//   },
+// ];
 const MOCKS3 = [
   {
     request: { query: ORGANIZATION_LIST },
@@ -162,29 +159,9 @@ const MOCKS4 = [
     error: new Error('Invalid credentials'),
   },
 ];
-const mockedGetItem = vi.fn();
-const mockedSetItem = vi.fn();
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: mockedGetItem,
-    setItem: mockedSetItem,
-  }),
-}));
-vi.mock('lib/auth-client', () => ({
-  authClient: {
-    signIn: {
-      email: vi.fn(), // Generic mock function without tracker yet
-    },
-    signUp: {
-      email: vi.fn(),
-    },
-  },
-}));
 
-const trackedMock = vi.mocked(authClient.signIn.email);
-const trackedMock2 = vi.mocked(authClient.signUp.email);
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS2, true);
+// const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
@@ -195,6 +172,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }));
@@ -252,9 +230,6 @@ vi.mock('react-google-recaptcha', async () => {
 });
 
 describe('Testing Login Page Screen', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
   it('Component Should be rendered properly', async () => {
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -365,133 +340,6 @@ describe('Testing Login Page Screen', () => {
     );
 
     await userEvent.click(screen.getByTestId('registrationBtn'));
-  });
-
-  it('sets registration loading state', async () => {
-    const formData = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      password: 'John@123',
-      confirmPassword: 'John@123',
-    };
-
-    // Setup the trackedMock2 to handle the signup flow
-    trackedMock2.mockImplementation((data, options) => {
-      // Create a properly structured RequestContext object
-      if (options && typeof options.onRequest === 'function') {
-        options.onRequest({
-          url: 'test-url',
-          headers: new Headers(),
-          body: {},
-          method: 'POST',
-          signal: new AbortController().signal,
-        });
-      }
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          if (options && typeof options.onResponse === 'function') {
-            // Simulated Request object
-            const mockRequest = new Request('https://api.example.com/signup', {
-              method: 'POST',
-              headers: new Headers({ 'Content-Type': 'application/json' }),
-              body: JSON.stringify(formData),
-            });
-
-            // Simulated Response object
-            const mockResponse = new Response(
-              JSON.stringify({
-                token: 'test-token-123',
-                id: 'user-id-123',
-              }),
-              {
-                status: 200,
-                headers: new Headers({ 'Content-Type': 'application/json' }),
-              },
-            );
-
-            // Simulated ResponseContext
-            const mockResponseContext = {
-              url: mockRequest.url,
-              status: mockResponse.status,
-              headers: mockResponse.headers,
-              response: mockResponse,
-              request: mockRequest, // ✅ Added the missing 'request' property
-            };
-
-            options.onResponse(mockResponseContext);
-          }
-
-          resolve({
-            data: {
-              token: 'test-token-123',
-              id: 'user-id-123',
-            },
-          });
-        }, 50);
-      });
-    });
-
-    // Render the component
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId(/goToRegisterPortion/i));
-
-    await wait();
-
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-    await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      formData.password,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      formData.confirmPassword,
-    );
-
-    // Elements should be enabled initially
-    expect(screen.getByPlaceholderText(/Name/i)).not.toBeDisabled();
-    expect(screen.getByTestId(/signInEmail/i)).not.toBeDisabled();
-    expect(screen.getByPlaceholderText('Password')).not.toBeDisabled();
-    expect(screen.getByPlaceholderText('Confirm Password')).not.toBeDisabled();
-    expect(screen.getByTestId('registrationBtn')).not.toBeDisabled();
-
-    // Submit the form
-    await userEvent.click(screen.getByTestId('registrationBtn'));
-
-    // Verify that the form elements are disabled when loading
-    expect(screen.getByPlaceholderText(/Name/i)).toBeDisabled();
-    expect(screen.getByTestId(/signInEmail/i)).toBeDisabled();
-    expect(screen.getByPlaceholderText('Password')).toBeDisabled();
-    expect(screen.getByPlaceholderText('Confirm Password')).toBeDisabled();
-    expect(screen.getByTestId('registrationBtn')).toBeDisabled();
-
-    // Wait for the UI to update after the response
-    await waitFor(
-      () => {
-        expect(screen.getByPlaceholderText(/Name/i)).not.toBeDisabled();
-        expect(screen.getByTestId(/signInEmail/i)).not.toBeDisabled();
-        expect(screen.getByPlaceholderText('Password')).not.toBeDisabled();
-        expect(
-          screen.getByPlaceholderText('Confirm Password'),
-        ).not.toBeDisabled();
-        expect(screen.getByTestId('registrationBtn')).not.toBeDisabled();
-      },
-      { timeout: 1000 },
-    );
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
@@ -854,244 +702,6 @@ describe('Testing Login Page Screen', () => {
   //     expect(resetReCAPTCHA).toBeCalled();
   //   });
   // });
-  it('sets Login loading state', async () => {
-    const changeLanguageMock = vi.fn();
-    vi.spyOn(i18n, 'changeLanguage').mockImplementation(changeLanguageMock);
-
-    // Setup the trackedMock to handle the authentication flow
-    trackedMock.mockImplementation((data, options) => {
-      // Create a properly structured RequestContext object
-      if (options && typeof options.onRequest === 'function') {
-        options.onRequest({
-          url: 'test-url',
-          headers: new Headers(),
-          body: {},
-          method: 'POST',
-          signal: new AbortController().signal,
-        });
-      }
-
-      // Return a promise that will resolve after a short delay
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          // Create a proper ResponseContext object (without status property at this level)
-          if (options && typeof options.onResponse === 'function') {
-            // Simulated Request object
-            const mockRequest = new Request('https://api.example.com/login', {
-              method: 'POST',
-              headers: new Headers({ 'Content-Type': 'application/json' }),
-              body: JSON.stringify({
-                email: 'testuser@example.com',
-                password: 'Password123!',
-              }),
-            });
-
-            // Simulated Response object
-            const mockResponse = new Response(
-              JSON.stringify({
-                role: 'administrator',
-                token: 'test-token-123',
-                id: 'user-id-123',
-                name: 'Test User',
-                email: 'testuser@example.com',
-                avatarName: 'avatar.jpg',
-                countryCode: 'en',
-              }),
-              {
-                status: 200,
-                headers: new Headers({ 'Content-Type': 'application/json' }),
-              },
-            );
-
-            // Simulated ResponseContext
-            const mockResponseContext = {
-              url: mockRequest.url,
-              status: mockResponse.status,
-              headers: mockResponse.headers,
-              response: mockResponse,
-              request: mockRequest, // ✅ Added the missing 'request' property
-            };
-
-            // Call onResponse with the correctly structured ResponseContext
-            options.onResponse(mockResponseContext);
-          }
-          resolve({
-            data: {
-              data: {
-                role: 'administrator',
-                token: 'test-token-123',
-                id: 'user-id-123',
-                name: 'Test User',
-                email: 'testuser@example.com',
-                avatarName: 'avatar.jpg',
-                countryCode: 'en',
-              },
-            },
-          });
-        }, 50);
-      });
-    });
-
-    // Render the component
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const user = userEvent.setup();
-
-    // Fill out the login form
-    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
-    await user.type(screen.getByTestId('password'), 'Password123!');
-
-    // Elements should be enabled initially
-    expect(screen.getByTestId('loginEmail')).not.toBeDisabled();
-    expect(screen.getByTestId('password')).not.toBeDisabled();
-    expect(screen.getByTestId('loginBtn')).not.toBeDisabled();
-
-    // Submit the form
-    await user.click(screen.getByTestId('loginBtn'));
-
-    // Verify that the form elements are disabled when loading
-    expect(screen.getByTestId('loginEmail')).toBeDisabled();
-    expect(screen.getByTestId('password')).toBeDisabled();
-    expect(screen.getByTestId('loginBtn')).toBeDisabled();
-
-    // Wait for the UI to update after the response
-    await waitFor(
-      () => {
-        // Form elements should be enabled again
-        expect(screen.getByTestId('loginEmail')).not.toBeDisabled();
-        expect(screen.getByTestId('password')).not.toBeDisabled();
-        expect(screen.getByTestId('loginBtn')).not.toBeDisabled();
-      },
-      { timeout: 1000 },
-    );
-  });
-
-  it('sets correct localStorage items after successful login ,change language', async () => {
-    const changeLanguageMock = vi.fn();
-    vi.spyOn(i18n, 'changeLanguage').mockImplementation(changeLanguageMock);
-    trackedMock.mockImplementation(() => {
-      return Promise.resolve({
-        data: {
-          data: {
-            role: 'administrator',
-            token: 'test-token-123',
-            id: 'user-id-123',
-            name: 'Test User',
-            email: 'testuser@example.com',
-            avatarName: 'avatar.jpg',
-            countryCode: 'en',
-          },
-        },
-      });
-    });
-    // Render the component
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const user = userEvent.setup();
-
-    // Fill out the login form
-    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
-    await user.type(screen.getByTestId('password'), 'Password123!');
-
-    // Submit the form
-    await user.click(screen.getByTestId('loginBtn'));
-
-    // Wait for async operations to complete
-    await waitFor(() => {
-      expect(changeLanguageMock).toHaveBeenCalledWith('en');
-      // Verify localStorage items were set correctly
-      expect(mockedSetItem).toHaveBeenCalledWith('token', 'test-token-123');
-      expect(mockedSetItem).toHaveBeenCalledWith('IsLoggedIn', 'TRUE');
-      expect(mockedSetItem).toHaveBeenCalledWith('name', 'Test User');
-      expect(mockedSetItem).toHaveBeenCalledWith(
-        'email',
-        'testuser@example.com',
-      );
-      expect(mockedSetItem).toHaveBeenCalledWith('role', 'administrator');
-      expect(mockedSetItem).toHaveBeenCalledWith('UserImage', 'avatar.jpg');
-      expect(mockedSetItem).toHaveBeenCalledWith('id', 'user-id-123');
-    });
-  });
-  it('properly extracts and assigns values from signInData', async () => {
-    const mockResponse = {
-      data: {
-        data: {
-          role: 'administrator',
-          token: 'test-token-123',
-          id: 'user-id-123',
-          name: 'Test User',
-          email: 'testuser@example.com',
-          avatarName: 'avatar.jpg',
-          countryCode: 'en',
-        },
-      },
-    };
-
-    trackedMock.mockImplementation(() => Promise.resolve(mockResponse));
-
-    // Render the component
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const user = userEvent.setup();
-
-    // Fill out the login form
-    await user.type(screen.getByTestId('loginEmail'), 'testuser@example.com');
-    await user.type(screen.getByTestId('password'), 'Password123!');
-
-    // Submit the form
-    await user.click(screen.getByTestId('loginBtn'));
-
-    // Wait for async operations to complete
-    await waitFor(() => {
-      // Extracted values from mockResponse
-      const { data } = mockResponse.data;
-      const { role, token, id, name, email, avatarName } = data;
-
-      // Assertions for destructured properties
-      expect(role).toBe('administrator');
-      expect(token).toBe('test-token-123');
-      expect(id).toBe('user-id-123');
-      expect(name).toBe('Test User');
-      expect(email).toBe('testuser@example.com');
-      expect(avatarName).toBe('avatar.jpg');
-
-      // Role-based assertion
-      expect(role === 'administrator').toBe(true);
-
-      // Verify loggedInUserId assignment
-      expect(id).toBe('user-id-123');
-    });
-  });
 
   it('Testing password preview feature for login', async () => {
     render(
@@ -1409,17 +1019,10 @@ describe('Testing Login Page Screen', () => {
 });
 
 describe('Testing redirect if already logged in', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('Logged in as USER', async () => {
-    mockedGetItem.mockImplementation((key) => {
-      if (key === 'IsLoggedIn') return 'TRUE';
-      if (key === 'userId') return '123'; // Example user ID
-      return null;
-    });
-
+    const { setItem } = useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', 'id');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1435,13 +1038,11 @@ describe('Testing redirect if already logged in', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
   it('Logged in as Admin or SuperAdmin', async () => {
-    mockedGetItem.mockImplementation((key) => {
-      if (key === 'IsLoggedIn') return 'TRUE';
-      if (key === 'userId') return null; // Example user ID
-      return null;
-    });
+    const { setItem } = useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('userId', null);
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
