@@ -28,7 +28,6 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 import 'style/app.module.css';
-import { text } from 'stream/consumers';
 const MOCKS = [
   {
     request: {
