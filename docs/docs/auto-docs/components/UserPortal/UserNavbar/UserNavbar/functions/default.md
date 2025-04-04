@@ -6,7 +6,7 @@
 
 > **default**(): `JSX.Element`
 
-Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L60)
+Defined in: [src/components/UserPortal/UserNavbar/UserNavbar.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserNavbar/UserNavbar.tsx#L61)
 
 ## Returns
 

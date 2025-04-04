@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_FUND\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/FundMutation.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L37)
+Defined in: [src/GraphQl/Mutations/FundMutation.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L49)
 
 GraphQL mutation to update a fund.
 
@@ -20,7 +20,19 @@ The name of the fund.
 
 ## Param
 
+The reference number of the fund.
+
+## Param
+
 Whether the fund is tax deductible.
+
+## Param
+
+Whether the fund is archived.
+
+## Param
+
+Whether the fund is the default.
 
 ## Returns
 

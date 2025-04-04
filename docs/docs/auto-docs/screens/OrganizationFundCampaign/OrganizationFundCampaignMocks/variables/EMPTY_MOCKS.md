@@ -6,7 +6,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L177)
+Defined in: [src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L300)
 
 ## Type declaration
 
@@ -22,13 +22,21 @@ Defined in: [src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.
 
 > **variables**: `object`
 
-#### request.variables.input
-
-> **input**: `object`
-
-#### request.variables.input.id
+#### request.variables.id
 
 > **id**: `string` = `'fundId'`
+
+#### request.variables.orderBy
+
+> **orderBy**: `any` = `null`
+
+#### request.variables.where
+
+> **where**: `object`
+
+#### request.variables.where.name\_contains
+
+> **name\_contains**: `string` = `''`
 
 ### result
 
@@ -38,22 +46,18 @@ Defined in: [src/screens/OrganizationFundCampaign/OrganizationFundCampaignMocks.
 
 > **data**: `object`
 
-#### result.data.fund
+#### result.data.getFundById
 
-> **fund**: `object`
+> **getFundById**: `object`
 
-#### result.data.fund.campaigns
+#### result.data.getFundById.campaigns
 
-> **campaigns**: `object`
+> **campaigns**: `any`[] = `[]`
 
-#### result.data.fund.campaigns.edges
+#### result.data.getFundById.isArchived
 
-> **edges**: `any`[] = `[]`
+> **isArchived**: `boolean` = `false`
 
-#### result.data.fund.id
-
-> **id**: `string` = `'fundId'`
-
-#### result.data.fund.name
+#### result.data.getFundById.name
 
 > **name**: `string` = `'Fund 1'`
