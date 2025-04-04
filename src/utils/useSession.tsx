@@ -1,15 +1,18 @@
-import { authClient } from 'lib/auth-client';
+import { useMutation, useQuery } from '@apollo/client';
+import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
+import { t } from 'i18next';
+import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
 
 type UseSessionReturnType = {
-  listSession: () => Promise<
-    Awaited<ReturnType<typeof authClient.listSessions>>
-  >;
-  revokeOtherSessionExceptCurrentSession: () => Promise<void>;
-  revokeAllSession: () => Promise<void>;
-  handleLogout: () => Promise<void>; //for when logged in already, simply extend session
+  startSession: () => void;
+  endSession: () => void;
+  handleLogout: () => void;
+  extendSession: () => void; //for when logged in already, simply extend session
 };
 
 /**
@@ -26,54 +29,135 @@ type UseSessionReturnType = {
  */
 const useSession = (): UseSessionReturnType => {
   const { t: tCommon } = useTranslation('common');
+
+  let startTime: number;
+  let timeoutDuration: number;
+  const [sessionTimeout, setSessionTimeout] = useState<number>(30);
+  // const sessionTimeout = 30;
+  const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const warningTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
-  //in this way we can access the session of a user in client side uncomment this when it is required
-  // const { data: session, isPending, error, refetch } = authClient.useSession();
+  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const { data, error: queryError } = useQuery(
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+  );
 
-  //List all active session
-  const listSession = async (): Promise<
-    Awaited<ReturnType<typeof authClient.listSessions>>
-  > => {
-    try {
-      const sessions = await authClient.listSessions();
-      return sessions;
-    } catch (error) {
-      toast.error(tCommon('sessionListingFailed'));
-      throw error;
+  useEffect(() => {
+    if (queryError) {
+      errorHandler(t, queryError as Error);
+    } else {
+      const sessionTimeoutData = data?.community;
+      if (sessionTimeoutData) {
+        setSessionTimeout(sessionTimeoutData.inactivityTimeoutDuration);
+      }
     }
-  };
-  //it will revoke all active session except the current session
-  const revokeOtherSessionExceptCurrentSession = async (): Promise<void> => {
-    try {
-      await authClient.revokeOtherSessions();
-    } catch (error) {
-      toast.error(tCommon('revokeOtherSessionsFailed'));
-      throw error;
-    }
+  }, [data, queryError]);
+
+  const resetTimers = (): void => {
+    if (sessionTimerRef.current) clearTimeout(sessionTimerRef.current);
+    if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
   };
 
-  //it will revoke all session with current session
-  const revokeAllSession = async (): Promise<void> => {
-    try {
-      await authClient.revokeSessions();
-    } catch (error) {
-      toast.error(tCommon('revokeAllSessionsFailed'));
-      throw error;
-    }
+  const endSession = (): void => {
+    resetTimers();
+    window.removeEventListener('mousemove', extendSession);
+    window.removeEventListener('keydown', extendSession);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
   };
-  //it will logout the user so it will automatically  revoke its current session
+
   const handleLogout = async (): Promise<void> => {
+    try {
+      await revokeRefreshToken();
+    } catch (error) {
+      console.error('Error revoking refresh token:', error);
+      // toast.error('Failed to revoke session. Please try again.');
+    }
     localStorage.clear();
-    await authClient.signOut();
+    endSession();
     navigate('/');
+    toast.warning(tCommon('sessionLogout'), { autoClose: false });
   };
+
+  const initializeTimers = (
+    timeLeft?: number,
+    warningTimeLeft?: number,
+  ): void => {
+    const warningTime = warningTimeLeft ?? sessionTimeout / 2;
+    const sessionTimeoutInMilliseconds =
+      (timeLeft || sessionTimeout) * 60 * 1000;
+    const warningTimeInMilliseconds = warningTime * 60 * 1000;
+
+    timeoutDuration = sessionTimeoutInMilliseconds;
+    startTime = Date.now();
+
+    warningTimerRef.current = setTimeout(() => {
+      toast.warning(tCommon('sessionWarning'));
+    }, warningTimeInMilliseconds);
+
+    sessionTimerRef.current = setTimeout(async () => {
+      await handleLogout();
+    }, sessionTimeoutInMilliseconds);
+  };
+
+  const extendSession = (): void => {
+    resetTimers();
+    initializeTimers();
+  };
+
+  const startSession = (): void => {
+    resetTimers();
+    initializeTimers();
+    window.removeEventListener('mousemove', extendSession);
+    window.removeEventListener('keydown', extendSession);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('mousemove', extendSession);
+    window.addEventListener('keydown', extendSession);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  };
+
+  const handleVisibilityChange = async (): Promise<void> => {
+    if (document.visibilityState === 'hidden') {
+      window.removeEventListener('mousemove', extendSession);
+      window.removeEventListener('keydown', extendSession);
+      resetTimers(); // Optionally reset timers to prevent them from running in the background
+    } else if (document.visibilityState === 'visible') {
+      window.removeEventListener('mousemove', extendSession);
+      window.removeEventListener('keydown', extendSession); // Ensure no duplicates
+      window.addEventListener('mousemove', extendSession);
+      window.addEventListener('keydown', extendSession);
+
+      // Calculate remaining time now that the tab is active again
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = timeoutDuration - elapsedTime;
+
+      const remainingSessionTime = Math.max(remainingTime, 0); // Ensures the remaining time is non-negative and measured in ms;
+
+      if (remainingSessionTime > 0) {
+        // Calculate remaining warning time only if session time is positive
+        const remainingWarningTime = Math.max(remainingSessionTime / 2, 0);
+        initializeTimers(
+          remainingSessionTime / 60 / 1000,
+          remainingWarningTime / 60 / 1000,
+        );
+      } else {
+        // Handle session expiration immediately if time has run out
+        await handleLogout();
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      endSession();
+    };
+  }, []);
 
   return {
-    listSession,
-    revokeOtherSessionExceptCurrentSession,
-    revokeAllSession,
+    startSession,
+    endSession,
     handleLogout,
+    extendSession,
   };
 };
 
