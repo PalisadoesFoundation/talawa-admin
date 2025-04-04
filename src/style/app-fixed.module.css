@@ -8407,3 +8407,7 @@ form {
 /* Add more Class Related to a particular Screen above this */
 
 /* ----------------------------------------------------- */
+
+:global(.form-control:focus) {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+}

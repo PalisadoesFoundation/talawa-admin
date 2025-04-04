@@ -28,6 +28,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 import 'style/app.module.css';
+import { text } from 'stream/consumers';
 const MOCKS = [
   {
     request: {
@@ -235,12 +236,11 @@ describe('Testing Login Page Screen', () => {
       configurable: true,
       value: {
         reload: vi.fn(),
-        href: 'https://localhost:4321/orglist',
+        href: 'https://localhost:4321/admin',
         origin: 'https://localhost:4321',
-        pathname: '/orglist',
+        pathname: '/admin',
       },
     });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -254,11 +254,8 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-    const adminLink = screen.getByText(/Admin/i);
-    await userEvent.click(adminLink);
-    await wait();
-    expect(screen.getByText(/Admin/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/orglist');
+    expect(screen.getByText(/Admin Login/i)).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/admin');
   });
 
   it('There should be default values of pre-login data when queried result is null', async () => {
@@ -942,12 +939,11 @@ describe('Testing Login Page Screen', () => {
       configurable: true,
       value: {
         reload: vi.fn(),
-        href: 'https://localhost:4321/user/organizations',
+        href: 'https://localhost:4321/',
         origin: 'https://localhost:4321',
-        pathname: '/user/organizations',
+        pathname: '/',
       },
     });
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -961,13 +957,36 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-    const userLink = screen.getByText(/User/i);
-    await userEvent.click(userLink);
-    await wait();
     expect(screen.getByText(/User Login/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/user/organizations');
+    expect(window.location.pathname).toBe('/');
   });
 
+  it('Component Should be rendered properly for user registration', async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/register',
+        origin: 'https://localhost:4321',
+        pathname: '/register',
+      },
+    });
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.getByTestId('register-text')).toBeInTheDocument();
+    expect(window.location.pathname).toBe('/register');
+  });
   // it('on value change of ReCAPTCHA onChange event should be triggered in both the captcha', async () => {
   //   render(
   //     <MockedProvider addTypename={false} link={link}>
