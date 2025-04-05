@@ -764,7 +764,6 @@ type Mutation {
   addUserImage(file: String!): User!
   addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
-  assignUserTag(input: ToggleUserTagAssignInput!): User
   assignToUserTag(input: ToggleUserToTagAssignInput!): User
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
@@ -904,8 +903,8 @@ type Mutation {
   updateUserType(data: UpdateUserTypeInput!): Boolean!
   venues: [Venue]
   removeFromUserTags(input: TagActionsInput!): UserTag
-  assignToUserTags(input: TagActionsInput!): Tag
-  assignUserTag(input: AddUserTagInput!): Tag
+  assignToUserTags(input: TagActionsInput!): TagPg
+  assignUserTag(input: AddUserTagInput!): TagPg
 }
 
 input OTPInput {
