@@ -563,7 +563,49 @@ describe('OrganizationCard Component with New Interface', () => {
 
       expect(cancelRequestSpy).not.toHaveBeenCalled();
     });
-  });
+
+    it('should not log error in production mode', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      process.env.NODE_ENV = 'production';
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      const errorMocks: MockedResponse[] = [
+        {
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          error: new Error('Withdrawal failed'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={errorMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+
+      process.env.NODE_ENV = undefined;
+      consoleErrorSpy.mockRestore();
+    });
+
+  }); // closes the existing describe block for mutations
 
   it('should handle generic thrown error (non-GraphQL)', async () => {
     const genericErrorMock: MockedResponse[] = [

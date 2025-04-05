@@ -165,7 +165,14 @@ export default function organizations(): JSX.Element {
     loading: loadingAll,
     refetch: refetchAll,
     error,
-  } = useQuery(ORGANIZATION_LIST, { variables: { filter: filterName } });
+  } = useQuery(ORGANIZATION_LIST, { 
+    variables: { filter: filterName },
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    skip: mode !== 0,
+    notifyOnNetworkStatusChange: true,
+    onError: (error) => console.error('All orgs error:', error)
+  });
 
   const {
     data: joinedOrganizationsData,
@@ -222,49 +229,34 @@ export default function organizations(): JSX.Element {
    */
   useEffect(() => {
     if (mode === 0) {
-      // All
       if (allOrganizationsData?.organizations) {
-        interface OrganizationData {
-          id: string;
-          name: string;
-          avatarURL?: string;
-          description?: string;
-          addressLine1?: string;
-          members?: {
-            edges?: Array<{ node: { id: string } }>;
-          };
-        }
+        const orgs = allOrganizationsData.organizations.map((org: any) => {
+          // Check if current user is a member
+          const memberEdges = org.members?.edges || [];
+          const isMember = memberEdges.some(
+            (edge: any) => edge.node.id === userId
+          );
 
-        const orgs = allOrganizationsData.organizations.map(
-          (org: OrganizationData) => {
-            const isMember =
-              org.members?.edges?.some(
-                (edge: { node: { id: string } }) => edge.node.id === userId,
-              ) || false;
-            return {
-              id: org.id,
-              name: org.name,
-              image: org.avatarURL,
-              description: org.description,
-              address: {
-                line1: org.addressLine1,
-                city: '',
-                countryCode: '',
-                postalCode: '',
-                state: '',
-              },
-              admins: [],
-              members: org.members?.edges?.map((edge: any) => edge.node) || [],
-              membershipRequestStatus: isMember ? 'accepted' : '',
-              userRegistrationRequired: false,
-              membershipRequests: [],
-              isJoined: isMember,
-            };
-          },
-        );
+          return {
+            id: org.id,
+            name: org.name,
+            image: org.avatarURL || null,
+            address: {
+              line1: org.addressLine1 || '',
+              city: '',
+              countryCode: '',
+              postalCode: '',
+              state: '',
+            },
+            admins: [],
+            members: org.members?.edges?.map((e: any) => e.node) || [],
+            membershipRequestStatus: isMember ? 'accepted' : '',
+            userRegistrationRequired: false,
+            membershipRequests: [],
+            isJoined: isMember // Set based on membership check
+          };
+        });
         setOrganizations(orgs);
-      } else {
-        setOrganizations([]);
       }
     } else if (mode === 1) {
       // Joined
