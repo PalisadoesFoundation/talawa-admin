@@ -6,7 +6,6 @@
  *
  * @module OrgActionItemCategories
  *
- *
  * @typedef {InterfaceActionItemCategoryProps} InterfaceActionItemCategoryProps - Props for the component.
  * @typedef {InterfaceActionItemCategoryInfo} InterfaceActionItemCategoryInfo - Interface for category data.
  *
@@ -23,12 +22,12 @@
  * <OrgActionItemCategories orgId="12345" />
  */
 import type { FC } from 'react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
+import { useQuery, gql } from '@apollo/client';
+import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -57,6 +56,29 @@ interface InterfaceActionItemCategoryProps {
   orgId: string;
 }
 
+/* -- Helper Component: CreatorNameCell -- */
+const GET_USER_NAME = gql`
+  query GetUser($input: QueryUserInput!) {
+    user(input: $input) {
+      name
+    }
+  }
+`;
+
+interface CreatorNameCellProps {
+  creatorId: string;
+}
+
+const CreatorNameCell: FC<CreatorNameCellProps> = ({ creatorId }) => {
+  const { data, loading, error } = useQuery(GET_USER_NAME, {
+    variables: { input: { id: creatorId } },
+  });
+
+  if (loading) return <span>Loading...</span>;
+  if (error || !data || !data.user) return <span>{creatorId}</span>;
+  return <span>{data.user.name}</span>;
+};
+
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
@@ -70,10 +92,6 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Represents the component for managing organization action item categories.
- * This component allows creating, updating, enabling, and disabling action item categories.
- */
 const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   orgId,
 }) => {
@@ -97,36 +115,62 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
+  });
 
-  // Query to fetch action item categories
+  // Use the provided query which expects an input object (only organizationId is supported)
   const {
     data: catData,
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
-  }: {
-    data?: {
-      actionItemCategoriesByOrganization: InterfaceActionItemCategory[];
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
+  } = useQuery(ACTION_ITEM_CATEGORY, {
     variables: {
-      organizationId: orgId,
-      where: {
-        name_contains: searchTerm,
-        is_disabled: !status ? undefined : status === CategoryStatus.Disabled,
+      input: {
+        organizationId: orgId,
       },
-      orderBy: sortBy,
     },
   });
 
-  console.log(categories);
+  // Log the data coming from the query for debugging
+  useEffect(() => {
+    if (catData) {
+      console.log('Fetched Action Item Categories Data:', catData);
+      if (catData.actionCategoriesByOrganization) {
+        setCategories(catData.actionCategoriesByOrganization);
+      }
+    }
+  }, [catData]);
+
+  // Client-side filtering based on search term and status
+  const filteredCategories = useMemo(() => {
+    return categories.filter((cat) => {
+      const matchesSearch = cat.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        status === null
+          ? true
+          : status === CategoryStatus.Disabled
+            ? cat.isDisabled
+            : !cat.isDisabled;
+      return matchesSearch && matchesStatus;
+    });
+  }, [categories, searchTerm, status]);
+
+  // Client-side sorting based on createdAt field
+  const sortedCategories = useMemo(() => {
+    return [...filteredCategories].sort((a, b) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return sortBy === 'createdAt_ASC' ? aTime - bTime : bTime - aTime;
+    });
+  }, [filteredCategories, sortBy]);
+
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
@@ -142,18 +186,10 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     [openModal],
   );
 
-  useEffect(() => {
-    if (catData && catData.actionItemCategoriesByOrganization) {
-      setCategories(catData.actionItemCategoriesByOrganization);
-    }
-  }, [catData]);
-
-  // Show loader while data is being fetched
   if (catLoading) {
     return <Loader styles={styles.message} size="lg" />;
   }
 
-  // Show error message if there's an error
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -181,7 +217,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div data-testid="rowId">{params.row.id}</div>;
+        // Find index from the sorted categories array and add 1
+        const index = sortedCategories.findIndex((row) => row.id === params.id);
+        return <div data-testid="rowId">{index + 1}</div>;
       },
     },
     {
@@ -193,16 +231,14 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="categoryName"
+        >
+          {params.row.name}
+        </div>
+      ),
     },
     {
       field: 'status',
@@ -213,18 +249,16 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Chip
-            data-testid="statusChip"
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isDisabled ? 'Disabled' : 'Active'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
-          />
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Chip
+          data-testid="statusChip"
+          icon={<Circle className={styles.chipIcon} />}
+          label={params.row.isDisabled ? 'Disabled' : 'Active'}
+          variant="outlined"
+          color="primary"
+          className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
+        />
+      ),
     },
     {
       field: 'createdBy',
@@ -235,13 +269,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <span data-testid="creatorName">
-            {`${params.row.creator.firstName} ${params.row.creator.lastName}`}
-          </span>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <span data-testid="creatorName">
+          <CreatorNameCell creatorId={params.row.creatorId} />
+        </span>
+      ),
     },
     {
       field: 'createdOn',
@@ -252,13 +284,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div data-testid="createdOn">
+          {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
+        </div>
+      ),
     },
     {
       field: 'action',
@@ -269,27 +299,24 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            variant="success"
-            size="sm"
-            className="me-2 rounded"
-            data-testid={'editCategoryBtn' + params.row.id}
-            onClick={() =>
-              handleOpenModal(params.row as InterfaceActionItemCategory, 'edit')
-            }
-          >
-            <i className="fa fa-edit" />
-          </Button>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Button
+          variant="success"
+          size="sm"
+          className="me-2 rounded"
+          data-testid={`editCategoryBtn${params.row.id}`}
+          onClick={() =>
+            handleOpenModal(params.row as InterfaceActionItemCategory, 'edit')
+          }
+        >
+          <i className="fa fa-edit" />
+        </Button>
+      ),
     },
   ];
 
   return (
     <div className="mx-4">
-      {/* Header with search, filter  and Create Button */}
       <div
         className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
       >
@@ -341,7 +368,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               className={styles.dropdown}
             />
           </div>
-
           <div>
             <Button
               variant="success"
@@ -349,18 +375,17 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               style={{ marginTop: '11px' }}
               data-testid="createActionItemCategoryBtn"
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className="fa fa-plus me-2" />
               {tCommon('create')}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Table with Action Item Categories */}
       <DataGrid
         disableColumnMenu
         columnBufferPx={6}
-        hideFooter={true}
+        hideFooter
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
@@ -373,12 +398,9 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        // rows={categories.map((category, index) => ({
-        //   id: index + 1,
-        //   ...category,
-        // }))}
         columns={columns}
         isRowSelectable={() => false}
+        rows={sortedCategories}
       />
 
       <CategoryModal

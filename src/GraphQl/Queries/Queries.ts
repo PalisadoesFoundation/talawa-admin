@@ -1100,7 +1100,10 @@ export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
 `;
 
 // get the list of Action Item Categories
-export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
+export {
+  ACTION_ITEM_CATEGORY_LIST,
+  ACTION_ITEM_CATEGORY,
+} from './ActionItemCategoryQueries';
 
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';

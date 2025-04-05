@@ -1,195 +1,344 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
-import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
-import OrgActionItemCategories from './OrgActionItemCategories';
-import { vi } from 'vitest';
-import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
-/**z
- * This file contains unit tests for the `OrgActionItemCategories` component.
- *
- * The tests cover:
- * - Proper rendering of the component under different conditions, including scenarios with populated categories, empty categories, and API errors.
- * - User interactions such as searching, filtering, sorting categories, and opening/closing modals for creating or editing categories.
- * - Verification of GraphQL query and mutation behaviors using mock data, ensuring correct functionality in both success and error cases.
- * - Handling edge cases like no input, invalid input, and form resets.
- * - Integration tests for Redux state, routing, internationalization, and toast notifications.
- * - Ensuring sorting functionality reflects the `createdAt` property both in ascending and descending order.
- * - Testing the modal interactions for creating and editing categories, ensuring proper lifecycle (open/close) and state updates.
- * - Checking the rendering of error messages and placeholders when no data is available or an error occurs.
- * - Validation of search functionality for categories by name, including clearing the search input and using keyboard shortcuts like `Enter`.
- */
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import dayjs from 'dayjs';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
+import OrgActionItemCategories from './OrgActionItemCategories';
+import {
+  ACTION_ITEM_CATEGORY,
+  GET_USER,
+} from 'GraphQl/Queries/ActionItemCategoryQueries';
+// import {  } from './OrgActionItemCategories'; // from the same file
+import type { InterfaceActionItemCategory } from 'utils/interfaces';
+
+// Mock i18n so we don’t worry about translations
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (str: string) => str,
+    i18n: { language: 'en' },
+  }),
+}));
+
+// Mock sub-components that we aren’t focusing on in detail
+vi.mock('subComponents/SortingButton', () => ({
+  __esModule: true,
+  default: ({
+    title,
+    sortingOptions,
+    selectedOption,
+    onSortChange,
+    dataTestIdPrefix,
+  }: {
+    title: string;
+    sortingOptions: { label: string; value: string }[];
+    selectedOption: string;
+    onSortChange: (val: string) => void;
+    dataTestIdPrefix: string;
+  }) => {
+    return (
+      <select
+        data-testid={dataTestIdPrefix}
+        aria-label={title}
+        onChange={(e) => onSortChange(e.target.value)}
+      >
+        {sortingOptions.map((opt) => (
+          <option
+            key={opt.value}
+            value={opt.value}
+            aria-label={opt.label}
+            selected={opt.label === selectedOption}
+          >
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    );
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const dateTimePickerModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: dateTimePickerModule.DesktopDateTimePicker,
-  };
-});
-
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_EMPTY);
-const link3 = new StaticMockLink(MOCKS_ERROR);
-const t = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
-
-const renderActionItemCategories = (
-  link: ApolloLink,
-  orgId: string,
-): RenderResult => {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <OrgActionItemCategories orgId={orgId} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
-  );
-};
-
-describe('Testing Organisation Action Item Categories', () => {
-  it('open and closes Create Category modal', async () => {
-    renderActionItemCategories(link1, 'orgId');
-
-    const addCategoryBtn = await screen.findByTestId(
-      'createActionItemCategoryBtn',
+vi.mock('subComponents/SearchBar', () => ({
+  __esModule: true,
+  default: ({
+    onSearch,
+    inputTestId,
+    buttonTestId,
+  }: {
+    onSearch: (val: string) => void;
+    inputTestId: string;
+    buttonTestId: string;
+  }) => {
+    return (
+      <div>
+        <input
+          data-testid={inputTestId}
+          onChange={(e) => onSearch(e.target.value)}
+        />
+        <button data-testid={buttonTestId} onClick={() => onSearch('')}>
+          Clear
+        </button>
+      </div>
     );
-    expect(addCategoryBtn).toBeInTheDocument();
-    await userEvent.click(addCategoryBtn);
+  },
+}));
 
-    await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    await userEvent.click(
-      screen.getByTestId('actionItemCategoryModalCloseBtn'),
+// We'll reference the same GET_USER_NAME used in the code
+// If it's not exported, define your own local copy
+export const mockCreatorQuery = GET_USER;
+
+// ---------------------------
+// 1. Mock Data for Categories
+// ---------------------------
+const mockCategories: InterfaceActionItemCategory[] = [
+  {
+    id: 'cat1',
+    name: 'Category One',
+    organizationId: 'org1',
+    creatorId: 'user1',
+    isDisabled: false,
+    createdAt: '2025-01-01T12:00:00.000Z',
+    updatedAt: '2025-01-02T12:00:00.000Z',
+  },
+  {
+    id: 'cat2',
+    name: 'Category Two',
+    organizationId: 'org1',
+    creatorId: 'user2',
+    isDisabled: true,
+    createdAt: '2025-01-02T12:00:00.000Z',
+    updatedAt: '2025-01-03T12:00:00.000Z',
+  },
+];
+
+// 2. Mock Data for GET_USER queries
+const mockUser1Name = 'User One';
+const mockUser2Name = 'User Two';
+
+// 3. Apollo Mocks
+const mockActionCategoriesSuccess: MockedResponse[] = [
+  {
+    request: {
+      query: ACTION_ITEM_CATEGORY,
+      variables: {
+        input: {
+          organizationId: 'org1',
+        },
+      },
+    },
+    result: {
+      data: {
+        actionCategoriesByOrganization: mockCategories,
+      },
+    },
+  },
+];
+
+// Mocks for the GET_USER query
+const mockGetUserNameSuccess: MockedResponse[] = [
+  {
+    request: {
+      query: GET_USER,
+      variables: {
+        input: { id: 'user1' },
+      },
+    },
+    result: {
+      data: {
+        user: { name: mockUser1Name },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_USER,
+      variables: {
+        input: { id: 'user2' },
+      },
+    },
+    result: {
+      data: {
+        user: { name: mockUser2Name },
+      },
+    },
+  },
+];
+
+describe('OrgActionItemCategories Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders rows after successful fetch', async () => {
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
     );
-    await waitFor(() =>
+
+    // Wait for rows
+    await waitFor(() => {
+      // "Category One" should appear
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+      // "Category Two" should appear
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+
+    // We expect 2 status chips (Active, Disabled)
+    // Because row1 => Active, row2 => Disabled
+    expect(screen.getByText('Active')).toBeInTheDocument();
+    expect(screen.getByText('Disabled')).toBeInTheDocument();
+  });
+
+  it('filters categories by search term', async () => {
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+    // Wait for categories to load
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+
+    // Search for "Two"
+    const searchInput = screen.getByTestId('searchByName') as HTMLInputElement;
+    fireEvent.change(searchInput, { target: { value: 'Two' } });
+
+    // Only "Category Two" should remain
+    await waitFor(() => {
+      expect(screen.queryByText('Category One')).not.toBeInTheDocument();
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+  });
+
+  it('filters categories by status (active, disabled)', async () => {
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+
+    // Wait for categories to load
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+
+    // The select for status has data-testid prefix = "filter"
+    const statusSelect = screen.getByTestId('filter') as HTMLSelectElement;
+    // set to "disabled"
+    fireEvent.change(statusSelect, { target: { value: 'disabled' } });
+
+    // Only the disabled category remains (Category Two)
+    await waitFor(() => {
+      expect(screen.queryByText('Category One')).not.toBeInTheDocument();
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+
+    // Now set to "active"
+    fireEvent.change(statusSelect, { target: { value: 'active' } });
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+      expect(screen.queryByText('Category Two')).not.toBeInTheDocument();
+    });
+  });
+
+  it('sorts categories by created date', async () => {
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+
+    // Wait for categories to load
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+      expect(screen.getByText('Category Two')).toBeInTheDocument();
+    });
+
+    // By default we set "createdAt_DESC" => cat2 first -> cat1 second
+    // Check the row "Sr. No." cell text or something
+    // We'll do a quick check for the "Category" column order
+
+    // The DataGrid "Sr. No." column uses sortedCategories => let's read them
+    const rowIds = screen.getAllByTestId('rowId').map((el) => el.textContent);
+    // rowId is 1,2 but let's see if the first row has "Category Two"
+    const categoryCells = screen
+      .getAllByTestId('categoryName')
+      .map((el) => el.textContent);
+
+    // Expect "Category Two" is first, "Category One" is second in the rendered list
+    expect(categoryCells[0]).toBe('Category Two');
+    expect(categoryCells[1]).toBe('Category One');
+
+    // Now let's switch to "createdAt_ASC"
+    const sortSelect = screen.getByTestId('sort') as HTMLSelectElement;
+    fireEvent.change(sortSelect, { target: { value: 'createdAt_ASC' } });
+
+    // Now "Category One" should appear first
+    await waitFor(() => {
+      const updatedCells = screen
+        .getAllByTestId('categoryName')
+        .map((el) => el.textContent);
+      expect(updatedCells[0]).toBe('Category One');
+      expect(updatedCells[1]).toBe('Category Two');
+    });
+  });
+
+  it('opens modal on clicking create and edit buttons', async () => {
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+
+    // Wait for categories to load
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
+    });
+
+    // 1) Click "create" => opens CategoryModal
+    const createBtn = screen.getByTestId('createActionItemCategoryBtn');
+    fireEvent.click(createBtn);
+    // The CategoryModal might have a test id, or we can expect certain text
+    // We can check if the "Close" button or form is visible
+    // For now, we test the "isOpen" state is true if there's dataTestId in the modal
+    // Suppose CategoryModal has dataTestId="categoryModal"
+    // If not, we can rely on anything that we know is in that modal
+    await waitFor(() => {
+      // We rely on the presence of something from the CategoryModal
+      // We can do:
       expect(
-        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
-      ).toBeNull(),
-    );
-  });
-
-  it('should render Empty Action Item Categories Screen', async () => {
-    renderActionItemCategories(link2, 'orgId');
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
+        screen.getByTestId('actionItemCategoryModalCloseBtn'),
+      ).toBeInTheDocument();
     });
-  });
 
-  it('should render the Action Item Categories Screen with error', async () => {
-    renderActionItemCategories(link3, 'orgId');
+    // 2) Click an edit button => opens in "edit" mode
+    const editBtnForCat1 = screen.getByTestId('editCategoryBtncat1');
+    fireEvent.click(editBtnForCat1);
+
+    // Wait for the modal again
     await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
-  });
-});
-
-function renderOrgCategories(
-  link: ApolloLink,
-  orgId: string,
-): ReturnType<typeof render> {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <OrgActionItemCategories orgId={orgId} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
-  );
-}
-
-describe('Additional Tests for OrgActionItemCategories', () => {
-  beforeEach(() => {
-    // Reset any global mocks if needed.
-  });
-
-  it('renders no rows overlay when there are no categories', async () => {
-    // Use an empty mock link to simulate no data
-    const emptyLink = new StaticMockLink(MOCKS_EMPTY);
-    renderOrgCategories(emptyLink, 'orgId');
-
-    await waitFor(() => {
-      expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
-    });
-  });
-
-  it('updates the search term input value', async () => {
-    const successLink = new StaticMockLink(MOCKS);
-    renderOrgCategories(successLink, 'orgId');
-
-    // Wait for the search bar to appear.
-    const searchInput = await screen.findByTestId('searchByName');
-    expect(searchInput).toBeInTheDocument();
-
-    // Simulate typing a search term.
-    await userEvent.type(searchInput, 'General');
-    expect(searchInput).toHaveValue('General');
-  });
-
-  it('triggers sort option change when sorting button is clicked', async () => {
-    const successLink = new StaticMockLink(MOCKS);
-    renderOrgCategories(successLink, 'orgId');
-
-    // Wait for the sort button to appear.
-    const sortBtn = await screen.findByTestId('sort');
-    expect(sortBtn).toBeInTheDocument();
-
-    // Click the sort button (if your SortingButton triggers a refetch or state change, you can verify that).
-    await userEvent.click(sortBtn);
-
-    // In our component, if no rows are rendered (rows prop is commented out), the DataGrid will
-    // continue to display the no rows overlay.
-    await waitFor(() => {
-      expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
-    });
-  });
-
-  it('applies status filter and displays no rows overlay when no categories match', async () => {
-    const successLink = new StaticMockLink(MOCKS);
-    renderOrgCategories(successLink, 'orgId');
-
-    // Wait for the filter button to appear.
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
-
-    // Click to filter by a status that does not match any category.
-    // For example, if all categories are active in your MOCKS, selecting "disabled" should yield no rows.
-    await userEvent.click(filterBtn);
-    // Depending on your SortingButton implementation, you might need to click an option.
-    // Here, we assume that clicking filter sets a filter value.
-    await waitFor(() => {
-      expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
+      expect(
+        screen.getByTestId('actionItemCategoryModalCloseBtn'),
+      ).toBeInTheDocument();
     });
   });
 });

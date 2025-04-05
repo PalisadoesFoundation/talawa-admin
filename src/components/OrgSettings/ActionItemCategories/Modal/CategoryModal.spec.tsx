@@ -1,32 +1,27 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
-import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
-import type { InterfaceActionItemCategoryModal } from './CategoryModal';
-import CategoryModal from './CategoryModal';
-import { toast } from 'react-toastify';
-import { vi } from 'vitest';
-/**
- * This file contains unit tests for the `CategoryModal` component.
- *
- * The tests cover:
- * - Proper rendering of the component in various scenarios, including `create` and `edit` modes, mock data, and error states.
- * - Handling user interactions with form fields, such as updating the category name and toggling the `isDisabled` switch.
- * - Ensuring form submissions trigger appropriate callbacks (e.g., `refetchCategories` and `hide`) and display correct toast notifications.
- * - Simulating GraphQL query and mutation operations with mocked data to validate behavior in success and error cases.
- * - Testing edge cases, such as submitting without changes, invalid inputs, and handling API errors gracefully.
- * - Verifying proper integration of internationalization, Redux state, routing, and toast notifications for success and error feedback.
- */
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 
+import CategoryModal, { InterfaceActionItemCategory } from './CategoryModal';
+import {
+  CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+  UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+} from 'GraphQl/Mutations/ActionItemCategoryMutations';
+import { toast } from 'react-toastify';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: (namespace?: string, options?: { keyPrefix?: string }) => {
+    const prefix = options?.keyPrefix ? `${options.keyPrefix}.` : '';
+    return {
+      t: (key: string) => prefix + key,
+      i18n: { language: 'en' },
+    };
+  },
+}));
+
+// Mock react-toastify so we can track calls to toast
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -34,191 +29,332 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link3 = new StaticMockLink(MOCKS_ERROR);
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.orgActionItemCategories ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
+describe('CategoryModal Component', () => {
+  // Reset mock calls before each test
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-const categoryProps: InterfaceActionItemCategoryModal[] = [
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    refetchCategories: vi.fn(),
-    orgId: 'orgId',
-    mode: 'create',
-    category: {
-      id: 'categoryId',
-      name: 'Category 1',
+  // Helper function to render the modal
+  function renderCategoryModal(
+    props?: Partial<React.ComponentProps<typeof CategoryModal>>,
+    apolloMocks?: MockedResponse[],
+  ) {
+    const defaultCategory: InterfaceActionItemCategory = {
+      id: 'cat-1',
+      name: 'Some Category',
+      organizationId: 'org-1',
+      creatorId: 'user-1',
       isDisabled: false,
-      createdAt: '2044-01-01',
-      updatedAt: '2044-01-02',
-      creatorId: '65378abd-8500-8f17-1cf2-990d00000002',
-      organizationId: 'org-123456',
-    },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    refetchCategories: vi.fn(),
-    orgId: 'orgId',
-    mode: 'edit',
-    category: {
-      id: 'categoryId',
-      name: 'Category 1',
-      isDisabled: false,
-      createdAt: '2044-01-01',
-      updatedAt: '2044-01-02',
-      creatorId: '65378abd-8500-8f17-1cf2-990d00000002',
-      organizationId: 'org-123456',
-    },
-  },
-];
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z',
+    };
 
-const renderCategoryModal = (
-  link: ApolloLink,
-  props: InterfaceActionItemCategoryModal,
-): RenderResult => {
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CategoryModal {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
-  );
-};
-
-const fillFormAndSubmit = async (
-  name: string,
-  isDisabled: boolean,
-): Promise<void> => {
-  const nameInput = screen.getByLabelText('Name *');
-  const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-  const submitBtn = screen.getByTestId('formSubmitButton');
-
-  fireEvent.change(nameInput, { target: { value: name } });
-  if (isDisabled) {
-    await userEvent.click(isDisabledSwitch);
+    return render(
+      <MockedProvider mocks={apolloMocks || []} addTypename={false}>
+        <CategoryModal
+          isOpen={true}
+          hide={vi.fn()}
+          refetchCategories={vi.fn()}
+          orgId="org-1"
+          category={defaultCategory}
+          mode="create"
+          {...props}
+        />
+      </MockedProvider>,
+    );
   }
-  await userEvent.click(submitBtn);
-};
 
-describe('Testing Action Item Category Modal', () => {
-  it('should populate form fields with correct values in edit mode', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    await waitFor(() =>
-      expect(
-        screen.getByText(translations.categoryDetails),
-      ).toBeInTheDocument(),
+  it('does not render modal if isOpen = false', () => {
+    // Even with no GraphQL calls, if isOpen=false, modal content is not rendered
+    renderCategoryModal({ isOpen: false });
+    expect(
+      screen.queryByText('orgActionItemCategories.categoryDetails'),
+    ).toBeNull();
+  });
+
+  it('toggles isDisabled field when switch is clicked', () => {
+    renderCategoryModal();
+    const switchEl = screen.getByTestId('isDisabledSwitch') as HTMLInputElement;
+    expect(switchEl).toBeInTheDocument();
+    // Initially false
+    expect(switchEl).not.toBeChecked();
+
+    fireEvent.click(switchEl);
+    // Now it's true
+    expect(switchEl).toBeChecked();
+    fireEvent.click(switchEl);
+    // Now it's false again
+    expect(switchEl).not.toBeChecked();
+  });
+
+  it('calls createActionItemCategory mutation on submit when in create mode', async () => {
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+          variables: {
+            input: {
+              name: 'New Category',
+              isDisabled: false,
+              organizationId: 'org-1',
+            },
+          },
+        },
+        result: {
+          data: {
+            createActionItemCategory: {
+              id: 'new-cat-id',
+              name: 'New Category',
+              organizationId: 'org-1',
+              creatorId: 'user-1',
+              isDisabled: false,
+              createdAt: '2025-01-01T00:00:00.000Z',
+              updatedAt: '2025-01-01T00:00:00.000Z',
+            },
+          },
+        },
+      },
+    ];
+
+    // Mocks for user function calls
+    const hideFn = vi.fn();
+    const refetchFn = vi.fn();
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CategoryModal
+          isOpen
+          hide={hideFn}
+          refetchCategories={refetchFn}
+          orgId="org-1"
+          category={null}
+          mode="create"
+        />
+      </MockedProvider>,
     );
 
-    expect(screen.getByLabelText('Name *')).toHaveValue('Category 1');
-    expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
-  });
+    const nameField = screen.getByTestId(
+      'categoryNameInput',
+    ) as HTMLInputElement;
+    expect(nameField).toBeInTheDocument();
+    // Type a new name
+    fireEvent.change(nameField, { target: { value: 'New Category' } });
 
-  it('should update name when input value changes', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    const nameInput = screen.getByLabelText('Name *');
-    expect(nameInput).toHaveValue('Category 1');
-    fireEvent.change(nameInput, { target: { value: 'Category 2' } });
-    expect(nameInput).toHaveValue('Category 2');
-  });
-
-  it('should update isDisabled when switch is toggled', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-    expect(isDisabledSwitch).not.toBeChecked();
-    await userEvent.click(isDisabledSwitch);
-    expect(isDisabledSwitch).toBeChecked();
-  });
-
-  it('should edit category', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    await fillFormAndSubmit('Category 2', true);
-
-    await waitFor(() => {
-      expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
-      expect(categoryProps[1].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfulUpdation,
-      );
-    });
-  });
-
-  it('Edit only Name', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    await fillFormAndSubmit('Category 2', false);
-
-    await waitFor(() => {
-      expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
-      expect(categoryProps[1].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfulUpdation,
-      );
-    });
-  });
-
-  it('Edit only isDisabled', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
-    await fillFormAndSubmit('Category 1', true);
-
-    await waitFor(() => {
-      expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
-      expect(categoryProps[1].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfulUpdation,
-      );
-    });
-  });
-
-  it('Error in updating category', async () => {
-    renderCategoryModal(link3, categoryProps[1]);
-    await fillFormAndSubmit('Category 2', true);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
-    });
-  });
-
-  it('should create category', async () => {
-    renderCategoryModal(link1, categoryProps[0]);
-    await fillFormAndSubmit('Category 2', true);
-
-    await waitFor(() => {
-      expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
-      expect(categoryProps[0].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfulCreation,
-      );
-    });
-  });
-
-  it('Error in creating category', async () => {
-    renderCategoryModal(link3, categoryProps[0]);
-    await fillFormAndSubmit('Category 2', true);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
-    });
-  });
-
-  it('Try to edit without changing any field', async () => {
-    renderCategoryModal(link1, categoryProps[1]);
+    // Submit the form
     const submitBtn = screen.getByTestId('formSubmitButton');
-    await userEvent.click(submitBtn);
+    fireEvent.click(submitBtn);
+
+    // Wait for success
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgActionItemCategories.successfulCreation',
+      );
+      expect(refetchFn).toHaveBeenCalled();
+      expect(hideFn).toHaveBeenCalled();
+    });
+  });
+
+  it('shows error toast if createActionItemCategory mutation fails', async () => {
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+          variables: {
+            input: {
+              name: 'Fail Category',
+              isDisabled: false,
+              organizationId: 'org-1',
+            },
+          },
+        },
+        error: new Error('Create Error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CategoryModal
+          isOpen
+          hide={vi.fn()}
+          refetchCategories={vi.fn()}
+          orgId="org-1"
+          category={null}
+          mode="create"
+        />
+      </MockedProvider>,
+    );
+    const nameField = screen.getByTestId(
+      'categoryNameInput',
+    ) as HTMLInputElement;
+    fireEvent.change(nameField, { target: { value: 'Fail Category' } });
+    fireEvent.click(screen.getByTestId('formSubmitButton'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.sameNameConflict);
+      expect(toast.error).toHaveBeenCalledWith('Create Error');
+    });
+  });
+
+  it('calls updateActionItemCategory mutation on submit when in edit mode', async () => {
+    const categoryToEdit = {
+      id: 'cat-123',
+      name: 'My Old Name',
+      organizationId: 'org-1',
+      creatorId: 'user-123',
+      isDisabled: false,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z',
+    } as InterfaceActionItemCategory;
+
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+          variables: {
+            input: {
+              categoryId: 'cat-123',
+              name: 'My New Name', // changed from old name
+            },
+          },
+        },
+        result: {
+          data: {
+            updateActionItemCategory: {
+              id: 'cat-123',
+              name: 'My New Name',
+              organizationId: 'org-1',
+              creatorId: 'user-123',
+              isDisabled: false,
+              createdAt: '2025-01-01T00:00:00.000Z',
+              updatedAt: '2025-01-02T00:00:00.000Z',
+            },
+          },
+        },
+      },
+    ];
+
+    const hideFn = vi.fn();
+    const refetchFn = vi.fn();
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CategoryModal
+          isOpen
+          hide={hideFn}
+          refetchCategories={refetchFn}
+          orgId="org-1"
+          category={categoryToEdit}
+          mode="edit"
+        />
+      </MockedProvider>,
+    );
+
+    // Confirm we're in edit mode
+    expect(screen.getByTestId('formSubmitButton').textContent).toMatch(
+      /updateActionItemCategory/i,
+    );
+
+    const nameField = screen.getByTestId(
+      'categoryNameInput',
+    ) as HTMLInputElement;
+
+    fireEvent.change(nameField, { target: { value: 'My New Name' } });
+    // Submit
+    fireEvent.click(screen.getByTestId('formSubmitButton'));
+
+    // Wait for success
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgActionItemCategories.successfulUpdation',
+      );
+      expect(refetchFn).toHaveBeenCalled();
+      expect(hideFn).toHaveBeenCalled();
+    });
+  });
+
+  it('shows error toast if updateActionItemCategory mutation fails', async () => {
+    const categoryToEdit: InterfaceActionItemCategory = {
+      id: 'cat-123',
+      name: 'Old Name',
+      organizationId: 'org-1',
+      creatorId: 'user-123',
+      isDisabled: false,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z',
+    };
+
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+          variables: {
+            input: {
+              categoryId: 'cat-123',
+              name: 'New Name',
+            },
+          },
+        },
+        error: new Error('Update Error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CategoryModal
+          isOpen
+          hide={vi.fn()}
+          refetchCategories={vi.fn()}
+          orgId="org-1"
+          category={categoryToEdit}
+          mode="edit"
+        />
+      </MockedProvider>,
+    );
+    const nameField = screen.getByTestId(
+      'categoryNameInput',
+    ) as HTMLInputElement;
+
+    fireEvent.change(nameField, { target: { value: 'New Name' } });
+    fireEvent.click(screen.getByTestId('formSubmitButton'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Update Error');
+    });
+  });
+
+  it('shows "sameNameConflict" toast if no fields are changed in edit mode', async () => {
+    const categoryToEdit: InterfaceActionItemCategory = {
+      id: 'cat-123',
+      name: 'No Change',
+      organizationId: 'org-1',
+      creatorId: 'user-123',
+      isDisabled: false,
+      createdAt: '2025-01-01T00:00:00.000Z',
+      updatedAt: '2025-01-02T00:00:00.000Z',
+    };
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <CategoryModal
+          isOpen
+          hide={vi.fn()}
+          refetchCategories={vi.fn()}
+          orgId="org-1"
+          category={categoryToEdit}
+          mode="edit"
+        />
+      </MockedProvider>,
+    );
+
+    // We won't change anything
+    fireEvent.click(screen.getByTestId('formSubmitButton'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'orgActionItemCategories.sameNameConflict',
+      );
     });
   });
 });
