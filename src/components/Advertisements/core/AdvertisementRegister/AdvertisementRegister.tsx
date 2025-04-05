@@ -1,6 +1,50 @@
+/**
+ * AdvertisementRegister Component
+ *
+ * This component handles the creation and editing of advertisements for an organization.
+ * It provides a modal-based form to input advertisement details such as name, media, type,
+ * start date, and end date. The component supports both "register" and "edit" modes.
+ *
+ * @component
+ * @param {InterfaceAddOnRegisterProps} props - The properties for the component.
+ * @param {string} [props.formStatus='register'] - Determines whether the form is in "register" or "edit" mode.
+ * @param {string} [props.idEdit] - The ID of the advertisement being edited (used in "edit" mode).
+ * @param {string} [props.nameEdit=''] - The name of the advertisement being edited.
+ * @param {string} [props.typeEdit='BANNER'] - The type of the advertisement being edited.
+ * @param {string} [props.advertisementMediaEdit=''] - The media file of the advertisement being edited.
+ * @param {Date} [props.startDateEdit=new Date()] - The start date of the advertisement being edited.
+ * @param {Date} [props.endDateEdit=new Date()] - The end date of the advertisement being edited.
+ * @param {Function} props.setAfter - Callback to reset pagination or refetch data after mutation.
+ *
+ * @returns {JSX.Element} The AdvertisementRegister component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and form components.
+ * - Integrates with Apollo Client for GraphQL mutations and queries.
+ * - Validates date ranges to ensure the end date is not earlier than the start date.
+ * - Converts uploaded media files to Base64 format for preview and submission.
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="register"
+ *   setAfter={setAfterCallback}
+ * />
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="edit"
+ *   idEdit="123"
+ *   nameEdit="Sample Ad"
+ *   typeEdit="POPUP"
+ *   advertisementMediaEdit="base64string"
+ *   startDateEdit={new Date()}
+ *   endDateEdit={new Date()}
+ *   setAfter={setAfterCallback}
+ * />
+ */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -17,43 +61,7 @@ import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,
 } from 'types/Advertisement/interface';
-/**
- * Props for the `advertisementRegister` component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.dropdown`
- * - `.inputField`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
-/**
- * Component for registering or editing an advertisement.
- *
- * @param props - Contains form status, advertisement details, and a function to update parent state.
- * @returns A JSX element that renders a form inside a modal for creating or editing an advertisement.
- *
- * @example
- * ```tsx
- * <AdvertisementRegister
- *   formStatus="register"
- *   setAfter={(value) => console.log(value)}
- * />
- * ```
- */
 function advertisementRegister({
   formStatus = 'register',
   idEdit,

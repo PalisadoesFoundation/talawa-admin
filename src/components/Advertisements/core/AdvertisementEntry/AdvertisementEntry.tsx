@@ -1,6 +1,43 @@
+/**
+ * AdvertisementEntry component displays an advertisement entry card with options to view, edit, or delete the advertisement.
+ * It supports media content (images or videos) and provides functionality for managing advertisements.
+ *
+ * @component
+ * @param {InterfaceAddOnEntryProps} props - The properties for the AdvertisementEntry component.
+ * @param {string} props.id - The unique identifier for the advertisement.
+ * @param {string} [props.name=''] - The name of the advertisement.
+ * @param {string} [props.type=''] - The type/category of the advertisement.
+ * @param {string} [props.mediaUrl=''] - The URL of the advertisement's media (image or video).
+ * @param {Date} [props.endDate=new Date()] - The end date of the advertisement.
+ * @param {string} [props.organizationId=''] - The ID of the organization associated with the advertisement.
+ * @param {Date} [props.startDate=new Date()] - The start date of the advertisement.
+ * @param {(after: string | null) => void} [props.setAfter] - Callback to update the pagination cursor after an action.
+ *
+ * @returns {JSX.Element} A JSX element representing the advertisement entry card.
+ *
+ * @remarks
+ * - Includes a dropdown menu for editing or deleting the advertisement.
+ * - Displays a confirmation modal before deleting an advertisement.
+ * - Uses Apollo Client's `useMutation` hook for deleting advertisements and refetching the advertisement list.
+ * - Supports translations using the `react-i18next` library.
+ *
+ * @example
+ * ```tsx
+ * <AdvertisementEntry
+ *   id="123"
+ *   name="Sample Ad"
+ *   type="Banner"
+ *   mediaUrl="https://example.com/image.jpg"
+ *   endDate={new Date('2023-12-31')}
+ *   organizationId="org123"
+ *   startDate={new Date('2023-01-01')}
+ *   setAfter={(after) => console.log(after)}
+ * />
+ * ```
+ */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -11,31 +48,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
 import type { InterfaceAddOnEntryProps } from 'types/Advertisement/interface';
 
-/**
- * Component for displaying an advertisement entry.
- * Allows viewing, editing, and deleting of the advertisement.
- *
- * @param  props - Component properties
- * @returns  The rendered component
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.addButton`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function AdvertisementEntry({
   id,
   name = '',

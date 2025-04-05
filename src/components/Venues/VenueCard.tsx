@@ -1,8 +1,39 @@
+/**
+ * VenueCard Component
+ *
+ * This component renders a card for displaying venue details, including
+ * its image, name, capacity, and description. It also provides options
+ * to edit or delete the venue.
+ *
+ * @component
+ * @param {InterfaceVenueCardProps} props - The props for the VenueCard component.
+ * @param {InterfaceQueryVenueListItem} props.venueItem - The venue item containing details such as name, image, capacity, and description.
+ * @param {number} props.index - The index of the venue item in the list, used for unique test IDs.
+ * @param {(venueItem: InterfaceQueryVenueListItem) => void} props.showEditVenueModal - Callback function to trigger the edit modal for the venue.
+ * @param {(venueId: string) => void} props.handleDelete - Callback function to handle the deletion of the venue by its ID.
+ *
+ * @returns {JSX.Element} A JSX element representing the venue card.
+ *
+ * @remarks
+ * - The component uses Bootstrap for styling and layout.
+ * - The `useTranslation` hook is used for internationalization of button labels.
+ * - Truncates long venue names and descriptions for better UI presentation.
+ *
+ * @example
+ * ```tsx
+ * <VenueCard
+ *   venueItem={venue}
+ *   index={0}
+ *   showEditVenueModal={handleEdit}
+ *   handleDelete={handleDelete}
+ * />
+ *
+ */
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
-import styles from '../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
@@ -13,47 +44,6 @@ interface InterfaceVenueCardProps {
   handleDelete: (venueId: string) => void;
 }
 
-/**
- * Represents a card component displaying venue information.
- *
- * This component renders a card with the venue's image, name, capacity, and description.
- * It also provides buttons to edit or delete the venue.
- *
- * @param venueItem - The venue item to be displayed in the card.
- * @param index - The index of the venue item in the list, used for test IDs.
- * @param showEditVenueModal - Function to show the edit venue modal, passing the current venue item.
- * @param handleDelete - Function to handle the deletion of the venue, passing the venue ID.
- *
- * @returns JSX.Element - The `VenueCard` component.
- *
- * @example
- * ```tsx
- * <VenueCard
- *   venueItem={venue}
- *   index={0}
- *   showEditVenueModal={handleShowEditVenueModal}
- *   handleDelete={handleDeleteVenue}
- * />
- * ```
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.addButton`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const VenueCard = ({
   venueItem,
   index,

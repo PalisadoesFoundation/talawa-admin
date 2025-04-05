@@ -1,7 +1,46 @@
+/**
+ * OrgSettings Component
+ *
+ * This component renders the organization settings page, allowing users to
+ * navigate between different settings tabs such as General Settings,
+ * Action Item Categories, and Agenda Item Categories. It dynamically updates
+ * the content based on the selected tab and ensures the organization ID is
+ * present in the URL parameters.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered organization settings page.
+ *
+ * @remarks
+ * - The component uses `useTranslation` from `react-i18next` for internationalization.
+ * - The `useParams` hook from `react-router-dom` is used to extract the `orgId` from the URL.
+ * - If `orgId` is not present, the user is redirected to the home page (`/`).
+ * - The document title is dynamically updated based on the translation key `orgSettings.title`.
+ *
+ * @example
+ * ```tsx
+ * <OrgSettings />
+ * ```
+ *
+ * @typedef {('general' | 'actionItemCategories' | 'agendaItemCategories')} SettingType
+ * Represents the type of settings tabs available in the component.
+ *
+ * @property {SettingType[]} settingtabs
+ * An array of available settings tabs.
+ *
+ * @property {SettingType} tab
+ * The currently selected settings tab, managed using React state.
+ *
+ * @function setTab
+ * Updates the currently selected tab when a tab button is clicked.
+ *
+ * @see {@link GeneralSettings} for the General Settings tab content.
+ * @see {@link OrgActionItemCategories} for the Action Item Categories tab content.
+ * @see {@link OrganizationAgendaCategory} for the Agenda Item Categories tab content.
+ */
 import React, { useState } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
 import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router-dom';
@@ -15,20 +54,8 @@ const settingtabs: SettingType[] = [
   'agendaItemCategories',
 ];
 
-/**
- * The `orgSettings` component provides a user interface for managing various settings related to an organization.
- * It includes options for updating organization details, deleting the organization, changing language preferences,
- * and managing custom fields and action item categories.
- *
- * The component renders different settings sections based on the user's selection from the tabs or dropdown menu.
- *
- * @returns The rendered component displaying the organization settings.
- */
-
 function OrgSettings(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgSettings',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
 
   const [tab, setTab] = useState<SettingType>('general');
 

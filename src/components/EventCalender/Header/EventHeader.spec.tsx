@@ -1,7 +1,7 @@
 import React, { act } from 'react'; // Import act for async testing
 import { render, fireEvent } from '@testing-library/react';
 import EventHeader from './EventHeader';
-import { ViewType } from '../../../screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { vi } from 'vitest';

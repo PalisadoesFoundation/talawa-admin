@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMapType
 
-Defined in: [src/utils/interfaces.ts:1292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1292)
+Defined in: [src/utils/interfaces.ts:1312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1312)
 
 ## Indexable
 

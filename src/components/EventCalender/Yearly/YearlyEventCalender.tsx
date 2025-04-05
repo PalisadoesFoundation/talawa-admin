@@ -1,8 +1,42 @@
+/**
+ * Yearly Event Calendar Component
+ *
+ * This component renders a yearly calendar view with events displayed
+ * for each day. It allows navigation between years and provides
+ * functionality to expand and view events for specific days.
+ *
+ * @component
+ * @param {InterfaceCalendarProps} props - The props for the calendar component.
+ * @param {InterfaceEvent[]} props.eventData - Array of event data to display.
+ * @param {Function} props.refetchEvents - Function to refetch events.
+ * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
+ * @param {string} [props.userRole] - Role of the user for access control.
+ * @param {string} [props.userId] - ID of the user for filtering events they are attending.
+ *
+ * @returns {JSX.Element} The rendered yearly calendar component.
+ *
+ * @remarks
+ * - The calendar supports filtering events based on user role, organization data, and user ID.
+ * - Events can be expanded to view more details or collapsed for a compact view.
+ * - Navigation buttons allow switching between years.
+ *
+ * @example
+ * ```tsx
+ * <Calendar
+ *   eventData={eventData}
+ *   refetchEvents={refetchEvents}
+ *   orgData={orgData}
+ *   userRole="ADMIN"
+ *   userId="12345"
+ * />
+ * ```
+ *
+ */
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,
@@ -12,20 +46,6 @@ import {
 } from 'types/Event/interface';
 import type { User } from 'types/User/type';
 
-/**
- * Calendar component to display events for a selected year.
- *
- * This component renders a yearly calendar with navigation to view previous and next years.
- * It displays events for each day, with functionality to expand and view details of events.
- *
- * @param eventData - Array of event data to display on the calendar.
- * @param refetchEvents - Function to refresh the event data.
- * @param orgData - Organization data to filter events.
- * @param userRole - Role of the user for access control.
- * @param userId - ID of the user for filtering events they are attending.
- * @param viewType - Type of view for the calendar.
- * @returns JSX.Element - The rendered calendar component.
- */
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
   refetchEvents,
@@ -172,9 +192,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           eventsForCurrentDate?.map((datas: InterfaceEvent) => {
             const attendees: Partial<User>[] = [];
             datas.attendees?.forEach((attendee) => {
-              const r = {
-                _id: attendee._id,
-              };
+              const r = { _id: attendee._id };
               attendees.push(r);
             });
 

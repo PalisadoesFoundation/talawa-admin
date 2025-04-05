@@ -12,9 +12,9 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
-import FundModal from './FundModal';
+import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -24,22 +24,14 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
-    '&:focus-within': {
-      outline: 'none',
-    },
+    '&:focus-within': { outline: 'none' },
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: 'var(--row-background)',
   },
-  '& .MuiDataGrid-cell:focus': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-cell:focus-within': {
-    outline: 'none',
-  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -100,9 +92,7 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'funds',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title based on the translation
@@ -116,7 +106,7 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -125,6 +115,8 @@ const organizationFunds = (): JSX.Element => {
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
+
+  const [searchText, setSearchText] = useState('');
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -142,20 +134,50 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceFundInfo[];
+      organization: {
+        funds: {
+          edges: { node: InterfaceFundInfo }[];
+        };
+      };
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
     variables: {
-      organizationId: orgId,
-      filter: searchTerm,
-      orderBy: sortBy,
+      input: {
+        id: orgId,
+      },
     },
   });
 
-  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
+  const funds = useMemo(() => {
+    return (
+      fundData?.organization?.funds?.edges.map(
+        (edge: { node: InterfaceFundInfo }) => edge.node,
+      ) ?? []
+    );
+  }, [fundData]);
+
+  const filteredAndSortedFunds = useMemo(() => {
+    let result = [...funds];
+
+    // Apply search filter
+    if (searchText) {
+      result = result.filter((fund) =>
+        fund.name.toLowerCase().includes(searchText.toLowerCase()),
+      );
+    }
+
+    // Apply sorting with strict timestamp comparison
+    return result.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+
+      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      return (dateA - dateB) * sortMultiplier;
+    });
+  }, [funds, searchText, sortBy]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -207,7 +229,7 @@ const organizationFunds = (): JSX.Element => {
           <div
             className={styles.hyperlinkText}
             data-testid="fundName"
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
           >
             {params.row.name}
           </div>
@@ -224,7 +246,7 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
+        return params.row.creator.name;
       },
     },
     {
@@ -299,7 +321,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
@@ -316,9 +338,9 @@ const organizationFunds = (): JSX.Element => {
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
           <SearchBar
             placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
             inputTestId="searchByName"
             buttonTestId="searchBtn"
+            onSearch={(text) => setSearchText(text)}
           />
           <div className="d-flex gap-4 mb-1">
             <SortingButton
@@ -357,7 +379,7 @@ const organizationFunds = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -369,10 +391,7 @@ const organizationFunds = (): JSX.Element => {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={funds.map((fund, index) => ({
-          id: index + 1,
-          ...fund,
-        }))}
+        rows={filteredAndSortedFunds}
         columns={columns}
         isRowSelectable={() => false}
       />

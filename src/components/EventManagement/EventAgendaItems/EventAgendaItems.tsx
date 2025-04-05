@@ -1,3 +1,39 @@
+/**
+ * Component for managing and displaying agenda items for a specific event.
+ *
+ * @component
+ * @param props - Component props.
+ * @param props.eventId - The ID of the event for which agenda items are managed.
+ *
+ * @remarks
+ * This component fetches and displays agenda items associated with a specific event.
+ * It also allows users to create new agenda items using a modal form.
+ *
+ * @requires
+ * - `useQuery` from `@apollo/client` for fetching agenda categories and agenda items.
+ * - `useMutation` from `@apollo/client` for creating new agenda items.
+ * - `useTranslation` from `react-i18next` for internationalization.
+ * - `react-toastify` for displaying success and error notifications.
+ * - `react-bootstrap` for UI components.
+ * - `@mui/icons-material` for displaying error icons.
+ *
+ * @returns A JSX element containing the agenda items management UI.
+ *
+ * @example
+ * ```tsx
+ * <EventAgendaItems eventId="12345" />
+ * ```
+ *
+ * @remarks
+ * The component handles:
+ * - Fetching agenda categories and agenda items using GraphQL queries.
+ * - Displaying a loader while data is being fetched.
+ * - Showing error messages if data fetching fails.
+ * - Managing the state of the create agenda item modal.
+ * - Submitting new agenda items via a GraphQL mutation.
+ *
+ * @throws Will display an error message if data fetching or mutation fails.
+ */
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,22 +56,13 @@ import type {
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 
-/**
- * Component to manage and display agenda items for a specific event.
- *
- * @param  props - The component props.
- * @param eventId - The ID of the event to manage agenda items for.
- * @returns  The rendered component.
- */
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'agendaItems',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
   // Extract organization ID from URL
   const url: string = window.location.href;

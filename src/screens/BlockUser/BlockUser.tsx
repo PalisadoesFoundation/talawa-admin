@@ -1,3 +1,45 @@
+/**
+ * BlockUser Component
+ *
+ * This component provides functionality to manage the blocking and unblocking
+ * of users within an organization. It allows administrators to view all members,
+ * search for specific users, block/unblock users, and toggle between viewing
+ * blocked and unblocked members.
+ *
+ * Features:
+ * - Fetches and displays organization members and blocked users using GraphQL queries.
+ * - Allows blocking and unblocking of users via GraphQL mutations.
+ * - Provides search functionality to filter users by name or email.
+ * - Supports toggling between viewing all members and blocked users.
+ * - Displays loading states and error messages using `react-toastify`.
+ *
+ * Hooks:
+ * - `useQuery`: Fetches members and blocked users data.
+ * - `useMutation`: Executes block and unblock user mutations.
+ * - `useState`: Manages component state for members, blocked users, search term, etc.
+ * - `useEffect`: Handles side effects such as data updates and error handling.
+ * - `useCallback`: Optimizes event handlers for blocking/unblocking users and searching.
+ *
+ * Dependencies:
+ * - `react-bootstrap`: Provides UI components like `Table` and `Button`.
+ * - `react-toastify`: Displays toast notifications for success and error messages.
+ * - `react-i18next`: Handles internationalization and translations.
+ * - `@apollo/client`: Manages GraphQL queries and mutations.
+ *
+ * Props:
+ * - None
+ *
+ * State Variables:
+ * - `showBlockedMembers`: Toggles between viewing blocked and unblocked members.
+ * - `allMembers`: Stores the list of all organization members.
+ * - `blockedUsers`: Stores the list of blocked users.
+ * - `searchTerm`: Stores the current search input value.
+ * - `filteredAllMembers`: Stores the filtered list of unblocked members.
+ * - `filteredBlockedUsers`: Stores the filtered list of blocked users.
+ *
+ * Returns:
+ * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
+ */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
@@ -14,7 +56,7 @@ import {
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router-dom';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -27,41 +69,6 @@ import type {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
-/**
- * Requests component displays and manages a list of users that can be blocked or unblocked.
- *
- * This component allows users to search for members by their first name or last name,
- * toggle between viewing blocked and all members, and perform block/unblock operations.
- *
- * @returns JSX.Element - The `Requests` component.
- *
- * @example
- * ```tsx
- * <Requests />
- * ```
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.head`
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
@@ -173,10 +180,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await blockUser({
-          variables: {
-            userId: user.id,
-            organizationId: currentUrl,
-          },
+          variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data?.blockUser) {
           toast.success(t('blockedSuccessfully') as string);
@@ -196,10 +200,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await unBlockUser({
-          variables: {
-            userId: user.id,
-            organizationId: currentUrl,
-          },
+          variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data) {
           toast.success(t('Un-BlockedSuccessfully') as string);

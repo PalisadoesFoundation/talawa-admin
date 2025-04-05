@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
-Defined in: [src/utils/interfaces.ts:1242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1242)
+Defined in: [src/utils/interfaces.ts:1262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1262)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1242](https://github.com/PalisadoesFoundati
 
 > **handleClose**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:1244](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1244)
+Defined in: [src/utils/interfaces.ts:1264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1264)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1244](https://github.com/PalisadoesFoundati
 
 > **reloadMembers**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:1245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1245)
+Defined in: [src/utils/interfaces.ts:1265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1265)
 
 #### Returns
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:1245](https://github.com/PalisadoesFoundati
 
 > **show**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1243](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1243)
+Defined in: [src/utils/interfaces.ts:1263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1263)

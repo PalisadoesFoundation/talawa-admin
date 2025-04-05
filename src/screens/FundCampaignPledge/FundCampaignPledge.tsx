@@ -1,3 +1,40 @@
+/**
+ * @file FundCampaignPledge.tsx
+ * @description This component renders the Fund Campaign Pledge screen, allowing users to view, search, sort,
+ *              and manage pledges for a specific fundraising campaign. It includes features like progress tracking,
+ *              pledge management, and user interaction with modals for editing or deleting pledges.
+ *
+ * @module FundCampaignPledge
+ *
+ * @requires react
+ * @requires react-router-dom
+ * @requires @apollo/client
+ * @requires @mui/material
+ * @requires @mui/x-data-grid
+ * @requires react-bootstrap
+ * @requires dayjs
+ * @requires components/Loader/Loader
+ * @requires components/Avatar/Avatar
+ * @requires subComponents/SortingButton
+ * @requires subComponents/SearchBar
+ * @requires utils/currency
+ * @requires utils/interfaces
+ * @requires style/app-fixed.module.css
+ *
+ * @typedef {InterfaceCampaignInfo} InterfaceCampaignInfo - Represents the campaign details including name, goal, dates, and currency.
+ * @typedef {InterfacePledgeInfo} InterfacePledgeInfo - Represents the pledge details including users, amount, and dates.
+ * @typedef {InterfaceUserInfo} InterfaceUserInfo - Represents user details like name and image.
+ *
+ * @component
+ * @description
+ * - Displays a breadcrumb navigation for campaign context.
+ * - Shows campaign progress with a toggle between pledged and raised amounts.
+ * - Provides a searchable and sortable table of pledges with actions to edit or delete.
+ * - Includes modals for adding/editing and deleting pledges.
+ * - Handles error and loading states for data fetching.
+ *
+ * @returns {JSX.Element} The Fund Campaign Pledge screen.
+ */
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
@@ -9,9 +46,9 @@ import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
-import styles from '../../style/app-fixed.module.css';
-import PledgeDeleteModal from './PledgeDeleteModal';
-import PledgeModal from './PledgeModal';
+import styles from 'style/app-fixed.module.css';
+import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
+import PledgeModal from './modal/PledgeModal';
 import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
@@ -24,29 +61,6 @@ import type {
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-/**
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 interface InterfaceCampaignInfo {
   name: string;
@@ -68,24 +82,14 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -104,10 +108,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
@@ -132,9 +133,7 @@ const fundCampaignPledge = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: {
-      getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
-    };
+    data?: { getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
@@ -143,12 +142,7 @@ const fundCampaignPledge = (): JSX.Element => {
       }>
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
-    variables: {
-      where: {
-        id: fundCampaignId,
-      },
-      pledgeOrderBy: sortBy,
-    },
+    variables: { where: { id: fundCampaignId }, pledgeOrderBy: sortBy },
   });
 
   const endDate = dayjs(

@@ -6,7 +6,7 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L33)
+Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L71)
 
 Component for displaying and managing agenda items.
 Supports drag-and-drop functionality, and includes modals for previewing,

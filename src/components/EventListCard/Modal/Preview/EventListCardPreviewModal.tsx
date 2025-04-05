@@ -1,6 +1,45 @@
+/**
+ * PreviewModal Component
+ *
+ * This component renders a modal for previewing and editing event details.
+ * It provides functionality to view, update, and manage event properties such as
+ * title, description, location, date, time, recurrence, and visibility settings.
+ *
+ * @component
+ * @param {InterfacePreviewEventModalProps} props - The props for the PreviewModal component.
+ * @param {boolean} props.eventModalIsOpen - Determines if the modal is open.
+ * @param {Function} props.hideViewModal - Function to close the modal.
+ * @param {Function} props.toggleDeleteModal - Function to toggle the delete confirmation modal.
+ * @param {Function} props.t - Translation function for event-specific strings.
+ * @param {Function} props.tCommon - Translation function for common strings.
+ * @param {boolean} props.isRegistered - Indicates if the user is registered for the event.
+ * @param {string} props.userId - The ID of the current user.
+ * @param {Date} props.eventStartDate - The start date of the event.
+ * @param {Date} props.eventEndDate - The end date of the event.
+ * @param {Function} props.setEventStartDate - Function to update the event start date.
+ * @param {Function} props.setEventEndDate - Function to update the event end date.
+ * @param {boolean} props.alldaychecked - Indicates if the event is an all-day event.
+ * @param {Function} props.setAllDayChecked - Function to toggle the all-day event setting.
+ * @param {boolean} props.recurringchecked - Indicates if the event is recurring.
+ * @param {Function} props.setRecurringChecked - Function to toggle the recurring event setting.
+ * @param {boolean} props.publicchecked - Indicates if the event is public.
+ * @param {Function} props.setPublicChecked - Function to toggle the public event setting.
+ * @param {boolean} props.registrablechecked - Indicates if the event is registrable.
+ * @param {Function} props.setRegistrableChecked - Function to toggle the registrable event setting.
+ * @param {Object} props.recurrenceRuleState - The state of the recurrence rule.
+ * @param {Function} props.setRecurrenceRuleState - Function to update the recurrence rule state.
+ * @param {string} props.recurrenceRuleText - Text representation of the recurrence rule.
+ * @param {Object} props.formState - The state of the form fields.
+ * @param {Function} props.setFormState - Function to update the form state.
+ * @param {Function} props.registerEventHandler - Function to handle event registration.
+ * @param {Function} props.handleEventUpdate - Function to handle event updates.
+ * @param {Function} props.openEventDashboard - Function to navigate to the event dashboard.
+ *
+ * @returns {JSX.Element} A modal for previewing and managing event details.
+ */
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from '../../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -11,9 +50,6 @@ import { Days, getWeekDayOccurenceInMonth } from 'utils/recurrenceUtils';
 
 import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
 
-/**
- * PreviewModal: A modal displaying event details with the ability to update fields.
- */
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
   eventModalIsOpen,
@@ -79,10 +115,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 : formState.title
             }
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                title: e.target.value,
-              });
+              setFormState({ ...formState, title: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&
@@ -105,10 +138,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 : formState.eventdescrip
             }
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                eventdescrip: e.target.value,
-              });
+              setFormState({ ...formState, eventdescrip: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&
@@ -127,10 +157,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             required
             value={formState.location}
             onChange={(e): void => {
-              setFormState({
-                ...formState,
-                location: e.target.value,
-              });
+              setFormState({ ...formState, location: e.target.value });
             }}
             disabled={
               !(eventListCardProps.creator?._id === userId) &&

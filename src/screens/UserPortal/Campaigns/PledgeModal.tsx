@@ -1,3 +1,44 @@
+/**
+ * @file PledgeModal.tsx
+ * @description This file defines the `PledgeModal` component, which provides a modal interface for creating or editing pledges
+ *              in a campaign. It includes form fields for selecting pledgers, specifying pledge amounts, currencies, and dates.
+ *              The component supports internationalization and integrates with GraphQL mutations and queries for data handling.
+ *
+ * @module PledgeModal
+ *
+ * @typedef {InterfacePledgeModal} InterfacePledgeModal
+ * @property {boolean} isOpen - Indicates whether the modal is open or closed.
+ * @property {() => void} hide - Function to close the modal.
+ * @property {string} campaignId - The ID of the campaign associated with the pledge.
+ * @property {string} userId - The ID of the user creating or editing the pledge.
+ * @property {InterfacePledgeInfo | null} pledge - The pledge data to edit, or null for creating a new pledge.
+ * @property {() => void} refetchPledge - Function to refetch the pledge data after updates.
+ * @property {Date} endDate - The maximum allowed end date for the pledge.
+ * @property {'create' | 'edit'} mode - The mode of the modal, either 'create' or 'edit'.
+ */
+
+/**
+ * @component
+ * @name PledgeModal
+ * @description A modal component for creating or editing pledges. It includes form fields for selecting pledgers,
+ *              specifying pledge amounts, currencies, and dates. The component supports internationalization and
+ *              integrates with GraphQL for data handling.
+ *
+ * @param {InterfacePledgeModal} props - The props for the PledgeModal component.
+ * @returns {JSX.Element} The rendered PledgeModal component.
+ *
+ * @example
+ * <PledgeModal
+ *   isOpen={true}
+ *   hide={() => {}}
+ *   campaignId="123"
+ *   userId="456"
+ *   pledge={null}
+ *   refetchPledge={() => {}}
+ *   endDate={new Date()}
+ *   mode="create"
+ * />
+ */
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { ChangeEvent } from 'react';
@@ -8,7 +49,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
 } from 'utils/interfaces';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -24,9 +65,6 @@ import {
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
-/**
- * Interface representing the properties for the `PledgeModal` component.
- */
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -38,19 +76,6 @@ export interface InterfacePledgeModal {
   mode: 'create' | 'edit';
 }
 
-/**
- * `PledgeModal` is a React component that allows users to create or edit a pledge for a specific campaign.
- * It displays a form with inputs for pledge details such as amount, currency, dates, and users involved in the pledge.
- *
- * @param isOpen - Determines if the modal is visible or hidden.
- * @param hide - Function to close the modal.
- * @param campaignId - The ID of the campaign for which the pledge is being made.
- * @param userId - The ID of the user making or editing the pledge.
- * @param pledge - The current pledge information if in edit mode, or null if creating a new pledge.
- * @param refetchPledge - Function to refresh the pledge data after a successful operation.
- * @param endDate - The maximum date allowed for the pledge's end date, based on the campaign's end date.
- * @param mode - Specifies whether the modal is used for creating a new pledge or editing an existing one.
- */
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -62,9 +87,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   // Translation functions to support internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
@@ -107,9 +130,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: {
-      id: userId,
-    },
+    variables: { id: userId },
   });
 
   // Effect to update the pledgers state when user data is fetched
@@ -161,10 +182,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       try {
         await updatePledge({
-          variables: {
-            id: pledge?._id,
-            ...updatedFields,
-          },
+          variables: { id: pledge?._id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -255,10 +273,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newPledgers,
-                });
+                setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
@@ -296,10 +311,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={dayjs(pledgeEndDate)}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
+                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
                 }
               }}
               minDate={dayjs(pledgeStartDate)}

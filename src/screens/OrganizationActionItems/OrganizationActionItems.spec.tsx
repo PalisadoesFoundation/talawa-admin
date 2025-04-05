@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import OrganizationActionItems from './OrganizationActionItems';
-import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+
 import {
   GET_USERS_BY_IDS,
   GET_EVENTS_BY_IDS,
@@ -17,7 +17,8 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import type { Mock } from 'vitest';
-
+import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
+// import OrganizationActionItems from './OrganizationActionItems';
 // --- Global Mocks for i18n and toast ---
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

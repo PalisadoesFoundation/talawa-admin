@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateFund
 
-Defined in: [src/utils/interfaces.ts:1159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1159)
+Defined in: [src/utils/interfaces.ts:1179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1179)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1159](https://github.com/PalisadoesFoundati
 
 > **fundName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1160)
+Defined in: [src/utils/interfaces.ts:1180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1180)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1160](https://github.com/PalisadoesFoundati
 
 > **fundRef**: `string`
 
-Defined in: [src/utils/interfaces.ts:1161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1161)
+Defined in: [src/utils/interfaces.ts:1181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1181)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1161](https://github.com/PalisadoesFoundati
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1163)
+Defined in: [src/utils/interfaces.ts:1183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1183)
 
 ***
 
@@ -36,12 +36,12 @@ Defined in: [src/utils/interfaces.ts:1163](https://github.com/PalisadoesFoundati
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1162)
+Defined in: [src/utils/interfaces.ts:1182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1182)
 
 ***
 
-### taxDeductible
+### isTaxDeductible
 
-> **taxDeductible**: `boolean`
+> **isTaxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1164)
+Defined in: [src/utils/interfaces.ts:1184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1184)

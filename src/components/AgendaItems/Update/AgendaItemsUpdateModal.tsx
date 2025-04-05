@@ -1,26 +1,55 @@
+/**
+ * AgendaItemsUpdateModal Component
+ *
+ * This component renders a modal for updating agenda items. It provides
+ * functionality to edit agenda item details such as title, duration,
+ * description, categories, URLs, and attachments. The modal also includes
+ * validation for URLs and file size limits for attachments.
+ *
+ * @component
+ * @param props - The props for the component.
+ * @param props.agendaItemUpdateModalIsOpen - Boolean indicating if the modal is open.
+ * @param props.hideUpdateModal - Function to close the modal.
+ * @param props.formState - The current state of the agenda item form.
+ * @param props.setFormState - Function to update the form state.
+ * @param props.updateAgendaItemHandler - Function to handle form submission.
+ * @param props.t - Translation function for localized strings.
+ * @param props.agendaItemCategories - List of available agenda item categories.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for modal and form elements.
+ * - `@mui/material` is used for the Autocomplete component.
+ * - File attachments are converted to base64 format before being added to the form state.
+ * - URLs are validated using a regular expression.
+ *
+ * @example
+ * ```tsx
+ * <AgendaItemsUpdateModal
+ *   agendaItemUpdateModalIsOpen={true}
+ *   hideUpdateModal={closeModal}
+ *   formState={formState}
+ *   setFormState={setFormState}
+ *   updateAgendaItemHandler={handleUpdate}
+ *   t={t}
+ *   agendaItemCategories={categories}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `react-toastify`
+ * - Custom utility functions: `convertToBase64`
+ *
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
-
-/**
- * Modal component for updating details of an agenda item.
- * Provides a form to update the agenda item's title, description, duration, categories, URLs, and attachments.
- * Also includes functionality to add, remove URLs and attachments.
- *
- * @param agendaItemUpdateModalIsOpen - Boolean flag indicating if the update modal is open.
- * @param hideUpdateModal - Function to hide the update modal.
- * @param formState - The current state of the form containing agenda item details.
- * @param setFormState - Function to update the form state.
- * @param updateAgendaItemHandler - Handler function for submitting the form.
- * @param t - Function for translating text based on keys.
- * @param agendaItemCategories - List of agenda item categories for selection.
- */
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({

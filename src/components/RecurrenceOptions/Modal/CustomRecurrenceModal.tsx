@@ -1,6 +1,42 @@
+/**
+ * CustomRecurrenceModal Component
+ *
+ * This component renders a modal for configuring custom recurrence rules.
+ * It allows users to specify recurrence frequency, interval, days of the week,
+ * and end conditions for recurring events.
+ *
+ * @component
+ * @param {InterfaceCustomRecurrenceModalProps} props - The props for the component.
+ * @param {InterfaceRecurrenceRuleState} props.recurrenceRuleState - The current state of the recurrence rule.
+ * @param {string} props.recurrenceRuleText - Text representation of the recurrence rule.
+ * @param {React.SetStateAction<InterfaceRecurrenceRuleState>} props.setRecurrenceRuleState - Function to update the recurrence rule state.
+ * @param {boolean} props.customRecurrenceModalIsOpen - Flag to control the visibility of the modal.
+ * @param {() => void} props.hideCustomRecurrenceModal - Function to hide the modal.
+ * @param {React.SetStateAction<boolean>} props.setCustomRecurrenceModalIsOpen - Function to toggle the modal's visibility.
+ * @param {(key: string) => string} props.t - Translation function for component-specific strings.
+ * @param {(key: string) => string} props.tCommon - Translation function for common strings.
+ *
+ * @remarks
+ * - Supports daily, weekly, monthly, and yearly recurrence frequencies.
+ * - Allows users to specify recurrence end conditions: never, on a specific date, or after a number of occurrences.
+ * - Provides options for selecting specific days of the week for weekly recurrence.
+ * - Includes a date picker for selecting the end date of the recurrence.
+ *
+ * @example
+ * <CustomRecurrenceModal
+ *   recurrenceRuleState={recurrenceRuleState}
+ *   recurrenceRuleText={recurrenceRuleText}
+ *   setRecurrenceRuleState={setRecurrenceRuleState}
+ *   customRecurrenceModalIsOpen={isModalOpen}
+ *   hideCustomRecurrenceModal={hideModal}
+ *   setCustomRecurrenceModalIsOpen={setModalOpen}
+ *   t={translate}
+ *   tCommon={translateCommon}
+ * />
+ */
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
 import {
   Days,
@@ -23,9 +59,6 @@ import type {
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
-/**
- * Props for the CustomRecurrenceModal component.
- */
 interface InterfaceCustomRecurrenceModalProps {
   recurrenceRuleState: InterfaceRecurrenceRuleState;
   recurrenceRuleText: string;
@@ -41,16 +74,6 @@ interface InterfaceCustomRecurrenceModalProps {
   tCommon: (key: string) => string;
 }
 
-/**
- * A modal for setting up custom recurrence rules.
- *
- * This component allows users to configure how often an event should repeat, and
- * when it should end. It includes options for daily, weekly, monthly, and yearly
- * recurrence, as well as specific end options.
- *
- * @param props - The props object containing various configurations and state management functions.
- * @returns The JSX element representing the CustomRecurrenceModal.
- */
 const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   recurrenceRuleState,
   recurrenceRuleText,

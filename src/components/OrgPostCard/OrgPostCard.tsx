@@ -1,3 +1,45 @@
+/**
+ * OrgPostCard Component
+ *
+ * This component represents a card for displaying organizational posts. It includes
+ * functionalities for viewing, editing, deleting, and pinning/unpinning posts. The card
+ * supports media attachments such as images and videos, and displays metadata like
+ * creation date and author information.
+ *
+ * @param {InterfaceOrgPostCardProps} props - The props for the component.
+ * @param {InterfacePost} props.post - The post data to be displayed in the card.
+ *
+ * @returns {JSX.Element} A React component that renders the organizational post card.
+ *
+ * @component
+ *
+ * @example
+ * ```tsx
+ * <OrgPostCard post={post} />
+ * ```
+ *
+ * @remarks
+ * - The component uses Apollo Client for GraphQL mutations and queries.
+ * - It supports localization using the `react-i18next` library.
+ * - Media attachments are displayed based on their MIME type (image or video).
+ * - Includes modals for editing and deleting posts.
+ *
+ * @features
+ * - View post details in a modal.
+ * - Edit post caption and attachments.
+ * - Delete a post with confirmation.
+ * - Pin or unpin a post.
+ * - Display author information fetched via GraphQL query.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL operations.
+ * - `react-bootstrap` for UI components.
+ * - `react-toastify` for notifications.
+ * - `react-i18next` for localization.
+ * - `utils/convertToBase64` for file conversion.
+ * - `utils/errorHandler` for error handling.
+ *
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef } from 'react';
@@ -7,7 +49,7 @@ import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
 import {
   DELETE_POST_MUTATION,
@@ -43,10 +85,7 @@ interface InterfaceOrgPostCardProps {
 
 interface InterfacePostFormState {
   caption: string;
-  attachments: {
-    url: string;
-    mimeType: string;
-  }[];
+  attachments: { url: string; mimeType: string }[];
 }
 
 export default function OrgPostCard({
@@ -123,11 +162,7 @@ export default function OrgPostCard({
   };
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
-    variables: {
-      input: {
-        id: post.creatorId || '',
-      },
-    },
+    variables: { input: { id: post.creatorId || '' } },
     skip: !post.creatorId,
   });
 
@@ -138,10 +173,7 @@ export default function OrgPostCard({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setPostFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPostFormState((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = async (
@@ -154,10 +186,7 @@ export default function OrgPostCard({
         ...prev,
         attachments: [
           ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
+          { url: base64 as string, mimeType: file.type },
         ],
       }));
     }
@@ -173,10 +202,7 @@ export default function OrgPostCard({
         ...prev,
         attachments: [
           ...prev.attachments,
-          {
-            url: base64 as string,
-            mimeType: file.type,
-          },
+          { url: base64 as string, mimeType: file.type },
         ],
       }));
     }
@@ -199,9 +225,7 @@ export default function OrgPostCard({
   const deletePost = async (): Promise<void> => {
     try {
       const { data } = await deletePostMutation({
-        variables: {
-          input: { id: post.id },
-        },
+        variables: { input: { id: post.id } },
       });
 
       if (data?.deletePost?.id) {

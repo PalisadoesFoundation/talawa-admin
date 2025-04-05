@@ -1,7 +1,31 @@
+/**
+ * @file OrgActionItemCategories.tsx
+ * @description This file contains the `OrgActionItemCategories` component, which is responsible for managing
+ *              action item categories within an organization. It provides functionality to create, update,
+ *              enable, disable, and search for action item categories.
+ *
+ * @module OrgActionItemCategories
+ *
+ *
+ * @typedef {InterfaceActionItemCategoryProps} InterfaceActionItemCategoryProps - Props for the component.
+ * @typedef {InterfaceActionItemCategoryInfo} InterfaceActionItemCategoryInfo - Interface for category data.
+ *
+ * @component
+ * @param {InterfaceActionItemCategoryProps} props - Component props containing the organization ID.
+ *
+ * @description
+ * - Displays a table of action item categories with options to sort, filter, and search.
+ * - Allows creating and editing categories via a modal.
+ * - Fetches data using GraphQL queries and handles loading and error states.
+ * - Provides a user-friendly interface with Material-UI components and Bootstrap styling.
+ *
+ * @example
+ * <OrgActionItemCategories orgId="12345" />
+ */
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
@@ -40,18 +64,10 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -81,10 +97,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   // Query to fetch action item categories
   const {
