@@ -443,15 +443,13 @@ const loginPage = (): JSX.Element => {
                 btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
-                className={`${styles.talawa_logo}  ${
-                  showTab === 'REGISTER' && styles.marginTopForReg
-                }`}
+                className={`${styles.talawa_logo}  ${showTab === 'REGISTER' && styles.marginTopForReg
+                  }`}
               />
               {/* LOGIN FORM */}
               <div
-                className={`${
-                  showTab === 'LOGIN' ? styles.active_tab : 'd-none'
-                }`}
+                className={`${showTab === 'LOGIN' ? styles.active_tab : 'd-none'
+                  }`}
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
@@ -543,31 +541,33 @@ const loginPage = (): JSX.Element => {
                   >
                     {tCommon('login')}
                   </Button>
-                  <div className="position-relative my-2">
-                    <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
-                  </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
-                    className={styles.reg_btn}
-                    data-testid="goToRegisterPortion"
-                    onClick={(): void => {
-                      setShowTab('REGISTER');
-                      setShowPassword(false);
-                    }}
-                  >
-                    <Link to={'/register'} className="text-decoration-none">
-                      {tCommon('register')}
-                    </Link>
-                  </Button>
+                  {role === 'admin' || <div>
+                    <div className="position-relative my-2">
+                      <hr />
+                      <span className={styles.orText}>{tCommon('OR')}</span>
+                    </div>
+                    <Button
+                      variant="outline-secondary"
+                      value="Register"
+                      className={styles.reg_btn}
+                      data-testid="goToRegisterPortion"
+                      onClick={(): void => {
+                        setShowTab('REGISTER');
+                        setShowPassword(false);
+                      }}
+                    >
+                      <Link to={'/register'} className="text-decoration-none">
+                        {tCommon('register')}
+                      </Link>
+                    </Button>
+                  </div>}
+
                 </form>
               </div>
               {/* REGISTER FORM */}
               <div
-                className={`${
-                  showTab === 'REGISTER' ? styles.active_tab : 'd-none'
-                }`}
+                className={`${showTab === 'REGISTER' ? styles.active_tab : 'd-none'
+                  }`}
               >
                 <Form onSubmit={signupLink}>
                   <h1
@@ -719,11 +719,10 @@ const loginPage = (): JSX.Element => {
                         )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.lowercaseChar
+                          className={`form-text ${showAlert.lowercaseChar
                               ? 'text-danger'
                               : 'text-success'
-                          } ${styles.password_check_element}`}
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.lowercaseChar ? (
                             <span>
@@ -739,11 +738,10 @@ const loginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.uppercaseChar
+                          className={`form-text ${showAlert.uppercaseChar
                               ? 'text-danger'
                               : 'text-success'
-                          } ${styles.password_check_element}`}
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.uppercaseChar ? (
                             <span>
@@ -759,11 +757,10 @@ const loginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.numericValue
+                          className={`form-text ${showAlert.numericValue
                               ? 'text-danger'
                               : 'text-success'
-                          } ${styles.password_check_element}`}
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.numericValue ? (
                             <span>
@@ -779,13 +776,11 @@ const loginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.specialChar
+                          className={`form-text ${showAlert.specialChar
                               ? 'text-danger'
                               : 'text-success'
-                          } ${styles.password_check_element} ${
-                            styles.password_check_element_bottom
-                          }`}
+                            } ${styles.password_check_element} ${styles.password_check_element_bottom
+                            }`}
                         >
                           {showAlert.specialChar ? (
                             <span>
@@ -833,7 +828,7 @@ const loginPage = (): JSX.Element => {
                     </div>
                     {signformState.cPassword.length > 0 &&
                       signformState.signPassword !==
-                        signformState.cPassword && (
+                      signformState.cPassword && (
                         <div
                           className="form-text text-danger"
                           data-testid="passwordCheck"
@@ -889,24 +884,6 @@ const loginPage = (): JSX.Element => {
                     disabled={signinLoading}
                   >
                     {tCommon('register')}
-                  </Button>
-                  <div className="position-relative">
-                    <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
-                  </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
-                    className={`mt-3 fw-bold mb-5 w-100 ${styles.reg_btn} `}
-                    data-testid="goToLoginPortion"
-                    onClick={(): void => {
-                      setShowTab('LOGIN');
-                      setShowPassword(false);
-                    }}
-                  >
-                    <Link to={'/'} className="text-decoration-none">
-                      {tCommon('login')}
-                    </Link>
                   </Button>
                 </Form>
               </div>
