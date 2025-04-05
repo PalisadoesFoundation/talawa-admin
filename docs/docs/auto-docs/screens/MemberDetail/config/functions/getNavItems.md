@@ -6,7 +6,7 @@
 
 > **getNavItems**(`t`): `any`[]
 
-Defined in: [src/screens/MemberDetail/config.jsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/config.jsx#L12)
+Defined in: [src/screens/MemberDetail/config.jsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/config.jsx#L11)
 
 Returns navigation items for the member detail screen
 
