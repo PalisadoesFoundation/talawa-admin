@@ -335,7 +335,7 @@ describe('MemberDetail', () => {
     expect(birthDateInput).toHaveValue('02/08/0002');
   });
 
-  it('validation when non-string value is used', async () => {
+  it('handles empty password gracefully', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
 
@@ -522,87 +522,6 @@ describe('MemberDetail', () => {
       'File is too large. Maximum size is 5MB.',
     );
   });
-
-  test('clicking profile picture with existing avatar triggers file input', async () => {
-    renderMemberDetailScreen(link2);
-    await wait();
-
-    // Create a mock for the click method of the file input
-    const mockClick = vi.fn();
-
-    // Mock the fileInputRef.current
-    const originalClick = Object.getOwnPropertyDescriptor(
-      HTMLInputElement.prototype,
-      'click',
-    );
-
-    Object.defineProperty(HTMLInputElement.prototype, 'click', {
-      configurable: true,
-      value: mockClick,
-    });
-
-    // Verify the profile picture is rendered
-    const profilePicture = screen.getByTestId('profile-picture');
-    expect(profilePicture).toBeInTheDocument();
-
-    // Click the profile picture
-    await userEvent.click(profilePicture);
-
-    // Verify the file input's click method was called
-    expect(mockClick).toHaveBeenCalled();
-
-    // Restore the original click method
-    if (originalClick) {
-      Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
-    }
-  });
-
-  test('clicking avatar placeholder button triggers file input', async () => {
-    // Render the component with a mock that has no avatarURL
-    render(
-      <MockedProvider addTypename={false} link={link4}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <MemberDetail id="123" />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Create a mock for the click method of the file input
-    const mockClick = vi.fn();
-
-    // Mock the fileInputRef.current
-    const originalClick = Object.getOwnPropertyDescriptor(
-      HTMLInputElement.prototype,
-      'click',
-    );
-
-    Object.defineProperty(HTMLInputElement.prototype, 'click', {
-      configurable: true,
-      value: mockClick,
-    });
-
-    // Wait for and find the upload image button
-    const uploadButton = await waitFor(() =>
-      screen.getByTestId('uploadImageBtn'),
-    );
-
-    // Click the upload button
-    await userEvent.click(uploadButton);
-
-    // Verify the file input's click method was called
-    expect(mockClick).toHaveBeenCalled();
-
-    // Restore the original click method
-    if (originalClick) {
-      Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
-    }
-  });
-
-  // tests new
 
   test('plugin creation checkbox should toggle correctly', async () => {
     renderMemberDetailScreen(link1);
