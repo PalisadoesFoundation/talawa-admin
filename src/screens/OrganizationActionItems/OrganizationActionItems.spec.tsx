@@ -9,7 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-
+import ItemViewModal from './itemViewModal/ItemViewModal';
 import {
   GET_USERS_BY_IDS,
   GET_EVENTS_BY_IDS,
@@ -82,7 +82,7 @@ vi.mock('subComponents/SearchBar', () => ({
     );
   },
 }));
-vi.mock('./ItemViewModal', () => ({
+vi.mock('./itemViewModal/ItemViewModal', () => ({
   default: ({
     isOpen,
     hide,
@@ -102,7 +102,7 @@ vi.mock('./ItemViewModal', () => ({
     ) : null,
 }));
 
-vi.mock('./ItemModal', () => ({
+vi.mock('./itemModal/ItemModal.tsx', () => ({
   default: ({
     isOpen,
     hide,
@@ -127,7 +127,7 @@ vi.mock('./ItemModal', () => ({
     ) : null,
 }));
 
-vi.mock('./ItemDeleteModal', () => ({
+vi.mock('./itemDeleteModal/ItemDeleteModal.tsx', () => ({
   default: ({
     isOpen,
     hide,
@@ -145,7 +145,7 @@ vi.mock('./ItemDeleteModal', () => ({
     ) : null,
 }));
 
-vi.mock('./ItemUpdateStatusModal', () => ({
+vi.mock('./itemUpdateModal/ItemUpdateStatusModal.tsx', () => ({
   default: ({
     isOpen,
     hide,
