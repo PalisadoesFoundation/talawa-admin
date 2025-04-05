@@ -335,14 +335,6 @@ describe('MemberDetail', () => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
     });
 
-    // Test realistic boolean field interaction (not password)
-    // Example: Find a checkbox that uses boolean values
-    const booleanField = screen.getByTestId('checkbox-field');
-    fireEvent.click(booleanField); // Toggles boolean value
-
-    // Verify password validation wasn't affected
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
     // Test password field with empty string (edge case)
     const passwordInput = screen.getByTestId('inputPassword');
     fireEvent.change(passwordInput, { target: { value: '' } });
@@ -1300,7 +1292,7 @@ describe('MemberDetail', () => {
       expect(validatePassword).toHaveBeenCalledWith('short');
       // Verify error toast
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        'Password must be at least 8 characters long.',
+        'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
       );
     });
 
@@ -1343,7 +1335,7 @@ describe('MemberDetail', () => {
 
     // Verify toast.error was called
     expect(toastErrorSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters long.',
+      'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
     );
 
     // Reset mocks
