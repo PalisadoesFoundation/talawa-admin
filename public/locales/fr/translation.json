@@ -375,7 +375,8 @@
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
-    "noMoreMembersFound": "Aucun autre membre trouvé"
+    "noMoreMembersFound": "Aucun autre membre trouvé",
+    "manageTag": "Gérer l'étiquette"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

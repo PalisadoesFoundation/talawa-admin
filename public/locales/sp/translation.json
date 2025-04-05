@@ -340,6 +340,7 @@
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
+    "manageTag": "Administrar etiqueta",
     "addPeopleToTag": "Agregar Personas a la etiqueta",
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
