@@ -9,14 +9,21 @@ import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 
 const mockTag: InterfaceTagData = {
-  _id: '1',
+  id: '1',
   name: 'Parent Tag',
-  childTags: { totalCount: 2 },
-  parentTag: { _id: '0' },
+  childTags: {
+    edges: [],
+    totalCount: 2,
+    pageInfo: {
+      hasNextPage: false,
+      endCursor: undefined,
+    },
+  },
+  parentTag: { id: '0', name: 'Parent' },
   usersAssignedTo: { totalCount: 0 },
   ancestorTags: [
     {
-      _id: '2',
+      id: '2',
       name: 'Ancestor Tag 1',
     },
   ],
@@ -27,8 +34,7 @@ const mockToggleTagSelection = vi.fn();
 const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
   key) as TFunction<'translation', 'manageTag'>;
 
-describe('TagNode', () => {
-  // Existing tests
+describe('TagNode', async () => {
   it('renders the tag name', () => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
@@ -56,7 +62,7 @@ describe('TagNode', () => {
       </MockedProvider>,
     );
 
-    const checkbox = screen.getByTestId(`checkTag${mockTag._id}`);
+    const checkbox = screen.getByTestId(`checkTag${mockTag.id}`);
     fireEvent.click(checkbox);
     expect(mockToggleTagSelection).toHaveBeenCalledWith(mockTag, true);
   });
@@ -74,7 +80,7 @@ describe('TagNode', () => {
       </MockedProvider>,
     );
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
@@ -95,7 +101,7 @@ describe('TagNode', () => {
       </MockedProvider>,
     );
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
@@ -105,35 +111,21 @@ describe('TagNode', () => {
     });
   });
 
-  it('loads more subtags on scroll', async () => {
-    render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
-    );
+  const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
+  fireEvent.click(expandIcon);
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+  await waitFor(() => {
+    expect(screen.getByText('subTag 1')).toBeInTheDocument();
+  });
 
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-    });
+  const scrollableDiv = screen.getByTestId(`subTagsScrollableDiv${mockTag.id}`);
+  fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
 
-    const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
-    );
-    fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 11')).toBeInTheDocument();
-    });
+  await waitFor(() => {
+    expect(screen.getByText('subTag 11')).toBeInTheDocument();
   });
 });
+
 describe('TagNode with Mocks', () => {
   it('renders parent tag name', () => {
     render(
@@ -162,7 +154,7 @@ describe('TagNode with Mocks', () => {
       </MockedProvider>,
     );
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
@@ -183,7 +175,7 @@ describe('TagNode with Mocks', () => {
       </MockedProvider>,
     );
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
     fireEvent.click(expandIcon);
 
     // Verify first set of subtags
@@ -194,7 +186,7 @@ describe('TagNode with Mocks', () => {
 
     // Trigger load more
     const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
+      `subTagsScrollableDiv${mockTag.id}`,
     );
     fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
 
@@ -216,7 +208,7 @@ describe('TagNode with Mocks', () => {
       </MockedProvider>,
     );
 
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
+    const expandIcon = screen.getByTestId(`expandSubTags${mockTag.id}`);
     fireEvent.click(expandIcon);
 
     // Verify error message

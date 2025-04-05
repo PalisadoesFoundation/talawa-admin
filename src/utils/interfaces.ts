@@ -1,5 +1,7 @@
 import { TFunction } from 'i18next';
 
+type ObjectId = string;
+
 export enum Iso3166Alpha2CountryCode {
   ad = 'ad',
   ae = 'ae',
@@ -933,6 +935,9 @@ export interface InterfaceTagData {
   assignedAt?: string;
   selectTagId?: string;
   currentTagId?: string;
+  usersAssignedTo?: {
+    totalCount: number;
+  };
 }
 
 export interface InterfaceTagMutation {
@@ -1465,32 +1470,127 @@ export interface InterfaceTagUserMutation {
 }
 
 export interface InterfaceTagUserPayload {
-  userId: string | Types.ObjectId;
-  tagId: string | Types.ObjectId;
-  organizationId: string | Types.ObjectId;
+  userId: string;
+  tagId: string;
+  organizationId: string;
 }
 
 export interface InterfaceTagUser {
   _id: string;
-  tagId: string | Types.ObjectId;
-  userId: string | Types.ObjectId;
-  organizationId: string | Types.ObjectId;
+  tagId: string | ObjectId;
+  userId: string | ObjectId;
+  organizationId: string | ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface InterfaceOrganizationTagUser {
-  _id: string | Types.ObjectId;
+  _id: string;
   name: string;
-  parentTagId?: string | Types.ObjectId;
-  organizationId: string | Types.ObjectId;
+  parentTagId?: string | ObjectId;
+  organizationId: string | ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface InterfaceAppUserProfile {
-  _id: string;
-  adminFor: Array<string | Types.ObjectId>;
+  _id: string | ObjectId;
+  adminFor: Array<string | ObjectId>;
   isSuperAdmin: boolean;
-  userId: string | Types.ObjectId;
+  userId: string | ObjectId;
+}
+
+export interface InterfaceAssignUserTagPayload {
+  userId: string | ObjectId;
+  tagId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceUnassignUserTagPayload {
+  tagId: string | ObjectId;
+  userId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceCreateUserTagPayload {
+  _id: string | ObjectId;
+  name: string;
+  parentTagId?: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceUserTag {
+  userId: string | ObjectId;
+  tagId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceToggleUserTag {
+  tagId: string | ObjectId;
+  userId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceCreateUserTag {
+  _id: string | ObjectId;
+  name: string;
+  parentTagId?: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceAppProfile {
+  adminFor: Array<string | ObjectId>;
+  isSuperAdmin: boolean;
+  userId: string | ObjectId;
+}
+
+export interface InterfaceUserTagInput {
+  userId: string | ObjectId;
+  tagId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceAssignUserTagInput {
+  tagId: string | ObjectId;
+  userId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceCreateUserTagInput {
+  _id: string | ObjectId;
+  name: string;
+  parentTagId?: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceAppUserProfile {
+  id?: string | ObjectId;
+  adminFor: Array<string | ObjectId>;
+  appLanguageCode: string;
+  userId: string | ObjectId;
+}
+
+export interface InterfaceUserMembershipRequest {
+  userId: string | ObjectId;
+  tagId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceUntagUserFromTagInput {
+  tagId: string | ObjectId;
+  userId: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceCreateUserTagInput {
+  _id: string | ObjectId;
+  name: string;
+  parentTagId?: string | ObjectId;
+  organizationId: string | ObjectId;
+}
+
+export interface InterfaceAppUserProfile {
+  adminFor: Array<string | ObjectId>;
+  appLanguageCode: string;
+  userId: string | ObjectId;
 }

@@ -62,6 +62,8 @@ const props: InterfaceTagActionsProps[] = [
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'assignToTags',
+    userId: 'testUserId',
+    currentTagId: 'testTagId',
     t: ((key: string) => translations[key]) as TFunction<
       'translation',
       'manageTag'
@@ -75,6 +77,8 @@ const props: InterfaceTagActionsProps[] = [
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'removeFromTags',
+    userId: 'testUserId',
+    currentTagId: 'testTagId',
     t: ((key: string) => translations[key]) as TFunction<
       'translation',
       'manageTag'
@@ -150,6 +154,8 @@ describe('Organisation Tags Page', () => {
       tagActionsModalIsOpen: true,
       hideTagActionsModal: hideTagActionsModalMock,
       tagActionType: 'assignToTags',
+      userId: 'testUserId',
+      currentTagId: 'testTagId',
       t: ((key: string) => translations[key]) as TFunction<
         'translation',
         'manageTag'
