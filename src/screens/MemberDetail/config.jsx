@@ -10,25 +10,24 @@ import OverviewIcon from 'assets/svgs/overview.svg?react';
  */
 
 export const getNavItems = (t) => [
-
   {
     to: '/member',
-    icon: <OverviewIcon />, 
+    icon: <OverviewIcon/>, 
     label: t('navigationOverview'),
   },
   {
     to: '/member/orgList',
-    icon: <MemberOrganizationIcon />,
+    icon: <MemberOrganizationIcon/>,
     label: t('navigationOrganizations'),
   },
   {
     to: '/member/orgevents',
-    icon: <MemberEvents />,
+    icon: <MemberEvents/>,
     label: t('navigationEvents'),
   },
   {
     to: '/member/orgtags',
-    icon: <TagIcon />,
+    icon: <TagIcon/>,
     label: t('navigationTags'),
   },
 ];

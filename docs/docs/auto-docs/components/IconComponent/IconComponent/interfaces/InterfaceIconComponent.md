@@ -4,7 +4,7 @@
 
 # Interface: InterfaceIconComponent
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L58)
+Defined in: [src/components/IconComponent/IconComponent.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L65)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:58](https://github.c
 
 > `optional` **fill**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L60)
+Defined in: [src/components/IconComponent/IconComponent.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L67)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:60](https://github.c
 
 > `optional` **height**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L61)
+Defined in: [src/components/IconComponent/IconComponent.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L68)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:61](https://github.c
 
 > **name**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L59)
+Defined in: [src/components/IconComponent/IconComponent.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L66)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:59](https://github.c
 
 > `optional` **width**: `string`
 
-Defined in: [src/components/IconComponent/IconComponent.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L62)
+Defined in: [src/components/IconComponent/IconComponent.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L69)
