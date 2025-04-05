@@ -604,7 +604,6 @@ describe('OrganizationCard Component with New Interface', () => {
       process.env.NODE_ENV = undefined;
       consoleErrorSpy.mockRestore();
     });
-
   }); // closes the existing describe block for mutations
 
   it('should handle generic thrown error (non-GraphQL)', async () => {

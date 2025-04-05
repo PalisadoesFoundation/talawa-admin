@@ -98,11 +98,14 @@ function OrganizationCard({
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [
       { query: ORGANIZATION_LIST },
-      { query: USER_JOINED_ORGANIZATIONS_PG, variables: { id: userId, first: 5 } }
+      {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: userId, first: 5 },
+      },
     ],
     onCompleted: () => {
-      window.location.reload();  // Force refresh after successful join
-    }
+      window.location.reload(); // Force refresh after successful join
+    },
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -149,7 +152,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = (membershipRequests).find(
+    const membershipRequest = membershipRequests.find(
       (request) => request.user.id === userId,
     );
 

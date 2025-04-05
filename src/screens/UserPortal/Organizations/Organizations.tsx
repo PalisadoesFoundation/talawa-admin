@@ -165,13 +165,13 @@ export default function organizations(): JSX.Element {
     loading: loadingAll,
     refetch: refetchAll,
     error,
-  } = useQuery(ORGANIZATION_LIST, { 
+  } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
-    onError: (error) => console.error('All orgs error:', error)
+    onError: (error) => console.error('All orgs error:', error),
   });
 
   const {
@@ -234,7 +234,7 @@ export default function organizations(): JSX.Element {
           // Check if current user is a member
           const memberEdges = org.members?.edges || [];
           const isMember = memberEdges.some(
-            (edge: any) => edge.node.id === userId
+            (edge: any) => edge.node.id === userId,
           );
 
           return {
@@ -253,7 +253,7 @@ export default function organizations(): JSX.Element {
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            isJoined: isMember // Set based on membership check
+            isJoined: isMember, // Set based on membership check
           };
         });
         setOrganizations(orgs);
