@@ -100,10 +100,8 @@ function OrganizationTags(): JSX.Element {
     fetchMore: orgUserTagsFetchMore,
   }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
-      id: orgId,
+      filter: tagSearchName,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-      sortedBy: { id: tagSortOrder },
     },
   });
 
@@ -112,8 +110,7 @@ function OrganizationTags(): JSX.Element {
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          null,
+          orgUserTagsData?.organizations[0]?.tags?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (
         prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
@@ -133,13 +130,13 @@ function OrganizationTags(): JSX.Element {
           organizations: [
             {
               ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
+              tags: {
+                ...prevResult.organizations[0].tags,
                 edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
+                  ...prevResult.organizations[0].tags.edges,
+                  ...fetchMoreResult.organizations[0].tags.edges,
                 ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
+                pageInfo: fetchMoreResult.organizations[0].tags.pageInfo,
               },
             },
           ],
@@ -196,16 +193,26 @@ function OrganizationTags(): JSX.Element {
   }
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge) => edge.node,
+    orgUserTagsData?.organizations?.[0]?.tags?.edges?.map(
+      (edge: { node: { id: any; name: any } }, index: number) => ({
+        _id: edge.node.id,
+        id: index + 1,
+        name: edge.node.name,
+        childTags: { totalCount: 0 },
+        usersAssignedTo: { totalCount: 0 },
+      }),
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    if (tagId) {
+      navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    }
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    if (tagId) {
+      navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    }
   };
 
   const columns: GridColDef[] = [
@@ -234,7 +241,7 @@ function OrganizationTags(): JSX.Element {
             {params.row.parentTag &&
               params.row.ancestorTags?.map((tag) => (
                 <div
-                  key={tag._id}
+                  key={tag.id}
                   className={styles.tagsBreadCrumbs}
                   data-testid="ancestorTagsBreadCrumbs"
                 >
@@ -242,11 +249,10 @@ function OrganizationTags(): JSX.Element {
                   <i className={'mx-2 fa fa-caret-right'} />
                 </div>
               ))}
-
             <div
               className={styles.subTagsLink}
               data-testid="tagName"
-              onClick={() => redirectToSubTags(params.row._id)}
+              onClick={() => redirectToSubTags(params.row.id)}
             >
               {params.row.name}
               <i className={'ms-2 fa fa-caret-right'} />
@@ -309,11 +315,11 @@ function OrganizationTags(): JSX.Element {
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => redirectToManageTag(params.row._id)}
+            onClick={() => redirectToManageTag(params.row._id)} // Change this to use _id instead of id
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
-            {t('manageTag')}
+            {t('edit')}
           </Button>
         );
       },
@@ -387,7 +393,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                    orgUserTagsData?.organizations?.[0]?.tags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -398,7 +404,7 @@ function OrganizationTags(): JSX.Element {
                     disableColumnMenu
                     columnBufferPx={7}
                     hideFooter={true}
-                    getRowId={(row) => row.id}
+                    getRowId={(row) => row._id}
                     slots={{
                       noRowsOverlay: () => (
                         <Stack
@@ -436,10 +442,12 @@ function OrganizationTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={userTagsList?.map((userTag, index) => ({
-                      id: index + 1,
-                      ...userTag,
-                    }))}
+                    rows={userTagsList?.map(
+                      (userTag: { _id: any; name: any }, index: number) => ({
+                        id: index + 1,
+                        ...userTag,
+                      }),
+                    )}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

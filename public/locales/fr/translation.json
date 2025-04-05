@@ -319,9 +319,10 @@
     "createUser": "Créer un utilisateur"
   },
   "organizationTags": {
+    "manageTag": "Gérer les étiquettes",
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
-    "manageTag": "Gérer",
+    "edit": "Éditer",
     "editTag": "Modifier",
     "removeTag": "Supprimer",
     "tagDetails": "Détails de l'Étiquette",

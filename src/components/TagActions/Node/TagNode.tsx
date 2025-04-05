@@ -46,9 +46,12 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import type { TFunction } from 'i18next';
 
 interface InterfaceTagNodeProps {
-  tag: InterfaceTagData;
+  tag: InterfaceTagData & { id: string; name: string };
   checkedTags: Set<string>;
-  toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
+  toggleTagSelection: (
+    tag: InterfaceTagData & { id: string },
+    isSelected: boolean,
+  ) => void;
   t: TFunction<'translation', 'manageTag'>;
 }
 
@@ -69,7 +72,10 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     error: subTagsError,
     fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
-    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+    variables: {
+      id: tag.id,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+    },
     skip: !expanded,
   });
 
@@ -134,44 +140,30 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   return (
     <div className="my-2">
       <div>
-        {tag.childTags.totalCount ? (
-          <>
-            <span
-              onClick={handleTagClick}
-              className="me-3"
-              style={{ cursor: 'pointer' }}
-              data-testid={`expandSubTags${tag._id}`}
-              aria-label={expanded ? t('collapse') : t('expand')}
-            >
-              {expanded ? '▼' : '▶'}
-            </span>
-            <input
-              style={{ cursor: 'pointer' }}
-              type="checkbox"
-              checked={checkedTags.has(tag._id)}
-              className="me-2"
-              onChange={handleCheckboxChange}
-              data-testid={`checkTag${tag._id}`}
-              id={`checkbox-${tag._id}`}
-              aria-label={t('selectTag')}
-            />
-            <i className="fa fa-folder mx-2" />{' '}
-          </>
-        ) : (
-          <>
-            <span className="me-3">●</span>
-            <input
-              style={{ cursor: 'pointer' }}
-              type="checkbox"
-              checked={checkedTags.has(tag._id)}
-              className="ms-1 me-2"
-              onChange={handleCheckboxChange}
-              data-testid={`checkTag${tag._id}`}
-              aria-label={tag.name}
-            />
-            <i className="fa fa-tag mx-2" />{' '}
-          </>
-        )}
+        <>
+          <span
+            onClick={handleTagClick}
+            className="me-3"
+            style={{ cursor: 'pointer' }}
+            data-testid={`expandSubTags${tag.id}`}
+            aria-label={expanded ? t('collapse') : t('expand')}
+          >
+            {expanded ? '▼' : '▶'}
+          </span>
+          <input
+            style={{ cursor: 'pointer' }}
+            type="checkbox"
+            checked={checkedTags.has(tag.id)}
+            className="me-2"
+            onChange={handleCheckboxChange}
+            data-testid={`checkTag${tag.id}`}
+            id={`checkbox-${tag.id}`}
+            aria-label={tag.name}
+          />
+          <i
+            className={`fa ${tag.childTags ? 'fa-folder' : 'fa-tag'} mx-2`}
+          />{' '}
+        </>
 
         {tag.name}
       </div>
@@ -186,9 +178,12 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       {expanded && subTagsList?.length && (
         <div style={{ marginLeft: '20px' }}>
           <div
-            id={`subTagsScrollableDiv${tag._id}`}
-            data-testid={`subTagsScrollableDiv${tag._id}`}
-            style={{ maxHeight: 300, overflow: 'auto' }}
+            id={`subTagsScrollableDiv${tag.id}`}
+            data-testid={`subTagsScrollableDiv${tag.id}`}
+            style={{
+              maxHeight: 300,
+              overflow: 'auto',
+            }}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}
@@ -198,10 +193,10 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                 false
               }
               loader={<InfiniteScrollLoader />}
-              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
+              scrollableTarget={`subTagsScrollableDiv${tag.id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (
-                <div key={tag._id} data-testid="orgUserSubTags">
+                <div key={tag.id} data-testid="orgUserSubTags">
                   <TagNode
                     tag={tag}
                     checkedTags={checkedTags}

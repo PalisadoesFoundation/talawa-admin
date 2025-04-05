@@ -61,6 +61,31 @@ import type {
   InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
+import { userId } from 'screens/UserPortal/LeaveOrganization/LeaveOrganization';
+
+/** TSDOC
+ *
+ * ## CSS Strategy Explanation:
+ *
+ * To ensure consistency across the application and reduce duplication, common styles
+ * (such as button styles) have been moved to the global CSS file. Instead of using
+ * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+ * class (e.g., .addButton) is now applied.
+ *
+ * ### Benefits:
+ * - **Reduces redundant CSS code.
+ * - **Improves maintainability by centralizing common styles.
+ * - **Ensures consistent styling across components.
+ *
+ * ### Global CSS Classes used:
+ * - `.editButton`
+ * - `.modalHeader`
+ * - `.inputField`
+ * - `.addButton`
+ * - `.removeButton`
+ *
+ * For more details on the reusable classes, refer to the global CSS file.
+ */
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -94,10 +119,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       variables: {
         id: currentTagId,
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: {
-          firstName: { starts_with: memberToAssignToSearchFirstName },
-          lastName: { starts_with: memberToAssignToSearchLastName },
-        },
       },
       skip: !addPeopleToTagModalIsOpen,
     },
@@ -114,32 +135,23 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
-            .pageInfo.endCursor, // Fetch after the last loaded cursor
+          userTagsMembersToAssignToData?.tag.organization.members.pageInfo
+            .endCursor,
       },
-      updateQuery: (
-        prevResult: {
-          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-        },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: {
-            getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-          };
-        },
-      ) => {
+      updateQuery: (prevResult, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prevResult;
-
         return {
-          getUsersToAssignTo: {
-            ...fetchMoreResult.getUsersToAssignTo,
-            usersToAssignTo: {
-              ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo,
-              edges: [
-                ...prevResult.getUsersToAssignTo.usersToAssignTo.edges,
-                ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo.edges,
-              ],
+          tag: {
+            ...fetchMoreResult.tag,
+            organization: {
+              ...fetchMoreResult.tag.organization,
+              members: {
+                ...fetchMoreResult.tag.organization.members,
+                edges: [
+                  ...prevResult.tag.organization.members.edges,
+                  ...fetchMoreResult.tag.organization.members.edges,
+                ],
+              },
             },
           },
         };
@@ -148,13 +160,19 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   };
 
   const userTagMembersToAssignTo =
-    userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
-      (edge) => edge.node,
+    userTagsMembersToAssignToData?.tag.organization.members.edges.map(
+      (edge) => ({
+        _id: edge.node.id,
+        name: edge.node.name,
+      }),
     ) ?? [];
+
+  const organizationId = userTagsMembersToAssignToData?.tag.organization.id;
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
       const isAssigned = prevMembers.some((m) => m._id === member._id);
+      console.log(member);
       if (isAssigned) {
         return prevMembers.filter((m) => m._id !== member._id);
       } else {
@@ -182,20 +200,49 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       return;
     }
 
-    try {
-      const { data } = await addPeople({
-        variables: {
-          tagId: currentTagId,
-          userIds: assignToMembers.map((member) => member._id),
-        },
-      });
+    if (!organizationId) {
+      toast.error(tErrors('organizationNotFound'));
+      return;
+    }
 
-      if (data) {
-        toast.success(t('successfullyAssignedToPeople'));
-        refetchAssignedMembersData();
-        hideAddPeopleToTagModal();
-        setAssignToMembers([]);
+    try {
+      let successCount = 0;
+      let alreadyMemberCount = 0;
+
+      for (const member of assignToMembers) {
+        try {
+          await addPeople({
+            variables: {
+              tagId: currentTagId,
+              userId: assignToMembers[0]._id,
+            },
+          });
+          successCount++;
+        } catch (e) {
+          if (
+            e instanceof Error &&
+            e.message?.includes('already has the membership')
+          ) {
+            alreadyMemberCount++;
+            continue;
+          }
+          throw e;
+        }
       }
+
+      if (successCount > 0 && alreadyMemberCount > 0) {
+        toast.info(
+          `${successCount} ${t('membersAdded')}, ${alreadyMemberCount} ${t('alreadyMembers')}`,
+        );
+      } else if (successCount > 0) {
+        toast.success(t('successfullyAssignedToPeople'));
+      } else if (alreadyMemberCount > 0) {
+        toast.warning(t('allSelectedAreAlreadyMembers'));
+      }
+
+      refetchAssignedMembersData();
+      hideAddPeopleToTagModal();
+      setAssignToMembers([]);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
@@ -239,11 +286,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">
-            {params.row.firstName + ' ' + params.row.lastName}
-          </div>
-        );
+        return <div data-testid="memberName">{params.row.name}</div>;
       },
     },
     {
@@ -310,7 +353,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     key={member._id}
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                   >
-                    {member.firstName} {member.lastName}
+                    {member.name}
                     <i
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                       onClick={() => removeMember(member._id)}
@@ -364,11 +407,11 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   style={{ height: 300, overflow: 'auto' }}
                 >
                   <InfiniteScroll
-                    dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
+                    dataLength={userTagMembersToAssignTo?.length ?? 0}
                     next={loadMoreMembersToAssignTo}
                     hasMore={
-                      userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ?? false
+                      userTagsMembersToAssignToData?.tag.organization.members
+                        .pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="addPeopleToTagScrollableDiv"

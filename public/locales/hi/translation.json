@@ -319,9 +319,10 @@
     "createUser": "उपयोगकर्ता बनाएं"
   },
   "organizationTags": {
+    "manageTag": "टैग प्रबंधित करें",
     "title": "संस्थान टैग",
     "createTag": "नया टैग बनाएँ",
-    "manageTag": "प्रबंधित करें",
+    "edit": "संशोधित करना",
     "editTag": "संपादित करें",
     "removeTag": "हटाएँ",
     "tagDetails": "टैग विवरण",

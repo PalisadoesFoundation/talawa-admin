@@ -185,40 +185,18 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
 
 export const ORGANIZATION_USER_TAGS_LIST = gql`
   query Organizations(
-    $id: ID!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-    $where: UserTagWhereInput
-    $sortedBy: UserTagSortedByInput
+    $first: Int
+    $last: Int
+    $filter: String
   ) {
-    organizations(id: $id) {
-      userTags(
-        after: $after
-        before: $before
-        first: $first
-        last: $last
-        where: $where
-        sortedBy: $sortedBy
-      ) {
+    organizations(filter: $filter) {
+      tags(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            _id
+            id
             name
-            parentTag {
-              _id
-            }
-            usersAssignedTo(first: $first, last: $last) {
-              totalCount
-            }
-            childTags(first: $first, last: $last) {
-              totalCount
-            }
-            ancestorTags {
-              _id
-              name
-            }
           }
           cursor
         }
@@ -228,7 +206,6 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
       }
     }
   }

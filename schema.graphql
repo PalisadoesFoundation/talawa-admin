@@ -723,6 +723,28 @@ input EditVenueInput {
   name: String
 }
 
+input TagActionsInput {
+  """
+  ID of the current tag
+  """
+  currentTagId: ID!
+  """
+  Array of tag IDs to be assigned
+  """
+  selectedTagIds: [ID!]!
+}
+
+input AddUserTagInput {
+  """
+  ID of the tag to assign
+  """
+  tagId: String!
+  """
+  ID of the user to assign the tag to
+  """
+  userId: String!
+}
+
 type Mutation {
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   addEventAttendee(data: EventAttendeeInput!): User!
@@ -743,6 +765,7 @@ type Mutation {
   addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
   adminRemoveEvent(eventId: ID!): Event!
   assignUserTag(input: ToggleUserTagAssignInput!): User
+  assignToUserTag(input: ToggleUserToTagAssignInput!): User
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
@@ -880,6 +903,9 @@ type Mutation {
   updateUserTag(input: UpdateUserTagInput!): UserTag
   updateUserType(data: UpdateUserTypeInput!): Boolean!
   venues: [Venue]
+  removeFromUserTags(input: TagActionsInput!): UserTag
+  assignToUserTags(input: TagActionsInput!): Tag
+  assignUserTag(input: AddUserTagInput!): Tag
 }
 
 input OTPInput {
@@ -1940,6 +1966,10 @@ input ToggleUserTagAssignInput {
   userId: ID!
 }
 
+input ToggleUserToTagAssignInput {
+  currentUserId: ID!
+  selectedUserId: ID!
+}
 type Translation {
   en_value: String
   lang_code: String
@@ -2799,7 +2829,7 @@ input UserPhoneInput {
 }
 
 type UserTag {
-  _id: ID!
+  id: ID!
   childTags(input: UserTagsConnectionInput!): UserTagsConnectionResult!
   name: String!
   organization: Organization

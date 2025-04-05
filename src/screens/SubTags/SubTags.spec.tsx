@@ -128,12 +128,14 @@ describe('Organisation Tags Page', () => {
   });
 
   it('render error component on unsuccessful subtags query', async () => {
-    const { queryByText } = renderSubTags(link2);
+    const { getByText } = renderSubTags(link2);
 
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
+      expect(
+        getByText('Error occured while loading sub tags'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -317,32 +319,38 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Fetches more sub tags with infinite scroll', async () => {
-    const { getByText } = renderSubTags(link);
+    renderSubTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
+      expect(screen.getByTestId('subTagsScrollableDiv')).toBeInTheDocument();
     });
+
+    // Get initial tags
+    const initialTags = screen.getAllByTestId('manageTagBtn');
+    expect(initialTags.length).toBeGreaterThan(0);
 
     const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
 
-    // Get the initial number of tags loaded
-    const initialSubTagsDataLength =
-      screen.getAllByTestId('manageTagBtn').length;
-
-    // Set scroll position to the bottom
+    // Trigger infinite scroll
     fireEvent.scroll(subTagsScrollableDiv, {
-      target: { scrollY: subTagsScrollableDiv.scrollHeight },
+      target: {
+        scrollTop: subTagsScrollableDiv.scrollHeight,
+        scrollHeight: subTagsScrollableDiv.scrollHeight,
+        clientHeight: subTagsScrollableDiv.clientHeight,
+      },
     });
 
-    await waitFor(() => {
-      const finalSubTagsDataLength =
-        screen.getAllByTestId('manageTagBtn').length;
-      expect(finalSubTagsDataLength).toBeGreaterThan(initialSubTagsDataLength);
+    // Wait for more data to load
+    await wait();
 
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
-    });
+    // Verify more tags were loaded
+    const updatedTags = screen.getAllByTestId('manageTagBtn');
+    expect(updatedTags.length).toBeGreaterThan(initialTags.length);
+
+    // Verify loading indicator appears during fetch
+    expect(screen.getByTestId('infiniteScrollLoader')).toBeInTheDocument();
   });
 
   it('adds a new sub tag to the current tag', async () => {

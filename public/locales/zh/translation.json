@@ -319,9 +319,10 @@
     "createUser": "创建用户"
   },
   "organizationTags": {
+    "manageTag": "管理标签",
     "title": "组织标签",
     "createTag": "创建新标签",
-    "manageTag": "管理",
+    "edit": "修改",
     "editTag": "编辑",
     "removeTag": "删除",
     "tagDetails": "标签详情",

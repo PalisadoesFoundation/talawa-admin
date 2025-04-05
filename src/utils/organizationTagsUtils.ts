@@ -101,11 +101,53 @@ export interface InterfaceOrganizationSubTagsQuery
 export interface InterfaceTagAssignedMembersQuery
   extends InterfaceBaseQueryResult {
   data?: {
-    getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
+    tag: {
+      id: string;
+      name: string;
+      assignees: {
+        edges: Array<{
+          node: {
+            id: string;
+            name: string;
+          };
+          cursor: string;
+        }>;
+        pageInfo: {
+          endCursor: string;
+          startCursor: string;
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+        };
+      };
+      organization: {
+        id: string;
+      };
+    };
   };
   fetchMore: (
     options: InterfaceBaseFetchMoreOptions<{
-      getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
+      tag: {
+        id: string;
+        name: string;
+        assignees: {
+          edges: Array<{
+            node: {
+              id: string;
+              name: string;
+            };
+            cursor: string;
+          }>;
+          pageInfo: {
+            endCursor: string;
+            startCursor: string;
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+          };
+        };
+        organization: {
+          id: string;
+        };
+      };
     }>,
   ) => void;
 }

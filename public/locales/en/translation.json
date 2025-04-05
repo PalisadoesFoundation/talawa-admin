@@ -319,9 +319,10 @@
     "profile": "profile"
   },
   "organizationTags": {
+    "manageTag": "Manage Tag",
     "title": "Organization Tags",
     "createTag": "Create a new tag",
-    "manageTag": "Manage",
+    "edit": "Edit",
     "editTag": "Edit",
     "removeTag": "Remove",
     "tagDetails": "Tag Details",
@@ -338,6 +339,7 @@
     "enterTagName": "Enter Tag Name"
   },
   "manageTag": {
+    "manageTag": "Manage Tag",
     "title": "Tag Details",
     "addPeopleToTag": "Add People to tag",
     "viewProfile": "View",

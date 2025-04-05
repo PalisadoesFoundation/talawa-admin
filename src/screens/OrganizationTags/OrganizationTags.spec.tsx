@@ -97,19 +97,32 @@ describe('Organisation Tags Page', () => {
       };
     });
   });
+
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
   });
+
   test('component loads correctly', async () => {
-    const { getByText } = renderOrganizationTags(link);
+    const { getByText, getByTestId, getByRole } = renderOrganizationTags(link);
 
     await wait();
 
     await waitFor(() => {
+      // Check if main elements are rendered
       expect(getByText(translations.createTag)).toBeInTheDocument();
+      expect(getByTestId('searchByName')).toBeInTheDocument();
+      expect(getByTestId('sortTags')).toBeInTheDocument();
+      expect(getByTestId('createTagBtn')).toBeInTheDocument();
+
+      // Check if the DataGrid is rendered
+      expect(getByRole('grid')).toBeInTheDocument();
+
+      // Check if the icon and title are present
+      expect(getByText('Tags')).toBeInTheDocument();
     });
   });
+
   test('render error component on unsuccessful userTags query', async () => {
     const { queryByText } = renderOrganizationTags(link2);
 
@@ -119,6 +132,7 @@ describe('Organisation Tags Page', () => {
       expect(queryByText(translations.createTag)).not.toBeInTheDocument();
     });
   });
+
   test('opens and closes the create tag modal', async () => {
     renderOrganizationTags(link);
 
@@ -142,140 +156,104 @@ describe('Organisation Tags Page', () => {
       ).not.toBeInTheDocument(),
     );
   });
+
   test('navigates to sub tags screen after clicking on a tag', async () => {
     renderOrganizationTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('tagName')[0]);
+
+    const tagNameCell = screen.getByText('userTag 1');
+    await userEvent.click(tagNameCell);
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
     });
   });
+
   test('navigates to manage tag page after clicking manage tag option', async () => {
     renderOrganizationTags(link);
 
     await wait();
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+
+    const editButton = screen.getByTestId('manageTagBtn');
+    await userEvent.click(editButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
     });
   });
-  test('searchs for tags where the name matches the provided search input', async () => {
+
+  test('searches for tags where the name matches the provided search input', async () => {
     renderOrganizationTags(link);
 
     await wait();
 
-    await waitFor(() => {
-      expect(
-        screen.getByPlaceholderText(translations.searchByName),
-      ).toBeInTheDocument();
-    });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.type(searchInput, 'searchUserTag');
 
-    // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
+    const searchButton = screen.getByTestId('searchBtn');
+    await userEvent.click(searchButton);
+
     await waitFor(() => {
-      const buttons = screen.getAllByTestId('manageTagBtn');
-      expect(buttons.length).toEqual(2);
+      const rows = screen.getAllByRole('row');
+      // Header row + 2 matching data rows
+      expect(rows.length).toBe(3);
     });
   });
-  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+
+  test('fetches the tags by the sort order', async () => {
     renderOrganizationTags(link);
 
     await wait();
 
-    await waitFor(() => {
-      expect(
-        screen.getByPlaceholderText(translations.searchByName),
-      ).toBeInTheDocument();
-    });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    const sortButton = screen.getByTestId('sortTags');
+    await userEvent.click(sortButton);
 
-    // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 1',
-      );
-    });
-
-    // now change the sorting order
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
+    const oldestOption = screen.getByTestId('oldest');
+    await userEvent.click(oldestOption);
 
     await waitFor(() => {
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('oldest'));
-
-    // returns the tags in reverse order
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 2',
-      );
+      const firstRow = screen.getAllByRole('row')[1];
+      expect(firstRow).toHaveTextContent('searchUserTag 2');
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(sortButton);
+    const latestOption = screen.getByTestId('latest');
+    await userEvent.click(latestOption);
 
     await waitFor(() => {
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('latest'));
-
-    // reverse the order again
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 1',
-      );
+      const firstRow = screen.getAllByRole('row')[1];
+      expect(firstRow).toHaveTextContent('searchUserTag 1');
     });
   });
+
   test('fetches more tags with infinite scroll', async () => {
-    const { getByText } = renderOrganizationTags(link);
+    renderOrganizationTags(link);
 
     await wait();
 
-    await waitFor(() => {
-      expect(getByText(translations.createTag)).toBeInTheDocument();
-    });
+    const scrollableDiv = screen.getByTestId('orgUserTagsScrollableDiv');
 
-    const orgUserTagsScrollableDiv = screen.getByTestId(
-      'orgUserTagsScrollableDiv',
-    );
+    const initialRows = screen.getAllByRole('row').length;
 
-    // Get the initial number of tags loaded
-    const initialTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(orgUserTagsScrollableDiv, {
-      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollY: scrollableDiv.scrollHeight },
     });
 
     await waitFor(() => {
-      const finalTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-
-      expect(getByText(translations.createTag)).toBeInTheDocument();
+      const newRows = screen.getAllByRole('row').length;
+      expect(newRows).toBeGreaterThan(initialRows);
     });
   });
+
   test('creates a new user tag', async () => {
     renderOrganizationTags(link);
 
@@ -305,6 +283,7 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
+
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
 
@@ -323,6 +302,7 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
+
   test('renders the no tags found message when there are no tags', async () => {
     renderOrganizationTags(link4);
 
@@ -332,6 +312,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
   });
+
   test('sets dataLength to 0 when userTagsList is undefined', async () => {
     renderOrganizationTags(link5);
 
@@ -343,6 +324,7 @@ describe('Organisation Tags Page', () => {
       expect(userTags).toHaveLength(0);
     });
   });
+
   test('Null endCursor', async () => {
     renderOrganizationTags(link6);
 
@@ -361,6 +343,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
+
   test('Null Page available', async () => {
     renderOrganizationTags(link7);
 
@@ -379,6 +362,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
+
   test('creates a new user tag with undefined data', async () => {
     renderOrganizationTags(link);
 
@@ -398,6 +382,45 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Tag creation failed');
+    });
+  });
+
+  test('handles null endCursor in pagination', async () => {
+    renderOrganizationTags(link6);
+
+    await wait();
+
+    const scrollableDiv = screen.getByTestId('orgUserTagsScrollableDiv');
+    const initialRows = screen.getAllByRole('row').length;
+
+    // Trigger infinite scroll
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollY: scrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      // Verify that no additional rows were loaded
+      const newRows = screen.getAllByRole('row').length;
+      expect(newRows).toBe(initialRows);
+      // Verify DataGrid is still present
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('handles error when fetching tags', async () => {
+    renderOrganizationTags(link3);
+
+    await wait();
+
+    const scrollableDiv = screen.getByTestId('orgUserTagsScrollableDiv');
+
+    // Trigger infinite scroll
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollY: scrollableDiv.scrollHeight },
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
 });

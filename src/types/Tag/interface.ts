@@ -3,16 +3,14 @@ import type { ApolloError } from '@apollo/client';
 
 export interface InterfaceMemberData {
   _id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
 export interface InterfaceTagMembersData {
   edges: {
     node: {
-      _id: string;
-      firstName: string;
-      lastName: string;
+      id: string;
+      name: string;
     };
   }[];
   pageInfo: {
@@ -48,18 +46,36 @@ export interface InterfaceBaseFetchMoreOptions<T> {
 }
 
 export interface InterfaceQueryUserTagsMembersToAssignTo {
-  name: string;
-  usersToAssignTo: InterfaceTagMembersData;
+  tag: {
+    id: string;
+    name: string;
+    organization: {
+      id: string;
+      members: {
+        edges: Array<{
+          node: {
+            id: string;
+            name: string;
+          };
+          cursor: string;
+        }>;
+        pageInfo: {
+          hasNextPage: boolean;
+          endCursor: string;
+        };
+      };
+    };
+  };
 }
 
 export interface InterfaceTagUsersToAssignToQuery
   extends InterfaceBaseQueryResult {
   data?: {
-    getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+    tag: InterfaceQueryUserTagsMembersToAssignTo['tag'];
   };
   fetchMore: (
     options: InterfaceBaseFetchMoreOptions<{
-      getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+      tag: InterfaceQueryUserTagsMembersToAssignTo['tag'];
     }>,
   ) => void;
 }

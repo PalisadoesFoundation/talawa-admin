@@ -96,9 +96,10 @@ import SearchBar from 'subComponents/SearchBar';
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
-  const { orgId, tagId: currentTagId } = useParams();
+  const { orgId, tagId, userId: routeUserId } = useParams();
+  const currentTagId = tagId ?? '';
+  console.log(currentTagId, 'currentTagId');
   const navigate = useNavigate();
-
   const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
     useState(false);
   const [addPeopleToTagModalIsOpen, setAddPeopleToTagModalIsOpen] =
@@ -107,7 +108,9 @@ function ManageTag(): JSX.Element {
   const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
   const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
     useState(false);
-  const [unassignUserId, setUnassignUserId] = useState(null);
+  const [unassignUserId, setUnassignUserId] = useState<string | undefined>(
+    undefined,
+  );
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
   const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
@@ -150,13 +153,11 @@ function ManageTag(): JSX.Element {
     fetchMore: fetchMoreAssignedMembers,
   }: InterfaceTagAssignedMembersQuery = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
     variables: {
-      id: currentTagId,
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: {
-        firstName: { starts_with: assignedMemberSearchFirstName },
-        lastName: { starts_with: assignedMemberSearchLastName },
+      input: {
+        id: currentTagId,
       },
-      sortedBy: { id: assignedMemberSortOrder },
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      after: null,
     },
     fetchPolicy: 'no-cache',
   });
@@ -165,30 +166,21 @@ function ManageTag(): JSX.Element {
     fetchMoreAssignedMembers({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.pageInfo
-            .endCursor,
+        after: userTagAssignedMembersData?.tag.assignees.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: {
-            getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
-          };
-        },
+        prevResult: { tag: any },
+        { fetchMoreResult }: { fetchMoreResult: { tag: any } },
       ) => {
         if (!fetchMoreResult) return prevResult;
-
         return {
-          getAssignedUsers: {
-            ...fetchMoreResult.getAssignedUsers,
-            usersAssignedTo: {
-              ...fetchMoreResult.getAssignedUsers.usersAssignedTo,
+          tag: {
+            ...fetchMoreResult.tag,
+            assignees: {
+              ...fetchMoreResult.tag.assignees,
               edges: [
-                ...prevResult.getAssignedUsers.usersAssignedTo.edges,
-                ...fetchMoreResult.getAssignedUsers.usersAssignedTo.edges,
+                ...prevResult.tag.assignees.edges,
+                ...fetchMoreResult.tag.assignees.edges,
               ],
             },
           },
@@ -201,7 +193,7 @@ function ManageTag(): JSX.Element {
     const [firstName, ...lastNameParts] = assignedMemberSearchInput
       .trim()
       .split(/\s+/);
-    const lastName = lastNameParts.join(' '); // Joins everything after the first word
+    const lastName = lastNameParts.join(' ');
     setAssignedMemberSearchFirstName(firstName);
     setAssignedMemberSearchLastName(lastName);
   }, [assignedMemberSearchInput]);
@@ -211,9 +203,11 @@ function ManageTag(): JSX.Element {
   const handleUnassignUserTag = async (): Promise<void> => {
     try {
       await unassignUserTag({
-        variables: { tagId: currentTagId, userId: unassignUserId },
+        variables: {
+          tagId: currentTagId,
+          userId: userTagAssignedMembers[0].id,
+        },
       });
-
       userTagAssignedMembersRefetch();
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
@@ -227,11 +221,10 @@ function ManageTag(): JSX.Element {
   const [edit] = useMutation(UPDATE_USER_TAG);
 
   const [newTagName, setNewTagName] = useState<string>('');
-  const currentTagName =
-    userTagAssignedMembersData?.getAssignedUsers.name ?? '';
+  const currentTagName = userTagAssignedMembersData?.tag.name ?? '';
 
   useEffect(() => {
-    setNewTagName(userTagAssignedMembersData?.getAssignedUsers.name ?? '');
+    setNewTagName(userTagAssignedMembersData?.tag.name ?? '');
   }, [userTagAssignedMembersData]);
 
   const handleEditUserTag = async (
@@ -246,7 +239,10 @@ function ManageTag(): JSX.Element {
 
     try {
       const { data } = await edit({
-        variables: { tagId: currentTagId, name: newTagName },
+        variables: {
+          id: currentTagId,
+          name: newTagName,
+        },
       });
 
       if (data) {
@@ -264,11 +260,22 @@ function ManageTag(): JSX.Element {
   const [removeUserTag] = useMutation(REMOVE_USER_TAG);
   const handleRemoveUserTag = async (): Promise<void> => {
     try {
-      await removeUserTag({ variables: { id: currentTagId } });
+      if (!currentTagId) {
+        toast.error(t('userIdNotFound'));
+        return;
+      }
 
-      navigate(`/orgtags/${orgId}`);
-      toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
+      const { data } = await removeUserTag({
+        variables: {
+          id: currentTagId,
+        },
+      });
+
+      if (data.deleteTag) {
+        toast.success(t('tagRemovalSuccess'));
+        toggleRemoveUserTagModal();
+        navigate(`/orgtags/${orgId}`);
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -282,7 +289,7 @@ function ManageTag(): JSX.Element {
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading assigned users
+            Error occurred while loading assigned users
           </h6>
         </div>
       </div>
@@ -290,15 +297,15 @@ function ManageTag(): JSX.Element {
   }
 
   const userTagAssignedMembers =
-    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
-      (edge) => edge.node,
+    userTagAssignedMembersData?.tag.assignees.edges.map(
+      (edge: any) => edge.node,
     ) ?? [];
 
-  // get the ancestorTags array and push the current tag in it
-  // used for the tag breadcrumbs
   const orgUserTagAncestors = [
-    ...(userTagAssignedMembersData?.getAssignedUsers.ancestorTags ?? []),
-    { _id: currentTagId, name: currentTagName },
+    {
+      id: currentTagId,
+      name: currentTagName,
+    },
   ];
 
   const redirectToSubTags = (tagId: string): void => {
@@ -309,11 +316,10 @@ function ManageTag(): JSX.Element {
   };
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
-      setUnassignUserId(null);
+      setUnassignUserId(undefined);
     }
     setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
   };
-
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -335,11 +341,7 @@ function ManageTag(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">
-            {params.row.firstName + ' ' + params.row.lastName}
-          </div>
-        );
+        return <div data-testid="memberName">{params.row.name}</div>;
       },
     },
     {
@@ -372,17 +374,18 @@ function ManageTag(): JSX.Element {
               onClick={() => {
                 setUnassignUserId(params.row._id);
                 toggleUnassignUserTagModal();
+                // console.log('unassignUserId hghjhjhbjh', params);
               }}
               data-testid="unassignTagBtn"
             >
-              {'Unassign'}
+              Unassign
             </Button>
           </div>
         );
       },
     },
   ];
-
+  console.log('userTagAssignedMembers', userTagAssignedMembers);
   return (
     <>
       <Row className={styles.head}>
@@ -442,14 +445,14 @@ function ManageTag(): JSX.Element {
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
                   >
-                    {'Tags'}
+                    Tags
                     <i className={'mx-2 fa fa-caret-right'} />
                   </div>
-                  {orgUserTagAncestors?.map((tag, index) => (
+                  {orgUserTagAncestors.map((tag, index) => (
                     <div
                       key={index}
-                      className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                      onClick={() => redirectToManageTag(tag._id as string)}
+                      className={`ms-2 my-1 ${tag.id === currentTagId ? 'fs-4 fw-semibold text-secondary' : `${styles.tagsBreadCrumbs} fs-6`}`}
+                      onClick={() => redirectToManageTag(tag.id as string)}
                       data-testid="redirectToManageTag"
                     >
                       {tag.name}
@@ -468,8 +471,8 @@ function ManageTag(): JSX.Element {
                     dataLength={userTagAssignedMembers?.length ?? 0}
                     next={loadMoreAssignedMembers}
                     hasMore={
-                      userTagAssignedMembersData?.getAssignedUsers
-                        .usersAssignedTo.pageInfo.hasNextPage ?? false
+                      userTagAssignedMembersData?.tag.assignees.pageInfo
+                        .hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
@@ -494,10 +497,10 @@ function ManageTag(): JSX.Element {
                       getRowClassName={() => `${styles.rowBackgrounds}`}
                       autoHeight
                       rowHeight={65}
-                      rows={userTagAssignedMembers?.map(
-                        (assignedMembers, index) => ({
+                      rows={userTagAssignedMembers.map(
+                        (assignedMember: any, index: number) => ({
                           id: index + 1,
-                          ...assignedMembers,
+                          ...assignedMember,
                         }),
                       )}
                       columns={columns}
@@ -508,7 +511,7 @@ function ManageTag(): JSX.Element {
               </Col>
               <Col className="ms-auto" xs={3}>
                 <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
-                  <div className="ms-3 fs-5">{'Actions'}</div>
+                  <div className="ms-3 fs-5">Actions</div>
                 </div>
                 <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
                   <div
@@ -567,13 +570,16 @@ function ManageTag(): JSX.Element {
         t={t}
         tCommon={tCommon}
       />
+      {console.log(currentTagId, 'currentTagId')}
       {/* Assign People To Tags Modal */}
       <TagActions
         tagActionsModalIsOpen={tagActionsModalIsOpen}
         hideTagActionsModal={hideTagActionsModal}
         tagActionType={tagActionType}
+        userId={unassignUserId || ''}
         t={t}
         tCommon={tCommon}
+        currentTagId={currentTagId}
       />
       {/* Unassign User Tag Modal */}
       <UnassignUserTagModal
