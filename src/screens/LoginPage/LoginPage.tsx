@@ -543,7 +543,7 @@ const loginPage = (): JSX.Element => {
                   >
                     {tCommon('login')}
                   </Button>
-                  {role === 'admin' || (
+                  {location.pathname !== '/admin' || (
                     <div>
                       <div className="position-relative my-2">
                         <hr />
