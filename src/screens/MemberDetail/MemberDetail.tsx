@@ -375,10 +375,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                             height: '60px',
                             objectFit: 'cover',
                           }}
-                          src={sanitizeAvatars(
-                            selectedAvatar,
-                            formState.avatarURL,
-                          )}
+                          src={
+                            sanitizeAvatars(
+                              selectedAvatar,
+                              formState.avatarURL,
+                            ) || ''
+                          }
                           alt="User"
                           crossOrigin="anonymous" // to avoid Cors
                         />

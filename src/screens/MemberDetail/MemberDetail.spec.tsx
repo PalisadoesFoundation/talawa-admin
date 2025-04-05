@@ -1307,4 +1307,69 @@ describe('MemberDetail', () => {
       expect(validatePassword).toHaveBeenCalledWith('validPass');
     });
   });
+
+  it('should only validate passwords when value is "string" and fieldName is password', async () => {
+    // Spy on toast.error
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    // Store original validatePassword if it exists
+    const originalValidatePassword = window.validatePassword;
+
+    // Set up validatePassword with a simplified approach
+    let validatePasswordShouldReturn = false;
+    window.validatePassword = (password) => {
+      // We can add logic here if needed
+      return validatePasswordShouldReturn;
+    };
+
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // CASE 1: Input "string" for password field - invalid password
+    // Set validatePassword to return false (validation fails)
+    validatePasswordShouldReturn = false;
+
+    // Try to set an invalid password with literal value "string"
+    const passwordInput = screen.getByTestId('inputPassword');
+    fireEvent.change(passwordInput, { target: { value: 'string' } });
+
+    // Verify toast.error was called
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Password must be at least 8 characters long.',
+    );
+
+    // Reset mocks
+    toastErrorSpy.mockClear();
+
+    // CASE 2: Input "string" for password field - valid password
+    // Set validatePassword to return true (validation passes)
+    validatePasswordShouldReturn = true;
+
+    // Set a valid password but with literal value "string"
+    fireEvent.change(passwordInput, { target: { value: 'string' } });
+
+    // Verify toast.error was not shown
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // CASE 3: Input other than "string" for password field
+    // Try to set a password with value other than "string"
+    fireEvent.change(passwordInput, {
+      target: { value: 'ValidPassword12@ijewirg3' },
+    });
+
+    // Verify toast.error was not shown (should skip that code path)
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // CASE 4: Input "string" for non-password field
+    // Update a regular field with literal value "string"
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'string' } });
+
+    // Verify toast.error was not shown (should skip that code path)
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // Clean up
+    window.validatePassword = originalValidatePassword;
+    toastErrorSpy.mockRestore();
+  });
 });
