@@ -1056,11 +1056,12 @@ describe('MemberDetail', () => {
     ).toBeInTheDocument();
 
     // Find and click one of the options=
-    const option = screen.getByTestId('change-naturallanguagecode-btn-en'); // Or whatever option text you expect
+    // Select a different language option than the initial one
+    const option = screen.getByTestId('change-naturallanguagecode-btn-fr'); // Or another available language
     await userEvent.click(option);
 
     // Verify the selection was made
-    expect(languageStatus).toHaveTextContent('English');
+    expect(languageStatus).toHaveTextContent('French'); // Should match the selected language
   });
 
   test('handles phone number input formatting', async () => {
