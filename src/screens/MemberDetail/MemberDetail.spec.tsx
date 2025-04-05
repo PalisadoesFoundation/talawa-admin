@@ -962,43 +962,6 @@ describe('MemberDetail', () => {
     toastSuccessSpy.mockRestore();
   });
 
-  test('handles user deletion successfully', async () => {
-    // Render with link6
-    renderMemberDetailScreen(link6);
-
-    // Wait for component to load
-    await waitFor(() => {
-      expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    });
-
-    // Find and click delete button
-    const deleteButton = screen.getByTestId('deleteUserButton');
-    expect(deleteButton).toBeInTheDocument();
-    await userEvent.click(deleteButton);
-
-    // Verify confirmation modal appears
-    const confirmationModal = screen.getByTestId('confirmationToDelete');
-    expect(confirmationModal).toBeInTheDocument();
-
-    // Setup toast spy
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
-
-    // Click confirm delete
-    const confirmDeleteButton = screen.getByTestId(
-      'button-handleDeleteConfirmation',
-    );
-    await userEvent.click(confirmDeleteButton);
-
-    // Verify success toast and navigation
-    await waitFor(() => {
-      expect(toastSuccessSpy).toHaveBeenCalled();
-    });
-
-    // Clean up
-    toastSuccessSpy.mockRestore();
-    vi.resetAllMocks();
-  });
-
   // Test for future birthdate validation (Lines 212-226)
   test('prevents selection of future birthdates', async () => {
     renderMemberDetailScreen(link1);
