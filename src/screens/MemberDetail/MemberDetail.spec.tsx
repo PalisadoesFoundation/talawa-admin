@@ -64,7 +64,16 @@ vi.mock('react-router-dom', async () => {
 });
 
 vi.mock('utils/passwordValidator', () => ({
-  validatePassword: vi.fn((password: string) => password.length >= 8),
+  validatePassword: vi.fn((password: string) => {
+    const minLength = password.length >= 8;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    return (
+      minLength && hasSpecialChar && hasNumber && hasUpperCase && hasLowerCase
+    );
+  }),
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -326,7 +335,7 @@ describe('MemberDetail', () => {
     expect(birthDateInput).toHaveValue('02/08/0002');
   });
 
-  it('skips password validation when non-string value is used', async () => {
+  it('validation when non-string value is used', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
 
