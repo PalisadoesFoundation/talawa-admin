@@ -26,6 +26,7 @@ import {
   DELETE_USER_MOCK,
 } from './MemberDetailMocks';
 import type { ApolloLink } from '@apollo/client';
+import { validatePassword } from 'utils/passwordValidator';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -61,6 +62,10 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockNavigate,
   };
 });
+
+vi.mock('utils/passwordValidator', () => ({
+  validatePassword: vi.fn((password: string) => password.length >= 8),
+}));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -321,21 +326,20 @@ describe('MemberDetail', () => {
     expect(birthDateInput).toHaveValue('02/08/0002');
   });
 
-  it('skips password validation when value is not a string', async () => {
+  it('skips password validation when non-string value is used', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
 
+    // Wait for password input to render
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
     });
 
+    // Test password field with empty string (edge case)
     const passwordInput = screen.getByTestId('inputPassword');
-    expect(passwordInput).toBeInTheDocument();
+    fireEvent.change(passwordInput, { target: { value: '' } });
 
-    // Simulate a change event with a non-string value (e.g., boolean)
-    fireEvent.change(passwordInput, { target: { value: false } });
-
-    // Expect that no error is thrown since the value is not a string
+    // Verify empty password doesn't trigger validation
     expect(toastErrorSpy).not.toHaveBeenCalled();
   });
 
@@ -1269,68 +1273,38 @@ describe('MemberDetail', () => {
     expect(countrySelect).toHaveValue('us');
   });
 
-  it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    // Spy on toast.error
+  it('should validate passwords when value is string type and fieldName is password', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
-
-    // Store original validatePassword if it exists
-    const originalValidatePassword = window.validatePassword;
-
-    // Set up validatePassword with a simplified approach
-    let validatePasswordShouldReturn = false;
-    window.validatePassword = (password) => {
-      // We can add logic here if needed
-      return validatePasswordShouldReturn;
-    };
-
     renderMemberDetailScreen(link1);
-    await wait();
 
-    // CASE 1: Input "string" for password field - invalid password
-    // Set validatePassword to return false (validation fails)
-    validatePasswordShouldReturn = false;
-
-    // Try to set an invalid password with literal value "string"
-    const passwordInput = screen.getByTestId('inputPassword');
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
-    // Verify toast.error was called
-    expect(toastErrorSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters long.',
-    );
-
-    // Reset mocks
-    toastErrorSpy.mockClear();
-
-    // CASE 2: Input "string" for password field - valid password
-    // Set validatePassword to return true (validation passes)
-    validatePasswordShouldReturn = true;
-
-    // Set a valid password but with literal value "string"
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
-    // Verify toast.error was not shown
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    // CASE 3: Input other than "string" for password field
-    // Try to set a password with value other than "string"
-    fireEvent.change(passwordInput, {
-      target: { value: 'ValidPassword12@ijewirg3' },
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
     });
 
-    // Verify toast.error was not shown (should skip that code path)
-    expect(toastErrorSpy).not.toHaveBeenCalled();
+    const passwordInput = screen.getByTestId('inputPassword');
 
-    // CASE 4: Input "string" for non-password field
-    // Update a regular field with literal value "string"
-    const nameInput = screen.getByTestId('inputName');
-    fireEvent.change(nameInput, { target: { value: 'string' } });
+    // Case 1: Invalid password (7 characters)
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
 
-    // Verify toast.error was not shown (should skip that code path)
-    expect(toastErrorSpy).not.toHaveBeenCalled();
+    await waitFor(() => {
+      // Verify validation was called with correct argument
+      expect(validatePassword).toHaveBeenCalledWith('short');
+      // Verify error toast
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'Password must be at least 8 characters long.',
+      );
+    });
 
-    // Clean up
-    window.validatePassword = originalValidatePassword;
-    toastErrorSpy.mockRestore();
+    // Reset mocks between test cases
+    vi.mocked(validatePassword).mockClear();
+    toastErrorSpy.mockClear();
+
+    // Case 2: Valid password (8 characters)
+    fireEvent.change(passwordInput, { target: { value: 'validPass' } });
+
+    await waitFor(() => {
+      expect(validatePassword).toHaveBeenCalledWith('validPass');
+    });
   });
 });

@@ -194,7 +194,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
     // Check if value is a string
     // Password validation (only for string values)
-    if (value === 'string') {
+    if (typeof value === 'string') {
       if (fieldName === 'password' && value) {
         if (!validatePassword(value)) {
           toast.error('Password must be at least 8 characters long.');
