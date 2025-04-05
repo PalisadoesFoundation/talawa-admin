@@ -1335,7 +1335,7 @@ describe('MemberDetail', () => {
 
     // Verify toast.error was called
     expect(toastErrorSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters long.',
+      'Password must be at least 8 characters long., contain uppercase, lowercase, numbers, and special characters.',
     );
 
     // Reset mocks
