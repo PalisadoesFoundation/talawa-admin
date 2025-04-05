@@ -557,6 +557,25 @@ export const ORGANIZATIONS_LIST = gql`
   }
 `;
 
+export const MEMBERS_LIST_PG = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      members(first: 32) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            createdAt
+          }
+        }
+      }
+    }
+  }
+`;
+
+
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {

@@ -68,30 +68,30 @@ export const FUND_CAMPAIGN = gql`
 `;
 
 export const FUND_CAMPAIGN_PLEDGE = gql`
-  query GetFundraisingCampaigns(
-    $where: CampaignWhereInput
-    $pledgeOrderBy: PledgeOrderByInput
-  ) {
-    getFundraisingCampaigns(where: $where, pledgeOrderBy: $pledgeOrderBy) {
-      fundId {
-        name
-      }
+  query GetFundCampaignPledges($input: QueryFundCampaignInput!) {
+    fundCampaign(input: $input) {
+      id
       name
-      fundingGoal
-      currency
-      startDate
-      endDate
-      pledges {
-        _id
-        amount
-        currency
-        endDate
-        startDate
-        users {
-          _id
-          firstName
-          lastName
-          image
+      endAt
+      startAt
+      currencyCode
+      goalAmount
+      pledges(first: 32) {
+        edges {
+          node {
+            id
+            amount
+            note
+            campaign {
+              id
+              name
+            }
+            pledger {
+              id
+              name
+              createdAt
+            }
+          }
         }
       }
     }
@@ -121,18 +121,18 @@ export const USER_PLEDGES = gql`
     $orderBy: PledgeOrderByInput
   ) {
     getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
-      _id
+      id
       amount
       startDate
       endDate
       campaign {
-        _id
+        id
         name
         endDate
       }
       currency
       users {
-        _id
+        id
         firstName
         lastName
         image

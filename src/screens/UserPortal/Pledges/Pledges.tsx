@@ -214,7 +214,7 @@ const Pledges = (): JSX.Element => {
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={user._id + '1'}
+                        key={user.id + '1'}
                         containerStyle={styles.imageContainer}
                         avatarStyle={styles.TableImage}
                         name={user.firstName + ' ' + user.lastName}
@@ -222,7 +222,7 @@ const Pledges = (): JSX.Element => {
                       />
                     </div>
                   )}
-                  <span key={user._id + '2'}>
+                  <span key={user.id + '2'}>
                     {user.firstName + ' ' + user.lastName}
                   </span>
                 </div>
@@ -427,7 +427,7 @@ const Pledges = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={8}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -440,7 +440,7 @@ const Pledges = (): JSX.Element => {
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
-          _id: pledge._id,
+          id: pledge.id,
           users: pledge.users,
           startDate: pledge.startDate,
           endDate: pledge.endDate,
@@ -455,7 +455,7 @@ const Pledges = (): JSX.Element => {
       <PledgeModal
         isOpen={modalState[ModalState.UPDATE]}
         hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign ? pledge?.campaign._id : ''}
+        campaignId={pledge?.campaign ? pledge?.campaign.id : ''}
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
@@ -493,7 +493,7 @@ const Pledges = (): JSX.Element => {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={user._id + '1'}
+                  key={user.id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={user.firstName + ' ' + user.lastName}
@@ -502,7 +502,7 @@ const Pledges = (): JSX.Element => {
                 />
               </div>
             )}
-            <span key={user._id + '2'}>
+            <span key={user.id + '2'}>
               {user.firstName + ' ' + user.lastName}
             </span>
           </div>

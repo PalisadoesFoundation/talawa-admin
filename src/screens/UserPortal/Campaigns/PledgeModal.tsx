@@ -52,8 +52,7 @@ import type {
 import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import {
   Autocomplete,
@@ -64,6 +63,54 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+
+export const CREATE_PLEDGE = gql`
+  mutation CreatePledge(
+    $campaignId: ID!
+    $amount: Float!
+    $currency: String!
+    $startDate: Date!
+    $endDate: Date!
+    $userIds: [ID!]!
+  ) {
+    createFundraisingCampaignPledge(
+      input: {
+        campaignId: $campaignId
+        amount: $amount
+        currency: $currency
+        startDate: $startDate
+        endDate: $endDate
+        userIds: $userIds
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PLEDGE = gql`
+  mutation UpdatePledge(
+    $id: ID!
+    $amount: Float
+    $currency: String
+    $startDate: Date
+    $endDate: Date
+    $userIds: [ID!]
+  ) {
+    updateFundraisingCampaignPledge(
+      id: $id
+      input: {
+        amount: $amount
+        currency: $currency
+        startDate: $startDate
+        endDate: $endDate
+        userIds: $userIds
+      }
+    ) {
+      id
+    }
+  }
+`;
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -106,7 +153,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
 
   // Mutation to create a new pledge
-  const [createPledge] = useMutation(CREATE_PlEDGE);
+  const [createPledge] = useMutation(CREATE_PLEDGE);
 
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
@@ -138,7 +185,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          _id: userData.user.user._id,
+          id: userData.user.user.id,
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
           image: userData.user.user.image,
@@ -154,7 +201,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @param e - The form submission event.
    * @returns A promise that resolves when the pledge is successfully updated.
    */
-
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -178,11 +224,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         updatedFields.endDate = endDate;
       }
       if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user._id);
+        updatedFields.users = pledgeUsers.map((user) => user.id);
       }
       try {
         await updatePledge({
-          variables: { id: pledge?._id, ...updatedFields },
+          variables: { id: pledge?.id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -212,7 +258,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             currency: pledgeCurrency,
             startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
             endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user._id),
+            userIds: pledgeUsers.map((user) => user.id),
           },
         });
 
@@ -267,7 +313,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={pledgeUsers}
               // TODO: Remove readOnly function once User Family implementation is done
               readOnly={mode === 'edit' ? true : false}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
                 `${member.firstName} ${member.lastName}`

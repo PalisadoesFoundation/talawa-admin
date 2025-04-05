@@ -5,32 +5,36 @@ import gql from 'graphql-tag';
  *
  * @param campaignId - The ID of the campaign the pledge is associated with.
  * @param amount - The amount of the pledge.
- * @param currency - The currency of the pledge.
- * @param startDate - The start date of the pledge.
- * @param endDate - The end date of the pledge.
- * @param userIds - The IDs of the users associated with the pledge.
- * @returns The ID of the created pledge.
+ * @param pledgerId - The ID of the pledger associated with the pledge.
+ * @param note - A note associated with the pledge.
+ * @returns The details of the created pledge.
  */
-export const CREATE_PlEDGE = gql`
-  mutation CreateFundraisingCampaignPledge(
+export const CREATE_PLEDGE = gql`
+  mutation CreateFundCampaignPledge(
     $campaignId: ID!
-    $amount: Float!
-    $currency: Currency!
-    $startDate: Date!
-    $endDate: Date!
-    $userIds: [ID!]!
+    $amount: Int!
+    $pledgerId: ID!
+    $note: String
   ) {
-    createFundraisingCampaignPledge(
-      data: {
+    createFundCampaignPledge(
+      input: {
         campaignId: $campaignId
         amount: $amount
-        currency: $currency
-        startDate: $startDate
-        endDate: $endDate
-        userIds: $userIds
+        pledgerId: $pledgerId
+        note: $note
       }
     ) {
-      _id
+      id
+      amount
+      note
+      campaign {
+        id
+        name
+      }
+      pledger {
+        id
+        name
+      }
     }
   }
 `;
@@ -40,31 +44,30 @@ export const CREATE_PlEDGE = gql`
  *
  * @param id - The ID of the pledge being updated.
  * @param amount - The amount of the pledge.
- * @param currency - The currency of the pledge.
- * @param startDate - The start date of the pledge.
- * @param endDate - The end date of the pledge.
- * @returns The ID of the updated pledge.
+ * @returns The details of the updated pledge.
  */
 export const UPDATE_PLEDGE = gql`
-  mutation UpdateFundraisingCampaignPledge(
+  mutation UpdateFundCampaignPledge(
     $id: ID!
-    $amount: Float
-    $currency: Currency
-    $startDate: Date
-    $endDate: Date
-    $users: [ID!]
+    $amount: Int
   ) {
-    updateFundraisingCampaignPledge(
-      id: $id
-      data: {
-        users: $users
+    updateFundCampaignPledge(
+      input: {
+        id: $id
         amount: $amount
-        currency: $currency
-        startDate: $startDate
-        endDate: $endDate
       }
     ) {
-      _id
+      id
+      amount
+      note
+      campaign {
+        id
+        name
+      }
+      pledger {
+        id
+        name
+      }
     }
   }
 `;
@@ -77,8 +80,8 @@ export const UPDATE_PLEDGE = gql`
  */
 export const DELETE_PLEDGE = gql`
   mutation DeleteFundraisingCampaignPledge($id: ID!) {
-    removeFundraisingCampaignPledge(id: $id) {
-      _id
+    deleteFundCampaignPledge(input: { id: $id }) {
+      id
     }
   }
 `;

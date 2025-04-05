@@ -133,47 +133,87 @@ const fundCampaignPledge = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: { getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[] };
+    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
       ApolloQueryResult<{
-        getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
+        fundCampaign: InterfaceQueryFundCampaignsPledges[];
       }>
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
-    variables: { where: { id: fundCampaignId }, pledgeOrderBy: sortBy },
+    variables: {
+      input: { id: fundCampaignId },
+    },
   });
 
   const endDate = dayjs(
-    pledgeData?.getFundraisingCampaigns[0]?.endDate,
+    pledgeData?.fundCampaign?.endAt,
     'YYYY-MM-DD',
   ).toDate();
 
   const { pledges, totalPledged, fundName } = useMemo(() => {
     let totalPledged = 0;
-    const pledges =
-      pledgeData?.getFundraisingCampaigns[0].pledges.filter((pledge) => {
-        totalPledged += pledge.amount;
-        const search = searchTerm.toLowerCase();
-        return pledge.users.some((user) => {
-          const fullName = `${user.firstName} ${user.lastName}`;
-          return fullName.toLowerCase().includes(search);
-        });
-      }) ?? [];
-    const fundName =
-      pledgeData?.getFundraisingCampaigns[0].fundId.name ?? tCommon('Funds');
-    return { pledges, totalPledged, fundName };
-  }, [pledgeData, searchTerm]);
+    
+    const pledges = pledgeData?.fundCampaign?.pledges?.edges.map(edge => {
+      const amount = edge.node.amount || 0;
+      totalPledged += amount;
+      
+      // Ensure we have valid dates by using proper date parsing
+      const createdAt = edge.node.createdAt ? new Date(edge.node.createdAt) : new Date();
+      const campaignEnd = pledgeData.fundCampaign.endAt ? new Date(pledgeData.fundCampaign.endAt) : new Date();
+      
+      return {
+        id: edge.node.id,
+        amount: amount,
+        startDate: createdAt,
+        endDate: campaignEnd,
+        pledgeDate: createdAt,
+        users: [{
+          id: edge.node.pledger.id,
+          name: edge.node.pledger.name || '',
+          image: null
+        }],
+        currency: 'USD'
+      };
+    }) ?? [];
+
+    // Apply sorting after ensuring valid dates
+    const sortedPledges = [...pledges].sort((a, b) => {
+      switch (sortBy) {
+        case 'amount_ASC':
+          return a.amount - b.amount;
+        case 'amount_DESC':
+          return b.amount - a.amount;
+        case 'endDate_ASC':
+          return a.endDate.getTime() - b.endDate.getTime();
+        case 'endDate_DESC':
+          return b.endDate.getTime() - a.endDate.getTime();
+        default:
+          return 0;
+      }
+    });
+
+    // Apply search filter to sorted pledges
+    const filteredPledges = sortedPledges.filter((pledge) => {
+      const search = searchTerm.toLowerCase();
+      return pledge.users.some((user) => 
+        user.name.toLowerCase().includes(search)
+      );
+    });
+
+    const fundName = pledgeData?.fundCampaign?.name ?? tCommon('Funds');
+    return { pledges: filteredPledges, totalPledged, fundName };
+  }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
-    if (pledgeData) {
+    if (pledgeData?.fundCampaign) {
       setCampaignInfo({
-        name: pledgeData.getFundraisingCampaigns[0].name,
-        goal: pledgeData.getFundraisingCampaigns[0].fundingGoal,
-        startDate: pledgeData.getFundraisingCampaigns[0].startDate,
-        endDate: pledgeData.getFundraisingCampaigns[0].endDate,
-        currency: pledgeData.getFundraisingCampaigns[0].currency,
+        name: pledgeData.fundCampaign.name,
+        goal: pledgeData.fundCampaign.goalAmount ?? 0,
+        startDate: pledgeData.fundCampaign.startAt ?? new Date(),
+        endDate: pledgeData.fundCampaign.endAt ?? new Date(),
+        currency: pledgeData.fundCampaign.currencyCode ?? 'USD',
       });
     }
   }, [pledgeData]);
@@ -181,6 +221,7 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
+console.log("campaignInfo", campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -196,7 +237,7 @@ const fundCampaignPledge = (): JSX.Element => {
       setPledgeModalMode(mode);
       openModal(ModalState.SAME);
     },
-    [openModal],
+    [openModal],  // Removed unnecessary dependencies
   );
 
   const handleDeleteClick = useCallback(
@@ -214,6 +255,17 @@ const fundCampaignPledge = (): JSX.Element => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
   };
+
+  const isWithinCampaignDates = useMemo(() => {
+    if (!pledgeData?.fundCampaign) return false;
+    
+    const now = dayjs();
+    let start = dayjs(pledgeData.fundCampaign.startAt);
+    let end = dayjs(pledgeData.fundCampaign.endAt);
+
+  
+    return now.isAfter(start) && now.isBefore(end);
+  }, [pledgeData]);
 
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
@@ -258,16 +310,16 @@ const fundCampaignPledge = (): JSX.Element => {
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={user._id + '1'}
+                        key={user.id + '1'}
                         containerStyle={styles.imageContainerPledge}
                         avatarStyle={styles.TableImagePledge}
-                        name={user.firstName + ' ' + user.lastName}
-                        alt={user.firstName + ' ' + user.lastName}
+                        name={user.name}
+                        alt={user.name}
                       />
                     </div>
                   )}
-                  <span key={user._id + '2'}>
-                    {user.firstName + ' ' + user.lastName}
+                  <span key={user.id + '2'}>
+                    {user.name}
                   </span>
                 </div>
               ))}
@@ -286,8 +338,8 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
-      field: 'startDate',
-      headerName: 'Start Date',
+      field: 'pledgeDate',
+      headerName: 'Pledge Date',
       flex: 1,
       minWidth: 150,
       align: 'center',
@@ -295,20 +347,7 @@ const fundCampaignPledge = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.startDate).format('DD/MM/YYYY');
-      },
-    },
-    {
-      field: 'endDate',
-      headerName: 'End Date',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.endDate).format('DD/MM/YYYY');
+        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
       },
     },
     {
@@ -328,7 +367,7 @@ const fundCampaignPledge = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
+              params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.amount}
@@ -353,7 +392,7 @@ const fundCampaignPledge = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
+              params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -507,10 +546,10 @@ const fundCampaignPledge = (): JSX.Element => {
               onSortChange={(value) =>
                 setSortBy(
                   value as
-                    | 'amount_ASC'
-                    | 'amount_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
+                  | 'amount_ASC'
+                  | 'amount_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
                 )
               }
               dataTestIdPrefix="filter"
@@ -521,9 +560,10 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               className={styles.dropdown}
-              disabled={endDate < new Date()}
+              disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
+              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addPledge')}
@@ -535,7 +575,7 @@ const fundCampaignPledge = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -548,10 +588,11 @@ const fundCampaignPledge = (): JSX.Element => {
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
-          _id: pledge._id,
+          id: pledge.id,
           users: pledge.users,
           startDate: pledge.startDate,
           endDate: pledge.endDate,
+          pledgeDate: pledge.pledgeDate,
           amount: pledge.amount,
           currency: pledge.currency,
         }))}
@@ -566,7 +607,7 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.getFundraisingCampaigns[0].endDate as Date}
+        endDate={pledgeData?.fundCampaign?.endDate as Date}
         mode={pledgeModalMode}
       />
       {/* Delete Pledge ModalState */}
@@ -599,17 +640,17 @@ const fundCampaignPledge = (): JSX.Element => {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={user._id + '1'}
+                  key={user.id + '1'}
                   containerStyle={styles.imageContainerPledge}
                   avatarStyle={styles.TableImagePledge}
-                  name={user.firstName + ' ' + user.lastName}
-                  alt={user.firstName + ' ' + user.lastName}
+                  name={user.name}
+                  alt={user.name}
                   dataTestId={`extraAvatar${index + 1}`}
                 />
               </div>
             )}
-            <span key={user._id + '2'}>
-              {user.firstName + ' ' + user.lastName}
+            <span key={user.id + '2'}>
+              {user.name}
             </span>
           </div>
         ))}
