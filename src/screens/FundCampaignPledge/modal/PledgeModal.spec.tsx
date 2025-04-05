@@ -131,14 +131,16 @@ describe('PledgeModal', () => {
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
-    
+
     await waitFor(async () => {
-      const pledgerInput = within(screen.getByTestId('pledgerSelect')).getByRole('combobox');
+      const pledgerInput = within(
+        screen.getByTestId('pledgerSelect'),
+      ).getByRole('combobox');
       expect(pledgerInput.getAttribute('aria-label')).toBe('Pledgers');
-      
+
       const startDate = pledgeProps[1].pledge?.startDate;
       const endDate = pledgeProps[1].pledge?.endDate;
-      
+
       // Compare date strings directly
       expect(startDate).toBe('2024-01-01');
       expect(endDate).toBe('2024-01-10');
@@ -149,7 +151,7 @@ describe('PledgeModal', () => {
     renderPledgeModal(link1, pledgeProps[1]);
     const amountInput = screen.getByLabelText('Amount');
     expect(amountInput).toHaveAttribute('value', '100');
-    
+
     fireEvent.change(amountInput, { target: { value: '200' } });
     expect(amountInput).toHaveAttribute('value', '200');
   });
@@ -158,13 +160,13 @@ describe('PledgeModal', () => {
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
-    
+
     const amountInput = screen.getByLabelText('Amount');
-    
+
     await act(async () => {
       fireEvent.change(amountInput, { target: { value: '-10' } });
     });
-    
+
     await waitFor(() => {
       expect(amountInput).toHaveAttribute('value', '0'); // Should reset to 0 for negative values
     });
@@ -174,11 +176,11 @@ describe('PledgeModal', () => {
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
-    
+
     await waitFor(() => {
       const currencySelect = screen.getByLabelText('Currency');
       expect(currencySelect).toBeInTheDocument();
-      
+
       // In MUI Select, the disabled state is on the div with role="button"
       const selectElement = currencySelect.closest('.MuiSelect-select');
       expect(selectElement).toHaveClass('Mui-disabled');
@@ -217,7 +219,7 @@ describe('PledgeModal', () => {
 
   it('should update end date if start date is after current end date', () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    
+
     const endDateInput = screen.getByLabelText('End Date');
     // End date input is disabled, so we can't test date changes
     expect(endDateInput).toBeDisabled();
@@ -238,24 +240,24 @@ describe('PledgeModal', () => {
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[0]);
     });
-    
+
     await waitFor(() => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveAttribute('value', '0');
-      
+
       const currencySelect = screen.getByLabelText('Currency');
       expect(currencySelect.textContent).toContain('USD');
-      
+
       expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
     });
   });
 
   it('should enforce date constraints (start date before end date)', () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    
+
     const startDateInput = screen.getByLabelText('Start Date');
     const endDateInput = screen.getByLabelText('End Date');
-    
+
     // Both date inputs are disabled, so we can't test date constraints
     expect(startDateInput).toBeDisabled();
     expect(endDateInput).toBeDisabled();

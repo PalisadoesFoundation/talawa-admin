@@ -39,141 +39,141 @@ const EMPTY_MOCK = {
   request: {
     query: FUND_CAMPAIGN_PLEDGE,
     variables: {
-      input: { id: 'fundCampaignId' }
-    }
+      input: { id: 'fundCampaignId' },
+    },
   },
   result: {
     data: {
       fundCampaign: {
-        id: "1",
-        name: "Test Campaign",
-        startDate: "2024-01-01",
-        endDate: "2024-12-31",
-        currency: "USD",
+        id: '1',
+        name: 'Test Campaign',
+        startDate: '2024-01-01',
+        endDate: '2024-12-31',
+        currency: 'USD',
         fundingGoal: 1000,
         pledges: {
-          edges: []
-        }
-      }
-    }
-  }
+          edges: [],
+        },
+      },
+    },
+  },
 };
 
 const updatedMocks = {
   request: {
     query: FUND_CAMPAIGN_PLEDGE,
     variables: {
-      input: { id: 'fundCampaignId' }
-    }
+      input: { id: 'fundCampaignId' },
+    },
   },
   result: {
     data: {
       fundCampaign: {
-        id: "1",
-        name: "Test Campaign",
-        startAt: "2023-01-01T00:00:00Z",
-        endAt: "2024-12-31T23:59:59Z",
-        currency: "USD",
+        id: '1',
+        name: 'Test Campaign',
+        startAt: '2023-01-01T00:00:00Z',
+        endAt: '2024-12-31T23:59:59Z',
+        currency: 'USD',
         fundingGoal: 1000,
         pledges: {
           edges: [
             {
               node: {
-                id: "1",
+                id: '1',
                 amount: 100,
                 pledger: {
-                  id: "1",
-                  name: "John Doe",
-                  image: "img-url"
-                }
-              }
+                  id: '1',
+                  name: 'John Doe',
+                  image: 'img-url',
+                },
+              },
             },
             {
               node: {
-                id: "2",
+                id: '2',
                 amount: 200,
                 pledger: {
-                  id: "2",
-                  name: "Jane Doe",
-                  image: null
-                }
-              }
+                  id: '2',
+                  name: 'Jane Doe',
+                  image: null,
+                },
+              },
             },
             {
               node: {
-                id: "3",
+                id: '3',
                 amount: 150,
                 pledger: {
-                  id: "3",
-                  name: "John Doe3",
-                  image: "img-url3"
-                }
-              }
+                  id: '3',
+                  name: 'John Doe3',
+                  image: 'img-url3',
+                },
+              },
             },
             {
               node: {
-                id: "4",
+                id: '4',
                 amount: 175,
                 pledger: {
-                  id: "4",
-                  name: "John Doe4",
-                  image: null
-                }
-              }
-            }
-          ]
-        }
-      }
-    }
-  }
+                  id: '4',
+                  name: 'John Doe4',
+                  image: null,
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
 };
 
 const FUTURE_CAMPAIGN_MOCK = {
   request: {
     query: FUND_CAMPAIGN_PLEDGE,
     variables: {
-      input: { id: 'fundCampaignId' }
-    }
+      input: { id: 'fundCampaignId' },
+    },
   },
   result: {
     data: {
       fundCampaign: {
-        id: "1",
-        name: "Future Campaign",
-        startAt: "2025-03-31T05:53:45.871Z",
-        endAt: "2025-04-24T05:53:45.871Z",
-        currency: "USD",
+        id: '1',
+        name: 'Future Campaign',
+        startAt: '2025-03-31T05:53:45.871Z',
+        endAt: '2025-04-24T05:53:45.871Z',
+        currency: 'USD',
         fundingGoal: 1000,
         pledges: {
-          edges: []
-        }
-      }
-    }
-  }
+          edges: [],
+        },
+      },
+    },
+  },
 };
 
 const ACTIVE_CAMPAIGN_MOCK = {
   request: {
     query: FUND_CAMPAIGN_PLEDGE,
     variables: {
-      input: { id: 'fundCampaignId' }
-    }
+      input: { id: 'fundCampaignId' },
+    },
   },
   result: {
     data: {
       fundCampaign: {
-        id: "1",
-        name: "Active Campaign",
-        startAt: "2023-01-01T00:00:00Z",
-        endAt: "2024-12-31T23:59:59Z",
-        currency: "USD",
+        id: '1',
+        name: 'Active Campaign',
+        startAt: '2023-01-01T00:00:00Z',
+        endAt: '2024-12-31T23:59:59Z',
+        currency: 'USD',
         fundingGoal: 1000,
         pledges: {
-          edges: []
-        }
-      }
-    }
-  }
+          edges: [],
+        },
+      },
+    },
+  },
 };
 
 const link1 = new StaticMockLink([updatedMocks]);
@@ -332,7 +332,9 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Verify modal is closed
     await waitFor(() => {
-      expect(screen.queryByText(translations.editPledge)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(translations.editPledge),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -369,14 +371,14 @@ describe('Testing Campaign Pledge Screen', () => {
   it('should handle breadcrumb navigation correctly', async () => {
     const mockHistoryBack = vi.fn();
     const mockHistoryGo = vi.fn();
-    
+
     // Mock window.history
     Object.defineProperty(window, 'history', {
       value: {
         back: mockHistoryBack,
-        go: mockHistoryGo
+        go: mockHistoryGo,
       },
-      writable: true
+      writable: true,
     });
 
     renderFundCampaignPledge(link1);
@@ -388,12 +390,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Find and click breadcrumb links
     const breadcrumbLinks = screen.getAllByRole('button');
-    
+
     // Click campaign name link (goes back 2 steps)
     fireEvent.click(breadcrumbLinks[0]);
     expect(mockHistoryGo).toHaveBeenCalledWith(-2);
 
-    // Click fund name link (goes back 1 step) 
+    // Click fund name link (goes back 1 step)
     fireEvent.click(breadcrumbLinks[1]);
     expect(mockHistoryBack).toHaveBeenCalled();
   });
@@ -421,11 +423,11 @@ describe('Testing Campaign Pledge Screen', () => {
 
     await waitFor(() => {
       // Find image container
-      const imageContainer = screen.getByRole('img', { 
-        name: "John Doe"  // Using the alt text which should match the user name
+      const imageContainer = screen.getByRole('img', {
+        name: 'John Doe', // Using the alt text which should match the user name
       });
       expect(imageContainer).toBeInTheDocument();
-      
+
       // Check either real image or avatar is rendered
       if (imageContainer.getAttribute('src')?.startsWith('data:image/svg')) {
         // Avatar SVG is rendered
@@ -577,11 +579,14 @@ describe('Testing Campaign Pledge Screen', () => {
     vi.setSystemTime(new Date('2024-01-01')); // Set current date to known value
     const futureCampaignLink = new StaticMockLink([FUTURE_CAMPAIGN_MOCK]);
     renderFundCampaignPledge(futureCampaignLink);
-    
+
     await waitFor(() => {
       const addPledgeBtn = screen.getByTestId('addPledgeBtn');
       expect(addPledgeBtn).toBeDisabled();
-      expect(addPledgeBtn).toHaveAttribute('title', 'pledges.campaignNotActive');
+      expect(addPledgeBtn).toHaveAttribute(
+        'title',
+        'pledges.campaignNotActive',
+      );
     });
     vi.useRealTimers();
   });
@@ -590,7 +595,7 @@ describe('Testing Campaign Pledge Screen', () => {
     vi.setSystemTime(new Date('2024-06-15')); // Set current date within campaign period
     const activeCampaignLink = new StaticMockLink([ACTIVE_CAMPAIGN_MOCK]);
     renderFundCampaignPledge(activeCampaignLink);
-    
+
     await waitFor(() => {
       const addPledgeBtn = screen.getByTestId('addPledgeBtn');
       expect(addPledgeBtn).not.toBeDisabled();
@@ -601,25 +606,25 @@ describe('Testing Campaign Pledge Screen', () => {
 
   // it('Sort the Pledges list by endDate correctly', async () => {
   //   renderFundCampaignPledge(link1);
-    
+
   //   await screen.findByTestId('searchPledger');
-    
+
   //   // Test DESC sorting
   //   fireEvent.click(screen.getByTestId('filter'));
   //   await screen.findByTestId('endDate_DESC');
   //   fireEvent.click(screen.getByTestId('endDate_DESC'));
-    
+
   //   await waitFor(() => {
   //     const pledgeDates = screen.getAllByText(/\d{2}\/\d{2}\/\d{4}/);
   //     const dates = pledgeDates.map(el => new Date(el.textContent || ''));
   //     expect(dates[0].getTime()).toBeGreaterThanOrEqual(dates[1].getTime());
   //   });
-    
+
   //   // Test ASC sorting
   //   fireEvent.click(screen.getByTestId('filter'));
   //   await screen.findByTestId('endDate_ASC');
   //   fireEvent.click(screen.getByTestId('endDate_ASC'));
-    
+
   //   await waitFor(() => {
   //     const pledgeDates = screen.getAllByText(/\d{2}\/\d{2}\/\d{4}/);
   //     const dates = pledgeDates.map(el => new Date(el.textContent || ''));

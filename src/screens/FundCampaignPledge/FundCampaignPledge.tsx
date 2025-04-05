@@ -147,36 +147,40 @@ const fundCampaignPledge = (): JSX.Element => {
     },
   });
 
-  const endDate = dayjs(
-    pledgeData?.fundCampaign?.endAt,
-    'YYYY-MM-DD',
-  ).toDate();
+  const endDate = dayjs(pledgeData?.fundCampaign?.endAt, 'YYYY-MM-DD').toDate();
 
   const { pledges, totalPledged, fundName } = useMemo(() => {
     let totalPledged = 0;
-    
-    const pledges = pledgeData?.fundCampaign?.pledges?.edges.map(edge => {
-      const amount = edge.node.amount || 0;
-      totalPledged += amount;
-      
-      // Ensure we have valid dates by using proper date parsing
-      const createdAt = edge.node.createdAt ? new Date(edge.node.createdAt) : new Date();
-      const campaignEnd = pledgeData.fundCampaign.endAt ? new Date(pledgeData.fundCampaign.endAt) : new Date();
-      
-      return {
-        id: edge.node.id,
-        amount: amount,
-        startDate: createdAt,
-        endDate: campaignEnd,
-        pledgeDate: createdAt,
-        users: [{
-          id: edge.node.pledger.id,
-          name: edge.node.pledger.name || '',
-          image: null
-        }],
-        currency: 'USD'
-      };
-    }) ?? [];
+
+    const pledges =
+      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
+        const amount = edge.node.amount || 0;
+        totalPledged += amount;
+
+        // Ensure we have valid dates by using proper date parsing
+        const createdAt = edge.node.createdAt
+          ? new Date(edge.node.createdAt)
+          : new Date();
+        const campaignEnd = pledgeData.fundCampaign.endAt
+          ? new Date(pledgeData.fundCampaign.endAt)
+          : new Date();
+
+        return {
+          id: edge.node.id,
+          amount: amount,
+          startDate: createdAt,
+          endDate: campaignEnd,
+          pledgeDate: createdAt,
+          users: [
+            {
+              id: edge.node.pledger.id,
+              name: edge.node.pledger.name || '',
+              image: null,
+            },
+          ],
+          currency: 'USD',
+        };
+      }) ?? [];
 
     // Apply sorting after ensuring valid dates
     const sortedPledges = [...pledges].sort((a, b) => {
@@ -197,8 +201,8 @@ const fundCampaignPledge = (): JSX.Element => {
     // Apply search filter to sorted pledges
     const filteredPledges = sortedPledges.filter((pledge) => {
       const search = searchTerm.toLowerCase();
-      return pledge.users.some((user) => 
-        user.name.toLowerCase().includes(search)
+      return pledge.users.some((user) =>
+        user.name.toLowerCase().includes(search),
       );
     });
 
@@ -221,7 +225,7 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
-console.log("campaignInfo", campaignInfo);
+  console.log('campaignInfo', campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -237,7 +241,7 @@ console.log("campaignInfo", campaignInfo);
       setPledgeModalMode(mode);
       openModal(ModalState.SAME);
     },
-    [openModal],  // Removed unnecessary dependencies
+    [openModal], // Removed unnecessary dependencies
   );
 
   const handleDeleteClick = useCallback(
@@ -258,12 +262,11 @@ console.log("campaignInfo", campaignInfo);
 
   const isWithinCampaignDates = useMemo(() => {
     if (!pledgeData?.fundCampaign) return false;
-    
+
     const now = dayjs();
     let start = dayjs(pledgeData.fundCampaign.startAt);
     let end = dayjs(pledgeData.fundCampaign.endAt);
 
-  
     return now.isAfter(start) && now.isBefore(end);
   }, [pledgeData]);
 
@@ -318,9 +321,7 @@ console.log("campaignInfo", campaignInfo);
                       />
                     </div>
                   )}
-                  <span key={user.id + '2'}>
-                    {user.name}
-                  </span>
+                  <span key={user.id + '2'}>{user.name}</span>
                 </div>
               ))}
             {params.row.users.length > 2 && (
@@ -367,7 +368,7 @@ console.log("campaignInfo", campaignInfo);
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.amount}
@@ -392,7 +393,7 @@ console.log("campaignInfo", campaignInfo);
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -546,10 +547,10 @@ console.log("campaignInfo", campaignInfo);
               onSortChange={(value) =>
                 setSortBy(
                   value as
-                  | 'amount_ASC'
-                  | 'amount_DESC'
-                  | 'endDate_ASC'
-                  | 'endDate_DESC',
+                    | 'amount_ASC'
+                    | 'amount_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
                 )
               }
               dataTestIdPrefix="filter"
@@ -649,9 +650,7 @@ console.log("campaignInfo", campaignInfo);
                 />
               </div>
             )}
-            <span key={user.id + '2'}>
-              {user.name}
-            </span>
+            <span key={user.id + '2'}>{user.name}</span>
           </div>
         ))}
       </BasePopup>

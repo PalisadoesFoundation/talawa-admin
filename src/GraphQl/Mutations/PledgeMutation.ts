@@ -47,16 +47,8 @@ export const CREATE_PLEDGE = gql`
  * @returns The details of the updated pledge.
  */
 export const UPDATE_PLEDGE = gql`
-  mutation UpdateFundCampaignPledge(
-    $id: ID!
-    $amount: Int
-  ) {
-    updateFundCampaignPledge(
-      input: {
-        id: $id
-        amount: $amount
-      }
-    ) {
+  mutation UpdateFundCampaignPledge($id: ID!, $amount: Int) {
+    updateFundCampaignPledge(input: { id: $id, amount: $amount }) {
       id
       amount
       note

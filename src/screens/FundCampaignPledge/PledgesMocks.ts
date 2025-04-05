@@ -1,4 +1,7 @@
-import { CREATE_PLEDGE, UPDATE_PLEDGE } from '../UserPortal/Campaigns/PledgeModal';
+import {
+  CREATE_PLEDGE,
+  UPDATE_PLEDGE,
+} from '../UserPortal/Campaigns/PledgeModal';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';

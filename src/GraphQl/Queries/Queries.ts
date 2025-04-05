@@ -575,7 +575,6 @@ export const MEMBERS_LIST_PG = gql`
   }
 `;
 
-
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {

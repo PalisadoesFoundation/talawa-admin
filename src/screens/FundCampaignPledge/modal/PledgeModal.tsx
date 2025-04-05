@@ -95,7 +95,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   refetchPledge,
   mode,
 }) => {
-  
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
@@ -103,10 +102,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeUsers: pledge?.users ?? [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: pledge?.endDate ? dayjs(pledge.endDate).toDate() : new Date(),
-    pledgeStartDate: pledge?.startDate ? dayjs(pledge.startDate).toDate() : new Date(),
+    pledgeEndDate: pledge?.endDate
+      ? dayjs(pledge.endDate).toDate()
+      : new Date(),
+    pledgeStartDate: pledge?.startDate
+      ? dayjs(pledge.startDate).toDate()
+      : new Date(),
   });
-  
+
   const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
@@ -130,7 +133,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (memberData) {
       const members = memberData.organization.members.edges.map(
-        (edge: { node: InterfaceUserInfo }) => edge.node
+        (edge: { node: InterfaceUserInfo }) => edge.node,
       );
       setPledgers(members);
     }
@@ -145,7 +148,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         id: string;
         amount?: number;
       } = {
-        id: pledge?.id
+        id: pledge?.id,
       };
 
       if (pledgeAmount !== pledge?.amount) {
@@ -153,7 +156,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       try {
         await updatePledge({
-          variables
+          variables,
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -241,18 +244,18 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 `${member.name || ''}`
               }
               onChange={(_, newPledger): void => {
-                setFormState({ 
-                  ...formState, 
-                  pledgeUsers: newPledger ? [newPledger] : [] 
+                setFormState({
+                  ...formState,
+                  pledgeUsers: newPledger ? [newPledger] : [],
                 });
               }}
               renderInput={(params) => (
-                <TextField 
-                  {...params} 
+                <TextField
+                  {...params}
                   label="Pledgers"
                   inputProps={{
                     ...params.inputProps,
-                    'aria-label': 'Pledgers'
+                    'aria-label': 'Pledgers',
                   }}
                 />
               )}
@@ -301,7 +304,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={formState.pledgeCurrency || ''}
                 label="Currency"
                 inputProps={{
-                  'aria-label': 'Currency'
+                  'aria-label': 'Currency',
                 }}
                 disabled
                 className="MuiSelect-disabled"
@@ -325,12 +328,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 label={t('amount')}
                 variant="outlined"
                 type="number"
-                inputProps={{ 
+                inputProps={{
                   min: 1,
-                  'aria-label': 'Amount'
+                  'aria-label': 'Amount',
                 }}
                 error={formState.pledgeAmount < 1}
-                helperText={formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''}
+                helperText={
+                  formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''
+                }
                 className={styles.noOutlinePledge}
                 value={formState.pledgeAmount}
                 onChange={handleAmountChange}
