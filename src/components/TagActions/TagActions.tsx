@@ -22,11 +22,13 @@ import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 
+/** Interface for ancestor tag data structure */
 interface InterfaceUserTagsAncestorData {
   id: string;
   name: string;
 }
 
+/** Props interface for TagActions component */
 export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
@@ -37,6 +39,7 @@ export interface InterfaceTagActionsProps {
   currentTagId: string;
 }
 
+/** Interface for organization tags query response */
 interface InterfaceOrganizationTagsQuery {
   data?: {
     organizations: Array<{
@@ -65,6 +68,11 @@ interface InterfaceOrganizationTagsQuery {
   fetchMore: (options: any) => Promise<any>;
 }
 
+/**
+ * TagActions component handles the assignment and removal of tags
+ * @param props - Component props of type InterfaceTagActionsProps
+ * @returns React component that renders a modal for tag actions
+ */
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
   hideTagActionsModal,
