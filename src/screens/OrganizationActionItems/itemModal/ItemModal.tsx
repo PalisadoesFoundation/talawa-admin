@@ -366,7 +366,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
       <Modal.Header>
-        <p className={styles.titlemodal}>
+        <p className={styles.titlemodal} data-testid="modalTitle">
           {editMode ? t('updateActionItem') : t('createActionItem')}
         </p>
         <Button
@@ -459,34 +459,35 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                 </>
               )}
 
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  disablePortal
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="memberSelect"
-                  options={users.filter(
-                    (user: UserType) => user.__typename === 'User',
-                  )}
-                  value={assigneeUser}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions
-                  getOptionLabel={(user: UserType): string => user.name}
-                  onChange={(_, newAssignee): void => {
-                    handleFormChange('assigneeId', newAssignee?.id ?? '');
-                    setAssigneeUser(newAssignee);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('assignee')}
-                      data-testid="assigneeSelect"
-                      required
-                    />
-                  )}
-                />
-              </Form.Group>
+              <Autocomplete
+                disablePortal
+                className={`${styles.noOutline} w-100`}
+                data-testid="memberSelect"
+                options={users.filter(
+                  (user: UserType) => user.__typename === 'User',
+                )}
+                value={assigneeUser}
+                isOptionEqualToValue={(option, value) =>
+                  option.id === value?.id
+                }
+                filterSelectedOptions
+                getOptionLabel={(user: UserType): string => user.name}
+                onChange={(_, newAssignee): void => {
+                  handleFormChange('assigneeId', newAssignee?.id ?? '');
+                  setAssigneeUser(newAssignee);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={t('assignee')}
+                    required
+                    inputProps={{
+                      ...params.inputProps,
+                      'data-testid': 'assignee-input',
+                    }}
+                  />
+                )}
+              />
 
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
                 <DatePicker

@@ -1,6 +1,13 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
@@ -68,6 +75,26 @@ vi.mock('@mui/x-date-pickers', async () => {
   };
 });
 
+const sampleEventsData = {
+  eventsByOrganizationId: [
+    { id: 'event1', name: 'Test Event 1' },
+    { id: 'event2', name: 'Test Event 2' },
+  ],
+};
+
+// Create a mock for the events query
+const eventsMock: MockedResponse[] = [
+  {
+    request: {
+      query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+      variables: { input: { organizationId: 'org1' } },
+    },
+    result: {
+      data: sampleEventsData,
+    },
+  },
+];
+
 // --- Sample data ---
 const sampleActionItem = {
   id: '1',
@@ -89,6 +116,34 @@ const sampleActionItem = {
     name: 'Category 1',
   },
 };
+
+const updateAssigneeMock: MockedResponse = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: sampleActionItem.id,
+        preCompletionNotes: sampleActionItem.preCompletionNotes,
+        // Here we expect the assigneeId to be updated from 'user1' to 'user2'
+        assigneeId: 'user2',
+        isCompleted: sampleActionItem.isCompleted,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        ...sampleActionItem,
+        assigneeId: 'user2',
+      },
+    },
+  },
+};
+
+const combinedMocks: MockedResponse[] = [
+  // ... other required mocks for categories, users, etc.
+  updateAssigneeMock,
+];
 
 const sampleCategoryData = {
   actionItemCategoriesByOrganization: [
@@ -410,6 +465,10 @@ const mocks: MockedResponse[] = [
   },
 ];
 
+const assigneeMocks: MockedResponse[] = [
+  updateAssigneeMock,
+  // You might need to add other mocks (e.g., for categories, users, etc.) that ItemModal relies on.
+];
 // --- Global mocks for callbacks ---
 let hideMock = vi.fn();
 let refetchMock = vi.fn();
@@ -693,16 +752,6 @@ describe('ItemModal Component', () => {
       expect(screen.getByTestId('submitBtn')).toBeInTheDocument(),
     );
   });
-});
-
-describe('ItemModal Update Category Tests', () => {
-  beforeEach(() => {
-    hideMock = vi.fn();
-    refetchMock = vi.fn();
-    toast.success = vi.fn();
-    toast.warning = vi.fn();
-    toast.error = vi.fn();
-  });
 
   it('should update categoryId when a different category is selected', async () => {
     await act(async () => {
@@ -804,6 +853,235 @@ describe('ItemModal Update Category Tests', () => {
       expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
       expect(hideMock).toHaveBeenCalled();
       expect(refetchMock).toHaveBeenCalled();
+    });
+  });
+
+  it('renders event options when events data is provided', async () => {
+    render(
+      <MockedProvider mocks={eventsMock} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // The Autocomplete for events has data-testid "eventSelect"
+    // Since Material-UI's Autocomplete doesn't immediately render options,
+    // we simulate a mouseDown on the input inside the Autocomplete to open the dropdown.
+
+    const eventSelect = screen.getByTestId('eventSelect');
+    const eventInput = eventSelect.querySelector('input');
+    if (!eventInput) {
+      throw new Error('Autocomplete input not found in eventSelect');
+    }
+    fireEvent.mouseDown(eventInput);
+
+    // Wait for options to appear.
+    await waitFor(() => {
+      const options = screen.getAllByRole('option');
+      expect(options.length).toBeGreaterThan(0);
+      expect(options[0]).toHaveTextContent('Test Event 1');
+    });
+  });
+
+  it('renders event options when events data is provided', async () => {
+    render(
+      <MockedProvider mocks={eventsMock} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait until the Autocomplete for events is rendered.
+    const eventSelect = screen.getByTestId('eventSelect');
+
+    const eventInput = within(eventSelect).getByRole('combobox');
+
+    // Simulate opening the dropdown.
+    userEvent.click(eventInput);
+
+    // Wait for the options to appear.
+    await waitFor(() => {
+      const options = screen.getAllByRole('option');
+      expect(options.length).toBeGreaterThan(0);
+      expect(options[0]).toHaveTextContent('Test Event 1');
+    });
+  });
+
+  it('renders no event options when events data is empty', async () => {
+    // Create a mock that returns an empty events array.
+    const emptyEventsMock: MockedResponse[] = [
+      {
+        request: {
+          query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: {
+          data: { eventsByOrganizationId: [] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyEventsMock} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const eventSelect = screen.getByTestId('eventSelect');
+    const eventInput = within(eventSelect).getByRole('combobox');
+    userEvent.click(eventInput);
+
+    await waitFor(() => {
+      const options = screen.queryAllByRole('option');
+      expect(options.length).toBe(0);
+    });
+  });
+
+  it('handles both defined and undefined events data', async () => {
+    // First test with valid events data
+    render(
+      <MockedProvider mocks={eventsMock} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the modal header to appear with the expected text.
+    await waitFor(() => {
+      expect(screen.getByTestId('modalTitle')).toHaveTextContent(
+        'createActionItem',
+      );
+    });
+
+    // Now test with undefined events data.
+    const emptyEventsMock: MockedResponse[] = [
+      {
+        request: {
+          query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: {
+          data: { eventsByOrganizationId: undefined },
+        },
+      },
+      // Include the other necessary mocks that ItemModal requires.
+      ...mocks.filter(
+        (mock) => mock.request.query !== POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+      ),
+    ];
+
+    // Render the component again with empty events data.
+    render(
+      <MockedProvider mocks={emptyEventsMock} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={null}
+            editMode={false}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const modalTitles = screen.getAllByTestId('modalTitle');
+      expect(modalTitles[0]).toHaveTextContent('createActionItem');
+    });
+  });
+  // Test for error handling in updateActionItem
+  it('handles errors when updating action item', async () => {
+    const errorMessage = 'Update failed';
+    const updateErrorMock = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            preCompletionNotes: 'Updated notes',
+            isCompleted: false,
+          },
+        },
+      },
+      error: new Error(errorMessage),
+    };
+
+    const errorMocks = [
+      ...mocks.filter(
+        (mock) => mock.request.query !== UPDATE_ACTION_ITEM_MUTATION,
+      ),
+      updateErrorMock,
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Update preCompletionNotes to trigger a change
+    const preCompletionField = screen.getByLabelText('preCompletionNotes');
+    fireEvent.change(preCompletionField, {
+      target: { value: 'Updated notes' },
+    });
+
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    // Wait for error toast
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(errorMessage);
     });
   });
 });
