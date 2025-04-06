@@ -27,7 +27,6 @@ import {
   DELETE_USER_MOCK,
 } from './MemberDetailMocks';
 import type { ApolloLink } from '@apollo/client';
-import { validatePassword } from 'utils/passwordValidator';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -155,8 +154,6 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/name/i)).toBeTruthy();
     expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
     expect(screen.getAllByText(/Gender/i)).toBeTruthy();
-    expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
-    expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
     expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
   });
 
@@ -539,32 +536,6 @@ describe('MemberDetail', () => {
     );
   });
 
-  test('plugin creation checkbox should toggle correctly', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    // Ensure the component is loaded
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-
-    // Get the checkbox
-    const pluginCreationCheckbox = screen.getByTestId('pluginCreationForm');
-
-    // Check initial state (assuming it starts unchecked)
-    expect(pluginCreationCheckbox).not.toBeChecked();
-
-    // Click the checkbox to check it
-    await userEvent.click(pluginCreationCheckbox);
-
-    // Verify it's now checked
-    expect(pluginCreationCheckbox).toBeChecked();
-
-    // Click again to uncheck
-    await userEvent.click(pluginCreationCheckbox);
-
-    // Verify it's unchecked again
-    expect(pluginCreationCheckbox).not.toBeChecked();
-  });
-
   test('admin approved checkbox should toggle correctly', async () => {
     renderMemberDetailScreen(link1);
     await wait();
@@ -602,15 +573,12 @@ describe('MemberDetail', () => {
     expect(screen.queryByTestId('resetChangesBtn')).not.toBeInTheDocument();
 
     // Get the checkboxes
-    const pluginCreationCheckbox = screen.getByTestId('pluginCreationForm');
     const adminApprovedCheckbox = screen.getByTestId('AdminApprovedForm');
 
     // Change checkbox values to trigger form state update
-    await userEvent.click(pluginCreationCheckbox);
     await userEvent.click(adminApprovedCheckbox);
 
     // Verify checkboxes are checked
-    expect(pluginCreationCheckbox).toBeChecked();
     expect(adminApprovedCheckbox).toBeChecked();
 
     // The reset button should be visible now since the form state has changed
@@ -623,7 +591,6 @@ describe('MemberDetail', () => {
 
     // After reset, checkboxes should return to initial state
     await waitFor(() => {
-      expect(pluginCreationCheckbox).not.toBeChecked();
       expect(adminApprovedCheckbox).not.toBeChecked();
     });
   });
@@ -942,39 +909,6 @@ describe('MemberDetail', () => {
     );
   });
 
-  test('renders language dropdown and handles selection', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    expect(
-      screen.getByTestId('naturallanguagecode-dropdown-container'),
-    ).toBeInTheDocument();
-
-    // Find the dropdown by the fieldName from DynamicDropDown props
-    const languageStatus = screen.getByTestId(
-      'naturallanguagecode-dropdown-btn',
-    );
-    expect(languageStatus).toBeInTheDocument();
-
-    // Test initial state
-    expect(languageStatus).toHaveTextContent('English'); // Or whatever your initial value is
-
-    // Click the dropdown button to open it
-    await userEvent.click(languageStatus);
-
-    expect(
-      screen.getByTestId('naturallanguagecode-dropdown-menu'),
-    ).toBeInTheDocument();
-
-    // Find and click one of the options=
-    // Select a different language option than the initial one
-    const option = screen.getByTestId('change-naturallanguagecode-btn-fr'); // Or another available language
-    await userEvent.click(option);
-
-    // Verify the selection was made
-    expect(languageStatus).toHaveTextContent('French'); // Should match the selected language
-  });
-
   test('handles phone number input formatting', async () => {
     renderMemberDetailScreen(link1);
     await wait();
@@ -1233,7 +1167,7 @@ describe('MemberDetail', () => {
 
     await waitFor(() => {
       // Verify validation was called with correct argument
-      expect(validatePassword).toHaveBeenCalledWith('short');
+      expect(passwordValidator.validatePassword).toHaveBeenCalledWith('short');
       // Verify error toast
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
@@ -1241,14 +1175,16 @@ describe('MemberDetail', () => {
     });
 
     // Reset mocks between test cases
-    vi.mocked(validatePassword).mockClear();
+    vi.mocked(passwordValidator.validatePassword).mockClear();
     toastErrorSpy.mockClear();
 
     // Case 2: Valid password (8 characters)
     fireEvent.change(passwordInput, { target: { value: 'validPass' } });
 
     await waitFor(() => {
-      expect(validatePassword).toHaveBeenCalledWith('validPass');
+      expect(passwordValidator.validatePassword).toHaveBeenCalledWith(
+        'validPass',
+      );
     });
   });
 

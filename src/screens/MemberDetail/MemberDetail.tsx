@@ -33,7 +33,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import {
@@ -112,7 +112,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     state: '',
     workPhoneNumber: '',
     adminApproved: false,
-    pluginCreationAllowed: false,
   });
 
   // Mutation to delete the user
@@ -262,7 +261,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       workPhoneNumber: formState.workPhoneNumber,
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
       adminApproved: formState.adminApproved,
-      pluginCreationAllowed: formState.pluginCreationAllowed,
     };
 
     const input = removeEmptyFields(data);
@@ -317,7 +315,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         className={`bg-white gap-4 ${styles.allRound} ${styles.navigationBox}`}
       >
         {navItems.map(({ to, icon, label }) => (
-          <div className={`bg-white gap-4 ${styles.allRound}`}>
+          <div key={to} className={`bg-white gap-4 ${styles.allRound}`}>
             <Link to={to} key={to}>
               <button
                 type="button"
@@ -355,92 +353,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
-              <Col lg={12} className="mb-2">
-                <div className="text-center mb-3">
-                  <div className="position-relative d-inline-block">
-                    {formState?.avatarURL ? (
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          padding: 0,
-                        }}
-                        aria-label="Edit profile picture"
-                        data-testid="profile-picture"
-                      >
-                        <img
-                          className="rounded-circle"
-                          style={{
-                            width: '60px',
-                            height: '60px',
-                            objectFit: 'cover',
-                          }}
-                          src={
-                            sanitizeAvatars(
-                              selectedAvatar,
-                              formState.avatarURL,
-                            ) || ''
-                          }
-                          alt="User"
-                          crossOrigin="anonymous" // to avoid Cors
-                        />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => fileInputRef.current?.click()}
-                        data-testid="uploadImageBtn"
-                        style={{
-                          cursor: 'pointer',
-                          fontSize: '1.2rem',
-                          background: 'none',
-                          border: 'none',
-                          padding: '0px',
-                        }}
-                        title="Edit profile picture"
-                        type="button"
-                        aria-label="Edit profile picture"
-                        tabIndex={0}
-                      >
-                        <Avatar
-                          name={formState.name}
-                          alt="User Image"
-                          size={60}
-                          radius={150}
-                        />
-                      </button>
-                    )}
-
-                    {/** Removed Logo for file upload **/}
-                    {/* <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
-                      onClick={() => fileInputRef.current?.click()}
-                      data-testid="uploadImageBtn"
-                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                      title="Edit profile picture"
-                      role="button"
-                      aria-label="Edit profile picture"
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && fileInputRef.current?.click()
-                      }
-                    /> */}
-                  </div>
-                </div>
-                <Form.Control
-                  accept="image/*"
-                  id="postphoto"
-                  name="photo"
-                  type="file"
-                  className={styles.cardControl}
-                  data-testid="fileInput"
-                  multiple={false}
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  style={{ display: 'none' }}
-                />
-              </Col>
               <Row className="g-3">
                 <Col md={9}>
                   <label htmlFor="name" className="form-label">
@@ -580,39 +492,77 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
         <Col lg={4}>
           <Card className={`${styles.contact} ${styles.allRound}`}>
-            <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.headerStyle}`}
-            >
-              <h3 className="m-0" data-testid="eventsAttended-title">
-                {t('personalDetailsHeading')}
-              </h3>
-            </Card.Header>
-            <Card.Body
-              id="tagsAssignedScrollableDiv"
-              data-testid="tagsAssignedScrollableDiv"
-              className={`${styles.cardBody} pe-0`}
-            >
-              <h3>User Information</h3>
-              <p>
-                This section provides a quick overview of the user's key
-                details, including their name, location, and contact number.
-                These details are displayed in a read-only format to ensure
-                clarity and prevent unintended modifications.
-              </p>
-
-              <div className={styles.profileDetailItem}>
-                <span>{tCommon('name')}:</span>
-                <span>{formState.name}</span>
+            <Col lg={12} className="mt-3">
+              <div className="text-center mb-3">
+                <div className="position-relative d-inline-block">
+                  {formState?.avatarURL ? (
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                      }}
+                      aria-label="Edit profile picture"
+                      data-testid="profile-picture"
+                    >
+                      <img
+                        className="rounded-circle"
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          objectFit: 'cover',
+                        }}
+                        src={
+                          sanitizeAvatars(
+                            selectedAvatar,
+                            formState.avatarURL,
+                          ) || ''
+                        }
+                        alt="User"
+                        crossOrigin="anonymous" // to avoid Cors
+                      />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      data-testid="uploadImageBtn"
+                      style={{
+                        cursor: 'pointer',
+                        fontSize: '1.2rem',
+                        background: 'none',
+                        border: 'none',
+                        padding: '0px',
+                      }}
+                      title="Edit profile picture"
+                      type="button"
+                      aria-label="Edit profile picture"
+                      tabIndex={0}
+                    >
+                      <Avatar
+                        name={formState.name}
+                        alt="User Image"
+                        size={60}
+                        radius={150}
+                      />
+                    </button>
+                  )}
+                </div>
               </div>
-              <div>
-                <span>{tCommon('location')}:</span>
-                <span>{formState.city}</span>
-              </div>
-              <div>
-                <span>{tCommon('phone')}:</span>
-                <span>{formState.workPhoneNumber}</span>
-              </div>
-            </Card.Body>
+              <Form.Control
+                accept="image/*"
+                id="postphoto"
+                name="photo"
+                type="file"
+                className={styles.cardControl}
+                data-testid="fileInput"
+                multiple={false}
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+              />
+            </Col>
           </Card>
 
           <Card className={`${styles.contact} ${styles.allRound} mt-5`}>
@@ -629,24 +579,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               className={`${styles.cardBody} pe-0`}
             >
               <Row className="mb-3 gap-2">
-                <Col md={12} className="mb-3">
-                  <Form.Check
-                    checked={!!formState.pluginCreationAllowed}
-                    className="gap-3 d-flex align-items-center"
-                    type="checkbox"
-                    onChange={(e) => {
-                      setFormState((prevState) => ({
-                        ...prevState,
-                        pluginCreationAllowed: e.target.checked,
-                      }));
-                      setisUpdated(true);
-                    }}
-                    id="pluginCreationAllowed"
-                    label={t('pluginCreationAllowed')}
-                    style={{ color: '#495057' }}
-                    data-testid="pluginCreationForm"
-                  />
-                </Col>
                 <Col md={12}>
                   <Form.Check
                     checked={!!formState.adminApproved}
@@ -667,26 +599,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
               </Row>
               <Row className="mt-4">
-                <Col md={5}>
-                  <label
-                    htmlFor="language"
-                    className="form-label"
-                    style={{ color: '#495057' }}
-                  >
-                    {t('chooseLanguage')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={languageEnum}
-                    fieldName="naturalLanguageCode"
-                    handleChange={(e) =>
-                      handleFieldChange('naturalLanguageCode', e.target.value)
-                    }
-                  />
-                </Col>
-
-                <Col md={7}>
+                <Col md={12}>
                   <label
                     htmlFor="deleteUserButton"
                     className="form-label"
@@ -744,7 +657,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Modal>
 
           {isUpdated && (
-            <Row className="mt-4">
+            <Row
+              className="mt-4 ml-4"
+              style={{ position: 'absolute', marginLeft: '10px' }}
+            >
               <Col md={12}>
                 <Card.Footer className="bg-inherit border-top-0 d-flex justify-content-center gap-2 py-3 px-2">
                   <Button
