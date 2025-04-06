@@ -1021,12 +1021,21 @@ export interface InterfaceQueryFundCampaignsPledges {
     name: string;
   };
   name: string;
-  fundingGoal: number;
-  currency: string;
-  startDate: Date;
-  endDate: Date;
+  goalAmount: number;
+  currencyCode: string;
+  startAt: Date;
+  endAt: Date;
   pledges: InterfacePledgeInfo[];
 }
+
+export interface InterfaceCampaignInfoPG {
+  name: string;
+  goal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
+
 export interface InterfaceFundInfo {
   id: string;
   name: string;
@@ -1063,8 +1072,8 @@ export interface InterfaceCampaignInfo {
   currencyCode: string;
 }
 export interface InterfacePledgeInfo {
-  _id: string;
-  campaign?: { _id: string; name: string; endDate: Date };
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
