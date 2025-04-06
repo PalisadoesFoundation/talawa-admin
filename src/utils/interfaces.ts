@@ -846,7 +846,7 @@ export interface InterfaceOrganizationPg {
 }
 
 export interface InterfaceQueryOrganizationListObject {
-  _id: string;
+  id: string;
   image: string | null;
   creator: {
     firstName: string;
@@ -854,13 +854,15 @@ export interface InterfaceQueryOrganizationListObject {
   };
   name: string;
   members: {
-    _id: string;
+    id: string;
   }[];
   admins: {
-    _id: string;
+    id: string;
   }[];
   createdAt: string;
-  address: InterfaceAddress;
+  city: string;
+  state: string;
+  countryCode: string;
 }
 
 export interface InterfacePostForm {

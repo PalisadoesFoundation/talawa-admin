@@ -6,7 +6,10 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/SuperAdminScreen/SuperAdminScreen.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L43)
+Defined in: [src/components/SuperAdminScreen/SuperAdminScreen.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SuperAdminScreen/SuperAdminScreen.tsx#L15)
+
+The SuperAdminScreen component manages the layout for the Super Admin screen,
+including handling the sidebar visibility and page title based on the current route.
 
 ## Returns
 

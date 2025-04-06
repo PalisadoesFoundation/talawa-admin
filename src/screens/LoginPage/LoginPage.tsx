@@ -71,7 +71,7 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST,
+  ORGANIZATION_LIST_BY_SEARCH,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -88,6 +88,7 @@ import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
 const loginPage = (): JSX.Element => {
+  const hasRendered = useRef(false);
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -182,25 +183,40 @@ const loginPage = (): JSX.Element => {
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST);
-  const { startSession, extendSession } = useSession();
+
+  const [fetchOrganizations, { loading: orgLoading }] = useLazyQuery(
+    ORGANIZATION_LIST_BY_SEARCH,
+    {
+      fetchPolicy: 'no-cache',
+      onCompleted: (orgData) => {
+        if (orgData) {
+          const options = orgData.organizations.map(
+            (org: InterfaceQueryOrganizationListObject) => {
+              const tempObj: { label: string; id: string } | null = {} as {
+                label: string;
+                id: string;
+              };
+              tempObj['label'] =
+                `${org.name} (${org.city},${org.state},${org.countryCode})`;
+              tempObj['id'] = org.id;
+              return tempObj;
+            },
+          );
+          setOrganizations(options);
+        }
+      },
+    },
+  );
+
+  // This useEffect ensure initial Org-search with "" empty string
   useEffect(() => {
-    if (orgData) {
-      const options = orgData.organizations.map(
-        (org: InterfaceQueryOrganizationListObject) => {
-          const tempObj: { label: string; id: string } | null = {} as {
-            label: string;
-            id: string;
-          };
-          tempObj['label'] =
-            `${org.name}(${org.address?.city},${org.address?.state},${org.address?.countryCode})`;
-          tempObj['id'] = org._id;
-          return tempObj;
-        },
-      );
-      setOrganizations(options);
+    if (!hasRendered.current) {
+      hasRendered.current = true;
+      fetchOrganizations({ variables: { filter: '' } });
     }
-  }, [orgData]);
+  }, []);
+
+  const { startSession, extendSession } = useSession();
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -240,12 +256,18 @@ const loginPage = (): JSX.Element => {
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const { signName, signEmail, signPassword, cPassword } = signformState;
+    const { signName, signEmail, signPassword, cPassword, signOrg } =
+      signformState;
 
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
     if (!isVerified) {
       toast.error(t('Please_check_the_captcha') as string);
+      return;
+    }
+
+    if (!signOrg) {
+      toast.error(t('selectOrg') as string);
       return;
     }
 
@@ -279,6 +301,7 @@ const loginPage = (): JSX.Element => {
               name: signName,
               email: signEmail,
               password: signPassword,
+              signOrg: signOrg,
             },
           });
 
@@ -848,8 +871,12 @@ const loginPage = (): JSX.Element => {
                     <Form.Label>{t('selectOrg')}</Form.Label>
                     <div className="position-relative">
                       <Autocomplete
+                        loading={orgLoading}
                         disablePortal
                         data-testid="selectOrg"
+                        onInputChange={(event, value) => {
+                          fetchOrganizations({ variables: { filter: value } });
+                        }}
                         onChange={(
                           event,
                           value: { label: string; id: string } | null,

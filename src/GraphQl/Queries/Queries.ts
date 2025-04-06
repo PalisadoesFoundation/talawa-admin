@@ -59,6 +59,19 @@ export const ORGANIZATION_LIST = gql`
   }
 `;
 
+// Query to get Org-list based on search
+export const ORGANIZATION_LIST_BY_SEARCH = gql`
+  query Organizations($filter: String) {
+    organizations(filter: $filter) {
+      id
+      name
+      city
+      state
+      countryCode
+    }
+  }
+`;
+
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $first: Int!) {
     user(input: { id: $id }) {
