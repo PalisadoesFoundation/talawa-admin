@@ -409,62 +409,121 @@ describe('OrgActionItemCategories Component', () => {
     });
   });
 
-  describe('CreatorNameCell Component', () => {
-    it('renders "Loading..." when the query is loading', () => {
-      const mocks: MockedResponse[] = [
-        {
-          request: {
-            query: GET_USER,
-            variables: { input: { id: testCreatorId } },
-          },
-          // No result provided: stays loading.
+  it('renders "Loading..." when the query is loading', () => {
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: GET_USER,
+          variables: { input: { id: testCreatorId } },
         },
-      ];
+        // No result provided: stays loading.
+      },
+    ];
 
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <CreatorNameCell creatorId={testCreatorId} />
-        </MockedProvider>,
-      );
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatorNameCell creatorId={testCreatorId} />
+      </MockedProvider>,
+    );
 
-      // Now query by the test id
-      expect(screen.getByTestId('loading-text')).toBeInTheDocument();
+    // Now query by the test id
+    expect(screen.getByTestId('loading-text')).toBeInTheDocument();
+  });
+
+  it('renders creatorId when query returns error', async () => {
+    render(
+      <MockedProvider mocks={creatorNameMocks.error} addTypename={false}>
+        <CreatorNameCell creatorId="errorUser" />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('errorUser')).toBeInTheDocument();
+    });
+  });
+
+  it('renders creatorId when query returns null/undefined data', async () => {
+    render(
+      <MockedProvider mocks={creatorNameMocks.nullData} addTypename={false}>
+        <CreatorNameCell creatorId="nullDataUser" />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('nullDataUser')).toBeInTheDocument();
+    });
+  });
+
+  it('renders user name when query is successful', async () => {
+    render(
+      <MockedProvider mocks={creatorNameMocks.success} addTypename={false}>
+        <CreatorNameCell creatorId="successUser" />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User Name')).toBeInTheDocument();
+    });
+  });
+  // New test for error branch: When query fails (catError)
+  it('renders error message if query fails', async () => {
+    const errorMocks: MockedResponse[] = [
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        error: new Error('Network Error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(screen.getByText(/Network Error/)).toBeInTheDocument();
+    });
+  });
+
+  // New test for modal close functionality (covering closeModal)
+  it('closes modal when the close button is clicked', async () => {
+    // Render the component with success mocks so modal can open
+    render(
+      <MockedProvider
+        mocks={[...mockActionCategoriesSuccess, ...mockGetUserNameSuccess]}
+        addTypename={false}
+      >
+        <OrgActionItemCategories orgId="org1" />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Category One')).toBeInTheDocument();
     });
 
-    it('renders creatorId when query returns error', async () => {
-      render(
-        <MockedProvider mocks={creatorNameMocks.error} addTypename={false}>
-          <CreatorNameCell creatorId="errorUser" />
-        </MockedProvider>,
-      );
+    // Open the modal by clicking the create button.
+    const createBtn = screen.getByTestId('createActionItemCategoryBtn');
+    fireEvent.click(createBtn);
 
-      await waitFor(() => {
-        expect(screen.getByText('errorUser')).toBeInTheDocument();
-      });
+    // Wait for modal to appear
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('actionItemCategoryModalCloseBtn'),
+      ).toBeInTheDocument();
     });
 
-    it('renders creatorId when query returns null/undefined data', async () => {
-      render(
-        <MockedProvider mocks={creatorNameMocks.nullData} addTypename={false}>
-          <CreatorNameCell creatorId="nullDataUser" />
-        </MockedProvider>,
-      );
+    // Click the modal close button
+    fireEvent.click(screen.getByTestId('actionItemCategoryModalCloseBtn'));
 
-      await waitFor(() => {
-        expect(screen.getByText('nullDataUser')).toBeInTheDocument();
-      });
-    });
-
-    it('renders user name when query is successful', async () => {
-      render(
-        <MockedProvider mocks={creatorNameMocks.success} addTypename={false}>
-          <CreatorNameCell creatorId="successUser" />
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText('Test User Name')).toBeInTheDocument();
-      });
+    // Wait for the modal to disappear
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
+      ).not.toBeInTheDocument();
     });
   });
 });
