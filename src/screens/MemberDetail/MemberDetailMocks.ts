@@ -155,7 +155,7 @@ export const UPDATE_MOCK = [
       query: UPDATE_CURRENT_USER_MUTATION,
       variables: {
         input: {
-          name: 'Bandhan Majumder',
+          name: 'New Name',
         },
       },
     },
@@ -179,7 +179,7 @@ export const UPDATE_MOCK = [
           isEmailAddressVerified: true,
           maritalStatus: null,
           mobilePhoneNumber: '',
-          name: 'Bandhan Majumder',
+          name: 'New Name',
           natalSex: null,
           naturalLanguageCode: null,
           postalCode: '',
