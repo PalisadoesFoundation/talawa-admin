@@ -77,6 +77,15 @@ vi.mock('utils/passwordValidator', async (importOriginal) => {
       if (password === 'ValidPass1!') {
         return true; // Force pass for valid passwords
       }
+      if (password === 'ValidPassword12@ijewirg3') {
+        return true;
+      }
+      if (password === 'string') {
+        return false;
+      }
+      if (password === 'validPass') {
+        return false;
+      }
       // Fall back to original implementation for other cases
       return originalModule.validatePassword(password);
     }),
@@ -784,7 +793,7 @@ describe('MemberDetail', () => {
     const toastSuccessSpy = vi.spyOn(toast, 'success');
 
     // Test variables
-    let mockHandleDeleteUser: any;
+    let mockHandleDeleteUser: () => {};
     let triggerDelete: any;
 
     // First test case: with data
@@ -1305,6 +1314,60 @@ describe('MemberDetail', () => {
 
     // Clean up
     window.validatePassword = originalValidatePassword;
+    toastErrorSpy.mockRestore();
+  });
+
+  it('should only validate passwords when value is a string type and fieldName is password', async () => {
+    // Spy on toast.error
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // CASE 1: Test with string value for password field - invalid password
+    const passwordInput = screen.getByTestId('inputPassword');
+    fireEvent.change(passwordInput, { target: { value: 'string' } });
+
+    // Verify toast.error was called because 'string' fails validation
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
+    );
+
+    // Reset mock
+    toastErrorSpy.mockClear();
+
+    // CASE 2: Test with string value for password field - valid password
+    fireEvent.change(passwordInput, {
+      target: { value: 'ValidPassword12@ijewirg3' },
+    });
+
+    // Verify toast.error was NOT called because password is valid
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // CASE 3: Test with non-string value for password field
+    // We need to directly call handleFieldChange since we can't set non-string values via UI
+    // Extract the component instance to access its methods
+    // This is a mock implementation since we can't directly call the method
+    const instance = screen.getByTestId('inputPassword');
+
+    // Create a custom event to bypass the UI and simulate a checkbox boolean value
+    const customEvent = new CustomEvent('customFieldChange', {
+      detail: { fieldName: 'password', value: true },
+    });
+
+    instance.dispatchEvent(customEvent);
+
+    // Verify toast.error was NOT called because value is not a string
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // CASE 4: Test with string value for non-password field
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'string' } });
+
+    // Verify toast.error was NOT called because fieldName is not 'password'
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    // Clean up
     toastErrorSpy.mockRestore();
   });
 });

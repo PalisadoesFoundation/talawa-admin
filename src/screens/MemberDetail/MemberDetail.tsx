@@ -316,8 +316,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       <div
         className={`bg-white gap-4 ${styles.allRound} ${styles.navigationBox}`}
       >
-        <div className={`bg-white gap-4 ${styles.allRound}`}>
-          {navItems.map(({ to, icon, label }) => (
+        {navItems.map(({ to, icon, label }) => (
+          <div className={`bg-white gap-4 ${styles.allRound}`}>
             <Link to={to} key={to}>
               <button
                 type="button"
@@ -332,8 +332,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </h3>
               </button>
             </Link>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
       <Row className="g-4 mt-1">
         <Col md={8}>
