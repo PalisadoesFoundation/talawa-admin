@@ -14,6 +14,7 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
+import * as passwordValidator from 'utils/passwordValidator';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
@@ -63,18 +64,24 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('utils/passwordValidator', () => ({
-  validatePassword: vi.fn((password: string) => {
-    const minLength = password.length >= 8;
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    return (
-      minLength && hasSpecialChar && hasNumber && hasUpperCase && hasLowerCase
-    );
-  }),
-}));
+// Mock the module but keep the original implementation
+vi.mock('utils/passwordValidator', async (importOriginal) => {
+  const originalModule = await importOriginal<typeof passwordValidator>();
+  return {
+    ...originalModule, // Keep original exports
+    validatePassword: vi.fn((password: string) => {
+      // Custom mock logic for specific cases
+      if (password === 'short') {
+        return false; // Force fail for short passwords
+      }
+      if (password === 'ValidPass1!') {
+        return true; // Force pass for valid passwords
+      }
+      // Fall back to original implementation for other cases
+      return originalModule.validatePassword(password);
+    }),
+  };
+});
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
