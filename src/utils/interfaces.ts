@@ -331,8 +331,9 @@ export interface InterfaceCurrentUserTypePG {
 }
 
 export interface InterfaceUserInfo {
-  id: string;
-  name: string;
+  _id: string;
+  firstName: string;
+  lastName: string;
   image?: string | null;
 }
 
@@ -1020,21 +1021,12 @@ export interface InterfaceQueryFundCampaignsPledges {
     name: string;
   };
   name: string;
-  goalAmount: number;
-  currencyCode: string;
-  startAt: Date;
-  endAt: Date;
-  pledges: InterfacePledgeInfo[];
-}
-
-export interface InterfaceCampaignInfoPG {
-  name: string;
-  goal: number;
+  fundingGoal: number;
+  currency: string;
   startDate: Date;
   endDate: Date;
-  currency: string;
+  pledges: InterfacePledgeInfo[];
 }
-
 export interface InterfaceFundInfo {
   id: string;
   name: string;
@@ -1071,8 +1063,8 @@ export interface InterfaceCampaignInfo {
   currencyCode: string;
 }
 export interface InterfacePledgeInfo {
-  id: string;
-  campaign?: { id: string; name: string; endDate: Date };
+  _id: string;
+  campaign?: { _id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
