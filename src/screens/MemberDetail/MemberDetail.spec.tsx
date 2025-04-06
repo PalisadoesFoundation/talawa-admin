@@ -48,10 +48,9 @@ Object.defineProperty(window, 'location', {
   },
   writable: true,
 });
-const passwordUtils = { validatePassword: passwordValidator.validatePassword };
 
 // Now spy on the function in the object
-const validatePasswordSpy = vi.spyOn(passwordUtils, 'validatePassword');
+const validatePasswordSpy = vi.spyOn(passwordValidator, 'validatePassword');
 const toastErrorSpy = vi.spyOn(toast, 'error');
 
 async function wait(ms = 500): Promise<void> {
@@ -110,16 +109,10 @@ vi.mock('utils/passwordValidator', async (importOriginal) => {
       if (password === 'short') {
         return false; // Force fail for short passwords
       }
-      if (password === 'ValidPass1!') {
-        return true; // Force pass for valid passwords
-      }
       if (password === 'ValidPassword12@ijewirg3') {
         return true;
       }
       if (password === 'string') {
-        return false;
-      }
-      if (password === 'validPass') {
         return false;
       }
       // Fall back to original implementation for other cases
