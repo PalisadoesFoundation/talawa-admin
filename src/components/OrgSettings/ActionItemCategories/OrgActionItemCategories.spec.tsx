@@ -4,14 +4,27 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import dayjs from 'dayjs';
-
-import OrgActionItemCategories from './OrgActionItemCategories';
 import {
   ACTION_ITEM_CATEGORY,
   GET_USER,
 } from 'GraphQl/Queries/ActionItemCategoryQueries';
 // import {  } from './OrgActionItemCategories'; // from the same file
-import type { InterfaceActionItemCategory } from 'utils/interfaces';
+// import type { InterfaceActionItemCategory } from 'utils/interfaces'
+
+import { CreatorNameCell } from './OrgActionItemCategories';
+import OrgActionItemCategories from './OrgActionItemCategories';
+export interface InterfaceActionItemCategory {
+  id: string;
+  name: string;
+  organizationId: string;
+  creatorId: string;
+  isDisabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+interface InterfaceActionItemCategoryProps {
+  creatorId: string;
+}
 
 // Mock i18n so we don’t worry about translations
 vi.mock('react-i18next', () => ({
@@ -164,11 +177,65 @@ const mockGetUserNameSuccess: MockedResponse[] = [
   },
 ];
 
+export const creatorNameMocks = {
+  // Stays in loading if no result or error is provided
+  loading: [
+    {
+      request: {
+        query: GET_USER,
+        variables: { input: { id: 'loadingUser' } },
+      },
+      // Omit result => remains loading
+    },
+  ],
+
+  // Simulates a GraphQL error (e.g. "User not found")
+  error: [
+    {
+      request: {
+        query: GET_USER,
+        variables: { input: { id: 'errorUser' } },
+      },
+      error: new Error('User not found'),
+    },
+  ],
+
+  // Returns a null user => fallback to displaying the ID
+  nullData: [
+    {
+      request: {
+        query: GET_USER,
+        variables: { input: { id: 'nullDataUser' } },
+      },
+      result: {
+        data: {
+          user: null,
+        },
+      },
+    },
+  ],
+
+  // Returns a valid user => displays the user name
+  success: [
+    {
+      request: {
+        query: GET_USER,
+        variables: { input: { id: 'successUser' } },
+      },
+      result: {
+        data: {
+          user: { name: 'Test User Name' },
+        },
+      },
+    },
+  ],
+};
+
 describe('OrgActionItemCategories Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-
+  const testCreatorId = 'test-user-id';
   it('renders rows after successful fetch', async () => {
     render(
       <MockedProvider
@@ -339,6 +406,65 @@ describe('OrgActionItemCategories Component', () => {
       expect(
         screen.getByTestId('actionItemCategoryModalCloseBtn'),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('CreatorNameCell Component', () => {
+    it('renders "Loading..." when the query is loading', () => {
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: GET_USER,
+            variables: { input: { id: testCreatorId } },
+          },
+          // No result provided: stays loading.
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <CreatorNameCell creatorId={testCreatorId} />
+        </MockedProvider>,
+      );
+
+      // Now query by the test id
+      expect(screen.getByTestId('loading-text')).toBeInTheDocument();
+    });
+
+    it('renders creatorId when query returns error', async () => {
+      render(
+        <MockedProvider mocks={creatorNameMocks.error} addTypename={false}>
+          <CreatorNameCell creatorId="errorUser" />
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('errorUser')).toBeInTheDocument();
+      });
+    });
+
+    it('renders creatorId when query returns null/undefined data', async () => {
+      render(
+        <MockedProvider mocks={creatorNameMocks.nullData} addTypename={false}>
+          <CreatorNameCell creatorId="nullDataUser" />
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('nullDataUser')).toBeInTheDocument();
+      });
+    });
+
+    it('renders user name when query is successful', async () => {
+      render(
+        <MockedProvider mocks={creatorNameMocks.success} addTypename={false}>
+          <CreatorNameCell creatorId="successUser" />
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Test User Name')).toBeInTheDocument();
+      });
     });
   });
 });

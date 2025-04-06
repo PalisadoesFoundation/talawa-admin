@@ -41,7 +41,7 @@ import { Chip, Stack } from '@mui/material';
 import CategoryModal from './Modal/CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
+import { GET_USER } from 'GraphQl/Queries/ActionItemCategoryQueries';
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
@@ -65,19 +65,21 @@ const GET_USER_NAME = gql`
   }
 `;
 
-interface CreatorNameCellProps {
+// Define a dedicated interface for the helper
+export interface CreatorNameCellProps {
   creatorId: string;
 }
 
-const CreatorNameCell: FC<CreatorNameCellProps> = ({ creatorId }) => {
-  const { data, loading, error } = useQuery(GET_USER_NAME, {
+// Export the helper component with its own props type
+export function CreatorNameCell({ creatorId }: CreatorNameCellProps) {
+  const { data, loading, error } = useQuery(GET_USER, {
     variables: { input: { id: creatorId } },
   });
 
-  if (loading) return <span>Loading...</span>;
+  if (loading) return <span data-testid="loading-text">Loading...</span>;
   if (error || !data || !data.user) return <span>{creatorId}</span>;
   return <span>{data.user.name}</span>;
-};
+}
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
