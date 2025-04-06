@@ -797,7 +797,7 @@ describe('MemberDetail', () => {
     const toastSuccessSpy = vi.spyOn(toast, 'success');
 
     // Test variables
-    let mockHandleDeleteUser: () => {};
+    let mockHandleDeleteUser: () => Promise<void>;
     let triggerDelete: any;
 
     // First test case: with data
