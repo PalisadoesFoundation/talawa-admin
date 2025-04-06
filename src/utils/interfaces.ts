@@ -1026,6 +1026,15 @@ export interface InterfaceQueryFundCampaignsPledges {
   endAt: Date;
   pledges: InterfacePledgeInfo[];
 }
+
+export interface InterfaceCampaignInfoPG {
+  name: string;
+  goal: number;
+  startDate: Date;
+  endDate: Date;
+  currency: string;
+}
+
 export interface InterfaceFundInfo {
   id: string;
   name: string;

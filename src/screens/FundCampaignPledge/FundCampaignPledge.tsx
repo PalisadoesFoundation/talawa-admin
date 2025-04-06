@@ -1,40 +1,3 @@
-/**
- * @file FundCampaignPledge.tsx
- * @description This component renders the Fund Campaign Pledge screen, allowing users to view, search, sort,
- *              and manage pledges for a specific fundraising campaign. It includes features like progress tracking,
- *              pledge management, and user interaction with modals for editing or deleting pledges.
- *
- * @module FundCampaignPledge
- *
- * @requires react
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires @mui/material
- * @requires @mui/x-data-grid
- * @requires react-bootstrap
- * @requires dayjs
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires subComponents/SearchBar
- * @requires utils/currency
- * @requires utils/interfaces
- * @requires style/app-fixed.module.css
- *
- * @typedef {InterfaceCampaignInfo} InterfaceCampaignInfo - Represents the campaign details including name, goal, dates, and currency.
- * @typedef {InterfacePledgeInfo} InterfacePledgeInfo - Represents the pledge details including users, amount, and dates.
- * @typedef {InterfaceUserInfo} InterfaceUserInfo - Represents user details like name and image.
- *
- * @component
- * @description
- * - Displays a breadcrumb navigation for campaign context.
- * - Shows campaign progress with a toggle between pledged and raised amounts.
- * - Provides a searchable and sortable table of pledges with actions to edit or delete.
- * - Includes modals for adding/editing and deleting pledges.
- * - Handles error and loading states for data fetching.
- *
- * @returns {JSX.Element} The Fund Campaign Pledge screen.
- */
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
@@ -57,18 +20,11 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo,
   InterfaceQueryFundCampaignsPledges,
+  InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-interface InterfaceCampaignInfo {
-  name: string;
-  goal: number;
-  startDate: Date;
-  endDate: Date;
-  currency: string;
-}
 
 enum ModalState {
   SAME = 'same',
@@ -98,7 +54,7 @@ const fundCampaignPledge = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfo>({
+  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfoPG>({
     name: '',
     goal: 0,
     startDate: new Date(),
@@ -157,7 +113,6 @@ const fundCampaignPledge = (): JSX.Element => {
         const amount = edge.node.amount || 0;
         totalPledged += amount;
 
-        // Ensure we have valid dates by using proper date parsing
         const createdAt = edge.node.createdAt
           ? new Date(edge.node.createdAt)
           : new Date();
@@ -182,7 +137,6 @@ const fundCampaignPledge = (): JSX.Element => {
         };
       }) ?? [];
 
-    // Apply sorting after ensuring valid dates
     const sortedPledges = [...pledges].sort((a, b) => {
       switch (sortBy) {
         case 'amount_ASC':
@@ -198,7 +152,6 @@ const fundCampaignPledge = (): JSX.Element => {
       }
     });
 
-    // Apply search filter to sorted pledges
     const filteredPledges = sortedPledges.filter((pledge) => {
       const search = searchTerm.toLowerCase();
       return pledge.users.some((user) =>
@@ -241,7 +194,7 @@ const fundCampaignPledge = (): JSX.Element => {
       setPledgeModalMode(mode);
       openModal(ModalState.SAME);
     },
-    [openModal], // Removed unnecessary dependencies
+    [openModal],
   );
 
   const handleDeleteClick = useCallback(
@@ -600,7 +553,6 @@ const fundCampaignPledge = (): JSX.Element => {
         columns={columns}
         isRowSelectable={() => false}
       />
-      {/* Update Pledge ModalState */}
       <PledgeModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
@@ -611,7 +563,6 @@ const fundCampaignPledge = (): JSX.Element => {
         endDate={pledgeData?.fundCampaign?.endDate as Date}
         mode={pledgeModalMode}
       />
-      {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
         isOpen={modalState[ModalState.DELETE]}
         hide={() => closeModal(ModalState.DELETE)}
