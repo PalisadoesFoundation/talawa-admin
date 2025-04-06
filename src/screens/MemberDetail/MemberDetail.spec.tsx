@@ -1320,6 +1320,7 @@ describe('MemberDetail', () => {
     handleFieldChange('password', 123);
     handleFieldChange('password', null);
     handleFieldChange('password', undefined);
+    handleFieldChange('password', ' ');
 
     // Verify validatePassword wasn't called with these values
     expect(validatePasswordSpy).not.toHaveBeenCalled();
