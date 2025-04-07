@@ -40,15 +40,15 @@ http://localhost:{{customPort}}/
 
 Replace `{{customPort}}` with the actual custom port number you have configured in your `.env` file.
 
-## Registration
+## User Registration
 
-The first time you navigate to the running talawa-admin's website you'll land at talawa-admin registration page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
+The first time you navigate to the running talawa-admin's website you'll land at talawa-admin user login page. New users can register by clicking the **Register** button on the login page (`/`). This will redirect them to the registration page located at `/register`. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
 
 ## Login
 
 The login process is different depending on the scenario
 
-### Normal Login
+### User Login
 
 Now sign in to talawa-admin using the `email` and `password` you used to sign up.
 
@@ -65,3 +65,9 @@ In a development environment, the defaults are:
 1. `API_ADMINISTRATOR_USER_EMAIL_ADDRESS`=administrator@email.com
 1. `API_ADMINISTRATOR_USER_NAME`=administrator
 1. `API_ADMINISTRATOR_USER_PASSWORD`=password
+
+### Administrator Login
+
+To login as administrator, navigate to the `/admin` route and enter the credentials.
+
+**Note:** Administrator accounts cannot be created through the registration process. Admin credentials must be provisioned separately and managed outside the application interface.
