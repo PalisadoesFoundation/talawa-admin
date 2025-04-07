@@ -1240,7 +1240,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfaceUserInfo[];
+  pledgeUsers: InterfaceUserInfo_PG[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;

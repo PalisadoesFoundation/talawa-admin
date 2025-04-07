@@ -102,7 +102,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     pledgeUsers:
       pledge?.users.map((user) => ({
         ...user,
-        _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+        _id: user.id,
       })) ?? [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
@@ -128,7 +128,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         pledgeUsers:
           pledge.users?.map((user) => ({
             ...user,
-            _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+            _id: user.id,
           })) ?? [],
         pledgeAmount: pledge.amount ?? 0,
         pledgeCurrency: pledge.currency ?? 'USD',
@@ -185,7 +185,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           variables: {
             campaignId,
             amount: formState.pledgeAmount,
-            pledgerId: formState.pledgeUsers[0]._id,
+            pledgerId: formState.pledgeUsers[0].id,
           },
         });
 
@@ -245,15 +245,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               className={`${styles.noOutlinePledge} w-100`}
               data-testid="pledgerSelect"
               options={pledgers}
-              value={
-                pledgeUsers[0]
-                  ? {
-                      ...pledgeUsers[0],
-                      id: pledgeUsers[0]._id,
-                      name: `${pledgeUsers[0].firstName} ${pledgeUsers[0].lastName}`,
-                    }
-                  : null
-              }
+              value={pledgeUsers[0] || null}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo_PG): string =>
@@ -263,7 +255,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 setFormState({
                   ...formState,
                   pledgeUsers: newPledger
-                    ? [{ ...newPledger, _id: newPledger.id }]
+                    ? [{ ...newPledger, id: newPledger.id }]
                     : [],
                 });
               }}

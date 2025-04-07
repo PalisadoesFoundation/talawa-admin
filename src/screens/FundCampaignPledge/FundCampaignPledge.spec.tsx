@@ -603,32 +603,4 @@ describe('Testing Campaign Pledge Screen', () => {
     });
     vi.useRealTimers();
   });
-
-  // it('Sort the Pledges list by endDate correctly', async () => {
-  //   renderFundCampaignPledge(link1);
-
-  //   await screen.findByTestId('searchPledger');
-
-  //   // Test DESC sorting
-  //   fireEvent.click(screen.getByTestId('filter'));
-  //   await screen.findByTestId('endDate_DESC');
-  //   fireEvent.click(screen.getByTestId('endDate_DESC'));
-
-  //   await waitFor(() => {
-  //     const pledgeDates = screen.getAllByText(/\d{2}\/\d{2}\/\d{4}/);
-  //     const dates = pledgeDates.map(el => new Date(el.textContent || ''));
-  //     expect(dates[0].getTime()).toBeGreaterThanOrEqual(dates[1].getTime());
-  //   });
-
-  //   // Test ASC sorting
-  //   fireEvent.click(screen.getByTestId('filter'));
-  //   await screen.findByTestId('endDate_ASC');
-  //   fireEvent.click(screen.getByTestId('endDate_ASC'));
-
-  //   await waitFor(() => {
-  //     const pledgeDates = screen.getAllByText(/\d{2}\/\d{2}\/\d{4}/);
-  //     const dates = pledgeDates.map(el => new Date(el.textContent || ''));
-  //     expect(dates[0].getTime()).toBeLessThanOrEqual(dates[1].getTime());
-  //   });
-  // });
 });
