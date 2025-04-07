@@ -185,7 +185,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           variables: {
             campaignId,
             amount: formState.pledgeAmount,
-            pledgerId: formState.pledgeUsers[0].id,
+            pledgerId: formState.pledgeUsers[0]._id,
           },
         });
 
@@ -245,7 +245,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               className={`${styles.noOutlinePledge} w-100`}
               data-testid="pledgerSelect"
               options={pledgers}
-              value={pledgeUsers[0] || null}
+              value={
+                pledgeUsers[0]
+                  ? {
+                      ...pledgeUsers[0],
+                      id: pledgeUsers[0]._id,
+                      name: `${pledgeUsers[0].firstName} ${pledgeUsers[0].lastName}`,
+                    }
+                  : null
+              }
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo_PG): string =>

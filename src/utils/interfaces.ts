@@ -333,7 +333,6 @@ export interface InterfaceCurrentUserTypePG {
 export interface InterfaceUserInfo {
   firstName: string;
   lastName: string;
-  name: string;
   _id: string;
   image?: string | null;
 }

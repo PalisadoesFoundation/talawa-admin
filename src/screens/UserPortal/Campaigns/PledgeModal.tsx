@@ -114,7 +114,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       pledgeUsers:
         pledge?.users.map((user) => ({
           ...user,
-          _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+          _id: user.id, // Map 'id' to '_id' to match InterfaceUserInfo
         })) ?? [],
       pledgeAmount: pledge?.amount ?? 0,
       pledgeCurrency: pledge?.currency ?? 'USD',
@@ -142,7 +142,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          id: userData.user.user.id,
+          id: userData.user.user.id, // Use 'id' to match InterfaceUserInfo_PG
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
           name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
@@ -219,7 +219,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             currency: pledgeCurrency,
             startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
             endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user.id),
+            userIds: pledgeUsers.map((user) => user._id),
           },
         });
 
@@ -263,15 +263,25 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables user to view participating pledgers */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
               limitTags={2}
               data-testid="pledgerSelect"
-              options={[...pledgers, ...pledgeUsers]}
-              value={pledgeUsers}
+              options={[
+                ...pledgers,
+                ...pledgeUsers.map((user) => ({
+                  ...user,
+                  id: user._id, // Map '_id' to 'id'
+                  name: `${user.firstName} ${user.lastName}`, // Ensure 'name' property exists
+                })),
+              ]}
+              value={pledgeUsers.map((user) => ({
+                ...user,
+                id: user._id, // Map '_id' to 'id'
+                name: `${user.firstName} ${user.lastName}`, // Add 'name' property
+              }))}
               // TODO: Remove readOnly function once User Family implementation is done
               readOnly={mode === 'edit' ? true : false}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -280,7 +290,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {
-                setFormState({ ...formState, pledgeUsers: newPledgers });
+                setFormState({
+                  ...formState,
+                  pledgeUsers: newPledgers.map((user) => ({
+                    ...user,
+                    _id: user.id,
+                  })),
+                });
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
