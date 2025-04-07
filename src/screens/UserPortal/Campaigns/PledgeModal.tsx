@@ -111,7 +111,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
     setFormState({
-      pledgeUsers: pledge ? [] : [],
+      pledgeUsers: pledge?.users ?? [],
       pledgeAmount: pledge?.amount ?? 0,
       pledgeCurrency: pledge?.currency ?? 'USD',
       pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
@@ -266,8 +266,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               data-testid="pledgerSelect"
               options={pledgers}
               value={pledgeUsers}
-              // TODO: Remove readOnly function once User Family implementation is done
-              readOnly={mode === 'edit' ? true : false}
+              readOnly={mode === 'edit'}
+              defaultValue={pledge?.users ?? []} // Add defaultValue for initial selection
               isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo_PG): string =>
