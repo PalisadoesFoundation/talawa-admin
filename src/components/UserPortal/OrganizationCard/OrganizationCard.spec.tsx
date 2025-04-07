@@ -12,7 +12,10 @@ import {
   JOIN_PUBLIC_ORGANIZATION,
   CANCEL_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/Queries';
+import {
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 // Mock hooks
@@ -78,7 +81,12 @@ const successMocks: MockedResponse[] = [
       variables: { organizationId: '123' },
     },
     result: {
-      data: { sendMembershipRequest: { success: true } },
+      data: {
+        sendMembershipRequest: {
+          success: true,
+          __typename: 'MembershipRequest',
+        },
+      },
     },
   },
   {
@@ -91,7 +99,12 @@ const successMocks: MockedResponse[] = [
       },
     },
     result: {
-      data: { joinPublicOrganization: { organizationId: '123' } },
+      data: {
+        joinPublicOrganization: {
+          organizationId: '123',
+          __typename: 'Organization',
+        },
+      },
     },
   },
   {
@@ -106,35 +119,59 @@ const successMocks: MockedResponse[] = [
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: 'mockUserId', first: 5 },
+      variables: { id: 'mockUserId', first: 5, filter: undefined },
     },
     result: {
       data: {
         user: {
+          __typename: 'User',
           organizationsWhereMember: {
+            __typename: 'OrganizationConnection',
             pageInfo: {
               hasNextPage: false,
+              __typename: 'PageInfo',
             },
             edges: [
               {
+                __typename: 'OrganizationEdge',
                 node: {
+                  __typename: 'Organization',
                   id: '123',
                   name: 'Test Org',
                   description: '',
-                  image: '',
+                  avatarURL: '',
                   membersCount: 10,
                   adminsCount: 2,
-                  address: {
-                    city: '',
-                    countryCode: '',
-                    line1: '',
-                    postalCode: '',
-                    state: '',
+                  city: '',
+                  countryCode: '',
+                  addressLine1: '',
+                  postalCode: '',
+                  state: '',
+                  members: {
+                    __typename: 'UserConnection',
+                    edges: [],
                   },
-                  members: [],
                 },
               },
             ],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {},
+    },
+    result: {
+      data: {
+        organizations: {
+          __typename: 'OrganizationConnection',
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            __typename: 'PageInfo',
           },
         },
       },
@@ -563,11 +600,102 @@ describe('OrganizationCard Component with New Interface', () => {
 
       expect(cancelRequestSpy).not.toHaveBeenCalled();
     });
-  });
 
-  it('should handle generic thrown error (non-GraphQL)', async () => {
-    const genericErrorMock: MockedResponse[] = [
-      {
+    it('should not log error in production mode', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      process.env.NODE_ENV = 'production';
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      const errorMocks: MockedResponse[] = [
+        {
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          error: new Error('Withdrawal failed'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={errorMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+
+      process.env.NODE_ENV = undefined;
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle generic thrown error (non-GraphQL)', async () => {
+      const genericErrorMock: MockedResponse[] = [
+        {
+          request: {
+            query: JOIN_PUBLIC_ORGANIZATION,
+            variables: {
+              input: {
+                organizationId: '123',
+              },
+            },
+          },
+          error: new Error('Network error'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={genericErrorMock}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByText('joinNow');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+    });
+
+    it('should refetch queries after successful join', async () => {
+      const organizationListMock = {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: {},
+        },
+        result: {
+          data: {
+            organizations: {
+              __typename: 'OrganizationConnection',
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                __typename: 'PageInfo',
+              },
+            },
+          },
+        },
+      };
+
+      const joinMutation = {
         request: {
           query: JOIN_PUBLIC_ORGANIZATION,
           variables: {
@@ -576,25 +704,69 @@ describe('OrganizationCard Component with New Interface', () => {
             },
           },
         },
-        error: new Error('Network error'),
-      },
-    ];
+        result: {
+          data: {
+            joinPublicOrganization: {
+              organizationId: '123',
+              __typename: 'Organization',
+            },
+          },
+        },
+      };
 
-    render(
-      <TestWrapper mocks={genericErrorMock}>
-        <OrganizationCard
-          {...defaultProps}
-          userRegistrationRequired={false}
-          isJoined={false}
-        />
-      </TestWrapper>,
-    );
+      const userOrgQuery = {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: 'mockUserId', first: 5, filter: undefined },
+        },
+        result: {
+          data: {
+            user: {
+              __typename: 'User',
+              organizationsWhereMember: {
+                __typename: 'OrganizationConnection',
+                pageInfo: {
+                  hasNextPage: false,
+                  __typename: 'PageInfo',
+                },
+                edges: [],
+              },
+            },
+          },
+        },
+      };
 
-    const joinButton = screen.getByText('joinNow');
-    await fireEvent.click(joinButton);
+      // Mock window.location.reload
+      const reloadMock = vi.fn();
+      Object.defineProperty(window, 'location', {
+        value: { reload: reloadMock },
+        writable: true,
+      });
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('error occurred');
+      render(
+        <TestWrapper mocks={[joinMutation, userOrgQuery, organizationListMock]}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByTestId('joinBtn');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Joined');
+      });
+
+      // Wait for reload to be called
+      await waitFor(
+        () => {
+          expect(reloadMock).toHaveBeenCalled();
+        },
+        { timeout: 2000 },
+      );
     });
   });
 });
