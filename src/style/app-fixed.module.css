@@ -725,6 +725,8 @@
   --reset-border-color: #1778f2;
   --reset-backgroundcolor-color: #ffffff;
   --reset-btn-colour: #1778f2;
+
+  --form-control-focus-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -8507,3 +8509,7 @@ form {
 }
 
 /* ----------------------------------------------------- */
+
+:global(.form-control:focus) {
+  box-shadow: var(--form-control-focus-shadow);
+}

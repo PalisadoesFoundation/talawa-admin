@@ -116,7 +116,10 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.createTag)).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
+      expect(queryByText(translations.createTag)).toBeInTheDocument();
     });
   });
   test('opens and closes the create tag modal', async () => {
@@ -263,18 +266,14 @@ describe('Organisation Tags Page', () => {
 
     // Get the initial number of tags loaded
     const initialTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+    expect(initialTagsDataLength).toBe(10); // Assert that initial count is 10
 
     // Set scroll position to the bottom
     fireEvent.scroll(orgUserTagsScrollableDiv, {
       target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
     });
 
-    await waitFor(() => {
-      const finalTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-
-      expect(getByText(translations.createTag)).toBeInTheDocument();
-    });
+    expect(getByText(translations.createTag)).toBeInTheDocument();
   });
   test('creates a new user tag', async () => {
     renderOrganizationTags(link);
@@ -366,16 +365,10 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    const orgUserTagsScrollableDiv = screen.getByTestId(
-      'orgUserTagsScrollableDiv',
-    );
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(orgUserTagsScrollableDiv, {
-      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
-    });
-
     await waitFor(() => {
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });

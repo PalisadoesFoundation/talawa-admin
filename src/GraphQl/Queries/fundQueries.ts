@@ -1,57 +1,67 @@
-/*eslint-disable*/
 import gql from 'graphql-tag';
 
 /**
  * GraphQL query to retrieve the list of members for a specific organization.
  *
  * @param id - The ID of the organization for which members are being retrieved.
- * @param filter - The filter to search for a specific member.
+ * @param name - The name of the organization for which members are being retrieved.
+ * @param creatorId - The ID of the creator of the organization.
+ * @param updaterId - The ID of the user who last updated the organization.
+ * @param isTaxDeductible - A boolean value indicating whether the organization is tax deductible.
  * @returns The list of members associated with the organization.
  */
 export const FUND_LIST = gql`
-  query FundsByOrganization(
-    $organizationId: ID!
-    $filter: String
-    $orderBy: FundOrderByInput
-  ) {
-    fundsByOrganization(
-      organizationId: $organizationId
-      where: { name_contains: $filter }
-      orderBy: $orderBy
-    ) {
-      _id
-      name
-      refrenceNumber
-      taxDeductible
-      isDefault
-      isArchived
-      createdAt
-      organizationId
-      creator {
-        _id
-        firstName
-        lastName
+  query FundsByOrganization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      funds(first: 32) {
+        edges {
+          node {
+            creator {
+              name
+            }
+            id
+            isTaxDeductible
+            name
+            organization {
+              name
+            }
+            updater {
+              name
+            }
+          }
+        }
       }
     }
   }
 `;
 
+/**
+ * Query to fetch a specific fund by its ID, along with its associated campaigns.
+ * @param id - The ID of the fund campaign to be fetched.
+ * @param name - The name of the fund campaign to be fetched.
+ * @param sratAt - The start date of the fund campaign to be fetched.
+ * @param endAt - The end date of the fund campaign to be fetched.
+ * @param currencyCode - The currency code of the fund campaign to be fetched.
+ * @param goalAmount - The goal amount of the fund campaign to be fetched.
+ * @returns The fund campaign with the specified ID.
+ */
+
 export const FUND_CAMPAIGN = gql`
-  query GetFundById(
-    $id: ID!
-    $where: CampaignWhereInput
-    $orderBy: CampaignOrderByInput
-  ) {
-    getFundById(id: $id, where: $where, orderBy: $orderBy) {
+  query GetFundById($input: QueryFundInput!) {
+    fund(input: $input) {
+      id
       name
-      isArchived
-      campaigns {
-        _id
-        endDate
-        fundingGoal
-        name
-        startDate
-        currency
+      campaigns(first: 10) {
+        edges {
+          node {
+            id
+            name
+            startAt
+            endAt
+            currencyCode
+            goalAmount
+          }
+        }
       }
     }
   }
@@ -93,13 +103,13 @@ export const USER_FUND_CAMPAIGNS = gql`
     $where: CampaignWhereInput
     $campaignOrderBy: CampaignOrderByInput
   ) {
-    getFundraisingCampaigns(where: $where, campaignOrderby: $campaignOrderBy) {
-      _id
+    getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
+      id
+      name
+      currency
+      fundingGoal
       startDate
       endDate
-      name
-      fundingGoal
-      currency
     }
   }
 `;
