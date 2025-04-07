@@ -101,17 +101,17 @@ function AdvertisementRegister({
    * Mutation to update advertisement and refetch the advertisement list
    */
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION, {
-    // refetchQueries: [
-    //   {
-    //     query: ORGANIZATION_ADVERTISEMENT_LIST,
-    //     variables: {
-    //       id: currentOrg,
-    //       first: 12,
-    //       after: null,
-    //       before: null
-    //     },
-    //   },
-    // ],
+    refetchQueries: [
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: currentOrg,
+          first: 12,
+          after: null,
+          before: null,
+        },
+      },
+    ],
   });
 
   // Set Initial Form State While Creating an Advertisemnt
@@ -341,7 +341,6 @@ function AdvertisementRegister({
         ...(endAt && { endAt }),
       };
 
-      console.log('mutation variables are: ', mutationVariables);
       // query to update the advertisement.
       const { data } = await updateAdvertisement({
         variables: mutationVariables,
@@ -466,12 +465,12 @@ function AdvertisementRegister({
                     <video
                       data-testid="mediaPreview"
                       controls
-                      src={URL.createObjectURL(file)}
+                      src={encodeURI(URL.createObjectURL(file))}
                     />
                   ) : (
                     <img
                       data-testid="mediaPreview"
-                      src={URL.createObjectURL(file)}
+                      src={encodeURI(URL.createObjectURL(file))}
                       alt="Preview"
                       className={styles.previewAdvertisementRegister}
                     />

@@ -67,10 +67,7 @@ export default function Advertisements(): JSX.Element {
 
   // Effect hook to update advertisements list when data changes or pagination cursor changes
   useEffect(() => {
-    if (
-      orgAdvertisementListData &&
-      orgAdvertisementListData.organization?.advertisements?.edges
-    ) {
+    if (orgAdvertisementListData?.organization?.advertisements?.edges) {
       const ads: Advertisement[] =
         orgAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
@@ -134,7 +131,7 @@ export default function Advertisements(): JSX.Element {
                   loader={
                     <>
                       {/* Skeleton loader while fetching more advertisements */}
-                      {[...Array(32)].map((_, index) => (
+                      {[...Array(12)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
                             <div className={styles.innerContainer}>
@@ -201,7 +198,7 @@ export default function Advertisements(): JSX.Element {
                   loader={
                     <>
                       {/* Skeleton loader while fetching more advertisements */}
-                      {[...Array(32)].map((_, index) => (
+                      {[...Array(12)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
                             <div className={styles.innerContainer}>

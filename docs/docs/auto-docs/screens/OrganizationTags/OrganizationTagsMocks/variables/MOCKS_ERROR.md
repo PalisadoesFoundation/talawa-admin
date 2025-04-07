@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://
 
 #### request.query
 
-> **query**: `DocumentNode` = `ORGANIZATION_USER_TAGS_LIST`
+> **query**: `DocumentNode` = `ORGANIZATION_USER_TAGS_LIST_PG`
 
 #### request.variables
 
@@ -30,7 +30,11 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://
 
 > **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
 
-#### request.variables.id
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.id
 
 > **id**: `string` = `'orgIdError'`
 
