@@ -70,17 +70,6 @@ const updateData = {
   },
 };
 
-const mockSetItem = vi.fn();
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn(),
-    setItem: mockSetItem,
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
-  writable: true,
-});
-
 vi.mock('./src/utils/useLocalstorage.ts', () => ({
   setItem: vi.fn(),
 }));
@@ -827,6 +816,8 @@ describe('MemberDetail', () => {
 
     expect(toastSuccessSpy).not.toHaveBeenCalled();
     expect(mockSetShowDeleteConfirmNoData).not.toHaveBeenCalled();
+
+    expect(toastSuccessSpy);
 
     toastSuccessSpy.mockRestore();
   });
