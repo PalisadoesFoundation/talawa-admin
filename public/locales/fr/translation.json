@@ -15,6 +15,7 @@
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
     "userLogin": "Utilisateur en ligne",
+    "adminLogin": "Connexion administrateur",
     "atleast_8_char_long": "Au moins 8 caractères",
     "atleast_6_char_long": "Au moins 6 caractères",
     "firstName_invalid": "Le prénom ne doit contenir que des lettres minuscules et majuscules",

@@ -4,7 +4,26 @@
 
 # Interface: InterfaceCampaignModal
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L61)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L44)
+
+Props for the CampaignModal component.
+
+## CSS Strategy Explanation:
+
+To ensure consistency across the application and reduce duplication, common styles
+(such as button styles) have been moved to the global CSS file. Instead of using
+component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
+class (e.g., .addButton) is now applied.
+
+### Benefits:
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
+
+### Global CSS Classes used:
+- `.addButton`
+
+For more details on the reusable classes, refer to the global CSS file.
 
 ## Properties
 
@@ -12,7 +31,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:61](ht
 
 > **campaign**: [`InterfaceCampaignInfo`](../../../../../utils/interfaces/interfaces/InterfaceCampaignInfo.md)
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L66)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L49)
 
 ***
 
@@ -20,7 +39,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:66](ht
 
 > **fundId**: `string`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L64)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L47)
 
 ***
 
@@ -28,7 +47,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:64](ht
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L63)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L46)
 
 #### Returns
 
@@ -40,7 +59,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:63](ht
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L62)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L45)
 
 ***
 
@@ -48,7 +67,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:62](ht
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L68)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L51)
 
 ***
 
@@ -56,7 +75,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:68](ht
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L65)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L48)
 
 ***
 
@@ -64,7 +83,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:65](ht
 
 > **refetchCampaign**: () => `void`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L67)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L50)
 
 #### Returns
 
