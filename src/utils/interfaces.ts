@@ -334,7 +334,7 @@ export interface InterfaceUserInfo {
   firstName: string;
   lastName: string;
   name: string;
-  id: string;
+  _id: string;
   image?: string | null;
 }
 
@@ -1091,7 +1091,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfaceUserInfo[];
+  users: InterfaceUserInfo_PG[];
 }
 
 export interface InterfacePledgeInfoPG {
@@ -1101,8 +1101,17 @@ export interface InterfacePledgeInfoPG {
   currencyCode: string;
   endAt: string;
   startAt: string;
-  pledges: InterfaceUserInfo[];
+  pledges: InterfaceUserInfo_PG[];
 }
+
+export interface InterfaceUserInfo_PG {
+  firstName: string;
+  lastName: string;
+  name: string;
+  id: string;
+  image?: string | null;
+}
+
 export interface InterfaceQueryOrganizationEventListItem
   extends InterfaceBaseEvent {
   isPublic: boolean;

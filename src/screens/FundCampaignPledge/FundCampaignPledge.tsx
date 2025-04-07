@@ -18,7 +18,7 @@ import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
   InterfaceQueryFundCampaignsPledges,
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
@@ -67,7 +67,7 @@ const fundCampaignPledge = (): JSX.Element => {
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
@@ -207,7 +207,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo[],
+    users: InterfaceUserInfo_PG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -254,7 +254,7 @@ const fundCampaignPledge = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfaceUserInfo, index: number) => (
+              .map((user: InterfaceUserInfo_PG, index: number) => (
                 <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
@@ -560,7 +560,7 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.fundCampaign?.endDate as Date}
+        endDate={pledgeData?.fundCampaign?.endAt as Date}
         mode={pledgeModalMode}
       />
       <PledgeDeleteModal
@@ -576,7 +576,7 @@ const fundCampaignPledge = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfaceUserInfo, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={index}

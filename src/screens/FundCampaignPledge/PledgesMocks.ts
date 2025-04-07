@@ -1,9 +1,6 @@
-import {
-  CREATE_PLEDGE,
-  UPDATE_PLEDGE,
-} from '../UserPortal/Campaigns/PledgeModal';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 
 const memberList = {
@@ -454,9 +451,88 @@ export const PLEDGE_MODAL_MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: CREATE_PLEDGE,
+      variables: {
+        campaignId: 'campaignId',
+        amount: 100,
+        currency: 'USD',
+        startDate: '2024-01-01',
+        endDate: '2024-01-10',
+        userIds: ['1'],
+      },
+    },
+    result: {
+      data: {
+        createPledge: {
+          id: '1',
+          amount: 100,
+          currency: 'USD',
+          startDate: '2024-01-01',
+          endDate: '2024-01-10',
+          users: [
+            {
+              id: '1',
+              firstName: 'John',
+              lastName: 'Doe',
+              name: 'John Doe',
+              image: null,
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_PLEDGE,
+      variables: {
+        id: '1',
+        amount: 200,
+      },
+    },
+    result: {
+      data: {
+        updatePledge: {
+          id: '1',
+          amount: 200,
+          currency: 'USD',
+          startDate: '2024-01-01',
+          endDate: '2024-01-10',
+          users: [
+            {
+              id: '1',
+              firstName: 'John',
+              lastName: 'Doe',
+              name: 'John Doe',
+              image: null,
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'orgId',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          image: null,
+        },
+      },
+    },
+  },
 ];
 
-// Add this to your PledgesMocks.js file
 export const PLEDGE_MODAL_ERROR_MOCKS = [
   {
     request: {

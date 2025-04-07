@@ -47,7 +47,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
 } from 'utils/interfaces';
 import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -100,7 +100,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
 
   // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
@@ -111,7 +111,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
     setFormState({
-      pledgeUsers: pledge?.users ?? [],
+      pledgeUsers:
+        pledge?.users.map((user) => ({
+          ...user,
+          _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+        })) ?? [],
       pledgeAmount: pledge?.amount ?? 0,
       pledgeCurrency: pledge?.currency ?? 'USD',
       pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
@@ -177,8 +181,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
         updatedFields.endDate = endDate;
       }
-      if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user.id);
+      if (
+        pledgeUsers.map((user) => user._id).join(',') !==
+        pledge?.users?.map((user) => user.id).join(',')
+      ) {
+        updatedFields.users = pledgeUsers.map((user) => user._id);
       }
       try {
         await updatePledge({
@@ -269,7 +276,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               readOnly={mode === 'edit' ? true : false}
               isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
+              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {

@@ -25,20 +25,15 @@ import PledgeModal from './PledgeModal';
 import React from 'react';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-vi.mock('@mui/x-date-pickers/DesktopDateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return { DateTimePicker: actual.DesktopDateTimePicker };
-});
-
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
-const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS);
+const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS, false);
+const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS, false);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -46,7 +41,7 @@ const translations = JSON.parse(
 const createPledgeProps = (): InterfacePledgeModal => ({
   isOpen: true,
   hide: vi.fn(),
-  pledge: null, // Changed to null for create mode
+  pledge: null,
   refetchPledge: vi.fn(),
   campaignId: 'campaignId',
   orgId: 'orgId',
@@ -121,16 +116,15 @@ describe('PledgeModal', () => {
 
   it('should render edit pledge modal with correct title', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    await waitFor(() =>
-      expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(screen.getByText(translations.editPledge)).toBeInTheDocument();
+    });
   });
 
   it('should close the modal when close button is clicked', async () => {
     const hideMock = vi.fn();
     const props = { ...pledgeProps[0], hide: hideMock };
     renderPledgeModal(link1, props);
-
     fireEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     expect(hideMock).toHaveBeenCalledTimes(1);
   });

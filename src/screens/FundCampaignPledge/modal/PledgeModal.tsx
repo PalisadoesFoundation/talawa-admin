@@ -56,7 +56,7 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -99,7 +99,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
-    pledgeUsers: pledge?.users ?? [],
+    pledgeUsers:
+      pledge?.users.map((user) => ({
+        ...user,
+        _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+      })) ?? [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
     pledgeEndDate: pledge?.endDate
@@ -110,7 +114,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       : new Date(),
   });
 
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
@@ -121,7 +125,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (pledge) {
       setFormState({
-        pledgeUsers: pledge.users ?? [],
+        pledgeUsers:
+          pledge.users?.map((user) => ({
+            ...user,
+            _id: user.id, // Assuming 'id' in InterfaceUserInfo_PG corresponds to '_id' in InterfaceUserInfo
+          })) ?? [],
         pledgeAmount: pledge.amount ?? 0,
         pledgeCurrency: pledge.currency ?? 'USD',
         pledgeEndDate: dayjs(pledge.endDate).toDate(),
@@ -133,7 +141,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (memberData) {
       const members = memberData.organization.members.edges.map(
-        (edge: { node: InterfaceUserInfo }) => edge.node,
+        (edge: { node: InterfaceUserInfo_PG }) => edge.node,
       );
       setPledgers(members);
     }
@@ -240,13 +248,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={pledgeUsers[0] || null}
               isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
+              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
                 `${member.name || ''}`
               }
               onChange={(_, newPledger): void => {
                 setFormState({
                   ...formState,
-                  pledgeUsers: newPledger ? [newPledger] : [],
+                  pledgeUsers: newPledger
+                    ? [{ ...newPledger, _id: newPledger.id }]
+                    : [],
                 });
               }}
               renderInput={(params) => (
