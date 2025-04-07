@@ -73,7 +73,14 @@ export default function Advertisements(): JSX.Element {
           (edge: { node: Advertisement }) => edge.node,
         );
       if (after) {
-        setAdvertisements((prevAds) => [...prevAds, ...ads]);
+        setAdvertisements((prevAds) => {
+          const merged = [...prevAds, ...ads];
+          // remove duplicates by `id`
+          const unique = Array.from(
+            new Map(merged.map((ad) => [ad.id, ad])).values(),
+          );
+          return unique;
+        });
       } else {
         setAdvertisements(ads);
       }
@@ -89,18 +96,25 @@ export default function Advertisements(): JSX.Element {
         ?.endCursor || null;
     setAfter(newAfter);
 
-    await refetch({
-      id: currentOrgId,
-      after: newAfter,
-      first: 12,
-    });
+    try {
+      await refetch({
+        id: currentOrgId,
+        after: newAfter,
+        first: 12,
+      });
+    } catch (error) {
+      console.error('Error fetching more advertisements:', error);
+    }
   }
 
+  const isAdvertisementActive = (ad: Advertisement): boolean => {
+    return ad.endAt && new Date(ad.endAt) >= new Date();
+  };
   return (
     <>
       <Row data-testid="advertisements">
         <Col
-          col={8}
+          md={8}
           className={styles.containerAdvertisements}
           style={{ marginTop: '2rem' }}
         >
@@ -131,15 +145,19 @@ export default function Advertisements(): JSX.Element {
                   loader={
                     <>
                       {/* Skeleton loader while fetching more advertisements */}
-                      {[...Array(12)].map((_, index) => (
+                      {[...Array(6)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
                             <div className={styles.innerContainer}>
                               <div
                                 className={`${styles.orgImgContainer} shimmer`}
-                              ></div>
+                              />
                               <div className={styles.content}>
-                                <h5 className="shimmer" title="Name"></h5>
+                                <h5 className="shimmer" title="Name">
+                                  <span className="visually-hidden">
+                                    Advertisement Loading
+                                  </span>
+                                </h5>
                               </div>
                             </div>
                             <div className={`shimmer ${styles.button}`} />
@@ -164,16 +182,11 @@ export default function Advertisements(): JSX.Element {
                     )
                   }
                 >
-                  {advertisements.filter((ad: Advertisement) => {
-                    const isActive = new Date(ad.endAt) > new Date();
-                    return isActive;
-                  }).length === 0 ? (
+                  {advertisements.filter(isAdvertisementActive).length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
                     advertisements
-                      .filter(
-                        (ad) => ad.endAt && new Date(ad.endAt) >= new Date(),
-                      )
+                      .filter(isAdvertisementActive)
                       .map((ad, i) => {
                         return (
                           <AdvertisementEntry
@@ -198,13 +211,13 @@ export default function Advertisements(): JSX.Element {
                   loader={
                     <>
                       {/* Skeleton loader while fetching more advertisements */}
-                      {[...Array(12)].map((_, index) => (
+                      {[...Array(6)].map((_, index) => (
                         <div key={index} className={styles.itemCard}>
                           <div className={styles.loadingWrapper}>
                             <div className={styles.innerContainer}>
                               <div
                                 className={`${styles.orgImgContainer} shimmer`}
-                              ></div>
+                              />
                               <div className={styles.content}>
                                 <h5 className="shimmer" title="Name"></h5>
                               </div>
@@ -231,20 +244,16 @@ export default function Advertisements(): JSX.Element {
                     )
                   }
                 >
-                  {advertisements.filter((ad: Advertisement) => {
-                    const isActive = new Date(ad.endAt) <= new Date();
-                    return isActive;
-                  }).length === 0 ? (
+                  {advertisements.filter((ad) => !isAdvertisementActive(ad))
+                    .length === 0 ? (
                     <h4>{t('pMessage')}</h4>
                   ) : (
                     advertisements
-                      .filter(
-                        (ad) => ad.endAt && new Date(ad.endAt) < new Date(),
-                      )
-                      .map((ad, i) => {
+                      .filter((ad) => !isAdvertisementActive(ad))
+                      .map((ad) => {
                         return (
                           <AdvertisementEntry
-                            key={i}
+                            key={ad.id} // use ad.id as the key for better performance
                             advertisement={ad}
                             setAfter={setAfter}
                           />

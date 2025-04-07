@@ -1526,7 +1526,8 @@ form label,
 }
 
 .addCard {
-  width: 28rem;
+  width: 100%;
+  max-width: 28rem;
 }
 
 .dropdownContainer {
@@ -8424,23 +8425,27 @@ form {
 .mediaContainer {
   position: relative;
   width: 100%;
-  height: 200px; /* Fixed height for all media containers */
+  height: 200px;
+  /* Fixed height for all media containers */
   overflow: hidden;
 }
 
 .imageWrapper {
   width: 100%;
-  height: 200px; /* Same height as the container */
+  height: 200px;
+  /* Same height as the container */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa; /* Light background for empty areas */
+  background-color: #f8f9fa;
+  /* Light background for empty areas */
 }
 
 .cardImage {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* This maintains aspect ratio while covering the container */
+  object-fit: cover;
+  /* This maintains aspect ratio while covering the container */
   object-position: center;
 }
 
@@ -8466,6 +8471,20 @@ form {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .addCard {
+    width: 100%;
+  }
+
+  .mediaContainer {
+    height: 150px;
+  }
+
+  .imageWrapper {
+    height: 150px;
+  }
 }
 
 .addCard > div:not(.dropdownContainer) {
