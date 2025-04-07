@@ -1522,6 +1522,7 @@ form label,
 .cardOtherSettings {
   height: 350px;
 }
+
 .addCard {
   width: 28rem;
 }
@@ -1635,7 +1636,6 @@ form label,
 }
 
 .closeButtonAdvertisementRegister {
-  position: absolute;
   top: 0px;
   right: 0px;
   width: 32px;
@@ -2211,10 +2211,12 @@ form label,
   width: 160px;
   font-size: 0.8rem;
 }
+
 .langBtn:active {
   background-color: var(--reset-backgroundcolor-color) !important;
   border-color: var(--reset-border-color) !important;
 }
+
 /* -- TableRow.tsx -- */
 
 /* -- CheckInWrapper.tsx -- */
@@ -4345,6 +4347,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4361,6 +4364,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4450,11 +4454,13 @@ form label,
   font-size: 1.2rem;
   font-weight: 600;
 }
+
 .scrollableCardBody {
   max-height: min(220px, 50vh);
   overflow-y: auto;
   scroll-behavior: smooth;
 }
+
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -4527,6 +4533,7 @@ form label,
   opacity: 1;
   color: black !important;
 }
+
 .opendrawer {
   position: fixed;
   display: flex;
@@ -4548,6 +4555,7 @@ form label,
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
@@ -4564,6 +4572,7 @@ form label,
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -4600,6 +4609,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4616,6 +4626,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -8405,5 +8416,94 @@ form {
 /* -- Users.tsx -- */
 
 /* Add more Class Related to a particular Screen above this */
+
+/* Advertisement.tsx */
+
+.mediaContainer {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Fixed height for all media containers */
+  overflow: hidden;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: 200px; /* Same height as the container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa; /* Light background for empty areas */
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This maintains aspect ratio while covering the container */
+  object-position: center;
+}
+
+.carouselContainer {
+  height: 100%;
+}
+
+.noMediaPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #f8f9fa;
+}
+
+.carouselContainer :global(.carousel-control-prev),
+.carouselContainer :global(.carousel-control-next) {
+  z-index: 5;
+}
+
+.addCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.addCard > div:not(.dropdownContainer) {
+  flex: 0 0 200px;
+}
+
+.dropdownContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.dropdownmenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  min-width: 120px;
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+.dropdownmenu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f8f9fa;
+}
 
 /* ----------------------------------------------------- */

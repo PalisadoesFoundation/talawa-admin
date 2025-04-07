@@ -480,65 +480,6 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
-export const ADD_ADVERTISEMENT_MUTATION = gql`
-  mutation (
-    $organizationId: ID!
-    $name: String!
-    $type: AdvertisementType!
-    $startDate: Date!
-    $endDate: Date!
-    $file: String!
-  ) {
-    createAdvertisement(
-      input: {
-        organizationId: $organizationId
-        name: $name
-        type: $type
-        startDate: $startDate
-        endDate: $endDate
-        mediaFile: $file
-      }
-    ) {
-      advertisement {
-        _id
-      }
-    }
-  }
-`;
-export const UPDATE_ADVERTISEMENT_MUTATION = gql`
-  mutation UpdateAdvertisement(
-    $id: ID!
-    $name: String
-    $file: String
-    $type: AdvertisementType
-    $startDate: Date
-    $endDate: Date
-  ) {
-    updateAdvertisement(
-      input: {
-        _id: $id
-        name: $name
-        mediaFile: $file
-        type: $type
-        startDate: $startDate
-        endDate: $endDate
-      }
-    ) {
-      advertisement {
-        _id
-      }
-    }
-  }
-`;
-export const DELETE_ADVERTISEMENT_BY_ID = gql`
-  mutation ($id: ID!) {
-    deleteAdvertisement(id: $id) {
-      advertisement {
-        _id
-      }
-    }
-  }
-`;
 export const UPDATE_POST_MUTATION = gql`
   mutation UpdatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {
@@ -723,6 +664,13 @@ export {
   DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
   UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
 } from './AgendaCategoryMutations';
+
+// CRUD operations for the advertisement
+export {
+  ADD_ADVERTISEMENT_MUTATION,
+  UPDATE_ADVERTISEMENT_MUTATION,
+  DELETE_ADVERTISEMENT_MUTATION,
+} from './AdvertisementMutations';
 
 export {
   CREATE_AGENDA_ITEM_MUTATION,

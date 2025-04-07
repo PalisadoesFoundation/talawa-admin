@@ -13,6 +13,7 @@ import {
   ORGANIZATION_ADVERTISEMENT_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { MockedResponse } from '@apollo/client/testing';
 
 const { getItem } = useLocalStorage();
 
@@ -119,29 +120,6 @@ export const ADVERTISEMENTS_LIST_MOCK: MockRequest[] = [
   ),
 ];
 
-export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
-  request: {
-    query: ADD_ADVERTISEMENT_MUTATION,
-    variables: {
-      organizationId: '1',
-      name: 'Cookie Shop',
-      file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
-      type: 'POPUP',
-      startDate: '2023-01-01',
-      endDate: '2023-02-02',
-    },
-  },
-  result: {
-    data: {
-      createAdvertisement: {
-        _id: '65844efc814dd4003db811c4',
-        advertisement: null,
-        __typename: 'Advertisement',
-      },
-    },
-  },
-};
-
 export const ORGANIZATIONS_LIST_MOCK = {
   request: { query: ORGANIZATIONS_LIST, variables: { id: '1' } },
   result: {
@@ -209,18 +187,18 @@ export const REGISTER_MOCKS = [
       variables: {
         organizationId: '1',
         name: 'Ad1',
-        type: 'BANNER',
-        startDate: '2023-01-01',
-        endDate: '2023-02-01',
-        file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
+        type: 'banner',
+        startAt: '2022-12-31T18:30:00.000Z', // Make sure this matches exactly
+        endAt: '2023-01-31T18:30:00.000Z', // Make sure this matches exactly
+        attachments: [expect.any(File)], // Consider using a matcher for File objects
+        description: 'advertisement',
       },
     },
     result: {
       data: {
         createAdvertisement: {
-          _id: '1',
-          advertisement: null,
-          __typename: 'Advertisement',
+          id: 'demo-id',
+          __typename: 'advertisement',
         },
       },
     },

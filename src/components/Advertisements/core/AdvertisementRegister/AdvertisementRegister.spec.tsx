@@ -1,12 +1,18 @@
 import React, { act } from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import {
+  render,
+  fireEvent,
+  waitFor,
+  screen,
+  getByTestId,
+} from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -16,6 +22,10 @@ import {
   client,
   REGISTER_MOCKS,
 } from 'components/Advertisements/AdvertisementsMocks';
+import {
+  ADD_ADVERTISEMENT_MUTATION,
+  UPDATE_ADVERTISEMENT_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -26,6 +36,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -35,6 +47,85 @@ vi.mock('react-toastify', () => ({
 }));
 
 const link = new StaticMockLink(REGISTER_MOCKS, true);
+
+const mockFile = new File(['dummy content'], 'test.jpg', {
+  type: 'image/jpeg',
+});
+const createAdSuccessMock: MockedResponse = {
+  request: {
+    query: ADD_ADVERTISEMENT_MUTATION,
+    variables: {
+      organizationId: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-12-31T18:30:00.000Z',
+      endAt: '2023-01-31T18:30:00.000Z',
+      description: 'advertisement',
+      attachments: [mockFile],
+    },
+  },
+  result: {
+    data: {
+      createAdvertisement: {
+        id: '0196',
+      },
+    },
+  },
+};
+
+const updateAdSuccessMock: MockedResponse = {
+  request: {
+    query: UPDATE_ADVERTISEMENT_MUTATION,
+    variables: {
+      id: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-12-31T18:30:00.000Z',
+      endAt: '2023-01-31T18:30:00.000Z',
+      description: 'advertisement',
+      attachments: [],
+    },
+  },
+  result: {
+    data: {
+      updateAdvertisement: {
+        id: '0196',
+      },
+    },
+  },
+};
+
+const createAdFailMock: MockedResponse = {
+  request: {
+    query: ADD_ADVERTISEMENT_MUTATION,
+    variables: {
+      organizationId: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-12-31T18:30:00.000Z',
+      endAt: '2023-01-31T18:30:00.000Z',
+      description: 'advertisement',
+      attachments: [mockFile],
+    },
+  },
+  error: new Error('Invalid arguments for this action.'),
+};
+
+const updateAdFailMock: MockedResponse = {
+  request: {
+    query: UPDATE_ADVERTISEMENT_MUTATION,
+    variables: {
+      id: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-01-31T18:30:00.000Z',
+      endAt: '2023-12-31T18:30:00.000Z',
+      description: 'advertisement',
+      attachments: [],
+    },
+  },
+  error: new Error('Invalid arguments for this action.'),
+};
 
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
@@ -53,6 +144,12 @@ const translations = {
 };
 
 describe('Testing Advertisement Register Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>
@@ -60,13 +157,16 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
-                nameEdit="Advert1"
-                orgIdEdit="1"
-                advertisementMediaEdit=""
-                setAfter={vi.fn()}
+                formStatus="register"
+                nameEdit=""
+                typeEdit="banner"
+                descriptionEdit=""
+                endAtEdit={
+                  new Date(new Date().setDate(new Date().getDate() + 1))
+                }
+                startAtEdit={new Date()}
+                idEdit="1"
+                setAfter={() => {}}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -83,18 +183,21 @@ describe('Testing Advertisement Register Component', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider addTypename={false} mocks={[createAdSuccessMock]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
-                  nameEdit="Ad1"
-                  orgIdEdit="1"
-                  advertisementMediaEdit=""
-                  setAfter={vi.fn()}
+                  formStatus="register"
+                  nameEdit=""
+                  typeEdit="banner"
+                  descriptionEdit=""
+                  endAtEdit={
+                    new Date(new Date().setDate(new Date().getDate() + 1))
+                  }
+                  startAtEdit={new Date()}
+                  idEdit="1"
+                  setAfter={() => {}}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -118,13 +221,13 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'Ad1' },
       });
 
-      const mediaFile = new File(['media content'], 'test.png', {
-        type: 'image/png',
+      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+        target: { value: 'advertisement' },
       });
 
       fireEvent.change(screen.getByLabelText(translations.Rmedia), {
         target: {
-          files: [mediaFile],
+          files: [mockFile],
         },
       });
     });
@@ -135,7 +238,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'BANNER' },
+        target: { value: 'banner' },
       });
 
       fireEvent.change(screen.getByLabelText(translations.RstartDate), {
@@ -148,13 +251,15 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
     expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
       '2023-02-01',
     );
+
+    expect(screen.getByText(translations.register)).toBeInTheDocument();
 
     await act(async () => {
       fireEvent.click(screen.getByText(translations.register));
@@ -171,20 +276,20 @@ describe('Testing Advertisement Register Component', () => {
 
   test('update advertisement', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-
+    const toastSuccessMock = vi.spyOn(toast, 'success');
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider addTypename={false} mocks={[updateAdSuccessMock]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
-                  nameEdit="Ad1"
-                  orgIdEdit="1"
-                  advertisementMediaEdit=""
+                  endAtEdit={new Date()}
+                  startAtEdit={new Date()}
+                  typeEdit="menu"
+                  nameEdit="Ad"
+                  idEdit="1"
+                  advertisementMedia=""
                   setAfter={vi.fn()}
                   formStatus="edit"
                 />
@@ -207,25 +312,14 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.change(screen.getByLabelText(translations.Rname), {
         target: { value: 'Ad1' },
       });
-
-      const mediaFile = new File(['media content'], 'test.png', {
-        type: 'image/png',
+      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+        target: { value: 'advertisement' },
       });
-
-      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
-        target: {
-          files: [mediaFile],
-        },
-      });
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     });
 
     await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'BANNER' },
+        target: { value: 'banner' },
       });
 
       fireEvent.change(screen.getByLabelText(translations.RstartDate), {
@@ -238,7 +332,7 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
       '2023-01-01',
     );
@@ -247,12 +341,13 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.saveChanges));
+      expect(screen.getByTestId('addonupdate')).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('addonupdate'));
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'Advertisement created successfully.',
+      expect(toastSuccessMock).toHaveBeenCalledWith(
+        'Advertisement updated Successfully',
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
@@ -266,17 +361,17 @@ describe('Testing Advertisement Register Component', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider addTypename={false} mocks={[createAdFailMock]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
                 <AdvertisementRegister
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
+                  endAtEdit={new Date()}
+                  startAtEdit={new Date()}
+                  typeEdit="banner"
                   nameEdit="Ad1"
-                  orgIdEdit="1"
-                  advertisementMediaEdit=""
+                  idEdit="1"
+                  advertisementMedia=""
                   setAfter={vi.fn()}
                 />
               </I18nextProvider>
@@ -302,7 +397,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `An error occurred. Couldn't create advertisement`,
+        `Invalid arguments for this action.`,
       );
     });
 
@@ -318,12 +413,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
                 nameEdit="Ad1"
-                orgIdEdit="1"
-                advertisementMediaEdit=""
+                idEdit="1"
+                advertisementMedia=""
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -357,9 +452,9 @@ describe('Testing Advertisement Register Component', () => {
     expect(mediaPreview).toBeInTheDocument();
 
     fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
 
     fireEvent.change(getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' },
@@ -375,7 +470,7 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(getByText(translations.register));
     });
     expect(toast.error).toHaveBeenCalledWith(
-      'End Date should be greater than or equal to Start Date',
+      'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
     vi.useRealTimers();
@@ -388,12 +483,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
                 nameEdit="Advert1"
-                orgIdEdit="1"
-                advertisementMediaEdit="google.com"
+                idEdit="1"
+                advertisementMedia="google.com"
                 formStatus="edit"
                 setAfter={vi.fn()}
               />
@@ -415,12 +510,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
                 nameEdit="Advert1"
-                orgIdEdit="1"
-                advertisementMediaEdit=""
+                idEdit="1"
+                advertisementMedia=""
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -440,20 +535,21 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     const { getByText, getByLabelText, queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               {
                 <AdvertisementRegister
                   formStatus="edit"
-                  endDateEdit={new Date()}
-                  startDateEdit={new Date()}
-                  typeEdit="BANNER"
+                  endAtEdit={new Date()}
+                  startAtEdit={new Date()}
+                  typeEdit="banner"
                   nameEdit="Advert1"
-                  orgIdEdit="1"
-                  advertisementMediaEdit="google.com"
+                  idEdit="1"
+                  advertisementMedia=""
                   setAfter={vi.fn()}
                 />
               }
@@ -463,7 +559,9 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(getByText(translations.edit));
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('editBtn'));
+    });
     expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
     fireEvent.change(getByLabelText(translations.Rname), {
       target: { value: 'Test Advertisement' },
@@ -472,34 +570,29 @@ describe('Testing Advertisement Register Component', () => {
       'Test Advertisement',
     );
 
-    const mediaFile = new File(['video content'], 'test.mp4', {
-      type: 'video/mp4',
-    });
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    await userEvent.upload(mediaInput, mediaFile);
-
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-
     fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'banner' },
     });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
 
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: '2023-02-02' },
+    expect(getByLabelText(translations.RstartDate)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+      target: { value: '2023-02-01' },
     });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-02');
 
-    fireEvent.change(getByLabelText(translations.RendDate), {
+    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-01');
+
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
       target: { value: '2023-01-01' },
     });
+
     expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
 
     fireEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'End Date should be greater than or equal to Start Date',
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'End Date should be greater than Start Date',
       );
     });
     vi.useRealTimers();
@@ -512,12 +605,12 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endDateEdit={new Date()}
-                startDateEdit={new Date()}
-                typeEdit="BANNER"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
                 nameEdit="Advert1"
-                orgIdEdit="1"
-                advertisementMediaEdit="test.mp4"
+                idEdit="1"
+                advertisementMedia="test.mp4"
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -542,47 +635,6 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(closeButton);
     expect(mediaPreview).not.toBeInTheDocument();
   });
+
   vi.useRealTimers();
-
-  test('shows success toast on successful update', async () => {
-    const setAfterMock = vi.fn();
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              <AdvertisementRegister
-                formStatus="edit"
-                idEdit="123"
-                nameEdit="Test Ad"
-                typeEdit="BANNER"
-                startDateEdit={new Date('2024-01-01')}
-                endDateEdit={new Date('2024-12-31')}
-                orgIdEdit="1"
-                advertisementMediaEdit=""
-                setAfter={setAfterMock}
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const editButton = screen.getByTestId('editBtn');
-    fireEvent.click(editButton);
-
-    const nameInput = screen.getByLabelText('Enter name of Advertisement');
-    fireEvent.change(nameInput, { target: { value: 'Updated Ad' } });
-
-    const saveButton = screen.getByTestId('addonupdate');
-    fireEvent.click(saveButton);
-
-    await waitFor(() => {
-      // Verify success toast was shown
-      expect(toast.success).toHaveBeenCalledWith(
-        'Advertisement created successfully.',
-      );
-    });
-  });
 });

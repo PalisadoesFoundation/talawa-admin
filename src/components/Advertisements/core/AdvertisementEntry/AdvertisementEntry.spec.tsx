@@ -10,11 +10,12 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import { MockedProvider } from '@apollo/client/testing';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
+import { AdvertisementType } from 'types/Advertisement/type';
 
 const translations = JSON.parse(
   JSON.stringify(
@@ -53,14 +54,20 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                id="1"
-                key={1}
-                mediaUrl="data:videos"
-                name="Advert1"
-                organizationId="1"
-                type="POPUP"
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [],
+                  name: 'Advert1',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -122,7 +129,20 @@ describe('Testing Advertisement Entry Component', () => {
   it('should use default props when none are provided', () => {
     render(
       <AdvertisementEntry
-        id={''}
+        advertisement={{
+          endAt: new Date(),
+          startAt: new Date(),
+          id: '1',
+          attachments: [],
+          name: 'Advert1',
+          createdAt: new Date(),
+          organization: {
+            id: '12',
+          },
+          orgId: '1',
+          type: AdvertisementType.Banner,
+          updatedAt: new Date(),
+        }}
         setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
         : void {
           throw new Error('Function not implemented.');
@@ -157,13 +177,20 @@ describe('Testing Advertisement Entry Component', () => {
 
     const { getByText } = render(
       <AdvertisementEntry
-        name={mockName}
-        type={mockType}
-        mediaUrl={mockMediaUrl}
-        endDate={mockEndDate}
-        startDate={mockStartDate}
-        organizationId={mockOrganizationId}
-        id={''}
+        advertisement={{
+          endAt: new Date(),
+          startAt: new Date(),
+          id: '1',
+          attachments: [],
+          name: 'Advert1',
+          createdAt: new Date(),
+          organization: {
+            id: '12',
+          },
+          orgId: '1',
+          type: AdvertisementType.Banner,
+          updatedAt: new Date(),
+        }}
         setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
         : void {
           throw new Error('Function not implemented.');
@@ -187,14 +214,20 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                id="1"
-                key={1}
-                mediaUrl=""
-                name="Advert1"
-                organizationId="1"
-                type="POPUP"
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [],
+                  name: 'Advert1',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -251,13 +284,20 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                type="POPUP"
-                name="Advert1"
-                organizationId="1"
-                mediaUrl=""
-                id="1"
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [],
+                  name: 'Advert1',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -321,13 +361,20 @@ describe('Testing Advertisement Entry Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
-                endDate={new Date()}
-                startDate={new Date()}
-                type="POPUP"
-                name="Advert1"
-                organizationId="1"
-                mediaUrl=""
-                id="1"
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [],
+                  name: 'Advert1',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
                 setAfter={vi.fn()}
               />
             </I18nextProvider>
@@ -537,7 +584,7 @@ describe('Testing Advertisement Entry Component', () => {
       },
       {
         request: {
-          query: DELETE_ADVERTISEMENT_BY_ID,
+          query: DELETE_ADVERTISEMENT_MUTATION,
           variables: {
             id: '1',
           },
@@ -559,14 +606,20 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider mocks={mocks} addTypename={false}>
                 <AdvertisementEntry
-                  endDate={new Date()}
-                  startDate={new Date()}
-                  id="1"
-                  key={1}
-                  mediaUrl="data:videos"
-                  name="Advert1"
-                  organizationId="1"
-                  type="POPUP"
+                  advertisement={{
+                    endAt: new Date(),
+                    startAt: new Date(),
+                    id: '1',
+                    attachments: [],
+                    name: 'Advert1',
+                    createdAt: new Date(),
+                    organization: {
+                      id: '12',
+                    },
+                    orgId: '1',
+                    type: AdvertisementType.Banner,
+                    updatedAt: new Date(),
+                  }}
                   setAfter={vi.fn()}
                 />
               </MockedProvider>

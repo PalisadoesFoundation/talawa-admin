@@ -16,7 +16,6 @@ import {
   wait,
   client,
   ORGANIZATIONS_LIST_MOCK,
-  ADD_ADVERTISEMENT_MUTATION_MOCK,
   ADVERTISEMENTS_LIST_MOCK,
 } from './AdvertisementsMocks';
 
@@ -40,11 +39,7 @@ tomorrow.setDate(today.getDate() + 1);
 
 describe('Testing Advertisement Component', () => {
   test('for creating new Advertisements', async () => {
-    const mocks = [
-      ORGANIZATIONS_LIST_MOCK,
-      ADD_ADVERTISEMENT_MUTATION_MOCK,
-      ...ADVERTISEMENTS_LIST_MOCK,
-    ];
+    const mocks = [ORGANIZATIONS_LIST_MOCK, ...ADVERTISEMENTS_LIST_MOCK];
 
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
