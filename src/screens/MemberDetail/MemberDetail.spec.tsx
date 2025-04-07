@@ -70,10 +70,6 @@ const updateData = {
   },
 };
 
-vi.mock('./src/utils/useLocalstorage.ts', () => ({
-  setItem: vi.fn(),
-}));
-
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -438,8 +434,9 @@ describe('MemberDetail', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
-      expect(confirmButton).toBeInTheDocument();
     });
+
+    expect(confirmButton).toBeInTheDocument();
   });
 
   test('clicking profile picture triggers file input click', async () => {
@@ -1023,31 +1020,35 @@ describe('MemberDetail', () => {
     expect(maritialStatus).toHaveTextContent('Male');
   });
 
-  test('clicking and submission of profile picture', async () => {
-    renderMemberDetailScreen(link1);
+  test('clicking profile picture or edit button triggers file input', async () => {
+    // Test first scenario with link1
+    const { unmount: unmountFirst } = renderMemberDetailScreen(link1);
     await wait();
 
     const uploadImageBtn = screen.getByTestId('profile-picture');
     expect(uploadImageBtn).toBeInTheDocument();
 
-    const fileInput = screen.getByTestId('fileInput');
-    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+    let fileInput = screen.getByTestId('fileInput');
+    let fileInputClickSpy = vi.spyOn(fileInput, 'click');
 
     await userEvent.click(uploadImageBtn);
     expect(fileInputClickSpy).toHaveBeenCalled();
-  });
 
-  test('handles profile picture edit button click', async () => {
+    // Clean up first render and reset spy
+    fileInputClickSpy.mockRestore();
+    unmountFirst();
+
+    // Test second scenario with link4
     renderMemberDetailScreen(link4);
     await wait();
 
-    const uploadImageBtn = screen.getByTestId('uploadImageBtn');
-    expect(uploadImageBtn).toBeInTheDocument();
+    const editButton = screen.getByTestId('uploadImageBtn');
+    expect(editButton).toBeInTheDocument();
 
-    const fileInput = screen.getByTestId('fileInput');
-    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+    fileInput = screen.getByTestId('fileInput');
+    fileInputClickSpy = vi.spyOn(fileInput, 'click');
 
-    await userEvent.click(uploadImageBtn);
+    await userEvent.click(editButton);
     expect(fileInputClickSpy).toHaveBeenCalled();
   });
 
@@ -1085,11 +1086,11 @@ describe('MemberDetail', () => {
     vi.mocked(passwordValidator.validatePassword).mockClear();
     toastErrorSpy.mockClear();
 
-    fireEvent.change(passwordInput, { target: { value: 'validPass' } });
+    fireEvent.change(passwordInput, { target: { value: 'validPass123!' } });
 
     await waitFor(() => {
       expect(passwordValidator.validatePassword).toHaveBeenCalledWith(
-        'validPass',
+        'validPass123!',
       );
     });
   });
