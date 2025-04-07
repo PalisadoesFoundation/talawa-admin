@@ -449,6 +449,7 @@ describe('MemberDetail', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+      expect(confirmButton).toBeInTheDocument();
     });
   });
 
@@ -1100,51 +1101,6 @@ describe('MemberDetail', () => {
         'validPass',
       );
     });
-  });
-
-  it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
-
-    const originalValidatePassword = window.validatePassword;
-
-    let validatePasswordShouldReturn = false;
-    window.validatePassword = (password) => {
-      return validatePasswordShouldReturn;
-    };
-
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    validatePasswordShouldReturn = false;
-
-    const passwordInput = screen.getByTestId('inputPassword');
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
-    expect(toastErrorSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
-    );
-
-    toastErrorSpy.mockClear();
-
-    validatePasswordShouldReturn = true;
-
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    fireEvent.change(passwordInput, {
-      target: { value: 'ValidPassword12@ijewirg3' },
-    });
-
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    const nameInput = screen.getByTestId('inputName');
-    fireEvent.change(nameInput, { target: { value: 'string' } });
-
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    window.validatePassword = originalValidatePassword;
-    toastErrorSpy.mockRestore();
   });
 
   it('should only validate passwords when value is a string type and fieldName is password', async () => {
