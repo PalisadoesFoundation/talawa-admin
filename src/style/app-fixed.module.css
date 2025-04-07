@@ -8425,27 +8425,23 @@ form {
 .mediaContainer {
   position: relative;
   width: 100%;
-  height: 200px;
-  /* Fixed height for all media containers */
+  height: 12.5rem;
   overflow: hidden;
 }
 
 .imageWrapper {
   width: 100%;
   height: 200px;
-  /* Same height as the container */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #f8f9fa;
-  /* Light background for empty areas */
 }
 
 .cardImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* This maintains aspect ratio while covering the container */
   object-position: center;
 }
 

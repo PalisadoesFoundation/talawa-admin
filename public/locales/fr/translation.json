@@ -1225,7 +1225,7 @@
     "RClose": "Ferme la fenêtre",
     "addNew": "Créer une nouvelle annonce",
     "EXname": "Ex. ",
-    "Exdesc": "Ex. ",
+    "EXdesc": "Ex. ",
     "EXlink": "Ex. ",
     "createAdvertisement": "Créer une publicité",
     "deleteAdvertisement": "Supprimer la publicité",
@@ -1242,7 +1242,8 @@
     "yes": "Oui",
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
-    "endOfResults": "Fin des résultats"
+    "endOfResults": "Fin des résultats",
+    "noDescription": "Aucune description"
   },
   "userChat": {
     "title": "Discussions",

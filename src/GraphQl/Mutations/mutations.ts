@@ -665,7 +665,6 @@ export {
   UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
 } from './AgendaCategoryMutations';
 
-// CRUD operations for the advertisement
 export {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,

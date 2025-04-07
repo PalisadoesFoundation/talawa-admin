@@ -1225,7 +1225,7 @@
     "RClose": "खिड़की बंद करो",
     "addNew": "नया विज्ञापन बनाएं",
     "EXname": "पूर्व। ",
-    "Exdesc": "पूर्व। ",
+    "EXdesc": "पूर्व। ",
     "EXlink": "पूर्व। ",
     "createAdvertisement": "विज्ञापन बनाएं",
     "deleteAdvertisement": "विज्ञापन हटाएँ",
@@ -1242,7 +1242,8 @@
     "yes": "हाँ",
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
-    "endOfResults": "परिणाम समाप्त"
+    "endOfResults": "परिणाम समाप्त",
+    "noDescription": "कोई विवरण नहीं"
   },
   "userChat": {
     "title": "चैट्स",

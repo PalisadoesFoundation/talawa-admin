@@ -1243,9 +1243,10 @@
     "RClose": "Cerrar",
     "addNew": "Agregar nuevo",
     "EXname": "Nombre",
-    "Exdesc": "Descripción",
+    "EXdesc": "Descripción",
     "EXlink": "Enlace",
-    "createAdvertisement": "Crear publicidad"
+    "createAdvertisement": "Crear publicidad",
+    "noDescription": "No hay descripción"
   },
   "userChat": {
     "title": "Chats",
