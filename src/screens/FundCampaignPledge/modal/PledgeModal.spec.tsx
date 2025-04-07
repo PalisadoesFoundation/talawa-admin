@@ -57,12 +57,20 @@ const createPledgeProps = (): InterfacePledgeModal => ({
 const editPledgeProps = (): InterfacePledgeModal => ({
   ...createPledgeProps(),
   pledge: {
-    _id: '1',
+    id: '1',
     amount: 100,
     currency: 'USD',
     startDate: '2024-01-01',
     endDate: '2024-01-10',
-    users: [{ _id: '1', firstName: 'John', lastName: 'Doe', image: undefined }],
+    users: [
+      {
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        name: 'John Doe',
+        image: undefined,
+      },
+    ],
   },
   mode: 'edit',
 });

@@ -36,7 +36,15 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     currency: 'USD',
     startDate: '2024-01-01',
     endDate: '2024-01-10',
-    users: [{ id: '1', firstName: 'John', lastName: 'Doe', image: 'img-url' }],
+    users: [
+      {
+        id: '1',
+        firstName: 'John',
+        lastName: 'Doe',
+        name: 'John Doe',
+        image: 'img-url',
+      },
+    ],
   },
   refetchPledge: vi.fn(),
 };

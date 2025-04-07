@@ -89,12 +89,12 @@ const fundCampaignPledge = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges[] };
+    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
       ApolloQueryResult<{
-        fundCampaign: InterfaceQueryFundCampaignsPledges[];
+        fundCampaign: InterfaceQueryFundCampaignsPledges;
       }>
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {

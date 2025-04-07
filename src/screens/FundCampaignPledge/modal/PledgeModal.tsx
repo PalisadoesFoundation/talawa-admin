@@ -145,7 +145,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       const variables: {
-        id: string;
+        id?: string;
         amount?: number;
       } = {
         id: pledge?.id,

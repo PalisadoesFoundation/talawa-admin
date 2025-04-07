@@ -331,9 +331,10 @@ export interface InterfaceCurrentUserTypePG {
 }
 
 export interface InterfaceUserInfo {
-  _id: string;
   firstName: string;
   lastName: string;
+  name: string;
+  id: string;
   image?: string | null;
 }
 
@@ -1025,7 +1026,19 @@ export interface InterfaceQueryFundCampaignsPledges {
   currencyCode: string;
   startAt: Date;
   endAt: Date;
-  pledges: InterfacePledgeInfo[];
+  pledges: {
+    edges: {
+      node: {
+        id: string;
+        amount: number;
+        createdAt: string;
+        pledger: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
 }
 
 export interface InterfaceCampaignInfoPG {
@@ -1079,6 +1092,16 @@ export interface InterfacePledgeInfo {
   endDate: string;
   startDate: string;
   users: InterfaceUserInfo[];
+}
+
+export interface InterfacePledgeInfoPG {
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
+  amount: number;
+  currencyCode: string;
+  endAt: string;
+  startAt: string;
+  pledges: InterfaceUserInfo[];
 }
 export interface InterfaceQueryOrganizationEventListItem
   extends InterfaceBaseEvent {

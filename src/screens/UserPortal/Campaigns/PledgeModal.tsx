@@ -52,7 +52,8 @@ import type {
 import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
   Autocomplete,
@@ -63,54 +64,6 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-
-export const CREATE_PLEDGE = gql`
-  mutation CreatePledge(
-    $campaignId: ID!
-    $amount: Float!
-    $currency: String!
-    $startDate: Date!
-    $endDate: Date!
-    $userIds: [ID!]!
-  ) {
-    createFundraisingCampaignPledge(
-      input: {
-        campaignId: $campaignId
-        amount: $amount
-        currency: $currency
-        startDate: $startDate
-        endDate: $endDate
-        userIds: $userIds
-      }
-    ) {
-      id
-    }
-  }
-`;
-
-export const UPDATE_PLEDGE = gql`
-  mutation UpdatePledge(
-    $id: ID!
-    $amount: Float
-    $currency: String
-    $startDate: Date
-    $endDate: Date
-    $userIds: [ID!]
-  ) {
-    updateFundraisingCampaignPledge(
-      id: $id
-      input: {
-        amount: $amount
-        currency: $currency
-        startDate: $startDate
-        endDate: $endDate
-        userIds: $userIds
-      }
-    ) {
-      id
-    }
-  }
-`;
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -188,6 +141,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           id: userData.user.user.id,
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
+          name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
           image: userData.user.user.image,
         },
       ]);
