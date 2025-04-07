@@ -465,11 +465,6 @@ const mocks: MockedResponse[] = [
   },
 ];
 
-const assigneeMocks: MockedResponse[] = [
-  updateAssigneeMock,
-  // You might need to add other mocks (e.g., for categories, users, etc.) that ItemModal relies on.
-];
-// --- Global mocks for callbacks ---
 let hideMock = vi.fn();
 let refetchMock = vi.fn();
 
@@ -1082,6 +1077,268 @@ describe('ItemModal Component', () => {
     // Wait for error toast
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(errorMessage);
+    });
+  });
+
+  //  Testing the isOptionEqualToValue functionality in Autocomplete
+  it('correctly compares option values in assignee dropdown using isOptionEqualToValue', async () => {
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY_LIST,
+          variables: { organizationId: 'org1', where: { is_disabled: false } },
+        },
+        result: { data: sampleCategoryData },
+      },
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleActionCategoryData },
+      },
+      {
+        request: {
+          query: USERS_BY_ORGANIZATION_ID,
+          variables: { organizationId: 'org1' },
+        },
+        result: { data: sampleUsersData },
+      },
+      {
+        request: {
+          query: EVENT_VOLUNTEER_LIST,
+          variables: { where: { eventId: 'event1', hasAccepted: true } },
+        },
+        result: { data: sampleVolunteersData },
+      },
+      {
+        request: {
+          query: MEMBERS_LIST,
+          variables: { id: 'org1' },
+        },
+        result: { data: sampleMembersData },
+      },
+      {
+        request: {
+          query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleEventsData },
+      },
+    ];
+
+    // Render component with the existing action item to test value comparison
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for the component to load data
+    await waitFor(() => {
+      expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+    });
+
+    // Check if the current assignee is correctly selected in the dropdown
+    const assigneeInput = screen.getByTestId('assignee-input');
+    await waitFor(() => {
+      expect(assigneeInput).toHaveValue('User One');
+    });
+  });
+
+  // Testing if no update is made when assignee isn't changed
+  it('does not update assignee when it is not changed', async () => {
+    // Mock for warning about no changes
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY_LIST,
+          variables: { organizationId: 'org1', where: { is_disabled: false } },
+        },
+        result: { data: sampleCategoryData },
+      },
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleActionCategoryData },
+      },
+      {
+        request: {
+          query: USERS_BY_ORGANIZATION_ID,
+          variables: { organizationId: 'org1' },
+        },
+        result: { data: sampleUsersData },
+      },
+      {
+        request: {
+          query: EVENT_VOLUNTEER_LIST,
+          variables: { where: { eventId: 'event1', hasAccepted: true } },
+        },
+        result: { data: sampleVolunteersData },
+      },
+      {
+        request: {
+          query: MEMBERS_LIST,
+          variables: { id: 'org1' },
+        },
+        result: { data: sampleMembersData },
+      },
+      {
+        request: {
+          query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleEventsData },
+      },
+    ];
+
+    // Render component in edit mode without changing the assignee
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
+    });
+
+    // Submit form without changing assignee
+    const submitBtn = screen.getByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    // Should show warning about no changes
+    await waitFor(() => {
+      expect(toast.warning).toHaveBeenCalledWith('noneUpdated');
+    });
+  });
+  // Testing null/undefined handling in Autocomplete onChange
+  it('handles null assignee selection correctly', async () => {
+    // Create a mock for the update mutation with empty assigneeId
+    const updateEmptyAssigneeMock: MockedResponse = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            assigneeId: '',
+            isCompleted: false,
+          },
+        },
+      },
+      result: {
+        data: {
+          updateActionItem: {
+            ...sampleActionItem,
+            assigneeId: '',
+          },
+        },
+      },
+    };
+
+    const mocks: MockedResponse[] = [
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY_LIST,
+          variables: { organizationId: 'org1', where: { is_disabled: false } },
+        },
+        result: { data: sampleCategoryData },
+      },
+      {
+        request: {
+          query: ACTION_ITEM_CATEGORY,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleActionCategoryData },
+      },
+      {
+        request: {
+          query: USERS_BY_ORGANIZATION_ID,
+          variables: { organizationId: 'org1' },
+        },
+        result: { data: sampleUsersData },
+      },
+      {
+        request: {
+          query: EVENT_VOLUNTEER_LIST,
+          variables: { where: { eventId: 'event1', hasAccepted: true } },
+        },
+        result: { data: sampleVolunteersData },
+      },
+      {
+        request: {
+          query: MEMBERS_LIST,
+          variables: { id: 'org1' },
+        },
+        result: { data: sampleMembersData },
+      },
+      {
+        request: {
+          query: POSTGRES_EVENTS_BY_ORGANIZATION_ID,
+          variables: { input: { organizationId: 'org1' } },
+        },
+        result: { data: sampleEventsData },
+      },
+      updateEmptyAssigneeMock,
+    ];
+
+    // Render component
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal
+            isOpen={true}
+            hide={hideMock}
+            orgId="org1"
+            eventId="event1"
+            actionItem={sampleActionItem}
+            editMode={true}
+            actionItemsRefetch={refetchMock}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+    });
+
+    // Find and clear the assignee field
+    const assigneeField = screen.getByTestId('memberSelect');
+    const clearButton = within(assigneeField).getByTitle('Clear');
+    fireEvent.click(clearButton);
+
+    // Submit form
+    const submitBtn = screen.getByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    // Verify that the mutation was called and success toast was shown
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
     });
   });
 });
