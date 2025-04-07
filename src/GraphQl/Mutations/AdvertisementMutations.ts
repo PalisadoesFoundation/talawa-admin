@@ -38,7 +38,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to delete an advertisement..
+ * GraphQL mutation to update an advertisement..
  *
  * @param id - Global identifier of the advertisement.
  * @param name - Optional updated name of the advertisement
