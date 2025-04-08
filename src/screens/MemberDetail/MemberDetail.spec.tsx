@@ -965,15 +965,13 @@ describe('MemberDetail', () => {
     expect(countrySelect).toHaveValue('us');
   });
 
-  it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    vi.spyOn({ validatePassword }, 'validatePassword').mockImplementation(
-      (password: string) => {
-        if (password === 'string' || password === 'weakpassword') {
-          return false;
-        }
-        return true;
-      },
-    );
+  it('should validate passwords correctly and only on password fields', async () => {
+    vi.mocked(validatePassword).mockImplementation((password: string) => {
+      if (password === 'string' || password === 'weakpassword') {
+        return false;
+      }
+      return true;
+    });
 
     renderMemberDetailScreen(link1);
     await wait();
