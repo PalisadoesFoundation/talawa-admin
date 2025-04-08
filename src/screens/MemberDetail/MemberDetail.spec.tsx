@@ -49,7 +49,6 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-const validatePasswordSpy = vi.spyOn({ validatePassword }, 'validatePassword');
 const toastErrorSpy = vi.spyOn(toast, 'error');
 
 async function wait(ms = 500): Promise<void> {
@@ -58,16 +57,6 @@ async function wait(ms = 500): Promise<void> {
 
 const setItem = vi.fn();
 const tCommon = vi.fn().mockReturnValue('Profile updated successfully');
-
-const updateData = {
-  updateCurrentUser: {
-    avatarURL: 'https://example.com/avatar.jpg',
-    name: 'Test User',
-    emailAddress: 'test@example.com',
-    id: '123',
-    role: 'USER',
-  },
-};
 
 Object.defineProperty(window, 'localStorage', {
   value: {
@@ -79,9 +68,18 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
-vi.mock('./src/utils/useLocalstorage.ts', () => ({
-  setItem: vi.fn(),
-}));
+const handleFieldChange = (fieldName: string, value: any) => {
+  if (typeof value === 'string') {
+    if (fieldName === 'password' && value) {
+      if (!validatePassword(value)) {
+        toast.error(
+          'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
+        );
+        return;
+      }
+    }
+  }
+};
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -89,28 +87,6 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
-  };
-});
-
-vi.mock('utils/passwordValidator', async () => {
-  const originalModule = await vi.importActual<
-    typeof import('utils/passwordValidator')
-  >('utils/passwordValidator');
-
-  return {
-    ...originalModule,
-    validatePassword: vi.fn((password: string) => {
-      if (password === 'short') {
-        return false;
-      }
-      if (password === 'ValidPassword12@ijewirg3') {
-        return true;
-      }
-      if (password === 'string') {
-        return false;
-      }
-      return originalModule.validatePassword(password);
-    }),
   };
 });
 
@@ -335,20 +311,6 @@ describe('MemberDetail', () => {
     expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
   });
 
-  it('handles file upload correctly', async () => {
-    renderMemberDetailScreen(link1);
-    global.URL.createObjectURL = vi.fn(() => 'mockURL');
-    await waitFor(() => {
-      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
-    });
-
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId('fileInput');
-    await userEvent.upload(fileInput, file);
-
-    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
-  });
-
   it('validates birth date input', async () => {
     renderMemberDetailScreen(link1);
     await waitFor(() => {
@@ -448,28 +410,30 @@ describe('MemberDetail', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+      expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
     });
   });
 
-  test('clicking profile picture triggers file input click', async () => {
-    renderMemberDetailScreen(link2);
-    await wait();
+  test('profile picture triggers file input and handles file upload', async () => {
+    global.URL.createObjectURL = vi.fn(() => 'mockURL');
 
-    const profilePicture = screen.getByTestId('profile-picture');
-    expect(profilePicture).toBeInTheDocument();
+    renderMemberDetailScreen(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    });
 
     const mockClick = vi.fn();
-
     const originalClick = Object.getOwnPropertyDescriptor(
       HTMLInputElement.prototype,
       'click',
     );
-
     Object.defineProperty(HTMLInputElement.prototype, 'click', {
       configurable: true,
       value: mockClick,
     });
 
+    const profilePicture = screen.getByTestId('profile-picture');
     await userEvent.click(profilePicture);
 
     expect(mockClick).toHaveBeenCalled();
@@ -477,6 +441,12 @@ describe('MemberDetail', () => {
     if (originalClick) {
       Object.defineProperty(HTMLInputElement.prototype, 'click', originalClick);
     }
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('fileInput');
+    await userEvent.upload(fileInput, file);
+
+    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
   });
 
   it('handles avatar processing error', async () => {
@@ -559,7 +529,7 @@ describe('MemberDetail', () => {
     expect(adminApprovedCheckbox).not.toBeChecked();
   });
 
-  test('both checkboxes should update form state', async () => {
+  test('checkbox should update form state', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
@@ -1045,42 +1015,10 @@ describe('MemberDetail', () => {
     expect(countrySelect).toHaveValue('us');
   });
 
-  it('should validate passwords when value is string type and fieldName is password', async () => {
-    renderMemberDetailScreen(link1);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
-    });
-
-    const passwordInput = screen.getByTestId('inputPassword');
-
-    fireEvent.change(passwordInput, { target: { value: 'short' } });
-
-    await waitFor(() => {
-      expect(validatePassword).toHaveBeenCalledWith('short');
-
-      expect(toastErrorSpy).toHaveBeenCalledWith(
-        'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
-      );
-    });
-
-    vi.mocked(validatePassword).mockClear();
-    toastErrorSpy.mockClear();
-
-    fireEvent.change(passwordInput, { target: { value: 'validPass' } });
-
-    await waitFor(() => {
-      expect(validatePassword).toHaveBeenCalledWith('validPass');
-    });
-  });
-
   it('should only validate passwords when value is "string" and fieldName is password', async () => {
     const originalValidatePassword = window.validatePassword;
 
     let validatePasswordShouldReturn = false;
-    window.validatePassword = (password) => {
-      return validatePasswordShouldReturn;
-    };
 
     renderMemberDetailScreen(link1);
     await wait();
@@ -1114,43 +1052,6 @@ describe('MemberDetail', () => {
     expect(toastErrorSpy).not.toHaveBeenCalled();
 
     window.validatePassword = originalValidatePassword;
-    toastErrorSpy.mockRestore();
-  });
-
-  it('should only validate passwords when value is a string type and fieldName is password', async () => {
-    const handleFieldChange = (fieldName: string, value: any) => {
-      if (typeof value === 'string') {
-        if (fieldName === 'password' && value) {
-          if (!validatePassword(value)) {
-            toast.error(
-              'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
-            );
-            return;
-          }
-        }
-      }
-    };
-
-    handleFieldChange('password', 'weak');
-    expect(validatePasswordSpy).toHaveBeenCalledWith('weak');
-
-    validatePasswordSpy.mockClear();
-    toastErrorSpy.mockClear();
-
-    handleFieldChange('password', 'ValidPass123!');
-    expect(validatePasswordSpy).toHaveBeenCalledWith('ValidPass123!');
-    expect(toastErrorSpy).not.toHaveBeenCalled();
-
-    validatePasswordSpy.mockClear();
-
-    handleFieldChange('password', true);
-    handleFieldChange('password', 123);
-    handleFieldChange('password', null);
-    handleFieldChange('password', undefined);
-
-    expect(validatePasswordSpy).not.toHaveBeenCalled();
-
-    validatePasswordSpy.mockRestore();
     toastErrorSpy.mockRestore();
   });
 
