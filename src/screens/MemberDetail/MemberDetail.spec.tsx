@@ -69,11 +69,10 @@ const updateData = {
   },
 };
 
-const mockSetItem = vi.fn();
 Object.defineProperty(window, 'localStorage', {
   value: {
     getItem: vi.fn(),
-    setItem: mockSetItem,
+    setItem: setItem,
     removeItem: vi.fn(),
     clear: vi.fn(),
   },
@@ -1156,13 +1155,10 @@ describe('MemberDetail', () => {
   });
 
   test('should set localStorage items when user update is successful', async () => {
-    // Render the component
     renderMemberDetailScreen(link5);
     await wait();
 
-    // Simulate handleUserUpdate with successful update
     await act(async () => {
-      // Create a simulated implementation of handleUserUpdate
       const updateUserMock = vi.fn().mockResolvedValue({
         data: {
           updateCurrentUser: {
@@ -1177,32 +1173,27 @@ describe('MemberDetail', () => {
 
       const tCommon = vi.fn().mockReturnValue('Profile updated successfully');
 
-      // Simulate the function call
       const { data: updateData } = await updateUserMock();
 
       if (updateData) {
         toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
-        mockSetItem('UserImage', updateData.updateCurrentUser.avatarURL);
-        mockSetItem('name', updateData.updateCurrentUser.name);
-        mockSetItem('email', updateData.updateCurrentUser.emailAddress);
-        mockSetItem('id', updateData.updateCurrentUser.id);
-        mockSetItem('role', updateData.updateCurrentUser.role);
-        // Wait for toast to complete
+        setItem('UserImage', updateData.updateCurrentUser.avatarURL);
+        setItem('name', updateData.updateCurrentUser.name);
+        setItem('email', updateData.updateCurrentUser.emailAddress);
+        setItem('id', updateData.updateCurrentUser.id);
+        setItem('role', updateData.updateCurrentUser.role);
+
         await new Promise((resolve) => setTimeout(resolve, 2000));
       }
-      // Verify localStorage setItem calls
-      expect(mockSetItem).toHaveBeenCalledTimes(5);
-      expect(mockSetItem).toHaveBeenCalledWith('UserImage', null);
-      expect(mockSetItem).toHaveBeenCalledWith('name', 'New Name');
-      expect(mockSetItem).toHaveBeenCalledWith(
-        'email',
-        'testadmin1@example.com',
-      );
-      expect(mockSetItem).toHaveBeenCalledWith(
+      expect(setItem).toHaveBeenCalledTimes(5);
+      expect(setItem).toHaveBeenCalledWith('UserImage', null);
+      expect(setItem).toHaveBeenCalledWith('name', 'New Name');
+      expect(setItem).toHaveBeenCalledWith('email', 'testadmin1@example.com');
+      expect(setItem).toHaveBeenCalledWith(
         'id',
         '65378abd-8500-8f17-1cf2-990d00000002',
       );
-      expect(mockSetItem).toHaveBeenCalledWith('role', 'administrator');
+      expect(setItem).toHaveBeenCalledWith('role', 'administrator');
     });
   });
 });
