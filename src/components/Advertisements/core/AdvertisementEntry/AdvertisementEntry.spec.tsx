@@ -40,6 +40,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+const mockFile = new File(['dummy content'], 'test.jpg', {
+  type: 'image/jpeg',
+});
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -48,7 +53,7 @@ describe('Testing Advertisement Entry Component', () => {
   it('Testing rendering and deleting of advertisement', async () => {
     const deleteAdByIdMock = vi.fn();
     mockUseMutation.mockReturnValue([deleteAdByIdMock]);
-    const { getByTestId, getAllByText } = render(
+    const screen = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
@@ -58,7 +63,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [],
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
                   name: 'Advert1',
                   createdAt: new Date(),
                   organization: {
@@ -77,21 +82,22 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     //Testing rendering
-    expect(getByTestId('AdEntry')).toBeInTheDocument();
-    expect(getAllByText('POPUP')[0]).toBeInTheDocument();
-    expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(screen.getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
     //Testing successful deletion
-    fireEvent.click(getByTestId('moreiconbtn'));
-    fireEvent.click(getByTestId('deletebtn'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('delete_title')).toBeInTheDocument();
       expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
 
-    fireEvent.click(getByTestId('delete_yes'));
+    fireEvent.click(screen.getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -106,9 +112,9 @@ describe('Testing Advertisement Entry Component', () => {
     //Testing unsuccessful deletion
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
-    fireEvent.click(getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
 
-    fireEvent.click(getByTestId('delete_yes'));
+    fireEvent.click(screen.getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -133,7 +139,7 @@ describe('Testing Advertisement Entry Component', () => {
           endAt: new Date(),
           startAt: new Date(),
           id: '1',
-          attachments: [],
+          attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
           name: 'Advert1',
           createdAt: new Date(),
           organization: {
@@ -156,40 +162,45 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with default `mediaUrl` (empty string)
     const mediaElement = screen.getByTestId('media');
-    expect(mediaElement).toHaveAttribute('src', '');
+    expect(mediaElement).toHaveAttribute('src', 'test.jpg');
 
     // Check that the component renders with default `endDate`
     const defaultEndDate = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultEndDate}`)).toBeInTheDocument();
+    expect(screen.getByText(`Ends : ${defaultEndDate}`)).toBeInTheDocument();
 
     // Check that the component renders with default `startDate`
     const defaultStartDate = new Date().toDateString();
-    expect(screen.getByText(`Ends on ${defaultStartDate}`)).toBeInTheDocument(); //fix text "Ends on"?
+    expect(
+      screen.getByText(`Starts : ${defaultStartDate}`),
+    ).toBeInTheDocument();
   });
 
   it('should correctly override default props when values are provided', () => {
-    const mockName = 'Test Ad';
-    const mockType = 'Banner';
     const mockMediaUrl = 'https://example.com/media.png';
+    const mockMediaType = 'image/png';
+    const mockName = 'Test Ad';
+    const mockType = AdvertisementType.Menu;
+    const mockCreatedAt = new Date();
     const mockEndDate = new Date(2025, 11, 31);
     const mockStartDate = new Date(2024, 0, 1);
+    const mockUpdatedAt = new Date();
     const mockOrganizationId = 'org123';
 
     const { getByText } = render(
       <AdvertisementEntry
         advertisement={{
-          endAt: new Date(),
-          startAt: new Date(),
+          endAt: mockEndDate,
+          startAt: mockStartDate,
           id: '1',
-          attachments: [],
-          name: 'Advert1',
-          createdAt: new Date(),
+          attachments: [{ url: mockMediaUrl, mimeType: mockMediaType }],
+          name: mockName,
+          createdAt: mockCreatedAt,
           organization: {
-            id: '12',
+            id: mockOrganizationId,
           },
           orgId: '1',
-          type: AdvertisementType.Banner,
-          updatedAt: new Date(),
+          type: mockType,
+          updatedAt: mockUpdatedAt,
         }}
         setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
         : void {
@@ -200,10 +211,10 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Check that the component renders with provided values
     expect(getByText(mockName)).toBeInTheDocument();
-    expect(getByText(mockType)).toBeInTheDocument();
+    expect(screen.getByText(`Type: ${mockType}`)).toBeInTheDocument();
     expect(screen.getByTestId('media')).toHaveAttribute('src', mockMediaUrl);
     expect(
-      getByText(`Ends on ${mockEndDate.toDateString()}`),
+      getByText(`Ends : ${mockEndDate.toDateString()}`),
     ).toBeInTheDocument();
   });
 
@@ -238,7 +249,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     // Test initial rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
-    expect(getAllByText('POPUP')[0]).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
 
     // Test dropdown functionality
@@ -265,7 +276,7 @@ describe('Testing Advertisement Entry Component', () => {
       data: {
         updateAdvertisement: {
           advertisement: {
-            _id: '1',
+            id: '1',
             name: 'Updated Advertisement',
             mediaUrl: '',
             startDate: dayjs(new Date()).add(1, 'day').format('YYYY-MM-DD'),
@@ -285,8 +296,8 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date(),
-                  startAt: new Date(),
+                  endAt: new Date('2025-04-09T18:30:00.000Z'),
+                  startAt: new Date('2025-04-08T18:30:00.000Z'),
                   id: '1',
                   attachments: [],
                   name: 'Advert1',
@@ -319,27 +330,28 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'menu' },
     });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('menu');
 
     fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-      target: { value: dayjs().add(1, 'day').format('YYYY-MM-DD') },
+      target: { value: '2025-04-08' },
     });
 
     fireEvent.change(screen.getByLabelText(translations.RendDate), {
-      target: { value: dayjs().add(2, 'days').format('YYYY-MM-DD') },
+      target: { value: '2025-04-09' },
     });
 
     fireEvent.click(screen.getByTestId('addonupdate'));
 
     expect(updateAdByIdMock).toHaveBeenCalledWith({
       variables: {
+        attachments: [],
+        endAt: '2025-04-08T18:30:00.000Z',
         id: '1',
         name: 'Updated Advertisement',
-        type: 'BANNER',
-        startDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
-        endDate: dayjs().add(2, 'days').format('YYYY-MM-DD'),
+        type: 'menu',
+        startAt: '2025-04-07T18:30:00.000Z',
       },
     });
   });
@@ -347,7 +359,7 @@ describe('Testing Advertisement Entry Component', () => {
   it('Simulating if the mutation doesnt have data variable while updating', async () => {
     const updateAdByIdMock = vi.fn().mockResolvedValue({
       updateAdvertisement: {
-        _id: '1',
+        id: '1',
         name: 'Updated Advertisement',
         type: 'BANNER',
       },
@@ -362,8 +374,8 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date(),
-                  startAt: new Date(),
+                  endAt: new Date('2025-04-09T18:30:00.000Z'),
+                  startAt: new Date('2025-04-08T18:30:00.000Z'),
                   id: '1',
                   attachments: [],
                   name: 'Advert1',
@@ -396,9 +408,9 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
+      target: { value: 'menu' },
     });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('menu');
 
     fireEvent.click(screen.getByTestId('addonupdate'));
 
@@ -406,7 +418,10 @@ describe('Testing Advertisement Entry Component', () => {
       variables: {
         id: '1',
         name: 'Updated Advertisement',
-        type: 'BANNER',
+        type: 'menu',
+        endAt: '2025-04-09T18:30:00.000Z',
+        startAt: '2025-04-08T18:30:00.000Z',
+        attachments: [],
       },
     });
   });
@@ -420,7 +435,7 @@ describe('Testing Advertisement Entry Component', () => {
     const createAdByIdMock = vi.fn().mockResolvedValue({
       data1: {
         createAdvertisement: {
-          _id: '1',
+          id: '1',
         },
       },
     });
@@ -454,10 +469,7 @@ describe('Testing Advertisement Entry Component', () => {
       'Updated Advertisement',
     );
 
-    fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'BANNER' },
-    });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('BANNER');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
 
     fireEvent.change(screen.getByLabelText(translations.RstartDate), {
       target: { value: '2023-01-01' },
@@ -473,16 +485,34 @@ describe('Testing Advertisement Entry Component', () => {
       '2023-02-01',
     );
 
+    await waitFor(() => {
+      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+        target: { value: 'advertisement' },
+      });
+
+      expect(screen.getByLabelText(translations.Rdesc)).toHaveValue(
+        'advertisement',
+      );
+      expect(screen.getByLabelText(translations.Rmedia)).toBeInTheDocument();
+      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
+        target: {
+          files: [mockFile],
+        },
+      });
+    });
+
+    expect(screen.getByTestId('addonregister')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('addonregister'));
 
     expect(createAdByIdMock).toHaveBeenCalledWith({
       variables: {
         organizationId: '1',
+        attachments: [mockFile],
         name: 'Updated Advertisement',
-        file: '',
-        type: 'BANNER',
-        startDate: dayjs(new Date('2023-01-01')).format('YYYY-MM-DD'),
-        endDate: dayjs(new Date('2023-02-01')).format('YYYY-MM-DD'),
+        description: 'advertisement',
+        type: 'banner',
+        startAt: '2022-12-31T18:30:00.000Z',
+        endAt: '2023-01-31T18:30:00.000Z',
       },
     });
   });
@@ -505,12 +535,12 @@ describe('Testing Advertisement Entry Component', () => {
           data: {
             organizations: [
               {
-                _id: '1',
+                id: '1',
                 advertisements: {
                   edges: [
                     {
                       node: {
-                        _id: '1',
+                        id: '1',
                         name: 'Advertisement1',
                         startDate: '2022-01-01',
                         endDate: '2023-01-01',
@@ -520,7 +550,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '2',
+                        id: '2',
                         name: 'Advertisement2',
                         startDate: '2024-02-01',
                         endDate: '2025-02-01',
@@ -530,7 +560,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '3',
+                        id: '3',
                         name: 'Advertisement1',
                         startDate: '2022-01-01',
                         endDate: '2023-01-01',
@@ -540,7 +570,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '4',
+                        id: '4',
                         name: 'Advertisement2',
                         startDate: '2024-02-01',
                         endDate: '2025-02-01',
@@ -550,7 +580,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '5',
+                        id: '5',
                         name: 'Advertisement1',
                         startDate: '2022-01-01',
                         endDate: '2023-01-01',
@@ -560,7 +590,7 @@ describe('Testing Advertisement Entry Component', () => {
                     },
                     {
                       node: {
-                        _id: '6',
+                        id: '6',
                         name: 'Advertisement2',
                         startDate: '2024-02-01',
                         endDate: '2025-02-01',
@@ -592,7 +622,7 @@ describe('Testing Advertisement Entry Component', () => {
         result: {
           data: {
             advertisements: {
-              _id: null,
+              id: null,
             },
           },
         },
@@ -631,7 +661,8 @@ describe('Testing Advertisement Entry Component', () => {
 
     //Testing rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
-    expect(getAllByText('POPUP')[0]).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toHaveTextContent('banner');
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 

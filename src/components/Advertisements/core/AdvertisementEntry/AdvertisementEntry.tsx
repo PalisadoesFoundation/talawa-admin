@@ -209,6 +209,7 @@ function AdvertisementEntry({
                   ) : (
                     <div
                       className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
+                      data-testid="media"
                     >
                       No media available
                     </div>
@@ -245,7 +246,10 @@ function AdvertisementEntry({
                     : 'N/A'}
                 </Card.Text>
 
-                <Card.Subtitle className="mb-2 text-muted author">
+                <Card.Subtitle
+                  className="mb-2 text-muted author"
+                  data-testid="Ad_type"
+                >
                   Type:{' '}
                   {advertisement.type === 'pop_up'
                     ? 'pop up'
