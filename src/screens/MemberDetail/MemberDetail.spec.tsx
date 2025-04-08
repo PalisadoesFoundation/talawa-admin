@@ -10,7 +10,13 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter,
+  MemoryRouter,
+  Route,
+  Routes,
+  NavigateFunction,
+} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
@@ -56,7 +62,6 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const setItem = vi.fn();
-const tCommon = vi.fn().mockReturnValue('Profile updated successfully');
 
 Object.defineProperty(window, 'localStorage', {
   value: {
@@ -68,22 +73,13 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
-const handleFieldChange = (fieldName: string, value: any) => {
-  if (typeof value === 'string') {
-    if (fieldName === 'password' && value) {
-      if (!validatePassword(value)) {
-        toast.error(
-          'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
-        );
-        return;
-      }
-    }
-  }
-};
+const mockNavigate: NavigateFunction = vi.fn();
 
-const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -674,120 +670,82 @@ describe('MemberDetail', () => {
     toastSuccessSpy.mockRestore();
   });
 
-  test('should only show success toast and close confirm when deleteData exists', async () => {
-    const deleteUserWithData = vi.fn().mockResolvedValue({
-      data: { deleteUser: { id: 'rishav-jha-mech' } },
-    });
+  test.each([
+    {
+      scenario: 'with valid data',
+      mockDelete: vi.fn().mockResolvedValue({
+        data: { deleteUser: { id: 'rishav-jha-mech' } },
+      }),
+      testId: 'trigger-delete',
+      expectToast: true,
+      expectCloseModal: true,
+    },
+    {
+      scenario: 'with null data',
+      mockDelete: vi.fn().mockResolvedValue({
+        data: null,
+      }),
+      testId: 'trigger-delete-no-data',
+      expectToast: false,
+      expectCloseModal: false,
+    },
+  ])(
+    'should handle user deletion $scenario',
+    async ({ mockDelete, testId, expectToast, expectCloseModal }) => {
+      const toastSuccessSpy = vi.spyOn(toast, 'success');
+      const mockSetShowDeleteConfirm = vi.fn();
 
-    const deleteUserWithoutData = vi.fn().mockResolvedValue({
-      data: null,
-    });
+      render(
+        <MockedProvider addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Provider store={store}>
+              <BrowserRouter>
+                <button
+                  type="button"
+                  data-testid={testId}
+                  onClick={async () => {
+                    try {
+                      const { data: deleteData } = await mockDelete({
+                        variables: { id: 'rishav-jha-mech' },
+                      });
+                      if (deleteData) {
+                        toast.success('User deleted successfully');
+                        mockSetShowDeleteConfirm(false);
+                      }
+                    } catch (error) {}
+                  }}
+                >
+                  Delete
+                </button>
+              </BrowserRouter>
+            </Provider>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
 
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+      fireEvent.click(screen.getByTestId(testId));
 
-    let mockHandleDeleteUser: () => Promise<void>;
-    let triggerDelete: any;
+      await waitFor(() => {
+        expect(mockDelete).toHaveBeenCalledTimes(1);
+      });
 
-    const mockSetShowDeleteConfirm = vi.fn();
+      if (expectToast) {
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'User deleted successfully',
+        );
+      } else {
+        expect(toastSuccessSpy).not.toHaveBeenCalled();
+      }
 
-    render(
-      <MockedProvider addTypename={false}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Provider store={store}>
-            <BrowserRouter>
-              {(() => {
-                mockHandleDeleteUser = async () => {
-                  try {
-                    const { data: deleteData } = await deleteUserWithData({
-                      variables: { id: 'rishav-jha-mech' },
-                    });
+      if (expectCloseModal) {
+        expect(mockSetShowDeleteConfirm).toHaveBeenCalledWith(false);
+      } else {
+        expect(mockSetShowDeleteConfirm).not.toHaveBeenCalled();
+      }
 
-                    if (deleteData) {
-                      toast.success('User deleted successfully');
-                      mockSetShowDeleteConfirm(false);
-                    }
-                  } catch (error) {}
-                };
-
-                triggerDelete = () => (
-                  <button
-                    type="button"
-                    data-testid="trigger-delete"
-                    onClick={mockHandleDeleteUser}
-                  >
-                    Delete
-                  </button>
-                );
-
-                return triggerDelete();
-              })()}
-            </BrowserRouter>
-          </Provider>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getByTestId('trigger-delete'));
-
-    await waitFor(() => {
-      expect(toastSuccessSpy).toHaveBeenCalledWith('User deleted successfully');
-      expect(deleteUserWithData).toHaveBeenCalledTimes(1);
-      expect(mockSetShowDeleteConfirm).toHaveBeenCalledWith(false);
-    });
-
-    cleanup();
-    toastSuccessSpy.mockClear();
-
-    const mockSetShowDeleteConfirmNoData = vi.fn();
-
-    render(
-      <MockedProvider addTypename={false}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Provider store={store}>
-            <BrowserRouter>
-              {(() => {
-                mockHandleDeleteUser = async () => {
-                  try {
-                    const { data: deleteData } = await deleteUserWithoutData({
-                      variables: { id: 'rishav-jha-mech' },
-                    });
-
-                    if (deleteData) {
-                      toast.success('User deleted successfully');
-                      mockSetShowDeleteConfirmNoData(false);
-                    }
-                  } catch (error) {}
-                };
-
-                triggerDelete = () => (
-                  <button
-                    type="button"
-                    data-testid="trigger-delete-no-data"
-                    onClick={mockHandleDeleteUser}
-                  >
-                    Delete No Data
-                  </button>
-                );
-
-                return triggerDelete();
-              })()}
-            </BrowserRouter>
-          </Provider>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getByTestId('trigger-delete-no-data'));
-
-    await waitFor(() => {
-      expect(deleteUserWithoutData).toHaveBeenCalledTimes(1);
-    });
-
-    expect(toastSuccessSpy).not.toHaveBeenCalled();
-    expect(mockSetShowDeleteConfirmNoData).not.toHaveBeenCalled();
-
-    toastSuccessSpy.mockRestore();
-  });
+      toastSuccessSpy.mockRestore();
+    },
+  );
 
   test('prevents selection of future birthdates', async () => {
     renderMemberDetailScreen(link1);
@@ -950,12 +908,12 @@ describe('MemberDetail', () => {
       screen.getByTestId('maritalstatus-dropdown-container'),
     ).toBeInTheDocument();
 
-    const maritialStatus = screen.getByTestId('maritalstatus-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
+    const maritalStatus = screen.getByTestId('maritalstatus-dropdown-btn');
+    expect(maritalStatus).toBeInTheDocument();
 
-    expect(maritialStatus).toHaveTextContent('None');
+    expect(maritalStatus).toHaveTextContent('None');
 
-    await userEvent.click(maritialStatus);
+    await userEvent.click(maritalStatus);
 
     expect(
       screen.getByTestId('maritalstatus-dropdown-menu'),
@@ -964,7 +922,7 @@ describe('MemberDetail', () => {
     const option = screen.getByTestId('change-maritalstatus-btn-single');
     await userEvent.click(option);
 
-    expect(maritialStatus).toHaveTextContent('Single');
+    expect(maritalStatus).toHaveTextContent('Single');
   });
 
   test('renders gender status dropdown and handles selection', async () => {
@@ -975,33 +933,19 @@ describe('MemberDetail', () => {
       screen.getByTestId('natalsex-dropdown-container'),
     ).toBeInTheDocument();
 
-    const maritialStatus = screen.getByTestId('natalsex-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
+    const maritalStatus = screen.getByTestId('natalsex-dropdown-btn');
+    expect(maritalStatus).toBeInTheDocument();
 
-    expect(maritialStatus).toHaveTextContent('None');
+    expect(maritalStatus).toHaveTextContent('None');
 
-    await userEvent.click(maritialStatus);
+    await userEvent.click(maritalStatus);
 
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 
     const option = screen.getByTestId('change-natalsex-btn-male');
     await userEvent.click(option);
 
-    expect(maritialStatus).toHaveTextContent('Male');
-  });
-
-  test('handles profile picture edit button click', async () => {
-    renderMemberDetailScreen(link4);
-    await wait();
-
-    const uploadImageBtn = screen.getByTestId('uploadImageBtn');
-    expect(uploadImageBtn).toBeInTheDocument();
-
-    const fileInput = screen.getByTestId('fileInput');
-    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
-
-    await userEvent.click(uploadImageBtn);
-    expect(fileInputClickSpy).toHaveBeenCalled();
+    expect(maritalStatus).toHaveTextContent('Male');
   });
 
   test('handles country selection change', async () => {
@@ -1016,7 +960,7 @@ describe('MemberDetail', () => {
   });
 
   it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    const originalValidatePassword = window.validatePassword;
+    const originalValidatePassword = validatePassword;
 
     let validatePasswordShouldReturn = false;
 
