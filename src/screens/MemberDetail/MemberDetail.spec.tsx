@@ -703,7 +703,7 @@ describe('MemberDetail', () => {
                 <button
                   type="button"
                   data-testid={testId}
-                  onClick={async () => {
+                  onClick={async (): Promise<void> => {
                     try {
                       const { data: deleteData } = await mockDelete({
                         variables: { id: 'rishav-jha-mech' },
@@ -711,6 +711,7 @@ describe('MemberDetail', () => {
                       if (deleteData) {
                         toast.success('User deleted successfully');
                         mockSetShowDeleteConfirm(false);
+                        mockNavigate('/');
                       }
                     } catch (error) {}
                   }}
@@ -733,6 +734,9 @@ describe('MemberDetail', () => {
         expect(toastSuccessSpy).toHaveBeenCalledWith(
           'User deleted successfully',
         );
+
+        expect(mockNavigate).toHaveBeenCalledTimes(1);
+        expect(mockNavigate).toHaveBeenCalledWith('/');
       } else {
         expect(toastSuccessSpy).not.toHaveBeenCalled();
       }
@@ -933,19 +937,19 @@ describe('MemberDetail', () => {
       screen.getByTestId('natalsex-dropdown-container'),
     ).toBeInTheDocument();
 
-    const maritalStatus = screen.getByTestId('natalsex-dropdown-btn');
-    expect(maritalStatus).toBeInTheDocument();
+    const genderStatus = screen.getByTestId('natalsex-dropdown-btn');
+    expect(genderStatus).toBeInTheDocument();
 
-    expect(maritalStatus).toHaveTextContent('None');
+    expect(genderStatus).toHaveTextContent('None');
 
-    await userEvent.click(maritalStatus);
+    await userEvent.click(genderStatus);
 
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 
     const option = screen.getByTestId('change-natalsex-btn-male');
     await userEvent.click(option);
 
-    expect(maritalStatus).toHaveTextContent('Male');
+    expect(genderStatus).toHaveTextContent('Male');
   });
 
   test('handles country selection change', async () => {
@@ -960,42 +964,37 @@ describe('MemberDetail', () => {
   });
 
   it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    const originalValidatePassword = validatePassword;
-
-    let validatePasswordShouldReturn = false;
+    vi.spyOn({ validatePassword }, 'validatePassword').mockImplementation(
+      (password: string) => {
+        if (password === 'string' || password === 'weakpassword') {
+          return false;
+        }
+        return true;
+      },
+    );
 
     renderMemberDetailScreen(link1);
     await wait();
 
-    validatePasswordShouldReturn = false;
-
     const passwordInput = screen.getByTestId('inputPassword');
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
+    fireEvent.change(passwordInput, { target: { value: 'weakpassword' } });
     expect(toastErrorSpy).toHaveBeenCalledWith(
       'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
     );
 
     toastErrorSpy.mockClear();
-
-    validatePasswordShouldReturn = true;
-
-    fireEvent.change(passwordInput, { target: { value: 'string' } });
-
+    fireEvent.change(passwordInput, { target: { value: 'StrongP@ssw0rd' } });
     expect(toastErrorSpy).not.toHaveBeenCalled();
 
     fireEvent.change(passwordInput, {
-      target: { value: 'ValidPassword12@ijewirg3' },
+      target: { value: 'ValidP@ss123' },
     });
-
     expect(toastErrorSpy).not.toHaveBeenCalled();
 
     const nameInput = screen.getByTestId('inputName');
     fireEvent.change(nameInput, { target: { value: 'string' } });
-
     expect(toastErrorSpy).not.toHaveBeenCalled();
 
-    window.validatePassword = originalValidatePassword;
     toastErrorSpy.mockRestore();
   });
 
