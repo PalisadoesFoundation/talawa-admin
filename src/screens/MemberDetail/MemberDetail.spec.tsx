@@ -63,16 +63,6 @@ async function wait(ms = 500): Promise<void> {
 
 const setItem = vi.fn();
 
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn(),
-    setItem: setItem,
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
-  writable: true,
-});
-
 const mockNavigate: NavigateFunction = vi.fn();
 
 vi.mock('react-router-dom', async () => {
