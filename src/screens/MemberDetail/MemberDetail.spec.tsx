@@ -367,7 +367,6 @@ describe('MemberDetail', () => {
   });
 
   it('handles empty password gracefully', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
 
     await waitFor(() => {
@@ -1048,7 +1047,6 @@ describe('MemberDetail', () => {
   });
 
   it('should validate passwords when value is string type and fieldName is password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
 
     await waitFor(() => {
@@ -1078,8 +1076,6 @@ describe('MemberDetail', () => {
   });
 
   it('should only validate passwords when value is "string" and fieldName is password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
-
     const originalValidatePassword = window.validatePassword;
 
     let validatePasswordShouldReturn = false;
