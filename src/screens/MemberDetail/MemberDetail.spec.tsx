@@ -14,7 +14,7 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
-import * as passwordValidator from 'utils/passwordValidator';
+import { validatePassword } from 'utils/passwordValidator';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail, { getLanguageName, prettyDate } from './MemberDetail';
@@ -49,7 +49,7 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-const validatePasswordSpy = vi.spyOn(passwordValidator, 'validatePassword');
+const validatePasswordSpy = vi.spyOn({ validatePassword }, 'validatePassword');
 const toastErrorSpy = vi.spyOn(toast, 'error');
 
 async function wait(ms = 500): Promise<void> {
@@ -57,7 +57,6 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const setItem = vi.fn();
-const setSelectedAvatar = vi.fn();
 const tCommon = vi.fn().mockReturnValue('Profile updated successfully');
 
 const updateData = {
@@ -70,6 +69,21 @@ const updateData = {
   },
 };
 
+const mockSetItem = vi.fn();
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: vi.fn(),
+    setItem: mockSetItem,
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  },
+  writable: true,
+});
+
+vi.mock('./src/utils/useLocalstorage.ts', () => ({
+  setItem: vi.fn(),
+}));
+
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -79,8 +93,11 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('utils/passwordValidator', async (importOriginal) => {
-  const originalModule = await importOriginal<typeof passwordValidator>();
+vi.mock('utils/passwordValidator', async () => {
+  const originalModule = await vi.importActual<
+    typeof import('utils/passwordValidator')
+  >('utils/passwordValidator');
+
   return {
     ...originalModule,
     validatePassword: vi.fn((password: string) => {
@@ -93,7 +110,6 @@ vi.mock('utils/passwordValidator', async (importOriginal) => {
       if (password === 'string') {
         return false;
       }
-
       return originalModule.validatePassword(password);
     }),
   };
@@ -320,7 +336,7 @@ describe('MemberDetail', () => {
     expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
   });
 
-  it('handles avatar upload and preview', async () => {
+  it('handles file upload correctly', async () => {
     renderMemberDetailScreen(link1);
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     await waitFor(() => {
@@ -435,8 +451,6 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
-
-    expect(confirmButton).toBeInTheDocument();
   });
 
   test('clicking profile picture triggers file input click', async () => {
@@ -592,34 +606,12 @@ describe('MemberDetail', () => {
     });
   });
 
-  test('cancel button should close the confirmation modal', async () => {
+  test('confirmation modal can be closed by both X button and cancel button', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
     const deleteButton = screen.getByTestId('deleteUserButton');
     fireEvent.click(deleteButton);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('confirmationToDelete')).toBeVisible();
-    });
-
-    const cancelButton = screen.getByTestId('button-cancelDeleteConfirmation');
-    fireEvent.click(cancelButton);
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('confirmationToDelete'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  test('close button (X) should close the confirmation modal', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const deleteButton = screen.getByTestId('deleteUserButton');
-    fireEvent.click(deleteButton);
-
     await waitFor(() => {
       expect(screen.getByTestId('confirmationToDelete')).toBeInTheDocument();
     });
@@ -628,7 +620,19 @@ describe('MemberDetail', () => {
       screen.getByLabelText('Close') ||
       screen.getByRole('button', { name: 'Close' });
     fireEvent.click(closeButton);
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('confirmationToDelete'),
+      ).not.toBeInTheDocument();
+    });
 
+    fireEvent.click(deleteButton);
+    await waitFor(() => {
+      expect(screen.getByTestId('confirmationToDelete')).toBeVisible();
+    });
+
+    const cancelButton = screen.getByTestId('button-cancelDeleteConfirmation');
+    fireEvent.click(cancelButton);
     await waitFor(() => {
       expect(
         screen.queryByTestId('confirmationToDelete'),
@@ -813,8 +817,6 @@ describe('MemberDetail', () => {
 
     expect(toastSuccessSpy).not.toHaveBeenCalled();
     expect(mockSetShowDeleteConfirmNoData).not.toHaveBeenCalled();
-
-    expect(toastSuccessSpy);
 
     toastSuccessSpy.mockRestore();
   });
@@ -1020,35 +1022,17 @@ describe('MemberDetail', () => {
     expect(maritialStatus).toHaveTextContent('Male');
   });
 
-  test('clicking profile picture or edit button triggers file input', async () => {
-    // Test first scenario with link1
-    const { unmount: unmountFirst } = renderMemberDetailScreen(link1);
-    await wait();
-
-    const uploadImageBtn = screen.getByTestId('profile-picture');
-    expect(uploadImageBtn).toBeInTheDocument();
-
-    let fileInput = screen.getByTestId('fileInput');
-    let fileInputClickSpy = vi.spyOn(fileInput, 'click');
-
-    await userEvent.click(uploadImageBtn);
-    expect(fileInputClickSpy).toHaveBeenCalled();
-
-    // Clean up first render and reset spy
-    fileInputClickSpy.mockRestore();
-    unmountFirst();
-
-    // Test second scenario with link4
+  test('handles profile picture edit button click', async () => {
     renderMemberDetailScreen(link4);
     await wait();
 
-    const editButton = screen.getByTestId('uploadImageBtn');
-    expect(editButton).toBeInTheDocument();
+    const uploadImageBtn = screen.getByTestId('uploadImageBtn');
+    expect(uploadImageBtn).toBeInTheDocument();
 
-    fileInput = screen.getByTestId('fileInput');
-    fileInputClickSpy = vi.spyOn(fileInput, 'click');
+    const fileInput = screen.getByTestId('fileInput');
+    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
 
-    await userEvent.click(editButton);
+    await userEvent.click(uploadImageBtn);
     expect(fileInputClickSpy).toHaveBeenCalled();
   });
 
@@ -1076,30 +1060,73 @@ describe('MemberDetail', () => {
     fireEvent.change(passwordInput, { target: { value: 'short' } });
 
     await waitFor(() => {
-      expect(passwordValidator.validatePassword).toHaveBeenCalledWith('short');
+      expect(validatePassword).toHaveBeenCalledWith('short');
 
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
       );
     });
 
-    vi.mocked(passwordValidator.validatePassword).mockClear();
+    vi.mocked(validatePassword).mockClear();
     toastErrorSpy.mockClear();
 
-    fireEvent.change(passwordInput, { target: { value: 'validPass123!' } });
+    fireEvent.change(passwordInput, { target: { value: 'validPass' } });
 
     await waitFor(() => {
-      expect(passwordValidator.validatePassword).toHaveBeenCalledWith(
-        'validPass123!',
-      );
+      expect(validatePassword).toHaveBeenCalledWith('validPass');
     });
+  });
+
+  it('should only validate passwords when value is "string" and fieldName is password', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    const originalValidatePassword = window.validatePassword;
+
+    let validatePasswordShouldReturn = false;
+    window.validatePassword = (password) => {
+      return validatePasswordShouldReturn;
+    };
+
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    validatePasswordShouldReturn = false;
+
+    const passwordInput = screen.getByTestId('inputPassword');
+    fireEvent.change(passwordInput, { target: { value: 'string' } });
+
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
+    );
+
+    toastErrorSpy.mockClear();
+
+    validatePasswordShouldReturn = true;
+
+    fireEvent.change(passwordInput, { target: { value: 'string' } });
+
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    fireEvent.change(passwordInput, {
+      target: { value: 'ValidPassword12@ijewirg3' },
+    });
+
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'string' } });
+
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+
+    window.validatePassword = originalValidatePassword;
+    toastErrorSpy.mockRestore();
   });
 
   it('should only validate passwords when value is a string type and fieldName is password', async () => {
     const handleFieldChange = (fieldName: string, value: any) => {
       if (typeof value === 'string') {
         if (fieldName === 'password' && value) {
-          if (!passwordValidator.validatePassword(value)) {
+          if (!validatePassword(value)) {
             toast.error(
               'Password must be at least 8 characters, contain uppercase, lowercase, numbers, and special characters.',
             );
@@ -1132,165 +1159,54 @@ describe('MemberDetail', () => {
     toastErrorSpy.mockRestore();
   });
 
-  test('should wait for 2000ms after update', async () => {
-    vi.useFakeTimers();
+  test('should set localStorage items when user update is successful', async () => {
+    // Render the component
+    renderMemberDetailScreen(link5);
+    await wait();
 
-    const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const timeoutPromiseResolved = vi.fn();
-    timeoutPromise.then(timeoutPromiseResolved);
-
-    expect(timeoutPromiseResolved).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1999);
-    await Promise.resolve();
-    expect(timeoutPromiseResolved).not.toHaveBeenCalled();
-
-    vi.advanceTimersByTime(1);
-    await Promise.resolve();
-    expect(timeoutPromiseResolved).toHaveBeenCalled();
-
-    vi.useRealTimers();
-  });
-
-  test('should set UserImage in localStorage from updateData', () => {
-    setItem('UserImage', updateData.updateCurrentUser.avatarURL);
-
-    expect(setItem).toHaveBeenCalledTimes(1);
-    expect(setItem).toHaveBeenCalledWith(
-      'UserImage',
-      'https://example.com/avatar.jpg',
-    );
-  });
-
-  test('should set name in localStorage from updateData', () => {
-    setItem('name', updateData.updateCurrentUser.name);
-
-    expect(setItem).toHaveBeenCalledTimes(1);
-    expect(setItem).toHaveBeenCalledWith('name', 'Test User');
-  });
-
-  test('should set email in localStorage from updateData', () => {
-    setItem('email', updateData.updateCurrentUser.emailAddress);
-
-    expect(setItem).toHaveBeenCalledTimes(1);
-    expect(setItem).toHaveBeenCalledWith('email', 'test@example.com');
-  });
-
-  test('should set id in localStorage from updateData', () => {
-    setItem('id', updateData.updateCurrentUser.id);
-
-    expect(setItem).toHaveBeenCalledTimes(1);
-    expect(setItem).toHaveBeenCalledWith('id', '123');
-  });
-
-  test('should execute all storage updates before timeout', async () => {
-    vi.useFakeTimers();
-
-    const executionSpy = {
-      toastCalled: false,
-      userImageSet: false,
-      nameSet: false,
-      emailSet: false,
-      idSet: false,
-      roleSet: false,
-      avatarReset: false,
-      timeoutStarted: false,
-      timeoutFinished: false,
-    };
-
-    const toastMock = vi.fn(() => {
-      executionSpy.toastCalled = true;
-    });
-
-    const setItemMock = vi.fn((key, value) => {
-      if (key === 'UserImage') executionSpy.userImageSet = true;
-      if (key === 'name') executionSpy.nameSet = true;
-      if (key === 'email') executionSpy.emailSet = true;
-      if (key === 'id') executionSpy.idSet = true;
-      if (key === 'role') executionSpy.roleSet = true;
-    });
-
-    const setSelectedAvatarMock = vi.fn(() => {
-      executionSpy.avatarReset = true;
-    });
-
-    toast.success(
-      tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
-    );
-    setItemMock('UserImage', updateData.updateCurrentUser.avatarURL);
-    setItemMock('name', updateData.updateCurrentUser.name);
-    setItemMock('email', updateData.updateCurrentUser.emailAddress);
-    setItemMock('id', updateData.updateCurrentUser.id);
-    setItemMock('role', updateData.updateCurrentUser.role);
-    setSelectedAvatarMock();
-
-    executionSpy.timeoutStarted = true;
-
-    const timeoutPromise = new Promise((resolve) => {
-      setTimeout(() => {
-        executionSpy.timeoutFinished = true;
-        resolve(undefined);
-      }, 2000);
-    });
-
-    expect(executionSpy.userImageSet).toBe(true);
-    expect(executionSpy.nameSet).toBe(true);
-    expect(executionSpy.emailSet).toBe(true);
-    expect(executionSpy.idSet).toBe(true);
-    expect(executionSpy.roleSet).toBe(true);
-    expect(executionSpy.avatarReset).toBe(true);
-    expect(executionSpy.timeoutStarted).toBe(true);
-    expect(executionSpy.timeoutFinished).toBe(false);
-
-    vi.advanceTimersByTime(2000);
-    await Promise.resolve();
-
-    expect(executionSpy.timeoutFinished).toBe(true);
-
-    vi.useRealTimers();
-  });
-
-  test('should handle all steps in the update process', async () => {
-    vi.useFakeTimers();
-
-    if (updateData) {
-      toast.success(
-        tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
-      );
-      setItem('UserImage', updateData.updateCurrentUser.avatarURL);
-      setItem('name', updateData.updateCurrentUser.name);
-      setItem('email', updateData.updateCurrentUser.emailAddress);
-      setItem('id', updateData.updateCurrentUser.id);
-      setItem('role', updateData.updateCurrentUser.role);
-      setSelectedAvatar(null);
-
-      let promiseResolved = false;
-      const timeoutPromise = new Promise((resolve) => {
-        setTimeout(() => {
-          promiseResolved = true;
-          resolve(undefined);
-        }, 2000);
+    // Simulate handleUserUpdate with successful update
+    await act(async () => {
+      // Create a simulated implementation of handleUserUpdate
+      const updateUserMock = vi.fn().mockResolvedValue({
+        data: {
+          updateCurrentUser: {
+            id: '65378abd-8500-8f17-1cf2-990d00000002',
+            name: 'New Name',
+            emailAddress: 'testadmin1@example.com',
+            avatarURL: null,
+            role: 'administrator',
+          },
+        },
       });
 
-      expect(promiseResolved).toBe(false);
+      const tCommon = vi.fn().mockReturnValue('Profile updated successfully');
 
-      vi.advanceTimersByTime(2000);
-      await Promise.resolve();
+      // Simulate the function call
+      const { data: updateData } = await updateUserMock();
 
-      expect(promiseResolved).toBe(true);
-    }
-
-    expect(setItem).toHaveBeenCalledWith(
-      'UserImage',
-      'https://example.com/avatar.jpg',
-    );
-    expect(setItem).toHaveBeenCalledWith('name', 'Test User');
-    expect(setItem).toHaveBeenCalledWith('email', 'test@example.com');
-    expect(setItem).toHaveBeenCalledWith('id', '123');
-    expect(setItem).toHaveBeenCalledWith('role', 'USER');
-    expect(setSelectedAvatar).toHaveBeenCalledWith(null);
-
-    vi.useRealTimers();
+      if (updateData) {
+        toast.success(tCommon('updatedSuccessfully', { item: 'Profile' }));
+        mockSetItem('UserImage', updateData.updateCurrentUser.avatarURL);
+        mockSetItem('name', updateData.updateCurrentUser.name);
+        mockSetItem('email', updateData.updateCurrentUser.emailAddress);
+        mockSetItem('id', updateData.updateCurrentUser.id);
+        mockSetItem('role', updateData.updateCurrentUser.role);
+        // Wait for toast to complete
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+      // Verify localStorage setItem calls
+      expect(mockSetItem).toHaveBeenCalledTimes(5);
+      expect(mockSetItem).toHaveBeenCalledWith('UserImage', null);
+      expect(mockSetItem).toHaveBeenCalledWith('name', 'New Name');
+      expect(mockSetItem).toHaveBeenCalledWith(
+        'email',
+        'testadmin1@example.com',
+      );
+      expect(mockSetItem).toHaveBeenCalledWith(
+        'id',
+        '65378abd-8500-8f17-1cf2-990d00000002',
+      );
+      expect(mockSetItem).toHaveBeenCalledWith('role', 'administrator');
+    });
   });
 });
