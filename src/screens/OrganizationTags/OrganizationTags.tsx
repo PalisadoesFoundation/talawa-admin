@@ -60,7 +60,7 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
@@ -98,7 +98,7 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
       filter: tagSearchName,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -123,6 +123,14 @@ function OrganizationTags(): JSX.Element {
         },
       ) => {
         if (!fetchMoreResult) {
+          return prevResult;
+        }
+
+        // Check if organizations exists in both prevResult and fetchMoreResult
+        if (
+          !prevResult.organizations?.[0] ||
+          !fetchMoreResult.organizations?.[0]
+        ) {
           return prevResult;
         }
 
@@ -177,7 +185,7 @@ function OrganizationTags(): JSX.Element {
     }
   };
 
-  if (orgUserTagsError) {
+  const showErrorMessage = (message: string): JSX.Element => {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
@@ -185,12 +193,12 @@ function OrganizationTags(): JSX.Element {
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading Organization Tags Data
             <br />
-            {orgUserTagsError.message}
+            {message}
           </h6>
         </div>
       </div>
     );
-  }
+  };
 
   const userTagsList =
     orgUserTagsData?.organizations?.[0]?.tags?.edges?.map(
@@ -276,7 +284,7 @@ function OrganizationTags(): JSX.Element {
             className="text-secondary"
             to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
-            {params.row.childTags.totalCount}
+            {params.row.childTags?.totalCount || 0}
           </Link>
         );
       },
@@ -296,7 +304,7 @@ function OrganizationTags(): JSX.Element {
             className="text-secondary"
             to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
-            {params.row.usersAssignedTo.totalCount}
+            {params.row.usersAssignedTo?.totalCount || 0}
           </Link>
         );
       },
@@ -372,6 +380,8 @@ function OrganizationTags(): JSX.Element {
 
           {orgUserTagsLoading || createUserTagLoading ? (
             <Loader />
+          ) : orgUserTagsError ? (
+            showErrorMessage(orgUserTagsError.message)
           ) : (
             <div className="mb-4">
               <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">

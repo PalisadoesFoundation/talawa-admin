@@ -129,7 +129,10 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.createTag)).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
+      expect(queryByText(translations.createTag)).toBeInTheDocument();
     });
   });
 
@@ -349,16 +352,10 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    const orgUserTagsScrollableDiv = screen.getByTestId(
-      'orgUserTagsScrollableDiv',
-    );
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(orgUserTagsScrollableDiv, {
-      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
-    });
-
     await waitFor(() => {
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });

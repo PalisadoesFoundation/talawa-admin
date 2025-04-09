@@ -111,32 +111,6 @@ export const FILTERED_ORGANIZATION_POSTS = gql`
     }
   }
 `;
-/**
- * GraphQL query to retrieve all organizations with optional filtering and pagination.
- *
- * @param filter - Optional. Filter organizations by a name string.
- * @param limit - Optional. Number of organizations to retrieve.
- * @param offset - Optional. Number of organizations to skip before starting to collect the result set.
- * @returns A list of organizations with metadata including membership status.
- */
-export const ALL_ORGANIZATIONS = gql`
-  query AllOrganizations($filter: String, $limit: Int, $offset: Int) {
-    organizations(filter: $filter, limit: $limit, offset: $offset) {
-      id
-      name
-      city
-      countryCode
-      addressLine1
-      postalCode
-      state
-      description
-      avatarURL
-      membersCount
-      adminsCount
-      isMember
-    }
-  }
-`;
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
@@ -156,8 +130,6 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
             state
             description
             avatarURL
-            membersCount
-            adminsCount
             members(first: $first) {
               edges {
                 node {
@@ -205,6 +177,45 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
           endCursor
           hasNextPage
           hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
+  query OrganizationTags(
+    $input: QueryOrganizationInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organization(input: $input) {
+      id
+      name
+      tags(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          cursor
+          node {
+            id
+            name
+            createdAt
+            updater {
+              id
+              name
+            }
+            folder {
+              id
+              name
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
         }
       }
     }
