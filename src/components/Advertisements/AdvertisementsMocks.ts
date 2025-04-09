@@ -13,7 +13,6 @@ import {
   ORGANIZATION_ADVERTISEMENT_LIST,
 } from 'GraphQl/Queries/Queries';
 import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { MockedResponse } from '@apollo/client/testing';
 
 const { getItem } = useLocalStorage();
 

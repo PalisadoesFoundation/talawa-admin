@@ -1,23 +1,28 @@
 import React from 'react';
 import { describe, test, expect, vi } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
+import { wait, client } from './AdvertisementsMocks';
 import {
-  wait,
-  client,
-  ORGANIZATIONS_LIST_MOCK,
-  ADVERTISEMENTS_LIST_MOCK,
-} from './AdvertisementsMocks';
+  ADD_ADVERTISEMENT_MUTATION,
+  DELETE_ADVERTISEMENT_MUTATION,
+} from 'GraphQl/Mutations/AdvertisementMutations';
+import i18n from '../../utils/i18nForTest';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -37,335 +42,289 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+    ),
+  ),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+
+const mockFile = new File(['dummy content'], 'test.jpg', {
+  type: 'image/jpeg',
+});
+
+const mocks = [
+  {
+    request: {
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: {
+        id: '1',
+        first: 12,
+        after: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          advertisements: {
+            edges: [
+              {
+                node: {
+                  id: '1',
+                  createdAt: '2025-04-05T11:24:59.000Z',
+                  description: 'this advertisement is created by admin',
+                  endAt: '2025-04-06T11:24:31.210Z',
+                  organization: {
+                    id: '1',
+                  },
+                  name: 'Cookie shop',
+                  startAt: '2025-04-05T11:24:31.210Z',
+                  type: 'banner',
+                  attachments: [
+                    {
+                      mimeType: 'image/jpeg',
+                      url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                    },
+                  ],
+                },
+              },
+            ],
+            pageInfo: {
+              startCursor: 'eyJXVl1jpIQ29va2lIHNob3BmIn0',
+              endCursor: 'eyJXVl1jpIQ29va2lIHNob3BmIn0',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_ADVERTISEMENT_MUTATION,
+      variables: {
+        id: '1',
+      },
+    },
+    result: {
+      data: {
+        deleteAdvertisement: {
+          id: '1',
+        },
+      },
+    },
+  },
+];
+
+const createAdSuccessMock: MockedResponse = {
+  request: {
+    query: ADD_ADVERTISEMENT_MUTATION,
+    variables: {
+      organizationId: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-12-31T18:30:00.000Z',
+      endAt: '2023-01-31T18:30:00.000Z',
+      description: 'advertisement',
+      attachments: [mockFile],
+    },
+  },
+  result: {
+    data: {
+      createAdvertisement: {
+        id: '0196',
+      },
+    },
+  },
+};
+
 describe('Testing Advertisement Component', () => {
-  test('for creating new Advertisements', async () => {
-    const mocks = [ORGANIZATIONS_LIST_MOCK, ...ADVERTISEMENTS_LIST_MOCK];
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
+  it('render spinner while loading', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
-        <BrowserRouter>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  });
+
+  it('delete advertisement', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await wait(); // wait for the loading spinner to disappear
+
+    //Testing rendering
+    expect(getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('moreiconbtn'));
+    expect(getByTestId('deletebtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('deletebtn'));
+    await waitFor(() => {
+      expect(getByTestId('delete_title')).toBeInTheDocument();
+      expect(getByTestId('delete_body')).toBeInTheDocument();
+    });
+    await act(() => {
+      fireEvent.click(getByTestId('delete_yes'));
+    });
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Advertisement deleted successfully.',
+      );
+    });
+  });
+
+  it('render advertisement screen and delete button', async () => {
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={mocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await wait(); // wait for the loading spinner to disappear
+
+    //Testing rendering
+    expect(getByTestId('AdEntry')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(getByTestId('Ad_name')).toBeInTheDocument();
+    expect(getByTestId('Ad_name')).toHaveTextContent('Cookie shop');
+    expect(getByTestId('Ad_desc')).toBeInTheDocument();
+    expect(getByTestId('Ad_desc')).toHaveTextContent(
+      'this advertisement is created by admin',
+    );
+    expect(getByTestId('media')).toBeInTheDocument();
+    expect(getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('moreiconbtn'));
+    expect(getByTestId('deletebtn')).toBeInTheDocument();
+  });
+
+  test('create advertisement', async () => {
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={[createAdSuccessMock]}>
           <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Advertisement />
-            </I18nextProvider>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <Advertisement />
+              </I18nextProvider>
+            </BrowserRouter>
           </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+        </MockedProvider>,
+      );
+    });
 
     await wait();
 
-    await userEvent.click(screen.getByText('Create Advertisement'));
-    await userEvent.type(
-      screen.getByLabelText('Enter name of Advertisement'),
-      'Cookie Shop',
-    );
-    const mediaFile = new File(['media content'], 'test.png', {
-      type: 'image/png',
-    });
-
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    fireEvent.change(mediaInput, { target: { files: [mediaFile] } });
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText('Select type of Advertisement'), {
-      target: { value: 'POPUP' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Select Start Date'), {
-      target: { value: '2023-01-01' },
-    });
-
-    fireEvent.change(screen.getByLabelText('Select End Date'), {
-      target: { value: '2023-02-02' },
-    });
-
-    await userEvent.click(screen.getByTestId('addonregister'));
     expect(
-      await screen.findByText('Advertisement created successfully.'),
+      screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
-  });
 
-  test('if the component renders correctly and ads are correctly categorized date wise', async () => {
-    mockID = '1';
-    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
 
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+        target: { value: 'advertisement' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.Rmedia), {
+        target: {
+          files: [mockFile],
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: '2023-01-01' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: '2023-02-01' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      '2023-01-01',
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      '2023-02-01',
     );
 
-    await wait();
+    expect(screen.getByText(translations.register)).toBeInTheDocument();
 
-    const date = await screen.findAllByTestId('Ad_end_date');
-    const dateString = date[0].innerHTML;
-    const dateMatch = dateString.match(
-      /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/,
-    );
-    let dateObject = new Date();
-    if (dateMatch) {
-      const monthName = dateMatch[1];
-      const day = parseInt(dateMatch[2], 10);
-      const year = parseInt(dateMatch[3], 10);
-      const monthIndex =
-        'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(monthName) / 3;
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
 
-      dateObject = new Date(year, monthIndex, day);
-    }
-    console.log(dateObject);
-    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
-  });
-
-  test('delete ad', async () => {
-    mockID = '1';
-    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    const moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    fireEvent.click(moreiconbtn[1]);
-    const deleteBtn = await screen.findByTestId('deletebtn');
-    expect(deleteBtn).toBeInTheDocument();
-    fireEvent.click(deleteBtn);
-  });
-
-  test('infinite scroll', async () => {
-    mockID = '1';
-    const mocks = [
-      ...ADVERTISEMENTS_LIST_MOCK,
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 2,
-            after: null,
-            last: null,
-            before: null,
-          },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '1',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor1',
-                    },
-                    {
-                      node: {
-                        _id: '2',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor2',
-                    },
-                    {
-                      node: {
-                        _id: '3',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor3',
-                    },
-                    {
-                      node: {
-                        _id: '4',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor4',
-                    },
-                    {
-                      node: {
-                        _id: '5',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor5',
-                    },
-                    {
-                      node: {
-                        _id: '6',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor6',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: 'cursor1',
-                    endCursor: 'cursor6',
-                    hasNextPage: true,
-                    hasPreviousPage: false,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: 'cursor6',
-            last: null,
-            before: null,
-          },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '7',
-                        name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    },
-                    {
-                      node: {
-                        _id: '8',
-                        name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    hasNextPage: false,
-                    hasPreviousPage: true,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: { id: '1', first: 6, after: 'cursor2' },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '7',
-                        name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    },
-                    {
-                      node: {
-                        _id: '8',
-                        name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    hasNextPage: false,
-                    hasPreviousPage: true,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-    ];
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-    let moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    console.log('before scroll', moreiconbtn);
-    fireEvent.scroll(window, { target: { scrollY: 500 } });
-    moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    console.log('after scroll', moreiconbtn);
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Advertisement created successfully.',
+      );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+    vi.useRealTimers();
   });
 });

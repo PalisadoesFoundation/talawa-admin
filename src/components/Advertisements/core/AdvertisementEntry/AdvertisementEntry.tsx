@@ -77,19 +77,7 @@ function AdvertisementEntry({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Mutation hook for deleting an advertisement
-  const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
-    refetchQueries: [
-      {
-        query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: {
-          first: 6,
-          after: null,
-          id: advertisement.organization.id.toString(),
-        },
-      },
-    ],
-    awaitRefetchQueries: true, // wait for refetchQueries to complete
-  });
+  const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {});
 
   /**
    * Toggles the visibility of the delete confirmation modal.
@@ -217,7 +205,9 @@ function AdvertisementEntry({
                 </div>
               )}
               <Card.Body>
-                <Card.Title className="t-bold">{advertisement.name}</Card.Title>
+                <Card.Title className="t-bold" data-testid="Ad_name">
+                  {advertisement.name}
+                </Card.Title>
                 <Card.Text
                   data-testid="Ad_desc"
                   style={{
