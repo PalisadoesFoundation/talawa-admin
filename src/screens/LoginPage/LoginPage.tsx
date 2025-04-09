@@ -1,4 +1,54 @@
-import { useQuery, useMutation } from '@apollo/client';
+/**
+ * @file LoginPage.tsx
+ * @description This file contains the implementation of the Login and Registration page for the Talawa Admin application.
+ * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
+ * The page supports both admin and user roles and provides localization support.
+ *
+ * @module LoginPage
+ *
+ * @requires react
+ * @requires react-router-dom
+ * @requires react-bootstrap
+ * @requires react-google-recaptcha
+ * @requires @apollo/client
+ * @requires @mui/icons-material
+ * @requires @mui/material
+ * @requires react-toastify
+ * @requires i18next
+ * @requires utils/errorHandler
+ * @requires utils/useLocalstorage
+ * @requires utils/useSession
+ * @requires utils/i18n
+ * @requires GraphQl/Mutations/mutations
+ * @requires GraphQl/Queries/Queries
+ * @requires components/ChangeLanguageDropdown/ChangeLanguageDropDown
+ * @requires components/LoginPortalToggle/LoginPortalToggle
+ * @requires assets/svgs/palisadoes.svg
+ * @requires assets/svgs/talawa.svg
+ *
+ * @component
+ * @description The `loginPage` component renders a login and registration interface with the following features:
+ * - Login and registration forms with validation.
+ * - Password strength checks and visibility toggles.
+ * - reCAPTCHA integration for bot prevention.
+ * - Organization selection using an autocomplete dropdown.
+ * - Social media links and community branding.
+ * - Role-based navigation for admin and user.
+ *
+ * @returns {JSX.Element} The rendered login and registration page.
+ *
+ * @example
+ * ```tsx
+ * import LoginPage from './LoginPage';
+ *
+ * const App = () => {
+ *   return <LoginPage />;
+ * };
+ *
+ * export default App;
+ * ```
+ */
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -8,55 +58,36 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import 'style/app.module.css';
+import '../../style/app.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   BACKEND_URL,
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
 } from 'Constant/constant';
-import { RECAPTCHA_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  RECAPTCHA_MUTATION,
+  SIGNUP_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST,
+  SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import LoginPortalToggle from 'components/LoginPortalToggle/LoginPortalToggle';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 // import styles from 'style/app.module.css';
-import styles from 'style/app-fixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
+import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
-import { authClient } from 'lib/auth-client';
-
-/**
- * LoginPage component is used to render the login page of the application where user can login or register
- * to the application using email and password. The component also provides the functionality to switch between login and
- * register form.
- *
- */
-export type IUserDetails = {
-  token: string;
-  id: string;
-  email: string;
-  name: string;
-  role?: string | null;
-  countryCode?: string | null;
-  avatarName?: string | null;
-};
-
-export type IAuthResponse = {
-  statusCode: string;
-  message: string;
-  data: IUserDetails;
-};
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -80,7 +111,7 @@ const loginPage = (): JSX.Element => {
   const SignupRecaptchaRef = useRef<ReCAPTCHA>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
-  const [role, setRole] = useState<'admin' | 'user'>('admin');
+  const [role, setRole] = useState<'admin' | 'user'>('user');
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [signformState, setSignFormState] = useState({
     signName: '',
@@ -89,7 +120,10 @@ const loginPage = (): JSX.Element => {
     cPassword: '',
     signOrg: '',
   });
-  const [formState, setFormState] = useState({ email: '', password: '' });
+  const [formState, setFormState] = useState({
+    email: '',
+    password: '',
+  });
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -100,7 +134,7 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
-
+  const location = useLocation();
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
     uppercaseCharRegExp: new RegExp('[A-Z]'),
@@ -117,14 +151,24 @@ const loginPage = (): JSX.Element => {
     });
   };
 
-  const handleRoleToggle = (role: 'admin' | 'user'): void => {
-    setRole(role);
-  };
+  useEffect(() => {
+    const isRegister = location.pathname === '/register';
+    if (isRegister) {
+      setShowTab('REGISTER');
+    }
+    const isAdmin = location.pathname === '/admin';
+    if (isAdmin) {
+      setRole('admin');
+    } else {
+      setRole('user');
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
       navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+      extendSession();
     }
   }, []);
 
@@ -137,12 +181,11 @@ const loginPage = (): JSX.Element => {
     // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
-
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [signinLoading, setSigninLoading] = useState(false);
+  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
+  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST);
-
+  const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
@@ -180,7 +223,11 @@ const loginPage = (): JSX.Element => {
       if (REACT_APP_USE_RECAPTCHA !== 'yes') {
         return true;
       }
-      const { data } = await recaptcha({ variables: { recaptchaToken } });
+      const { data } = await recaptcha({
+        variables: {
+          recaptchaToken,
+        },
+      });
 
       return data.recaptcha;
     } catch {
@@ -229,22 +276,14 @@ const loginPage = (): JSX.Element => {
     ) {
       if (cPassword == signPassword) {
         try {
-          const { data: signUpData } = await authClient.signUp.email(
-            {
+          const { data: signUpData } = await signup({
+            variables: {
+              name: signName,
               email: signEmail,
               password: signPassword,
-              name: signName,
             },
+          });
 
-            {
-              onRequest: () => {
-                setSigninLoading(true);
-              },
-              onResponse() {
-                setSigninLoading(false);
-              },
-            },
-          );
           if (signUpData) {
             toast.success(
               t(
@@ -291,51 +330,41 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: signInData } = (await authClient.signIn.email(
-        {
-          email: formState.email,
-          password: formState.password,
-          rememberMe: true,
-        },
-        {
-          onRequest: () => {
-            setLoginLoading(true);
-          },
-          onResponse() {
-            setLoginLoading(false);
-          },
-        },
-      )) as {
-        data: IAuthResponse | null;
-      };
+      const { data: signInData } = await signin({
+        variables: { email: formState.email, password: formState.password },
+      });
 
-      if (signInData?.data) {
-        if (signInData?.data?.countryCode) {
-          i18n.changeLanguage(signInData.data.countryCode);
+      if (signInData) {
+        if (signInData.signIn.user.countryCode !== null) {
+          i18n.changeLanguage(signInData.signIn.user.countryCode);
         }
 
-        const { data } = signInData;
-        const { role, token, id, name, email, avatarName } = data;
-        const isAdministrator: boolean = role === 'administrator';
-
-        if (!isAdministrator) {
+        const { signIn } = signInData;
+        const { user, authenticationToken } = signIn;
+        const isAdmin: boolean = user.role === 'administrator';
+        if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
           return;
         }
-        const loggedInUserId = id;
+        const loggedInUserId = user.id;
 
-        setItem('token', token);
+        setItem('token', authenticationToken);
         setItem('IsLoggedIn', 'TRUE');
-        setItem('name', name);
-        setItem('email', email);
-        setItem('role', role);
-        setItem('UserImage', avatarName || '');
-        if (role === 'administrator') {
+        setItem('name', user.name);
+        setItem('email', user.emailAddress);
+        setItem('role', user.role);
+        setItem('UserImage', user.avatarURL || '');
+        // setItem('FirstName', user.firstName);
+        // setItem('LastName', user.lastName);
+        // setItem('UserImage', user.avatarURL);
+        if (role === 'admin') {
           setItem('id', loggedInUserId);
         } else {
           setItem('userId', loggedInUserId);
         }
-        navigate(role === 'administrator' ? '/orglist' : '/user/organizations');
+
+        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        startSession();
       } else {
         toast.warn(tErrors('notFound') as string);
       }
@@ -418,9 +447,6 @@ const loginPage = (): JSX.Element => {
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
-
-              <LoginPortalToggle onToggle={handleRoleToggle} />
-
               {/* LOGIN FORM */}
               <div
                 className={`${
@@ -429,7 +455,8 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {role === 'admin' ? tCommon('login') : t('userLogin')}
+                    {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
+                    {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
@@ -440,7 +467,10 @@ const loginPage = (): JSX.Element => {
                       required
                       value={formState.email}
                       onChange={(e): void => {
-                        setFormState({ ...formState, email: e.target.value });
+                        setFormState({
+                          ...formState,
+                          email: e.target.value,
+                        });
                       }}
                       autoComplete="username"
                       data-testid="loginEmail"
@@ -513,22 +543,28 @@ const loginPage = (): JSX.Element => {
                   >
                     {tCommon('login')}
                   </Button>
-                  <div className="position-relative my-2">
-                    <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
-                  </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
-                    className={styles.reg_btn}
-                    data-testid="goToRegisterPortion"
-                    onClick={(): void => {
-                      setShowTab('REGISTER');
-                      setShowPassword(false);
-                    }}
-                  >
-                    {tCommon('register')}
-                  </Button>
+                  {location.pathname === '/admin' || (
+                    <div>
+                      <div className="position-relative my-2">
+                        <hr />
+                        <span className={styles.orText}>{tCommon('OR')}</span>
+                      </div>
+                      <Button
+                        variant="outline-secondary"
+                        value="Register"
+                        className={styles.reg_btn}
+                        data-testid="goToRegisterPortion"
+                        onClick={(): void => {
+                          setShowTab('REGISTER');
+                          setShowPassword(false);
+                        }}
+                      >
+                        <Link to={'/register'} className="text-decoration-none">
+                          {tCommon('register')}
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
                 </form>
               </div>
               {/* REGISTER FORM */}
@@ -538,7 +574,10 @@ const loginPage = (): JSX.Element => {
                 }`}
               >
                 <Form onSubmit={signupLink}>
-                  <h1 className="fs-2 fw-bold text-dark mb-3">
+                  <h1
+                    className="fs-2 fw-bold text-dark mb-3"
+                    data-testid="register-text"
+                  >
                     {tCommon('register')}
                   </h1>
                   <Row>
@@ -854,22 +893,6 @@ const loginPage = (): JSX.Element => {
                     disabled={signinLoading}
                   >
                     {tCommon('register')}
-                  </Button>
-                  <div className="position-relative">
-                    <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
-                  </div>
-                  <Button
-                    variant="outline-secondary"
-                    value="Register"
-                    className={`mt-3 fw-bold mb-5 w-100 ${styles.reg_btn} `}
-                    data-testid="goToLoginPortion"
-                    onClick={(): void => {
-                      setShowTab('LOGIN');
-                      setShowPassword(false);
-                    }}
-                  >
-                    {tCommon('login')}
                   </Button>
                 </Form>
               </div>

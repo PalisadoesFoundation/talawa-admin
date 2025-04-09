@@ -96,7 +96,16 @@ function OrganizationCard({
     refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [{ query: ORGANIZATION_LIST }],
+    refetchQueries: [
+      { query: ORGANIZATION_LIST },
+      {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: userId, first: 5 },
+      },
+    ],
+    onCompleted: () => {
+      window.location.reload(); // Force refresh after successful join
+    },
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -121,7 +130,6 @@ function OrganizationCard({
         });
         toast.success(t('orgJoined') as string);
       }
-      refetch();
     } catch (error: unknown) {
       if (error instanceof Error) {
         const apolloError = error as ApolloError;
@@ -144,7 +152,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = (membershipRequests ?? []).find(
+    const membershipRequest = membershipRequests.find(
       (request) => request.user.id === userId,
     );
 
@@ -208,40 +216,36 @@ function OrganizationCard({
         </div>
       </div>
 
-      {isJoined && (
-        <Button
-          data-testid="manageBtn"
-          className={styles.addButton}
-          onClick={() => {
-            navigate(`/user/organization/${id}`);
-          }}
-          style={{ width: '8rem' }}
-        >
-          {t('visit')}
-        </Button>
-      )}
-
-      {membershipRequestStatus === 'pending' && !isJoined && (
-        <Button
-          variant="danger"
-          onClick={withdrawMembershipRequest}
-          data-testid="withdrawBtn"
-          className={styles.withdrawBtn}
-        >
-          {t('withdraw')}
-        </Button>
-      )}
-
-      {membershipRequestStatus === '' && !isJoined && (
-        <Button
-          onClick={joinOrganization}
-          data-testid="joinBtn"
-          className={styles.outlineBtn}
-          style={{ width: '8rem' }}
-        >
-          {t('joinNow')}
-        </Button>
-      )}
+      <div className={styles.buttonContainer}>
+        {isJoined ? (
+          <Button
+            data-testid="manageBtn"
+            className={styles.addButton}
+            onClick={() => navigate(`/user/organization/${id}`)}
+            style={{ width: '8rem' }}
+          >
+            {t('visit')}
+          </Button>
+        ) : membershipRequestStatus === 'pending' ? (
+          <Button
+            variant="danger"
+            onClick={withdrawMembershipRequest}
+            data-testid="withdrawBtn"
+            className={styles.withdrawBtn}
+          >
+            {t('withdraw')}
+          </Button>
+        ) : (
+          <Button
+            onClick={joinOrganization}
+            data-testid="joinBtn"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
+          >
+            {t('joinNow')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }
