@@ -208,6 +208,21 @@ const loginPage = (): JSX.Element => {
     },
   );
 
+  function debounce<T extends (...args: any[]) => void>(
+    func: T,
+    delay: number,
+  ): (...args: Parameters<T>) => void {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    return function (...args: Parameters<T>): void {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func.apply(null, args);
+      }, delay);
+    };
+  }
+  const debouncedFetchOrganizations = debounce(fetchOrganizations, 300);
+
   // This useEffect ensure initial Org-search with "" empty string
   useEffect(() => {
     if (!hasRendered.current) {
@@ -875,7 +890,9 @@ const loginPage = (): JSX.Element => {
                         disablePortal
                         data-testid="selectOrg"
                         onInputChange={(event, value) => {
-                          fetchOrganizations({ variables: { filter: value } });
+                          debouncedFetchOrganizations({
+                            variables: { filter: value },
+                          });
                         }}
                         onChange={(
                           event,
