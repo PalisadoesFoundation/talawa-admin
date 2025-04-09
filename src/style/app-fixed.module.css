@@ -6394,11 +6394,9 @@ form {
 
 .featuresBox {
   display: flex;
-  border: solid;
-  color: var(--featuresBox-border);
-  border-width: 1px;
+  border: 1px solid var(--featuresBox-border);
   background-color: var(--featuresBox-bg);
-  border-color: var(--featuresBox-border);
+  color: var(--featuresBox-border);
   align-items: center;
   justify-content: center;
   height: 60px;
@@ -6411,6 +6409,10 @@ form {
   background-color: var(--featuresBox-bg-hover);
   border-color: var(--featuresBox-border-hover);
   color: var(--featuresBox-border-hover);
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
 }
 
 .topRadius {

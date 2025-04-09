@@ -56,7 +56,6 @@ import {
   educationGradeEnum,
   maritalStatusEnum,
   genderEnum,
-  languageEnum,
   employmentStatusEnum,
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
