@@ -167,7 +167,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       // Call mutation with just the ID
       const { data: deleteData } = await deleteUser({
         variables: {
-          id: id,
+          id: currentId,
         },
       });
 
