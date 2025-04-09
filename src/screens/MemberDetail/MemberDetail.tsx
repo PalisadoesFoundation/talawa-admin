@@ -315,7 +315,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       >
         {navItems.map(({ to, icon, label }) => (
           <div key={to} className={`bg-white gap-4 ${styles.allRound}`}>
-            <Link to={to} key={to}>
+            <Link to={to}>
               <button
                 type="button"
                 className={`${styles.featuresBox} ${styles.allRound} flex items-center rounded-lg text-gray-100 transition-colors`}

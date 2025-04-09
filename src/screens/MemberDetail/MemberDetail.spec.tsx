@@ -475,6 +475,20 @@ describe('MemberDetail', () => {
     expect(nameInput).toHaveValue('Rishav Jha');
   });
 
+  test('checks the edit of profile picture', async () => {
+    renderMemberDetailScreen(link4);
+    await wait();
+
+    const uploadImageBtn = screen.getByTestId('uploadImageBtn');
+    expect(uploadImageBtn).toBeInTheDocument();
+
+    const fileInput = screen.getByTestId('fileInput');
+    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
+
+    await userEvent.click(uploadImageBtn);
+    expect(fileInputClickSpy).toHaveBeenCalled();
+  });
+
   it('handles file upload validation', async () => {
     renderMemberDetailScreen(link4);
 
