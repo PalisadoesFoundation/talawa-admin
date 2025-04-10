@@ -72,6 +72,7 @@ Make sure you are following [issue report guidelines](ISSUE_GUIDELINES.md) avail
 For Talawa Admin, we had employed the following branching strategy to simplify the development process and to ensure that only stable code is pushed to the `main` branch:
 
 - `develop`: For unstable code and bug fixing
+<<<<<<< HEAD
 - `main`: Where the stable production ready code lies. This is our default branch.
 
 #### Conflict Resolution
@@ -82,6 +83,10 @@ When multiple developers are working on issues there is bound to be a conflict o
 - Based on basic courtesy, it is good practice to let the person who created a function apply and test that function when needed.
 - Last but not the least, communication is important make sure to talk to other contributors, in these cases, in slack channel or in a issue/PR thread.
 - As a last resort the Admins would be responsible for deciding how to resolve this conflict.
+=======
+- `alpha-x.x.x`: for stability teesting
+- `master`: Where the stable production ready code lies
+>>>>>>> 653345efa (Added extra markdown styling to contribute.md)
 
 ### Contributing Code
 
