@@ -187,9 +187,9 @@ export const REGISTER_MOCKS = [
         organizationId: '1',
         name: 'Ad1',
         type: 'banner',
-        startAt: '2022-12-31T18:30:00.000Z', // Make sure this matches exactly
-        endAt: '2023-01-31T18:30:00.000Z', // Make sure this matches exactly
-        attachments: [expect.any(File)], // Consider using a matcher for File objects
+        startAt: '2022-12-31T18:30:00.000Z',
+        endAt: '2023-01-31T18:30:00.000Z',
+        attachments: [expect.any(File)],
         description: 'advertisement',
       },
     },

@@ -85,6 +85,8 @@ export default function Advertisements(): JSX.Element {
       } else {
         setAdvertisements(ads);
       }
+    } else {
+      setAdvertisements([]); // No advertisements found
     }
   }, [orgAdvertisementListData, after]);
 
@@ -109,16 +111,15 @@ export default function Advertisements(): JSX.Element {
   }
 
   const isAdvertisementActive = (ad: Advertisement): boolean => {
-    return ad.endAt && new Date(ad.endAt) >= new Date();
+    if (!ad.endAt) {
+      return false;
+    }
+    return new Date(ad.endAt) >= new Date();
   };
   return (
     <>
       <Row data-testid="advertisements">
-        <Col
-          md={8}
-          className={styles.containerAdvertisements}
-          style={{ marginTop: '2rem' }}
-        >
+        <Col md={8} className={styles.containerAdvertisements}>
           {loading && <Loader />}
           {!loading && (
             <div className={styles.justifyspAdvertisements}>

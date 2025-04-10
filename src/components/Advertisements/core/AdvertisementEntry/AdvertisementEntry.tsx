@@ -175,7 +175,7 @@ function AdvertisementEntry({
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
                                 src={attachment.url}
-                                alt={`Advertisement media ${index + 1}`}
+                                alt={`Advertisement image #${index + 1} for ${advertisement.name ?? 'ad'}`}
                                 data-testid="media"
                                 crossOrigin="anonymous"
                               />
