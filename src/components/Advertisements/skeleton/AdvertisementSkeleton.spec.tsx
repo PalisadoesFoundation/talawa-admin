@@ -22,7 +22,7 @@ describe('Testing Advertisement Component', () => {
     vi.clearAllMocks();
   });
 
-  it('render spinner while loading', async () => {
+  it('Testing AdvertisementSkeleton Component', async () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
