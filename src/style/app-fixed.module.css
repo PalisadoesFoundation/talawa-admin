@@ -1665,12 +1665,23 @@ form label,
 .containerAdvertisements {
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
+  width: auto;
 }
 
 .justifyspAdvertisements {
   display: grid;
   width: 100%;
   margin-top: 30px;
+}
+
+.rowAdvertisements {
+  margin-top: 20px;
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+  overflow: hidden;
 }
 
 .colAdvertisements {

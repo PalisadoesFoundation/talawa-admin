@@ -45,6 +45,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchBar from 'subComponents/SearchBar';
 import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
+import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -118,7 +119,7 @@ export default function Advertisements(): JSX.Element {
   };
   return (
     <>
-      <Row data-testid="advertisements">
+      <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
           {loading && <Loader />}
           {!loading && (
@@ -149,25 +150,7 @@ export default function Advertisements(): JSX.Element {
                     loader={
                       <>
                         {/* Skeleton loader while fetching more advertisements */}
-                        {[...Array(6)].map((_, index) => (
-                          <div key={index} className={styles.itemCard}>
-                            <div className={styles.loadingWrapper}>
-                              <div className={styles.innerContainer}>
-                                <div
-                                  className={`${styles.orgImgContainer} shimmer`}
-                                />
-                                <div className={styles.content}>
-                                  <h5 className="shimmer" title="Name">
-                                    <span className="visually-hidden">
-                                      Advertisement Loading
-                                    </span>
-                                  </h5>
-                                </div>
-                              </div>
-                              <div className={`shimmer ${styles.button}`} />
-                            </div>
-                          </div>
-                        ))}
+                        <AdvertisementSkeleton />
                       </>
                     }
                     hasMore={
@@ -216,21 +199,7 @@ export default function Advertisements(): JSX.Element {
                     loader={
                       <>
                         {/* Skeleton loader while fetching more advertisements */}
-                        {[...Array(6)].map((_, index) => (
-                          <div key={index} className={styles.itemCard}>
-                            <div className={styles.loadingWrapper}>
-                              <div className={styles.innerContainer}>
-                                <div
-                                  className={`${styles.orgImgContainer} shimmer`}
-                                />
-                                <div className={styles.content}>
-                                  <h5 className="shimmer" title="Name"></h5>
-                                </div>
-                              </div>
-                              <div className={`shimmer ${styles.button}`} />
-                            </div>
-                          </div>
-                        ))}
+                        <AdvertisementSkeleton />
                       </>
                     }
                     hasMore={
