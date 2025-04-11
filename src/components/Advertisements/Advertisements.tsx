@@ -178,7 +178,7 @@ export default function Advertisements(): JSX.Element {
                         .map((ad, i) => {
                           return (
                             <AdvertisementEntry
-                              key={i}
+                              key={ad.id}
                               advertisement={ad}
                               setAfter={setAfter}
                             />
@@ -203,7 +203,7 @@ export default function Advertisements(): JSX.Element {
                       </>
                     }
                     hasMore={
-                      orgAdvertisementListData?.organizations?.advertisements
+                      orgAdvertisementListData?.organization?.advertisements
                         ?.pageInfo?.hasNextPage ?? false
                     }
                     className={styles.listBoxAdvertisements}
