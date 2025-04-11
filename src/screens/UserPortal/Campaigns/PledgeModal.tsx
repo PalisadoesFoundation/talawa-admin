@@ -257,17 +257,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables user to view participating pledgers */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
               limitTags={2}
               data-testid="pledgerSelect"
-              options={pledgers}
+              options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
               readOnly={mode === 'edit'}
-              defaultValue={pledge?.users ?? []} // Add defaultValue for initial selection
               isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo_PG): string =>
@@ -282,7 +280,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
@@ -304,7 +301,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               minDate={dayjs(pledgeStartDate)}
               maxDate={dayjs(endDate)}
             />
-            {/* Date Calendar Component to select end Date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('endDate')}
@@ -320,7 +316,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
-            {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 {t('currency')}
@@ -344,7 +339,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 ))}
               </Select>
             </FormControl>
-            {/* Input field to enter amount to be pledged */}
             <FormControl fullWidth>
               <TextField
                 label={t('amount')}
@@ -362,7 +356,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               />
             </FormControl>
           </Form.Group>
-          {/* Button to submit the pledge form */}
           <Button
             type="submit"
             className={styles.addButton}

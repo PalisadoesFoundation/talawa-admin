@@ -108,36 +108,40 @@ const fundCampaignPledge = (): JSX.Element => {
   const { pledges, totalPledged, fundName } = useMemo(() => {
     let totalPledged = 0;
 
-    const pledges =
+    const pledgesList =
       pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
         const amount = edge.node.amount || 0;
         totalPledged += amount;
 
-        const createdAt = edge.node.createdAt
-          ? new Date(edge.node.createdAt)
-          : new Date();
-        const campaignEnd = pledgeData.fundCampaign.endAt
-          ? new Date(pledgeData.fundCampaign.endAt)
-          : new Date();
+        const allUsers =
+          'users' in edge.node && Array.isArray(edge.node.users)
+            ? edge.node.users
+            : [edge.node.pledger];
 
         return {
           id: edge.node.id,
           amount: amount,
-          startDate: createdAt,
-          endDate: campaignEnd,
-          pledgeDate: createdAt,
-          users: [
-            {
-              id: edge.node.pledger.id,
-              name: edge.node.pledger.name || '',
-              image: null,
-            },
-          ],
-          currency: 'USD',
+          pledgeDate: edge.node.createdAt
+            ? new Date(edge.node.createdAt)
+            : new Date(),
+          endDate: pledgeData.fundCampaign.endAt
+            ? new Date(pledgeData.fundCampaign.endAt)
+            : new Date(),
+          users: allUsers.filter(Boolean),
+          currency: pledgeData.fundCampaign.currencyCode || 'USD',
         };
       }) ?? [];
 
-    const sortedPledges = [...pledges].sort((a, b) => {
+    const filteredPledges = searchTerm
+      ? pledgesList.filter((pledge) => {
+          const search = searchTerm.toLowerCase();
+          return pledge.users.some((user) =>
+            user.name?.toLowerCase().includes(search),
+          );
+        })
+      : pledgesList;
+
+    const sortedPledges = [...filteredPledges].sort((a, b) => {
       switch (sortBy) {
         case 'amount_ASC':
           return a.amount - b.amount;
@@ -147,20 +151,13 @@ const fundCampaignPledge = (): JSX.Element => {
           return a.endDate.getTime() - b.endDate.getTime();
         case 'endDate_DESC':
           return b.endDate.getTime() - a.endDate.getTime();
-        default:
-          return 0;
+        // default:
+        //   return 0;
       }
     });
 
-    const filteredPledges = sortedPledges.filter((pledge) => {
-      const search = searchTerm.toLowerCase();
-      return pledge.users.some((user) =>
-        user.name.toLowerCase().includes(search),
-      );
-    });
-
     const fundName = pledgeData?.fundCampaign?.name ?? tCommon('Funds');
-    return { pledges: filteredPledges, totalPledged, fundName };
+    return { pledges: sortedPledges, totalPledged, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
@@ -250,41 +247,43 @@ const fundCampaignPledge = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
+        const users = params.row.users || [];
+        const mainUsers = users.slice(0, 1);
+        const extraUsers = users.slice(1);
+
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {params.row.users
-              .slice(0, 2)
-              .map((user: InterfaceUserInfo_PG, index: number) => (
-                <div className={styles.pledgerContainer} key={index}>
-                  {user.image ? (
-                    <img
-                      src={user.image}
-                      alt="pledge"
-                      data-testid={`image${index + 1}`}
-                      className={styles.TableImagePledge}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={user.id + '1'}
-                        containerStyle={styles.imageContainerPledge}
-                        avatarStyle={styles.TableImagePledge}
-                        name={user.name}
-                        alt={user.name}
-                      />
-                    </div>
-                  )}
-                  <span key={user.id + '2'}>{user.name}</span>
-                </div>
-              ))}
-            {params.row.users.length > 2 && (
+            {mainUsers.map((user: InterfaceUserInfo_PG, index: number) => (
+              <div
+                className={styles.pledgerContainer}
+                key={`${params.row.id}-main-${index}`}
+                data-testid={`mainUser-${params.row.id}-${index}`}
+              >
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className={styles.TableImagePledge}
+                  />
+                ) : (
+                  <Avatar
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={user.name}
+                    alt={user.name}
+                  />
+                )}
+                <span>{user.name}</span>
+              </div>
+            ))}
+            {extraUsers.length > 0 && (
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, params.row.users.slice(2))}
+                onClick={(e) => handleClick(e, extraUsers)}
+                data-testid={`moreContainer-${params.row.id}`}
               >
-                <span>+{params.row.users.length - 2} more...</span>
+                +{extraUsers.length} more...
               </div>
             )}
           </div>
@@ -544,7 +543,6 @@ const fundCampaignPledge = (): JSX.Element => {
         rows={pledges.map((pledge) => ({
           id: pledge.id,
           users: pledge.users,
-          startDate: pledge.startDate,
           endDate: pledge.endDate,
           pledgeDate: pledge.pledgeDate,
           amount: pledge.amount,
@@ -575,33 +573,29 @@ const fundCampaignPledge = (): JSX.Element => {
         anchor={anchor}
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+        data-testid="extra-users-popup"
       >
         {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
           <div
             className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+            key={user.id}
+            data-testid={`extraUser-${index}`}
           >
             {user.image ? (
               <img
                 src={user.image}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
+                alt={user.name}
                 className={styles.TableImagePledge}
               />
             ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user.id + '1'}
-                  containerStyle={styles.imageContainerPledge}
-                  avatarStyle={styles.TableImagePledge}
-                  name={user.name}
-                  alt={user.name}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
+              <Avatar
+                containerStyle={styles.imageContainerPledge}
+                avatarStyle={styles.TableImagePledge}
+                name={user.name}
+                alt={user.name}
+              />
             )}
-            <span key={user.id + '2'}>{user.name}</span>
+            <span>{user.name}</span>
           </div>
         ))}
       </BasePopup>

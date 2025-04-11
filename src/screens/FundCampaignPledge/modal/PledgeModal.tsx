@@ -100,7 +100,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers:
-      pledge?.users.map((user) => ({
+      pledge?.users?.map((user) => ({
         ...user,
         _id: user.id,
       })) ?? [],
@@ -149,6 +149,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   const { pledgeUsers, pledgeAmount } = formState;
 
+  const isAmountValid = formState.pledgeAmount > 0;
+
+  // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -163,10 +166,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         variables.amount = pledgeAmount;
       }
       try {
+        const variables = {
+          id: pledge?.id ?? '',
+          ...(pledge &&
+            pledgeAmount !== pledge.amount && { amount: pledgeAmount }),
+        };
+
         await updatePledge({
           variables,
         });
-        toast.success(t('pledgeUpdated') as string);
+        toast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
@@ -181,6 +190,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
+        if (!formState.pledgeUsers[0]?.id) {
+          throw new Error('Failed to create pledge');
+        }
         await createPledge({
           variables: {
             campaignId,
@@ -246,7 +258,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               data-testid="pledgerSelect"
               options={pledgers}
               value={pledgeUsers[0] || null}
-              isOptionEqualToValue={(option, value) => option?.id === value?.id}
+              // isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo_PG): string =>
                 `${member.name || ''}`
@@ -318,12 +330,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 }}
                 disabled
                 className="MuiSelect-disabled"
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    pledgeCurrency: e.target.value,
-                  });
-                }}
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
@@ -357,6 +363,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             type="submit"
             className={styles.addButton}
             data-testid="submitPledgeBtn"
+            disabled={!isAmountValid}
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
           </Button>
