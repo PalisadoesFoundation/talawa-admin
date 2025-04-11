@@ -1,20 +1,12 @@
 import React from 'react';
-import { describe, test, expect, vi } from 'vitest';
-import { ApolloProvider } from '@apollo/client';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { describe, expect, vi } from 'vitest';
+import { MockedProvider } from '@apollo/client/testing';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import { client } from '../AdvertisementsMocks';
 import { AdvertisementSkeleton } from './AdvertisementSkeleton';
 
 describe('Testing Advertisement Component', () => {
