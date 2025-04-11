@@ -24,17 +24,15 @@ describe('Testing Advertisement Component', () => {
 
   it('render spinner while loading', async () => {
     render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
-                <AdvertisementSkeleton />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
+      <Provider store={store}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <MockedProvider addTypename={false}>
+              <AdvertisementSkeleton />
+            </MockedProvider>
+          </I18nextProvider>
+        </BrowserRouter>
+      </Provider>,
     );
 
     console.log(screen.debug());
