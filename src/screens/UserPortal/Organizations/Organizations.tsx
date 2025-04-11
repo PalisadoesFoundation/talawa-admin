@@ -1,7 +1,42 @@
+/**
+ * @file Organizations.tsx
+ * @description This file contains the `organizations` component, which is responsible for displaying
+ * and managing the organizations associated with a user. It provides functionality to view all
+ * organizations, joined organizations, and created organizations, along with search and pagination features.
+ *
+ * The component uses GraphQL queries to fetch data for organizations and manages the state for
+ * filtering, pagination, and UI responsiveness. It also includes a debounced search mechanism
+ * to optimize performance when filtering organizations.
+ *
+ * @component
+ * @remarks
+ * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
+ * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
+ * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
+ * - Pagination is implemented to handle large datasets efficiently.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries.
+ * - `@mui/icons-material` for icons.
+ * - `react-bootstrap` for UI components.
+ * - `react-i18next` for internationalization.
+ * - Custom components like `PaginationList`, `OrganizationCard`, and `UserSidebar`.
+ *
+ * @example
+ * ```tsx
+ * <Organizations />
+ * ```
+ *
+ */
+
 import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/Queries';
+import {
+  USER_CREATED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
@@ -9,37 +44,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import {
-  ALL_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS_PG,
-} from 'GraphQl/Queries/OrganizationQueries';
-import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
+import styles from '../../../style/app-fixed.module.css';
 
-/**
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const { getItem } = useLocalStorage();
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
@@ -56,26 +62,34 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
 
   return debouncedFn;
 }
-//For Raw Data received from Querying the Orgs
-interface OrganizationRawData {
+
+interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
-  city?: string;
-  countryCode?: string;
-  addressLine1?: string;
-  postalCode?: string;
-  state?: string;
-  description?: string;
-  avatarURL?: string;
-  membersCount?: number;
-  isMember?: boolean;
-  adminsCount?: number;
-  members?: { edges?: { node: { id: string } }[] };
+  image: string;
+  description: string;
+  admins: [];
+  members: [];
+  address: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
+  isJoined: boolean;
+  membersCount: number; // Add this
+  adminsCount: number; // Add this
 }
 
-interface JoinedOrganizationEdge {
-  node: OrganizationRawData;
-}
 /**
  * Interface defining the structure of organization properties.
  */
@@ -85,9 +99,8 @@ interface InterfaceOrganization {
   name: string;
   image: string;
   description: string;
-  members?: [];
-  membersCount: number;
-  adminsCount: number;
+  admins: [];
+  members: [];
   address: {
     city: string;
     countryCode: string;
@@ -120,14 +133,12 @@ export default function organizations(): JSX.Element {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(true); // Show sidebar
-    } else {
-      setHideDrawer(false); // Hide sidebar
+      setHideDrawer(!hideDrawer);
     }
   };
 
   useEffect(() => {
-    handleResize(); // Set initial state
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -149,16 +160,18 @@ export default function organizations(): JSX.Element {
 
   const userId: string | null = getItem('userId');
 
-  /**
-   * Queries for all 3 modes
-   */
   const {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
     error,
-  } = useQuery(ALL_ORGANIZATIONS, {
+  } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    skip: mode !== 0,
+    notifyOnNetworkStatusChange: true,
+    onError: (error) => console.error('All orgs error:', error),
   });
 
   const {
@@ -214,95 +227,69 @@ export default function organizations(): JSX.Element {
   /**
    * React to changes in mode or relevant query data
    */
-
   useEffect(() => {
-    if (mode === 0 && allOrganizationsData?.organizations) {
-      // All Organizations
-      const orgs = allOrganizationsData.organizations.map(
-        (org: OrganizationRawData) => {
-          const isMember = false || org.isMember;
+    if (mode === 0) {
+      if (allOrganizationsData?.organizations) {
+        const orgs = allOrganizationsData.organizations.map((org: any) => {
+          // Check if current user is a member
+          const memberEdges = org.members?.edges || [];
+          const isMember = memberEdges.some(
+            (edge: any) => edge.node.id === userId,
+          );
+
           return {
             id: org.id,
             name: org.name,
-            image: org.avatarURL || '',
-            description: org.description || '',
-            membersCount: org.membersCount || 0,
-            adminsCount: org.adminsCount || 0,
+            image: org.avatarURL || null,
             address: {
-              city: org.city || '',
-              countryCode: org.countryCode || '',
               line1: org.addressLine1 || '',
-              postalCode: org.postalCode || '',
-              state: org.state || '',
+              city: '',
+              countryCode: '',
+              postalCode: '',
+              state: '',
             },
+            admins: [],
+            members: org.members?.edges?.map((e: any) => e.node) || [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            isJoined: isMember,
+            isJoined: isMember, // Set based on membership check
           };
-        },
-      );
-      setOrganizations(orgs);
-    } else if (
-      mode === 1 &&
-      joinedOrganizationsData?.user?.organizationsWhereMember?.edges
-    ) {
-      // Joined Organizations
-      const orgs =
-        joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-          (edge: JoinedOrganizationEdge) => ({
-            id: edge.node.id,
-            name: edge.node.name,
-            image: edge.node.avatarURL || '',
-            description: edge.node.description || '',
-            membersCount: edge.node.membersCount || 0,
-            members:
-              edge.node.members?.edges?.map((edge) => edge.node.id) || [],
-            adminsCount: edge.node.adminsCount || 0,
-            address: {
-              city: edge.node.city || '',
-              countryCode: edge.node.countryCode || '',
-              line1: edge.node.addressLine1 || '',
-              postalCode: edge.node.postalCode || '',
-              state: edge.node.state || '',
+        });
+        setOrganizations(orgs);
+      }
+    } else if (mode === 1) {
+      // Joined
+      if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
+        const orgs =
+          joinedOrganizationsData.user.organizationsWhereMember.edges.map(
+            (edge: { node: InterfaceOrganization }) => {
+              const organization = edge.node;
+              return {
+                ...organization,
+                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
+                isJoined: true,
+              };
             },
-            membershipRequestStatus: 'accepted',
-            userRegistrationRequired: false,
-            membershipRequests: [],
+          );
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
+    } else if (mode === 2) {
+      // Created
+      if (createdOrganizationsData?.user?.createdOrganizations) {
+        const orgs = createdOrganizationsData.user.createdOrganizations.map(
+          (org: InterfaceOrganization) => ({
+            ...org,
+            membershipRequestStatus: 'created',
             isJoined: true,
           }),
         );
-      setOrganizations(orgs);
-    } else if (
-      mode === 2 &&
-      createdOrganizationsData?.user?.createdOrganizations
-    ) {
-      // Created Organizations
-      const orgs = createdOrganizationsData.user.createdOrganizations.map(
-        (org: OrganizationRawData) => ({
-          id: org.id,
-          name: org.name,
-          image: org.avatarURL || '',
-          description: org.description || '',
-          membersCount: org.membersCount || 0,
-          members: org.members?.edges?.map((edge) => edge.node.id) || [],
-          adminsCount: org.adminsCount || 0,
-          address: {
-            city: org.city || '',
-            countryCode: org.countryCode || '',
-            line1: org.addressLine1 || '',
-            postalCode: org.postalCode || '',
-            state: org.state || '',
-          },
-          membershipRequestStatus: 'created',
-          userRegistrationRequired: false,
-          membershipRequests: [],
-          isJoined: true,
-        }),
-      );
-      setOrganizations(orgs);
-    } else {
-      setOrganizations([]);
+        setOrganizations(orgs);
+      } else {
+        setOrganizations([]);
+      }
     }
   }, [
     mode,
@@ -447,11 +434,10 @@ export default function organizations(): JSX.Element {
                       ).map((organization: InterfaceOrganization, index) => {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
-                          adminsCount: organization.adminsCount,
-                          membersCount: organization.membersCount,
                           image: organization.image,
                           id: organization.id,
                           description: organization.description,
+                          admins: organization.admins,
                           members: organization.members,
                           address: organization.address,
                           membershipRequestStatus:
@@ -460,6 +446,12 @@ export default function organizations(): JSX.Element {
                             organization.userRegistrationRequired,
                           membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
+                          membersCount: Array.isArray(organization.members)
+                            ? organization.members.length
+                            : 0,
+                          adminsCount: Array.isArray(organization.admins)
+                            ? organization.admins.length
+                            : 0,
                         };
                         return (
                           <div

@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L61)
+Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L60)
 
 Modal component for creating or editing a campaign.
 

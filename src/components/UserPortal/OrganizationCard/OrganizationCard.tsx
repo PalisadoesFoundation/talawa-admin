@@ -1,3 +1,47 @@
+/**
+ * OrganizationCard Component
+ *
+ * This component represents a card displaying information about an organization.
+ * It provides functionality for users to join, withdraw membership requests, or visit
+ * the organization's page based on their membership status.
+ *
+ * @param props - The properties for the OrganizationCard component.
+ * @param props.id - The unique identifier of the organization.
+ * @param props.name - The name of the organization.
+ * @param props.image - The URL of the organization's image.
+ * @param props.description - A brief description of the organization.
+ * @param props.adminsCount - The number of admins in the organization.
+ * @param props.membersCount - The number of members in the organization.
+ * @param props.address - The address of the organization, including city and country code.
+ * @param props.membershipRequestStatus - The current membership request status for the user.
+ * @param props.userRegistrationRequired - Indicates if user registration is required to join.
+ * @param props.membershipRequests - List of membership requests for the organization.
+ * @param props.isJoined - Indicates if the user is already a member of the organization.
+ *
+ * @returns A JSX.Element representing the organization card.
+ *
+ * @remarks
+ * - Uses GraphQL mutations and queries to handle membership actions.
+ * - Displays success or error messages using `react-toastify`.
+ * - Handles user ID retrieval from localStorage and manages state accordingly.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationCard
+ *   id="org123"
+ *   name="Sample Organization"
+ *   image="https://example.com/image.jpg"
+ *   description="A sample organization"
+ *   adminsCount={5}
+ *   membersCount={100}
+ *   address={{ city: "New York", countryCode: "US", line1: "123 Main St" }}
+ *   membershipRequestStatus="pending"
+ *   userRegistrationRequired={true}
+ *   membershipRequests={[]}
+ *   isJoined={false}
+ * />
+ * ```
+ */
 import { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
@@ -17,31 +61,6 @@ import type { ApolloError } from '@apollo/client';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 import { getItem } from 'utils/useLocalstorage';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-
-/**
- * Component to display an organization's card with its image and owner details.
- * Displays an organization card with options to join or manage membership.
- *
- * Shows the organization's name, image, description, address, number of admins and members,
- * and provides buttons for joining, withdrawing membership requests, or visiting the organization page.
- *
- * @param props - The properties for the organization card.
- * @param id - The unique identifier of the organization.
- * @param name - The name of the organization.
- * @param image - The URL of the organization's image.
- * @param description - A description of the organization.
- * @param admins - The list of admins with their IDs.
- * @param membersCount - organization members count
- * @param adminsCount - organization Admins count
- * @param address - The address of the organization including city, country code, line1, postal code, and state.
- * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
- * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
- * @param membershipRequests - The list of membership requests with user IDs.
- *
- * @param props - Properties for the organization card.
- * @returns JSX element representing the organization card.
- * @returns The organization card component.
- */
 
 function OrganizationCard({
   id,
@@ -77,7 +96,16 @@ function OrganizationCard({
     refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
-    refetchQueries: [{ query: ORGANIZATION_LIST }],
+    refetchQueries: [
+      { query: ORGANIZATION_LIST },
+      {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: userId, first: 5 },
+      },
+    ],
+    onCompleted: () => {
+      window.location.reload(); // Force refresh after successful join
+    },
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -102,7 +130,6 @@ function OrganizationCard({
         });
         toast.success(t('orgJoined') as string);
       }
-      refetch();
     } catch (error: unknown) {
       if (error instanceof Error) {
         const apolloError = error as ApolloError;
@@ -125,7 +152,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = (membershipRequests ?? []).find(
+    const membershipRequest = membershipRequests.find(
       (request) => request.user.id === userId,
     );
 
@@ -189,40 +216,36 @@ function OrganizationCard({
         </div>
       </div>
 
-      {isJoined && (
-        <Button
-          data-testid="manageBtn"
-          className={styles.addButton}
-          onClick={() => {
-            navigate(`/user/organization/${id}`);
-          }}
-          style={{ width: '8rem' }}
-        >
-          {t('visit')}
-        </Button>
-      )}
-
-      {membershipRequestStatus === 'pending' && !isJoined && (
-        <Button
-          variant="danger"
-          onClick={withdrawMembershipRequest}
-          data-testid="withdrawBtn"
-          className={styles.withdrawBtn}
-        >
-          {t('withdraw')}
-        </Button>
-      )}
-
-      {membershipRequestStatus === '' && !isJoined && (
-        <Button
-          onClick={joinOrganization}
-          data-testid="joinBtn"
-          className={styles.outlineBtn}
-          style={{ width: '8rem' }}
-        >
-          {t('joinNow')}
-        </Button>
-      )}
+      <div className={styles.buttonContainer}>
+        {isJoined ? (
+          <Button
+            data-testid="manageBtn"
+            className={styles.addButton}
+            onClick={() => navigate(`/user/organization/${id}`)}
+            style={{ width: '8rem' }}
+          >
+            {t('visit')}
+          </Button>
+        ) : membershipRequestStatus === 'pending' ? (
+          <Button
+            variant="danger"
+            onClick={withdrawMembershipRequest}
+            data-testid="withdrawBtn"
+            className={styles.withdrawBtn}
+          >
+            {t('withdraw')}
+          </Button>
+        ) : (
+          <Button
+            onClick={joinOrganization}
+            data-testid="joinBtn"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
+          >
+            {t('joinNow')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

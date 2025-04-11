@@ -1,3 +1,39 @@
+/**
+ * OrganizationTags Component
+ *
+ * This component is responsible for managing and displaying organization tags.
+ * It provides functionalities such as searching, sorting, creating, and managing tags.
+ * The component integrates with GraphQL queries and mutations to fetch and update data.
+ *
+ * @component
+ *
+ * @remarks
+ * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
+ * - Implements infinite scrolling for loading tags in chunks.
+ * - Uses Material-UI's `DataGrid` for displaying tags in a tabular format.
+ * - Includes a modal for creating new tags.
+ *
+ *
+ * @example
+ * ```tsx
+ * <OrganizationTags />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered OrganizationTags component.
+ *
+ * @property {boolean} createTagModalIsOpen - State to control the visibility of the create tag modal.
+ * @property {string} tagSearchName - State to store the search term for filtering tags.
+ * @property {SortedByType} tagSortOrder - State to store the sorting order of tags.
+ * @property {string} tagName - State to store the name of the tag being created.
+ *
+ * @function showCreateTagModal - Opens the create tag modal.
+ * @function hideCreateTagModal - Closes the create tag modal.
+ * @function createTag - Handles the creation of a new tag.
+ * @function loadMoreUserTags - Fetches more tags for infinite scrolling.
+ * @function redirectToManageTag - Navigates to the manage tag page for a specific tag.
+ * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
+ * @function handleSortChange - Updates the sorting order of tags.
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
@@ -24,38 +60,12 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-/**
- * Component that renders the Organization Tags screen when the app navigates to '/orgtags/:orgId'.
- *
- * This component does not accept any props and is responsible for displaying
- * the content associated with the corresponding route.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.inputField`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -88,9 +98,9 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
-      id: orgId,
+      input: { id: orgId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
       where: { name: { starts_with: tagSearchName } },
       sortedBy: { id: tagSortOrder },
@@ -116,6 +126,14 @@ function OrganizationTags(): JSX.Element {
         },
       ) => {
         if (!fetchMoreResult) {
+          return prevResult;
+        }
+
+        // Check if organizations exists in both prevResult and fetchMoreResult
+        if (
+          !prevResult.organizations?.[0] ||
+          !fetchMoreResult.organizations?.[0]
+        ) {
           return prevResult;
         }
 
@@ -170,7 +188,7 @@ function OrganizationTags(): JSX.Element {
     }
   };
 
-  if (orgUserTagsError) {
+  const showErrorMessage = (message: string): JSX.Element => {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
@@ -178,16 +196,16 @@ function OrganizationTags(): JSX.Element {
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading Organization Tags Data
             <br />
-            {orgUserTagsError.message}
+            {message}
           </h6>
         </div>
       </div>
     );
-  }
+  };
 
   const userTagsList =
     orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge) => edge.node,
+      (edge: { node: InterfaceTagData }) => edge.node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
@@ -260,7 +278,7 @@ function OrganizationTags(): JSX.Element {
             className="text-secondary"
             to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
-            {params.row.childTags.totalCount}
+            {params.row.childTags?.totalCount || 0}
           </Link>
         );
       },
@@ -280,7 +298,7 @@ function OrganizationTags(): JSX.Element {
             className="text-secondary"
             to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
-            {params.row.usersAssignedTo.totalCount}
+            {params.row.usersAssignedTo?.totalCount || 0}
           </Link>
         );
       },
@@ -356,6 +374,8 @@ function OrganizationTags(): JSX.Element {
 
           {orgUserTagsLoading || createUserTagLoading ? (
             <Loader />
+          ) : orgUserTagsError ? (
+            showErrorMessage(orgUserTagsError.message)
           ) : (
             <div className="mb-4">
               <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">

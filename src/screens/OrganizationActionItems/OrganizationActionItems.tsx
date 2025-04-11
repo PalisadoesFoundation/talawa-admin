@@ -1,3 +1,48 @@
+/**
+ * Component: OrganizationActionItems
+ *
+ * This component renders a table of action items for a specific organization and event.
+ * It provides functionality to search, filter, sort, and manage action items.
+ *
+ * Features:
+ * - Fetches action items using GraphQL query based on filters and sorting.
+ * - Displays action items in a data grid with columns for assignee, category, status, allotted hours, and due date.
+ * - Allows users to create, edit, view, delete, and update the status of action items via modals.
+ * - Includes search functionality with debounce for optimized performance.
+ * - Provides sorting and filtering options for better data management.
+ *
+ * Props:
+ * - None (Relies on URL parameters for organization and event IDs).
+ *
+ * State:
+ * - `actionItem`: Stores the currently selected action item for modal operations.
+ * - `modalMode`: Determines whether the modal is in 'create' or 'edit' mode.
+ * - `searchTerm`: Stores the search input value.
+ * - `sortBy`: Stores the sorting criteria for due dates.
+ * - `status`: Filters action items by their status (Pending, Completed, or Late).
+ * - `searchBy`: Determines whether to search by 'assignee' or 'category'.
+ * - `modalState`: Tracks the visibility of different modals (Create/Edit, View, Delete, Status Update).
+ *
+ * Dependencies:
+ * - React, React Router, Apollo Client, Material-UI, Bootstrap, Day.js, and custom components.
+ *
+ * GraphQL:
+ * - Query: `ACTION_ITEM_LIST` - Fetches action items based on organization ID, event ID, filters, and sorting.
+ *
+ * Modals:
+ * - `ItemModal`: For creating or editing action items.
+ * - `ItemViewModal`: For viewing action item details.
+ * - `ItemDeleteModal`: For confirming and deleting action items.
+ * - `ItemUpdateStatusModal`: For updating the status of an action item.
+ *
+ * Error Handling:
+ * - Displays an error message if the GraphQL query fails.
+ *
+ * Loading State:
+ * - Displays a loader while fetching data.
+ *
+ * @returns JSX.Element - The rendered OrganizationActionItems component.
+ */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
@@ -42,13 +87,6 @@ enum ModalState {
   STATUS = 'status',
 }
 
-/**
- * Component for managing and displaying action items within an organization.
- *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
- * @returns The rendered component.
- */
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',

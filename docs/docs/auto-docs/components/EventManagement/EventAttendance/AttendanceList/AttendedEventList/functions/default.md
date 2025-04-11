@@ -6,9 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx#L15)
-
-Component to display a list of events attended by a member
+Defined in: [src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/AttendanceList/AttendedEventList.tsx#L42)
 
 ## Parameters
 
@@ -29,5 +27,3 @@ Component to display a list of events attended by a member
 ## Returns
 
 `ReactNode`
-
-A table row containing event details with a link to the event

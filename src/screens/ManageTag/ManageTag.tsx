@@ -1,3 +1,56 @@
+/**
+ * ManageTag Component
+ *
+ * This component is responsible for managing tags within an organization. It provides
+ * functionalities to view, edit, assign, unassign, and remove tags, as well as manage
+ * members assigned to a specific tag. It also supports infinite scrolling for assigned
+ * members and includes modals for various actions.
+ *
+ * @component
+ * @returns {JSX.Element} The ManageTag component.
+ *
+ * @remarks
+ * - Uses GraphQL queries and mutations to fetch and manipulate tag data.
+ * - Includes modals for actions like editing, removing, assigning, and unassigning tags.
+ * - Implements infinite scrolling for the list of assigned members.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries and mutations.
+ * - `react-router-dom` for navigation.
+ * - `react-bootstrap` for UI components.
+ * - `@mui/x-data-grid` for displaying assigned members in a table.
+ * - `react-toastify` for notifications.
+ * - Custom components like `AddPeopleToTag`, `TagActions`, `EditUserTagModal`, etc.
+ *
+ * @state
+ * - `unassignUserTagModalIsOpen` - Controls the visibility of the unassign user tag modal.
+ * - `addPeopleToTagModalIsOpen` - Controls the visibility of the add people to tag modal.
+ * - `tagActionsModalIsOpen` - Controls the visibility of the tag actions modal.
+ * - `editUserTagModalIsOpen` - Controls the visibility of the edit user tag modal.
+ * - `removeUserTagModalIsOpen` - Controls the visibility of the remove user tag modal.
+ * - `assignedMemberSearchInput` - Stores the search input for filtering assigned members.
+ * - `assignedMemberSortOrder` - Stores the sort order for assigned members.
+ * - `tagActionType` - Specifies the type of tag action (assign or remove).
+ * - `newTagName` - Stores the new name for the tag being edited.
+ *
+ * @methods
+ * - `toggleRemoveUserTagModal` - Toggles the visibility of the remove user tag modal.
+ * - `showAddPeopleToTagModal` - Opens the add people to tag modal.
+ * - `hideAddPeopleToTagModal` - Closes the add people to tag modal.
+ * - `showTagActionsModal` - Opens the tag actions modal.
+ * - `hideTagActionsModal` - Closes the tag actions modal.
+ * - `handleUnassignUserTag` - Handles the unassignment of a user from a tag.
+ * - `handleEditUserTag` - Handles the editing of a tag's name.
+ * - `handleRemoveUserTag` - Handles the removal of a tag.
+ *
+ * @errorHandling
+ * - Displays error messages using `react-toastify` in case of GraphQL errors.
+ *
+ * @example
+ * ```tsx
+ * <ManageTag />
+ * ```
+ */
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
@@ -39,28 +92,6 @@ import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-
-/**
- * Component that renders the Manage Tag screen when the app navigates to '/orgtags/:orgId/manageTag/:tagId'.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.tableHeader`
- * - `.editButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });

@@ -1,3 +1,38 @@
+/**
+ * VolunteerDeleteModal Component
+ *
+ * This component renders a modal for confirming the deletion of a volunteer.
+ * It provides options to either confirm or cancel the deletion process.
+ *
+ * @component
+ * @param {InterfaceDeleteVolunteerModal} props - The props for the component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to hide the modal.
+ * @param {InterfaceEventVolunteerInfo} props.volunteer - The volunteer information to be deleted.
+ * @param {() => void} props.refetchVolunteers - Function to refetch the list of volunteers after deletion.
+ *
+ * @returns {React.FC} A React functional component rendering the delete confirmation modal.
+ *
+ * @example
+ * ```tsx
+ * <VolunteerDeleteModal
+ *   isOpen={isModalOpen}
+ *   hide={closeModal}
+ *   volunteer={selectedVolunteer}
+ *   refetchVolunteers={fetchVolunteers}
+ * />
+ * ```
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and button components.
+ * - Integrates `react-i18next` for translations.
+ * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
+ * - Displays success or error messages using `react-toastify`.
+ *
+ * @dependencies
+ * - `DELETE_VOLUNTEER` GraphQL mutation for deleting a volunteer.
+ * - `styles` for custom modal styling.
+ */
 import { Button, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React from 'react';
@@ -13,31 +48,6 @@ export interface InterfaceDeleteVolunteerModal {
   volunteer: InterfaceEventVolunteerInfo;
   refetchVolunteers: () => void;
 }
-
-/**
- * A modal dialog for confirming the deletion of a volunteer.
- *
- * @param  isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param  volunteer - The volunteer object to be deleted.
- * @param refetchVolunteers - Function to refetch the volunteers after deletion.
- *
- * @returns  The rendered modal component.
- *
- *
- * The `VolunteerDeleteModal` component displays a confirmation dialog when a user attempts to delete a volunteer.
- * It allows the user to either confirm or cancel the deletion.
- * On confirmation, the `deleteVolunteer` mutation is called to remove the pledge from the database,
- * and the `refetchVolunteers` function is invoked to update the list of volunteers.
- * A success or error toast notification is shown based on the result of the deletion operation.
- *
- * The modal includes:
- * - A header with a title and a close button.
- * - A body with a message asking for confirmation.
- * - A footer with "Yes" and "No" buttons to confirm or cancel the deletion.
- *
- * The `deleteVolunteer` mutation is used to perform the deletion operation.
- */
 
 const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   isOpen,
