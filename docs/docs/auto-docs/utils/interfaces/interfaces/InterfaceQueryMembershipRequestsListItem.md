@@ -14,9 +14,9 @@ Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1211)
 
-#### \_id
+#### id
 
-> **\_id**: `string`
+> **id**: `string`
 
 #### membershipRequests
 
