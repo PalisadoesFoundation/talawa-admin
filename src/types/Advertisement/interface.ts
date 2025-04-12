@@ -27,7 +27,7 @@ export interface InterfaceFormStateTypes {
 export interface InterfaceAddOnEntryProps {
   id: string;
   name?: string;
-  attachmentUrl?: string;
+  existingAttachments?: string;
   type?: string;
   organizationId?: string;
   startAt?: Date;

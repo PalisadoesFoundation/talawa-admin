@@ -68,6 +68,7 @@ export default function Advertisements(): JSX.Element {
       first: 6,
       where: { isCompleted: true },
     },
+    skip: !currentOrgId, // Skip the query if currentOrgId is not available
   });
 
   // Query to fetch active advertisements for the organization with pagination
@@ -82,6 +83,7 @@ export default function Advertisements(): JSX.Element {
       first: 6,
       where: { isCompleted: false },
     },
+    skip: !currentOrgId, // Skip the query if currentOrgId is not available
   });
 
   // State to manage the list of advertisements
@@ -103,10 +105,7 @@ export default function Advertisements(): JSX.Element {
         );
       if (after) {
         setCompletedAdvertisements((prevAds) => {
-          const merged = [...prevAds, ...ads];
-          const unique = Array.from(
-            new Map(merged.map((ad) => [ad.id, ad])).values(),
-          );
+          const unique = mergedAdvertisements(prevAds, ads);
           return unique;
         });
       } else {
@@ -123,10 +122,7 @@ export default function Advertisements(): JSX.Element {
         );
       if (after) {
         setActiveAdvertisements((prevAds) => {
-          const merged = [...prevAds, ...ads];
-          const unique = Array.from(
-            new Map(merged.map((ad) => [ad.id, ad])).values(),
-          );
+          const unique = mergedAdvertisements(prevAds, ads);
           return unique;
         });
       } else {
@@ -150,6 +146,7 @@ export default function Advertisements(): JSX.Element {
         ?.endCursor || null;
     setAfter(newAfter);
 
+    // Refetch active advertisements
     try {
       await activeRefetch({
         // Refetch active advertisements
@@ -160,6 +157,12 @@ export default function Advertisements(): JSX.Element {
           isCompleted: false,
         },
       });
+    } catch (error) {
+      console.error('Error fetching more active advertisements:', error);
+    }
+
+    // Refetch completed advertisements
+    try {
       await completedRefetch({
         // Refetch completed advertisements
         id: currentOrgId,
@@ -170,16 +173,26 @@ export default function Advertisements(): JSX.Element {
         },
       });
     } catch (error) {
-      console.error('Error fetching more advertisements:', error);
+      console.error('Error fetching more completed advertisements:', error);
     }
   }
 
-  const isAdvertisementActive = (ad: Advertisement): boolean => {
-    if (!ad.endAt) {
-      return false;
-    }
-    return new Date(ad.endAt) >= new Date();
-  };
+  /**
+   * Merges two arrays of advertisements, ensuring uniqueness based on advertisement ID.
+   * @param prevAds - Previous advertisements.
+   * @param ads - New advertisements to merge.
+   * @returns Merged array of unique advertisements.
+   */
+  function mergedAdvertisements(
+    prevAds: Advertisement[],
+    ads: Advertisement[],
+  ): Advertisement[] {
+    const merged = [...prevAds, ...ads];
+    const unique = Array.from(
+      new Map(merged.map((ad) => [ad.id, ad])).values(),
+    );
+    return unique;
+  }
 
   const loading = activeLoading || completedLoading; // if any of them is in loading state
   return (
@@ -232,21 +245,18 @@ export default function Advertisements(): JSX.Element {
                       )
                     }
                   >
-                    {activeAdvertisements.filter(isAdvertisementActive)
-                      .length === 0 ? (
+                    {activeAdvertisements.length === 0 ? (
                       <h4>{t('pMessage')}</h4>
                     ) : (
-                      activeAdvertisements
-                        .filter(isAdvertisementActive)
-                        .map((ad, i) => {
-                          return (
-                            <AdvertisementEntry
-                              key={ad.id}
-                              advertisement={ad}
-                              setAfter={setAfter}
-                            />
-                          );
-                        })
+                      activeAdvertisements.map((ad, i) => {
+                        return (
+                          <AdvertisementEntry
+                            key={ad.id}
+                            advertisement={ad}
+                            setAfter={setAfter}
+                          />
+                        );
+                      })
                     )}
                   </InfiniteScroll>
                 </Tab>
@@ -282,17 +292,15 @@ export default function Advertisements(): JSX.Element {
                     {completedAdvertisements.length === 0 ? (
                       <h4>{t('pMessage')}</h4>
                     ) : (
-                      completedAdvertisements
-                        .filter((ad) => !isAdvertisementActive(ad))
-                        .map((ad) => {
-                          return (
-                            <AdvertisementEntry
-                              key={ad.id}
-                              advertisement={ad}
-                              setAfter={setAfter}
-                            />
-                          );
-                        })
+                      completedAdvertisements.map((ad) => {
+                        return (
+                          <AdvertisementEntry
+                            key={ad.id}
+                            advertisement={ad}
+                            setAfter={setAfter}
+                          />
+                        );
+                      })
                     )}
                   </InfiniteScroll>
                 </Tab>

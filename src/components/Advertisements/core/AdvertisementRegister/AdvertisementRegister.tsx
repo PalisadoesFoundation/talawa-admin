@@ -89,7 +89,7 @@ function AdvertisementRegister({
         query: ORGANIZATION_ADVERTISEMENT_LIST,
         variables: {
           id: currentOrg,
-          first: 12,
+          first: 6,
           after: null,
           before: null,
         },
@@ -145,11 +145,26 @@ function AdvertisementRegister({
     try {
       const files = e.target.files;
       if (files && files.length > 0) {
-        const newFiles = Array.from(files);
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, ...newFiles],
-        }));
+        const validFiles: File[] = [];
+        const maxFileSize = 5 * 1024 * 1024; // 5MB
+        const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+
+        Array.from(files).forEach((file) => {
+          if (!allowedTypes.includes(file.type)) {
+            toast.error(`Invalid file type: ${file.name}`);
+          } else if (file.size > maxFileSize) {
+            toast.error(`File too large: ${file.name}`);
+          } else {
+            validFiles.push(file);
+          }
+        });
+
+        if (validFiles.length > 0) {
+          setFormState((prev) => ({
+            ...prev,
+            attachments: [...prev.attachments, ...validFiles],
+          }));
+        }
       }
     } catch (e) {
       toast.error('Error during File Upload');
@@ -195,12 +210,6 @@ function AdvertisementRegister({
       return;
     }
 
-    const formData = new FormData();
-
-    formState.attachments.forEach((file) =>
-      formData.append('attachments', file),
-    );
-
     try {
       const startDate = dayjs(formState.startAt).startOf('day');
       const endDate = dayjs(formState.endAt).startOf('day');
@@ -233,7 +242,6 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs(formState.startAt).toISOString(),
         endAt: dayjs(formState.endAt).toISOString(),
-
         attachments: formState.attachments,
       };
 
@@ -259,6 +267,7 @@ function AdvertisementRegister({
             endAt: new Date(),
             organizationId: currentOrg,
             attachments: [],
+            existingAttachments: undefined,
           });
         }
         setAfter(null);
@@ -450,7 +459,13 @@ function AdvertisementRegister({
                       playsInline
                       crossOrigin="anonymous"
                       src={formState.existingAttachments}
-                    />
+                    >
+                      <track
+                        kind="captions"
+                        srcLang="en"
+                        label="English captions"
+                      />
+                    </video>
                   ) : (
                     <img
                       src={formState.existingAttachments}
@@ -466,7 +481,14 @@ function AdvertisementRegister({
                       data-testid="mediaPreview"
                       controls
                       src={encodeURI(URL.createObjectURL(file))}
-                    />
+                      className={styles.previewAdvertisementRegister}
+                    >
+                      <track
+                        kind="captions"
+                        srcLang="en"
+                        label="English captions"
+                      />
+                    </video>
                   ) : (
                     <img
                       data-testid="mediaPreview"

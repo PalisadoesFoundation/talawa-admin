@@ -727,6 +727,9 @@
   --reset-btn-colour: #1778f2;
 
   --form-control-focus-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+
+  --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
+  --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -8439,15 +8442,6 @@ form {
   overflow: hidden;
 }
 
-.imageWrapper {
-  width: 100%;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f8f9fa;
-}
-
 .cardImage {
   width: 100%;
   height: 100%;
@@ -8479,17 +8473,26 @@ form {
   flex-direction: column;
 }
 
+.imageWrapper {
+  width: 100%;
+  height: 12.5rem; /* Changed to relative units for better scalability */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
 @media (max-width: 768px) {
   .addCard {
     width: 100%;
   }
 
   .mediaContainer {
-    height: 150px;
+    height: 10rem; /* Using relative units for better scalability */
   }
 
   .imageWrapper {
-    height: 150px;
+    height: 10rem; /* Adjusted to relative units for consistency */
   }
 }
 
@@ -8518,10 +8521,10 @@ form {
   padding: 0.5rem 0;
   margin: 0;
   list-style: none;
-  background-color: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: var(--orText-bg);
+  border: var(--advertisement-dropdown-border);
   border-radius: 0.25rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  box-shadow: var(--advertisement-dropdown-box-shadow);
 }
 
 .dropdownmenu li {

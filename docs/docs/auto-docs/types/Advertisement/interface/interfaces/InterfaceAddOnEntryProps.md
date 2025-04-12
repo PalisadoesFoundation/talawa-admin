@@ -16,19 +16,19 @@ Defined in: [src/types/Advertisement/interface.ts:35](https://github.com/Palisad
 
 ***
 
-### attachmentUrl?
-
-> `optional` **attachmentUrl**: `string`
-
-Defined in: [src/types/Advertisement/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L30)
-
-***
-
 ### endAt?
 
 > `optional` **endAt**: `Date`
 
 Defined in: [src/types/Advertisement/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L34)
+
+***
+
+### existingAttachments?
+
+> `optional` **existingAttachments**: `string`
+
+Defined in: [src/types/Advertisement/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L30)
 
 ***
 

@@ -8,7 +8,7 @@
 
 Defined in: [src/GraphQl/Mutations/AdvertisementMutations.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AdvertisementMutations.ts#L14)
 
-GraphQL mutation to create an advertisement..
+GraphQL mutation to create an advertisement.
 
 ## Param
 

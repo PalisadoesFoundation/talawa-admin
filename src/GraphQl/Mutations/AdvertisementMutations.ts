@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL mutation to create an advertisement..
+ * GraphQL mutation to create an advertisement.
  *
  * @param organizationId - Global identifier of the associated organization.
  * @param name - Name of the advertisement.
@@ -38,7 +38,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to update an advertisement..
+ * GraphQL mutation to update an advertisement.
  *
  * @param id - Global identifier of the advertisement.
  * @param name - Optional updated name of the advertisement
@@ -72,7 +72,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 `;
 
 /**
- * GraphQL mutation to delete an advertisement..
+ * GraphQL mutation to delete an advertisement.
  *
  * @param id - Global identifier of the advertisement.
  */
