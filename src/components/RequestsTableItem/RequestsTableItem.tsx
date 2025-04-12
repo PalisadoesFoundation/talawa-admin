@@ -36,6 +36,8 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './RequestsTableItem.module.css';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
@@ -66,9 +68,12 @@ const RequestsTableItem = (props: Props): JSX.Element => {
     try {
       const { data } = await acceptUser({
         variables: {
-          id: membershipRequestId,
+          input: {
+            membershipRequestId: membershipRequestId,
+          },
         },
       });
+
       if (data) {
         toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
@@ -90,11 +95,15 @@ const RequestsTableItem = (props: Props): JSX.Element => {
     membershipRequestId: string,
   ): Promise<void> => {
     try {
+      // Change this part to wrap the ID in an input object
       const { data } = await rejectUser({
         variables: {
-          id: membershipRequestId,
+          input: {
+            membershipRequestId: membershipRequestId, // Pass ID in the input object
+          },
         },
       });
+
       if (data) {
         toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
@@ -107,32 +116,30 @@ const RequestsTableItem = (props: Props): JSX.Element => {
   return (
     <tr className={styles.tableItem}>
       <td className={styles.index}>{index + 1}.</td>
-      <td
-        className={styles.name}
-      >{`${request.user.firstName} ${request.user.lastName}`}</td>
-      <td className={styles.email}>{request.user.email}</td>
+      <td className={styles.name}>{`${request.user.name}`}</td>
+      <td className={styles.email}>{request.user.emailAddress}</td>
       <td>
         <Button
           variant="success"
-          data-testid={`acceptMembershipRequestBtn${request._id}`}
+          data-testid={`acceptMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
-            await handleAcceptUser(request._id);
+            await handleAcceptUser(request.membershipRequestId);
           }}
           className={styles.acceptButton}
         >
-          {t('accept')}
+          <CheckIcon className={styles.buttonIcon} />
         </Button>
       </td>
       <td>
         <Button
           variant="danger"
-          data-testid={`rejectMembershipRequestBtn${request._id}`}
+          data-testid={`rejectMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
-            await handleRejectUser(request._id);
+            await handleRejectUser(request.membershipRequestId);
           }}
           className={styles.rejectButton}
         >
-          {t('reject')}
+          <DeleteIcon className={styles.buttonIcon} />
         </Button>
       </td>
     </tr>
