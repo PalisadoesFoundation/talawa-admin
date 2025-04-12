@@ -890,6 +890,10 @@ input OTPInput {
   email: EmailAddress!
 }
 
+input AdvertisementWhereInput {
+  isCompleted: Boolean!
+}
+
 type Organization {
   id: ID!
   actionItemCategories: [ActionItemCategory]
@@ -943,6 +947,7 @@ type OrganizationPg {
     before: String
     first: Int
     last: Int
+    where: AdvertisementWhereInput
   ): OrganizationAdvertisementsConnectionPg
 
   blockedUsers(

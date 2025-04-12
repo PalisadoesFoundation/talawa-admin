@@ -56,27 +56,53 @@ export default function Advertisements(): JSX.Element {
 
   const [after, setAfter] = useState<string | null | undefined>(null);
 
-  // Query to fetch advertisements for the organization with pagination
+  // Query to fetch completed advertisements for the organization with pagination
   const {
-    data: orgAdvertisementListData,
-    loading,
-    refetch,
+    data: orgCompletedAdvertisementListData,
+    loading: completedLoading,
+    refetch: completedRefetch,
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: { id: currentOrgId, after, first: 12 },
+    variables: {
+      id: currentOrgId,
+      after,
+      first: 6,
+      where: { isCompleted: true },
+    },
+  });
+
+  // Query to fetch active advertisements for the organization with pagination
+  const {
+    data: orgActiveAdvertisementListData,
+    loading: activeLoading,
+    refetch: activeRefetch,
+  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+    variables: {
+      id: currentOrgId,
+      after,
+      first: 6,
+      where: { isCompleted: false },
+    },
   });
 
   // State to manage the list of advertisements
-  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
+  const [completedAdvertisements, setcompletedAdvertisements] = useState<
+    Advertisement[]
+  >([]);
+  const [activeAdvertisements, setActiveAdvertisements] = useState<
+    Advertisement[]
+  >([]);
 
   // Effect hook to update advertisements list when data changes or pagination cursor changes
   useEffect(() => {
-    if (orgAdvertisementListData?.organization?.advertisements?.edges) {
+    if (
+      orgCompletedAdvertisementListData?.organization?.advertisements?.edges
+    ) {
       const ads: Advertisement[] =
-        orgAdvertisementListData.organization.advertisements.edges.map(
+        orgCompletedAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
         );
       if (after) {
-        setAdvertisements((prevAds) => {
+        setcompletedAdvertisements((prevAds) => {
           const merged = [...prevAds, ...ads];
           const unique = Array.from(
             new Map(merged.map((ad) => [ad.id, ad])).values(),
@@ -84,27 +110,64 @@ export default function Advertisements(): JSX.Element {
           return unique;
         });
       } else {
-        setAdvertisements(ads);
+        setcompletedAdvertisements(ads);
       }
     } else {
-      setAdvertisements([]); // No advertisements found
+      setcompletedAdvertisements([]); // No advertisements found
     }
-  }, [orgAdvertisementListData, after]);
+
+    if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
+      const ads: Advertisement[] =
+        orgActiveAdvertisementListData.organization.advertisements.edges.map(
+          (edge: { node: Advertisement }) => edge.node,
+        );
+      if (after) {
+        setActiveAdvertisements((prevAds) => {
+          const merged = [...prevAds, ...ads];
+          const unique = Array.from(
+            new Map(merged.map((ad) => [ad.id, ad])).values(),
+          );
+          return unique;
+        });
+      } else {
+        setActiveAdvertisements(ads);
+      }
+    } else {
+      setcompletedAdvertisements([]); // No advertisements found
+    }
+  }, [
+    orgCompletedAdvertisementListData,
+    orgActiveAdvertisementListData,
+    after,
+  ]);
 
   /**
    * Fetches more advertisements for infinite scrolling.
    */
   async function loadMoreAdvertisements(): Promise<void> {
     const newAfter =
-      orgAdvertisementListData?.organization?.advertisements?.pageInfo
+      orgCompletedAdvertisementListData?.organization?.advertisements?.pageInfo
         ?.endCursor || null;
     setAfter(newAfter);
 
     try {
-      await refetch({
+      await activeRefetch({
+        // Refetch active advertisements
         id: currentOrgId,
         after: newAfter,
-        first: 12,
+        first: 6,
+        where: {
+          isCompleted: false,
+        },
+      });
+      await completedRefetch({
+        // Refetch completed advertisements
+        id: currentOrgId,
+        after: newAfter,
+        first: 6,
+        where: {
+          isCompleted: true,
+        },
       });
     } catch (error) {
       console.error('Error fetching more advertisements:', error);
@@ -117,6 +180,8 @@ export default function Advertisements(): JSX.Element {
     }
     return new Date(ad.endAt) >= new Date();
   };
+
+  const loading = activeLoading || completedLoading; // if any of them is in loading state
   return (
     <>
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
@@ -145,7 +210,7 @@ export default function Advertisements(): JSX.Element {
                   className="pt-4 m-2"
                 >
                   <InfiniteScroll
-                    dataLength={advertisements.length}
+                    dataLength={activeAdvertisements.length}
                     next={loadMoreAdvertisements}
                     loader={
                       <>
@@ -154,26 +219,24 @@ export default function Advertisements(): JSX.Element {
                       </>
                     }
                     hasMore={
-                      orgAdvertisementListData?.organization?.advertisements
-                        ?.pageInfo?.hasNextPage ?? false
+                      orgActiveAdvertisementListData?.organization
+                        ?.advertisements?.pageInfo?.hasNextPage ?? false
                     }
                     className={styles.listBoxAdvertisements}
                     data-testid="organizations-list"
                     endMessage={
-                      advertisements.some(
-                        (ad: Advertisement) => ad.endAt > new Date(),
-                      ) && (
+                      !activeAdvertisements && (
                         <div className={'w-100 text-center my-4'}>
                           <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                         </div>
                       )
                     }
                   >
-                    {advertisements.filter(isAdvertisementActive).length ===
-                    0 ? (
+                    {activeAdvertisements.filter(isAdvertisementActive)
+                      .length === 0 ? (
                       <h4>{t('pMessage')}</h4>
                     ) : (
-                      advertisements
+                      activeAdvertisements
                         .filter(isAdvertisementActive)
                         .map((ad, i) => {
                           return (
@@ -194,7 +257,7 @@ export default function Advertisements(): JSX.Element {
                   className="pt-4 m-2"
                 >
                   <InfiniteScroll
-                    dataLength={advertisements.length}
+                    dataLength={completedAdvertisements.length}
                     next={loadMoreAdvertisements}
                     loader={
                       <>
@@ -203,31 +266,28 @@ export default function Advertisements(): JSX.Element {
                       </>
                     }
                     hasMore={
-                      orgAdvertisementListData?.organization?.advertisements
-                        ?.pageInfo?.hasNextPage ?? false
+                      orgCompletedAdvertisementListData?.organization
+                        ?.advertisements?.pageInfo?.hasNextPage ?? false
                     }
                     className={styles.listBoxAdvertisements}
                     data-testid="organizations-list"
                     endMessage={
-                      advertisements.some(
-                        (ad: Advertisement) => ad.endAt < new Date(),
-                      ) && (
+                      !completedAdvertisements && (
                         <div className={'w-100 text-center my-4'}>
                           <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                         </div>
                       )
                     }
                   >
-                    {advertisements.filter((ad) => !isAdvertisementActive(ad))
-                      .length === 0 ? (
+                    {completedAdvertisements.length === 0 ? (
                       <h4>{t('pMessage')}</h4>
                     ) : (
-                      advertisements
+                      completedAdvertisements
                         .filter((ad) => !isAdvertisementActive(ad))
                         .map((ad) => {
                           return (
                             <AdvertisementEntry
-                              key={ad.id} // use ad.id as the key for better performance
+                              key={ad.id}
                               advertisement={ad}
                               setAfter={setAfter}
                             />

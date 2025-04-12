@@ -16,6 +16,7 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
     $last: Int
     $after: String
     $before: String
+    $where: AdvertisementWhereInput
   ) {
     organization(input: { id: $id }) {
       advertisements(
@@ -23,6 +24,7 @@ export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
         last: $last
         after: $after
         before: $before
+        where: $where
       ) {
         edges {
           node {
