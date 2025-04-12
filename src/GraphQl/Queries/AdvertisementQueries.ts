@@ -4,7 +4,7 @@
  * @param id - The ID of a specific organization to retrieve.
  * @param first - Optional. Number of advertisements to retrieve in the first batch.
  * @param last - Optional. Number of advertisements to retrieve in the last batch.
- * @returns The list of organizations based on the applied filters.
+ * @returns The organization’s advertisements based on the applied filters.
  */
 
 import gql from 'graphql-tag';

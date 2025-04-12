@@ -85,7 +85,7 @@ export default function Advertisements(): JSX.Element {
   });
 
   // State to manage the list of advertisements
-  const [completedAdvertisements, setcompletedAdvertisements] = useState<
+  const [completedAdvertisements, setCompletedAdvertisements] = useState<
     Advertisement[]
   >([]);
   const [activeAdvertisements, setActiveAdvertisements] = useState<
@@ -102,7 +102,7 @@ export default function Advertisements(): JSX.Element {
           (edge: { node: Advertisement }) => edge.node,
         );
       if (after) {
-        setcompletedAdvertisements((prevAds) => {
+        setCompletedAdvertisements((prevAds) => {
           const merged = [...prevAds, ...ads];
           const unique = Array.from(
             new Map(merged.map((ad) => [ad.id, ad])).values(),
@@ -110,10 +110,10 @@ export default function Advertisements(): JSX.Element {
           return unique;
         });
       } else {
-        setcompletedAdvertisements(ads);
+        setCompletedAdvertisements(ads);
       }
     } else {
-      setcompletedAdvertisements([]); // No advertisements found
+      setCompletedAdvertisements([]); // No advertisements found
     }
 
     if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
@@ -133,7 +133,7 @@ export default function Advertisements(): JSX.Element {
         setActiveAdvertisements(ads);
       }
     } else {
-      setcompletedAdvertisements([]); // No advertisements found
+      setActiveAdvertisements([]); // No advertisements found
     }
   }, [
     orgCompletedAdvertisementListData,
@@ -225,7 +225,7 @@ export default function Advertisements(): JSX.Element {
                     className={styles.listBoxAdvertisements}
                     data-testid="organizations-list"
                     endMessage={
-                      !activeAdvertisements && (
+                      activeAdvertisements.length === 0 && (
                         <div className={'w-100 text-center my-4'}>
                           <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                         </div>
@@ -272,7 +272,7 @@ export default function Advertisements(): JSX.Element {
                     className={styles.listBoxAdvertisements}
                     data-testid="organizations-list"
                     endMessage={
-                      !completedAdvertisements && (
+                      completedAdvertisements.length === 0 && (
                         <div className={'w-100 text-center my-4'}>
                           <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
                         </div>
