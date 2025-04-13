@@ -1002,7 +1002,7 @@ describe('MemberDetail', () => {
     toastErrorSpy.mockRestore();
   });
 
-  test('should set localStorage items when user update is successful', async () => {
+  test('should set localStorage items when user updated', async () => {
     renderMemberDetailScreen(link5);
     await wait();
 
