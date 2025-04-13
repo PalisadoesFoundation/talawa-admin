@@ -56,13 +56,13 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
   Autocomplete,
@@ -73,7 +73,7 @@ import {
   TextField,
 } from '@mui/material';
 
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -93,88 +93,96 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   orgId,
   pledge,
   refetchPledge,
-  endDate,
   mode,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
-    pledgeUsers: [],
-    pledgeAmount: pledge?.amount ?? 0,
+    pledgeUsers:
+      pledge?.users?.map((user) => ({
+        ...user,
+        _id: user.id,
+      })) ?? [],
+    pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-    pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
+    pledgeEndDate: pledge?.endDate
+      ? dayjs(pledge.endDate).toDate()
+      : new Date(),
+    pledgeStartDate: pledge?.startDate
+      ? dayjs(pledge.startDate).toDate()
+      : new Date(),
   });
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
-  const [updatePledge] = useMutation(UPDATE_PLEDGE);
-  const [createPledge] = useMutation(CREATE_PlEDGE);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
+  const [updatePledge] = useMutation(UPDATE_PLEDGE);
+  const [createPledge] = useMutation(CREATE_PLEDGE);
+
+  const { data: memberData } = useQuery(MEMBERS_LIST_PG, {
+    variables: { input: { id: orgId } },
   });
 
   useEffect(() => {
-    setFormState({
-      pledgeUsers: pledge?.users ?? [],
-      pledgeAmount: pledge?.amount ?? 0,
-      pledgeCurrency: pledge?.currency ?? 'USD',
-      pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-      pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
-    });
+    if (pledge) {
+      setFormState({
+        pledgeUsers:
+          pledge.users?.map((user) => ({
+            ...user,
+            _id: user.id,
+          })) ?? [],
+        pledgeAmount: pledge.amount ?? 0,
+        pledgeCurrency: pledge.currency ?? 'USD',
+        pledgeEndDate: dayjs(pledge.endDate).toDate(),
+        pledgeStartDate: dayjs(pledge.startDate).toDate(),
+      });
+    }
   }, [pledge]);
 
   useEffect(() => {
     if (memberData) {
-      setPledgers(memberData.organizations[0].members);
+      const members = memberData.organization.members.edges.map(
+        (edge: { node: InterfaceUserInfo_PG }) => edge.node,
+      );
+      setPledgers(members);
     }
   }, [memberData]);
 
-  const {
-    pledgeUsers,
-    pledgeAmount,
-    pledgeCurrency,
-    pledgeStartDate,
-    pledgeEndDate,
-  } = formState;
+  const { pledgeUsers, pledgeAmount } = formState;
 
+  const isAmountValid = formState.pledgeAmount > 0;
+
+  // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
-      const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
-      const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
+      const variables: {
+        id?: string;
+        amount?: number;
+      } = {
+        id: pledge?.id,
+      };
 
-      const updatedFields: {
-        [key: string]: number | string | string[] | undefined;
-      } = {};
-      // checks if there are changes to the pledge and adds them to the updatedFields object
       if (pledgeAmount !== pledge?.amount) {
-        updatedFields.amount = pledgeAmount;
-      }
-      if (pledgeCurrency !== pledge?.currency) {
-        updatedFields.currency = pledgeCurrency;
-      }
-      if (startDate !== dayjs(pledge?.startDate).format('YYYY-MM-DD')) {
-        updatedFields.startDate = startDate;
-      }
-      if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
-        updatedFields.endDate = endDate;
-      }
-      if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user._id);
+        variables.amount = pledgeAmount;
       }
       try {
+        const variables = {
+          id: pledge?.id ?? '',
+          ...(pledge &&
+            pledgeAmount !== pledge.amount && { amount: pledgeAmount }),
+        };
+
         await updatePledge({
-          variables: { id: pledge?._id, ...updatedFields },
+          variables,
         });
-        toast.success(t('pledgeUpdated') as string);
+        toast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
         toast.error((error as Error).message);
       }
     },
-    [formState, pledge],
+    [formState, pledge, updatePledge, t, refetchPledge, hide],
   );
 
   // Function to create a new pledge
@@ -182,14 +190,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
+        if (!formState.pledgeUsers[0]?.id) {
+          throw new Error('Failed to create pledge');
+        }
         await createPledge({
           variables: {
             campaignId,
-            amount: pledgeAmount,
-            currency: pledgeCurrency,
-            startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
-            endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user._id),
+            amount: formState.pledgeAmount,
+            pledgerId: formState.pledgeUsers[0].id,
           },
         });
 
@@ -210,12 +218,22 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     [formState, campaignId],
   );
 
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (!isNaN(value)) {
+      setFormState({
+        ...formState,
+        pledgeAmount: Math.max(0, value),
+      });
+    }
+  };
+
   return (
     <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>
-          {t(mode === 'edit' ? 'editPledge' : 'createPledge')}
-        </p>
+        <Modal.Title data-testid="createPledgeTitle">
+          {mode === 'create' ? t('createPledge') : t('editPledge')}
+        </Modal.Title>
         <Button
           variant="danger"
           onClick={hide}
@@ -236,22 +254,32 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
-              multiple
               className={`${styles.noOutlinePledge} w-100`}
-              limitTags={2}
               data-testid="pledgerSelect"
               options={pledgers}
-              value={pledgeUsers}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              value={pledgeUsers[0] || null}
+              // isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
+                `${member.name || ''}`
               }
-              onChange={(_, newPledgers): void => {
-                setFormState({ ...formState, pledgeUsers: newPledgers });
+              onChange={(_, newPledger): void => {
+                setFormState({
+                  ...formState,
+                  pledgeUsers: newPledger
+                    ? [{ ...newPledger, id: newPledger.id }]
+                    : [],
+                });
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Pledgers" />
+                <TextField
+                  {...params}
+                  label="Pledgers"
+                  inputProps={{
+                    ...params.inputProps,
+                    'aria-label': 'Pledgers',
+                  }}
+                />
               )}
             />
           </Form.Group>
@@ -260,37 +288,32 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
-              value={dayjs(pledgeStartDate)}
+              value={dayjs(formState.pledgeStartDate)}
               className={styles.noOutlinePledge}
-              onChange={(date: Dayjs | null): void => {
+              onChange={(date): void => {
                 if (date) {
                   setFormState({
                     ...formState,
                     pledgeStartDate: date.toDate(),
-                    pledgeEndDate:
-                      pledgeEndDate &&
-                      (pledgeEndDate < date?.toDate()
-                        ? date.toDate()
-                        : pledgeEndDate),
                   });
                 }
               }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
+              disabled
             />
-            {/* Date Calendar Component to select end Date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
-              label={tCommon('endDate')}
+              label="End Date"
+              value={dayjs(formState.pledgeEndDate)}
               className={styles.noOutlinePledge}
-              value={dayjs(pledgeEndDate)}
-              onChange={(date: Dayjs | null): void => {
+              onChange={(date): void => {
                 if (date) {
-                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
+                  setFormState({
+                    ...formState,
+                    pledgeEndDate: date.toDate(),
+                  });
                 }
               }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
+              disabled
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
@@ -300,16 +323,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 {t('currency')}
               </InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                value={pledgeCurrency}
-                label={t('currency')}
-                data-testid="currencySelect"
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    pledgeCurrency: e.target.value,
-                  });
+                value={formState.pledgeCurrency || ''}
+                label="Currency"
+                inputProps={{
+                  'aria-label': 'Currency',
                 }}
+                disabled
+                className="MuiSelect-disabled"
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
@@ -323,16 +343,18 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               <TextField
                 label={t('amount')}
                 variant="outlined"
-                className={styles.noOutlinePledge}
-                value={pledgeAmount}
-                onChange={(e) => {
-                  if (parseInt(e.target.value) > 0) {
-                    setFormState({
-                      ...formState,
-                      pledgeAmount: parseInt(e.target.value),
-                    });
-                  }
+                type="number"
+                inputProps={{
+                  min: 1,
+                  'aria-label': 'Amount',
                 }}
+                error={formState.pledgeAmount < 1}
+                helperText={
+                  formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''
+                }
+                className={styles.noOutlinePledge}
+                value={formState.pledgeAmount}
+                onChange={handleAmountChange}
               />
             </FormControl>
           </Form.Group>
@@ -341,6 +363,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             type="submit"
             className={styles.addButton}
             data-testid="submitPledgeBtn"
+            disabled={!isAmountValid}
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
           </Button>
