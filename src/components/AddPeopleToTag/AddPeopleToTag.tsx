@@ -333,7 +333,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       >
         <Modal.Header
           className={`bg-primary ${styles.modalHeader}`}
-          data-testid="modalOrganizationHeader"
+          data-testid="modalHeader"
           closeButton
         >
           <Modal.Title className="text-white">{t('addPeople')}</Modal.Title>
@@ -460,7 +460,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             <Button
               onClick={hideAddPeopleToTagModal}
               variant="outline-danger"
-              data-testid="closeAddPeopleToTagModal"
+              data-testid="closeModalBtn"
               className={styles.removeButton}
             >
               {tCommon('cancel')}

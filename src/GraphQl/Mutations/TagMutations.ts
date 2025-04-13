@@ -115,7 +115,10 @@ export const ASSIGN_TO_TAGS = gql`
  * GraphQL mutation to remove tags from a user.
  */
 export const REMOVE_FROM_TAGS = gql`
-  mutation RemoveFromUserTags($currentTagId: ID!, $selectedTagIds: [ID!]!) {
+  mutation RemoveFromUserTags(
+    $currentTagId: String!
+    $selectedTagIds: [String!]!
+  ) {
     removeFromUserTags(
       input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
     ) {

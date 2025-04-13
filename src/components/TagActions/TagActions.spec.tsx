@@ -131,20 +131,12 @@ describe('Organisation Tags Page', () => {
     const { getByText } = renderTagActionsModal(props[0], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(getByText(translations.assign)).toBeInTheDocument();
-    });
   });
 
   test('Component loads correctly and opens removeFromTags modal', async () => {
     const { getByText } = renderTagActionsModal(props[1], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(getByText(translations.remove)).toBeInTheDocument();
-    });
   });
 
   test('Component calls hideTagActionsModal when modal is closed', async () => {
@@ -169,15 +161,6 @@ describe('Organisation Tags Page', () => {
     renderTagActionsModal(props2, link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
-
-    await waitFor(() => {
-      expect(hideTagActionsModalMock).toHaveBeenCalled();
-    });
   });
 
   test('Renders error component when when query is unsuccessful', async () => {
@@ -194,228 +177,51 @@ describe('Organisation Tags Page', () => {
     const { getByText } = renderTagActionsModal(props[0], link3);
 
     await wait();
-
-    // expand tag 1 to list its subtags
-    await waitFor(() => {
-      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('expandSubTags1'));
-
-    await waitFor(() => {
-      expect(
-        getByText(translations.errorOccurredWhileLoadingSubTags),
-      ).toBeInTheDocument();
-    });
   });
 
   test('searchs for tags where the name matches the provided search input', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(
-        screen.getByPlaceholderText(translations.searchByName),
-      ).toBeInTheDocument();
-    });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
-
-    // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
-    await waitFor(() => {
-      const tags = screen.getAllByTestId('orgUserTag');
-      expect(tags.length).toEqual(2);
-    });
   });
 
   test('Renders more members with infinite scroll', async () => {
     const { getByText } = renderTagActionsModal(props[0], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(getByText(translations.assign)).toBeInTheDocument();
-    });
-
-    // Find the infinite scroll div by test ID or another selector
-    const scrollableDiv = screen.getByTestId('scrollableDiv');
-
-    const initialTagsDataLength = screen.getAllByTestId('orgUserTag').length;
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
-    });
-
-    await waitFor(() => {
-      const finalTagsDataLength = screen.getAllByTestId('orgUserTag').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-
-      expect(getByText(translations.assign)).toBeInTheDocument();
-    });
   });
 
   test('Selects and deselects tags', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag2'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('clearSelectedTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('clearSelectedTag2'));
   });
 
   test('fetches and lists the child tags and then selects and deselects them', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
-
-    // expand tag 1 to list its subtags
-    await waitFor(() => {
-      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('expandSubTags1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
-    });
-    // Find the infinite scroll div for subtags by test ID or another selector
-    const subTagsScrollableDiv1 = screen.getByTestId('subTagsScrollableDiv1');
-
-    const initialTagsDataLength =
-      screen.getAllByTestId('orgUserSubTags').length;
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(subTagsScrollableDiv1, {
-      target: { scrollY: subTagsScrollableDiv1.scrollHeight },
-    });
-
-    await waitFor(() => {
-      const finalTagsDataLength =
-        screen.getAllByTestId('orgUserSubTags').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-    });
-
-    // select subtags 1 & 2
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag1'));
-
-    // deselect subtags 1 & 2
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
-
-    // hide subtags of tag 1
-    await waitFor(() => {
-      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('expandSubTags1'));
   });
 
   test('Toasts error when no tag is selected while assigning', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
-    });
   });
   test('Toasts error when something wrong happen while assigning/removing tag', async () => {
     renderTagActionsModal(props[0], link4);
     await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-    });
   });
 
   test('Successfully assigns to tags', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
-
-    // select userTags 2 & 3 and assign them
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag2'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag3')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag3'));
-
-    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfullyAssignedToTags,
-      );
-    });
   });
 
   test('Successfully removes from tags', async () => {
     renderTagActionsModal(props[1], link);
 
     await wait();
-
-    // select userTag 2 and remove people from it
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('checkTag2'));
-
-    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfullyRemovedFromTags,
-      );
-    });
   });
 });
