@@ -36,7 +36,18 @@ import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
  * Options for configuring the updateQuery function behavior
  */
 interface UpdateQueryOptions {
+  /**
+   * When true, removes duplicate users from the merged results based on user._id
+   * This ensures each user appears only once in the final list
+   * @default false
+   */
   deduplicateUsers?: boolean;
+
+  /**
+   * When true, calculates whether there are more users to load based on the
+   * number of new users returned in the latest fetch
+   * @default false
+   */
   calculateHasMore?: boolean;
 }
 
@@ -44,10 +55,15 @@ interface UpdateQueryOptions {
  * Represents a user object with required ID and optional additional properties
  */
 interface User {
-  user: {
-    _id: string;
-    [key: string]: any;
-  };
+  user: UserInfo;
+  [key: string]: any;
+}
+
+/**
+ * Represents the basic user details
+ */
+interface UserInfo {
+  _id: string;
   [key: string]: any;
 }
 
