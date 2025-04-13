@@ -85,6 +85,9 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
             campaign {
               id
               name
+              fund {
+                name
+              }
             }
             pledger {
               id

@@ -105,13 +105,17 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const endDate = dayjs(pledgeData?.fundCampaign?.endAt, 'YYYY-MM-DD').toDate();
 
-  const { pledges, totalPledged, fundName } = useMemo(() => {
+  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
     let totalPledged = 0;
+    let totalRaised = 0;
 
     const pledgesList =
       pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
         const amount = edge.node.amount || 0;
         totalPledged += amount;
+        // Assuming there's no raised amount for now, 
+        // this should be updated when raised amount data is available
+        totalRaised += 0; 
 
         const allUsers =
           'users' in edge.node && Array.isArray(edge.node.users)
@@ -151,13 +155,12 @@ const fundCampaignPledge = (): JSX.Element => {
           return a.endDate.getTime() - b.endDate.getTime();
         case 'endDate_DESC':
           return b.endDate.getTime() - a.endDate.getTime();
-        // default:
-        //   return 0;
       }
     });
 
-    const fundName = pledgeData?.fundCampaign?.name ?? tCommon('Funds');
-    return { pledges: sortedPledges, totalPledged, fundName };
+    // Get fund name from the campaign's fund property
+    const fundName = pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ?? tCommon('Funds');
+    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
@@ -323,7 +326,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 params.row.currency as keyof typeof currencySymbols
               ]
             }
-            {params.row.amount}
+            {params.row.amount.toLocaleString('en-US')}
           </div>
         );
       },
@@ -419,7 +422,7 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {campaignInfo?.endDate.toString()}
+            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -465,21 +468,32 @@ const fundCampaignPledge = (): JSX.Element => {
 
           <div className={styles.progress}>
             <ProgressBar
-              now={progressIndicator === 'pledged' ? totalPledged : 0}
-              label={`$${progressIndicator === 'pledged' ? totalPledged : 0}`}
-              max={campaignInfo?.goal}
+              now={
+                progressIndicator === 'pledged' 
+                  ? (totalPledged / (campaignInfo?.goal || 1)) * 100
+                  : (totalRaised / (campaignInfo?.goal || 1)) * 100
+              }
+              label={`${
+                currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'
+              }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
+              max={100}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
               className={`${styles.progressBar}`}
             />
             <div className={styles.endpoints}>
-              <div className={styles.start}>$0</div>
-              <div className={styles.end}>${campaignInfo?.goal}</div>
+              <div className={styles.start}>
+                {currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'}0
+              </div>
+              <div className={styles.end}>
+                {currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'}
+                {campaignInfo?.goal.toLocaleString('en-US')}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainerPledge} align-items-center`}>
         <SearchBar
           placeholder={t('searchPledger')}
           onSearch={setSearchTerm}
