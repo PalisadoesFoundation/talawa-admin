@@ -61,6 +61,10 @@ describe('Testing Advertisement Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
 
   it('render spinner while loading', async () => {
     render(
