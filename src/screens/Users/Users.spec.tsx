@@ -30,6 +30,51 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
+// Define a base implementation for updateQuery that can be customized
+interface UpdateQueryOptions {
+  deduplicateUsers?: boolean;
+  calculateHasMore?: boolean;
+}
+
+interface User {
+  user: {
+    _id: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+const createUpdateQuery = (options: UpdateQueryOptions = {}) => {
+  return (
+    prev: { users: User[]; hasMore?: boolean } | undefined,
+    { fetchMoreResult }: { fetchMoreResult?: { users: User[] } },
+  ) => {
+    // Base behavior
+    if (!fetchMoreResult) return prev || { users: [] };
+
+    const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+
+    // Conditional deduplication
+    let users = mergedUsers;
+    if (options.deduplicateUsers) {
+      users = Array.from(
+        new Map(
+          mergedUsers.map((user: User) => [user.user._id, user]),
+        ).values(),
+      );
+    }
+
+    // Conditional hasMore calculation
+    const result: { users: User[]; hasMore?: boolean } = { users };
+    if (options.calculateHasMore) {
+      result.hasMore =
+        !prev?.users || users.length - (prev.users.length || 0) >= 12;
+    }
+
+    return result;
+  };
+};
+
 const { setItem, removeItem } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
@@ -270,22 +315,7 @@ describe('Testing Users screen', () => {
       };
     }
 
-    const updateQuery = (
-      prev: { users: UserData[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: UserData[] } },
-    ) => {
-      if (!fetchMoreResult) return prev || { users: [] };
-
-      const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
-
-      const uniqueUsers = Array.from(
-        new Map(
-          mergedUsers.map((user: UserData) => [user.user._id, user]),
-        ).values(),
-      );
-
-      return { users: uniqueUsers };
-    };
+    const updateQuery = createUpdateQuery({ deduplicateUsers: true });
 
     // Test the updateQuery function
     const result = updateQuery(previousData, { fetchMoreResult: newData });
@@ -886,13 +916,7 @@ describe('Testing Users screen', () => {
   it('should handle the case when fetchMoreResult is undefined', async () => {
     // Instead of mocking the entire module, we'll test the logic directly
     // Create a function that mimics the updateQuery logic
-    const updateQuery = (
-      prev: { users: any[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
-    ) => {
-      if (!fetchMoreResult) return prev || { users: [] };
-      return { users: [...(prev?.users || []), ...fetchMoreResult.users] };
-    };
+    const updateQuery = createUpdateQuery();
 
     // Test the function directly
     const result = updateQuery({ users: [] }, { fetchMoreResult: undefined });
@@ -901,13 +925,7 @@ describe('Testing Users screen', () => {
 
   it('should handle the case when prev is undefined', async () => {
     // Create a function that mimics the updateQuery logic
-    const updateQuery = (
-      prev: { users: any[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
-    ) => {
-      if (!fetchMoreResult) return prev || { users: [] };
-      return { users: [...(prev?.users || []), ...fetchMoreResult.users] };
-    };
+    const updateQuery = createUpdateQuery();
 
     // Test the function directly
     const result = updateQuery(undefined, {
@@ -918,20 +936,7 @@ describe('Testing Users screen', () => {
 
   it('should handle duplicate users correctly', async () => {
     // Create a function that mimics the updateQuery logic
-    const updateQuery = (
-      prev: { users: any[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
-    ) => {
-      if (!fetchMoreResult) return prev || { users: [] };
-
-      const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
-
-      const uniqueUsers = Array.from(
-        new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
-      );
-
-      return { users: uniqueUsers };
-    };
+    const updateQuery = createUpdateQuery({ deduplicateUsers: true });
 
     // Test the function directly
     const prev = {
@@ -969,26 +974,10 @@ describe('Testing Users screen', () => {
 
   it('should set hasMore to false when there are fewer new users than perPageResult', async () => {
     // Create a function that mimics the updateQuery logic
-    const updateQuery = (
-      prev: { users: any[]; hasMore?: boolean } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: any[] } },
-    ): { users: any[]; hasMore: boolean } => {
-      if (!fetchMoreResult) return { users: prev?.users || [], hasMore: true };
-
-      const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
-
-      const uniqueUsers = Array.from(
-        new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
-      );
-
-      // This is the logic that would set hasMore to false
-      const hasMore = !(
-        prev?.users && uniqueUsers.length - prev.users.length < 12
-      );
-
-      // Always return the same structure
-      return { users: uniqueUsers, hasMore };
-    };
+    const updateQuery = createUpdateQuery({
+      deduplicateUsers: true,
+      calculateHasMore: true,
+    });
 
     // Test the function directly
     const prev = {
@@ -1250,8 +1239,11 @@ describe('Testing Users screen', () => {
           })),
       };
 
+      // Create a custom updateQuery function for this test
+      const updateQuery = createUpdateQuery();
+
       // This should not throw an error due to the prev?.users check
-      const result = updateQueryFn(prev, { fetchMoreResult });
+      const result = updateQuery(prev, { fetchMoreResult });
 
       // Verify that the function returns the expected result
       expect(result.users).toEqual(fetchMoreResult.users);
