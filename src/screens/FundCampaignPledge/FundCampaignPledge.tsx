@@ -113,9 +113,9 @@ const fundCampaignPledge = (): JSX.Element => {
       pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
         const amount = edge.node.amount || 0;
         totalPledged += amount;
-        // Assuming there's no raised amount for now, 
+        // Assuming there's no raised amount for now,
         // this should be updated when raised amount data is available
-        totalRaised += 0; 
+        totalRaised += 0;
 
         const allUsers =
           'users' in edge.node && Array.isArray(edge.node.users)
@@ -159,7 +159,9 @@ const fundCampaignPledge = (): JSX.Element => {
     });
 
     // Get fund name from the campaign's fund property
-    const fundName = pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ?? tCommon('Funds');
+    const fundName =
+      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
+      tCommon('Funds');
     return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
@@ -469,12 +471,14 @@ const fundCampaignPledge = (): JSX.Element => {
           <div className={styles.progress}>
             <ProgressBar
               now={
-                progressIndicator === 'pledged' 
+                progressIndicator === 'pledged'
                   ? (totalPledged / (campaignInfo?.goal || 1)) * 100
                   : (totalRaised / (campaignInfo?.goal || 1)) * 100
               }
               label={`${
-                currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'
+                currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'
               }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
               max={100}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
@@ -483,10 +487,15 @@ const fundCampaignPledge = (): JSX.Element => {
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>
-                {currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'}0
+                {currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'}
+                0
               </div>
               <div className={styles.end}>
-                {currencySymbols[campaignInfo?.currency as keyof typeof currencySymbols] || '$'}
+                {currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'}
                 {campaignInfo?.goal.toLocaleString('en-US')}
               </div>
             </div>
