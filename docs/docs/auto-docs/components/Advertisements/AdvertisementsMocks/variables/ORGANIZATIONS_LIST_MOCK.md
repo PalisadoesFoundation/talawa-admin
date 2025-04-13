@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATIONS\_LIST\_MOCK**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L122)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L126)
 
 ## Type declaration
 

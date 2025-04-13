@@ -8,7 +8,9 @@ Defined in: [src/types/Tag/interface.ts:45](https://github.com/PalisadoesFoundat
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Properties
 

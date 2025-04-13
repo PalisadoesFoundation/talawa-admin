@@ -6,4 +6,4 @@
 
 > `const` **ADVERTISEMENTS\_LIST\_MOCK**: `MockRequest`[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L115)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L119)
