@@ -31,11 +31,18 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
 // Define a base implementation for updateQuery that can be customized
+
+/**
+ * Options for configuring the updateQuery function behavior
+ */
 interface UpdateQueryOptions {
   deduplicateUsers?: boolean;
   calculateHasMore?: boolean;
 }
 
+/**
+ * Represents a user object with required ID and optional additional properties
+ */
 interface User {
   user: {
     _id: string;
@@ -44,6 +51,14 @@ interface User {
   [key: string]: any;
 }
 
+/**
+ * Creates an updateQuery function for Apollo Client's fetchMore with customizable behavior
+ *
+ * @param options - Configuration options for the updateQuery function
+ * @param options.deduplicateUsers - Whether to remove duplicate users based on user._id
+ * @param options.calculateHasMore - Whether to calculate and return the hasMore property
+ * @returns A function that merges previous and new query results according to the options
+ */
 const createUpdateQuery = (options: UpdateQueryOptions = {}) => {
   return (
     prev: { users: User[]; hasMore?: boolean } | undefined,
@@ -969,7 +984,7 @@ describe('Testing Users screen', () => {
 
     // Verify that the result contains unique users
     expect(result.users.length).toBe(3);
-    expect(result.users.map((u: any) => u.user._id)).toEqual(['1', '2', '3']);
+    expect(result.users.map((u: User) => u.user._id)).toEqual(['1', '2', '3']);
   });
 
   it('should set hasMore to false when there are fewer new users than perPageResult', async () => {
