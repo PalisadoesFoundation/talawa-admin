@@ -72,12 +72,17 @@ import {
 } from '@mui/material';
 
 interface InterfaceRequestsListItem {
-  _id: string;
-  user: { firstName: string; lastName: string; email: string };
+  membershipRequestId: string;
+  createdAt: string;
+  status: string;
+  user: {
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
 }
 
 const Requests = (): JSX.Element => {
-  // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { t: tCommon } = useTranslation('common');
 
@@ -93,25 +98,23 @@ const Requests = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
-  const userRole = getItem('SuperAdmin')
-    ? 'SUPERADMIN'
-    : getItem('AdminFor')
-      ? 'ADMIN'
-      : 'USER';
+  const userRole = getItem('role') as string;
   const { orgId = '' } = useParams();
   const organizationId = orgId;
 
   // Query to fetch membership requests
   const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
     variables: {
-      id: organizationId,
+      input: {
+        id: organizationId,
+      },
       first: perPageResult,
       skip: 0,
-      firstName_contains: '',
+      name_contains: '',
     },
     notifyOnNetworkStatusChange: true,
   });
-
+  console.log(data);
   // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
@@ -124,14 +127,17 @@ const Requests = (): JSX.Element => {
       return;
     }
 
-    const membershipRequests =
-      data.organizations?.[0]?.membershipRequests || [];
+    const allRequests = data.organization?.membershipRequests || [];
+    // Filter to only show pending requests
+    const pendingRequests = allRequests.filter(
+      (req: { status: string }) => req.status === 'pending',
+    );
 
-    if (membershipRequests.length < perPageResult) {
+    if (pendingRequests.length < perPageResult) {
       setHasMore(false);
     }
 
-    setDisplayedRequests(membershipRequests);
+    setDisplayedRequests(pendingRequests);
   }, [data]);
 
   // Clear the search field when the component is unmounted
@@ -153,12 +159,13 @@ const Requests = (): JSX.Element => {
     }
   }, [orgsData, t]);
 
-  // Redirect to orgList page if the user is not an admin
+  // new useEffect to check if user is authorized
   useEffect(() => {
-    if (userRole != 'ADMIN' && userRole != 'SUPERADMIN') {
+    const isAuthorized = userRole?.toLowerCase() === 'administrator';
+    if (!isAuthorized) {
       window.location.assign('/orglist');
     }
-  }, [userRole]);
+  }, []);
 
   // Manage the loading state
   useEffect(() => {
@@ -182,7 +189,7 @@ const Requests = (): JSX.Element => {
     }
     refetch({
       id: organizationId,
-      firstName_contains: value,
+      name_contains: value,
       // Later on we can add several search and filter options
     });
   };
@@ -191,7 +198,11 @@ const Requests = (): JSX.Element => {
    * Resets search and refetches the data.
    */
   const resetAndRefetch = (): void => {
-    refetch({ first: perPageResult, skip: 0, firstName_contains: '' });
+    refetch({
+      first: perPageResult,
+      skip: 0,
+      name_contains: '',
+    });
     setHasMore(true);
   };
 
@@ -203,35 +214,26 @@ const Requests = (): JSX.Element => {
     setIsLoadingMore(true);
     fetchMore({
       variables: {
-        id: organizationId,
-        skip: data?.organizations?.[0]?.membershipRequests?.length || 0,
-        firstName_contains: searchByName,
+        input: { id: organizationId },
+        skip: data?.organization?.membershipRequests?.length || 0,
+        name_contains: searchByName,
       },
-      updateQuery: (
-        prev: InterfaceQueryMembershipRequestsListItem | undefined,
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: InterfaceQueryMembershipRequestsListItem | undefined;
-        },
-      ): InterfaceQueryMembershipRequestsListItem | undefined => {
+      updateQuery: (prev, { fetchMoreResult }) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev;
         const newMembershipRequests =
-          fetchMoreResult.organizations?.[0]?.membershipRequests || [];
+          fetchMoreResult.organization?.membershipRequests || [];
         if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
-          organizations: [
-            {
-              _id: organizationId,
-              membershipRequests: [
-                ...(prev?.organizations?.[0]?.membershipRequests || []),
-                ...newMembershipRequests,
-              ],
-            },
-          ],
+          organization: {
+            id: organizationId,
+            membershipRequests: [
+              ...(prev?.organization?.membershipRequests || []),
+              ...newMembershipRequests,
+            ],
+          },
         };
       },
     });
@@ -256,10 +258,7 @@ const Requests = (): JSX.Element => {
         <div
           className={`${styles.input}`}
           style={{
-            display:
-              userRole === 'ADMIN' || userRole === 'SUPERADMIN'
-                ? 'block'
-                : 'none',
+            display: userRole === 'administrator' ? 'block' : 'none',
           }}
         >
           <SearchBar
@@ -343,7 +342,7 @@ const Requests = (): JSX.Element => {
                         (request: InterfaceRequestsListItem, index: number) => {
                           return (
                             <RequestsTableItem
-                              key={request?._id}
+                              key={request?.membershipRequestId}
                               index={index}
                               resetAndRefetch={resetAndRefetch}
                               request={request}

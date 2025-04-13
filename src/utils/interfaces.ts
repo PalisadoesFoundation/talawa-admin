@@ -1209,11 +1209,11 @@ export interface InterfaceCreatePledge {
 
 export interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
-    _id: string;
+    id: string;
     membershipRequests: {
-      _id: string;
+      id: string;
       user: {
-        _id: string;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;
