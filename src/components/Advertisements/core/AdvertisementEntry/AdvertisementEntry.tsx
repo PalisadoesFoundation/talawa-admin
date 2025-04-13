@@ -77,7 +77,32 @@ function AdvertisementEntry({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Mutation hook for deleting an advertisement
-  const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {});
+  const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
+    refetchQueries: [
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: advertisement.organization.id,
+          after: null,
+          first: 6,
+          where: {
+            isCompleted: true,
+          },
+        },
+      },
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: advertisement.organization.id,
+          after: null,
+          first: 6,
+          where: {
+            isCompleted: false,
+          },
+        },
+      },
+    ],
+  });
 
   /**
    * Toggles the visibility of the delete confirmation modal.

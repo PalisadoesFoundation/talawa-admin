@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, test, expect, vi } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   act,
   fireEvent,
@@ -9,7 +9,6 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -17,11 +16,15 @@ import { toast } from 'react-toastify';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
-import { wait, client } from './AdvertisementsMocks';
 import {
-  ADD_ADVERTISEMENT_MUTATION,
-  DELETE_ADVERTISEMENT_MUTATION,
-} from 'GraphQl/Mutations/AdvertisementMutations';
+  wait,
+  client,
+  getAdvertisementMocks,
+  createAdSuccessMock,
+  deleteAdvertisementMocks,
+  mockFileForAdvertisementScreen,
+  updateAddSuccess,
+} from './AdvertisementsMocks';
 import i18n from '../../utils/i18nForTest';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
@@ -54,96 +57,6 @@ const translations = {
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
-const mockFile = new File(['dummy content'], 'test.jpg', {
-  type: 'image/jpeg',
-});
-
-const mocks = [
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: {
-        id: '1',
-        first: 12,
-        after: null,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          advertisements: {
-            edges: [
-              {
-                node: {
-                  id: '1',
-                  createdAt: '2025-04-05T11:24:59.000Z',
-                  description: 'this advertisement is created by admin',
-                  endAt: '2025-04-06T11:24:31.210Z',
-                  organization: {
-                    id: '1',
-                  },
-                  name: 'Cookie shop',
-                  startAt: '2025-04-05T11:24:31.210Z',
-                  type: 'banner',
-                  attachments: [
-                    {
-                      mimeType: 'image/jpeg',
-                      url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
-                    },
-                  ],
-                },
-              },
-            ],
-            pageInfo: {
-              startCursor: 'eyJXVl1jpIQ29va2lIHNob3BmIn0',
-              endCursor: 'eyJXVl1jpIQ29va2lIHNob3BmIn0',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: DELETE_ADVERTISEMENT_MUTATION,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        deleteAdvertisement: {
-          id: '1',
-        },
-      },
-    },
-  },
-];
-
-const createAdSuccessMock: MockedResponse = {
-  request: {
-    query: ADD_ADVERTISEMENT_MUTATION,
-    variables: {
-      organizationId: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-12-31T18:30:00.000Z',
-      endAt: '2023-01-31T18:30:00.000Z',
-      description: 'advertisement',
-      attachments: [mockFile],
-    },
-  },
-  result: {
-    data: {
-      createAdvertisement: {
-        id: '0196',
-      },
-    },
-  },
-};
-
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -155,7 +68,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider mocks={getAdvertisementMocks} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -174,7 +87,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider
+                mocks={deleteAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -212,7 +128,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider mocks={getAdvertisementMocks} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -243,10 +159,10 @@ describe('Testing Advertisement Component', () => {
 
   test('create advertisement', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} mocks={[createAdSuccessMock]}>
+        <MockedProvider addTypename={false} mocks={createAdSuccessMock}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
@@ -276,12 +192,12 @@ describe('Testing Advertisement Component', () => {
       });
 
       fireEvent.change(screen.getByLabelText(translations.Rdesc), {
-        target: { value: 'advertisement' },
+        target: { value: 'this advertisement is created by admin' },
       });
 
       fireEvent.change(screen.getByLabelText(translations.Rmedia), {
         target: {
-          files: [mockFile],
+          files: [mockFileForAdvertisementScreen],
         },
       });
     });
@@ -320,8 +236,58 @@ describe('Testing Advertisement Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
         'Advertisement created successfully.',
+      );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
+    vi.useRealTimers();
+  });
+
+  test('update advertisement', async () => {
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={updateAddSuccess}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <Advertisement />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+    });
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await wait(); // wait for the loading spinner to disappear
+
+    //Testing rendering
+    expect(screen.getByTestId('MoreVertIcon')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('MoreVertIcon'));
+
+    await wait();
+
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    await wait();
+
+    expect(screen.getByTestId('Ad_desc')).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+      target: { value: 'this advertisement is edited by admin' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('addonupdate'));
+    });
+
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Advertisement updated Successfully',
       );
       expect(setTimeoutSpy).toHaveBeenCalled();
     });
