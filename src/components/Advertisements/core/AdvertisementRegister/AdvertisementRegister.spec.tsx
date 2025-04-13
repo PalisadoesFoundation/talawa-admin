@@ -147,6 +147,10 @@ describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>
