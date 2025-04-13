@@ -342,12 +342,19 @@
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
 <<<<<<< HEAD
+<<<<<<< HEAD
   --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
 =======
   --featuresBox-border: #808080;
   --featuresBox-border-hover: #555555;
   --featuresBox-bg-hover: #eaebef;
   --featuresBox-bg: #ffffff;
+=======
+  --features-box-border: #808080;
+  --features-box-border-hover: #555555;
+  --features-box-bg-hover: #eaebef;
+  --features-box-bg: #ffffff;
+>>>>>>> eb8b798e8 (added more changes)
 
   --loader-size: 10em;
 >>>>>>> ec7e589be (added new UI Components)
@@ -6392,11 +6399,11 @@ form {
   color: #000000;
 }
 
-.featuresBox {
+.features-box {
   display: flex;
-  border: 1px solid var(--featuresBox-border);
-  background-color: var(--featuresBox-bg);
-  color: var(--featuresBox-border);
+  border: 1px solid var(--features-box-border);
+  background-color: var(--features-box-bg);
+  color: var(--features-box-border);
   align-items: center;
   justify-content: center;
   height: 60px;
@@ -6405,10 +6412,10 @@ form {
   gap: 0.5rem;
 }
 
-.featuresBox:hover {
-  background-color: var(--featuresBox-bg-hover);
-  border-color: var(--featuresBox-border-hover);
-  color: var(--featuresBox-border-hover);
+.features-box:hover {
+  background-color: var(--features-box-bg-hover);
+  border-color: var(--features-box-border-hover);
+  color: var(--features-box-border-hover);
   transition:
     background-color 0.3s,
     border-color 0.3s,

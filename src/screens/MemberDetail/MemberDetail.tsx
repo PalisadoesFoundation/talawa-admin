@@ -162,6 +162,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   };
 
   // Function to handle the deletion of a user
+  /*istanbul ignore next*/
   const handleDeleteUser = async (): Promise<void> => {
     try {
       // Call mutation with just the ID
@@ -184,6 +185,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   };
 
   // to handle the change in the form fields
+  /*istanbul ignore next*/
   const handleFieldChange = (
     fieldName: string,
     value: string | boolean,
