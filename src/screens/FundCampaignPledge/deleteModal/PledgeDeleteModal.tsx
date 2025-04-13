@@ -58,7 +58,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deletePledge({ variables: { id: pledge?._id } });
+      await deletePledge({ variables: { id: pledge?.id } });
       refetchPledge();
       hide();
       toast.success(t('pledgeDeleted') as string);
