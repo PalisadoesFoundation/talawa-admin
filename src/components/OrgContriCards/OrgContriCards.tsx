@@ -34,7 +34,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceOrgContriCardsProps } from 'types/Contribution/interface';
 
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {

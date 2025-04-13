@@ -42,7 +42,7 @@ import {
   UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
 import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';

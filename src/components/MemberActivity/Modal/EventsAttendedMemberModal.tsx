@@ -47,7 +47,7 @@ import {
 } from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
 import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
 

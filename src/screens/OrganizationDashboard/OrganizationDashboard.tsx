@@ -61,7 +61,7 @@ import type {
   InterfaceOrganizationEventsConnectionEdgePg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {

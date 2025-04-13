@@ -58,7 +58,7 @@ import type {
   InterfaceActionItemInfo,
   InterfaceActionItemList,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
