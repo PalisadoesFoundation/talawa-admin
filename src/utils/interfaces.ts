@@ -1035,6 +1035,13 @@ export interface InterfaceQueryFundCampaignsPledges {
           id: string;
           name: string;
         };
+        campaign: {
+          id: string;
+          name: string;
+          fund: {
+            name: string;
+          };
+        };
       };
     }[];
   };
