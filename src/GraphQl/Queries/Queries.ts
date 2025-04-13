@@ -861,25 +861,26 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations(
-    $id: ID!
+  query Organization(
+    $input: QueryOrganizationInput!
     $skip: Int
     $first: Int
-    $firstName_contains: String
+    $name_contains: String
   ) {
-    organizations(id: $id) {
-      _id
+    organization(input: $input) {
+      id
       membershipRequests(
         skip: $skip
         first: $first
-        where: { user: { firstName_contains: $firstName_contains } }
+        where: { user: { name_contains: $name_contains } }
       ) {
-        _id
+        membershipRequestId
+        createdAt
+        status
         user {
-          _id
-          firstName
-          lastName
-          email
+          id
+          name
+          emailAddress
         }
       }
     }
