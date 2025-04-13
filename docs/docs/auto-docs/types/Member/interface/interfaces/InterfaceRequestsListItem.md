@@ -8,11 +8,27 @@ Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoun
 
 ## Properties
 
-### \_id
+### createdAt
 
-> **\_id**: `string`
+> **createdAt**: `string`
+
+Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
+
+***
+
+### membershipRequestId
+
+> **membershipRequestId**: `string`
 
 Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L11)
+
+***
+
+### status
+
+> **status**: `string`
+
+Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
 
 ***
 
@@ -20,16 +36,16 @@ Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoun
 
 > **user**: `object`
 
-Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
+Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
 
-#### email
+#### emailAddress
 
-> **email**: `string`
+> **emailAddress**: `string`
 
-#### firstName
+#### id
 
-> **firstName**: `string`
+> **id**: `string`
 
-#### lastName
+#### name
 
-> **lastName**: `string`
+> **name**: `string`
