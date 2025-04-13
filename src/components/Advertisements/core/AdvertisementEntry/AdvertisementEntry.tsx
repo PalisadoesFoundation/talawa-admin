@@ -118,7 +118,7 @@ function AdvertisementEntry({
     try {
       await deleteAd({
         variables: {
-          id: advertisement.id.toString(),
+          id: advertisement.id,
         },
       });
       toast.success(t('advertisementDeleted') as string);
