@@ -38,7 +38,7 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app-fixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 

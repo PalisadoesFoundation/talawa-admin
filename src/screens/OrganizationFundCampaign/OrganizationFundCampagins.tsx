@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from '../../../style/app-fixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
