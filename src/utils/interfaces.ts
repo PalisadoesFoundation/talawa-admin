@@ -331,9 +331,9 @@ export interface InterfaceCurrentUserTypePG {
 }
 
 export interface InterfaceUserInfo {
-  _id: string;
   firstName: string;
   lastName: string;
+  _id: string;
   image?: string | null;
 }
 
@@ -1043,12 +1043,40 @@ export interface InterfaceQueryFundCampaignsPledges {
     name: string;
   };
   name: string;
-  fundingGoal: number;
-  currency: string;
+  goalAmount: number;
+  currencyCode: string;
+  startAt: Date;
+  endAt: Date;
+  pledges: {
+    edges: {
+      node: {
+        id: string;
+        amount: number;
+        createdAt: string;
+        pledger: {
+          id: string;
+          name: string;
+        };
+        campaign: {
+          id: string;
+          name: string;
+          fund: {
+            name: string;
+          };
+        };
+      };
+    }[];
+  };
+}
+
+export interface InterfaceCampaignInfoPG {
+  name: string;
+  goal: number;
   startDate: Date;
   endDate: Date;
-  pledges: InterfacePledgeInfo[];
+  currency: string;
 }
+
 export interface InterfaceFundInfo {
   id: string;
   name: string;
@@ -1085,14 +1113,33 @@ export interface InterfaceCampaignInfo {
   currencyCode: string;
 }
 export interface InterfacePledgeInfo {
-  _id: string;
-  campaign?: { _id: string; name: string; endDate: Date };
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfaceUserInfo[];
+  users: InterfaceUserInfo_PG[];
 }
+
+export interface InterfacePledgeInfoPG {
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
+  amount: number;
+  currencyCode: string;
+  endAt: string;
+  startAt: string;
+  pledges: InterfaceUserInfo_PG[];
+}
+
+export interface InterfaceUserInfo_PG {
+  firstName: string;
+  lastName: string;
+  name: string;
+  id: string;
+  image?: string | null;
+}
+
 export interface InterfaceQueryOrganizationEventListItem
   extends InterfaceBaseEvent {
   isPublic: boolean;
@@ -1222,7 +1269,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfaceUserInfo[];
+  pledgeUsers: InterfaceUserInfo_PG[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -1231,11 +1278,11 @@ export interface InterfaceCreatePledge {
 
 export interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
-    _id: string;
+    id: string;
     membershipRequests: {
-      _id: string;
+      id: string;
       user: {
-        _id: string;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;

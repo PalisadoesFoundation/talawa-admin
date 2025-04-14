@@ -599,6 +599,24 @@ export const ORGANIZATIONS_LIST = gql`
   }
 `;
 
+export const MEMBERS_LIST_PG = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      members(first: 32) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            createdAt
+          }
+        }
+      }
+    }
+  }
+`;
+
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
   query Organizations($id: ID!) {
@@ -903,25 +921,26 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations(
-    $id: ID!
+  query Organization(
+    $input: QueryOrganizationInput!
     $skip: Int
     $first: Int
-    $firstName_contains: String
+    $name_contains: String
   ) {
-    organizations(id: $id) {
-      _id
+    organization(input: $input) {
+      id
       membershipRequests(
         skip: $skip
         first: $first
-        where: { user: { firstName_contains: $firstName_contains } }
+        where: { user: { name_contains: $name_contains } }
       ) {
-        _id
+        membershipRequestId
+        createdAt
+        status
         user {
-          _id
-          firstName
-          lastName
-          email
+          id
+          name
+          emailAddress
         }
       }
     }
