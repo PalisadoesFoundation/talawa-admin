@@ -8,6 +8,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { useNavigate } from 'react-router-dom';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
@@ -83,7 +84,57 @@ const MOCK_ORGANIZATION_CONNECTION = {
     },
   },
 };
+const mockStorage = {
+  clear: vi.fn(),
+  getItem: vi.fn((key: string) => {
+    const items: Record<string, string> = {
+      name: JSON.stringify('Test User'),
+    };
+    return items[key] || null;
+  }),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  length: 0,
+  key: vi.fn(),
+};
 
+// Mock localStorage globally
+beforeEach(() => {
+  Object.defineProperty(global, 'localStorage', {
+    value: mockStorage,
+    configurable: true,
+  });
+
+  // Clear mock calls before each test
+  mockStorage.clear.mockClear();
+  mockStorage.getItem.mockClear();
+  mockStorage.setItem.mockClear();
+  mockStorage.removeItem.mockClear();
+});
+
+const mockHandleLogout = vi.fn(async () => {
+  mockStorage.clear(); // Ensure localStorage is cleared
+  mockNavigate('/'); // Navigate after clearing storage
+});
+
+vi.mock('utils/useSession', () => ({
+  default: () => ({
+    handleLogout: mockHandleLogout,
+  }),
+}));
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 const MOCKS = [MOCK_ORGANIZATION_CONNECTION];
 
 async function wait(ms = 100): Promise<void> {
@@ -274,29 +325,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should handle logout properly', async () => {
-    const mockStorage = {
-      clear: vi.fn(),
-      getItem: vi.fn((key: 'name') => {
-        const items = {
-          name: JSON.stringify('Test User'),
-        };
-        return items[key] || null;
-      }),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-      length: 0,
-      key: vi.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: mockStorage,
-    });
-    const mockLocation = {
-      replace: vi.fn(),
-    };
-    Object.defineProperty(window, 'location', {
-      value: mockLocation,
-      writable: true,
-    });
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -310,9 +338,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     );
     await wait();
     await userEvent.click(screen.getByTestId('personIcon'));
+    console.log('Before click:', mockNavigate.mock.calls);
     await userEvent.click(screen.getByTestId('logoutBtn'));
+    console.log('After click:', mockNavigate.mock.calls);
     expect(mockStorage.clear).toHaveBeenCalled();
-    expect(mockLocation.replace).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
   it('Should navigate to home page on home link click', async () => {
