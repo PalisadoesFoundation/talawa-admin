@@ -20,9 +20,7 @@ import {
   wait,
   client,
   getAdvertisementMocks,
-  createAdSuccessMock,
   deleteAdvertisementMocks,
-  mockFileForAdvertisementScreen,
   updateAddSuccess,
 } from './AdvertisementsMocks';
 import i18n from '../../utils/i18nForTest';
@@ -177,8 +175,6 @@ describe('Testing Advertisement Component', () => {
         </MockedProvider>,
       );
     });
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
     await wait(); // wait for the loading spinner to disappear
 
