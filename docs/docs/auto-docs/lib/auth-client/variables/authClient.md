@@ -4,7 +4,7 @@
 
 # Variable: authClient
 
-> `const` **authClient**: `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object`
+> `const` **authClient**: `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object` & `object`
 
 Defined in: [src/lib/auth-client.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/lib/auth-client.ts#L2)
 
@@ -403,6 +403,26 @@ Defined in: [src/lib/auth-client.ts:2](https://github.com/PalisadoesFoundation/t
 #### Returns
 
 `Promise`\<`BetterFetchResponse`\<\{\}, \{\}, `FetchOptions`\[`"throw"`\] *extends* `true` ? `true` : `false`\>\>
+
+## Type declaration
+
+### refreshToken()
+
+> **refreshToken**: \<`FetchOptions`\>(...`data`) => `Promise`\<`BetterFetchResponse`\<`OAuth2Tokens`, \{\}, `FetchOptions`\[`"throw"`\] *extends* `true` ? `true` : `false`\>\>
+
+#### Type Parameters
+
+• **FetchOptions** *extends* `object`
+
+#### Parameters
+
+##### data
+
+...\[`Prettify`\<`object` & `object`\>, `FetchOptions`?\]
+
+#### Returns
+
+`Promise`\<`BetterFetchResponse`\<`OAuth2Tokens`, \{\}, `FetchOptions`\[`"throw"`\] *extends* `true` ? `true` : `false`\>\>
 
 ## Type declaration
 

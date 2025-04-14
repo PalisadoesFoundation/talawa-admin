@@ -6,7 +6,7 @@
 
 > **IAuthResponse**: `object`
 
-Defined in: [src/screens/LoginPage/LoginPage.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L55)
+Defined in: [src/screens/LoginPage/LoginPage.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L54)
 
 ## Type declaration
 

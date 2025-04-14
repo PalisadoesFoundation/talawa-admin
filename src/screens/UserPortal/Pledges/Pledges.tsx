@@ -41,7 +41,10 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
+import type {
+  InterfacePledgeInfo,
+  InterfaceUserInfo_PG,
+} from 'utils/interfaces';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
@@ -93,7 +96,7 @@ const Pledges = (): JSX.Element => {
   const userId: string = userIdFromStorage as string;
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -159,7 +162,7 @@ const Pledges = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo[],
+    users: InterfaceUserInfo_PG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -202,7 +205,7 @@ const Pledges = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfaceUserInfo, index: number) => (
+              .map((user: InterfaceUserInfo_PG, index: number) => (
                 <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
@@ -214,7 +217,7 @@ const Pledges = (): JSX.Element => {
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={user._id + '1'}
+                        key={user.id + '1'}
                         containerStyle={styles.imageContainer}
                         avatarStyle={styles.TableImage}
                         name={user.firstName + ' ' + user.lastName}
@@ -222,7 +225,7 @@ const Pledges = (): JSX.Element => {
                       />
                     </div>
                   )}
-                  <span key={user._id + '2'}>
+                  <span key={user.id + '2'}>
                     {user.firstName + ' ' + user.lastName}
                   </span>
                 </div>
@@ -427,7 +430,7 @@ const Pledges = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={8}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -440,7 +443,7 @@ const Pledges = (): JSX.Element => {
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
-          _id: pledge._id,
+          id: pledge.id,
           users: pledge.users,
           startDate: pledge.startDate,
           endDate: pledge.endDate,
@@ -455,7 +458,7 @@ const Pledges = (): JSX.Element => {
       <PledgeModal
         isOpen={modalState[ModalState.UPDATE]}
         hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign ? pledge?.campaign._id : ''}
+        campaignId={pledge?.campaign ? pledge?.campaign.id : ''}
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
@@ -477,7 +480,7 @@ const Pledges = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfaceUserInfo, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={index}
@@ -493,7 +496,7 @@ const Pledges = (): JSX.Element => {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={user._id + '1'}
+                  key={user.id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={user.firstName + ' ' + user.lastName}
@@ -502,7 +505,7 @@ const Pledges = (): JSX.Element => {
                 />
               </div>
             )}
-            <span key={user._id + '2'}>
+            <span key={user.id + '2'}>
               {user.firstName + ' ' + user.lastName}
             </span>
           </div>
