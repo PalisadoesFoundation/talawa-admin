@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_ACTION\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L35)
+Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L33)
 
 GraphQL mutation to update an action item category.
 

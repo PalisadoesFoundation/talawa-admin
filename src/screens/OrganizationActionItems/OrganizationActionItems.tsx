@@ -47,25 +47,23 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
-
+import {
+  GET_USERS_BY_IDS,
+  GET_EVENTS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
-
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
-
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
+import styles from '../../style/app.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import ItemViewModal from './itemViewModal/ItemViewModal';
 import ItemModal from './itemModal/ItemModal';
 import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
@@ -73,6 +71,12 @@ import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+import type { InterfaceActionItem } from 'utils/interfaces';
+
+type EventType = {
+  id: string;
+  name: string;
+};
 
 enum ItemStatus {
   Pending = 'pending',
@@ -86,6 +90,17 @@ enum ModalState {
   VIEW = 'view',
   STATUS = 'status',
 }
+
+type User = {
+  id: string;
+  name: string;
+  emailAddress: string;
+};
+/**
+ * Component for managing and displaying action items within an organization.
+ * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
+ * @returns The rendered component.
+ */
 
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -101,7 +116,7 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
+  const [actionItem, setActionItem] = useState<InterfaceActionItem | null>(
     null,
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -127,7 +142,7 @@ function organizationActionItems(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: InterfaceActionItem | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {
         setModalMode(actionItem ? 'edit' : 'create');
       }
@@ -137,44 +152,178 @@ function organizationActionItems(): JSX.Element {
     [openModal],
   );
 
-  /**
-   * Query to fetch action items for the organization based on filters and sorting.
-   */
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  }: {
-    data: InterfaceActionItemList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
-    variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
-      where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
-      },
+  } = useQuery<{ actionItemsByOrganization: InterfaceActionItem[] }>(
+    ACTION_ITEM_FOR_ORGANIZATION,
+    {
+      variables: { organizationId: orgId },
     },
+  );
+
+  const assigneeIds =
+    actionItemsData?.actionItemsByOrganization
+      .map((item) => item.assigneeId)
+      .filter((id): id is string => id !== null) || [];
+
+  const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
+    skip: assigneeIds.length === 0,
+    variables: { input: { ids: assigneeIds } },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
+  // useEffect(() => {
+  //   if (userLoading) {
+  //     // console.log("Loading users...");
+  //   }
+
+  //   if (userError) {
+  //     // console.error("Error fetching users:", userError.message);
+  //   }
+  // }, [userLoading, userError]);
+
+  const getAssigneeName = (assigneeId: string | null): string => {
+    if (!assigneeId) return 'Unassigned';
+
+    if (!usersData?.usersByIds) {
+      return 'Unknown User';
+    }
+
+    const user = usersData.usersByIds.find(
+      (user: User) => user.id === assigneeId,
+    );
+
+    if (user) {
+      // console.log("Found user:", user);
+      return user.name;
+    } else {
+      return 'Unknown User';
+    }
+  };
+
+  const categoryIds = Array.from(
+    new Set(
+      actionItemsData?.actionItemsByOrganization
+        .map((item) => item.categoryId)
+        .filter((id): id is string => id != null),
+    ),
   );
+
+  const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
+    variables: { ids: categoryIds },
+    skip: !categoryIds.length,
+  });
+
+  const enrichedActionItems = useMemo(() => {
+    if (!actionItemsData?.actionItemsByOrganization) return [];
+    if (!categoriesData) {
+      return actionItemsData.actionItemsByOrganization.map((item) => ({
+        ...item,
+        categoryName: 'No Category',
+      }));
+    }
+    return actionItemsData.actionItemsByOrganization.map((item) => {
+      const category = categoriesData.categoriesByIds.find(
+        (cat: { id: string; name: string }) => cat.id === item.categoryId,
+      );
+      return {
+        ...item,
+        categoryName: category ? category.name : 'No Category',
+      };
+    });
+  }, [actionItemsData, categoriesData]);
+
+  const eventIds =
+    actionItemsData?.actionItemsByOrganization
+      .map((item) => item.eventId)
+      .filter((id): id is string => id !== null) || [];
+
+  const { data: eventsData } = useQuery(GET_EVENTS_BY_IDS, {
+    skip: eventIds.length === 0,
+    variables: { ids: eventIds },
+  });
+
+  const filteredAndSortedActionItems = useMemo(() => {
+    if (!enrichedActionItems.length) return [];
+
+    let items = [...enrichedActionItems];
+
+    // Apply search filtering
+    if (searchTerm) {
+      items = items.filter((item) =>
+        searchBy === 'assignee'
+          ? getAssigneeName(item.assigneeId)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : (item.categoryName || 'No Category')
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    if (status !== null) {
+      items = items.filter((item) =>
+        status === ItemStatus.Pending ? !item.isCompleted : item.isCompleted,
+      );
+    }
+
+    // Apply sorting
+    if (sortBy) {
+      items.sort((a, b) => {
+        const dateA = a.completionAt ? new Date(a.completionAt).getTime() : 0;
+        const dateB = b.completionAt ? new Date(b.completionAt).getTime() : 0;
+        return sortBy === 'dueDate_DESC' ? dateB - dateA : dateA - dateB;
+      });
+    }
+
+    return items;
+  }, [
+    enrichedActionItems,
+    searchTerm,
+    searchBy,
+    status,
+    sortBy,
+    getAssigneeName,
+  ]);
+  const getEventDetails = (eventId: string | null): string => {
+    if (!eventId) return 'No Event Assigned';
+
+    const event = eventsData?.eventsByIds?.find(
+      (evt: EventType) => evt.id === eventId,
+    );
+    return event ? `${event.name}` : 'Unknown Event';
+  };
+
+  // Logging data to ensure correctness
+  useEffect(() => {
+    if (eventsData) {
+      // console.log("Fetched Events Data:", eventsData);
+    }
+  }, [eventsData]);
+
+  useEffect(() => {
+    if (actionItemsLoading) {
+      // console.log('⏳ Loading action items...');
+    }
+
+    // if (actionItemsData) {
+    //   console.log(
+    //     ' Action Items Data:',
+    //     JSON.stringify(actionItemsData, null, 2),
+    //   );
+    // }
+
+    if (actionItemsError) {
+    }
+  }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
-
-  // Trigger refetch on sortBy or status change
+  // console.log(searchTerm);
   useEffect(() => {
     actionItemsRefetch();
   }, [sortBy, status, actionItemsRefetch]);
@@ -205,58 +354,25 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } =
-          params.row.assigneeUser || params.row.assignee?.user || {};
+        const name = params.row.assigneeName || 'Unassigned'; // ✅ Fetch from row data
 
         return (
-          <>
-            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt="Assignee"
-                      data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.TableImage}>
-                      <Avatar
-                        key={_id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={firstName + ' ' + lastName}
-                        alt={firstName + ' ' + lastName}
-                      />
-                    </div>
-                  )}
-                  {firstName + ' ' + lastName}
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  <div className={styles.avatarContainer}>
-                    <Avatar
-                      key={_id + '1'}
-                      containerStyle={styles.imageContainer}
-                      avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name as string}
-                      alt={'assigneeGroup_avatar'}
-                    />
-                  </div>
-                  {params.row.assigneeGroup?.name as string}
-                </div>
-              </>
-            )}
-          </>
+          <div
+            className="d-flex fw-bold align-items-center ms-2"
+            data-testid="assigneeName"
+          >
+            <div className={styles.TableImage}>
+              <Avatar
+                key={params.row.id}
+                containerStyle={styles.imageContainer}
+                avatarStyle={styles.TableImage}
+                name={name}
+                alt={name}
+              />
+            </div>
+
+            {name}
+          </div>
         );
       },
     },
@@ -269,16 +385,14 @@ function organizationActionItems(): JSX.Element {
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="categoryName"
+        >
+          {params.row.categoryName}
+        </div>
+      ),
     },
     {
       field: 'status',
@@ -301,37 +415,64 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'allottedHours',
-      headerName: 'Allotted Hours',
+      field: 'eventDetails',
+      headerName: 'Event',
+      flex: 1,
       align: 'center',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allottedHours">
-            {params.row.allottedHours ?? '-'}
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="eventDetails"
+          >
+            {getEventDetails(params.row.eventId)}
           </div>
         );
       },
     },
     {
-      field: 'dueDate',
-      headerName: 'Due Date',
+      field: 'createdAt',
+      headerName: 'Date of Creation',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
+        const createdDate = params.row.createdAt;
         return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
+          <div data-testid="createdDate">
+            {createdDate
+              ? dayjs(createdDate).format('DD/MM/YYYY')
+              : 'No Created Date'}
           </div>
         );
       },
     },
+    {
+      field: 'completionAt',
+      headerName: 'Completion Date',
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      flex: 1,
+      renderCell: (params: GridCellParams) => {
+        const completionDate = params.row.completionAt;
+        return (
+          <div data-testid="completionDate">
+            {completionDate
+              ? dayjs(completionDate).format('DD/MM/YYYY')
+              : 'No Completion Date'}
+          </div>
+        );
+      },
+    },
+
     {
       field: 'options',
       headerName: 'Options',
@@ -345,7 +486,6 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
               className={styles.infoButton}
@@ -420,11 +560,14 @@ function organizationActionItems(): JSX.Element {
             title={tCommon('searchBy')}
             sortingOptions={[
               { label: t('assignee'), value: 'assignee' },
-              { label: t('category'), value: 'category' },
+              // { label: t('category'), value: 'category' },
             ]}
             selectedOption={t(searchBy)}
             onSortChange={(value) =>
-              setSearchBy(value as 'assignee' | 'category')
+              setSearchBy(
+                value as 'assignee',
+                // 'category'
+              )
             }
             dataTestIdPrefix="searchByToggle"
             buttonLabel={tCommon('searchBy', { item: '' })}
@@ -479,39 +622,25 @@ function organizationActionItems(): JSX.Element {
         </div>
       </div>
 
-      {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
         disableColumnResize
         columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row._id}
-        sx={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          '& .MuiDataGrid-columnHeaders': { border: 'none' },
-          '& .MuiDataGrid-cell': { border: 'none' },
-          '& .MuiDataGrid-columnSeparator': { display: 'none' },
-        }}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
-            </Stack>
-          ),
-        }}
-        getRowClassName={() => `${styles.rowBackground}`}
+        hideFooter
+        getRowId={(row) => row.id}
         autoHeight
         rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
-          ...actionItem,
-        }))}
+        rows={
+          filteredAndSortedActionItems.map((actionItem) => ({
+            ...actionItem,
+            assigneeName: getAssigneeName(actionItem.assigneeId), // Still need this for assignee name
+            status: actionItem.isCompleted ? 'Completed' : 'Pending',
+          })) || []
+        }
         columns={columns}
         isRowSelectable={() => false}
       />
 
-      {/* Item Modal (Create/Edit) */}
       <ItemModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
@@ -522,7 +651,6 @@ function organizationActionItems(): JSX.Element {
         editMode={modalMode === 'edit'}
       />
 
-      {/* View Modal */}
       {actionItem && (
         <>
           <ItemViewModal

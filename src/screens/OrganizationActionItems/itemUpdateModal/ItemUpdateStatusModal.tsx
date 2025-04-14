@@ -35,17 +35,27 @@ import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import styles from 'style/app-fixed.module.css';
-import { useMutation } from '@apollo/client';
-import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+// import { DatePicker } from '@mui/x-date-pickers';
+// import dayjs from 'dayjs';
+import styles from '../../../style/app-fixed.module.css';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+  UPDATE_ACTION_ITEM_MUTATION,
+  MARK_ACTION_ITEM_AS_PENDING,
+} from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type { InterfaceActionItem } from 'utils/interfaces';
+import {
+  GET_USERS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
+import Avatar from 'components/Avatar/Avatar';
 
 export interface InterfaceItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
-  actionItem: InterfaceActionItemInfo;
+  actionItem: InterfaceActionItem;
 }
 
 const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
@@ -59,48 +69,76 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
 
+  // Destructure the action item fields as defined in InterfaceActionItem
   const {
-    _id,
+    id,
     isCompleted,
-    assignee,
-    assigneeGroup,
-    assigneeUser,
-    assigneeType,
+    assignedAt,
+    eventId,
+    categoryId,
+    assigneeId,
+    creatorId,
+    postCompletionNotes,
   } = actionItem;
 
-  const [postCompletionNotes, setPostCompletionNotes] = useState<string>(
-    actionItem.postCompletionNotes ?? '',
-  );
+  const [localPostCompletionNotes, setLocalPostCompletionNotes] =
+    useState<string>(postCompletionNotes ?? '');
 
-  /**
-   * Mutation to update an action item.
-   */
+  const [newAssigneeId, setNewAssigneeId] = useState<string | null>(assigneeId);
+
+  const [markActionItemAsPending] = useMutation(MARK_ACTION_ITEM_AS_PENDING);
+
+  const userIds = Array.from(
+    new Set([assigneeId, creatorId].filter(Boolean)),
+  ) as string[];
+
+  const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
+    variables: { input: { ids: userIds } },
+    skip: userIds.length === 0,
+  });
+
+  const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
+    variables: { ids: categoryId ? [categoryId] : [] },
+    skip: !categoryId,
+  });
+
+  const getUserName = (userId: string | null, defaultName: string): string => {
+    if (!userId) return defaultName;
+    const user = usersData?.usersByIds?.find(
+      (u: { id: string; name: string }) => u.id === userId,
+    );
+    return user ? user.name : defaultName;
+  };
+
+  const getAssigneeDisplay = (): string =>
+    getUserName(assigneeId, 'Unassigned');
+
+  const getCategoryDisplay = (): string => {
+    if (!categoryId) return 'No Category';
+    const category = categoriesData?.categoriesByIds?.find(
+      (cat: { id: string; name: string }) => cat.id === categoryId,
+    );
+    return category ? category.name : 'No Category';
+  };
+
+  // Mutation to update the action item using the provided mutation
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
-  /**
-   * Handles the form submission for updating an action item.
-   *
-   * @param  e - The form submission event.
-   */
-  const updateActionItemHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  useEffect(() => {
+    setLocalPostCompletionNotes(postCompletionNotes ?? '');
+    setNewAssigneeId(assigneeId);
+  }, [actionItem, postCompletionNotes, assignedAt, assigneeId, eventId]);
+
+  const handleMarkAsPending = async (e: React.MouseEvent): Promise<void> => {
     e.preventDefault();
+    if (!actionItem?.id) {
+      toast.error('Action item ID is missing.');
+      return;
+    }
 
     try {
-      await updateActionItem({
-        variables: {
-          actionItemId: _id,
-          assigneeId:
-            assigneeType === 'EventVolunteer'
-              ? assignee?._id
-              : assigneeType === 'EventVolunteerGroup'
-                ? assigneeGroup?._id
-                : assigneeUser?._id,
-          assigneeType,
-          postCompletionNotes: isCompleted ? '' : postCompletionNotes,
-          isCompleted: !isCompleted,
-        },
+      await markActionItemAsPending({
+        variables: { id: actionItem.id }, // ✅ Pass `id` correctly
       });
 
       actionItemsRefetch();
@@ -111,9 +149,36 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     }
   };
 
+  const updateActionItemHandler = async (
+    e: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    try {
+      await updateActionItem({
+        variables: {
+          input: {
+            id, // The id remains the same
+            assigneeId: newAssigneeId,
+            postCompletionNotes: isCompleted ? '' : localPostCompletionNotes,
+            isCompleted: !isCompleted,
+            // Remove assignedAt and eventId because they're not in the input type
+            // If you need them, update your GraphQL schema accordingly.
+          },
+        },
+      });
+      actionItemsRefetch();
+      hide();
+      toast.success(t('successfulUpdation'));
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  // Update local state when actionItem changes
   useEffect(() => {
-    setPostCompletionNotes(actionItem.postCompletionNotes ?? '');
-  }, [actionItem]);
+    setLocalPostCompletionNotes(postCompletionNotes ?? '');
+    setNewAssigneeId(assigneeId);
+  }, [actionItem, postCompletionNotes, assignedAt, assigneeId, eventId]);
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -129,46 +194,85 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmitCapture={updateActionItemHandler} className="p-2">
-          {!isCompleted ? (
-            <FormControl fullWidth className="mb-2">
+        {/* Summary Section: Display enriched details (Category, Assignee) */}
+        <Form className="p-3">
+          <Form.Group className="d-flex gap-3 mb-3">
+            <FormControl fullWidth>
               <TextField
-                label={t('postCompletionNotes')}
+                label={t('category')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={postCompletionNotes}
-                onChange={(e) => setPostCompletionNotes(e.target.value)}
+                value={getCategoryDisplay()}
+                disabled
               />
             </FormControl>
-          ) : (
-            <p>{t('updateStatusMsg')}</p>
-          )}
+            <FormControl fullWidth>
+              <TextField
+                label={t('assignee')}
+                variant="outlined"
+                className={styles.noOutline}
+                value={getAssigneeDisplay()}
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <Avatar
+                      key={assigneeId || 'default'}
+                      containerStyle={styles.imageContainer}
+                      avatarStyle={styles.TableImage}
+                      name={getAssigneeDisplay()}
+                      alt="assignee avatar"
+                    />
+                  ),
+                }}
+              />
+            </FormControl>
+          </Form.Group>
 
-          {isCompleted ? (
-            <div className="d-flex gap-3 justify-content-end">
+          <Form
+            onSubmitCapture={updateActionItemHandler}
+            className="p-2"
+            data-testid="update-form"
+          >
+            {!isCompleted ? (
+              <FormControl fullWidth className="mb-2">
+                <TextField
+                  label={t('postCompletionNotes')}
+                  variant="outlined"
+                  className={styles.noOutline}
+                  value={localPostCompletionNotes}
+                  onChange={(e) => setLocalPostCompletionNotes(e.target.value)}
+                />
+              </FormControl>
+            ) : (
+              <p>{t('updateStatusMsg')}</p>
+            )}
+            {isCompleted ? (
+              <>
+                <Button
+                  type="button"
+                  className={styles.addButton}
+                  data-testid="yesBtn"
+                  onClick={handleMarkAsPending}
+                >
+                  {tCommon('yes')}
+                </Button>
+                <Button
+                  className={`btn btn-danger ${styles.removeButton}`}
+                  onClick={hide}
+                >
+                  {tCommon('no')}
+                </Button>
+              </>
+            ) : (
               <Button
                 type="submit"
                 className={styles.addButton}
-                data-testid="yesBtn"
+                data-testid="createBtn"
               >
-                {tCommon('yes')}
+                {t('markCompletion')}
               </Button>
-              <Button
-                className={`btn btn-danger ${styles.removeButton}`}
-                onClick={hide}
-              >
-                {tCommon('no')}
-              </Button>
-            </div>
-          ) : (
-            <Button
-              type="submit"
-              className={`${styles.addButton}`}
-              data-testid="createBtn"
-            >
-              {t('markCompletion')}
-            </Button>
-          )}
+            )}
+          </Form>
         </Form>
       </Modal.Body>
     </Modal>

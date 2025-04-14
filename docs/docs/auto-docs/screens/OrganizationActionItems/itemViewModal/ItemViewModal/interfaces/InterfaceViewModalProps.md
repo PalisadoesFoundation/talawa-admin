@@ -4,7 +4,12 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L46)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L59)
+
+The ItemViewModal component displays a read-only modal view of an action item.
+It shows details such as category, assignee, assigner, status, dates, and any pre-
+or post-completion notes. It uses GraphQL queries to fetch user and category data,
+and leverages React-Bootstrap and MUI components for the UI.
 
 ## Properties
 
@@ -12,7 +17,7 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L48)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L61)
 
 #### Returns
 
@@ -24,12 +29,12 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L47)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L60)
 
 ***
 
 ### item
 
-> **item**: [`InterfaceActionItemInfo`](../../../../../utils/interfaces/interfaces/InterfaceActionItemInfo.md)
+> **item**: [`InterfaceActionItem`](../../../../../utils/interfaces/interfaces/InterfaceActionItem.md)
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L49)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L62)

@@ -8,6 +8,14 @@ Defined in: [src/utils/interfaces.ts:1093](https://github.com/PalisadoesFoundati
 
 ## Properties
 
+### \_id
+
+> **\_id**: `string`
+
+Defined in: [src/utils/interfaces.ts:1088](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1088)
+
+***
+
 ### amount
 
 > **amount**: `number`

@@ -30,3 +30,27 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
     }
   }
 `;
+
+export const ACTION_ITEM_CATEGORY = gql`
+  query FetchActionCategoriesByOrganization(
+    $input: QueryActionCategoriesByOrganizationInput!
+  ) {
+    actionCategoriesByOrganization(input: $input) {
+      id
+      name
+      organizationId
+      creatorId
+      isDisabled
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query GetUserName($input: QueryUserInput!) {
+    user(input: $input) {
+      name
+    }
+  }
+`;

@@ -59,6 +59,15 @@ import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsP
 import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
 
+/**
+ * Component for displaying and managing agenda items.
+ * Supports drag-and-drop functionality, and includes modals for previewing,
+ * updating, and deleting agenda items.
+ *
+ * @param props - The props for the component.
+ * @returns JSX.Element
+ */
+
 function AgendaItemsContainer({
   agendaItemConnection,
   agendaItemData,

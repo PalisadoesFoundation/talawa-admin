@@ -6,17 +6,13 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L130)
-
-A modal component for creating action items.
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L119)
 
 ## Parameters
 
 ### props
 
 [`InterfaceItemModalProps`](../interfaces/InterfaceItemModalProps.md)
-
-The properties passed to the component.
 
 ### deprecatedLegacyContext?
 
@@ -31,5 +27,3 @@ The properties passed to the component.
 ## Returns
 
 `ReactNode`
-
-The `ItemModal` component.
