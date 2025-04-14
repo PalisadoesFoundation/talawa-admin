@@ -87,6 +87,7 @@ const timeToDayJs = (time: string): Dayjs => {
 
 export enum ViewType {
   DAY = 'Day',
+  WEEK = 'Week View',
   MONTH = 'Month View',
   YEAR = 'Year View',
 }

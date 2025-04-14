@@ -2628,7 +2628,7 @@ form label,
   position: relative;
 }
 
-.day__events {
+.weekly__day__events {
   background-color: var(--dayEvents-bg);
 }
 
@@ -2680,14 +2680,6 @@ form label,
   /* font-weight: bold; */
   border: 0px;
   font-size: 40px;
-}
-
-.calendar__weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit, sans-serif;
-  height: 25px;
 }
 
 .weekday {
@@ -2789,6 +2781,146 @@ form label,
 .yearlyCalender {
   background-color: var(--yearlyCalender-bg);
   box-sizing: border-box;
+}
+
+/* WeeklyEventCalendar.css */
+
+.weeklyEventCalendar {
+  background-color: var(--calendar-bg);
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.weeklyEventCalendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.weeklyEventCalendarHeader > div {
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: var(--grey-dark);
+}
+
+.buttonEventCalendar {
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buttonEventCalendar:hover {
+  background-color: var(--blue-dark);
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--grey-dark);
+  color: white;
+  padding: 10px 0;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: bold;
+}
+
+.day__events {
+  background-color: var(--light-grey);
+}
+
+.weekly__day_header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.event_list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.expand_event_list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.expand_list_container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: var(--expandListContainer-bg);
+  border: 1px solid var(--expandListContainer-border);
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.btn__more {
+  background-color: transparent;
+  border: none;
+  color: var(--blue-primary);
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn__more:hover {
+  text-decoration: underline;
+}
+
+.day__selected {
+  background-color: var(--blue-primary);
+  color: var(--grey-dark);
+  outline: 2px solid var(--blue-dark);
+}
+
+.day__today {
+  background-color: var(--light-neon-green);
+  font-weight: 700;
+  text-decoration: underline;
+  color: var(--light-green);
+  position: relative;
+}
+
+.day:focus {
+  outline: 2px dashed var(--blue-primary);
+  outline-offset: 2px;
+}
+@media only screen and (max-width: 768px) {
+  .event_list {
+    display: none;
+  }
+
+  .expand_list_container {
+    width: 150px;
+    padding: 4px 4px 0px 4px;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .btn__more {
+    font-size: 12px;
+  }
+
+  .weekly__calendar__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+
+  .day {
+    min-height: auto;
+  }
 }
 
 /* -- EventDashboardSreen.tsx -- */
