@@ -10,9 +10,7 @@ Defined in: [src/components/OrgListCard/useDebounce.tsx:31](https://github.com/P
 
 ## Type Parameters
 
-### T
-
-`T` *extends* (...`args`) => `void`
+• **T** *extends* (...`args`) => `void`
 
 ## Parameters
 

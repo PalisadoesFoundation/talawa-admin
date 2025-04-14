@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`__namedParameters`): `JSX.Element`
 
 Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx#L110)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:110](
 
 ## Returns
 
-`Element`
+`JSX.Element`

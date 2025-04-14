@@ -12,9 +12,7 @@ Retrieves the stored value for the given key from local storage.
 
 ## Type Parameters
 
-### T
-
-`T`
+• **T**
 
 ## Parameters
 

@@ -10,9 +10,7 @@ Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://gith
 
 ## Type Parameters
 
-### T
-
-`T` *extends* `Record`\<`string`, `unknown`\>
+• **T** *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 

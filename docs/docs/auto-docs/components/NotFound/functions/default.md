@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`props`): `JSX.Element`
 
 Defined in: [src/components/NotFound/NotFound.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/NotFound/NotFound.tsx#L40)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/NotFound/NotFound.tsx:40](https://github.com/Palisad
 
 ## Returns
 
-`Element`
+`JSX.Element`

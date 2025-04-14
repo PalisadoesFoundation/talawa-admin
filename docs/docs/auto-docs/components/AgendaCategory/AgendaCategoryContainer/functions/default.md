@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`__namedParameters`): `JSX.Element`
 
 Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainer.tsx#L51)
 
@@ -26,4 +26,4 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:51](https
 
 ## Returns
 
-`Element`
+`JSX.Element`

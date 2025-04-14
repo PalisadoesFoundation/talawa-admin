@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`__namedParameters`): `JSX.Element`
 
 Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L59)
 
@@ -22,4 +22,4 @@ Defined in: [src/components/Advertisements/core/AdvertisementEntry/Advertisement
 
 ## Returns
 
-`Element`
+`JSX.Element`

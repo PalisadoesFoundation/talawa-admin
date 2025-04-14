@@ -42,7 +42,7 @@ Defined in: [src/types/Tag/interface.ts:30](https://github.com/PalisadoesFoundat
 
 ### t
 
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
+> **t**: `TFunction`\<`"manageTag"`\>
 
 Defined in: [src/types/Tag/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L31)
 
@@ -50,6 +50,6 @@ Defined in: [src/types/Tag/interface.ts:31](https://github.com/PalisadoesFoundat
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
+> **tCommon**: `TFunction`\<`"common"`\>
 
 Defined in: [src/types/Tag/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L32)

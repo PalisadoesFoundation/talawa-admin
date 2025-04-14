@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`props`): `JSX.Element`
 
 Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgContriCards/OrgContriCards.tsx#L40)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:40](https://github
 
 ## Returns
 
-`Element`
+`JSX.Element`
