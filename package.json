@@ -18,10 +18,11 @@
     "@mui/base": "^5.0.0-beta.61",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
-    "@mui/system": "^6.1.6",
-    "@mui/x-charts": "^7.22.2",
-    "@mui/x-data-grid": "^7.22.1",
-    "@mui/x-date-pickers": "^7.18.0",
+    "@mui/private-theming": "^6.3.0",
+    "@mui/system": "^7.0.1",
+    "@mui/x-charts": "^7.28.0",
+    "@mui/x-data-grid": "^7.28.3",
+    "@mui/x-date-pickers": "^7.28.3",
     "@pdfme/common": "^5.2.11",
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
@@ -66,7 +67,8 @@
     "typescript": "^5.6.3",
     "vite-plugin-environment": "^1.1.3",
     "vite-tsconfig-paths": "^5.1.3",
-    "web-vitals": "^4.2.4"
+    "web-vitals": "^4.2.4",
+    "markdown-toc": "^1.2.0"
   },
   "scripts": {
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",

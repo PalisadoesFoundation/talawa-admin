@@ -47,13 +47,13 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
 } from 'utils/interfaces';
 import styles from 'style/app.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
   Autocomplete,
@@ -100,13 +100,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
 
   // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
 
   // Mutation to create a new pledge
-  const [createPledge] = useMutation(CREATE_PlEDGE);
+  const [createPledge] = useMutation(CREATE_PLEDGE);
 
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
@@ -138,9 +138,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          _id: userData.user.user._id,
+          id: userData.user.user._id,
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
+          name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
           image: userData.user.user.image,
         },
       ]);
@@ -178,11 +179,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         updatedFields.endDate = endDate;
       }
       if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user._id);
+        updatedFields.users = pledgeUsers.map((user) => user.id);
       }
       try {
         await updatePledge({
-          variables: { id: pledge?._id, ...updatedFields },
+          variables: { id: pledge?.id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -212,7 +213,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             currency: pledgeCurrency,
             startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
             endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user._id),
+            userIds: pledgeUsers.map((user) => user.id),
           },
         });
 
@@ -256,7 +257,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables user to view participating pledgers */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
@@ -265,11 +265,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               data-testid="pledgerSelect"
               options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
-              // TODO: Remove readOnly function once User Family implementation is done
-              readOnly={mode === 'edit' ? true : false}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              readOnly={mode === 'edit'}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
+              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
                 `${member.firstName} ${member.lastName}`
               }
               onChange={(_, newPledgers): void => {
@@ -281,7 +280,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
@@ -303,7 +301,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               minDate={dayjs(pledgeStartDate)}
               maxDate={dayjs(endDate)}
             />
-            {/* Date Calendar Component to select end Date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('endDate')}
@@ -319,7 +316,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
-            {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 {t('currency')}
@@ -343,7 +339,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 ))}
               </Select>
             </FormControl>
-            {/* Input field to enter amount to be pledged */}
             <FormControl fullWidth>
               <TextField
                 label={t('amount')}
@@ -361,7 +356,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               />
             </FormControl>
           </Form.Group>
-          {/* Button to submit the pledge form */}
           <Button
             type="submit"
             className={styles.addButton}
