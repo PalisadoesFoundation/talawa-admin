@@ -1080,7 +1080,6 @@ describe('ItemModal Component', () => {
     });
   });
 
-  //  Testing the isOptionEqualToValue functionality in Autocomplete
   it('correctly compares option values in assignee dropdown using isOptionEqualToValue', async () => {
     const mocks: MockedResponse[] = [
       {
