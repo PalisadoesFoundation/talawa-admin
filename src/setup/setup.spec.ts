@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import { main, askAndSetRecaptcha } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
+import { backupEnv } from './backupEnv/backupEnv';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './updateEnvFile/updateEnvFile';
@@ -20,6 +21,7 @@ vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
 vi.mock('./updateEnvFile/updateEnvFile');
 vi.mock('./askAndUpdatePort/askAndUpdatePort');
 vi.mock('./askForDocker/askForDocker');
+vi.mock('./backupEnv/backupEnv');
 
 describe('Talawa Admin Setup', () => {
   let processExitSpy: MockInstance;
@@ -48,7 +50,8 @@ describe('Talawa Admin Setup', () => {
   it('should successfully complete setup with default options', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -65,7 +68,8 @@ describe('Talawa Admin Setup', () => {
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -76,7 +80,8 @@ describe('Talawa Admin Setup', () => {
   it('should handle error logging setup when user opts in', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: true });
+      .mockResolvedValueOnce({ shouldLogErrors: true })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     await main();
 
@@ -114,7 +119,8 @@ describe('Talawa Admin Setup', () => {
   it('should handle file system operations correctly', async () => {
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: false });
 
     const mockEnvContent = 'MOCK_ENV_CONTENT';
 
@@ -125,6 +131,7 @@ describe('Talawa Admin Setup', () => {
     expect(fs.readFileSync).toHaveBeenCalledWith('.env', 'utf8');
     expect(dotenv.parse).toHaveBeenCalledWith(mockEnvContent);
   });
+
   it('should handle user opting out of reCAPTCHA setup', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       shouldUseRecaptcha: false,
@@ -151,7 +158,7 @@ describe('Talawa Admin Setup', () => {
           'Invalid reCAPTCHA site key. Please try again.',
         );
         return Object.assign(
-          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey }),
+          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey, ui: {} }),
         );
       });
 
@@ -176,5 +183,16 @@ describe('Talawa Admin Setup', () => {
       mockError,
     );
     expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  it('should call backupEnv when user opts to backup the .env file', async () => {
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false })
+      .mockResolvedValueOnce({ shouldBackupEnv: true });
+
+    await main();
+
+    expect(backupEnv).toHaveBeenCalled();
   });
 });

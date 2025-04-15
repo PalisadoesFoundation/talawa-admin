@@ -7,6 +7,7 @@ import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption
 import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import { backupEnv } from './backupEnv/backupEnv';
 
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
@@ -58,6 +59,22 @@ const askAndSetLogErrors = async (): Promise<void> => {
   }
 };
 
+// Ask if the user would like to back up the old version of the .env file
+const askAndBackupEnv = async (): Promise<void> => {
+  const { shouldBackupEnv } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'shouldBackupEnv',
+      message: 'Would you like to backup the old version of the .env file?',
+      default: true,
+    },
+  ]);
+
+  if (shouldBackupEnv) {
+    backupEnv();
+  }
+};
+
 // Main function to run the setup process
 export async function main(): Promise<void> {
   try {
@@ -80,6 +97,7 @@ export async function main(): Promise<void> {
 
     await askAndSetRecaptcha();
     await askAndSetLogErrors();
+    await askAndBackupEnv();
 
     console.log(
       '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
