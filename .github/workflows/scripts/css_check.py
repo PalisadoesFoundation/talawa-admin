@@ -315,7 +315,7 @@ def main():
                 output.append(
                     f"- {violation.file_path}: "
                     f"has embedded color code `{css_code}`. use CSS variable "
-                    f"in src/style/app-fixed.module.css."
+                    f"in src/style/app.module.css."
                 )
         exit_code = 1
 
