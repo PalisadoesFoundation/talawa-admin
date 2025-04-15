@@ -82,7 +82,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   /**
    * Handles user logout by clearing local storage and redirecting to the home page.
    */
-  const handleLogout = (): void => {
+  const handleLogout = async (): Promise<void> => {
     localStorage.clear();
     window.location.replace('/');
   };
@@ -122,7 +122,9 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => navigate(homeLink)}
+                onClick={async (): Promise<void> => {
+                  await navigate(homeLink);
+                }}
               >
                 {t('home')}
               </Nav.Link>
