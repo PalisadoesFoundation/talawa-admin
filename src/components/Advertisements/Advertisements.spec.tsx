@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
@@ -29,8 +29,8 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
 }));
 let mockID: string | undefined = '1';
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 

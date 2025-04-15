@@ -3,12 +3,12 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
-import type * as RouterTypes from 'react-router-dom';
+import type * as RouterTypes from 'react-router';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
 import VenueModal from './VenueModal';
@@ -145,9 +145,9 @@ const MOCKS = [
 ];
 const mockId = 'orgId';
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = (await vi.importActual(
-    'react-router-dom',
+    'react-router',
   )) as typeof RouterTypes;
   return { ...actual, useParams: () => ({ orgId: mockId }) };
 });

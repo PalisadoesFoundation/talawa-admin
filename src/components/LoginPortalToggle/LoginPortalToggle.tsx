@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 
 interface InterfaceLoginPortalToggleProps {
   onToggle: (role: 'admin' | 'user') => void;
