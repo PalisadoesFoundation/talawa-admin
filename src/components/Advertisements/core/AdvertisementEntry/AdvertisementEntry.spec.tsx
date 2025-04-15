@@ -352,7 +352,6 @@ describe('Testing Advertisement Entry Component', () => {
         type: 'menu',
         endAt: '2025-04-09T18:30:00.000Z',
         startAt: '2025-04-08T18:30:00.000Z',
-        attachments: [],
       },
     });
   });
