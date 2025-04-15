@@ -299,7 +299,10 @@ function AdvertisementRegister({
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
       }
-      if (formState.attachments !== updatedFields.attachments) {
+      if (
+        !updatedFields.attachments ||
+        formState.attachments !== updatedFields.attachments
+      ) {
         updatedFields.attachments = formState.attachments;
       }
       if (formState.type !== typeEdit) {

@@ -46,6 +46,7 @@ import SearchBar from 'subComponents/SearchBar';
 import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
+import { toast } from 'react-toastify';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -157,6 +158,7 @@ export default function Advertisements(): JSX.Element {
           },
         });
       } catch (error) {
+        toast.error('Error fetching more completed advertisements');
         console.error('Error fetching more completed advertisements:', error);
       }
     }
@@ -184,6 +186,7 @@ export default function Advertisements(): JSX.Element {
           },
         });
       } catch (error) {
+        toast.error('Error fetching more active advertisements');
         console.error('Error fetching more active advertisements:', error);
       }
     }
@@ -225,13 +228,12 @@ export default function Advertisements(): JSX.Element {
             />
           </Col>
           <Tabs
-            key={Math.random()}
+            key="advertisements-tabs"
             defaultActiveKey="archivedAds"
             id="uncontrolled-tab-example"
             className="mt-4"
           >
             <Tab
-              key={Math.random()}
               eventKey="activeAds"
               title={t('activeAds')}
               className="pt-4 m-2"
@@ -267,7 +269,6 @@ export default function Advertisements(): JSX.Element {
             </Tab>
 
             <Tab
-              key={Math.random()}
               eventKey="archivedAds"
               title={t('archivedAds')}
               className="pt-4 m-2"
@@ -286,20 +287,18 @@ export default function Advertisements(): JSX.Element {
                 {completedAdvertisements.length === 0 ? (
                   <h4>{t('pMessage')}</h4>
                 ) : (
-                  completedAdvertisements.map((ad) => {
-                    return (
-                      <div className={styles.justifyspAdvertisements}>
-                        {
-                          <AdvertisementEntry
-                            key={ad.id}
-                            advertisement={ad}
-                            setAfterActive={setAfterActive}
-                            setAfterCompleted={setAfterCompleted}
-                          />
-                        }
-                      </div>
-                    );
-                  })
+                  <div className={styles.justifyspAdvertisements}>
+                    {completedAdvertisements.map((ad) => {
+                      return (
+                        <AdvertisementEntry
+                          key={ad.id}
+                          advertisement={ad}
+                          setAfterActive={setAfterActive}
+                          setAfterCompleted={setAfterCompleted}
+                        />
+                      );
+                    })}
+                  </div>
                 )}
               </InfiniteScroll>
             </Tab>
