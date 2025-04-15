@@ -50,13 +50,16 @@ import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
-  const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
 
-  const [after, setAfter] = useState<string | null | undefined>(null);
+  const [afterActive, setAfterActive] = useState<string | null | undefined>(
+    null,
+  );
+  const [afterCompleted, setAfterCompleted] = useState<
+    string | null | undefined
+  >(null);
 
-  // Query to fetch completed advertisements for the organization with pagination
   const {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
@@ -64,14 +67,13 @@ export default function Advertisements(): JSX.Element {
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
-      after,
+      after: afterCompleted,
       first: 6,
       where: { isCompleted: true },
     },
-    skip: !currentOrgId, // Skip the query if currentOrgId is not available
+    skip: !currentOrgId,
   });
 
-  // Query to fetch active advertisements for the organization with pagination
   const {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
@@ -79,14 +81,13 @@ export default function Advertisements(): JSX.Element {
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
-      after,
+      after: afterActive,
       first: 6,
       where: { isCompleted: false },
     },
-    skip: !currentOrgId, // Skip the query if currentOrgId is not available
+    skip: !currentOrgId,
   });
 
-  // State to manage the list of advertisements
   const [completedAdvertisements, setCompletedAdvertisements] = useState<
     Advertisement[]
   >([]);
@@ -94,7 +95,6 @@ export default function Advertisements(): JSX.Element {
     Advertisement[]
   >([]);
 
-  // Effect hook to update advertisements list when data changes or pagination cursor changes
   useEffect(() => {
     if (
       orgCompletedAdvertisementListData?.organization?.advertisements?.edges
@@ -103,7 +103,7 @@ export default function Advertisements(): JSX.Element {
         orgCompletedAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
         );
-      if (after) {
+      if (afterCompleted) {
         setCompletedAdvertisements((prevAds) => {
           const unique = mergedAdvertisements(prevAds, ads);
           return unique;
@@ -111,16 +111,18 @@ export default function Advertisements(): JSX.Element {
       } else {
         setCompletedAdvertisements(ads);
       }
-    } else {
+    } else if (orgCompletedAdvertisementListData) {
       setCompletedAdvertisements([]); // No advertisements found
     }
+  }, [orgCompletedAdvertisementListData, afterCompleted]);
 
+  useEffect(() => {
     if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
       const ads: Advertisement[] =
         orgActiveAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
         );
-      if (after) {
+      if (afterActive) {
         setActiveAdvertisements((prevAds) => {
           const unique = mergedAdvertisements(prevAds, ads);
           return unique;
@@ -128,52 +130,62 @@ export default function Advertisements(): JSX.Element {
       } else {
         setActiveAdvertisements(ads);
       }
-    } else {
+    } else if (orgActiveAdvertisementListData) {
       setActiveAdvertisements([]); // No advertisements found
     }
-  }, [
-    orgCompletedAdvertisementListData,
-    orgActiveAdvertisementListData,
-    after,
-  ]);
+  }, [orgActiveAdvertisementListData, afterActive]);
 
   /**
-   * Fetches more advertisements for infinite scrolling.
+   * Fetches more completed advertisements for infinite scrolling.
    */
-  async function loadMoreAdvertisements(): Promise<void> {
+  async function loadMoreCompletedAdvertisements(): Promise<void> {
     const newAfter =
       orgCompletedAdvertisementListData?.organization?.advertisements?.pageInfo
         ?.endCursor || null;
-    setAfter(newAfter);
 
-    // Refetch active advertisements
-    try {
-      await activeRefetch({
-        // Refetch active advertisements
-        id: currentOrgId,
-        after: newAfter,
-        first: 6,
-        where: {
-          isCompleted: false,
-        },
-      });
-    } catch (error) {
-      console.error('Error fetching more active advertisements:', error);
+    if (newAfter) {
+      setAfterCompleted(newAfter);
+
+      // Refetch completed advertisements
+      try {
+        await completedRefetch({
+          id: currentOrgId,
+          after: newAfter,
+          first: 6,
+          where: {
+            isCompleted: true,
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching more completed advertisements:', error);
+      }
     }
+  }
 
-    // Refetch completed advertisements
-    try {
-      await completedRefetch({
-        // Refetch completed advertisements
-        id: currentOrgId,
-        after: newAfter,
-        first: 6,
-        where: {
-          isCompleted: true,
-        },
-      });
-    } catch (error) {
-      console.error('Error fetching more completed advertisements:', error);
+  /**
+   * Fetches more active advertisements for infinite scrolling.
+   */
+  async function loadMoreActiveAdvertisements(): Promise<void> {
+    const newAfter =
+      orgActiveAdvertisementListData?.organization?.advertisements?.pageInfo
+        ?.endCursor || null;
+
+    if (newAfter) {
+      setAfterActive(newAfter);
+
+      // Refetch active advertisements
+      try {
+        await activeRefetch({
+          id: currentOrgId,
+          after: newAfter,
+          first: 6,
+          where: {
+            isCompleted: false,
+          },
+        });
+      } catch (error) {
+        console.error('Error fetching more active advertisements:', error);
+      }
     }
   }
 
@@ -200,113 +212,98 @@ export default function Advertisements(): JSX.Element {
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
           {loading && <Loader />}
-          {!loading && (
-            <div className={styles.justifyspAdvertisements}>
-              <Col className={styles.colAdvertisements}>
-                <SearchBar
-                  placeholder={'Search..'}
-                  onSearch={(value) => console.log(value)} // Replace with actual search handler
-                  inputTestId="searchname"
-                  buttonTestId="searchButton"
-                />
-                <AdvertisementRegister setAfter={setAfter} />
-              </Col>
-
-              <Tabs
-                defaultActiveKey="archivedAds"
-                id="uncontrolled-tab-example"
-                className="mt-4"
+          <Col className={styles.colAdvertisements}>
+            <SearchBar
+              placeholder={'Search..'}
+              onSearch={(value) => console.log(value)} // Replace with actual search handler
+              inputTestId="searchname"
+              buttonTestId="searchButton"
+            />
+            <AdvertisementRegister
+              setAfterActive={setAfterActive}
+              setAfterCompleted={setAfterCompleted}
+            />
+          </Col>
+          <Tabs
+            key={Math.random()}
+            defaultActiveKey="archivedAds"
+            id="uncontrolled-tab-example"
+            className="mt-4"
+          >
+            <Tab
+              key={Math.random()}
+              eventKey="activeAds"
+              title={t('activeAds')}
+              className="pt-4 m-2"
+            >
+              <InfiniteScroll
+                dataLength={activeAdvertisements.length}
+                next={loadMoreActiveAdvertisements}
+                loader={<AdvertisementSkeleton />}
+                hasMore={
+                  orgActiveAdvertisementListData?.organization?.advertisements
+                    ?.pageInfo?.hasNextPage ?? false
+                }
+                className={styles.listBoxAdvertisements}
+                data-testid="infinite-scroll-active"
               >
-                <Tab
-                  eventKey="activeAds"
-                  title={t('activeAds')}
-                  className="pt-4 m-2"
-                >
-                  <InfiniteScroll
-                    dataLength={activeAdvertisements.length}
-                    next={loadMoreAdvertisements}
-                    loader={
-                      <>
-                        {/* Skeleton loader while fetching more advertisements */}
-                        <AdvertisementSkeleton />
-                      </>
-                    }
-                    hasMore={
-                      orgActiveAdvertisementListData?.organization
-                        ?.advertisements?.pageInfo?.hasNextPage ?? false
-                    }
-                    className={styles.listBoxAdvertisements}
-                    data-testid="organizations-list"
-                    endMessage={
-                      activeAdvertisements.length === 0 && (
-                        <div className={'w-100 text-center my-4'}>
-                          <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                        </div>
-                      )
-                    }
-                  >
-                    {activeAdvertisements.length === 0 ? (
-                      <h4>{t('pMessage')}</h4>
-                    ) : (
-                      activeAdvertisements.map((ad, i) => {
-                        return (
-                          <AdvertisementEntry
-                            key={ad.id}
-                            advertisement={ad}
-                            setAfter={setAfter}
-                          />
-                        );
-                      })
-                    )}
-                  </InfiniteScroll>
-                </Tab>
+                {activeAdvertisements.length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
+                ) : (
+                  <div className={styles.justifyspAdvertisements}>
+                    {activeAdvertisements.map((ad) => {
+                      return (
+                        <AdvertisementEntry
+                          key={ad.id}
+                          advertisement={ad}
+                          setAfterActive={setAfterActive}
+                          setAfterCompleted={setAfterCompleted}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+              </InfiniteScroll>
+            </Tab>
 
-                <Tab
-                  eventKey="archivedAds"
-                  title={t('archivedAds')}
-                  className="pt-4 m-2"
-                >
-                  <InfiniteScroll
-                    dataLength={completedAdvertisements.length}
-                    next={loadMoreAdvertisements}
-                    loader={
-                      <>
-                        {/* Skeleton loader while fetching more advertisements */}
-                        <AdvertisementSkeleton />
-                      </>
-                    }
-                    hasMore={
-                      orgCompletedAdvertisementListData?.organization
-                        ?.advertisements?.pageInfo?.hasNextPage ?? false
-                    }
-                    className={styles.listBoxAdvertisements}
-                    data-testid="organizations-list"
-                    endMessage={
-                      completedAdvertisements.length === 0 && (
-                        <div className={'w-100 text-center my-4'}>
-                          <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                        </div>
-                      )
-                    }
-                  >
-                    {completedAdvertisements.length === 0 ? (
-                      <h4>{t('pMessage')}</h4>
-                    ) : (
-                      completedAdvertisements.map((ad) => {
-                        return (
+            <Tab
+              key={Math.random()}
+              eventKey="archivedAds"
+              title={t('archivedAds')}
+              className="pt-4 m-2"
+            >
+              <InfiniteScroll
+                dataLength={completedAdvertisements.length}
+                next={loadMoreCompletedAdvertisements}
+                loader={<AdvertisementSkeleton />}
+                hasMore={
+                  orgCompletedAdvertisementListData?.organization
+                    ?.advertisements?.pageInfo?.hasNextPage ?? false
+                }
+                className={styles.listBoxAdvertisements}
+                data-testid="infinite-scroll-completed"
+              >
+                {completedAdvertisements.length === 0 ? (
+                  <h4>{t('pMessage')}</h4>
+                ) : (
+                  completedAdvertisements.map((ad) => {
+                    return (
+                      <div className={styles.justifyspAdvertisements}>
+                        {
                           <AdvertisementEntry
                             key={ad.id}
                             advertisement={ad}
-                            setAfter={setAfter}
+                            setAfterActive={setAfterActive}
+                            setAfterCompleted={setAfterCompleted}
                           />
-                        );
-                      })
-                    )}
-                  </InfiniteScroll>
-                </Tab>
-              </Tabs>
-            </div>
-          )}
+                        }
+                      </div>
+                    );
+                  })
+                )}
+              </InfiniteScroll>
+            </Tab>
+          </Tabs>
         </Col>
       </Row>
     </>

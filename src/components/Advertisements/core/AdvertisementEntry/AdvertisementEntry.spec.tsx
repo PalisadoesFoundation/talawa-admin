@@ -78,7 +78,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -154,7 +155,11 @@ describe('Testing Advertisement Entry Component', () => {
           type: AdvertisementType.Banner,
           updatedAt: new Date(),
         }}
-        setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
+        setAfterActive={function () // _value: React.SetStateAction<string | null | undefined>,
+        : void {
+          throw new Error('Function not implemented.');
+        }}
+        setAfterCompleted={function () // _value: React.SetStateAction<string | null | undefined>,
         : void {
           throw new Error('Function not implemented.');
         }}
@@ -207,7 +212,11 @@ describe('Testing Advertisement Entry Component', () => {
           type: mockType,
           updatedAt: mockUpdatedAt,
         }}
-        setAfter={function () // _value: React.SetStateAction<string | null | undefined>,
+        setAfterActive={function () // _value: React.SetStateAction<string | null | undefined>,
+        : void {
+          throw new Error('Function not implemented.');
+        }}
+        setAfterCompleted={function () // _value: React.SetStateAction<string | null | undefined>,
         : void {
           throw new Error('Function not implemented.');
         }}
@@ -244,7 +253,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -307,7 +317,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -479,7 +490,8 @@ describe('Testing Advertisement Entry Component', () => {
                     type: AdvertisementType.Banner,
                     updatedAt: new Date(),
                   }}
-                  setAfter={vi.fn()}
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
                 />
               </MockedProvider>
             </I18nextProvider>

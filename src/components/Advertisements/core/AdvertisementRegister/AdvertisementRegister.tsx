@@ -70,7 +70,8 @@ function AdvertisementRegister({
   descriptionEdit = null,
   endAtEdit = new Date(new Date().setDate(new Date().getDate() + 1)),
   startAtEdit = new Date(),
-  setAfter,
+  setAfterActive,
+  setAfterCompleted,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
@@ -92,6 +93,17 @@ function AdvertisementRegister({
           first: 6,
           after: null,
           before: null,
+          where: { isCompleted: false },
+        },
+      },
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: currentOrg,
+          first: 6,
+          after: null,
+          before: null,
+          where: { isCompleted: true },
         },
       },
     ],
@@ -100,19 +112,7 @@ function AdvertisementRegister({
   /*
    * Mutation to update advertisement and refetch the advertisement list
    */
-  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION, {
-    refetchQueries: [
-      {
-        query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: {
-          id: currentOrg,
-          first: 12,
-          after: null,
-          before: null,
-        },
-      },
-    ],
-  });
+  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
 
   // Set Initial Form State While Creating an Advertisemnt
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
@@ -121,7 +121,7 @@ function AdvertisementRegister({
     type: 'banner',
     startAt: new Date(),
     endAt: dayjs().add(1, 'day').toDate(),
-    attachments: [],
+    attachments: undefined,
   });
 
   const handleClose = (): void => {
@@ -131,7 +131,7 @@ function AdvertisementRegister({
       description: null,
       startAt: new Date(),
       endAt: dayjs().add(1, 'day').toDate(),
-      attachments: [],
+      attachments: undefined,
     });
     setShow(false);
   };
@@ -162,7 +162,7 @@ function AdvertisementRegister({
         if (validFiles.length > 0) {
           setFormState((prev) => ({
             ...prev,
-            attachments: [...prev.attachments, ...validFiles],
+            attachments: [...(prev.attachments || []), ...validFiles],
           }));
         }
       }
@@ -175,7 +175,7 @@ function AdvertisementRegister({
   const removeFile = (index: number): void => {
     setFormState((prev) => ({
       ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index),
+      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
     }));
   };
 
@@ -219,11 +219,7 @@ function AdvertisementRegister({
         return;
       }
 
-      if (
-        !formState.name ||
-        !formState.attachments ||
-        formState.attachments.length === 0
-      ) {
+      if (!formState.name) {
         toast.error('Invalid arguments for this action.');
         return;
       }
@@ -234,7 +230,7 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[];
+        attachments: File[] | undefined;
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -252,30 +248,31 @@ function AdvertisementRegister({
         };
       }
 
-      try {
-        const { data } = await createAdvertisement({
-          variables,
+      const { data, errors } = await createAdvertisement({
+        variables,
+      });
+      if (data) {
+        toast.success(t('advertisementCreated') as string);
+        handleClose();
+        setFormState({
+          name: '',
+          type: 'banner',
+          description: null,
+          startAt: new Date(formState.startAt || new Date()),
+          endAt: new Date(),
+          organizationId: currentOrg,
+          attachments: undefined,
+          existingAttachments: undefined,
         });
-        if (data) {
-          toast.success(t('advertisementCreated') as string);
-          handleClose();
-          setFormState({
-            name: '',
-            type: 'banner',
-            description: null,
-            startAt: new Date(formState.startAt || new Date()),
-            endAt: new Date(),
-            organizationId: currentOrg,
-            attachments: [],
-            existingAttachments: undefined,
-          });
-        }
-        setAfter(null);
-      } catch (e) {
-        console.log('The problem is: ', e);
+        setAfterActive(null);
+        setAfterCompleted(null);
+      }
+      if (errors) {
+        errors.forEach((error) => {
+          toast.error(error.message);
+        });
       }
     } catch (error: unknown) {
-      console.log('error is: ', error);
       if (error instanceof Error) {
         toast.error(
           tErrors('errorOccurredCouldntCreate', {
@@ -360,7 +357,8 @@ function AdvertisementRegister({
           tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
-        setAfter(null);
+        setAfterActive(null);
+        setAfterCompleted(null);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -474,7 +472,7 @@ function AdvertisementRegister({
                   )}
                 </div>
               )}
-              {formState.attachments.map((file, index) => (
+              {(formState.attachments || []).map((file, index) => (
                 <div key={index}>
                   {file.type.startsWith('video/') ? (
                     <video

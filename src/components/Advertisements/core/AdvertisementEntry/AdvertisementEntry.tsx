@@ -58,10 +58,16 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQu
 
 function AdvertisementEntry({
   advertisement,
-  setAfter,
+  setAfterActive,
+  setAfterCompleted,
 }: {
   advertisement: Advertisement;
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  setAfterActive: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >;
+  setAfterCompleted: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >;
 }): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
@@ -123,7 +129,9 @@ function AdvertisementEntry({
       });
       toast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
-      setAfter?.(null);
+      setAfterCompleted?.(null);
+      setAfterActive?.(null);
+      setDropdown(false); // Close dropdown after deletion
       toggleShowDeleteModal(); // Close the modal after deletion
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -158,7 +166,8 @@ function AdvertisementEntry({
                         endAtEdit={advertisement.endAt}
                         descriptionEdit={advertisement.description}
                         startAtEdit={advertisement.startAt}
-                        setAfter={setAfter}
+                        setAfterActive={setAfterActive}
+                        setAfterCompleted={setAfterCompleted}
                       />
                     </li>
                     <li

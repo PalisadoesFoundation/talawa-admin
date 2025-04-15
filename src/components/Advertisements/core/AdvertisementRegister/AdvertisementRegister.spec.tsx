@@ -18,10 +18,7 @@ import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import {
-  client,
-  REGISTER_MOCKS,
-} from 'components/Advertisements/AdvertisementsMocks';
+import { client } from 'components/Advertisements/AdvertisementsMocks';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
@@ -45,8 +42,6 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
-
-const link = new StaticMockLink(REGISTER_MOCKS, true);
 
 const mockFile = new File(['dummy content'], 'test.jpg', {
   type: 'image/jpeg',
@@ -167,7 +162,8 @@ describe('Testing Advertisement Register Component', () => {
                 }
                 startAtEdit={new Date()}
                 idEdit="1"
-                setAfter={() => {}}
+                setAfterActive={() => {}}
+                setAfterCompleted={() => {}}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -196,7 +192,8 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Ad1"
                   idEdit="1"
                   advertisementMedia=""
-                  setAfter={vi.fn()}
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
                 />
               </I18nextProvider>
             </BrowserRouter>
@@ -232,7 +229,7 @@ describe('Testing Advertisement Register Component', () => {
   test('Throws error when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const { getByText, queryByText, getByLabelText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -243,7 +240,8 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Ad1"
                 idEdit="1"
                 advertisementMedia=""
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -314,7 +312,8 @@ describe('Testing Advertisement Register Component', () => {
                 idEdit="1"
                 advertisementMedia="google.com"
                 formStatus="edit"
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -340,7 +339,8 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 idEdit="1"
                 advertisementMedia=""
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -374,7 +374,8 @@ describe('Testing Advertisement Register Component', () => {
                   nameEdit="Advert1"
                   idEdit="1"
                   advertisementMedia=""
-                  setAfter={vi.fn()}
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
                 />
               }
             </I18nextProvider>
@@ -424,7 +425,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Media preview renders correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -435,7 +436,8 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 idEdit="1"
                 advertisementMedia="test.mp4"
-                setAfter={vi.fn()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
               />
             </I18nextProvider>
           </BrowserRouter>

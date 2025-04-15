@@ -10,7 +10,12 @@ export interface InterfaceAddOnRegisterProps {
   createdBy?: string; // Optional user who created the advertisement
   endAtEdit?: Date; // End date of the advertisement to edit
   startAtEdit?: Date; // Start date of the advertisement to edit
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>; // Function to update parent state
+  setAfterActive: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >; // Function to update parent state
+  setAfterCompleted: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >; // Function to update parent state
 }
 
 export interface InterfaceFormStateTypes {
@@ -20,7 +25,7 @@ export interface InterfaceFormStateTypes {
   description: string | null; // Description of the advertisement
   endAt: Date; // End date of the advertisement
   organizationId?: string | undefined; // Organization ID
-  attachments: File[]; //File Array
+  attachments: File[] | undefined; //File Array
   existingAttachments?: string | undefined; //Keep existing media URL for previews
 }
 
