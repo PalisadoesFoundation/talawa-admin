@@ -979,7 +979,7 @@ interface InterfaceTagMembersData {
 
 export interface InterfaceQueryOrganizationUserTags {
   [x: string]: any;
-  organizations: {
+  organization: {
     tags: InterfaceTagData;
   };
 }

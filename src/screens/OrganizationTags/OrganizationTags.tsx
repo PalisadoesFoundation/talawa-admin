@@ -98,8 +98,11 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
+  } = useQuery<InterfaceOrganizationTagsQuery>(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
+      input: {
+        id: orgId,
+      },
       filter: tagSearchName,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
@@ -109,45 +112,37 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          orgUserTagsData?.organizations[0]?.tags?.pageInfo?.endCursor ?? null,
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        prevResult: InterfaceOrganizationTagsQuery,
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
+          fetchMoreResult?: InterfaceOrganizationTagsQuery;
         },
-      ) => {
+      ): InterfaceOrganizationTagsQuery => {
         if (!fetchMoreResult) {
           return prevResult;
         }
 
         // Check if organizations exists in both prevResult and fetchMoreResult
-        if (
-          !prevResult.organizations?.[0] ||
-          !fetchMoreResult.organizations?.[0]
-        ) {
+        if (!prevResult.organization || !fetchMoreResult.organization) {
           return prevResult;
         }
 
         return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              tags: {
-                ...prevResult.organizations[0].tags,
-                edges: [
-                  ...prevResult.organizations[0].tags.edges,
-                  ...fetchMoreResult.organizations[0].tags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].tags.pageInfo,
-              },
+          organization: {
+            ...prevResult.organization,
+            tags: {
+              ...prevResult.organization.tags,
+              edges: [
+                ...prevResult.organization.tags.edges,
+                ...fetchMoreResult.organization.tags.edges,
+              ],
+              pageInfo: fetchMoreResult.organization.tags.pageInfo,
             },
-          ],
+          },
         };
       },
     });
@@ -201,8 +196,8 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.tags?.edges?.map(
-      (edge: { node: { id: any; name: any } }, index: number) => ({
+    orgUserTagsData?.organization?.tags?.edges?.map(
+      (edge: { node: { id: string; name: string } }, index: number) => ({
         _id: edge.node.id,
         id: index + 1,
         name: edge.node.name,
@@ -210,7 +205,6 @@ function OrganizationTags(): JSX.Element {
         usersAssignedTo: { totalCount: 0 },
       }),
     ) || [];
-
   const redirectToManageTag = (tagId: string): void => {
     if (tagId) {
       navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
@@ -403,7 +397,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organizations?.[0]?.tags?.pageInfo
+                    orgUserTagsData?.organization?.tags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -452,12 +446,7 @@ function OrganizationTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={userTagsList?.map(
-                      (userTag: { _id: any; name: any }, index: number) => ({
-                        id: index + 1,
-                        ...userTag,
-                      }),
-                    )}
+                    rows={userTagsList}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

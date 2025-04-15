@@ -74,16 +74,33 @@ interface InterfaceBaseFetchMoreOptions<T> {
 }
 
 // 4. Query interfaces
-export interface InterfaceOrganizationTagsQuery
-  extends InterfaceBaseQueryResult {
-  data?: {
-    organizations: InterfaceQueryOrganizationUserTags[];
+export interface InterfaceOrganizationTagsQuery {
+  organization: {
+    tags: {
+      edges: Array<{
+        cursor: string;
+        node: {
+          id: string;
+          name: string;
+          createdAt: string;
+          updater: {
+            id: string;
+            name: string;
+          };
+          folder: {
+            id: string;
+            name: string;
+          };
+        };
+      }>;
+      pageInfo: {
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+        startCursor: string;
+        endCursor: string;
+      };
+    };
   };
-  fetchMore: (
-    options: InterfaceBaseFetchMoreOptions<{
-      organizations: InterfaceQueryOrganizationUserTags[];
-    }>,
-  ) => void;
 }
 
 export interface InterfaceOrganizationSubTagsQuery
