@@ -32,7 +32,7 @@
  * - Material-UI (Table, Pagination)
  * - React-Bootstrap (Modal)
  * - i18next (for translations)
- * - Custom styles from `style/app.module.css`
+ * - Custom styles from `style/app-fixed.module.css`
  */
 import React, { useState, useMemo } from 'react';
 import {
