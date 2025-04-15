@@ -46,9 +46,7 @@ Object.defineProperty(window, 'location', {
 const mockNavgatePush = vi.fn();
 
 vi.mock('react-router', async () => {
-  const actual = (await vi.importActual(
-    'react-router',
-  )) as typeof RouterTypes;
+  const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return {
     ...actual,
     useNavigate: () => mockNavgatePush,

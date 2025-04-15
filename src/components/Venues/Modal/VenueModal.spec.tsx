@@ -146,9 +146,7 @@ const MOCKS = [
 const mockId = 'orgId';
 
 vi.mock('react-router', async () => {
-  const actual = (await vi.importActual(
-    'react-router',
-  )) as typeof RouterTypes;
+  const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return { ...actual, useParams: () => ({ orgId: mockId }) };
 });
 
