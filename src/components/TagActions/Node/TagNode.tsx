@@ -123,12 +123,20 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       </div>
     );
   }
+  console.log('Querying tag:', tag.id);
+  console.log('Subtag data:', subTagsData);
+  console.log('Subtags loading:', subTagsLoading);
 
   const subTagsList =
     subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
+    console.log('Tag expanded state: ', !expanded);
+    console.log('Querying with variables:', {
+      id: tag.id,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+    });
   };
 
   const handleCheckboxChange = (

@@ -446,39 +446,39 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   >
                     {userTagsList?.map((tag) => (
                       <div key={tag.id} className="position-relative w-100">
-                      <div
-                        className="d-inline-block w-100"
-                        data-testid="orgUserTag"
-                      >
-                        <TagNode
-                        tag={{
-                          ...tag,
-                          _id: tag.id // Add the required _id field
-                        }}
-                        checkedTags={checkedTags}
-                        toggleTagSelection={toggleTagSelection}
-                        t={t}
-                        />
-                      </div>
-                      {tag.ancestorTags && tag.ancestorTags.length > 0 && (
-                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
-                        <span className="me-1">(</span>
-                        {tag.ancestorTags.map((ancestorTag) => (
-                          <span
-                          key={ancestorTag.id}
-                          className="d-flex align-items-center ms-1 my-0"
-                          data-testid="ancestorTagsBreadCrumbs"
-                          >
-                          {ancestorTag.name}
-                          {tag.ancestorTags!.indexOf(ancestorTag) !==
-                            tag.ancestorTags!.length - 1 && (
-                            <i className="ms-2 fa fa-caret-right" />
-                          )}
-                          </span>
-                        ))}
-                        <span className="ms-1">)</span>
+                        <div
+                          className="d-inline-block w-100"
+                          data-testid="orgUserTag"
+                        >
+                          <TagNode
+                            tag={{
+                              ...tag,
+                              _id: tag.id,
+                            }}
+                            checkedTags={checkedTags}
+                            toggleTagSelection={toggleTagSelection}
+                            t={t}
+                          />
                         </div>
-                      )}
+                        {tag.ancestorTags && tag.ancestorTags.length > 0 && (
+                          <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                            <span className="me-1">(</span>
+                            {tag.ancestorTags.map((ancestorTag) => (
+                              <span
+                                key={ancestorTag.id}
+                                className="d-flex align-items-center ms-1 my-0"
+                                data-testid="ancestorTagsBreadCrumbs"
+                              >
+                                {ancestorTag.name}
+                                {tag.ancestorTags!.indexOf(ancestorTag) !==
+                                  tag.ancestorTags!.length - 1 && (
+                                  <i className="ms-2 fa fa-caret-right" />
+                                )}
+                              </span>
+                            ))}
+                            <span className="ms-1">)</span>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </InfiniteScroll>
