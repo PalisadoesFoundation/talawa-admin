@@ -254,7 +254,7 @@ function OrganizationTags(): JSX.Element {
             <div
               className={styles.subTagsLink}
               data-testid="tagName"
-              onClick={() => redirectToSubTags(params.row.id)}
+              onClick={() => redirectToSubTags(params.row._id)}
             >
               {params.row.name}
               <i className={'ms-2 fa fa-caret-right'} />

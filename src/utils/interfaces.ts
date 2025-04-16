@@ -896,14 +896,8 @@ export interface InterfaceQueryOrganizationPostListItem {
     };
   };
 }
-// export interface InterfaceTagData {
-//   id: string;
-//   name: string;
-//   childTags: {
-//     totalCount: number;
-//   };
-// }
 export interface InterfaceTagData {
+  _id: string;
   id: string;
   name: string;
   __typename?: string;
@@ -920,8 +914,8 @@ export interface InterfaceTagData {
     name: string;
   } | null;
   childTags?: {
-    edges: Array<{ node: InterfaceTagData }>;
-    totalCount?: number;
+    edges?: Array<{ node: InterfaceTagData }>;
+    totalCount: number;
     pageInfo?: {
       endCursor?: string;
       hasNextPage?: boolean;
