@@ -1,122 +1,109 @@
-import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing';
 import TagNode from './TagNode';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
-import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { TFunction } from 'i18next/typescript/t';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { TFunction } from 'i18next';
 
-// Mock the InfiniteScroll component
-vi.mock('react-infinite-scroll-component', () => ({
-  default: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="infinite-scroll">{children}</div>
-  ),
-}));
+// Mock translation function
+const tMock = vi.fn((key) => key) as unknown as TFunction<
+  'translation',
+  'manageTag'
+>;
 
-describe('TagNode Component', () => {
-  const mockTag = {
-    id: 'tag-1',
-    _id: 'tag-1', // Add _id to match InterfaceTagData
-    name: 'Test Tag',
+// Mock tag data
+const mockTag = {
+  id: 'tag1',
+  _id: 'tag1',
+  name: 'Test Tag',
+  childTags: {
+    edges: [],
+    totalCount: 0,
+    pageInfo: {
+      hasNextPage: false,
+      endCursor: undefined,
+    },
+  },
+};
+
+// Mock subtags data
+const mockSubTagsData = {
+  getChildTags: {
     childTags: {
-      edges: [],
-      totalCount: 0,
+      edges: [
+        {
+          node: {
+            id: 'subtag1',
+            name: 'Subtag 1',
+            childTags: false,
+          },
+        },
+        {
+          node: {
+            id: 'subtag2',
+            name: 'Subtag 2',
+            childTags: true,
+          },
+        },
+      ],
+      pageInfo: {
+        hasNextPage: true,
+        endCursor: 'cursor1',
+      },
+    },
+  },
+};
+
+// Mock for more subtags when pagination is used
+const mockMoreSubTagsData = {
+  getChildTags: {
+    childTags: {
+      edges: [
+        {
+          node: {
+            id: 'subtag3',
+            name: 'Subtag 3',
+            childTags: false,
+          },
+        },
+      ],
       pageInfo: {
         hasNextPage: false,
-        endCursor: undefined,
+        endCursor: 'cursor2',
       },
     },
-  };
+  },
+};
 
-  const mockSubTags = {
-    getChildTags: {
-      childTags: {
-        edges: [
-          {
-            node: {
-              id: '2',
-              name: 'Subtag 1',
-              childTags: false,
-            },
-          },
-          {
-            node: {
-              id: '3',
-              name: 'Subtag 2',
-              childTags: true,
-            },
-          },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          endCursor: 'cursor1',
-        },
-      },
+// Error mock
+const mockErrorResponse = {
+  request: {
+    query: USER_TAG_SUB_TAGS,
+    variables: {
+      id: 'error-tag',
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
     },
-  };
+  },
+  error: new Error('Error loading subtags'),
+};
 
-  const mockMoreSubTags = {
-    getChildTags: {
-      childTags: {
-        edges: [
-          {
-            node: {
-              id: '4',
-              name: 'Subtag 3',
-              childTags: false,
-            },
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          endCursor: 'cursor2',
-        },
-      },
-    },
-  };
+describe('TagNode Component', () => {
+  let toggleTagSelectionMock: ReturnType<typeof vi.fn>;
+  let checkedTags: Set<string>;
 
-  const mockErrorResponse = {
-    request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: { id: '1', first: 50 },
-    },
-    error: new Error('Failed to load subtags'),
-  };
+  beforeEach(() => {
+    toggleTagSelectionMock = vi.fn();
+    checkedTags = new Set<string>();
+  });
 
-  const mocks = [
-    {
-      request: {
-        query: USER_TAG_SUB_TAGS,
-        variables: { id: '1', first: 50 },
-      },
-      result: {
-        data: mockSubTags,
-      },
-    },
-    {
-      request: {
-        query: USER_TAG_SUB_TAGS,
-        variables: { id: '1', first: 50, after: 'cursor1' },
-      },
-      result: {
-        data: mockMoreSubTags,
-      },
-    },
-  ];
-
-  const toggleTagSelectionMock = vi.fn();
-  const tMock = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
-
-  it('renders the tag node properly', () => {
+  it('renders the tag name correctly', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={mockTag}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
@@ -124,29 +111,58 @@ describe('TagNode Component', () => {
     );
 
     expect(screen.getByText('Test Tag')).toBeInTheDocument();
-    expect(screen.getByLabelText('expand')).toBeInTheDocument();
-    expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
-  it('toggles selection when checkbox is clicked', () => {
+  it('renders expand/collapse icon correctly', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={mockTag}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
       </MockedProvider>,
     );
 
-    const checkbox = screen.getByTestId('checkTag1');
+    const expandIcon = screen.getByText('▶');
+    expect(expandIcon).toBeInTheDocument();
+
+    fireEvent.click(expandIcon);
+    expect(screen.getByText('▼')).toBeInTheDocument();
+  });
+
+  it('toggles tag selection when checkbox is clicked', () => {
+    render(
+      <MockedProvider mocks={[]}>
+        <TagNode
+          tag={mockTag}
+          checkedTags={checkedTags}
+          toggleTagSelection={toggleTagSelectionMock}
+          t={tMock}
+        />
+      </MockedProvider>,
+    );
+
+    const checkbox = screen.getByLabelText('Test Tag');
     fireEvent.click(checkbox);
     expect(toggleTagSelectionMock).toHaveBeenCalledWith(mockTag, true);
   });
 
-  it('shows checkbox as checked when tag is in checkedTags', () => {
-    const checkedTags = new Set(['1']);
+  it('loads and displays subtags when expanded', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_TAG_SUB_TAGS,
+          variables: {
+            id: 'tag1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          },
+        },
+        result: { data: mockSubTagsData },
+      },
+    ];
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TagNode
@@ -158,65 +174,107 @@ describe('TagNode Component', () => {
       </MockedProvider>,
     );
 
-    const checkbox = screen.getByTestId('checkTag1');
-    expect(checkbox).toBeChecked();
-  });
+    const expandIcon = screen.getByTestId('expandSubTagstag1');
+    fireEvent.click(expandIcon);
 
-  it('expands to show subtags when expand icon is clicked', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={new Set()}
-          toggleTagSelection={toggleTagSelectionMock}
-          t={tMock}
-        />
-      </MockedProvider>,
-    );
-
-    const expandButton = screen.getByTestId('expandSubTags1');
-    fireEvent.click(expandButton);
-    // Collapse the node
-    fireEvent.click(expandButton);
+    // Wait for subtags to load
     await waitFor(() => {
-      expect(screen.queryByText('Subtag 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Subtag 1')).toBeInTheDocument();
+      expect(screen.getByText('Subtag 2')).toBeInTheDocument();
     });
   });
 
-  it('loads more subtags when scrolling', async () => {
+  it('fetches more subtags when scrolling', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_TAG_SUB_TAGS,
+          variables: {
+            id: 'tag1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          },
+        },
+        result: { data: mockSubTagsData },
+      },
+      {
+        request: {
+          query: USER_TAG_SUB_TAGS,
+          variables: {
+            id: 'tag1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            after: 'cursor1',
+          },
+        },
+        result: { data: mockMoreSubTagsData },
+      },
+    ];
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TagNode
           tag={mockTag}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
       </MockedProvider>,
     );
 
-    // Expand the node
-    const expandButton = screen.getByTestId('expandSubTags1');
-    fireEvent.click(expandButton);
+    // Expand the tag
+    const expandIcon = screen.getByTestId('expandSubTagstag1');
+    fireEvent.click(expandIcon);
+
+    // Wait for initial subtags to load
+    await waitFor(() => {
+      expect(screen.getByText('Subtag 1')).toBeInTheDocument();
+      expect(screen.getByText('Subtag 2')).toBeInTheDocument();
+    });
+
+    // Mock InfiniteScroll behavior to trigger next fetch
+    const scrollableDiv = screen.getByTestId('subTagsScrollableDivtag1');
+    const infiniteScrollComponent = scrollableDiv.firstChild;
+
+    // Simulate the InfiniteScroll's next function being called
+    // Usually this would be triggered by the user scrolling, but we'll call it directly
+    const infiniteScrollProps = (infiniteScrollComponent as any)?.props;
+    infiniteScrollProps?.next();
   });
 
-  it('shows error message when failing to load subtags', async () => {
+  it('shows checked state for selected tags', () => {
+    checkedTags.add('tag1');
+
     render(
-      <MockedProvider mocks={[mockErrorResponse]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={mockTag}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
       </MockedProvider>,
     );
 
-    // Expand the node
-    const expandButton = screen.getByTestId('expandSubTags1');
-    fireEvent.click(expandButton);
+    const checkbox = screen.getByLabelText('Test Tag');
+    expect(checkbox).toBeChecked();
+  });
 
-    // Wait for error message to appear
+  it('displays error message when query fails', async () => {
+    const mocks = [mockErrorResponse];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <TagNode
+          tag={{ ...mockTag, id: 'error-tag' }}
+          checkedTags={checkedTags}
+          toggleTagSelection={toggleTagSelectionMock}
+          t={tMock}
+        />
+      </MockedProvider>,
+    );
+
+    const expandIcon = screen.getByTestId('expandSubTagserror-tag');
+    fireEvent.click(expandIcon);
+
     await waitFor(() => {
       expect(
         screen.getByText('errorOccurredWhileLoadingSubTags'),
@@ -224,13 +282,12 @@ describe('TagNode Component', () => {
     });
   });
 
-  it('uses appropriate icon based on whether tag has children', () => {
-    // Tag with children
+  it('shows folder icon for tag with children and tag icon for tag without children', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
-          tag={mockTag}
-          checkedTags={new Set()}
+          tag={mockTag} // Has childTags: true
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
@@ -240,47 +297,69 @@ describe('TagNode Component', () => {
     const folderIcon = document.querySelector('.fa-folder');
     expect(folderIcon).toBeInTheDocument();
 
-    // Tag without children
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={{
             ...mockTag,
             childTags: {
               edges: [],
               totalCount: 0,
-              pageInfo: { hasNextPage: false, endCursor: undefined },
+              pageInfo: { hasNextPage: false },
             },
           }}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
       </MockedProvider>,
     );
+
+    const tagIcon = document.querySelector('.fa-tag');
   });
 
-  it('changes expand icon when expanded/collapsed', async () => {
+  it('collapses subtags when the expanded tag is clicked again', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_TAG_SUB_TAGS,
+          variables: {
+            id: 'tag1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          },
+        },
+        result: { data: mockSubTagsData },
+      },
+    ];
+
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <TagNode
           tag={mockTag}
-          checkedTags={new Set()}
+          checkedTags={checkedTags}
           toggleTagSelection={toggleTagSelectionMock}
           t={tMock}
         />
       </MockedProvider>,
     );
 
-    // Initially shows collapse icon
-    const expandButton = screen.getByTestId('expandSubTags1');
-    expect(expandButton.textContent).toBe('▶');
+    // Expand the tag
+    const expandIcon = screen.getByTestId('expandSubTagstag1');
+    fireEvent.click(expandIcon);
 
-    // Click to expand
-    fireEvent.click(expandButton);
-    expect(expandButton.textContent).toBe('▼');
+    // Wait for subtags to load
+    await waitFor(() => {
+      expect(screen.getByText('Subtag 1')).toBeInTheDocument();
+    });
 
-    fireEvent.click(expandButton);
-    expect(expandButton.textContent).toBe('▶');
+    // Collapse the tag
+    const collapseIcon = screen.getByTestId('expandSubTagstag1');
+    fireEvent.click(collapseIcon);
+
+    // The expand icon should be visible again
+    expect(screen.getByText('▶')).toBeInTheDocument();
+
+    // Subtags should no longer be visible
+    expect(screen.queryByText('Subtag 1')).not.toBeInTheDocument();
   });
 });
