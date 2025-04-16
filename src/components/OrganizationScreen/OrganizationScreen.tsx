@@ -68,7 +68,7 @@ import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
-import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
 
 const OrganizationScreen = (): JSX.Element => {
@@ -104,7 +104,7 @@ const OrganizationScreen = (): JSX.Element => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
 
-  const { data: eventsData } = useQuery(ORGANIZATION_EVENT_LIST, {
+  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
   });
 

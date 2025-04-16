@@ -282,31 +282,32 @@ export const USER_LIST_REQUEST = gql`
 `;
 
 export const EVENT_DETAILS = gql`
-  query Event($id: ID!) {
-    event(id: $id) {
-      _id
-      title
+  query GetEvent($eventId: String!) {
+    event(input: { id: $eventId }) {
+      id
+      name
       description
-      startDate
-      endDate
-      startTime
-      endTime
-      allDay
       location
-      recurring
-      baseRecurringEvent {
-        _id
+      allDay
+      isPublic
+      isRegisterable
+      startAt
+      endAt
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
+      }
+      updater {
+        id
+        name
+        emailAddress
       }
       organization {
-        _id
-        members {
-          _id
-          firstName
-          lastName
-        }
-      }
-      attendees {
-        _id
+        id
+        name
       }
     }
   }
@@ -481,6 +482,10 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             description
             startAt
             endAt
+            allDay
+            location
+            isPublic
+            isRegisterable
             creator {
               id
               name
@@ -517,20 +522,54 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
+// Query to take the Organization with data
 export const GET_ORGANIZATION_DATA_PG = gql`
-  query getOrganizationData($id: String!) {
+  query getOrganizationData($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
       id
-      avatarURL
       name
+      description
+      addressLine1
+      addressLine2
       city
+      state
+      postalCode
+      countryCode
+      avatarURL
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
+      }
+      updater {
+        id
+        name
+        emailAddress
+      }
+      members(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
     }
   }
 `;
-
+// list of a organizations
 export const ORGANIZATIONS_LIST = gql`
-  query getOrganization($id: String!) {
-    organization(input: { id: $id }) {
+  query Organizations {
+    organizations {
       id
       name
       description
@@ -757,27 +796,6 @@ export const USER_DETAILS = gql`
         }
         eventAdmin {
           _id
-        }
-      }
-    }
-  }
-`;
-
-// to take the organization event list
-export const ORGANIZATION_EVENT_LIST = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        edges {
-          node {
-            id
-            name
-            description
-            startAt
-            endAt
-            location
-          }
         }
       }
     }
@@ -1092,18 +1110,3 @@ export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
 } from './OrganizationQueries';
-
-export const GET_ORGANIZATION_EVENTS = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        id
-        name
-        description
-        startAt
-        endAt
-      }
-    }
-  }
-`;
