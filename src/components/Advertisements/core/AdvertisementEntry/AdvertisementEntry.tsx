@@ -310,6 +310,7 @@ function AdvertisementEntry({
                     <Button
                       className={`btn btn-danger ${styles.removeButton}`}
                       onClick={toggleShowDeleteModal}
+                      data-testid="delete_no"
                     >
                       {tCommon('no')}
                     </Button>

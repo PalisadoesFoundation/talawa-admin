@@ -64,6 +64,7 @@ export default function Advertisements(): JSX.Element {
   const {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
+    error: completedError,
     refetch: completedRefetch,
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
@@ -78,6 +79,7 @@ export default function Advertisements(): JSX.Element {
   const {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
+    error: activeError,
     refetch: activeRefetch,
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
@@ -88,6 +90,10 @@ export default function Advertisements(): JSX.Element {
     },
     skip: !currentOrgId,
   });
+
+  if (completedError || activeError) {
+    toast.error('Failed to fetch advertisements');
+  }
 
   const [completedAdvertisements, setCompletedAdvertisements] = useState<
     Advertisement[]
@@ -247,7 +253,6 @@ export default function Advertisements(): JSX.Element {
                     ?.pageInfo?.hasNextPage ?? false
                 }
                 className={styles.listBoxAdvertisements}
-                data-testid="infinite-scroll-active"
               >
                 {activeAdvertisements.length === 0 ? (
                   <h4>{t('pMessage')}</h4>
@@ -282,7 +287,6 @@ export default function Advertisements(): JSX.Element {
                     ?.advertisements?.pageInfo?.hasNextPage ?? false
                 }
                 className={styles.listBoxAdvertisements}
-                data-testid="infinite-scroll-completed"
               >
                 {completedAdvertisements.length === 0 ? (
                   <h4>{t('pMessage')}</h4>
