@@ -3,12 +3,10 @@ import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementEntry from './AdvertisementEntry';
-import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import dayjs from 'dayjs';
 import { MockedProvider } from '@apollo/client/testing';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
@@ -40,9 +38,6 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const mockFile = new File(['dummy content'], 'test.jpg', {
-  type: 'image/jpeg',
-});
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 describe('Testing Advertisement Entry Component', () => {
@@ -540,7 +535,7 @@ describe('Testing Advertisement Entry Component', () => {
           id: '1',
         },
       });
-      const deletionFailedText = screen.queryByText((content, element) => {
+      const deletionFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Deletion Failed' &&
           element.tagName.toLowerCase() === 'div'

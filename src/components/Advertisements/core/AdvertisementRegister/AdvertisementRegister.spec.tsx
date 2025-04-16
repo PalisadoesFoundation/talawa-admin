@@ -39,6 +39,15 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const mockUseMutation = vi.fn();
+vi.mock('@apollo/client', async () => {
+  const actual = await vi.importActual('@apollo/client');
+  return {
+    ...actual,
+    useMutation: () => mockUseMutation(),
+  };
+});
+
 const mockFile = new File(['dummy content'], 'test.jpg', {
   type: 'image/jpeg',
 });
@@ -94,6 +103,7 @@ const translations = {
 describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -416,7 +426,8 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('create advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const createAdMock = vi.fn();
+    mockUseMutation.mockReturnValue([createAdMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
@@ -576,19 +587,30 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    await waitFor(
-      () => {
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
-          'Advertisement created successfully.',
+    await waitFor(() => {
+      expect(createAdMock).toHaveBeenCalledWith({
+        variables: {
+          organizationId: '1',
+          name: 'Ad1',
+          type: 'banner',
+          startAt: startISOReceived,
+          endAt: endISOReceived,
+        },
+      });
+      const creationFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Creation Failed' &&
+          element.tagName.toLowerCase() === 'div'
         );
-      },
-      { timeout: 3000 },
-    );
+      });
+      expect(creationFailedText).toBeNull();
+    });
     vi.useRealTimers();
   });
 
   it('update advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const updateMock = vi.fn();
+    mockUseMutation.mockReturnValue([updateMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
@@ -807,15 +829,23 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByTestId('addonupdate'));
     });
 
-    await waitFor(
-      () => {
-        expect(toastSuccessSpy).toHaveBeenCalled();
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
-          'Advertisement updated Successfully',
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          description: 'This is an updated advertisement',
+          startAt: startISOReceived,
+          endAt: endISOReceived,
+        },
+      });
+      const updateFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Update Failed' &&
+          element.tagName.toLowerCase() === 'div'
         );
-      },
-      { timeout: 3000 },
-    );
+      });
+      expect(updateFailedText).toBeNull();
+    });
   });
   vi.useRealTimers();
 });

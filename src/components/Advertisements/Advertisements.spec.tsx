@@ -61,9 +61,19 @@ tomorrow.setDate(today.getDate() + 1);
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
+const mockUseMutation = vi.fn();
+vi.mock('@apollo/client', async () => {
+  const actual = await vi.importActual('@apollo/client');
+  return {
+    ...actual,
+    useMutation: () => mockUseMutation(),
+  };
+});
+
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -207,7 +217,8 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('create advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const createAdMock = vi.fn();
+    mockUseMutation.mockReturnValue([createAdMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
@@ -363,14 +374,24 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    await waitFor(
-      () => {
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
-          'Advertisement created successfully.',
+    await waitFor(() => {
+      expect(createAdMock).toHaveBeenCalledWith({
+        variables: {
+          organizationId: '1',
+          name: 'Ad1',
+          type: 'banner',
+          startAt: startISOReceived,
+          endAt: endISOReceived,
+        },
+      });
+      const creationFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Creation Failed' &&
+          element.tagName.toLowerCase() === 'div'
         );
-      },
-      { timeout: 3000 },
-    );
+      });
+      expect(creationFailedText).toBeNull();
+    });
     vi.useRealTimers();
   });
 
@@ -627,7 +648,8 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('update advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const updateMock = vi.fn();
+    mockUseMutation.mockReturnValue([updateMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
@@ -850,15 +872,23 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(screen.getByTestId('addonupdate'));
     });
 
-    await waitFor(
-      () => {
-        expect(toastSuccessSpy).toHaveBeenCalled();
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
-          'Advertisement updated Successfully',
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          description: 'This is an updated advertisement',
+          startAt: startISOReceived,
+          endAt: endISOReceived,
+        },
+      });
+      const updateFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Update Failed' &&
+          element.tagName.toLowerCase() === 'div'
         );
-      },
-      { timeout: 3000 },
-    );
+      });
+      expect(updateFailedText).toBeNull();
+    });
   });
 
   it('delete advertisement', async () => {
@@ -894,14 +924,11 @@ describe('Testing Advertisement Component', () => {
     await act(() => {
       fireEvent.click(getByTestId('delete_yes'));
     });
-    await waitFor(
-      () => {
-        expect(toastSuccessSpy).toHaveBeenCalledWith(
-          'Advertisement deleted successfully.',
-        );
-      },
-      { timeout: 3000 },
-    );
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Advertisement deleted successfully.',
+      );
+    });
   });
 
   test('skips queries when organization ID is missing', async () => {
