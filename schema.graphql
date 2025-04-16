@@ -258,32 +258,34 @@ interface Error {
 }
 
 type Event {
-  _id: ID!
-  actionItems: [ActionItem]
-  admins(adminId: ID): [User!]
-  allDay: Boolean!
-  attendees: [User]
-  attendeesCheckInStatus: [CheckInStatus!]!
-  averageFeedbackScore: Float
-  createdAt: DateTime!
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnection
+
+  allDay: Boolean
+  attachments: [EventAttachment!]
+  createdAt: DateTime
   creator: User
-  description: String!
-  endDate: Date
-  endTime: Time
-  feedback: [Feedback!]!
+  description: String
+  endAt: DateTime
+  id: ID!
   isPublic: Boolean!
   isRegisterable: Boolean!
-  latitude: Latitude
   location: String
-  longitude: Longitude
+  name: String
   organization: Organization
-  recurrance: Recurrance
-  recurring: Boolean!
-  startDate: Date!
-  startTime: Time
-  status: Status!
-  title: String!
-  updatedAt: DateTime!
+  startAt: DateTime
+  updatedAt: DateTime
+  updater: User
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnection
 }
 
 input EventAttendeeInput {
@@ -775,10 +777,8 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(
-    data: EventInput!
-    recurrenceRuleData: RecurrenceRuleInput
-  ): Event!
+  createEvent(input: MutationCreateEventInput!): Event
+
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
   createOrganization(data: OrganizationInput, file: String): Organization!
@@ -2066,6 +2066,19 @@ enum Gender {
   FEMALE
   MALE
   OTHER
+}
+
+input MutationCreateEventInput {
+  allDay: Boolean!
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
 }
 
 input MutationUpdateUserInput {
