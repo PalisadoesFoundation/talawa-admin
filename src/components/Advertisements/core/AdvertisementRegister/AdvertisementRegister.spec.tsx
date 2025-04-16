@@ -430,6 +430,8 @@ describe('Testing Advertisement Register Component', () => {
     mockUseMutation.mockReturnValue([createAdMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
+    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
+    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
     const endISOReceived = '2030-01-31T18:30:00.000Z';
     const createAdvertisement = [
@@ -593,8 +595,9 @@ describe('Testing Advertisement Register Component', () => {
           organizationId: '1',
           name: 'Ad1',
           type: 'banner',
-          startAt: startISOReceived,
-          endAt: endISOReceived,
+          attachments: undefined,
+          startAt: startAtCalledWith,
+          endAt: endAtCalledWith,
         },
       });
       const creationFailedText = screen.queryByText((_, element) => {
@@ -613,6 +616,8 @@ describe('Testing Advertisement Register Component', () => {
     mockUseMutation.mockReturnValue([updateMock]);
     const startAtISO = '2024-12-31T18:30:00.000Z';
     const endAtISO = '2030-02-01T18:30:00.000Z';
+    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
+    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
     const startISOReceived = '2024-12-30T18:30:00.000Z';
     const endISOReceived = '2030-01-31T18:30:00.000Z';
     const updateAdMocks = [
@@ -834,8 +839,8 @@ describe('Testing Advertisement Register Component', () => {
         variables: {
           id: '1',
           description: 'This is an updated advertisement',
-          startAt: startISOReceived,
-          endAt: endISOReceived,
+          startAt: startAtCalledWith,
+          endAt: endAtCalledWith,
         },
       });
       const updateFailedText = screen.queryByText((_, element) => {
