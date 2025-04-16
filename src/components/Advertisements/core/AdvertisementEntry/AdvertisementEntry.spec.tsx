@@ -544,4 +544,122 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletionFailedText).toBeNull();
     });
   });
+
+  it('render Carousel correctly for active ads', async () => {
+    const { getByTestId, getAllByText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider addTypename={false}>
+                <AdvertisementEntry
+                  advertisement={{
+                    endAt: new Date('2030-01-01'),
+                    startAt: new Date(),
+                    id: '1',
+                    attachments: [
+                      {
+                        url: 'test1.jpg',
+                        mimeType: 'image/jpeg',
+                      },
+                      {
+                        url: 'test2.jpg',
+                        mimeType: 'image/jpeg',
+                      },
+                    ],
+                    name: 'Advert1',
+                    createdAt: new Date(),
+                    organization: {
+                      id: '12',
+                    },
+                    orgId: '1',
+                    type: AdvertisementType.Banner,
+                    updatedAt: new Date(),
+                  }}
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    //Testing rendering
+    expect(getByTestId('AdEntry')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+
+    const mediaElements = screen.queryAllByTestId('media');
+    expect(mediaElements).toHaveLength(2);
+    mediaElements.forEach((element, index) => {
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveAttribute('src', `test${index + 1}.jpg`);
+      expect(element).toHaveAttribute(
+        'alt',
+        `Advertisement image #${index + 1} for Advert1`,
+      );
+    });
+  });
+
+  it('render Carousel correctly for completed ads', async () => {
+    const { getByTestId, getAllByText } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider addTypename={false}>
+                <AdvertisementEntry
+                  advertisement={{
+                    endAt: new Date('2023-02-02'),
+                    startAt: new Date('2023-01-01'),
+                    id: '1',
+                    attachments: [
+                      {
+                        url: 'test1.jpg',
+                        mimeType: 'image/jpeg',
+                      },
+                      {
+                        url: 'test2.jpg',
+                        mimeType: 'image/jpeg',
+                      },
+                    ],
+                    name: 'Advert1',
+                    createdAt: new Date(),
+                    organization: {
+                      id: '12',
+                    },
+                    orgId: '1',
+                    type: AdvertisementType.Banner,
+                    updatedAt: new Date(),
+                  }}
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    //Testing rendering
+    expect(getByTestId('AdEntry')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toBeInTheDocument();
+    expect(getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(getAllByText('Advert1')[0]).toBeInTheDocument();
+
+    const mediaElements = screen.queryAllByTestId('media');
+    expect(mediaElements).toHaveLength(2);
+    mediaElements.forEach((element, index) => {
+      expect(element).toBeInTheDocument();
+      expect(element).toHaveAttribute('src', `test${index + 1}.jpg`);
+      expect(element).toHaveAttribute(
+        'alt',
+        `Advertisement image #${index + 1} for Advert1`,
+      );
+    });
+  });
 });

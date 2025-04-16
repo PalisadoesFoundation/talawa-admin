@@ -22,6 +22,7 @@ import {
   getCompletedAdvertisementMocks,
   getActiveAdvertisementMocks,
   deleteAdvertisementMocks,
+  emptyMocks,
 } from './AdvertisementsMocks';
 import i18n from '../../utils/i18nForTest';
 import {
@@ -983,5 +984,31 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(document.title).toBe(translations.title);
+  });
+
+  test('both empty advertisement array should render ad not availabe text correctly', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={emptyMocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const emptyTextElements = screen.queryAllByText(
+      'Ads not present for this campaign.',
+    );
+    expect(emptyTextElements).toHaveLength(2);
+    emptyTextElements.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
   });
 });

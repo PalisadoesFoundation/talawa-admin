@@ -52,6 +52,14 @@ const mockFile = new File(['dummy content'], 'test.jpg', {
   type: 'image/jpeg',
 });
 
+const mockBigFile = new File(
+  [new Array(10 * 1024 * 1024).fill('a').join('')],
+  'test.jpg',
+  {
+    type: 'image/jpeg',
+  },
+);
+
 const createAdFailMock: MockedResponse = {
   request: {
     query: ADD_ADVERTISEMENT_MUTATION,
@@ -851,6 +859,107 @@ describe('Testing Advertisement Register Component', () => {
       });
       expect(updateFailedText).toBeNull();
     });
+  });
+
+  it('throw error while uploading attachment of more than 5 mb', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider addTypename={false}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, mockBigFile);
+
+    expect(toastErrorSpy).toHaveBeenCalledWith('File too large: test.jpg');
+    expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
+  it('upload valid files successfully', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider addTypename={false}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, mockFile);
+
+    expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
+    vi.useRealTimers();
   });
   vi.useRealTimers();
 });

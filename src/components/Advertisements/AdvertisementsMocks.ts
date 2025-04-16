@@ -569,4 +569,28 @@ export const emptyMocks = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATION_ADVERTISEMENT_LIST,
+      variables: {
+        id: '1',
+        after: null,
+        first: 6,
+        where: { isCompleted: true },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          advertisements: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    },
+  },
 ];
