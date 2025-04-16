@@ -16,7 +16,8 @@ vi.mock('react-infinite-scroll-component', () => ({
 
 describe('TagNode Component', () => {
   const mockTag = {
-    id: '1',
+    id: 'tag-1',
+    _id: 'tag-1', // Add _id to match InterfaceTagData
     name: 'Test Tag',
     childTags: {
       edges: [],
