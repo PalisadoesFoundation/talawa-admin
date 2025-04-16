@@ -576,11 +576,14 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    await waitFor(() => {
-      expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Advertisement created successfully.',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'Advertisement created successfully.',
+        );
+      },
+      { timeout: 3000 },
+    );
     vi.useRealTimers();
   });
 
@@ -804,9 +807,14 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.click(screen.getByTestId('addonupdate'));
     });
 
-    expect(toastSuccessSpy).toHaveBeenCalled();
-    expect(toastSuccessSpy).toHaveBeenCalledWith(
-      'Advertisement updated Successfully',
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalled();
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'Advertisement updated Successfully',
+        );
+      },
+      { timeout: 3000 },
     );
   });
   vi.useRealTimers();

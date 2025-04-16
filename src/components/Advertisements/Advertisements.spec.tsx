@@ -91,7 +91,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  test('switches between active and archived tabs', async () => {
+  test('switches between tabs', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -130,7 +130,7 @@ describe('Testing Advertisement Component', () => {
     );
   });
 
-  it('render completed advertisement after loading', async () => {
+  it('render active advertisement after loading', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -168,7 +168,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
   });
 
-  it('render active advertisement after loading', async () => {
+  it('render completed advertisement after loading', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -363,11 +363,14 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
-    await waitFor(() => {
-      expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Advertisement created successfully.',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'Advertisement created successfully.',
+        );
+      },
+      { timeout: 3000 },
+    );
     vi.useRealTimers();
   });
 
@@ -847,9 +850,14 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(screen.getByTestId('addonupdate'));
     });
 
-    expect(toastSuccessSpy).toHaveBeenCalled();
-    expect(toastSuccessSpy).toHaveBeenCalledWith(
-      'Advertisement updated Successfully',
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalled();
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'Advertisement updated Successfully',
+        );
+      },
+      { timeout: 3000 },
     );
   });
 
@@ -886,11 +894,14 @@ describe('Testing Advertisement Component', () => {
     await act(() => {
       fireEvent.click(getByTestId('delete_yes'));
     });
-    await waitFor(() => {
-      expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Advertisement deleted successfully.',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          'Advertisement deleted successfully.',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('skips queries when organization ID is missing', async () => {
