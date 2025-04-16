@@ -1,11 +1,5 @@
 import React, { act } from 'react';
-import {
-  render,
-  fireEvent,
-  waitFor,
-  screen,
-  getByTestId,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import AdvertisementRegister from './AdvertisementRegister';
@@ -14,8 +8,8 @@ import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import i18n from 'utils/i18nForTest';
+import { wait } from 'components/Advertisements/AdvertisementsMocks';
 import { toast } from 'react-toastify';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
@@ -23,6 +17,8 @@ import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import i18nForTest from 'utils/i18nForTest';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -46,49 +42,6 @@ vi.mock('react-toastify', () => ({
 const mockFile = new File(['dummy content'], 'test.jpg', {
   type: 'image/jpeg',
 });
-const createAdSuccessMock: MockedResponse = {
-  request: {
-    query: ADD_ADVERTISEMENT_MUTATION,
-    variables: {
-      organizationId: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-12-31T18:30:00.000Z',
-      endAt: '2023-01-31T18:30:00.000Z',
-      description: 'advertisement',
-      attachments: [mockFile],
-    },
-  },
-  result: {
-    data: {
-      createAdvertisement: {
-        id: '0196',
-      },
-    },
-  },
-};
-
-const updateAdSuccessMock: MockedResponse = {
-  request: {
-    query: UPDATE_ADVERTISEMENT_MUTATION,
-    variables: {
-      id: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-12-31T18:30:00.000Z',
-      endAt: '2023-01-31T18:30:00.000Z',
-      description: 'advertisement',
-      attachments: [],
-    },
-  },
-  result: {
-    data: {
-      updateAdvertisement: {
-        id: '0196',
-      },
-    },
-  },
-};
 
 const createAdFailMock: MockedResponse = {
   request: {
@@ -462,5 +415,399 @@ describe('Testing Advertisement Register Component', () => {
     expect(mediaPreview).not.toBeInTheDocument();
   });
 
+  it('create advertisement', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const startAtISO = '2024-12-31T18:30:00.000Z';
+    const endAtISO = '2030-02-01T18:30:00.000Z';
+    const startISOReceived = '2024-12-30T18:30:00.000Z';
+    const endISOReceived = '2030-01-31T18:30:00.000Z';
+    const createAdvertisement = [
+      {
+        request: {
+          query: ADD_ADVERTISEMENT_MUTATION,
+          variables: {
+            organizationId: '1',
+            name: 'Ad1',
+            type: 'banner',
+            startAt: startISOReceived,
+            endAt: endISOReceived,
+          },
+        },
+        result: {
+          data: {
+            createAdvertisement: {
+              id: '123',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date().toISOString(),
+                      description:
+                        'This is a new advertisement created for testing.',
+                      endAt: endAtISO,
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Ad1',
+                      startAt: startAtISO,
+                      type: 'banner',
+                      attachments: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={createAdvertisement} addTypename={false}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: endAtISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      startAtISO.split('T')[0],
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      endAtISO.split('T')[0],
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Advertisement created successfully.',
+      );
+    });
+    vi.useRealTimers();
+  });
+
+  it('update advertisement', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const startAtISO = '2024-12-31T18:30:00.000Z';
+    const endAtISO = '2030-02-01T18:30:00.000Z';
+    const startISOReceived = '2024-12-30T18:30:00.000Z';
+    const endISOReceived = '2030-01-31T18:30:00.000Z';
+    const updateAdMocks = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date().toISOString(),
+                      description:
+                        'This is a new advertisement created for testing.',
+                      endAt: endAtISO,
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Ad1',
+                      startAt: startAtISO,
+                      type: 'banner',
+                      attachments: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: UPDATE_ADVERTISEMENT_MUTATION,
+          variables: {
+            id: '1',
+            description: 'This is an updated advertisement',
+            startAt: startISOReceived,
+            endAt: endISOReceived,
+          },
+        },
+        result: {
+          data: {
+            updateAdvertisement: {
+              id: '1',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date().toISOString(),
+                      description: 'This is an updated advertisement',
+                      endAt: endAtISO,
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Ad1',
+                      startAt: startAtISO,
+                      type: 'banner',
+                      attachments: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={updateAdMocks} addTypename={false}>
+                <AdvertisementRegister
+                  endAtEdit={new Date()}
+                  startAtEdit={new Date()}
+                  typeEdit="banner"
+                  nameEdit="Ad1"
+                  idEdit="1"
+                  advertisementMedia=""
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                  formStatus="edit"
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const descriptionField = screen.getByLabelText(
+      'Enter description of Advertisement (optional)',
+    );
+    fireEvent.change(descriptionField, {
+      target: { value: 'This is an updated advertisement' },
+    });
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: endAtISO.split('T')[0] },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('addonupdate'));
+    });
+
+    expect(toastSuccessSpy).toHaveBeenCalled();
+    expect(toastSuccessSpy).toHaveBeenCalledWith(
+      'Advertisement updated Successfully',
+    );
+  });
   vi.useRealTimers();
 });
