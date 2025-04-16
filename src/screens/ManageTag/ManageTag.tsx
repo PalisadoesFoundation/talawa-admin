@@ -98,7 +98,6 @@ function ManageTag(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const { orgId, tagId, userId: routeUserId } = useParams();
   const currentTagId = tagId ?? '';
-  console.log(currentTagId, 'currentTagId');
   const navigate = useNavigate();
   const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
     useState(false);
@@ -570,7 +569,6 @@ function ManageTag(): JSX.Element {
         t={t}
         tCommon={tCommon}
       />
-      {console.log(currentTagId, 'currentTagId')}
       {/* Assign People To Tags Modal */}
       <TagActions
         tagActionsModalIsOpen={tagActionsModalIsOpen}
