@@ -13,7 +13,6 @@ import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import 'style/app.module.css';
 import { errorMock, MOCKS1, MOCKS2 } from './SettingsMocks';
 import { urlToFile } from 'utils/urlToFile';
 
