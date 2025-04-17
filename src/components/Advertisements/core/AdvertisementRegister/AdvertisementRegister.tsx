@@ -432,83 +432,85 @@ function AdvertisementRegister({
                 className={styles.inputField}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="advertisementMedia">
-                {t('Rmedia')}
-              </Form.Label>
-              <Form.Control
-                accept="image/*, video/*"
-                data-testid="advertisementMedia"
-                name="advertisementMedia"
-                type="file"
-                id="advertisementMedia"
-                multiple={false}
-                onChange={handleFileUpload}
-                className={styles.inputField}
-              />
-              {/* Preview section */}
-              {formState.existingAttachments && (
-                <div
-                  className={styles.previewAdvertisementRegister}
-                  data-testid="mediaPreview"
-                >
-                  {formState.existingAttachments.includes('video') ? (
-                    <video
-                      muted
-                      autoPlay={false}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                      src={formState.existingAttachments}
-                    >
-                      <track
-                        kind="captions"
-                        srcLang="en"
-                        label="English captions"
-                      />
-                    </video>
-                  ) : (
-                    <img
-                      src={formState.existingAttachments}
-                      alt="Existing Attachment"
-                    />
-                  )}
-                </div>
-              )}
-              {(formState.attachments || []).map((file, index) => (
-                <div key={index}>
-                  {file.type.startsWith('video/') ? (
-                    <video
-                      data-testid="mediaPreview"
-                      controls
-                      src={encodeURI(URL.createObjectURL(file))}
-                      className={styles.previewAdvertisementRegister}
-                    >
-                      <track
-                        kind="captions"
-                        srcLang="en"
-                        label="English captions"
-                      />
-                    </video>
-                  ) : (
-                    <img
-                      data-testid="mediaPreview"
-                      src={encodeURI(URL.createObjectURL(file))}
-                      alt="Preview"
-                      className={styles.previewAdvertisementRegister}
-                    />
-                  )}
-                  <Button
-                    variant="danger"
-                    data-testid="closePreview"
-                    className={styles.removeButton}
-                    onClick={() => removeFile(index)}
+            {formStatus === 'register' && (
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="advertisementMedia">
+                  {t('Rmedia')}
+                </Form.Label>
+                <Form.Control
+                  accept="image/*, video/*"
+                  data-testid="advertisementMedia"
+                  name="advertisementMedia"
+                  type="file"
+                  id="advertisementMedia"
+                  multiple={false}
+                  onChange={handleFileUpload}
+                  className={styles.inputField}
+                />
+                {/* Preview section */}
+                {formState.existingAttachments && (
+                  <div
+                    className={styles.previewAdvertisementRegister}
+                    data-testid="mediaPreview"
                   >
-                    <FaTrashCan />
-                  </Button>
-                </div>
-              ))}
-            </Form.Group>
+                    {formState.existingAttachments.includes('video') ? (
+                      <video
+                        muted
+                        autoPlay={false}
+                        loop={true}
+                        playsInline
+                        crossOrigin="anonymous"
+                        src={formState.existingAttachments}
+                      >
+                        <track
+                          kind="captions"
+                          srcLang="en"
+                          label="English captions"
+                        />
+                      </video>
+                    ) : (
+                      <img
+                        src={formState.existingAttachments}
+                        alt="Existing Attachment"
+                      />
+                    )}
+                  </div>
+                )}
+                {(formState.attachments || []).map((file, index) => (
+                  <div key={index}>
+                    {file.type.startsWith('video/') ? (
+                      <video
+                        data-testid="mediaPreview"
+                        controls
+                        src={encodeURI(URL.createObjectURL(file))}
+                        className={styles.previewAdvertisementRegister}
+                      >
+                        <track
+                          kind="captions"
+                          srcLang="en"
+                          label="English captions"
+                        />
+                      </video>
+                    ) : (
+                      <img
+                        data-testid="mediaPreview"
+                        src={encodeURI(URL.createObjectURL(file))}
+                        alt="Preview"
+                        className={styles.previewAdvertisementRegister}
+                      />
+                    )}
+                    <Button
+                      variant="danger"
+                      data-testid="closePreview"
+                      className={styles.removeButton}
+                      onClick={() => removeFile(index)}
+                    >
+                      <FaTrashCan />
+                    </Button>
+                  </div>
+                ))}
+              </Form.Group>
+            )}
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
               <Form.Select

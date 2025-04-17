@@ -913,7 +913,6 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('upload valid files successfully', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -960,6 +959,440 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
     vi.useRealTimers();
+  });
+
+  test('Validates file types during upload', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const invalidFile = new File(['content'], 'test.pdf', {
+      type: 'image/pdf',
+    });
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    expect(mediaInput).toBeInTheDocument();
+    await userEvent.upload(mediaInput, invalidFile);
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Invalid file type: test.pdf');
+    });
+  });
+
+  test('Validates that name is required', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: '' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'Invalid arguments for this action.',
+      );
+    });
+  });
+
+  test('does not shows updating attachment option in edit mode', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                advertisementMedia="https://example.com/image.jpg"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const mediaPreview = await screen.queryByTestId('mediaPreview');
+    expect(mediaPreview).not.toBeInTheDocument();
+  });
+
+  test('Updates only end date in edit mode', async () => {
+    const updateMock = vi.fn().mockResolvedValue({
+      data: {
+        updateAdvertisement: {
+          id: '1',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([updateMock]);
+
+    const originalStartDate = new Date('2023-06-01');
+    const originalEndDate = new Date('2023-06-30');
+    const newEndDate = '2023-07-15';
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                startAtEdit={originalStartDate}
+                endAtEdit={originalEndDate}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const endDateField = screen.getByLabelText(translations.RendDate);
+    fireEvent.change(endDateField, { target: { value: newEndDate } });
+
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          endAt: '2023-07-14T18:30:00.000Z',
+          startAt: '2023-06-01T00:00:00.000Z',
+        },
+      });
+    });
+  });
+
+  test('Selects menu ad type', async () => {
+    const createMock = vi.fn().mockResolvedValue({
+      data: {
+        createAdvertisement: {
+          id: '123',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([createMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Menu Ad' },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'menu' },
+    });
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('menu');
+
+    fireEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            name: 'Menu Ad',
+            type: 'menu',
+          }),
+        }),
+      );
+    });
+  });
+
+  test('Handles error from create mutation', async () => {
+    const createError = new Error('Creation failed due to server error');
+    const createMock = vi.fn().mockRejectedValue(createError);
+    mockUseMutation.mockReturnValue([createMock]);
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'New Ad' },
+    });
+
+    fireEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        "An error occurred. Couldn't create advertisement",
+      );
+    });
+  });
+
+  test('Handles error from update mutation', async () => {
+    const updateError = new Error('Update failed due to server error');
+    const updateMock = vi.fn().mockRejectedValue(updateError);
+    mockUseMutation.mockReturnValue([updateMock]);
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const nameField = screen.getByLabelText(translations.Rname);
+    fireEvent.change(nameField, { target: { value: 'Updated Ad' } });
+
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalled();
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'Update failed due to server error',
+      );
+    });
+  });
+
+  test('Updates only start date in edit mode', async () => {
+    const updateMock = vi.fn().mockResolvedValue({
+      data: {
+        updateAdvertisement: {
+          id: '1',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([updateMock]);
+
+    const originalStartDate = new Date('2023-06-01');
+    const originalEndDate = new Date('2023-06-30');
+    const newStartDate = '2023-06-15';
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                startAtEdit={originalStartDate}
+                endAtEdit={originalEndDate}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    // Only update the start date
+    const startDateField = screen.getByLabelText(translations.RstartDate);
+    fireEvent.change(startDateField, { target: { value: newStartDate } });
+
+    // Submit the update
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          startAt: '2023-06-14T18:30:00.000Z',
+          endAt: '2023-06-30T00:00:00.000Z',
+        },
+      });
+      const callVariables = updateMock.mock.calls[0][0].variables;
+      expect(callVariables).toHaveProperty('startAt');
+    });
+  });
+
+  test('Updates advertisement name in edit mode', async () => {
+    const updateMock = vi.fn().mockResolvedValue({
+      data: {
+        updateAdvertisement: {
+          id: '1',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([updateMock]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                endAtEdit={new Date()}
+                startAtEdit={new Date()}
+                typeEdit="banner"
+                nameEdit="Original Name"
+                idEdit="1"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    // Change the name
+    const nameField = screen.getByLabelText(translations.Rname);
+    fireEvent.change(nameField, { target: { value: 'Updated Name' } });
+    expect(nameField).toHaveValue('Updated Name');
+
+    // Submit the update
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            id: '1',
+            name: 'Updated Name',
+          }),
+        }),
+      );
+    });
+  });
+
+  test('Handles multiple file uploads with video files', async () => {
+    const mockVideoFile = new File(['video content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+
+    await userEvent.upload(mediaInput, mockFile);
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+
+    await userEvent.upload(mediaInput, mockVideoFile);
+
+    const previews = screen.getAllByTestId('mediaPreview');
+    expect(previews.length).toBe(2);
   });
   vi.useRealTimers();
 });
