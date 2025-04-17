@@ -140,7 +140,10 @@ export const handleCreateDirectChat = async (
           isGroup: false,
         },
       });
-      // await chatsListRefetch(); ---> This query is to be fixed
+      await chatsListRefetch();
+      {
+        /*To be fixed*/
+      }
       toggleCreateDirectChatModal();
     } catch (error) {
       errorHandler(t, error);
