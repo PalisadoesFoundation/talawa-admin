@@ -39,7 +39,7 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,

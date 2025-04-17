@@ -11,7 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 import {
   MOCKS,

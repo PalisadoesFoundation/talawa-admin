@@ -9,7 +9,6 @@ import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
-import 'style/app.module.css';
 const { setItem } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {

@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 

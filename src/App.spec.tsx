@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import 'style/app.module.css';
+import 'style/app-fixed.module.css';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),

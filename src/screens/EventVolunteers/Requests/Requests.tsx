@@ -49,7 +49,7 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';

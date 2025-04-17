@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import 'style/app.module.css';
+import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
 const { setItem } = useLocalStorage();
 

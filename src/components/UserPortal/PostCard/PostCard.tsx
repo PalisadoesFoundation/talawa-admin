@@ -61,7 +61,7 @@ import {
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {

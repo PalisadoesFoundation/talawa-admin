@@ -17,7 +17,7 @@
  * @requires react-router-dom - For accessing route parameters
  * @requires utils/errorHandler - For handling errors
  * @requires GraphQl/Mutations/mutations - Contains the ADD_ADMIN_MUTATION
- * @requires style/app.module.css - For styling the button
+ * @requires style/app-fixed.module.css - For styling the button
  *
  * @param {InterfaceUserListCardProps} props - The props for the component
  * @param {number} props.key - Unique key for the component
