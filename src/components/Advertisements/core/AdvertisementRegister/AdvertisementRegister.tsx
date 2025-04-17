@@ -169,7 +169,6 @@ function AdvertisementRegister({
     } catch (e) {
       toast.error('Error during File Upload');
     }
-    URL.revokeObjectURL(e.target.value); // clean up the URL object to prevent memoryleak
   };
 
   // Handle file removal
