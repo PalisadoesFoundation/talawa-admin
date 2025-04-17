@@ -33,13 +33,13 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from 'style/app-fixed.module.css';
+import styles from './Chat.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
   UNREAD_CHAT_LIST,
 } from 'GraphQl/Queries/PlugInQueries';
-import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
+import CreateGroupChat from 'components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/Chat/type';
@@ -55,7 +55,9 @@ interface InterfaceContactCardProps {
 }
 
 export default function chat(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [chats, setChats] = useState<GroupChat[]>([]);
@@ -63,6 +65,25 @@ export default function chat(): JSX.Element {
   const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+
+  React.useEffect(() => {
+    if (filterType === 'all') {
+      chatsListRefetch();
+      if (chatsListData && chatsListData.chatsByUserId) {
+        setChats(chatsListData.chatsByUserId);
+      }
+    } else if (filterType === 'unread') {
+      unreadChatListRefetch();
+      if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
+        setChats(unreadChatListData.getUnreadChatsByUserId);
+      }
+    } else if (filterType === 'group') {
+      groupChatListRefetch();
+      if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
+        setChats(groupChatListData.getGroupChatsByUserId);
+      }
+    }
+  }, [filterType]);
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -89,7 +110,11 @@ export default function chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, { variables: { id: userId } });
+  } = useQuery(CHATS_LIST, {
+    variables: {
+      id: userId,
+    },
+  });
 
   const { data: groupChatListData, refetch: groupChatListRefetch } =
     useQuery(GROUP_CHAT_LIST);
@@ -98,7 +123,10 @@ export default function chat(): JSX.Element {
     useQuery(UNREAD_CHAT_LIST);
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-    variables: { chatId: selectedContact, userId: userId },
+    variables: {
+      chatId: selectedContact,
+      userId: userId,
+    },
   });
 
   useEffect(() => {
@@ -106,28 +134,6 @@ export default function chat(): JSX.Element {
       chatsListRefetch({ id: userId });
     });
   }, [selectedContact]);
-
-  React.useEffect(() => {
-    async function getChats(): Promise<void> {
-      if (filterType === 'all') {
-        await chatsListRefetch();
-        if (chatsListData && chatsListData.chatsByUserId) {
-          setChats(chatsListData.chatsByUserId);
-        }
-      } else if (filterType === 'unread') {
-        await unreadChatListRefetch();
-        if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
-          setChats(unreadChatListData.getUnreadChatsByUserId);
-        }
-      } else if (filterType === 'group') {
-        await groupChatListRefetch();
-        if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
-          setChats(groupChatListData.getGroupChatsByUserId);
-        }
-      }
-    }
-    getChats();
-  }, [filterType]);
 
   React.useEffect(() => {
     if (chatsListData && chatsListData?.chatsByUserId.length) {

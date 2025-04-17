@@ -47,7 +47,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from 'style/app.module.css';
+import styles from './CreateGroupChat.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -77,24 +77,17 @@ interface InterfaceCreateGroupChatProps {
 }
 
 /**
- * Styled table container with custom styles.
- */
-
-const StyledTableContainer = styled(TableContainer)<{
-  component?: React.ElementType;
-}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
-
-/**
  * Styled table cell with custom styles.
  */
 
-const StyledTableCell = styled(TableCell)(() => ({
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg)',
-    color: 'var(--table-header-color)',
-    fontSize: 'var(--font-size-header)',
+    backgroundColor: ['#31bb6b', '!important'],
+    color: theme.palette.common.white,
   },
-  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
 }));
 
 /**
@@ -102,7 +95,9 @@ const StyledTableCell = styled(TableCell)(() => ({
  */
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
 }));
 
 const { getItem } = useLocalStorage();
@@ -166,7 +161,10 @@ export default function CreateGroupChat({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+    },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -176,7 +174,10 @@ export default function CreateGroupChat({
       firstName_contains: firstName || '',
       lastName_contains: lastName || '',
     };
-    allUsersRefetch({ ...newFilterData });
+
+    allUsersRefetch({
+      ...newFilterData,
+    });
   };
 
   const handleImageClick = (): void => {
@@ -295,7 +296,7 @@ export default function CreateGroupChat({
                     data-testid="searchUser"
                     placeholder="searchFullName"
                     autoComplete="off"
-                    className={styles.inputField}
+                    className={styles.inputFieldModal}
                     value={userName}
                     onChange={(e): void => {
                       const { value } = e.target;
@@ -305,14 +306,14 @@ export default function CreateGroupChat({
                   <Button
                     type="submit"
                     data-testid="submitBtn"
-                    className={styles.searchButton}
+                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
                   >
                     <Search />
                   </Button>
                 </Form>
               </div>
 
-              <StyledTableContainer component={Paper}>
+              <TableContainer className={styles.userData} component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -359,7 +360,6 @@ export default function CreateGroupChat({
                                 </Button>
                               ) : (
                                 <Button
-                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
                                   onClick={() => {
                                     setUserIds([
                                       ...userIds,
@@ -377,7 +377,7 @@ export default function CreateGroupChat({
                       )}
                   </TableBody>
                 </Table>
-              </StyledTableContainer>
+              </TableContainer>
             </>
           )}
           <Button

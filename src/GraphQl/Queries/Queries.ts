@@ -921,74 +921,8 @@ export const USERS_CONNECTION_LIST = gql`
       user {
         firstName
         lastName
-        image
         _id
         email
-        createdAt
-        organizationsBlockedBy {
-          _id
-          name
-          image
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          createdAt
-          creator {
-            _id
-            firstName
-            lastName
-            image
-            email
-            createdAt
-          }
-        }
-        joinedOrganizations {
-          _id
-          name
-          image
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          createdAt
-          creator {
-            _id
-            firstName
-            lastName
-            image
-            email
-            createdAt
-          }
-        }
-      }
-      appUserProfile {
-        _id
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
-        }
       }
     }
   }

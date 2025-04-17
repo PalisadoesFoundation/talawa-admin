@@ -55,7 +55,7 @@ import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from 'style/app.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
@@ -148,9 +148,10 @@ export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
   chatsListRefetch,
-  chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
@@ -159,16 +160,33 @@ export default function createDirectChatModal({
 
   const [createChat] = useMutation(CREATE_CHAT);
 
+  const handleCreateDirectChat = async (id: string): Promise<void> => {
+    await createChat({
+      variables: {
+        organizationId,
+        userIds: [userId, id],
+        isGroup: false,
+      },
+    });
+
+    await chatsListRefetch();
+    toggleCreateDirectChatModal();
+  };
+
   const {
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+    },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
+    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
 
     const newFilterData = {
@@ -176,7 +194,9 @@ export default function createDirectChatModal({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({ ...newFilterData });
+    allUsersRefetch({
+      ...newFilterData,
+    });
   };
 
   return (
@@ -258,16 +278,7 @@ export default function createDirectChatModal({
                             <StyledTableCell align="center">
                               <Button
                                 onClick={() => {
-                                  handleCreateDirectChat(
-                                    userDetails.user._id,
-                                    chats,
-                                    t,
-                                    createChat,
-                                    organizationId,
-                                    userId,
-                                    chatsListRefetch,
-                                    toggleCreateDirectChatModal,
-                                  );
+                                  handleCreateDirectChat(userDetails.user._id);
                                 }}
                                 data-testid="addBtn"
                               >
