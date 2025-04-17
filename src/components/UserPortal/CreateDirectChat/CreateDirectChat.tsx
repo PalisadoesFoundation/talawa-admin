@@ -134,7 +134,11 @@ export const handleCreateDirectChat = async (
   } else {
     try {
       await createChat({
-        variables: { organizationId, userIds: [userId, id], isGroup: false },
+        variables: {
+          organizationId,
+          userIds: [userId, id],
+          isGroup: false,
+        },
       });
       await chatsListRefetch();
       toggleCreateDirectChatModal();
@@ -159,19 +163,6 @@ export default function createDirectChatModal({
   const [userName, setUserName] = useState('');
 
   const [createChat] = useMutation(CREATE_CHAT);
-
-  const handleCreateDirectChat = async (id: string): Promise<void> => {
-    await createChat({
-      variables: {
-        organizationId,
-        userIds: [userId, id],
-        isGroup: false,
-      },
-    });
-
-    await chatsListRefetch();
-    toggleCreateDirectChatModal();
-  };
 
   const {
     data: allUsersData,
@@ -277,7 +268,16 @@ export default function createDirectChatModal({
                             <StyledTableCell align="center">
                               <Button
                                 onClick={() => {
-                                  handleCreateDirectChat(userDetails.user._id);
+                                  handleCreateDirectChat(
+                                    userDetails.user._id,
+                                    [],
+                                    t,
+                                    createChat,
+                                    organizationId,
+                                    userId,
+                                    chatsListRefetch,
+                                    toggleCreateDirectChatModal,
+                                  );
                                 }}
                                 data-testid="addBtn"
                               >

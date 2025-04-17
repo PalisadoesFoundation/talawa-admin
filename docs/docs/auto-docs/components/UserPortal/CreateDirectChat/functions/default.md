@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L147)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L151)
 
 ## Parameters
 
