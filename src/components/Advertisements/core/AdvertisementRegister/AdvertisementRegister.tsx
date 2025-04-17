@@ -169,6 +169,7 @@ function AdvertisementRegister({
     } catch (e) {
       toast.error('Error during File Upload');
     }
+    URL.revokeObjectURL(e.target.value); // clean up the URL object to prevent memoryleak
   };
 
   // Handle file removal
@@ -298,12 +299,6 @@ function AdvertisementRegister({
       // Only include the fields which are updated
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
-      }
-      if (
-        !updatedFields.attachments ||
-        formState.attachments !== updatedFields.attachments
-      ) {
-        updatedFields.attachments = formState.attachments;
       }
       if (formState.type !== typeEdit) {
         updatedFields.type = formState.type;
@@ -443,7 +438,7 @@ function AdvertisementRegister({
                   name="advertisementMedia"
                   type="file"
                   id="advertisementMedia"
-                  multiple={false}
+                  multiple={true}
                   onChange={handleFileUpload}
                   className={styles.inputField}
                 />

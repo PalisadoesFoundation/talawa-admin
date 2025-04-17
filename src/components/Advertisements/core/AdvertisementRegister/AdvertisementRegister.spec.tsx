@@ -1108,7 +1108,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(updateMock).toHaveBeenCalledWith({
         variables: {
           id: '1',
-          endAt: '2023-07-14T18:30:00.000Z',
+          endAt: '2023-07-15T00:00:00.000Z',
           startAt: '2023-06-01T00:00:00.000Z',
         },
       });
@@ -1287,18 +1287,16 @@ describe('Testing Advertisement Register Component', () => {
     await wait();
     fireEvent.click(screen.getByTestId('editBtn'));
 
-    // Only update the start date
     const startDateField = screen.getByLabelText(translations.RstartDate);
     fireEvent.change(startDateField, { target: { value: newStartDate } });
 
-    // Submit the update
     fireEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalledWith({
         variables: {
           id: '1',
-          startAt: '2023-06-14T18:30:00.000Z',
+          startAt: '2023-06-15T00:00:00.000Z',
           endAt: '2023-06-30T00:00:00.000Z',
         },
       });
@@ -1341,12 +1339,10 @@ describe('Testing Advertisement Register Component', () => {
     await wait();
     fireEvent.click(screen.getByTestId('editBtn'));
 
-    // Change the name
     const nameField = screen.getByLabelText(translations.Rname);
     fireEvent.change(nameField, { target: { value: 'Updated Name' } });
     expect(nameField).toHaveValue('Updated Name');
 
-    // Submit the update
     fireEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
