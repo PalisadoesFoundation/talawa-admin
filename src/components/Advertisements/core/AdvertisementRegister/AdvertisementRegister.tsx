@@ -201,10 +201,8 @@ function AdvertisementRegister({
     endAtEdit,
     currentOrg,
   ]);
-  /**
-   * Handles advertisement registration.
-   * Validates the date range and performs the mutation to create an advertisement.
-   */
+
+  // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
     if (currentOrg === undefined) {
       return;
@@ -248,7 +246,7 @@ function AdvertisementRegister({
         };
       }
 
-      const { data, errors } = await createAdvertisement({
+      const { data } = await createAdvertisement({
         variables,
       });
       if (data) {
@@ -267,11 +265,6 @@ function AdvertisementRegister({
         setAfterActive(null);
         setAfterCompleted(null);
       }
-      if (errors) {
-        errors.forEach((error) => {
-          toast.error(error.message);
-        });
-      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(
@@ -283,10 +276,7 @@ function AdvertisementRegister({
     }
   };
 
-  /**
-   * Handles advertisement update.
-   * Validates the date range and performs the mutation to update the advertisement.
-   */
+  // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
     if (currentOrg === undefined) {
       return;

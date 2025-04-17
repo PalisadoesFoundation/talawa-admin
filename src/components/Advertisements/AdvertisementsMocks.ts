@@ -88,7 +88,7 @@ export const getCompletedAdvertisementMocks = [
                 node: {
                   id: '1',
                   createdAt: new Date('2025-02-02').toISOString(),
-                  description: 'this is an active advertisement',
+                  description: 'this is a completed advertisement',
                   endAt: new Date().toISOString(),
                   organization: {
                     id: '1',
@@ -167,7 +167,7 @@ export const getActiveAdvertisementMocks = [
                 node: {
                   id: '2',
                   createdAt: new Date('2025-02-02').toISOString(),
-                  description: 'this is a completed advertisement',
+                  description: 'this is an active advertisement',
                   endAt: new Date('2030-01-01').toISOString(),
                   organization: {
                     id: '1',
@@ -203,7 +203,7 @@ export const getActiveAdvertisementMocks = [
         first: 6,
         after: null,
         where: {
-          isCompleted: false,
+          isCompleted: true,
         },
       },
     },

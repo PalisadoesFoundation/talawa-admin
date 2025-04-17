@@ -224,7 +224,31 @@ export default function Advertisements(): JSX.Element {
           <Col className={styles.colAdvertisements}>
             <SearchBar
               placeholder={'Search..'}
-              onSearch={(value) => console.log(value)} // Replace with actual search handler
+              onSearch={(value) => {
+                const searchValue = value.toLowerCase();
+                const filteredActiveAds =
+                  orgActiveAdvertisementListData?.organization?.advertisements?.edges
+                    ?.map((edge: { node: Advertisement }) => edge.node)
+                    .filter(
+                      (ad: Advertisement) =>
+                        ad.name.toLowerCase().includes(searchValue) ||
+                        (ad.description ?? '')
+                          .toLowerCase()
+                          .includes(searchValue),
+                    ) || [];
+                const filteredCompletedAds =
+                  orgCompletedAdvertisementListData?.organization?.advertisements?.edges
+                    ?.map((edge: { node: Advertisement }) => edge.node)
+                    .filter(
+                      (ad: Advertisement) =>
+                        ad.name.toLowerCase().includes(searchValue) ||
+                        (ad.description ?? '')
+                          .toLowerCase()
+                          .includes(searchValue),
+                    ) || [];
+                setActiveAdvertisements(filteredActiveAds);
+                setCompletedAdvertisements(filteredCompletedAds);
+              }}
               inputTestId="searchname"
               buttonTestId="searchButton"
             />
