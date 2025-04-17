@@ -69,17 +69,17 @@ export default function chat(): JSX.Element {
   React.useEffect(() => {
     if (filterType === 'all') {
       chatsListRefetch();
-      if (chatsListData && chatsListData.chatsByUserId) {
+      if (chatsListData?.chatsByUserId) {
         setChats(chatsListData.chatsByUserId);
       }
     } else if (filterType === 'unread') {
       unreadChatListRefetch();
-      if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
+      if (unreadChatListData?.getUnreadChatsByUserId) {
         setChats(unreadChatListData.getUnreadChatsByUserId);
       }
     } else if (filterType === 'group') {
       groupChatListRefetch();
-      if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
+      if (groupChatListData?.getGroupChatsByUserId) {
         setChats(groupChatListData.getGroupChatsByUserId);
       }
     }
