@@ -27,7 +27,7 @@
  * - Ensure that the `InterfaceDonationCardProps` type is correctly defined in the `types/Donation/interface` module.
  */
 import React from 'react';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { type InterfaceDonationCardProps } from 'types/Donation/interface';
 import { Button } from 'react-bootstrap';
 

@@ -49,7 +49,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfo_PG,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';

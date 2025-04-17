@@ -32,7 +32,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
-import 'style/app.module.css';
+import 'style/app-fixed.module.css';
 const theme = createTheme({
   palette: {
     primary: {
