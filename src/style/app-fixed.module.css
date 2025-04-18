@@ -36,8 +36,7 @@
  */
 
 :root {
-
-	--primary-theme-color: #1778f2;
+  --primary-theme-color: #1778f2;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -834,11 +833,10 @@
 
   --rowBackgroundOrganizationFundCampaign-bg: #fff;
 
-	--createorgdropdown-button-bg:#eaebef;
+  --createorgdropdown-button-bg: #eaebef;
 
-	--dropdown-border:#555555;
-	--dropdown-bg:#fcfcfc;
-
+  --dropdown-border: #555555;
+  --dropdown-bg: #fcfcfc;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1333,7 +1331,7 @@ form label,
 }
 
 .createorgdropdown {
-  background-color: var(--createorgdropdown-button-bg)!important;
+  background-color: var(--createorgdropdown-button-bg) !important;
   border: 1px solid var(--dropdown-border) !important;
   height: 3rem;
   margin-top: 0.7rem;
@@ -1418,7 +1416,7 @@ form label,
   flex: 1;
   position: relative;
   margin-right: 8px;
-	margin-left: 8px;
+  margin-left: 8px;
   background-color: '#F2F7FF';
   background-color: 'red';
   margin-right: 180px;
@@ -1818,7 +1816,7 @@ form label,
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
   position: relative;
-	margin-right:2rem;
+  margin-right: 2rem;
 }
 
 .orgCard .innerContainer .orgImgContainer {
