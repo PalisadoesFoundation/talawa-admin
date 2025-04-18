@@ -23,8 +23,6 @@ import {
   getActiveAdvertisementMocks,
   deleteAdvertisementMocks,
   emptyMocks,
-  filterCompletedAdvertisementData,
-  filterActiveAdvertisementData,
 } from './AdvertisementsMocks';
 import i18n from '../../utils/i18nForTest';
 import {
@@ -309,7 +307,186 @@ describe('Testing Advertisement Component', () => {
     );
   });
 
-  it('filter completed advertisement by name', async () => {
+  it('filter active advertisement by name', async () => {
+    const filterActiveAdvertisementData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 1',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 2',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 3',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 4',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 5',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 6',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -347,7 +524,186 @@ describe('Testing Advertisement Component', () => {
     expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
   });
 
-  it('filter completed advertisement by description', async () => {
+  it('filter active advertisement by description', async () => {
+    const filterActiveAdvertisementData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 1',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 2',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 3',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 4',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 5',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement 6',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -386,6 +742,185 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('filter completed advertisement by name', async () => {
+    const filterCompletedAdvertisementData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 1',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 2',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 3',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 4',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 5',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 6',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -424,6 +959,185 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('filter completed advertisement by description', async () => {
+    const filterCompletedAdvertisementData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 1',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 2',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 3',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 4',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 5',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is a completed advertisement 6',
+                      endAt: new Date().toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
