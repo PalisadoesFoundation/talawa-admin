@@ -543,7 +543,7 @@ jobs:
       - name: Run docstring compliance check
         run: |
           source venv/bin/activate
-          python .github/workflows/scripts/check_docstrings.py --directories .github     
+          python .github/workflows/scripts/check_docstrings.py --directories .github   
   Check-Dependencies:
     name: Check Dependencies
     runs-on: ubuntu-latest
@@ -557,8 +557,13 @@ jobs:
         with:
           node-version: '22.x'
 
+      - name: Cache npm modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Check for Unused and Missing Dependencies
         run: npm run check-dependencies
