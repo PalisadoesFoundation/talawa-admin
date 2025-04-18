@@ -837,6 +837,8 @@
 
   --dropdown-border: #555555;
   --dropdown-bg: #fcfcfc;
+
+  --input-bg: #f2f7ff;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1416,8 +1418,7 @@ form label,
   flex: 1;
   position: relative;
   margin-left: 8px;
-  background-color: '#F2F7FF';
-  background-color: 'red';
+  background-color: var(--input-bg);
   margin-right: 180px;
   width: 425px;
 }
