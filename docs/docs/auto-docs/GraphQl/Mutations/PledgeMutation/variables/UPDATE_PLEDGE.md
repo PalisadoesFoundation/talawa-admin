@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_PLEDGE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L48)
+Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L49)
 
 GraphQL mutation to update a pledge.
 
@@ -18,18 +18,6 @@ The ID of the pledge being updated.
 
 The amount of the pledge.
 
-## Param
-
-The currency of the pledge.
-
-## Param
-
-The start date of the pledge.
-
-## Param
-
-The end date of the pledge.
-
 ## Returns
 
-The ID of the updated pledge.
+The details of the updated pledge.
