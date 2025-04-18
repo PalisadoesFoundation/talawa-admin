@@ -837,6 +837,7 @@
 
   --dropdown-border: #555555;
   --dropdown-bg: #fcfcfc;
+  --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
 }
@@ -1324,7 +1325,7 @@ form label,
   ) {
   box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
-  color: var(--dropdown-font) !important;
+  color: var(--dropdown-font-color) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
