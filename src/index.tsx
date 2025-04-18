@@ -46,17 +46,17 @@ import useLocalStorage from 'utils/useLocalstorage';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 
-const { getItem } = useLocalStorage();
-const authLink = setContext((_, { headers }) => {
-  const lng = i18n.language;
-  return {
-    headers: {
-      ...headers,
-      authorization: 'Bearer ' + getItem('token') || '',
-      'Accept-Language': lng,
-    },
-  };
-});
+	const { getItem } = useLocalStorage();
+	const authLink = setContext((_, { headers }) => {
+		const lng = i18n.language;
+		return {
+			headers: {
+				...headers,
+				authorization: `Bearer ${getItem('token')}` || '',
+				'Accept-Language': lng,
+			},
+		};
+	});
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
