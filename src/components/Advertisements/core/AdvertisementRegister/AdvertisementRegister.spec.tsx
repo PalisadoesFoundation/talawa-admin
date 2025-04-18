@@ -449,6 +449,7 @@ describe('Testing Advertisement Register Component', () => {
           variables: {
             organizationId: '1',
             name: 'Ad1',
+            description: 'this is a banner',
             type: 'banner',
             startAt: startISOReceived,
             endAt: endISOReceived,
@@ -575,6 +576,10 @@ describe('Testing Advertisement Register Component', () => {
         target: { value: 'banner' },
       });
 
+      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
+        target: { value: 'this is a banner' },
+      });
+
       fireEvent.change(screen.getByLabelText(translations.RstartDate), {
         target: { value: startAtISO.split('T')[0] },
       });
@@ -603,6 +608,7 @@ describe('Testing Advertisement Register Component', () => {
           organizationId: '1',
           name: 'Ad1',
           type: 'banner',
+          description: 'this is a banner',
           attachments: undefined,
           startAt: startAtCalledWith,
           endAt: endAtCalledWith,
@@ -844,6 +850,247 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          description: 'This is an updated advertisement',
+          startAt: startAtCalledWith,
+          endAt: endAtCalledWith,
+        },
+      });
+      const updateFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Update Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(updateFailedText).toBeNull();
+    });
+  });
+
+  it('update advertisement with undefined orgId should early return', async () => {
+    const updateMock = vi.fn();
+    mockUseMutation.mockReturnValue([updateMock]);
+    const startAtISO = '2024-12-31T18:30:00.000Z';
+    const endAtISO = '2030-02-01T18:30:00.000Z';
+    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
+    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
+    const startISOReceived = '2024-12-30T18:30:00.000Z';
+    const endISOReceived = '2030-01-31T18:30:00.000Z';
+    const updateAdMocks = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date().toISOString(),
+                      description:
+                        'This is a new advertisement created for testing.',
+                      endAt: endAtISO,
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Ad1',
+                      startAt: startAtISO,
+                      type: 'banner',
+                      attachments: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: UPDATE_ADVERTISEMENT_MUTATION,
+          variables: {
+            id: '1',
+            description: 'This is an updated advertisement',
+            startAt: startISOReceived,
+            endAt: endISOReceived,
+          },
+        },
+        result: {
+          data: {
+            updateAdvertisement: {
+              id: '1',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date().toISOString(),
+                      description: 'This is an updated advertisement',
+                      endAt: endAtISO,
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Ad1',
+                      startAt: startAtISO,
+                      type: 'banner',
+                      attachments: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={updateAdMocks} addTypename={false}>
+                <AdvertisementRegister
+                  endAtEdit={new Date()}
+                  startAtEdit={new Date()}
+                  typeEdit="banner"
+                  nameEdit="Ad1"
+                  advertisementMedia=""
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                  formStatus="edit"
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const descriptionField = screen.getByLabelText(
+      'Enter description of Advertisement (optional)',
+    );
+    fireEvent.change(descriptionField, {
+      target: { value: 'This is an updated advertisement' },
+    });
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: endAtISO.split('T')[0] },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('addonupdate'));
+    });
+
+    await waitFor(() => {
+      expect(updateMock).not.toHaveBeenCalledWith({
         variables: {
           id: '1',
           description: 'This is an updated advertisement',

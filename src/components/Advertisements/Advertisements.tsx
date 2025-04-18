@@ -152,21 +152,6 @@ export default function Advertisements(): JSX.Element {
 
     if (newAfter) {
       setAfterCompleted(newAfter);
-
-      // Refetch completed advertisements
-      try {
-        await completedRefetch({
-          id: currentOrgId,
-          after: newAfter,
-          first: 6,
-          where: {
-            isCompleted: true,
-          },
-        });
-      } catch (error) {
-        toast.error('Error fetching more completed advertisements');
-        console.error('Error fetching more completed advertisements:', error);
-      }
     }
   }
 
@@ -180,21 +165,6 @@ export default function Advertisements(): JSX.Element {
 
     if (newAfter) {
       setAfterActive(newAfter);
-
-      // Refetch active advertisements
-      try {
-        await activeRefetch({
-          id: currentOrgId,
-          after: newAfter,
-          first: 6,
-          where: {
-            isCompleted: false,
-          },
-        });
-      } catch (error) {
-        toast.error('Error fetching more active advertisements');
-        console.error('Error fetching more active advertisements:', error);
-      }
     }
   }
 
@@ -227,25 +197,21 @@ export default function Advertisements(): JSX.Element {
               onSearch={(value) => {
                 const searchValue = value.toLowerCase();
                 const filteredActiveAds =
-                  orgActiveAdvertisementListData?.organization?.advertisements?.edges
-                    ?.map((edge: { node: Advertisement }) => edge.node)
-                    .filter(
-                      (ad: Advertisement) =>
-                        ad.name.toLowerCase().includes(searchValue) ||
-                        (ad.description ?? '')
-                          .toLowerCase()
-                          .includes(searchValue),
-                    ) || [];
+                  activeAdvertisements.filter(
+                    (ad: Advertisement) =>
+                      ad.name.toLowerCase().includes(searchValue) ||
+                      (ad.description ?? '')
+                        .toLowerCase()
+                        .includes(searchValue),
+                  ) || [];
                 const filteredCompletedAds =
-                  orgCompletedAdvertisementListData?.organization?.advertisements?.edges
-                    ?.map((edge: { node: Advertisement }) => edge.node)
-                    .filter(
-                      (ad: Advertisement) =>
-                        ad.name.toLowerCase().includes(searchValue) ||
-                        (ad.description ?? '')
-                          .toLowerCase()
-                          .includes(searchValue),
-                    ) || [];
+                  completedAdvertisements.filter(
+                    (ad: Advertisement) =>
+                      ad.name.toLowerCase().includes(searchValue) ||
+                      (ad.description ?? '')
+                        .toLowerCase()
+                        .includes(searchValue),
+                  ) || [];
                 setActiveAdvertisements(filteredActiveAds);
                 setCompletedAdvertisements(filteredCompletedAds);
               }}

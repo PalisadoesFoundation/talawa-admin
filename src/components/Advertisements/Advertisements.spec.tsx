@@ -23,6 +23,8 @@ import {
   getActiveAdvertisementMocks,
   deleteAdvertisementMocks,
   emptyMocks,
+  filterCompletedAdvertisementData,
+  filterActiveAdvertisementData,
 } from './AdvertisementsMocks';
 import i18n from '../../utils/i18nForTest';
 import {
@@ -279,7 +281,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
   });
 
-  it('filter completed advertisement by name', async () => {
+  it('search button renders correctly with placeholder', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -287,6 +289,34 @@ describe('Testing Advertisement Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider
                 mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    expect(screen.getByTestId('searchname')).toHaveAttribute(
+      'placeholder',
+      'Search..',
+    );
+  });
+
+  it('filter completed advertisement by name', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterActiveAdvertisementData}
                 addTypename={false}
               >
                 <Advertisement />
@@ -304,10 +334,17 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
     fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'Cookie' },
+      target: { value: 'Cookie shop 6' },
     });
     fireEvent.click(screen.getByTestId('searchButton'));
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
   });
 
   it('filter completed advertisement by description', async () => {
@@ -317,7 +354,7 @@ describe('Testing Advertisement Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider
-                mocks={getCompletedAdvertisementMocks}
+                mocks={filterActiveAdvertisementData}
                 addTypename={false}
               >
                 <Advertisement />
@@ -334,13 +371,94 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
-    await act(() => {
-      fireEvent.change(screen.getByTestId('searchname'), {
-        target: { value: 'this is a completed advertisement' },
-      });
-      fireEvent.click(screen.getByTestId('searchButton'));
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'this is an active advertisement 6' },
     });
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('filter completed advertisement by name', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'Cookie shop 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('filter completed advertisement by description', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'this is a completed advertisement 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
   });
 
   it('search for not existing advertisement', async () => {
