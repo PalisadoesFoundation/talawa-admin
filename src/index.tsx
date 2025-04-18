@@ -52,7 +52,7 @@
 		return {
 			headers: {
 				...headers,
-				authorization: 'Bearer ' + getItem('token') || '',
+				authorization: `Bearer ${getItem('token')}` || '',
 				'Accept-Language': lng,
 			},
 		};
