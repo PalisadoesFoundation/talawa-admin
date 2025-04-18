@@ -48,7 +48,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';

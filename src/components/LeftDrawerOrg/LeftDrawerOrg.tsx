@@ -41,7 +41,7 @@ import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropd
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';

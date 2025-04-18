@@ -33,8 +33,8 @@ vi.mock('react-toastify', () => ({
 }));
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', () => {
-  const actual = vi.importActual('react-router-dom');
+vi.mock('react-router', () => {
+  const actual = vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: () => mockNavigate,

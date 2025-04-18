@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import { vi } from 'vitest';
 import Calendar from './YearlyEventCalender';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 enum Role {
   USER = 'USER',

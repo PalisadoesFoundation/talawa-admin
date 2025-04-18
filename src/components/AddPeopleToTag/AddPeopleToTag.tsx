@@ -45,7 +45,7 @@ import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
 import { toast } from 'react-toastify';

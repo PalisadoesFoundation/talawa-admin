@@ -38,7 +38,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const SignOut = (): JSX.Element => {
   const { endSession } = useSession();

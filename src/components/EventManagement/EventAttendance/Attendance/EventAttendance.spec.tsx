@@ -9,7 +9,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
@@ -49,8 +49,8 @@ const renderEventAttendance = (): RenderResult => {
 
 describe('Event Attendance Component', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
     }));
   });
 
@@ -170,8 +170,8 @@ describe('EventAttendance CSS Tests', () => {
   };
 
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
     }));
   });
 

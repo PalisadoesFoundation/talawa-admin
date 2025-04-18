@@ -66,7 +66,7 @@ import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 

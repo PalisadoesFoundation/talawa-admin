@@ -15,7 +15,7 @@ import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
@@ -28,8 +28,8 @@ const { setItem } = useLocalStorage();
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({ orgId: mockID }),

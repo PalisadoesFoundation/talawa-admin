@@ -13,7 +13,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -109,8 +109,8 @@ describe('Testing User Campaigns Screen', () => {
     /**
      * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
      */
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: vi.fn(() => ({ orgId: 'orgId' })), // Mock `useParams`
@@ -153,7 +153,7 @@ describe('Testing User Campaigns Screen', () => {
    * Ensures the app redirects to the fallback URL if URL parameters are undefined.
    */
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.unmock('react-router-dom'); // unmocking to get real behavior from useParams
+    vi.unmock('react-router'); // unmocking to get real behavior from useParams
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>

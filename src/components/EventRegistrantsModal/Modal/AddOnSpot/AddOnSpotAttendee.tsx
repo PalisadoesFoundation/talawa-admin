@@ -38,7 +38,7 @@
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import type {

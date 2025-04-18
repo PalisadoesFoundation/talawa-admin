@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -16,8 +16,8 @@ import { MOCKS } from './OrgSettings.mocks';
 
 const link1 = new StaticMockLink(MOCKS);
 const mockRouterParams = (orgId: string | undefined): void => {
-  vi.doMock('react-router-dom', async () => {
-    const actual = await vi.importActual('react-router-dom');
+  vi.doMock('react-router', async () => {
+    const actual = await vi.importActual('react-router');
     return {
       ...actual,
       useParams: () => ({ orgId }),
@@ -54,13 +54,13 @@ const renderOrganisationSettings = (
 
 describe('Organisation Settings Page', () => {
   afterEach(() => {
-    vi.unmock('react-router-dom');
+    vi.unmock('react-router');
   });
 
   const SetupRedirectTest = async (): Promise<ReactElement> => {
     const useParamsMock = vi.fn(() => ({ orgId: undefined }));
-    vi.doMock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.doMock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: useParamsMock,

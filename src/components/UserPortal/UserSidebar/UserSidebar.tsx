@@ -31,7 +31,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';

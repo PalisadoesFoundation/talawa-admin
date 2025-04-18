@@ -56,7 +56,7 @@ import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,

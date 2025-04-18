@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventStatsWrapper } from './EventStatsWrapper';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { mockData } from './EventStatsMocks';
 import { vi, describe, expect, it } from 'vitest';
 

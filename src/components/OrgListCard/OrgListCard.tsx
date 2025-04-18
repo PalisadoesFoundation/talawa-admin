@@ -45,7 +45,7 @@ import styles from 'style/app-fixed.module.css';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 export interface InterfaceOrgListCardPropsPG {
   data: InterfaceOrgInfoTypePG;

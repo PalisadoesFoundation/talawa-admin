@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';

@@ -43,7 +43,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';

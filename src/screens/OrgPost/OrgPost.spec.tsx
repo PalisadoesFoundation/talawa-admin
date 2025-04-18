@@ -9,7 +9,7 @@ import {
 import { describe, it, expect, beforeEach, afterAll, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import OrgPost from './OrgPost';
 import {
   GET_POSTS_BY_ORG,
@@ -542,8 +542,8 @@ const createPostSuccessMock: MockedResponse = {
     },
   },
 };
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return { ...actual, useParams: () => ({ orgId: '123' }) };
 });
 

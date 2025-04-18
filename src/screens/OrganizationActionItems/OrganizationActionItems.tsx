@@ -46,7 +46,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';

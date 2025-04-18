@@ -37,7 +37,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';

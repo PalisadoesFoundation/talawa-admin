@@ -46,7 +46,7 @@ import React from 'react';
 // import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
 // import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 // import AngleRightIcon from 'assets/svgs/angleRight.svg?react';

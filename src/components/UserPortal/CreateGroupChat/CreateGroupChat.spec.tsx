@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import * as MinioUploadHook from 'utils/MinioUpload';
 import {
   act,
@@ -15,7 +15,7 @@ import {
   USERS_CONNECTION_LIST,
   USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';

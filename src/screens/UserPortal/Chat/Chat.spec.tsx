@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { expect, describe, test, vi } from 'vitest';
 import { store } from 'state/store';

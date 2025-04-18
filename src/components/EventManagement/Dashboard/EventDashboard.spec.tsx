@@ -2,7 +2,7 @@ import React from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, act, fireEvent } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -39,8 +39,8 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const mockID = 'event123';
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
 }));
 
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {

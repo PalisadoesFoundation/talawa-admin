@@ -37,7 +37,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 

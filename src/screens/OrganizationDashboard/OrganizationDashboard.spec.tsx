@@ -4,7 +4,7 @@ import { RenderResult, within } from '@testing-library/react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { toast } from 'react-toastify';
 import OrganizationDashboard from './OrganizationDashboard';
 import {
@@ -25,8 +25,8 @@ vi.mock('react-i18next', () => ({
 }));
 
 const mockedNavigate = vi.fn();
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: () => mockedNavigate,

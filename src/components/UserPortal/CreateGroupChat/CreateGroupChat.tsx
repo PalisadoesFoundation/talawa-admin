@@ -63,7 +63,7 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';

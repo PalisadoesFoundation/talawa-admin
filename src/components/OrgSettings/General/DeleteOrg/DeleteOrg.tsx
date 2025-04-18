@@ -11,7 +11,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 
 /**

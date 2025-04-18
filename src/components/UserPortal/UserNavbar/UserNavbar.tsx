@@ -55,7 +55,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {

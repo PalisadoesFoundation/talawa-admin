@@ -47,7 +47,7 @@ import {
   hasRecurrenceRuleChanged,
 } from 'utils/recurrenceUtils';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import {
   DELETE_EVENT_MUTATION,
   REGISTER_EVENT,
