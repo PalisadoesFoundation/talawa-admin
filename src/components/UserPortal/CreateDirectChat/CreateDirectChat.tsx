@@ -134,9 +134,16 @@ export const handleCreateDirectChat = async (
   } else {
     try {
       await createChat({
-        variables: { organizationId, userIds: [userId, id], isGroup: false },
+        variables: {
+          organizationId,
+          userIds: [userId, id],
+          isGroup: false,
+        },
       });
       await chatsListRefetch();
+      {
+        /*To be fixed*/
+      }
       toggleCreateDirectChatModal();
     } catch (error) {
       errorHandler(t, error);
@@ -148,9 +155,10 @@ export default function createDirectChatModal({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
   chatsListRefetch,
-  chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChat',
+  });
   const { orgId: organizationId } = useParams();
 
   const userId: string | null = getItem('userId');
@@ -164,7 +172,10 @@ export default function createDirectChatModal({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+    variables: {
+      firstName_contains: '',
+      lastName_contains: '',
+    },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -176,7 +187,9 @@ export default function createDirectChatModal({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({ ...newFilterData });
+    allUsersRefetch({
+      ...newFilterData,
+    });
   };
 
   return (
@@ -260,7 +273,7 @@ export default function createDirectChatModal({
                                 onClick={() => {
                                   handleCreateDirectChat(
                                     userDetails.user._id,
-                                    chats,
+                                    [],
                                     t,
                                     createChat,
                                     organizationId,

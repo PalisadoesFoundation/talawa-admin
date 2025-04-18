@@ -60,13 +60,13 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
 export const CREATE_CHAT = gql`
   mutation createChat(
     $userIds: [ID!]!
-    $organizationId: ID
+    $organizationId: ID!
     $isGroup: Boolean!
     $name: String
     $image: String
   ) {
     createChat(
-      data: {
+      input: {
         userIds: $userIds
         organizationId: $organizationId
         isGroup: $isGroup
