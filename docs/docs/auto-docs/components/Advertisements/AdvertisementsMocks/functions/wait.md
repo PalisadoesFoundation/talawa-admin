@@ -6,7 +6,7 @@
 
 > **wait**(`ms`): `Promise`\<`void`\>
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L29)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L33)
 
 ## Parameters
 

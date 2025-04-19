@@ -8,13 +8,137 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import {
-  ORGANIZATIONS_LIST,
-  ORGANIZATION_ADVERTISEMENT_LIST,
-} from 'GraphQl/Queries/Queries';
-import { ADD_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
+  ADD_ADVERTISEMENT_MUTATION,
+  DELETE_ADVERTISEMENT_MUTATION,
+  UPDATE_ADVERTISEMENT_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+
+type AdvertisementType = 'banner' | 'pop_up' | 'menu';
+
+interface Attachment {
+  mimeType: string;
+  url: string;
+}
+
+interface AdvertisementNode {
+  id: string;
+  createdAt: string;
+  description: string;
+  endAt: string;
+  organization: {
+    id: string;
+  };
+  name: string;
+  startAt: string;
+  type: AdvertisementType;
+  attachments: Attachment[];
+}
+
+interface PageInfo {
+  startCursor: string | null;
+  endCursor: string | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+interface Edge {
+  node: AdvertisementNode;
+}
+
+interface AdvertisementListMock {
+  request: {
+    query: DocumentNode;
+    variables: {
+      id: string;
+      first: number;
+      after: string | null;
+      where: {
+        isCompleted: boolean;
+      };
+    };
+  };
+  result: {
+    data: {
+      organization: {
+        advertisements: {
+          edges: Edge[];
+          pageInfo: PageInfo;
+        };
+      };
+    };
+  };
+}
+
+interface AdvertisementNodeParams {
+  id: string;
+  name: string;
+  description: string;
+  startAt?: string;
+  endAt: string;
+  type?: AdvertisementType;
+  organizationId?: string;
+  createdAt?: string;
+  attachments?: Attachment[];
+}
+
+interface AdvertisementListParams {
+  id?: string;
+  first?: number;
+  after?: string | null;
+  isCompleted?: boolean;
+  edges?: Edge[];
+  startCursor?: string | null;
+  endCursor?: string | null;
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
+}
+
+interface BaseMutationMock<T = any> {
+  request: {
+    query: DocumentNode;
+    variables: T;
+  };
+  result?: {
+    data: any;
+  };
+  error?: Error;
+}
 
 const { getItem } = useLocalStorage();
+export const mockFileForAdvertisementScreen = new File(
+  ['dummy content'],
+  'test.png',
+  { type: 'image/png' },
+);
+
+export const dateConstants = {
+  create: {
+    startAtISO: '2024-12-31T18:30:00.000Z',
+    endAtISO: '2030-02-01T18:30:00.000Z',
+    startAtCalledWith: '2024-12-31T00:00:00.000Z',
+    endAtCalledWith: '2030-02-01T00:00:00.000Z',
+    startISOReceived: '2024-12-30T18:30:00.000Z',
+    endISOReceived: '2030-01-31T18:30:00.000Z',
+    endBeforeStartISO: '2010-02-01T18:30:00.000Z',
+    endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
+    endBeforeStartISOReceived: '2010-01-31T18:30:00.000Z',
+  },
+  update: {
+    startAtISO: '2024-12-31T18:30:00.000Z',
+    endAtISO: '2030-02-01T18:30:00.000Z',
+    startAtCalledWith: '2024-12-31T00:00:00.000Z',
+    endAtCalledWith: '2030-02-01T00:00:00.000Z',
+    startISOReceived: '2024-12-30T18:30:00.000Z',
+    endISOReceived: '2030-01-31T18:30:00.000Z',
+    endBeforeStartISO: '2010-02-01T18:30:00.000Z',
+    endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
+    endBeforeStartISOReceived: '2010-01-31T18:30:00.000Z',
+  },
+};
+
+export const { create: createDates, update: updateDates } = dateConstants;
 
 export const httpLink = new HttpLink({
   uri: BACKEND_URL,
@@ -34,241 +158,442 @@ export async function wait(ms = 100): Promise<void> {
   });
 }
 
-type VariablesType =
-  | { id: string; first: number; after: null }
-  | { id: string; first: number; after: null; before: null; last: null };
+const createAdvertisementNode = ({
+  id,
+  name,
+  description,
+  startAt = new Date('2025-02-02').toISOString(),
+  endAt,
+  type = 'banner',
+  organizationId = '1',
+  createdAt = new Date('2025-02-02').toISOString(),
+  attachments = [
+    {
+      mimeType: 'image/jpeg',
+      url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+    },
+  ],
+}: AdvertisementNodeParams): Edge => ({
+  node: {
+    id,
+    createdAt,
+    description,
+    endAt,
+    organization: {
+      id: organizationId,
+    },
+    name,
+    startAt,
+    type,
+    attachments,
+  },
+});
 
-type MockRequest = {
-  request: { query: DocumentNode; variables: VariablesType };
+const createAdvertisementListMock = ({
+  id = '1',
+  first = 6,
+  after = null,
+  isCompleted = false,
+  edges = [],
+  startCursor = 'cursor-1',
+  endCursor = 'cursor-2',
+  hasNextPage = true,
+  hasPreviousPage = false,
+}: AdvertisementListParams): AdvertisementListMock => ({
+  request: {
+    query: ORGANIZATION_ADVERTISEMENT_LIST,
+    variables: {
+      id,
+      first,
+      after,
+      where: {
+        isCompleted,
+      },
+    },
+  },
   result: {
     data: {
-      organizations: {
-        _id: string;
+      organization: {
         advertisements: {
-          edges: {
-            node: {
-              _id: string;
-              name: string;
-              startDate: string;
-              endDate: string;
-              mediaUrl: string;
-            };
-            cursor: string;
-          }[];
+          edges,
           pageInfo: {
-            startCursor: string;
-            endCursor: string;
-            hasNextPage: boolean;
-            hasPreviousPage: boolean;
-          };
-          totalCount: number;
-        };
-      }[];
-    };
-  };
-};
-
-const createMock = (variables: VariablesType): MockRequest => ({
-  request: { query: ORGANIZATION_ADVERTISEMENT_LIST, variables },
-  result: {
-    data: {
-      organizations: [
-        {
-          _id: '1',
-          advertisements: {
-            edges: [
-              {
-                node: {
-                  _id: '1',
-                  name: 'Advertisement1',
-                  startDate: '2022-01-01',
-                  endDate: '2023-01-01',
-                  mediaUrl: 'http://example1.com',
-                },
-                cursor: 'cursor1',
-              },
-              {
-                node: {
-                  _id: '2',
-                  name: 'Advertisement2',
-                  startDate: '2021-02-01',
-                  endDate: '2035-02-01',
-                  mediaUrl: 'http://example2.com',
-                },
-                cursor: 'cursor2',
-              },
-            ],
-            pageInfo: {
-              startCursor: 'cursor1',
-              endCursor: 'cursor2',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 2,
+            startCursor,
+            endCursor,
+            hasNextPage,
+            hasPreviousPage,
           },
         },
-      ],
+      },
     },
   },
 });
 
-export const ADVERTISEMENTS_LIST_MOCK: MockRequest[] = [
-  ...Array(4).fill(createMock({ id: '1', first: 6, after: null })),
-  ...Array(4).fill(
-    createMock({ id: '1', first: 6, after: null, before: null, last: null }),
+const createBatchNodes = (
+  count: number,
+  baseName: string,
+  description: string,
+  endAt: string,
+  numbered = false,
+): Edge[] => {
+  return Array.from({ length: count }, (_, i) =>
+    createAdvertisementNode({
+      id: String(i + 1),
+      name: `${baseName} ${i + 1}`,
+      description: numbered ? `${description} ${i + 1}` : description,
+      endAt,
+    }),
+  );
+};
+
+const createMutationMock = <T>(
+  query: DocumentNode,
+  variables: T,
+  resultData?: any,
+  error?: Error,
+): BaseMutationMock<T> => {
+  const mock: BaseMutationMock<T> = {
+    request: {
+      query,
+      variables,
+    },
+  };
+
+  if (error) {
+    mock.error = error;
+  } else {
+    mock.result = {
+      data: resultData || {},
+    };
+  }
+
+  return mock;
+};
+
+export const emptyMocks: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+    endCursor: null,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: [],
+    hasNextPage: false,
+    endCursor: null,
+  }),
+];
+
+const completedAdNode = createAdvertisementNode({
+  id: '1',
+  name: 'Cookie shop',
+  description: 'this is a completed advertisement',
+  endAt: new Date().toISOString(),
+});
+
+const activeAdNode = createAdvertisementNode({
+  id: '2',
+  name: 'Cookie shop',
+  description: 'this is an active advertisement',
+  endAt: new Date('2030-01-01').toISOString(),
+});
+
+export const getCompletedAdvertisementMocks: AdvertisementListMock[] = [
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
+];
+
+export const getActiveAdvertisementMocks: AdvertisementListMock[] = [
+  createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+];
+
+export const createAdSuccessMock = [
+  createMutationMock(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
+      organizationId: '1',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: '2022-12-31T18:30:00.000Z',
+      endAt: '2023-01-31T18:30:00.000Z',
+      attachments: [mockFileForAdvertisementScreen],
+      description: 'this advertisement is created by admin',
+    },
+    { createAdvertisement: { id: '1' } },
   ),
 ];
 
-export const ADD_ADVERTISEMENT_MUTATION_MOCK = {
-  request: {
-    query: ADD_ADVERTISEMENT_MUTATION,
-    variables: {
+export const deleteAdvertisementMocks = [
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createMutationMock(
+    DELETE_ADVERTISEMENT_MUTATION,
+    { id: '1' },
+    { deleteAdvertisement: { id: '1' } },
+  ),
+];
+
+export const infiniteScrollMocks: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'First Ad',
+        description: 'First batch advertisement',
+        endAt: new Date().toISOString(),
+      }),
+    ],
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+    endCursor: null,
+    startCursor: null,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    after: 'cursor-2',
+    edges: [
+      createAdvertisementNode({
+        id: '2',
+        name: 'Second Ad',
+        description: 'Second batch advertisement',
+        endAt: new Date().toISOString(),
+        createdAt: new Date('2025-02-03').toISOString(),
+        type: 'pop_up',
+      }),
+    ],
+    startCursor: 'cursor-2',
+    endCursor: 'cursor-3',
+    hasNextPage: false,
+    hasPreviousPage: true,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    after: 'cursor-2',
+    edges: [],
+    startCursor: null,
+    endCursor: null,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  }),
+];
+
+export const initialArchivedData: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2025-02-03').toISOString(),
+    ),
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    after: 'cursor-2',
+    edges: [
+      createAdvertisementNode({
+        id: '121',
+        name: 'Cookie shop infinite 1',
+        description: 'this is an infinitely scrolled archived advertisement',
+        endAt: new Date('2025-02-03').toISOString(),
+      }),
+    ],
+    startCursor: 'cursor-2',
+    endCursor: 'cursor-3',
+    hasNextPage: false,
+    hasPreviousPage: true,
+  }),
+];
+
+export const initialActiveData: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-02-03').toISOString(),
+    ),
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    after: 'cursor-2',
+    edges: [
+      createAdvertisementNode({
+        id: '121',
+        name: 'Cookie shop infinite 1',
+        description: 'this is an infinitely scrolled active advertisement',
+        endAt: new Date('2030-02-03').toISOString(),
+      }),
+    ],
+    startCursor: 'cursor-2',
+    endCursor: 'cursor-3',
+    hasNextPage: false,
+    hasPreviousPage: true,
+  }),
+];
+
+export const filterActiveAdvertisementData: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-01-01').toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+];
+
+export const filterCompletedAdvertisementData: AdvertisementListMock[] = [
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is a completed advertisement',
+      new Date().toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
+];
+
+export const createAdvertisement = [
+  createMutationMock(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
       organizationId: '1',
-      name: 'Cookie Shop',
-      file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
-      type: 'POPUP',
-      startDate: '2023-01-01',
-      endDate: '2023-02-02',
+      name: 'Ad1',
+      type: 'banner',
+      startAt: createDates.startISOReceived,
+      endAt: createDates.endISOReceived,
     },
-  },
-  result: {
-    data: {
-      createAdvertisement: {
-        _id: '65844efc814dd4003db811c4',
-        advertisement: null,
-        __typename: 'Advertisement',
-      },
-    },
-  },
-};
-
-export const ORGANIZATIONS_LIST_MOCK = {
-  request: { query: ORGANIZATIONS_LIST, variables: { id: '1' } },
-  result: {
-    data: {
-      organizations: [
-        {
-          _id: '1',
-          image: '',
-          creator: {
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          name: 'name',
-          description: 'description',
-          userRegistrationRequired: true,
-
-          visibleInSearch: true,
-          address: {
-            city: 'Kingston',
-            countryCode: 'JM',
-            dependentLocality: 'Sample Dependent Locality',
-            line1: '123 Jamaica Street',
-            line2: 'Apartment 456',
-            postalCode: 'JM12345',
-            sortingCode: 'ABC-123',
-            state: 'Kingston Parish',
-          },
-          members: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          admins: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-          membershipRequests: {
-            _id: 'id',
-            user: {
-              firstName: 'firstName',
-              lastName: 'lastName',
-              email: 'email',
-            },
-          },
-          blockedUsers: {
-            _id: 'id',
-            firstName: 'firstName',
-            lastName: 'lastName',
-            email: 'email',
-          },
-        },
-      ],
-    },
-  },
-};
-
-export const REGISTER_MOCKS = [
-  {
-    request: {
-      query: ADD_ADVERTISEMENT_MUTATION,
-      variables: {
-        organizationId: '1',
+    { createAdvertisement: { id: '123' } },
+  ),
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
         name: 'Ad1',
-        type: 'BANNER',
-        startDate: '2023-01-01',
-        endDate: '2023-02-01',
-        file: 'data:image/png;base64,bWVkaWEgY29udGVudA==',
-      },
+        description: 'This is a new advertisement created for testing.',
+        startAt: createDates.startAtISO,
+        endAt: createDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+];
+
+export const createAdvertisementWithoutName = [
+  createMutationMock(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
+      organizationId: '1',
+      type: 'banner',
+      startAt: createDates.startISOReceived,
+      endAt: createDates.endISOReceived,
     },
-    result: {
-      data: {
-        createAdvertisement: {
-          _id: '1',
-          advertisement: null,
-          __typename: 'Advertisement',
-        },
-      },
+    { createAdvertisement: { id: '123' } },
+  ),
+];
+
+export const createAdvertisementWithEndDateBeforeStart = [
+  createMutationMock(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
+      organizationId: '1',
+      type: 'banner',
+      startAt: createDates.startISOReceived,
+      endAt: createDates.endBeforeStartISOReceived,
     },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: { id: '1', first: 6, after: null },
+    { createAdvertisement: { id: '123' } },
+  ),
+];
+
+export const createAdvertisementError = [
+  createMutationMock(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
+      organizationId: '1',
+      type: 'banner',
+      startAt: createDates.startISOReceived,
+      endAt: createDates.endISOReceived,
     },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'Advertisement1',
-                    startDate: '2022-01-01',
-                    endDate: '2023-01-01',
-                    mediaUrl: 'http://example1.com',
-                  },
-                  cursor: '5rdiyr3iwfhwaify',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'Advertisement2',
-                    startDate: '2024-02-01',
-                    endDate: '2025-02-01',
-                    mediaUrl: 'http://example2.com',
-                  },
-                  cursor: '5rdiyr3iwfhwaify',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'erdftgyhujkerty',
-                endCursor: 'edrftgyhujikl',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
+    undefined,
+    new Error('An unknown error occurred'),
+  ),
+];
+
+export const updateAdMocks = [
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createMutationMock(
+    UPDATE_ADVERTISEMENT_MUTATION,
+    {
+      id: '1',
+      description: 'This is an updated advertisement',
+      startAt: updateDates.startISOReceived,
+      endAt: updateDates.endISOReceived,
     },
-  },
+    { updateAdvertisement: { id: '1' } },
+  ),
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is an updated advertisement',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+];
+
+export const fetchErrorMocks = [
+  createMutationMock(
+    ORGANIZATION_ADVERTISEMENT_LIST,
+    { id: '1', first: 6, after: null, where: { isCompleted: false } },
+    undefined,
+    new Error('Failed to fetch advertisements'),
+  ),
+  createMutationMock(
+    ORGANIZATION_ADVERTISEMENT_LIST,
+    { id: '1', first: 6, after: null, where: { isCompleted: true } },
+    undefined,
+    new Error('Failed to fetch advertisements'),
+  ),
 ];

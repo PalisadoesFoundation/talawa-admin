@@ -453,9 +453,7 @@ function orgList(): JSX.Element {
                 <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
-                      <div
-                        className={`${styles.orgImgContainer} shimmer`}
-                      ></div>
+                      <div className={`${styles.orgImgContainer} shimmer`} />
 
                       <div className={styles.content}>
                         <h5 className="shimmer" title="Org name"></h5>

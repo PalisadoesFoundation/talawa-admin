@@ -723,6 +723,20 @@ input EditVenueInput {
   name: String
 }
 
+input MutationCreateAdvertisementInput {
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
+  type: AdvertisementType!
+}
+
+input QueryOrganizationInput {
+  id: String!
+}
+
 type Mutation {
   acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   addEventAttendee(data: EventAttendeeInput!): User!
@@ -756,14 +770,7 @@ type Mutation {
     organizationId: ID!
   ): ActionItemCategory!
   createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  createAdvertisement(
-    endDate: Date!
-    link: String!
-    name: String!
-    orgId: ID!
-    startDate: Date!
-    type: String!
-  ): Advertisement!
+  createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
   createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
   createComment(data: CommentInput!, postId: ID!): Comment
   createChat(data: chatInput!): Chat!
@@ -787,8 +794,7 @@ type Mutation {
   createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
   createVenue(data: VenueInput!): Venue
-  deleteAdvertisement(id: ID!): DeletePayload!
-  deleteAdvertisementById(id: ID!): DeletePayload!
+  deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
   deleteVenue(id: ID!): Venue
@@ -850,9 +856,7 @@ type Mutation {
     data: UpdateActionItemCategoryInput!
     id: ID!
   ): ActionItemCategory
-  updateAdvertisement(
-    input: UpdateAdvertisementInput!
-  ): UpdateAdvertisementPayload
+  updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
   updateAgendaCategory(
     id: ID!
     input: UpdateAgendaCategoryInput!
@@ -884,6 +888,10 @@ type Mutation {
 
 input OTPInput {
   email: EmailAddress!
+}
+
+input AdvertisementWhereInput {
+  isCompleted: Boolean!
 }
 
 type Organization {
@@ -939,6 +947,7 @@ type OrganizationPg {
     before: String
     first: Int
     last: Int
+    where: AdvertisementWhereInput
   ): OrganizationAdvertisementsConnectionPg
 
   blockedUsers(
@@ -1868,6 +1877,7 @@ type Query {
   me: UserData!
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
+  organization(input: QueryOrganizationInput!): OrganizationPg
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
   organizationsMemberConnection(
     first: Int
@@ -1983,6 +1993,19 @@ input UpdateAdvertisementInput {
   name: String
   startDate: Date
   type: AdvertisementType
+}
+
+input MutationUpdateAdvertisementInput {
+  description: String
+  endAt: DateTime
+  id: ID!
+  name: String
+  startAt: DateTime
+  type: AdvertisementType
+}
+
+input MutationDeleteAdvertisementInput {
+  id: ID!
 }
 
 type UpdateAdvertisementPayload {

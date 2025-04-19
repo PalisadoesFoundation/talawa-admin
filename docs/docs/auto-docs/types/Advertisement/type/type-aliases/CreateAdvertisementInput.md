@@ -6,17 +6,21 @@
 
 > **CreateAdvertisementInput**: `object`
 
-Defined in: [src/types/Advertisement/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L38)
+Defined in: [src/types/Advertisement/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L46)
 
 ## Type declaration
 
-### endDate
+### attachments
 
-> **endDate**: `Date`
+> **attachments**: `File`[]
 
-### mediaFile
+### description?
 
-> **mediaFile**: `string`
+> `optional` **description**: `string`
+
+### endAt
+
+> **endAt**: `Date`
 
 ### name
 
@@ -26,10 +30,10 @@ Defined in: [src/types/Advertisement/type.ts:38](https://github.com/PalisadoesFo
 
 > **organizationId**: `string`
 
-### startDate
+### startAt
 
-> **startDate**: `Date`
+> **startAt**: `Date`
 
 ### type
 
-> **type**: [`AdvertisementType`](../variables/AdvertisementType.md)
+> **type**: [`AdvertisementType`](../enumerations/AdvertisementType.md)
