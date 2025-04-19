@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -19,6 +19,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import * as router from 'react-router-dom';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -867,247 +868,6 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  it('update advertisement with undefined orgId should early return', async () => {
-    const updateMock = vi.fn();
-    mockUseMutation.mockReturnValue([updateMock]);
-    const startAtISO = '2024-12-31T18:30:00.000Z';
-    const endAtISO = '2030-02-01T18:30:00.000Z';
-    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
-    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
-    const startISOReceived = '2024-12-30T18:30:00.000Z';
-    const endISOReceived = '2030-01-31T18:30:00.000Z';
-    const updateAdMocks = [
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: false,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      createdAt: new Date().toISOString(),
-                      description:
-                        'This is a new advertisement created for testing.',
-                      endAt: endAtISO,
-                      organization: {
-                        id: '1',
-                      },
-                      name: 'Ad1',
-                      startAt: startAtISO,
-                      type: 'banner',
-                      attachments: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: true,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: UPDATE_ADVERTISEMENT_MUTATION,
-          variables: {
-            id: '1',
-            description: 'This is an updated advertisement',
-            startAt: startISOReceived,
-            endAt: endISOReceived,
-          },
-        },
-        result: {
-          data: {
-            updateAdvertisement: {
-              id: '1',
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: false,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      createdAt: new Date().toISOString(),
-                      description: 'This is an updated advertisement',
-                      endAt: endAtISO,
-                      organization: {
-                        id: '1',
-                      },
-                      name: 'Ad1',
-                      startAt: startAtISO,
-                      type: 'banner',
-                      attachments: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: true,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-    ];
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={updateAdMocks} addTypename={false}>
-                <AdvertisementRegister
-                  endAtEdit={new Date()}
-                  startAtEdit={new Date()}
-                  typeEdit="banner"
-                  nameEdit="Ad1"
-                  advertisementMedia=""
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
-                  formStatus="edit"
-                />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('editBtn'));
-
-    const descriptionField = screen.getByLabelText(
-      'Enter description of Advertisement (optional)',
-    );
-    fireEvent.change(descriptionField, {
-      target: { value: 'This is an updated advertisement' },
-    });
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: endAtISO.split('T')[0] },
-      });
-    });
-
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('addonupdate'));
-    });
-
-    await waitFor(() => {
-      expect(updateMock).not.toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          description: 'This is an updated advertisement',
-          startAt: startAtCalledWith,
-          endAt: endAtCalledWith,
-        },
-      });
-      const updateFailedText = screen.queryByText((_, element) => {
-        return (
-          element?.textContent === 'Update Failed' &&
-          element.tagName.toLowerCase() === 'div'
-        );
-      });
-      expect(updateFailedText).toBeNull();
-    });
-  });
-
   it('throw error while uploading attachment of more than 5 mb', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     render(
@@ -1208,7 +968,7 @@ describe('Testing Advertisement Register Component', () => {
     vi.useRealTimers();
   });
 
-  test('Validates file types during upload', async () => {
+  it('Validates file types during upload', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
 
     render(
@@ -1242,7 +1002,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Validates that name is required', async () => {
+  it('Validates that name is required', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
 
     render(
@@ -1278,7 +1038,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('does not shows updating attachment option in edit mode', async () => {
+  it('does not shows updating attachment option in edit mode', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -1308,7 +1068,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(mediaPreview).not.toBeInTheDocument();
   });
 
-  test('Updates only end date in edit mode', async () => {
+  it('Updates only end date in edit mode', async () => {
     const updateMock = vi.fn().mockResolvedValue({
       data: {
         updateAdvertisement: {
@@ -1362,7 +1122,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Selects menu ad type', async () => {
+  it('Selects menu ad type', async () => {
     const createMock = vi.fn().mockResolvedValue({
       data: {
         createAdvertisement: {
@@ -1414,7 +1174,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Handles error from create mutation', async () => {
+  it('Handles error from create mutation', async () => {
     const createError = new Error('Creation failed due to server error');
     const createMock = vi.fn().mockRejectedValue(createError);
     mockUseMutation.mockReturnValue([createMock]);
@@ -1453,7 +1213,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Handles error from update mutation', async () => {
+  it('Handles error from update mutation', async () => {
     const updateError = new Error('Update failed due to server error');
     const updateMock = vi.fn().mockRejectedValue(updateError);
     mockUseMutation.mockReturnValue([updateMock]);
@@ -1496,7 +1256,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Updates only start date in edit mode', async () => {
+  it('Updates only start date in edit mode', async () => {
     const updateMock = vi.fn().mockResolvedValue({
       data: {
         updateAdvertisement: {
@@ -1552,7 +1312,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Updates advertisement name in edit mode', async () => {
+  it('Updates advertisement name in edit mode', async () => {
     const updateMock = vi.fn().mockResolvedValue({
       data: {
         updateAdvertisement: {
@@ -1604,7 +1364,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  test('Handles multiple file uploads with video files', async () => {
+  it('Handles multiple file uploads with video files', async () => {
     const mockVideoFile = new File(['video content'], 'test.mp4', {
       type: 'video/mp4',
     });
@@ -1636,6 +1396,37 @@ describe('Testing Advertisement Register Component', () => {
 
     const previews = screen.getAllByTestId('mediaPreview');
     expect(previews.length).toBe(2);
+  });
+
+  it('advertisement with undefined orgId should show 404', async () => {
+    const useParamsMock = vi.spyOn(router, 'useParams');
+    useParamsMock.mockReturnValue({ orgId: undefined });
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <MemoryRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider addTypename={false}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </MemoryRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByText('404')).toBeInTheDocument();
+    expect(
+      screen.getByText('Oops! The Page you requested was not found!'),
+    ).toBeInTheDocument();
+
+    useParamsMock.mockRestore();
   });
   vi.useRealTimers();
 });

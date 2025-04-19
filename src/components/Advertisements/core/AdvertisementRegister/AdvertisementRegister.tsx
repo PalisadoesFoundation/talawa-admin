@@ -61,6 +61,7 @@ import type {
   InterfaceFormStateTypes,
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -78,9 +79,13 @@ function AdvertisementRegister({
   const { t: tErrors } = useTranslation('errors');
 
   const { orgId: currentOrg } = useParams();
-
+  console.log('currentOrg', currentOrg);
   const [show, setShow] = useState(false);
 
+  if (currentOrg === undefined) {
+    console.log('coming inside the currentOrg');
+    return <PageNotFound />;
+  }
   /*
    * Mutation to add advertisement and refetch the advertisement list
    */
@@ -200,10 +205,6 @@ function AdvertisementRegister({
 
   // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
-    if (currentOrg === undefined) {
-      return;
-    }
-
     try {
       const startDate = dayjs(formState.startAt).startOf('day');
       const endDate = dayjs(formState.endAt).startOf('day');
@@ -274,10 +275,6 @@ function AdvertisementRegister({
 
   // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
-    if (currentOrg === undefined) {
-      return;
-    }
-
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
 

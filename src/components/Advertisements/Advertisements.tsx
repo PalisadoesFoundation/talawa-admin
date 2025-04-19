@@ -65,7 +65,6 @@ export default function Advertisements(): JSX.Element {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
     error: completedError,
-    refetch: completedRefetch,
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
@@ -80,7 +79,6 @@ export default function Advertisements(): JSX.Element {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
     error: activeError,
-    refetch: activeRefetch,
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
@@ -118,8 +116,6 @@ export default function Advertisements(): JSX.Element {
       } else {
         setCompletedAdvertisements(ads);
       }
-    } else if (orgCompletedAdvertisementListData) {
-      setCompletedAdvertisements([]); // No advertisements found
     }
   }, [orgCompletedAdvertisementListData, afterCompleted]);
 
@@ -137,8 +133,6 @@ export default function Advertisements(): JSX.Element {
       } else {
         setActiveAdvertisements(ads);
       }
-    } else if (orgActiveAdvertisementListData) {
-      setActiveAdvertisements([]); // No advertisements found
     }
   }, [orgActiveAdvertisementListData, afterActive]);
 
