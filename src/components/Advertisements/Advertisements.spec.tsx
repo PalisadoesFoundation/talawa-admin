@@ -2696,6 +2696,8 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('advertisements')).toBeInTheDocument();
     expect(screen.queryByTestId('Ad_name')).not.toBeInTheDocument();
+
+    mockID = '1'; // restore the mock id
   });
 
   test('title is set correctly', async () => {

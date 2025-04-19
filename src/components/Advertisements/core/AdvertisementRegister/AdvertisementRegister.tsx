@@ -83,7 +83,6 @@ function AdvertisementRegister({
   const [show, setShow] = useState(false);
 
   if (currentOrg === undefined) {
-    console.log('coming inside the currentOrg');
     return <PageNotFound />;
   }
   /*
