@@ -318,7 +318,10 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const loginLink = async (
+    e: ChangeEvent<HTMLFormElement>,
+    isAdminRoute: boolean = false,
+  ): Promise<void> => {
     e.preventDefault();
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -340,7 +343,18 @@ const loginPage = (): JSX.Element => {
         const { signIn } = signInData;
         const { user, authenticationToken } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
+        if (role === 'admin' && !isAdmin) {
+          toast.warn(tErrors('notAuthorised') as string);
+          return;
+        }
         const loggedInUserId = user.id;
+
+        // Check if a non-admin is trying to access admin route
+        if (isAdminRoute && !isAdmin) {
+          toast.error(t('Unauthorized_admin_access') as string);
+          loginRecaptchaRef.current?.reset();
+          return;
+        }
 
         setItem('token', authenticationToken);
         setItem('IsLoggedIn', 'TRUE');
@@ -348,6 +362,7 @@ const loginPage = (): JSX.Element => {
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
+
         if (isAdmin) {
           setItem('id', loggedInUserId);
           navigate('/orglist'); // Admin dashboard

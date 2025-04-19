@@ -68,6 +68,6 @@ In a development environment, the defaults are:
 
 ### Administrator Login
 
-To login as administrator, navigate to the `/admin` route and enter the credentials.
+To login as administrator, navigate to the `/admin` route and enter the credentials. You can also login as admin through the User Login page.
 
 **Note:** Administrator accounts cannot be created through the registration process. Admin credentials must be provisioned separately and managed outside the application interface.
