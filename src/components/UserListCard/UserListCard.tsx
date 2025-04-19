@@ -17,7 +17,7 @@
  * @requires react-router-dom - For accessing route parameters
  * @requires utils/errorHandler - For handling errors
  * @requires GraphQl/Mutations/mutations - Contains the ADD_ADMIN_MUTATION
- * @requires style/app.module.css - For styling the button
+ * @requires style/app-fixed.module.css - For styling the button
  *
  * @param {InterfaceUserListCardProps} props - The props for the component
  * @param {number} props.key - Unique key for the component
@@ -43,7 +43,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 

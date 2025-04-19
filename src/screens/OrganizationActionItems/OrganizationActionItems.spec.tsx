@@ -9,7 +9,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import ItemViewModal from './itemViewModal/ItemViewModal';
+import styles from '../../style/app-fixed.module.css';
+
 import {
   GET_USERS_BY_IDS,
   GET_EVENTS_BY_IDS,

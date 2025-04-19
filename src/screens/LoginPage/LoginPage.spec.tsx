@@ -27,7 +27,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
-import 'style/app.module.css';
+
 const MOCKS = [
   {
     request: {

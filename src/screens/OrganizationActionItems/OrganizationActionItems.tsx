@@ -56,7 +56,8 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
-import styles from '../../style/app.module.css';
+import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
+import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
