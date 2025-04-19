@@ -12,18 +12,6 @@ interface PageInfo {
   hasPreviousPage: boolean;
 }
 
-interface DateConstantSet {
-  startAtISO: string;
-  endAtISO: string;
-  startAtCalledWith: string;
-  endAtCalledWith: string;
-  startISOReceived: string;
-  endISOReceived: string;
-  endBeforeStartISO: string;
-  endBeforeStartCalledWith: string;
-  endBeforeStartISOReceived: string;
-}
-
 export const mockFile = new File(['dummy content'], 'test.jpg', {
   type: 'image/jpeg',
 });
