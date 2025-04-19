@@ -340,10 +340,6 @@ const loginPage = (): JSX.Element => {
         const { signIn } = signInData;
         const { user, authenticationToken } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
-        if (role === 'admin' && !isAdmin) {
-          toast.warn(tErrors('notAuthorised') as string);
-          return;
-        }
         const loggedInUserId = user.id;
 
         setItem('token', authenticationToken);
@@ -352,16 +348,14 @@ const loginPage = (): JSX.Element => {
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
-        // setItem('FirstName', user.firstName);
-        // setItem('LastName', user.lastName);
-        // setItem('UserImage', user.avatarURL);
-        if (role === 'admin') {
+        if (isAdmin) {
           setItem('id', loggedInUserId);
+          navigate('/orglist'); // Admin dashboard
         } else {
           setItem('userId', loggedInUserId);
+          navigate('/user/organizations'); // User dashboard
         }
 
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
         startSession();
       } else {
         toast.warn(tErrors('notFound') as string);
