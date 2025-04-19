@@ -44,6 +44,7 @@ import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirec
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/Chat/type';
 import { useParams, Navigate } from 'react-router-dom';
+import { OrganizationProvider } from 'contexts/OrganizationContext';
 
 interface InterfaceContactCardProps {
   id: string;
@@ -59,9 +60,9 @@ interface InterfaceContactCardProps {
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
-  const { orgId: organizationId } = useParams();
+  const params = useParams<{ orgId: string }>();
+  const organizationId = params.orgId!;
 
-  // Redirect to home if organization ID is not available
   if (!organizationId) {
     return <Navigate to="/" replace />;
   }
@@ -145,155 +146,156 @@ export default function chat(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div data-testid="chat" className={`${styles.mainContainer}`}>
-          <div className={styles.contactContainer}>
-            <div
-              className={`d-flex justify-content-between ${styles.addChatContainer}`}
-            >
-              <h4>{t('messages')}</h4>
-              <Dropdown style={{ cursor: 'pointer' }}>
-                <Dropdown.Toggle
-                  className={styles.customToggle}
-                  data-testid={'dropdown'}
-                >
-                  <NewChat />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={openCreateDirectChatModal}
-                    data-testid="newDirectChat"
+      <OrganizationProvider organizationId={organizationId}>
+        <div className={`d-flex flex-row ${styles.containerHeight}`}>
+          <div data-testid="chat" className={`${styles.mainContainer}`}>
+            <div className={styles.contactContainer}>
+              <div
+                className={`d-flex justify-content-between ${styles.addChatContainer}`}
+              >
+                <h4>{t('messages')}</h4>
+                <Dropdown style={{ cursor: 'pointer' }}>
+                  <Dropdown.Toggle
+                    className={styles.customToggle}
+                    data-testid={'dropdown'}
                   >
-                    {t('newChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={openCreateGroupChatModal}
-                    data-testid="newGroupChat"
-                  >
-                    {t('newGroupChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    Starred Messages
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-            <div className={styles.contactListContainer}>
-              {chatsListLoading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.filters}>
-                    {/* three buttons to filter unread, all and group chats. All selected by default. */}
-                    <Button
-                      onClick={() => {
-                        setFilterType('all');
-                      }}
-                      data-testid="allChat"
-                      className={[
-                        styles.filterButton,
-                        filterType === 'all' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
+                    <NewChat />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={openCreateDirectChatModal}
+                      data-testid="newDirectChat"
                     >
-                      All
-                    </Button>
-                    <Button
-                      data-testid="unreadChat"
-                      onClick={() => {
-                        setFilterType('unread');
-                      }}
-                      className={[
-                        styles.filterButton,
-                        filterType === 'unread' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
+                      {t('newChat')}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={openCreateGroupChatModal}
+                      data-testid="newGroupChat"
                     >
-                      Unread
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setFilterType('group');
-                      }}
-                      data-testid="groupChat"
-                      className={[
-                        styles.filterButton,
-                        filterType === 'group' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                    >
-                      Groups
-                    </Button>
+                      {t('newGroupChat')}
+                    </Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">
+                      Starred Messages
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+              <div className={styles.contactListContainer}>
+                {chatsListLoading ? (
+                  <div className={`d-flex flex-row justify-content-center`}>
+                    <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                   </div>
+                ) : (
+                  <>
+                    <div className={styles.filters}>
+                      {/* three buttons to filter unread, all and group chats. All selected by default. */}
+                      <Button
+                        onClick={() => {
+                          setFilterType('all');
+                        }}
+                        data-testid="allChat"
+                        className={[
+                          styles.filterButton,
+                          filterType === 'all' && styles.selectedBtn,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        data-testid="unreadChat"
+                        onClick={() => {
+                          setFilterType('unread');
+                        }}
+                        className={[
+                          styles.filterButton,
+                          filterType === 'unread' && styles.selectedBtn,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
+                        Unread
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setFilterType('group');
+                        }}
+                        data-testid="groupChat"
+                        className={[
+                          styles.filterButton,
+                          filterType === 'group' && styles.selectedBtn,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
+                        Groups
+                      </Button>
+                    </div>
 
-                  <div
-                    data-testid="contactCardContainer"
-                    className={styles.contactCardContainer}
-                  >
-                    {!!chats.length &&
-                      chats.map((chat: GroupChat) => {
-                        const cardProps: InterfaceContactCardProps = {
-                          id: chat._id,
-                          title: !chat.isGroup
-                            ? chat.users[0]?._id === userId
-                              ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
-                              : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
-                            : (chat.name ?? ''),
-                          image: chat.isGroup
-                            ? (chat.image ?? '')
-                            : userId
-                              ? (chat.users[1]?.image ?? '')
-                              : (chat.users[0]?.image ?? ''),
-                          setSelectedContact,
-                          selectedContact,
-                          isGroup: chat.isGroup,
-                          unseenMessages: Number(
-                            (
-                              JSON.parse(
-                                chat.unseenMessagesByUsers as string,
-                              ) as Record<string, number>
-                            )[userId as string],
-                          ),
-                          lastMessage:
-                            chat.messages[chat.messages.length - 1]
-                              ?.messageContent,
-                        };
-                        return <ContactCard {...cardProps} key={chat._id} />;
-                      })}
-                  </div>
-                </>
-              )}
+                    <div
+                      data-testid="contactCardContainer"
+                      className={styles.contactCardContainer}
+                    >
+                      {!!chats.length &&
+                        chats.map((chat: GroupChat) => {
+                          const cardProps: InterfaceContactCardProps = {
+                            id: chat._id,
+                            title: !chat.isGroup
+                              ? chat.users[0]?._id === userId
+                                ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
+                                : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
+                              : (chat.name ?? ''),
+                            image: chat.isGroup
+                              ? (chat.image ?? '')
+                              : userId
+                                ? (chat.users[1]?.image ?? '')
+                                : (chat.users[0]?.image ?? ''),
+                            setSelectedContact,
+                            selectedContact,
+                            isGroup: chat.isGroup,
+                            unseenMessages: Number(
+                              (
+                                JSON.parse(
+                                  chat.unseenMessagesByUsers as string,
+                                ) as Record<string, number>
+                              )[userId as string],
+                            ),
+                            lastMessage:
+                              chat.messages[chat.messages.length - 1]
+                                ?.messageContent,
+                          };
+                          return <ContactCard {...cardProps} key={chat._id} />;
+                        })}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-          <div className={styles.chatContainer} id="chat-container">
-            <ChatRoom
-              chatListRefetch={chatsListRefetch}
-              selectedContact={selectedContact}
-              organizationId={organizationId}
-            />
+            <div className={styles.chatContainer} id="chat-container">
+              <ChatRoom
+                chatListRefetch={chatsListRefetch}
+                selectedContact={selectedContact}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {createGroupChatModalisOpen && (
-        <CreateGroupChat
-          toggleCreateGroupChatModal={toggleCreateGroupChatModal}
-          createGroupChatModalisOpen={createGroupChatModalisOpen}
-          chatsListRefetch={chatsListRefetch}
-        ></CreateGroupChat>
-      )}
-      {createDirectChatModalisOpen && (
-        <CreateDirectChat
-          toggleCreateDirectChatModal={toggleCreateDirectChatModal}
-          createDirectChatModalisOpen={createDirectChatModalisOpen}
-          chatsListRefetch={chatsListRefetch}
-          chats={chats}
-        ></CreateDirectChat>
-      )}
+        {createGroupChatModalisOpen && (
+          <CreateGroupChat
+            toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+            createGroupChatModalisOpen={createGroupChatModalisOpen}
+            chatsListRefetch={chatsListRefetch}
+          ></CreateGroupChat>
+        )}
+        {createDirectChatModalisOpen && (
+          <CreateDirectChat
+            toggleCreateDirectChatModal={toggleCreateDirectChatModal}
+            createDirectChatModalisOpen={createDirectChatModalisOpen}
+            chatsListRefetch={chatsListRefetch}
+            chats={chats}
+          ></CreateDirectChat>
+        )}
+      </OrganizationProvider>
     </>
   );
 }

@@ -28,6 +28,7 @@ import ChatRoom from './ChatRoom';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
+import { OrganizationProvider } from 'contexts/OrganizationContext';
 
 /**
  * Unit tests for the ChatRoom component
@@ -303,70 +304,6 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
       variables: {
         id: '8',
       },
-    },
-    result: {
-      data: {
-        getUnreadChatsByUserId: {
-          _id: '1',
-          createdAt: '2345678903456',
-          isGroup: false,
-          creator: {
-            _id: '64378abd85008f171cf2990d',
-            firstName: 'Wilt',
-            lastName: 'Shepherd',
-            image: null,
-            email: 'testsuperadmin@example.com',
-            createdAt: '2023-04-13T04:53:17.742Z',
-            __typename: 'User',
-          },
-          organization: null,
-          name: '',
-          messages: [
-            {
-              _id: '345678',
-              createdAt: '345678908765',
-              messageContent: 'Hello',
-              media: null,
-              replyTo: null,
-              type: 'STRING',
-              sender: {
-                _id: '2',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: '',
-              },
-            },
-          ],
-          users: [
-            {
-              _id: '1',
-              firstName: 'Disha',
-              lastName: 'Talreja',
-              email: 'disha@example.com',
-              image: '',
-            },
-            {
-              _id: '2',
-              firstName: 'Test',
-              lastName: 'User',
-              email: 'test@example.com',
-              image: '',
-            },
-          ],
-          admins: [],
-          unseenMessagesByUsers: JSON.stringify({
-            '1': 0,
-            '2': 0,
-          }),
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UNREAD_CHAT_LIST,
-      variables: {},
     },
     result: {
       data: {
@@ -5686,11 +5623,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact=""
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5713,15 +5648,13 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mocks} link={link}>
+      <MockedProvider link={link} addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact="1"
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5744,15 +5677,13 @@ describe('Testing Chatroom Component [User Portal]', () => {
     ];
     const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact="1"
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5833,15 +5764,13 @@ describe('Testing Chatroom Component [User Portal]', () => {
     ];
     const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact="1"
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5923,11 +5852,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact="1"
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5952,11 +5879,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom
-                selectedContact="1"
-                chatListRefetch={vi.fn()}
-                organizationId="1"
-              />
+              <OrganizationProvider organizationId="1">
+                <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              </OrganizationProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
