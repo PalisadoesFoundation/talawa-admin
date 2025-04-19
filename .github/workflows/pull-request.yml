@@ -173,7 +173,7 @@ jobs:
           BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
 
           # Count all changed files excluding .md files
-          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -v "\.md$" | wc -l | tr -d ' ')
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -v -i "\.md$" | wc -l | tr -d ' ')
           echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
@@ -499,7 +499,7 @@ jobs:
     name: Validate CodeRabbit Approval
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]'
-    needs: [Test-Docusaurus-Deployment]
+    needs: [Test-Docusaurus-Deployment, Check-Target-Branch]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
