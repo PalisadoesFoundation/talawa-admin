@@ -98,12 +98,13 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
+  } = useQuery<InterfaceOrganizationTagsQuery>(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
-      input: { id: orgId },
+      input: {
+        id: orgId,
+      },
+      filter: tagSearchName,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-      sortedBy: { id: tagSortOrder },
     },
   });
 
@@ -111,46 +112,37 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          null,
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        prevResult: InterfaceOrganizationTagsQuery,
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
+          fetchMoreResult?: InterfaceOrganizationTagsQuery;
         },
-      ) => {
+      ): InterfaceOrganizationTagsQuery => {
         if (!fetchMoreResult) {
           return prevResult;
         }
 
         // Check if organizations exists in both prevResult and fetchMoreResult
-        if (
-          !prevResult.organizations?.[0] ||
-          !fetchMoreResult.organizations?.[0]
-        ) {
+        if (!prevResult.organization || !fetchMoreResult.organization) {
           return prevResult;
         }
 
         return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
+          organization: {
+            ...prevResult.organization,
+            tags: {
+              ...prevResult.organization.tags,
+              edges: [
+                ...prevResult.organization.tags.edges,
+                ...fetchMoreResult.organization.tags.edges,
+              ],
+              pageInfo: fetchMoreResult.organization.tags.pageInfo,
             },
-          ],
+          },
         };
       },
     });
@@ -204,16 +196,25 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge: { node: InterfaceTagData }) => edge.node,
+    orgUserTagsData?.organization?.tags?.edges?.map(
+      (edge: { node: { id: string; name: string } }, index: number) => ({
+        _id: edge.node.id,
+        id: index + 1,
+        name: edge.node.name,
+        childTags: { totalCount: 0 },
+        usersAssignedTo: { totalCount: 0 },
+      }),
     ) || [];
-
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    if (tagId) {
+      navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    }
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    if (tagId) {
+      navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    }
   };
 
   const columns: GridColDef[] = [
@@ -242,7 +243,7 @@ function OrganizationTags(): JSX.Element {
             {params.row.parentTag &&
               params.row.ancestorTags?.map((tag) => (
                 <div
-                  key={tag._id}
+                  key={tag.id}
                   className={styles.tagsBreadCrumbs}
                   data-testid="ancestorTagsBreadCrumbs"
                 >
@@ -250,7 +251,6 @@ function OrganizationTags(): JSX.Element {
                   <i className={'mx-2 fa fa-caret-right'} />
                 </div>
               ))}
-
             <div
               className={styles.subTagsLink}
               data-testid="tagName"
@@ -317,11 +317,11 @@ function OrganizationTags(): JSX.Element {
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => redirectToManageTag(params.row._id)}
+            onClick={() => redirectToManageTag(params.row._id)} // Change this to use _id instead of id
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
-            {t('manageTag')}
+            {t('edit')}
           </Button>
         );
       },
@@ -397,7 +397,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                    orgUserTagsData?.organization?.tags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -408,7 +408,7 @@ function OrganizationTags(): JSX.Element {
                     disableColumnMenu
                     columnBufferPx={7}
                     hideFooter={true}
-                    getRowId={(row) => row.id}
+                    getRowId={(row) => row._id}
                     slots={{
                       noRowsOverlay: () => (
                         <Stack
@@ -446,10 +446,7 @@ function OrganizationTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={userTagsList?.map((userTag, index) => ({
-                      id: index + 1,
-                      ...userTag,
-                    }))}
+                    rows={userTagsList}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

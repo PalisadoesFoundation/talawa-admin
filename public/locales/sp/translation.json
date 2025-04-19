@@ -320,9 +320,10 @@
     "createUser": "Crear usuario"
   },
   "organizationTags": {
+    "manageTag": "Gestionar Etiqueta",
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
-    "manageTag": "Gestionar",
+    "edit": "Editar",
     "editTag": "Editar",
     "removeTag": "Eliminar",
     "tagDetails": "Detalles de la Etiqueta",
@@ -340,6 +341,7 @@
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
+    "manageTag": "Administrar etiqueta",
     "addPeopleToTag": "Agregar Personas a la etiqueta",
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
