@@ -318,7 +318,10 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const loginLink = async (
+    e: ChangeEvent<HTMLFormElement>,
+    isAdminRoute: boolean = false,
+  ): Promise<void> => {
     e.preventDefault();
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
@@ -352,16 +355,15 @@ const loginPage = (): JSX.Element => {
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
-        // setItem('FirstName', user.firstName);
-        // setItem('LastName', user.lastName);
-        // setItem('UserImage', user.avatarURL);
-        if (role === 'admin') {
+
+        if (isAdmin) {
           setItem('id', loggedInUserId);
+          navigate('/orglist'); // Admin dashboard
         } else {
           setItem('userId', loggedInUserId);
+          navigate('/user/organizations'); // User dashboard
         }
 
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
         startSession();
       } else {
         toast.warn(tErrors('notFound') as string);

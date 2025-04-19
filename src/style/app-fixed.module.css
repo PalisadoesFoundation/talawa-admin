@@ -36,6 +36,8 @@
  */
 
 :root {
+  --primary-theme-color: #1778f2;
+
   --addButton-font: #555555;
   --addButton-border: #eaebef;
   --addButton-bg: #a8c7fa;

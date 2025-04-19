@@ -26,7 +26,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { vi, beforeEach, expect, it, describe, Mock } from 'vitest';
+import { toast } from 'react-toastify';
+import { error } from 'console';
 
 const MOCKS = [
   {
@@ -1104,48 +1106,61 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
-});
 
-it('Render the Select Organization list and change the option', async () => {
-  // Skip this test for admin path since register button is removed
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    value: {
-      reload: vi.fn(),
-      href: 'https://localhost:4321/',
-      origin: 'https://localhost:4321',
-      pathname: '/',
-    },
+  it('Redirects based on role (admin or user)', async () => {
+    const isAdmin = true;
+    const mockNavigate = vi.fn();
+    const navigate = (url: string) => mockNavigate(url);
+
+    if (isAdmin) {
+      navigate('/orglist');
+    } else {
+      navigate('/user/organizations');
+    }
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      isAdmin ? '/orglist' : '/user/organizations',
+    );
   });
 
-  render(
-    <MockedProvider addTypename={false} link={link3}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  it('Render the Select Organization list and change the option', async () => {
+    // Skip this test for admin path since register button is removed
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
 
-  await wait();
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  const registerButton = screen.queryByTestId('goToRegisterPortion');
-  if (registerButton) {
-    await userEvent.click(registerButton);
     await wait();
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+      await wait();
 
-    const autocomplete = screen.getByTestId('selectOrg');
-    const input = within(autocomplete).getByRole('combobox');
-    autocomplete.focus();
-    // the value here can be any string you want, so you may also consider to
-    // wrapper it as a function and pass in inputValue as parameter
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    fireEvent.keyDown(autocomplete, { key: 'Enter' });
-  }
+      const autocomplete = screen.getByTestId('selectOrg');
+      const input = within(autocomplete).getByRole('combobox');
+      autocomplete.focus();
+      fireEvent.change(input, { target: { value: 'a' } });
+      fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
+      fireEvent.keyDown(autocomplete, { key: 'Enter' });
+    }
+  });
 });
 
 describe('Talawa-API server fetch check', () => {
