@@ -21,6 +21,7 @@ import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
   ORGANIZATION_LIST,
+  ORGANIZATION_LIST_BY_SEARCH,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -73,47 +74,30 @@ const MOCKS = [
 
 const MOCKS3 = [
   {
-    request: { query: ORGANIZATION_LIST },
+    request: { query: ORGANIZATION_LIST_BY_SEARCH },
     result: {
       data: {
         organizations: [
           {
-            _id: '6437904485008f171cf29924',
-            image: null,
-            creator: { firstName: 'Wilt', lastName: 'Shepherd' },
-            name: 'Unity Foundation',
-            members: [{ _id: '64378abd85008f171cf2990d' }],
-            admins: [{ _id: '64378abd85008f171cf2990d' }],
-            createdAt: '2023-04-13T05:16:52.827Z',
-            address: {
-              city: 'Bronx',
-              countryCode: 'US',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Random Street',
-              line2: 'Apartment 456',
-              postalCode: '10451',
-              sortingCode: 'ABC-123',
-              state: 'NYC',
-            },
+            id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+            name: 'Unity Foundation - North',
+            city: 'Fort Collins',
+            state: 'CO',
+            countryCode: 'us',
           },
           {
-            _id: 'db1d5caad2ade57ab811e681',
-            image: null,
-            creator: { firstName: 'Sonya', lastName: 'Jones' },
-            name: 'Mills Group',
-            members: [{ _id: '661b8410bd25a325da05e67c' }],
-            admins: [{ _id: '661b8410bd25a325da05e67c' }],
-            createdAt: '2024-04-14T07:21:52.940Z',
-            address: {
-              city: 'Lake Martineside',
-              countryCode: 'SL',
-              dependentLocality: 'Apt. 544',
-              line1: '5112 Dare Centers',
-              line2: 'Suite 163',
-              postalCode: '10452',
-              sortingCode: '46565-3458',
-              state: 'New Hampshire',
-            },
+            id: '01960b81-bfed-7524-bc73-c1a67449d746',
+            name: 'Unity Foundation - South',
+            city: 'Miami',
+            state: 'FL',
+            countryCode: 'us',
+          },
+          {
+            id: '01960b81-bfed-751e-a6e6-eca1c98fc585',
+            name: 'Unity Foundation - East',
+            city: 'Boston',
+            state: 'MA',
+            countryCode: 'us',
           },
         ],
       },
@@ -1139,6 +1123,7 @@ it('Render the Select Organization list and change the option', async () => {
 
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
+    await userEvent.click(input);
     autocomplete.focus();
     // the value here can be any string you want, so you may also consider to
     // wrapper it as a function and pass in inputValue as parameter
