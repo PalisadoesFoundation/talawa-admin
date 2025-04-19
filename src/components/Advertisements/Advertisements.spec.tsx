@@ -100,7 +100,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
-  test('switches between tabs', async () => {
+  it('switches between tabs', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -277,6 +277,579 @@ describe('Testing Advertisement Component', () => {
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+  });
+
+  it('loads more archived advertisements on scroll', async () => {
+    const initialArchivedData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-03').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: 'cursor-2',
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '121',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description:
+                        'this is an infinitely scrolled archived advertisement',
+                      endAt: new Date('2025-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop infinite 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-2',
+                  endCursor: 'cursor-3',
+                  hasNextPage: false,
+                  hasPreviousPage: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    // Render component with mocks
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={initialArchivedData} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Wait for initial data to load
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    // before infinite scroll
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Cookie shop infinite 1'),
+    ).not.toBeInTheDocument();
+
+    // archivedAds is the default tab.
+
+    await act(() => {
+      const tab = screen.getByText('Completed Campaigns');
+      fireEvent.click(tab);
+      expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+        'Completed Campaigns',
+      );
+    });
+
+    await act(() => {
+      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    });
+
+    // all data should be present
+    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+  });
+
+  it('loads more active advertisements on scroll', async () => {
+    const initialActiveData = [
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: null,
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 2',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '3',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 3',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '4',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 4',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '5',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 5',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    node: {
+                      id: '6',
+                      createdAt: new Date('2025-02-03').toISOString(),
+                      description: 'this is an active advertisement',
+                      endAt: new Date('2030-01-01').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop 6',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-1',
+                  endCursor: 'cursor-2',
+                  hasNextPage: true,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: {
+            id: '1',
+            first: 6,
+            after: 'cursor-2',
+            where: {
+              isCompleted: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              advertisements: {
+                edges: [
+                  {
+                    node: {
+                      id: '121',
+                      createdAt: new Date('2025-02-02').toISOString(),
+                      description:
+                        'this is an infinitely scrolled active advertisement',
+                      endAt: new Date('2030-02-03').toISOString(),
+                      organization: {
+                        id: '1',
+                      },
+                      name: 'Cookie shop infinite 1',
+                      startAt: new Date('2025-02-02').toISOString(),
+                      type: 'banner',
+                      attachments: [
+                        {
+                          mimeType: 'image/jpeg',
+                          url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
+                        },
+                      ],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'cursor-2',
+                  endCursor: 'cursor-3',
+                  hasNextPage: false,
+                  hasPreviousPage: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    // Render component with mocks
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={initialActiveData} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Wait for initial data to load
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    // before infinite scroll
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Cookie shop infinite 1'),
+    ).not.toBeInTheDocument();
+
+    // activeads is  not the default tab
+    await act(() => {
+      const tab = screen.getByText('Active Campaigns');
+      fireEvent.click(tab);
+    });
+
+    await wait();
+    expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+      'Active Campaigns',
+    );
+
+    await act(() => {
+      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    });
+
+    await wait();
+
+    // all data should be present
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
   });
 
   it('search button renders correctly with placeholder', async () => {
@@ -2122,6 +2695,7 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('advertisements')).toBeInTheDocument();
+    expect(screen.queryByTestId('Ad_name')).not.toBeInTheDocument();
   });
 
   test('title is set correctly', async () => {
