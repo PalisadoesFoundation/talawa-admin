@@ -82,14 +82,12 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    //Testing rendering
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
     expect(screen.getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
-    //Testing successful deletion
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('deletebtn'));
 
@@ -110,7 +108,6 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletedMessage).toBeNull();
     });
 
-    //Testing unsuccessful deletion
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
     fireEvent.click(screen.getByTestId('moreiconbtn'));
@@ -123,7 +120,7 @@ describe('Testing Advertisement Entry Component', () => {
           id: '1',
         },
       });
-      const deletionFailedText = screen.queryByText((content, element) => {
+      const deletionFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Deletion Failed' &&
           element.tagName.toLowerCase() === 'div'
@@ -150,30 +147,20 @@ describe('Testing Advertisement Entry Component', () => {
           type: AdvertisementType.Banner,
           updatedAt: new Date(),
         }}
-        setAfterActive={function () // _value: React.SetStateAction<string | null | undefined>,
-        : void {
-          throw new Error('Function not implemented.');
-        }}
-        setAfterCompleted={function () // _value: React.SetStateAction<string | null | undefined>,
-        : void {
-          throw new Error('Function not implemented.');
-        }}
+        setAfterActive={vi.fn()}
+        setAfterCompleted={vi.fn()}
       />,
     );
 
-    //Check if component renders with default ''(empty string)
-    const elements = screen.getAllByText(''); // This will return an array of matching elements
+    const elements = screen.getAllByText('');
     elements.forEach((element) => expect(element).toBeInTheDocument());
 
-    // Check that the component renders with default `mediaUrl` (empty string)
     const mediaElement = screen.getByTestId('media');
     expect(mediaElement).toHaveAttribute('src', 'test.jpg');
 
-    // Check that the component renders with default `endDate`
     const defaultEndDate = new Date().toDateString();
     expect(screen.getByText(`Ends : ${defaultEndDate}`)).toBeInTheDocument();
 
-    // Check that the component renders with default `startDate`
     const defaultStartDate = new Date().toDateString();
     expect(
       screen.getByText(`Starts : ${defaultStartDate}`),
@@ -207,19 +194,12 @@ describe('Testing Advertisement Entry Component', () => {
           type: mockType,
           updatedAt: mockUpdatedAt,
         }}
-        setAfterActive={function () // _value: React.SetStateAction<string | null | undefined>,
-        : void {
-          throw new Error('Function not implemented.');
-        }}
-        setAfterCompleted={function () // _value: React.SetStateAction<string | null | undefined>,
-        : void {
-          throw new Error('Function not implemented.');
-        }}
+        setAfterActive={vi.fn()}
+        setAfterCompleted={vi.fn()}
       />,
     );
 
-    // Check that the component renders with provided values
-    expect(getByText(mockName)).toBeInTheDocument();
+    expect(screen.getByText(mockName)).toBeInTheDocument();
     expect(screen.getByText(`Type: ${mockType}`)).toBeInTheDocument();
     expect(screen.getByTestId('media')).toHaveAttribute('src', mockMediaUrl);
     expect(
@@ -257,27 +237,20 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    // Test initial rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
 
-    // Test dropdown functionality
     const optionsButton = getByTestId('moreiconbtn');
 
-    // Initially, the dropdown should not be visible
     expect(queryByText('Edit')).toBeNull();
 
-    // Click to open the dropdown
     fireEvent.click(optionsButton);
 
-    // After clicking the button, the dropdown should be visible
     expect(queryByText('Edit')).toBeInTheDocument();
 
-    // Click again to close the dropdown
     fireEvent.click(optionsButton);
 
-    // After the second click, the dropdown should be hidden again
     expect(queryByText('Edit')).toBeNull();
   });
 
@@ -494,14 +467,12 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    //Testing rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getByTestId('Ad_type')).toBeInTheDocument();
     expect(getByTestId('Ad_type')).toHaveTextContent('banner');
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
-    //Testing successful deletion
     fireEvent.click(getByTestId('moreiconbtn'));
     fireEvent.click(getByTestId('deletebtn'));
 
@@ -522,7 +493,6 @@ describe('Testing Advertisement Entry Component', () => {
       expect(deletedMessage).toBeNull();
     });
 
-    //Testing unsuccessful deletion
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
     fireEvent.click(getByTestId('moreiconbtn'));
@@ -586,7 +556,6 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    //Testing rendering
     expect(getByTestId('AdEntry')).toBeInTheDocument();
     expect(getByTestId('Ad_type')).toBeInTheDocument();
     expect(getByTestId('Ad_type')).toHaveTextContent('banner');

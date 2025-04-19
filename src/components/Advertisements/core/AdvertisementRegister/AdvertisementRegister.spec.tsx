@@ -20,6 +20,14 @@ import {
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import * as router from 'react-router-dom';
+import {
+  createAdFailMock,
+  createAdvertisement,
+  dateConstants,
+  mockBigFile,
+  mockFile,
+  updateAdFailMock,
+} from './AdvertisementRegisterMocks';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -48,50 +56,6 @@ vi.mock('@apollo/client', async () => {
     useMutation: () => mockUseMutation(),
   };
 });
-
-const mockFile = new File(['dummy content'], 'test.jpg', {
-  type: 'image/jpeg',
-});
-
-const mockBigFile = new File(
-  [new Array(10 * 1024 * 1024).fill('a').join('')],
-  'test.jpg',
-  {
-    type: 'image/jpeg',
-  },
-);
-
-const createAdFailMock: MockedResponse = {
-  request: {
-    query: ADD_ADVERTISEMENT_MUTATION,
-    variables: {
-      organizationId: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-12-31T18:30:00.000Z',
-      endAt: '2023-01-31T18:30:00.000Z',
-      description: 'advertisement',
-      attachments: [mockFile],
-    },
-  },
-  error: new Error('Invalid arguments for this action.'),
-};
-
-const updateAdFailMock: MockedResponse = {
-  request: {
-    query: UPDATE_ADVERTISEMENT_MUTATION,
-    variables: {
-      id: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-01-31T18:30:00.000Z',
-      endAt: '2023-12-31T18:30:00.000Z',
-      description: 'advertisement',
-      attachments: [],
-    },
-  },
-  error: new Error('Invalid arguments for this action.'),
-};
 
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
@@ -198,7 +162,7 @@ describe('Testing Advertisement Register Component', () => {
     vi.useRealTimers();
   });
 
-  test('Throws error when the end date is less than the start date', async () => {
+  test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false}>
@@ -206,12 +170,6 @@ describe('Testing Advertisement Register Component', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
-                typeEdit="banner"
-                nameEdit="Ad1"
-                idEdit="1"
-                advertisementMedia=""
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
               />
@@ -251,14 +209,18 @@ describe('Testing Advertisement Register Component', () => {
     expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
 
     fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: '2023-01-01' },
+      target: { value: dateConstants.create.startAtISO.split('T')[0] },
     });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-01-01');
+    expect(getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
 
     fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: '2022-02-01' },
+      target: { value: dateConstants.create.endBeforeStartISO.split('T')[0] },
     });
-    expect(getByLabelText(translations.RendDate)).toHaveValue('2022-02-01');
+    expect(getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.create.endBeforeStartISO.split('T')[0],
+    );
 
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
@@ -375,16 +337,20 @@ describe('Testing Advertisement Register Component', () => {
     expect(getByLabelText(translations.RstartDate)).toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-      target: { value: '2023-02-01' },
+      target: { value: dateConstants.update.startAtISO.split('T')[0] },
     });
 
-    expect(getByLabelText(translations.RstartDate)).toHaveValue('2023-02-01');
+    expect(getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.update.startAtISO.split('T')[0],
+    );
 
     fireEvent.change(screen.getByLabelText(translations.RendDate), {
-      target: { value: '2023-01-01' },
+      target: { value: dateConstants.update.endBeforeStartISO.split('T')[0] },
     });
 
-    expect(getByLabelText(translations.RendDate)).toHaveValue('2023-01-01');
+    expect(getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.update.endBeforeStartISO.split('T')[0],
+    );
 
     fireEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
@@ -437,107 +403,6 @@ describe('Testing Advertisement Register Component', () => {
   it('create advertisement', async () => {
     const createAdMock = vi.fn();
     mockUseMutation.mockReturnValue([createAdMock]);
-    const startAtISO = '2024-12-31T18:30:00.000Z';
-    const endAtISO = '2030-02-01T18:30:00.000Z';
-    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
-    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
-    const startISOReceived = '2024-12-30T18:30:00.000Z';
-    const endISOReceived = '2030-01-31T18:30:00.000Z';
-    const createAdvertisement = [
-      {
-        request: {
-          query: ADD_ADVERTISEMENT_MUTATION,
-          variables: {
-            organizationId: '1',
-            name: 'Ad1',
-            description: 'this is a banner',
-            type: 'banner',
-            startAt: startISOReceived,
-            endAt: endISOReceived,
-          },
-        },
-        result: {
-          data: {
-            createAdvertisement: {
-              id: '123',
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: false,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [
-                  {
-                    node: {
-                      id: '1',
-                      createdAt: new Date().toISOString(),
-                      description:
-                        'This is a new advertisement created for testing.',
-                      endAt: endAtISO,
-                      organization: {
-                        id: '1',
-                      },
-                      name: 'Ad1',
-                      startAt: startAtISO,
-                      type: 'banner',
-                      attachments: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: true,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: null,
-            where: {
-              isCompleted: true,
-            },
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              advertisements: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-2',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      },
-    ];
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -582,21 +447,21 @@ describe('Testing Advertisement Register Component', () => {
       });
 
       fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: startAtISO.split('T')[0] },
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
       });
 
       fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: endAtISO.split('T')[0] },
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
       });
     });
 
     expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
     expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
     expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
-      startAtISO.split('T')[0],
+      dateConstants.create.startAtISO.split('T')[0],
     );
     expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
-      endAtISO.split('T')[0],
+      dateConstants.create.endAtISO.split('T')[0],
     );
 
     await act(async () => {
@@ -611,8 +476,8 @@ describe('Testing Advertisement Register Component', () => {
           type: 'banner',
           description: 'this is a banner',
           attachments: undefined,
-          startAt: startAtCalledWith,
-          endAt: endAtCalledWith,
+          startAt: dateConstants.create.startAtCalledWith,
+          endAt: dateConstants.create.endAtCalledWith,
         },
       });
       const creationFailedText = screen.queryByText((_, element) => {
@@ -629,12 +494,6 @@ describe('Testing Advertisement Register Component', () => {
   it('update advertisement', async () => {
     const updateMock = vi.fn();
     mockUseMutation.mockReturnValue([updateMock]);
-    const startAtISO = '2024-12-31T18:30:00.000Z';
-    const endAtISO = '2030-02-01T18:30:00.000Z';
-    const startAtCalledWith = '2024-12-31T00:00:00.000Z';
-    const endAtCalledWith = '2030-02-01T00:00:00.000Z';
-    const startISOReceived = '2024-12-30T18:30:00.000Z';
-    const endISOReceived = '2030-01-31T18:30:00.000Z';
     const updateAdMocks = [
       {
         request: {
@@ -659,12 +518,12 @@ describe('Testing Advertisement Register Component', () => {
                       createdAt: new Date().toISOString(),
                       description:
                         'This is a new advertisement created for testing.',
-                      endAt: endAtISO,
+                      endAt: dateConstants.update.endAtISO,
                       organization: {
                         id: '1',
                       },
                       name: 'Ad1',
-                      startAt: startAtISO,
+                      startAt: dateConstants.update.startAtISO,
                       type: 'banner',
                       attachments: [],
                     },
@@ -715,8 +574,8 @@ describe('Testing Advertisement Register Component', () => {
           variables: {
             id: '1',
             description: 'This is an updated advertisement',
-            startAt: startISOReceived,
-            endAt: endISOReceived,
+            startAt: dateConstants.update.startISOReceived,
+            endAt: dateConstants.update.endISOReceived,
           },
         },
         result: {
@@ -749,12 +608,12 @@ describe('Testing Advertisement Register Component', () => {
                       id: '1',
                       createdAt: new Date().toISOString(),
                       description: 'This is an updated advertisement',
-                      endAt: endAtISO,
+                      endAt: dateConstants.update.endAtISO,
                       organization: {
                         id: '1',
                       },
                       name: 'Ad1',
-                      startAt: startAtISO,
+                      startAt: dateConstants.update.startAtISO,
                       type: 'banner',
                       attachments: [],
                     },
@@ -837,11 +696,11 @@ describe('Testing Advertisement Register Component', () => {
     });
     await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: startAtISO.split('T')[0] },
+        target: { value: dateConstants.update.startAtISO.split('T')[0] },
       });
 
       fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: endAtISO.split('T')[0] },
+        target: { value: dateConstants.update.endAtISO.split('T')[0] },
       });
     });
 
@@ -854,8 +713,8 @@ describe('Testing Advertisement Register Component', () => {
         variables: {
           id: '1',
           description: 'This is an updated advertisement',
-          startAt: startAtCalledWith,
-          endAt: endAtCalledWith,
+          startAt: dateConstants.update.startAtCalledWith,
+          endAt: dateConstants.update.endAtCalledWith,
         },
       });
       const updateFailedText = screen.queryByText((_, element) => {
@@ -1078,9 +937,13 @@ describe('Testing Advertisement Register Component', () => {
     });
     mockUseMutation.mockReturnValue([updateMock]);
 
-    const originalStartDate = new Date('2023-06-01');
-    const originalEndDate = new Date('2023-06-30');
-    const newEndDate = '2023-07-15';
+    const originalStartDate = new Date(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    const originalEndDate = new Date(
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+    const newEndDate = dateConstants.update.endAtISO.split('T')[0];
 
     render(
       <ApolloProvider client={client}>
@@ -1115,8 +978,8 @@ describe('Testing Advertisement Register Component', () => {
       expect(updateMock).toHaveBeenCalledWith({
         variables: {
           id: '1',
-          endAt: '2023-07-15T00:00:00.000Z',
-          startAt: '2023-06-01T00:00:00.000Z',
+          endAt: dateConstants.update.endAtCalledWith,
+          startAt: dateConstants.create.startAtCalledWith,
         },
       });
     });
@@ -1266,9 +1129,13 @@ describe('Testing Advertisement Register Component', () => {
     });
     mockUseMutation.mockReturnValue([updateMock]);
 
-    const originalStartDate = new Date('2023-06-01');
-    const originalEndDate = new Date('2023-06-30');
-    const newStartDate = '2023-06-15';
+    const originalStartDate = new Date(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    const originalEndDate = new Date(
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+    const newStartDate = dateConstants.update.startAtISO.split('T')[0];
 
     render(
       <ApolloProvider client={client}>
@@ -1303,8 +1170,8 @@ describe('Testing Advertisement Register Component', () => {
       expect(updateMock).toHaveBeenCalledWith({
         variables: {
           id: '1',
-          startAt: '2023-06-15T00:00:00.000Z',
-          endAt: '2023-06-30T00:00:00.000Z',
+          startAt: dateConstants.update.startAtCalledWith,
+          endAt: dateConstants.create.endAtCalledWith,
         },
       });
       const callVariables = updateMock.mock.calls[0][0].variables;

@@ -79,7 +79,6 @@ function AdvertisementRegister({
   const { t: tErrors } = useTranslation('errors');
 
   const { orgId: currentOrg } = useParams();
-  console.log('currentOrg', currentOrg);
   const [show, setShow] = useState(false);
 
   if (currentOrg === undefined) {
