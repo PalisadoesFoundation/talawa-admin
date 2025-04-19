@@ -8,6 +8,7 @@
  * @param {InterfaceChatRoomProps} props - The props for the ChatRoom component.
  * @param {string} props.selectedContact - The ID of the selected contact or chat.
  * @param {Function} props.chatListRefetch - A function to refetch the chat list.
+ * @param {string} props.organizationId - The ID of the organization for MinIO storage.
  *
  * @returns {JSX.Element} The rendered ChatRoom component.
  *
@@ -15,17 +16,18 @@
  * - Uses Apollo Client for GraphQL queries, mutations, and subscriptions.
  * - Supports message editing, replying, and attachments.
  * - Displays group chat details when applicable.
+ * - Uses MinIO for file storage.
  *
  * @dependencies
  * - React, React-Bootstrap, Material-UI, and Apollo Client.
- * - Custom hooks: `useLocalStorage`.
- * - Utility functions: `convertToBase64`.
+ * - Custom hooks: `useLocalStorage`, `useMinioUpload`.
  *
  * @example
  * ```tsx
  * <ChatRoom
  *   selectedContact="12345"
  *   chatListRefetch={refetchChatList}
+ *   organizationId="org123"
  * />
  * ```
  *
@@ -51,8 +53,10 @@ import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
+
 interface InterfaceChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
@@ -62,6 +66,7 @@ interface InterfaceChatRoomProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
+  organizationId: string;
 }
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
@@ -69,6 +74,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     keyPrefix: 'userChatRoom',
   });
   const isMountedRef = useRef<boolean>(true);
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+  const [messageMediaUrls, setMessageMediaUrls] = useState<
+    Record<string, string>
+  >({});
 
   useEffect(() => {
     return () => {
@@ -90,6 +100,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     useState(false);
 
   const [attachment, setAttachment] = useState('');
+  const [attachmentObjectName, setAttachmentObjectName] = useState('');
 
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
@@ -114,7 +125,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
-      media: attachment,
+      media: attachmentObjectName,
       messageContent: newMessage,
     },
   });
@@ -139,12 +150,6 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       id: props.selectedContact,
     },
   });
-
-  // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
-  //   variables: {
-  //     id: userId,
-  //   },
-  // });
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST, {
     variables: {
@@ -190,6 +195,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setReplyToDirectMessage(null);
     setNewMessage('');
     setAttachment('');
+    setAttachmentObjectName('');
     await props.chatListRefetch({ id: userId as string });
   };
 
@@ -228,10 +234,58 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setAttachment(base64);
+      try {
+        // Upload file to MinIO
+        const { objectName } = await uploadFileToMinio(
+          file,
+          props.organizationId,
+        );
+        setAttachmentObjectName(objectName);
+
+        // Create a temporary URL for preview
+        const objectUrl = URL.createObjectURL(file);
+        setAttachment(objectUrl);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        // TODO: Show error toast to user
+      }
     }
   };
+
+  // Clean up object URL when component unmounts or attachment changes
+  useEffect(() => {
+    return () => {
+      if (attachment && attachment.startsWith('blob:')) {
+        URL.revokeObjectURL(attachment);
+      }
+    };
+  }, [attachment]);
+
+  useEffect(() => {
+    if (chat?.messages) {
+      // Load media URLs for messages with attachments
+      const loadMediaUrls = async () => {
+        const newMediaUrls: Record<string, string> = {};
+        for (const message of chat.messages) {
+          if (message.media && !messageMediaUrls[message.media]) {
+            try {
+              const url = await getFileFromMinio(
+                message.media,
+                props.organizationId,
+              );
+              newMediaUrls[message.media] = url;
+            } catch (error) {
+              console.error('Error loading media URL:', error);
+            }
+          }
+        }
+        if (Object.keys(newMediaUrls).length > 0) {
+          setMessageMediaUrls((prev) => ({ ...prev, ...newMediaUrls }));
+        }
+      };
+      loadMediaUrls();
+    }
+  }, [chat?.messages, props.organizationId]);
 
   return (
     <div
@@ -338,13 +392,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                                 </div>
                               </a>
                             )}
-                            {message.media && (
-                              <img
-                                className={styles.messageAttachment}
-                                src={message.media}
-                                alt="attachment"
-                              />
-                            )}
+                            {message.media &&
+                              messageMediaUrls[message.media] && (
+                                <img
+                                  className={styles.messageAttachment}
+                                  src={messageMediaUrls[message.media]}
+                                  alt="attachment"
+                                />
+                              )}
                             {message.messageContent}
                           </span>
                           <div className={styles.messageAttributes}>
@@ -441,10 +496,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             )}
             {attachment && (
               <div className={styles.attachment}>
-                <img src={attachment as string} alt="attachment" />
+                <img src={attachment} alt="attachment" />
 
                 <Button
-                  onClick={() => setAttachment('')}
+                  onClick={() => {
+                    setAttachment('');
+                    setAttachmentObjectName('');
+                  }}
                   className={styles.closeBtn}
                 >
                   <Close />

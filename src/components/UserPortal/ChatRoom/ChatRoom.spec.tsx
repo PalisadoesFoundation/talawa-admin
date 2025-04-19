@@ -5686,7 +5686,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact=""
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5713,7 +5717,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5740,7 +5748,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5825,7 +5837,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5907,7 +5923,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -5932,7 +5952,11 @@ describe('Testing Chatroom Component [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+              <ChatRoom
+                selectedContact="1"
+                chatListRefetch={vi.fn()}
+                organizationId="1"
+              />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

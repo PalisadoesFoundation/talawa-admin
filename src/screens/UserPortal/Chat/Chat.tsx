@@ -43,6 +43,8 @@ import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/Crea
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/Chat/type';
+import { useParams, Navigate } from 'react-router-dom';
+
 interface InterfaceContactCardProps {
   id: string;
   title: string;
@@ -57,6 +59,12 @@ interface InterfaceContactCardProps {
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
+  const { orgId: organizationId } = useParams();
+
+  // Redirect to home if organization ID is not available
+  if (!organizationId) {
+    return <Navigate to="/" replace />;
+  }
 
   const [chats, setChats] = useState<GroupChat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
@@ -266,6 +274,7 @@ export default function chat(): JSX.Element {
             <ChatRoom
               chatListRefetch={chatsListRefetch}
               selectedContact={selectedContact}
+              organizationId={organizationId}
             />
           </div>
         </div>
