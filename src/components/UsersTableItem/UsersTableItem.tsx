@@ -52,7 +52,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 type Props = {
   user: InterfaceQueryUserListItem;
