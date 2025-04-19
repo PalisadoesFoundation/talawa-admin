@@ -556,7 +556,6 @@ export const emptyMocks = [
       data: {
         organization: {
           advertisements: {
-            edges: [],
             pageInfo: {
               hasNextPage: false,
               endCursor: null,
@@ -580,7 +579,6 @@ export const emptyMocks = [
       data: {
         organization: {
           advertisements: {
-            edges: [],
             pageInfo: {
               hasNextPage: false,
               endCursor: null,

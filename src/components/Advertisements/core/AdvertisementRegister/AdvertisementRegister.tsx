@@ -142,32 +142,28 @@ function AdvertisementRegister({
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    try {
-      const files = e.target.files;
-      if (files && files.length > 0) {
-        const validFiles: File[] = [];
-        const maxFileSize = 5 * 1024 * 1024; // 5MB
-        const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const validFiles: File[] = [];
+      const maxFileSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
 
-        Array.from(files).forEach((file) => {
-          if (!allowedTypes.includes(file.type)) {
-            toast.error(`Invalid file type: ${file.name}`);
-          } else if (file.size > maxFileSize) {
-            toast.error(`File too large: ${file.name}`);
-          } else {
-            validFiles.push(file);
-          }
-        });
-
-        if (validFiles.length > 0) {
-          setFormState((prev) => ({
-            ...prev,
-            attachments: [...(prev.attachments || []), ...validFiles],
-          }));
+      Array.from(files).forEach((file) => {
+        if (!allowedTypes.includes(file.type)) {
+          toast.error(`Invalid file type: ${file.name}`);
+        } else if (file.size > maxFileSize) {
+          toast.error(`File too large: ${file.name}`);
+        } else {
+          validFiles.push(file);
         }
+      });
+
+      if (validFiles.length > 0) {
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [...(prev.attachments || []), ...validFiles],
+        }));
       }
-    } catch (e) {
-      toast.error('Error during File Upload');
     }
   };
 
