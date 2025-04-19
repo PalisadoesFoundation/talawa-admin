@@ -349,13 +349,6 @@ const loginPage = (): JSX.Element => {
         }
         const loggedInUserId = user.id;
 
-        // Check if a non-admin is trying to access admin route
-        if (isAdminRoute && !isAdmin) {
-          toast.error(t('Unauthorized_admin_access') as string);
-          loginRecaptchaRef.current?.reset();
-          return;
-        }
-
         setItem('token', authenticationToken);
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
