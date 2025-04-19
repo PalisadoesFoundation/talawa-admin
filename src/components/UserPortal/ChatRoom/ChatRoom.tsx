@@ -30,7 +30,7 @@
  * ```
  *
  */
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -257,7 +257,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   // Clean up object URL when component unmounts or attachment changes
   useEffect(() => {
     return () => {
-      if (attachment && attachment.startsWith('blob:')) {
+      if (attachment?.startsWith('blob:')) {
         URL.revokeObjectURL(attachment);
       }
     };

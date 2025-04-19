@@ -285,7 +285,7 @@ export default function chat(): JSX.Element {
             toggleCreateGroupChatModal={toggleCreateGroupChatModal}
             createGroupChatModalisOpen={createGroupChatModalisOpen}
             chatsListRefetch={chatsListRefetch}
-          ></CreateGroupChat>
+          />
         )}
         {createDirectChatModalisOpen && (
           <CreateDirectChat
@@ -293,7 +293,7 @@ export default function chat(): JSX.Element {
             createDirectChatModalisOpen={createDirectChatModalisOpen}
             chatsListRefetch={chatsListRefetch}
             chats={chats}
-          ></CreateDirectChat>
+          />
         )}
       </OrganizationProvider>
     </>
