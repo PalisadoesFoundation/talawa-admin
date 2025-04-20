@@ -43,7 +43,6 @@
  * />
  */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -579,15 +578,5 @@ function AdvertisementRegister({
     </>
   );
 }
-
-AdvertisementRegister.propTypes = {
-  name: PropTypes.string,
-  advertisementMedia: PropTypes.string,
-  type: PropTypes.string,
-  startAt: PropTypes.instanceOf(Date),
-  endAt: PropTypes.instanceOf(Date),
-  organizationId: PropTypes.string,
-  formStatus: PropTypes.string,
-};
 
 export default AdvertisementRegister;

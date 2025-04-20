@@ -127,7 +127,6 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Ad1"
                   idEdit="1"
-                  advertisementMedia=""
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
                 />
@@ -244,7 +243,6 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Advert1"
                 idEdit="1"
-                advertisementMedia="google.com"
                 formStatus="edit"
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
@@ -272,7 +270,6 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Advert1"
                 idEdit="1"
-                advertisementMedia=""
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
               />
@@ -307,7 +304,6 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Advert1"
                   idEdit="1"
-                  advertisementMedia=""
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
                 />
@@ -373,7 +369,6 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Advert1"
                 idEdit="1"
-                advertisementMedia="test.mp4"
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
               />
@@ -671,7 +666,6 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Ad1"
                   idEdit="1"
-                  advertisementMedia=""
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
                   formStatus="edit"
@@ -910,7 +904,6 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                advertisementMedia="https://example.com/image.jpg"
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
               />

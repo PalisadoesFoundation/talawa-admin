@@ -53,7 +53,7 @@ describe('Testing Advertisement Entry Component', () => {
   it('Testing rendering and deleting of advertisement', async () => {
     const deleteAdByIdMock = vi.fn();
     mockUseMutation.mockReturnValue([deleteAdByIdMock]);
-    const screen = render(
+    render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
