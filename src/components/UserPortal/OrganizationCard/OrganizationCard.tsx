@@ -56,7 +56,7 @@ import {
 import { useMutation, useQuery } from '@apollo/client';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import type { ApolloError } from '@apollo/client';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 import { getItem } from 'utils/useLocalstorage';
