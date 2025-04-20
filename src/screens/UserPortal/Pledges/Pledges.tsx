@@ -59,7 +59,7 @@ import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDeleteModal';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';

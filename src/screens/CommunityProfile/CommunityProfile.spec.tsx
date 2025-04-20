@@ -8,7 +8,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { toast } from 'react-toastify';
 import {
   RESET_COMMUNITY,

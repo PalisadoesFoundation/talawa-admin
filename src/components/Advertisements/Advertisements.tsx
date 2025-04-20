@@ -40,7 +40,7 @@ import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type { InterfaceQueryOrganizationAdvertisementListItem } from 'utils/interfaces';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchBar from 'subComponents/SearchBar';

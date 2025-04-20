@@ -8,7 +8,7 @@ import {
   // waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -160,8 +160,8 @@ vi.mock('Constant/constant.ts', async () => ({
 }));
 
 const mockNavigate = vi.fn();
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useNavigate: () => mockNavigate,
 }));
 

@@ -37,7 +37,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export interface InterfaceCardItem {
   title: string;

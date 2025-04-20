@@ -36,7 +36,7 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
