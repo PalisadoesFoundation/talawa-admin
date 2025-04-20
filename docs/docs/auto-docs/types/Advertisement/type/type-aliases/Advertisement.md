@@ -6,13 +6,13 @@
 
 > **Advertisement**: `object`
 
-Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L14)
+Defined in: [src/types/Advertisement/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L12)
 
 ## Type declaration
 
-### \_id
+### attachments?
 
-> **\_id**: `string`
+> `optional` **attachments**: [`AdvertisementAttachment`](AdvertisementAttachment.md)[]
 
 ### createdAt
 
@@ -22,29 +22,41 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 > `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
 
-### endDate
+### description?
 
-> **endDate**: `Date`
+> `optional` **description**: `string`
 
-### mediaUrl
+### endAt
 
-> **mediaUrl**: `URL`
+> **endAt**: `Date`
+
+### id
+
+> **id**: `string`
 
 ### name
 
 > **name**: `string`
 
+### organization
+
+> **organization**: `object`
+
+#### organization.id
+
+> **id**: `string`
+
 ### orgId
 
 > **orgId**: `string`
 
-### startDate
+### startAt
 
-> **startDate**: `Date`
+> **startAt**: `Date`
 
 ### type
 
-> **type**: [`AdvertisementType`](../variables/AdvertisementType.md)
+> **type**: [`AdvertisementType`](../enumerations/AdvertisementType.md)
 
 ### updatedAt
 

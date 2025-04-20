@@ -4,23 +4,39 @@
 
 # Interface: InterfaceFormStateTypes
 
-Defined in: [src/types/Advertisement/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L14)
+Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L21)
 
 ## Properties
 
-### advertisementMedia
+### attachments
 
-> **advertisementMedia**: `string`
+> **attachments**: `File`[]
 
-Defined in: [src/types/Advertisement/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L16)
+Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L28)
 
 ***
 
-### endDate
+### description
 
-> **endDate**: `Date`
+> **description**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L19)
+Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L25)
+
+***
+
+### endAt
+
+> **endAt**: `Date`
+
+Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L26)
+
+***
+
+### existingAttachments?
+
+> `optional` **existingAttachments**: `string`
+
+Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L29)
 
 ***
 
@@ -28,23 +44,23 @@ Defined in: [src/types/Advertisement/interface.ts:19](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L15)
+Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L22)
 
 ***
 
-### organizationId
+### organizationId?
 
-> **organizationId**: `string`
+> `optional` **organizationId**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L20)
+Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L27)
 
 ***
 
-### startDate
+### startAt
 
-> **startDate**: `Date`
+> **startAt**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L18)
+Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L24)
 
 ***
 
@@ -52,4 +68,4 @@ Defined in: [src/types/Advertisement/interface.ts:18](https://github.com/Palisad
 
 > **type**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L17)
+Defined in: [src/types/Advertisement/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L23)

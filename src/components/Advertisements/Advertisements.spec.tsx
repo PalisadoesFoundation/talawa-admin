@@ -2,23 +2,40 @@ import React from 'react';
 import { describe, test, expect, vi } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
 import {
   wait,
   client,
-  ORGANIZATIONS_LIST_MOCK,
-  ADD_ADVERTISEMENT_MUTATION_MOCK,
-  ADVERTISEMENTS_LIST_MOCK,
+  getCompletedAdvertisementMocks,
+  getActiveAdvertisementMocks,
+  deleteAdvertisementMocks,
+  emptyMocks,
+  initialArchivedData,
+  initialActiveData,
+  filterActiveAdvertisementData,
+  filterCompletedAdvertisementData,
+  dateConstants,
+  createAdvertisement,
+  createAdvertisementWithoutName,
+  createAdvertisementWithEndDateBeforeStart,
+  createAdvertisementError,
+  updateAdMocks,
+  fetchErrorMocks,
 } from './AdvertisementsMocks';
+import i18n from '../../utils/i18nForTest';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -27,6 +44,17 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
     fetchStore: vi.fn().mockResolvedValue([]),
   })),
 }));
+
+const translations = {
+  ...JSON.parse(
+    JSON.stringify(
+      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+    ),
+  ),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
+  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
 let mockID: string | undefined = '1';
 
 vi.mock('react-router', async () => {
@@ -38,70 +66,904 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
+const mockUseMutation = vi.fn();
+vi.mock('@apollo/client', async () => {
+  const actual = await vi.importActual('@apollo/client');
+  return {
+    ...actual,
+    useMutation: () => mockUseMutation(),
+  };
+});
+
 describe('Testing Advertisement Component', () => {
-  test('for creating new Advertisements', async () => {
-    const mocks = [
-      ORGANIZATIONS_LIST_MOCK,
-      ADD_ADVERTISEMENT_MUTATION_MOCK,
-      ...ADVERTISEMENTS_LIST_MOCK,
-    ];
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseMutation.mockReturnValue([vi.fn()]);
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
 
+  it('render spinner while loading', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
-        <BrowserRouter>
-          <Provider store={store}>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Advertisement />
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
             </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+  });
+
+  it('switches between tabs', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
     );
 
     await wait();
 
-    await userEvent.click(screen.getByText('Create Advertisement'));
-    await userEvent.type(
-      screen.getByLabelText('Enter name of Advertisement'),
-      'Cookie Shop',
+    expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+      /Completed Campaigns/i,
     );
-    const mediaFile = new File(['media content'], 'test.png', {
-      type: 'image/png',
-    });
 
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    fireEvent.change(mediaInput, { target: { files: [mediaFile] } });
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText('Select type of Advertisement'), {
-      target: { value: 'POPUP' },
-    });
+    const activeTab = screen.getByRole('tab', { name: /Active Campaigns/i });
+    fireEvent.click(activeTab);
 
-    fireEvent.change(screen.getByLabelText('Select Start Date'), {
-      target: { value: '2023-01-01' },
-    });
+    expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+      /Active Campaigns/i,
+    );
 
-    fireEvent.change(screen.getByLabelText('Select End Date'), {
-      target: { value: '2023-02-02' },
+    const archivedTab = screen.getByRole('tab', {
+      name: /Completed Campaigns/i,
     });
+    fireEvent.click(archivedTab);
 
-    await userEvent.click(screen.getByTestId('addonregister'));
+    expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+      /Completed Campaigns/i,
+    );
+  });
+
+  it('render active advertisement after loading', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(screen.getByTestId('Ad_name')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_name')).toHaveTextContent('Cookie shop');
+    expect(screen.getByTestId('Ad_desc')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_desc')).toHaveTextContent(
+      'this is an active advertisement',
+    );
+    expect(screen.getByTestId('media')).toBeInTheDocument();
+    expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+  });
+
+  it('filter active advertisement by name', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'Cookie' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
+  });
+
+  it('filter active advertisement by description', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'this is an active advertisement' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
+  });
+
+  it('render completed advertisement after loading', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(screen.getByTestId('Ad_name')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_name')).toHaveTextContent('Cookie shop');
+    expect(screen.getByTestId('Ad_desc')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_desc')).toHaveTextContent(
+      'this is a completed advertisement',
+    );
+    expect(screen.getByTestId('media')).toBeInTheDocument();
+    expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+  });
+
+  it('loads more archived advertisements on scroll', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={initialArchivedData} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(
-      await screen.findByText('Advertisement created successfully.'),
+      screen.queryByText('Cookie shop infinite 1'),
+    ).not.toBeInTheDocument();
+
+    await act(() => {
+      const tab = screen.getByText('Completed Campaigns');
+      fireEvent.click(tab);
+      expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+        'Completed Campaigns',
+      );
+    });
+
+    await act(() => {
+      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    });
+
+    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+  });
+
+  it('loads more active advertisements on scroll', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={initialActiveData} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(
+      screen.queryByText('Cookie shop infinite 1'),
+    ).not.toBeInTheDocument();
+
+    await act(() => {
+      const tab = screen.getByText('Active Campaigns');
+      fireEvent.click(tab);
+    });
+
+    await wait();
+    expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
+      'Active Campaigns',
+    );
+
+    await act(() => {
+      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    });
+
+    await wait();
+
+    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+  });
+
+  it('search button renders correctly with placeholder', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    expect(screen.getByTestId('searchname')).toHaveAttribute(
+      'placeholder',
+      'Search..',
+    );
+  });
+
+  it('filter active advertisement by name', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterActiveAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'Cookie shop 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('filter active advertisement by description', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterActiveAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'this is an active advertisement 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('filter completed advertisement by name', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'Cookie shop 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('filter completed advertisement by description', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'this is a completed advertisement 6' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 3')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 2')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
+  });
+
+  it('search for not existing advertisement', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.getByTestId('searchname')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByTestId('searchname'), {
+      target: { value: 'BandhanSearchedIt' },
+    });
+    fireEvent.click(screen.getByTestId('searchButton'));
+    expect(
+      screen.getAllByText('Ads not present for this campaign.'),
+    ).toHaveLength(2); // both completed and active tab
+  });
+
+  it('create advertisement', async () => {
+    const createAdMock = vi.fn();
+    mockUseMutation.mockReturnValue([createAdMock]);
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={createAdvertisement} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    await waitFor(() => {
+      expect(createAdMock).toHaveBeenCalledWith({
+        variables: {
+          organizationId: '1',
+          name: 'Ad1',
+          type: 'banner',
+          attachments: undefined,
+          startAt: dateConstants.create.startAtCalledWith,
+          endAt: dateConstants.create.endAtCalledWith,
+        },
+      });
+      const creationFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Creation Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(creationFailedText).toBeNull();
+    });
+    vi.useRealTimers();
   });
 
-  test('if the component renders correctly and ads are correctly categorized date wise', async () => {
-    mockID = '1';
-    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
-
+  it('creating advertisement without name should throw an error', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider
+                mocks={createAdvertisementWithoutName}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).not.toHaveValue();
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Invalid arguments for this action.',
+    );
+  });
+
+  it('creating advertisement with end date before than start date should throw an error', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={createAdvertisementWithEndDateBeforeStart}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endBeforeStartISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.create.endBeforeStartISO.split('T')[0],
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'End Date should be greater than Start Date',
+    );
+  });
+
+  it('should handle unknown errors', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={createAdvertisementError}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      "An error occurred. Couldn't create advertisement",
+    );
+  });
+
+  it('update advertisement', async () => {
+    const updateMock = vi.fn();
+    mockUseMutation.mockReturnValue([updateMock]);
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={updateAdMocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await wait();
+
+    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
+    expect(screen.getByTestId('Ad_name')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_name')).toHaveTextContent('Ad1');
+    expect(screen.getByTestId('Ad_desc')).toBeInTheDocument();
+    expect(screen.getByTestId('Ad_desc')).toHaveTextContent(
+      'This is a new advertisement created for testing.',
+    );
+    expect(screen.getByTestId('media')).toBeInTheDocument();
+    expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    const descriptionField = screen.getByLabelText(
+      'Enter description of Advertisement (optional)',
+    );
+    fireEvent.change(descriptionField, {
+      target: { value: 'This is an updated advertisement' },
+    });
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.update.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.update.endAtISO.split('T')[0] },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('addonupdate'));
+    });
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+          description: 'This is an updated advertisement',
+          startAt: dateConstants.update.startAtCalledWith,
+          endAt: dateConstants.update.endAtCalledWith,
+        },
+      });
+      const updateFailedText = screen.queryByText((_, element) => {
+        return (
+          element?.textContent === 'Update Failed' &&
+          element.tagName.toLowerCase() === 'div'
+        );
+      });
+      expect(updateFailedText).toBeNull();
+    });
+  });
+
+  it('cancels advertisement update when close button is clicked', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -112,35 +974,33 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    const date = await screen.findAllByTestId('Ad_end_date');
-    const dateString = date[0].innerHTML;
-    const dateMatch = dateString.match(
-      /\b(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{1,2})\s+(\d{4})\b/,
-    );
-    let dateObject = new Date();
-    if (dateMatch) {
-      const monthName = dateMatch[1];
-      const day = parseInt(dateMatch[2], 10);
-      const year = parseInt(dateMatch[3], 10);
-      const monthIndex =
-        'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(monthName) / 3;
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('editBtn'));
 
-      dateObject = new Date(year, monthIndex, day);
-    }
-    console.log(dateObject);
-    expect(dateObject.getTime()).toBeLessThan(new Date().getTime());
+    expect(screen.getByTestId('addonupdate')).toBeInTheDocument();
+    expect(screen.getByTestId('addonclose')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('addonclose'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('addonupdate')).not.toBeInTheDocument();
+    });
   });
 
-  test('delete ad', async () => {
-    mockID = '1';
-    const mocks = [...ADVERTISEMENTS_LIST_MOCK];
+  it('validates advertisement update form properly', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const updateMock = vi.fn();
+    mockUseMutation.mockReturnValue([updateMock]);
 
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -151,215 +1011,42 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    const moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    fireEvent.click(moreiconbtn[1]);
-    const deleteBtn = await screen.findByTestId('deletebtn');
-    expect(deleteBtn).toBeInTheDocument();
-    fireEvent.click(deleteBtn);
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.update.startAtISO.split('T')[0] },
+      });
+    });
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.update.endBeforeStartISO.split('T')[0] },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('addonupdate'));
+    });
+
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'End Date should be greater than Start Date',
+    );
+
+    expect(updateMock).not.toHaveBeenCalled();
   });
 
-  test('infinite scroll', async () => {
-    mockID = '1';
-    const mocks = [
-      ...ADVERTISEMENTS_LIST_MOCK,
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 2,
-            after: null,
-            last: null,
-            before: null,
-          },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '1',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor1',
-                    },
-                    {
-                      node: {
-                        _id: '2',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor2',
-                    },
-                    {
-                      node: {
-                        _id: '3',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor3',
-                    },
-                    {
-                      node: {
-                        _id: '4',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor4',
-                    },
-                    {
-                      node: {
-                        _id: '5',
-                        name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: 'cursor5',
-                    },
-                    {
-                      node: {
-                        _id: '6',
-                        name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: 'cursor6',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: 'cursor1',
-                    endCursor: 'cursor6',
-                    hasNextPage: true,
-                    hasPreviousPage: false,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: {
-            id: '1',
-            first: 6,
-            after: 'cursor6',
-            last: null,
-            before: null,
-          },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '7',
-                        name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    },
-                    {
-                      node: {
-                        _id: '8',
-                        name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    hasNextPage: false,
-                    hasPreviousPage: true,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: { id: '1', first: 6, after: 'cursor2' },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                _id: '1',
-                advertisements: {
-                  edges: [
-                    {
-                      node: {
-                        _id: '7',
-                        name: 'Advertisement7',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
-                        mediaUrl: 'http://example1.com',
-                      },
-                      cursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    },
-                    {
-                      node: {
-                        _id: '8',
-                        name: 'Advertisement8',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
-                        mediaUrl: 'http://example2.com',
-                      },
-                      cursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    },
-                  ],
-                  pageInfo: {
-                    startCursor: '5rdiyruyu3hkjkjiwfhwaify',
-                    endCursor: '5rdiyrhgkjkjjyg3iwfhwaify',
-                    hasNextPage: false,
-                    hasPreviousPage: true,
-                  },
-                  totalCount: 8,
-                },
-              },
-            ],
-          },
-        },
-      },
-    ];
-
-    render(
+  it('cancelling delete advertisement should close the modal', async () => {
+    const { getByTestId } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider
+                mocks={deleteAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -367,10 +1054,205 @@ describe('Testing Advertisement Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-    let moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    console.log('before scroll', moreiconbtn);
-    fireEvent.scroll(window, { target: { scrollY: 500 } });
-    moreiconbtn = await screen.findAllByTestId('moreiconbtn');
-    console.log('after scroll', moreiconbtn);
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await wait();
+    expect(getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('moreiconbtn'));
+    expect(getByTestId('deletebtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('deletebtn'));
+    await waitFor(() => {
+      expect(getByTestId('delete_title')).toBeInTheDocument();
+      expect(getByTestId('delete_body')).toBeInTheDocument();
+    });
+    await act(() => {
+      fireEvent.click(getByTestId('delete_no'));
+    });
+
+    await wait();
+    expect(screen.queryByTestId('delete_title')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('delete_body')).not.toBeInTheDocument();
+
+    expect(getByTestId('moreiconbtn')).toBeInTheDocument();
+  });
+
+  it('delete advertisement', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const { getByTestId } = render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={deleteAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await wait();
+    expect(getByTestId('moreiconbtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('moreiconbtn'));
+    expect(getByTestId('deletebtn')).toBeInTheDocument();
+    fireEvent.click(getByTestId('deletebtn'));
+    await waitFor(() => {
+      expect(getByTestId('delete_title')).toBeInTheDocument();
+      expect(getByTestId('delete_body')).toBeInTheDocument();
+    });
+    await act(() => {
+      fireEvent.click(getByTestId('delete_yes'));
+    });
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Advertisement deleted successfully.',
+      );
+    });
+  });
+
+  it('handles GraphQL errors when fetching advertisements', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={fetchErrorMocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    // Should show error messages
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'Failed to fetch advertisements',
+    );
+  });
+
+  test('skips queries when organization ID is missing', async () => {
+    mockID = undefined;
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={[]} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByTestId('advertisements')).toBeInTheDocument();
+    expect(screen.queryByTestId('Ad_name')).not.toBeInTheDocument();
+
+    mockID = '1'; // restore the mock id
+  });
+
+  test('title is set correctly', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const translations = JSON.parse(
+      JSON.stringify(
+        i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+      ),
+    );
+
+    expect(document.title).toBe(translations.title);
+  });
+
+  test('both empty advertisement array should render ad not availabe text correctly', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={emptyMocks} addTypename={false}>
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    const emptyTextElements = screen.queryAllByText(
+      'Ads not present for this campaign.',
+    );
+    expect(emptyTextElements).toHaveLength(2);
+    emptyTextElements.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
+  });
+
+  it('cancels advertisement creation when cancel button is clicked', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
+                <Advertisement />
+              </MockedProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Test Ad' },
+    });
+
+    fireEvent.click(screen.getByTestId('addonclose'));
+
+    await waitFor(() => {
+      expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
+    });
   });
 });
