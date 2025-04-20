@@ -17,7 +17,7 @@ export const mockFile = new File(['dummy content'], 'test.jpg', {
 });
 
 export const mockBigFile = new File(
-  [new Array(10 * 1024 * 1024).fill('a').join('')],
+  [new Array(6 * 1024 * 1024).fill('a').join('')],
   'test.jpg',
   {
     type: 'image/jpeg',

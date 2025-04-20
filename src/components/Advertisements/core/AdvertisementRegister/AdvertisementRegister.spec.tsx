@@ -154,7 +154,6 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(setTimeoutSpy).toHaveBeenCalled();
-    vi.useRealTimers();
   });
 
   test('Throws error at creation when the end date is less than the start date', async () => {

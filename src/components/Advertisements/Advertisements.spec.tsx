@@ -137,11 +137,13 @@ describe('Testing Advertisement Component', () => {
       /Active Campaigns/i,
     );
 
-    const archivedTab = screen.getByRole('tab', { name: /Active Campaigns/i });
+    const archivedTab = screen.getByRole('tab', {
+      name: /Completed Campaigns/i,
+    });
     fireEvent.click(archivedTab);
 
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
-      /Active Campaigns/i,
+      /Completed Campaigns/i,
     );
   });
 
