@@ -49,7 +49,6 @@ import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { toast } from 'react-toastify';
 
 export default function Advertisements(): JSX.Element {
-  console.log('advertisement pe aa raha hai');
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
@@ -244,7 +243,6 @@ export default function Advertisements(): JSX.Element {
                 ) : (
                   <div className={styles.justifyspAdvertisements}>
                     {activeAdvertisements.map((ad) => {
-                      console.log('coming inside the entry.............');
                       return (
                         <AdvertisementEntry
                           key={ad.id}
@@ -279,7 +277,6 @@ export default function Advertisements(): JSX.Element {
                 ) : (
                   <div className={styles.justifyspAdvertisements}>
                     {completedAdvertisements.map((ad) => {
-                      console.log('coming inside the entry.............');
                       return (
                         <AdvertisementEntry
                           key={ad.id}
