@@ -40,7 +40,7 @@ import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchBar from 'subComponents/SearchBar';
 import type { Advertisement } from 'types/Advertisement/type';
@@ -49,6 +49,7 @@ import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { toast } from 'react-toastify';
 
 export default function Advertisements(): JSX.Element {
+  console.log('advertisement pe aa raha hai');
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
 
@@ -243,6 +244,7 @@ export default function Advertisements(): JSX.Element {
                 ) : (
                   <div className={styles.justifyspAdvertisements}>
                     {activeAdvertisements.map((ad) => {
+                      console.log('coming inside the entry.............');
                       return (
                         <AdvertisementEntry
                           key={ad.id}
@@ -277,6 +279,7 @@ export default function Advertisements(): JSX.Element {
                 ) : (
                   <div className={styles.justifyspAdvertisements}>
                     {completedAdvertisements.map((ad) => {
+                      console.log('coming inside the entry.............');
                       return (
                         <AdvertisementEntry
                           key={ad.id}

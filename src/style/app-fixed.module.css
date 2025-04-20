@@ -729,8 +729,8 @@
   --reset-btn-colour: #1778f2;
 
   --form-control-focus-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
-  --primary-theme-color: #1778f2 --advertisement-dropdown-border: 1px solid
-    rgba(0, 0, 0, 0.15);
+  --primary-theme-color: #1778f2;
+  --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
   --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
@@ -1638,10 +1638,6 @@ form label,
   height: 350px;
 }
 
-.addCard {
-  width: 28rem;
-}
-
 .dropdownContainer {
   position: relative;
   display: inline-block;
@@ -1649,6 +1645,14 @@ form label,
 
 .dropdownContainer:hover .dropdownmenu {
   display: block;
+}
+
+.dropdownContainer:focus-within .dropdownmenu {
+  display: block;
+}
+
+.addCard > div:not(.dropdownContainer) {
+  flex: 0 0 200px;
 }
 
 .dropdownmenu {
@@ -1788,6 +1792,12 @@ form label,
   grid-template-rows: auto;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 0.8rem 0.4rem;
+}
+
+@media (max-width: 1024px) {
+  .justifyspAdvertisements {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .rowAdvertisements {
@@ -9216,8 +9226,6 @@ form {
 
 /* Add more Class Related to a particular Screen above this */
 
-/* Advertisement.tsx */
-
 .mediaContainer {
   position: relative;
   width: 100%;
@@ -9254,6 +9262,7 @@ form {
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 28rem;
 }
 
 .imageWrapper {
@@ -9271,21 +9280,12 @@ form {
   }
 
   .mediaContainer {
-    height: 10rem; /* Using relative units for better scalability */
+    height: 10rem;
   }
 
   .imageWrapper {
-    height: 10rem; /* Adjusted to relative units for consistency */
+    height: 10rem;
   }
-}
-
-.addCard > div:not(.dropdownContainer) {
-  flex: 0 0 200px;
-}
-
-.dropdownContainer {
-  position: relative;
-  display: inline-block;
 }
 
 .dropdownButton {

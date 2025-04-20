@@ -64,11 +64,19 @@ Defined in: [src/types/Advertisement/interface.ts:6](https://github.com/Palisado
 
 ***
 
-### setAfter
+### setAfterActive
 
-> **setAfter**: `Dispatch`\<`SetStateAction`\<`string`\>\>
+> **setAfterActive**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
 Defined in: [src/types/Advertisement/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L13)
+
+***
+
+### setAfterCompleted
+
+> **setAfterCompleted**: `Dispatch`\<`SetStateAction`\<`string`\>\>
+
+Defined in: [src/types/Advertisement/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L16)
 
 ***
 

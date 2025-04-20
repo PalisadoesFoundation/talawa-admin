@@ -16,7 +16,11 @@ Defined in: [src/components/Advertisements/core/AdvertisementEntry/Advertisement
 
 [`Advertisement`](../../../../../../types/Advertisement/type/type-aliases/Advertisement.md)
 
-#### setAfter
+#### setAfterActive
+
+`Dispatch`\<`SetStateAction`\<`string`\>\>
+
+#### setAfterCompleted
 
 `Dispatch`\<`SetStateAction`\<`string`\>\>
 

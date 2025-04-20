@@ -422,34 +422,6 @@ function AdvertisementRegister({
                   className={styles.inputField}
                 />
                 {/* Preview section */}
-                {formState.existingAttachments && (
-                  <div
-                    className={styles.previewAdvertisementRegister}
-                    data-testid="mediaPreview"
-                  >
-                    {formState.existingAttachments.includes('video') ? (
-                      <video
-                        muted
-                        autoPlay={false}
-                        loop={true}
-                        playsInline
-                        crossOrigin="anonymous"
-                        src={formState.existingAttachments}
-                      >
-                        <track
-                          kind="captions"
-                          srcLang="en"
-                          label="English captions"
-                        />
-                      </video>
-                    ) : (
-                      <img
-                        src={formState.existingAttachments}
-                        alt="Existing Attachment"
-                      />
-                    )}
-                  </div>
-                )}
                 {(formState.attachments || []).map((file, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
