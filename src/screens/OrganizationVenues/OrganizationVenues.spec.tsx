@@ -21,7 +21,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';
@@ -285,8 +285,8 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 
 describe('OrganizationVenue with missing orgId', () => {
   beforeAll(() => {
-    vi.doMock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.doMock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ orgId: undefined }),
     }));
   });
@@ -323,8 +323,8 @@ describe('Organisation Venues', () => {
   global.alert = vi.fn();
 
   beforeAll(() => {
-    vi.doMock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.doMock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ orgId: 'orgId' }),
     }));
   });

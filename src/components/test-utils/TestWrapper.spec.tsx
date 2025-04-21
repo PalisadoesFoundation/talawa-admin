@@ -37,7 +37,7 @@ vi.mock('react-i18next', () => ({
   ),
 }));
 
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
   BrowserRouter: ({ children }: { children: ReactNode }) => (
     <div data-testid="browser-router">{children}</div>
   ),

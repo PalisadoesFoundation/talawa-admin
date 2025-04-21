@@ -69,7 +69,7 @@ import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import {
   Frequency,

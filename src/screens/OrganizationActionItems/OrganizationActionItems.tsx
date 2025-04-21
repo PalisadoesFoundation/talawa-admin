@@ -52,6 +52,8 @@ import {
   GET_EVENTS_BY_IDS,
   GET_CATEGORIES_BY_IDS,
 } from 'GraphQl/Queries/Queries';
+import { Navigate, useParams } from 'react-router';
+
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';

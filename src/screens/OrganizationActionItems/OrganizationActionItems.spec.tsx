@@ -8,6 +8,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
+import { Provider } from 'react-redux';
+import { MemoryRouter, Route, Routes } from 'react-router';
+import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import styles from '../../style/app-fixed.module.css';
 
@@ -248,6 +255,13 @@ const customActionItemsMock: MockedResponse = {
   },
   result: { data: customActionItemsData },
 };
+describe('Testing Organization Action Items Screen', () => {
+  beforeAll(() => {
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
+      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
+    }));
+  });
 
 // Provide a categories mock that returns proper names for both categories
 const categoriesMockForFiltering: MockedResponse = {

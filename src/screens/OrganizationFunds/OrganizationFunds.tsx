@@ -8,7 +8,7 @@ import {
 } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';

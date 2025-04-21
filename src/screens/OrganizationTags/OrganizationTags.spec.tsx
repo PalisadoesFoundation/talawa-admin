@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -89,8 +89,8 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: () => ({ orgId: 'orgId' }),

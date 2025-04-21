@@ -57,7 +57,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 

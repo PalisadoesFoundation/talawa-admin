@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
@@ -41,8 +41,8 @@ const renderEventRegistrants = (): RenderResult => {
 
 describe('Event Registrants Component', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
@@ -264,8 +264,8 @@ describe('EventRegistrants CSS Tests', () => {
   };
 
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
     }));
   });

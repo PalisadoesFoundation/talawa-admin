@@ -7,7 +7,7 @@ import {
   fireEvent,
 } from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';

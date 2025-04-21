@@ -9,7 +9,7 @@ import {
 } from '@testing-library/react';
 import { MockedProvider, MockSubscriptionLink } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';

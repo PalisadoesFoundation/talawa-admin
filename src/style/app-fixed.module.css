@@ -36,6 +36,8 @@
  */
 
 :root {
+  --primary-theme-color: #1778f2;
+
   --addButton-font: #555555;
   --addButton-border: #eaebef;
   --addButton-bg: #a8c7fa;
@@ -217,7 +219,7 @@
   --secondText-color: #555555;
 
   --leftDrawer-bg: #ffffff;
-  --leftDrawer-fixedModule-bg: #f6f8fc;
+  --leftDrawer-fixedModule-bg: #ffffff;
   --leftDrawer-scrollbar-color: #eaebef;
   --leftDrawer-optionList-bg: #ffffff;
   --LeftDrawer-org-profileContainer-bg: #e0e9ff;
@@ -727,8 +729,10 @@
   --reset-btn-colour: #1778f2;
 
   --form-control-focus-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
-
-  --pledgeModal-bg: #ffffff;
+  --primary-theme-color: #1778f2;
+  --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
+  --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -830,6 +834,14 @@
   --checkbox-focus-border: #d1d5db;
 
   --rowBackgroundOrganizationFundCampaign-bg: #fff;
+
+  --createorgdropdown-button-bg: #eaebef;
+
+  --dropdown-border: #555555;
+  --dropdown-bg: #fcfcfc;
+  --dropdown-font-color: #555555;
+
+  --input-bg: #f2f7ff;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1292,13 +1304,12 @@ form label,
 /* Dropdown */
 
 .dropdown {
-  background-color: var(--sortBtn-bg) !important;
+  background-color: var(--dropdown-bg) !important;
   min-width: 150px;
   border: 1px solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .customDropdown {
@@ -1314,9 +1325,9 @@ form label,
     :disabled,
     :checked
   ) {
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
-  color: var(--dropdown-font) !important;
+  color: var(--dropdown-font-color) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -1325,7 +1336,7 @@ form label,
 }
 
 .createorgdropdown {
-  background-color: var(--createorgdropdown-button-bg);
+  background-color: var(--createorgdropdown-button-bg) !important;
   border: 1px solid var(--dropdown-border) !important;
   height: 3rem;
   margin-top: 0.7rem;
@@ -1409,9 +1420,8 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  margin-right: 10px;
-  background-color: '#F2F7FF';
-  background-color: 'red';
+  margin-left: 8px;
+  background-color: var(--input-bg);
   margin-right: 180px;
   width: 425px;
 }
@@ -1627,9 +1637,6 @@ form label,
 .cardOtherSettings {
   height: 350px;
 }
-.addCard {
-  width: 28rem;
-}
 
 .dropdownContainer {
   position: relative;
@@ -1638,6 +1645,14 @@ form label,
 
 .dropdownContainer:hover .dropdownmenu {
   display: block;
+}
+
+.dropdownContainer:focus-within .dropdownmenu {
+  display: block;
+}
+
+.addCard > div:not(.dropdownContainer) {
+  flex: 0 0 200px;
 }
 
 .dropdownmenu {
@@ -1740,7 +1755,6 @@ form label,
 }
 
 .closeButtonAdvertisementRegister {
-  position: absolute;
   top: 0px;
   right: 0px;
   width: 32px;
@@ -1768,12 +1782,32 @@ form label,
 .containerAdvertisements {
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
+  width: auto;
 }
 
 .justifyspAdvertisements {
   display: grid;
   width: 100%;
   margin-top: 30px;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+@media (max-width: 1024px) {
+  .justifyspAdvertisements {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rowAdvertisements {
+  margin-top: 20px;
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+  overflow: hidden;
 }
 
 .colAdvertisements {
@@ -1809,6 +1843,7 @@ form label,
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
   position: relative;
+  margin-right: 2rem;
 }
 
 .orgCard .innerContainer .orgImgContainer {
@@ -2316,10 +2351,12 @@ form label,
   width: 160px;
   font-size: 0.8rem;
 }
+
 .langBtn:active {
   background-color: var(--reset-backgroundcolor-color) !important;
   border-color: var(--reset-border-color) !important;
 }
+
 /* -- TableRow.tsx -- */
 
 /* -- CheckInWrapper.tsx -- */
@@ -4450,6 +4487,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4466,6 +4504,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4503,7 +4542,7 @@ form label,
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .syncIconStyle,
@@ -4527,7 +4566,7 @@ form label,
 
 .saveChangesBtn:hover {
   background-color: var(--card-background-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .mainContainer {
@@ -4555,11 +4594,13 @@ form label,
   font-size: 1.2rem;
   font-weight: 600;
 }
+
 .scrollableCardBody {
   max-height: min(220px, 50vh);
   overflow-y: auto;
   scroll-behavior: smooth;
 }
+
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -4632,6 +4673,7 @@ form label,
   opacity: 1;
   color: black !important;
 }
+
 .opendrawer {
   position: fixed;
   display: flex;
@@ -4653,6 +4695,7 @@ form label,
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
@@ -4669,6 +4712,7 @@ form label,
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -4705,6 +4749,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4721,6 +4766,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4785,7 +4831,7 @@ form label,
 .deleteButton:focus {
   background-color: var(--removeButton-bg) !important;
   color: var(--removeButton-color);
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
   outline: none;
 }
 
@@ -4807,7 +4853,7 @@ form label,
 
 .customFileInput::file-selector-button:hover {
   color: var(--card-background-color);
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .btnConfirmDelete:hover {
@@ -4889,7 +4935,7 @@ form {
   border-width: 2px;
   border-color: var(--resetbtn-border) !important;
   color: var(--resetbtn-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow) !important;
 }
 
 .syncIconStyle,
@@ -4913,7 +4959,7 @@ form {
 
 .saveChangesBtn:hover {
   background-color: var(--card-background-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .orgUpdateFormLables {
@@ -7298,7 +7344,7 @@ form {
 
 .btnsContainerSearchBar {
   display: flex;
-  width: 100%;
+  width: 95%;
   justify-content: space-between;
   margin: 2.5rem 0 2.5rem 0;
 }
@@ -7313,7 +7359,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
@@ -9179,6 +9225,99 @@ form {
 /* -- Users.tsx -- */
 
 /* Add more Class Related to a particular Screen above this */
+
+.mediaContainer {
+  position: relative;
+  width: 100%;
+  height: var(--advertisement-media-height);
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.carouselContainer {
+  height: 100%;
+}
+
+.noMediaPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: var(--dropdownmenu-li-hover);
+}
+
+.carouselContainer :global(.carousel-control-prev),
+.carouselContainer :global(.carousel-control-next) {
+  z-index: 5;
+}
+
+.addCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 28rem;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: var(--advertisement-media-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .addCard {
+    width: 100%;
+  }
+
+  .mediaContainer {
+    height: 10rem;
+  }
+
+  .imageWrapper {
+    height: 10rem;
+  }
+}
+
+.dropdownButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.dropdownmenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  min-width: 120px;
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+  background-color: var(--orText-bg);
+  border: var(--advertisement-dropdown-border);
+  border-radius: 0.25rem;
+  box-shadow: var(--advertisement-dropdown-box-shadow);
+}
+
+.dropdownmenu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f8f9fa;
+}
 
 /* ----------------------------------------------------- */
 
