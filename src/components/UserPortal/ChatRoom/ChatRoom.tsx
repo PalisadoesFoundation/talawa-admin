@@ -51,7 +51,8 @@ import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -63,6 +64,87 @@ interface InterfaceChatRoomProps {
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
+
+// Helper component to handle MinIO image loading
+interface MessageImageProps {
+  media: string;
+  organizationId: string;
+  getFileFromMinio: (
+    objectName: string,
+    organizationId: string,
+  ) => Promise<string>;
+}
+
+const MessageImage: React.FC<MessageImageProps> = ({
+  media,
+  organizationId,
+  getFileFromMinio,
+}) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(media && !media.startsWith('data:'));
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const loadImage = async (): Promise<void> => {
+      if (media && !media.startsWith('data:')) {
+        setLoading(true);
+        try {
+          const url = await getFileFromMinio(media, organizationId);
+          setImageUrl(url);
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching image from MinIO:', error);
+          setError(true);
+          setLoading(false);
+        }
+      }
+    };
+
+    if (media && !media.startsWith('data:')) {
+      loadImage();
+    }
+  }, [media, organizationId, getFileFromMinio]);
+
+  // If it's a Base64 image, use it directly
+  if (media.startsWith('data:')) {
+    return (
+      <img
+        className={styles.messageAttachment}
+        src={media}
+        alt="attachment"
+        onError={() => setError(true)}
+      />
+    );
+  }
+
+  // If loading, show placeholder
+  if (loading) {
+    return (
+      <div className={styles.messageAttachment}>
+        <span>Loading image...</span>
+      </div>
+    );
+  }
+
+  // If error or no URL, show fallback
+  if (error || !imageUrl) {
+    return (
+      <div className={styles.messageAttachment}>
+        <span>Image not available</span>
+      </div>
+    );
+  }
+
+  // Show the MinIO image
+  return (
+    <img
+      className={styles.messageAttachment}
+      src={imageUrl}
+      alt="attachment"
+      onError={() => setError(true)}
+    />
+  );
+};
 
 export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -90,6 +172,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     useState(false);
 
   const [attachment, setAttachment] = useState('');
+  const [attachmentObjectName, setAttachmentObjectName] = useState('');
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
@@ -114,7 +199,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
-      media: attachment,
+      media: attachmentObjectName,
       messageContent: newMessage,
     },
   });
@@ -190,6 +275,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     setReplyToDirectMessage(null);
     setNewMessage('');
     setAttachment('');
+    setAttachmentObjectName('');
     await props.chatListRefetch({ id: userId as string });
   };
 
@@ -227,9 +313,41 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setAttachment(base64);
+    if (!file) return;
+
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      alert('File is too large. Maximum file size is 5MB.');
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Only image files are allowed.');
+      return;
+    }
+
+    try {
+      // Get current organization ID from the chat data
+      const organizationId = chat?.organization?._id || 'default';
+
+      // Upload file to MinIO
+      const { objectName } = await uploadFileToMinio(file, organizationId);
+
+      // Store the object name for sending with the message
+      setAttachmentObjectName(objectName);
+
+      // Get a presigned URL to display the image preview
+      const presignedUrl = await getFileFromMinio(objectName, organizationId);
+      setAttachment(presignedUrl);
+    } catch (error) {
+      console.error('Error uploading file to MinIO:', error);
+      alert('Error uploading image. Please try again.');
+      // Clear any partial data
+      setAttachment('');
+      setAttachmentObjectName('');
     }
   };
 
@@ -276,6 +394,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               {!!chat?.messages.length && (
                 <div id="messages">
                   {chat?.messages.map((message: DirectMessage) => {
+                    const organizationId = chat?.organization?._id || 'default';
+
                     return (
                       <div
                         className={
@@ -339,10 +459,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                               </a>
                             )}
                             {message.media && (
-                              <img
-                                className={styles.messageAttachment}
-                                src={message.media}
-                                alt="attachment"
+                              <MessageImage
+                                media={message.media}
+                                organizationId={organizationId}
+                                getFileFromMinio={getFileFromMinio}
                               />
                             )}
                             {message.messageContent}
@@ -441,10 +561,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
             )}
             {attachment && (
               <div className={styles.attachment}>
-                <img src={attachment as string} alt="attachment" />
+                <img src={attachment} alt="attachment" />
 
                 <Button
-                  onClick={() => setAttachment('')}
+                  onClick={() => {
+                    setAttachment('');
+                    setAttachmentObjectName('');
+                  }}
                   className={styles.closeBtn}
                 >
                   <Close />
