@@ -27,7 +27,7 @@ import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery, gql } from '@apollo/client';
-import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import { ACTION_ITEM_CATEGORIES_BY_ORGANIZATION } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -128,7 +128,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
-  } = useQuery(ACTION_ITEM_CATEGORY, {
+  } = useQuery(ACTION_ITEM_CATEGORIES_BY_ORGANIZATION, {
     variables: {
       input: {
         organizationId: orgId,

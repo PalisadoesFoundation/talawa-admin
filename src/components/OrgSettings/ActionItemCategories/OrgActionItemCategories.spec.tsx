@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { MockedResponse } from '@apollo/client/testing';
 import dayjs from 'dayjs';
 import {
-  ACTION_ITEM_CATEGORY,
+  ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
   GET_USER,
 } from 'GraphQl/Queries/ActionItemCategoryQueries';
 // import {  } from './OrgActionItemCategories'; // from the same file
@@ -134,7 +134,7 @@ const mockUser2Name = 'User Two';
 const mockActionCategoriesSuccess: MockedResponse[] = [
   {
     request: {
-      query: ACTION_ITEM_CATEGORY,
+      query: ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
       variables: {
         input: {
           organizationId: 'org1',
@@ -472,7 +472,7 @@ describe('OrgActionItemCategories Component', () => {
     const errorMocks: MockedResponse[] = [
       {
         request: {
-          query: ACTION_ITEM_CATEGORY,
+          query: ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
           variables: { input: { organizationId: 'org1' } },
         },
         error: new Error('Network Error'),

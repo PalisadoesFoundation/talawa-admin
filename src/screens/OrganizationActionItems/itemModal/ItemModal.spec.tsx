@@ -12,10 +12,6 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ItemModal from './ItemModal';
 import {

@@ -31,7 +31,7 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
   }
 `;
 
-export const ACTION_ITEM_CATEGORY = gql`
+export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql`
   query FetchActionCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!
   ) {
