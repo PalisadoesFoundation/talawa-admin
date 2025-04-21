@@ -74,7 +74,7 @@ Defined in: [src/utils/interfaces.ts:558](https://github.com/PalisadoesFoundatio
 
 ### creator
 
-> **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
+> **creator**: `InterfaceUserPg`
 
 Defined in: [src/utils/interfaces.ts:559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L559)
 
@@ -202,7 +202,7 @@ Defined in: [src/utils/interfaces.ts:574](https://github.com/PalisadoesFoundatio
 
 ### updater
 
-> **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
+> **updater**: `InterfaceUserPg`
 
 Defined in: [src/utils/interfaces.ts:575](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L575)
 

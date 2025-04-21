@@ -1,12 +1,3 @@
-/**
- * CategoryModal Component
- *
- * This component renders a modal for creating or editing action item categories.
- * It provides a form with fields for category name and a toggle switch for enabling/disabling the category.
- * The modal supports two modes: 'create' and 'edit', and handles the respective GraphQL mutations.
- *
- * @component
- */
 import React, { FC, useEffect, useState, ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +10,6 @@ import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-// import type { InterfaceActionItemCategory } from 'utils/interfaces';
 
 export interface InterfaceActionItemCategory {
   id: string;
@@ -59,7 +49,7 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
   });
   const { name, isDisabled } = formState;
 
-  // Keep form in sync with `category` prop changes (e.g., if user re-opens modal)
+  // Keep form in sync with `category` prop changes:
   useEffect(() => {
     setFormState({
       name: category?.name ?? '',
@@ -67,7 +57,7 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     });
   }, [category]);
 
-  // GraphQL mutations for create and update
+  // GraphQL mutations
   const [createActionItemCategory] = useMutation(
     CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
@@ -75,9 +65,7 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
-  /**
-   * Handles creating a new category.
-   */
+  /** Create a new category */
   const handleCreate = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -93,18 +81,16 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       toast.success(t('successfulCreation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   };
 
-  /**
-   * Handles editing an existing category.
-   */
+  /** Edit an existing category */
   const handleEdit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // If nothing changed, show an error (optional check)
+    // Nothing changed?
     if (name === category?.name && isDisabled === category?.isDisabled) {
       toast.error(t('sameNameConflict'));
       return;
@@ -114,10 +100,9 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
       await updateActionItemCategory({
         variables: {
           input: {
-            categoryId: category?.id,
-            // Only send changed fields
-            ...(name !== category?.name && { name }),
-            ...(isDisabled !== category?.isDisabled && { isDisabled }),
+            categoryId: category!.id, // ← renamed
+            ...(name !== category!.name && { name }),
+            ...(isDisabled !== category!.isDisabled && { isDisabled }),
           },
         },
       });
@@ -125,8 +110,8 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       toast.success(t('successfulUpdation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   };
 
@@ -163,6 +148,7 @@ export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
               required
             />
           </FormControl>
+
           <Form.Group className="d-flex flex-column mb-4">
             <label>{tCommon('disabled')}</label>
             <Form.Switch

@@ -4,15 +4,15 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L105)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItems.tsx:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItems.tsx#L99)
 
 Component for managing and displaying action items within an organization.
 This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

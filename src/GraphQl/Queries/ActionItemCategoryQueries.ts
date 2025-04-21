@@ -32,7 +32,7 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
 `;
 
 export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql(/* GraphQL */ `
-  query ActionCategoriesByOrganization(
+  query actionCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!
   ) {
     actionCategoriesByOrganization(input: $input) {
@@ -40,8 +40,6 @@ export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql(/* GraphQL */ `
       name
       isDisabled
       createdAt
-      updatedAt
-
       organization {
         id
       }

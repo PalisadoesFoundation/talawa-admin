@@ -53,10 +53,9 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   POSTGRES_CREATE_ACTION_ITEM_MUTATION,
-  POSTGRES_EVENTS_BY_ORGANIZATION_ID,
   UPDATE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
-import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import { ACTION_ITEM_CATEGORIES_BY_ORGANIZATION } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import {
   USERS_BY_ORGANIZATION_ID,
@@ -65,21 +64,21 @@ import {
 
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
-import { ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemQueries';
 
 /**
  * The form state now uses a `dueDate` property that represents the date that will
  * be sent as `assignedAt` to the backend.
  */
+
 interface InterfaceFormStateType {
   dueDate: Date;
   assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
   actionItemCategoryId: string;
   assigneeId: string;
-  eventId?: string;
   preCompletionNotes: string;
   postCompletionNotes: string | null;
   isCompleted: boolean;
+  allottedHours: number | null;
 }
 
 type UserType = {
@@ -114,6 +113,7 @@ const initializeFormState = (
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
   isCompleted: actionItem?.isCompleted || false,
+  allottedHours: actionItem?.allottedHours || null, // Adding the missing property
 });
 
 const ItemModal: FC<InterfaceItemModalProps> = ({
@@ -146,20 +146,21 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     preCompletionNotes,
     postCompletionNotes,
     isCompleted,
+    allottedHours,
   } = formState;
 
-  // Query to fetch action item categories
-  const { data: actionItemCategoriesData } = useQuery(
-    ACTION_ITEM_CATEGORY_LIST,
-    {
-      variables: {
+  const {
+    data: actionItemCategoriesData,
+    loading: actionItemCategoriesLoading,
+    error: actionItemCategoriesError,
+  } = useQuery(ACTION_ITEM_CATEGORIES_BY_ORGANIZATION, {
+    variables: {
+      input: {
         organizationId: orgId,
-        where: { is_disabled: false },
       },
     },
-  );
+  });
 
-  // Query to fetch event volunteers
   const { data: volunteersData } = useQuery(EVENT_VOLUNTEER_LIST, {
     variables: {
       where: {
@@ -169,19 +170,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     },
   });
 
-  const { data: eventsData } = useQuery(POSTGRES_EVENTS_BY_ORGANIZATION_ID, {
-    variables: {
-      input: { organizationId: orgId },
-    },
-  });
-
   // Query to fetch action item categories (for the Autocomplete)
-  const { data: categoryData } = useQuery(ACTION_ITEM_CATEGORY, {
-    variables: {
-      input: { organizationId: orgId },
-    },
-  });
-
   // Query to fetch users
   const { data: usersData } = useQuery(USERS_BY_ORGANIZATION_ID, {
     variables: { organizationId: orgId },
@@ -196,13 +185,6 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     [membersData],
   );
 
-  const events = useMemo(() => {
-    if (eventsData?.eventsByOrganizationId) {
-      return eventsData.eventsByOrganizationId;
-    }
-    return [];
-  }, [eventsData]);
-
   const volunteers = useMemo(
     () => volunteersData?.getEventVolunteers || [],
     [volunteersData],
@@ -214,7 +196,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   );
 
   const actionItemCategories = useMemo(
-    () => actionItemCategoriesData?.actionItemCategoriesByOrganization || [],
+    () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
     [actionItemCategoriesData],
   );
 
@@ -245,6 +227,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           organizationId: orgId,
           eventId: eventId,
           assignedAt: dayjs(dueDate).format('YYYY-MM-DD'),
+          allottedHours: allottedHours !== null ? allottedHours : null,
         },
       };
 
@@ -272,12 +255,17 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
   ): Promise<void> => {
     e.preventDefault();
     try {
+      // allow number in here too
       const updatedFields: {
-        [key: string]: string | boolean | null;
+        [key: string]: string | boolean | number | null;
       } = {};
 
       if (actionItemCategoryId !== actionItem?.category?.id) {
         updatedFields.categoryId = actionItemCategoryId;
+      }
+
+      if (allottedHours !== actionItem?.allottedHours) {
+        updatedFields.allottedHours = allottedHours;
       }
 
       // Update the assignee if it has changed
@@ -300,6 +288,10 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         return;
       }
 
+      if (Object.keys(updatedFields).length === 0) {
+        toast.warning(t('noneUpdated'));
+        return;
+      }
       await updateActionItem({
         variables: {
           input: {
@@ -388,10 +380,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="categorySelect"
-              options={
-                (categoryData?.actionCategoriesByOrganization as InterfaceActionItemCategory[]) ||
-                []
-              }
+              options={actionItemCategories as InterfaceActionItemCategory[]}
               value={actionItemCategory}
               isOptionEqualToValue={(option, value) => option.id === value?.id}
               filterSelectedOptions
@@ -489,45 +478,34 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               />
 
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
-                <DatePicker
-                  format="DD/MM/YYYY"
-                  label={t('dueDate')}
-                  className={styles.noOutline}
-                  value={dayjs(dueDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) handleFormChange('dueDate', date.toDate());
-                  }}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="eventSelect"
-                  options={events}
-                  value={
-                    events.find(
-                      (event: { id: string; name: string }) =>
-                        event.id === formState.eventId,
-                    ) || null
-                  }
-                  isOptionEqualToValue={(
-                    option: { id: string; name: string },
-                    value: { id: string; name: string } | null,
-                  ) => option.id === value?.id}
-                  getOptionLabel={(event: { id: string; name: string }) =>
-                    event.name
-                  }
-                  onChange={(
-                    _,
-                    selectedEvent: { id: string; name: string } | null,
-                  ) => {
-                    handleFormChange('eventId', selectedEvent?.id || undefined);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select Event" required />
-                  )}
-                />
+                <div className="w-50">
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    label={t('dueDate')}
+                    className={`${styles.noOutline} w-100`}
+                    value={dayjs(dueDate)}
+                    onChange={(date: Dayjs | null): void => {
+                      if (date) handleFormChange('dueDate', date.toDate());
+                    }}
+                  />
+                </div>
+                <div className="w-50">
+                  <TextField
+                    type="number"
+                    label={t('allottedHours')}
+                    variant="outlined"
+                    className={`${styles.noOutline} w-100`}
+                    value={allottedHours ?? ''}
+                    onChange={(e) =>
+                      handleFormChange(
+                        'allottedHours',
+                        Number(e.target.value) || null,
+                      )
+                    }
+                    inputProps={{ min: 0 }}
+                    data-testid="allottedHoursInput"
+                  />
+                </div>
               </Form.Group>
 
               <FormControl fullWidth className="mb-2">

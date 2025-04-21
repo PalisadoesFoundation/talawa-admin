@@ -38,21 +38,35 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
 `;
 
 export const POSTGRES_CREATE_ACTION_ITEM_MUTATION = gql`
-  mutation CreateActionItem($input: CreateActionItemInput!) {
+  mutation CreateActionItem($input: MutationCreateActionItemInput!) {
     createActionItem(input: $input) {
       id
-      categoryId
-      assigneeId
-      assignedAt
-      completionAt
+      isCompleted
       preCompletionNotes
       postCompletionNotes
-      isCompleted
-      eventId
-      organizationId
-      creatorId
-      updaterId
+      assignedAt
+      completionAt
       updatedAt
+      allottedHours
+
+      category {
+        id
+      }
+      assignee {
+        id
+      }
+      event {
+        id
+      }
+      organization {
+        id
+      }
+      creator {
+        id
+      }
+      updater {
+        id
+      }
     }
   }
 `;
@@ -84,11 +98,20 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
     updateActionItem(input: $input) {
       id
       isCompleted
-      postCompletionNotes
       preCompletionNotes
-      categoryId
-      assigneeId
-      updaterId
+      postCompletionNotes
+      updatedAt
+      allottedHours
+
+      category {
+        id
+      }
+      assignee {
+        id
+      }
+      updater {
+        id
+      }
     }
   }
 `;
@@ -114,13 +137,21 @@ export const DELETE_ACTION_ITEM_MUTATION = gql`
     deleteActionItem(input: $input) {
       id
       isCompleted
-      categoryId
-      assigneeId
-      organizationId
+      preCompletionNotes
+      postCompletionNotes
       createdAt
       updatedAt
-      postCompletionNotes
-      preCompletionNotes
+      allottedHours
+
+      category {
+        id
+      }
+      assignee {
+        id
+      }
+      organization {
+        id
+      }
     }
   }
 `;

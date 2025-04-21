@@ -134,18 +134,18 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
       </Modal.Header>
       <Modal.Body>
         <Form className="p-3">
-          {/* Category */}
           <Form.Group className="d-flex mb-3 w-100">
             <FormControl fullWidth>
               <TextField
                 label={t('category')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={getCategoryDisplay()}
+                value={item.category?.name ?? 'No Category'}
                 disabled
               />
             </FormControl>
           </Form.Group>
+
           {/* Assignee & Assigner */}
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>

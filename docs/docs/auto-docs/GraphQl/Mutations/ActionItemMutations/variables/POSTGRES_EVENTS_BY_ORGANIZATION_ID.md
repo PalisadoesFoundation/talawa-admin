@@ -6,4 +6,4 @@
 
 > `const` **POSTGRES\_EVENTS\_BY\_ORGANIZATION\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L60)
+Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L62)

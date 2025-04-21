@@ -9,15 +9,20 @@ import gql from 'graphql-tag';
  */
 
 export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation CreateActionItemCategory($input: CreateActionItemCategoryInput!) {
+  mutation CreateActionItemCategory(
+    $input: MutationCreateActionItemCategoryInput!
+  ) {
     createActionItemCategory(input: $input) {
       id
       name
-      organizationId
-      creatorId
       isDisabled
       createdAt
-      updatedAt
+      organization {
+        id
+      }
+      creator {
+        id
+      }
     }
   }
 `;
@@ -31,15 +36,21 @@ export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
  */
 
 export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
-  mutation UpdateActionItemCategory($input: UpdateActionItemCategoryInput!) {
+  mutation UpdateActionItemCategory(
+    $input: MutationUpdateActionItemCategoryInput!
+  ) {
     updateActionItemCategory(input: $input) {
       id
       name
       isDisabled
-      organizationId
-      creatorId
       createdAt
-      updatedAt
+
+      organization {
+        id
+      }
+      creator {
+        id
+      }
     }
   }
 `;

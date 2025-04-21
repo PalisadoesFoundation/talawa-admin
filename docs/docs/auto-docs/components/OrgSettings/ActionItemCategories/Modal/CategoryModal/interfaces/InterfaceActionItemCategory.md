@@ -4,7 +4,7 @@
 
 # Interface: InterfaceActionItemCategory
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L24)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **createdAt**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L30)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L20)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **creatorId**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L28)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L18)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **id**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L25)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L15)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L29)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L19)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **name**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L26)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L16)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **organizationId**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L27)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L17)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 > **updatedAt**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L31)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L21)

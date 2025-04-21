@@ -49,7 +49,6 @@ import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
 import {
   GET_USERS_BY_IDS,
-  GET_EVENTS_BY_IDS,
   GET_CATEGORIES_BY_IDS,
 } from 'GraphQl/Queries/Queries';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -72,11 +71,6 @@ import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 import type { InterfaceActionItem } from 'utils/interfaces';
-
-type EventType = {
-  id: string;
-  name: string;
-};
 
 enum ItemStatus {
   Pending = 'pending',
@@ -244,11 +238,6 @@ function organizationActionItems(): JSX.Element {
       .map((item) => item.eventId)
       .filter((id): id is string => id !== null) || [];
 
-  const { data: eventsData } = useQuery(GET_EVENTS_BY_IDS, {
-    skip: eventIds.length === 0,
-    variables: { ids: eventIds },
-  });
-
   const filteredAndSortedActionItems = useMemo(() => {
     if (!enrichedActionItems.length) return [];
 
@@ -291,21 +280,6 @@ function organizationActionItems(): JSX.Element {
     sortBy,
     getAssigneeName,
   ]);
-  const getEventDetails = (eventId: string | null): string => {
-    if (!eventId) return 'No Event Assigned';
-
-    const event = eventsData?.eventsByIds?.find(
-      (evt: EventType) => evt.id === eventId,
-    );
-    return event ? `${event.name}` : 'Unknown Event';
-  };
-
-  // Logging data to ensure correctness
-  useEffect(() => {
-    if (eventsData) {
-      // console.log("Fetched Events Data:", eventsData);
-    }
-  }, [eventsData]);
 
   useEffect(() => {
     if (actionItemsLoading) {
@@ -359,12 +333,8 @@ function organizationActionItems(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const name = params.row.assignee?.name || 'Unassigned';
-
         return (
-          <div
-            className="d-flex fw-bold align-items-center ms-2"
-            data-testid="assigneeName"
-          >
+          <div className="d-flex fw-bold align-items-center ms-2">
             <div className={styles.TableImage}>
               <Avatar
                 key={params.row.id}
@@ -630,7 +600,6 @@ function organizationActionItems(): JSX.Element {
         rows={
           filteredAndSortedActionItems.map((actionItem) => ({
             ...actionItem,
-            assigneeName: getAssigneeName(actionItem.assigneeId), // Still need this for assignee name
             status: actionItem.isCompleted ? 'Completed' : 'Pending',
           })) || []
         }
