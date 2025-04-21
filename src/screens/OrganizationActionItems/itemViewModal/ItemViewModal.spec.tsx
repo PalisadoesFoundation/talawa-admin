@@ -4,12 +4,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
-import type { RenderResult } from '@testing-library/react';
-import { render, screen, within } from '@testing-library/react';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import ItemViewModal from './ItemViewModal';
 import {

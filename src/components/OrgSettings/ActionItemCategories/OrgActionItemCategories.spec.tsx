@@ -1,8 +1,8 @@
 import React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
 import dayjs from 'dayjs';
 import {
   ACTION_ITEM_CATEGORY,
@@ -12,16 +12,7 @@ import {
 // import type { InterfaceActionItemCategory } from 'utils/interfaces'
 import { CreatorNameCell } from './OrgActionItemCategories';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
-import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
 import OrgActionItemCategories from './OrgActionItemCategories';
 export interface InterfaceActionItemCategory {

@@ -1,26 +1,14 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import CategoryModal, { InterfaceActionItemCategory } from './CategoryModal';
+import { InterfaceActionItemCategory } from './CategoryModal';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
-import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
-import type { InterfaceActionItemCategoryModal } from './CategoryModal';
+
 import CategoryModal from './CategoryModal';
 
 import { toast } from 'react-toastify';
