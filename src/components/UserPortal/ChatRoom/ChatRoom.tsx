@@ -30,7 +30,7 @@
  * ```
  *
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -54,6 +54,7 @@ import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
+import { toast } from 'react-toastify';
 interface InterfaceChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
@@ -81,7 +82,9 @@ const MessageImage: React.FC<MessageImageProps> = ({
   getFileFromMinio,
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(media && !media.startsWith('data:'));
+  const [loading, setLoading] = useState<boolean>(
+    !!media && !media.startsWith('data:'),
+  );
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -174,8 +177,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [attachment, setAttachment] = useState('');
   const [attachmentObjectName, setAttachmentObjectName] = useState('');
   const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio } = useMinioDownload();
-
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinio = useCallback(unstableGetFile, []); // stable ref
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
@@ -331,8 +334,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
     try {
       // Get current organization ID from the chat data
-      const organizationId = chat?.organization?._id || 'default';
-
+      if (!chat?.organization?._id) {
+        toast.info('Organization details are still loading. Please try again.');
+        return;
+      }
+      const organizationId = chat.organization._id;
       // Upload file to MinIO
       const { objectName } = await uploadFileToMinio(file, organizationId);
 
@@ -342,6 +348,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       // Get a presigned URL to display the image preview
       const presignedUrl = await getFileFromMinio(objectName, organizationId);
       setAttachment(presignedUrl);
+
+      // allow re‑selecting the same file
+      if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
       console.error('Error uploading file to MinIO:', error);
       alert('Error uploading image. Please try again.');
@@ -567,6 +576,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
                   onClick={() => {
                     setAttachment('');
                     setAttachmentObjectName('');
+                    if (fileInputRef.current) fileInputRef.current.value = '';
                   }}
                   className={styles.closeBtn}
                 >
