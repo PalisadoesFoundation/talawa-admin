@@ -55,9 +55,55 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { useOrganization } from 'contexts/OrganizationContext';
+import { toast } from 'react-toastify';
 
-// Cache to persist MinIO URLs across component renders/mounts
-const globalMediaCache: Record<string, string> = {};
+// Organization-scoped cache to persist MinIO URLs with size limit
+interface MediaCacheValue {
+  url: string;
+  lastAccessed: number; // timestamp for LRU tracking
+}
+
+const MAX_CACHE_ENTRIES = 500; // Reasonable limit per organization
+const mediaCache: Record<string, Record<string, MediaCacheValue>> = {};
+
+// Helper to get or create organization cache
+const getOrCreateOrgCache = (
+  orgId: string,
+): Record<string, MediaCacheValue> => {
+  if (!mediaCache[orgId]) {
+    mediaCache[orgId] = {};
+  }
+  return mediaCache[orgId];
+};
+
+// Helper to trim cache when it gets too large
+const trimCache = (orgId: string): void => {
+  const orgCache = mediaCache[orgId];
+  const keys = Object.keys(orgCache);
+
+  if (keys.length <= MAX_CACHE_ENTRIES) return;
+
+  // Sort by last accessed (oldest first)
+  keys.sort((a, b) => orgCache[a].lastAccessed - orgCache[b].lastAccessed);
+
+  // Remove oldest entries to get back to 75% of max size
+  const entriesToRemove = keys.length - Math.floor(MAX_CACHE_ENTRIES * 0.75);
+  keys.slice(0, entriesToRemove).forEach((key) => {
+    delete orgCache[key];
+  });
+};
+
+// Clear organization cache when changing orgs
+export const clearMediaCache = (orgId?: string): void => {
+  if (orgId) {
+    delete mediaCache[orgId];
+  } else {
+    // Clear all caches if no orgId specified
+    Object.keys(mediaCache).forEach((key) => {
+      delete mediaCache[key];
+    });
+  }
+};
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -75,12 +121,40 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     keyPrefix: 'userChatRoom',
   });
   const { organizationId } = useOrganization();
+
+  // Fail fast if organizationId is missing to ensure tenant isolation
+  if (!organizationId) {
+    throw new Error('ChatRoom must be rendered within OrganizationProvider');
+  }
+
   const isMountedRef = useRef<boolean>(true);
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
-  const mediaUrlCacheRef = useRef<Record<string, string>>(globalMediaCache);
-  const [messageMediaUrls, setMessageMediaUrls] =
-    useState<Record<string, string>>(globalMediaCache);
+
+  // Initialize organization-scoped cache
+  const orgCache = getOrCreateOrgCache(organizationId);
+  const [messageMediaUrls, setMessageMediaUrls] = useState<
+    Record<string, string>
+  >({});
+
+  // Load initial cached URLs for this organization
+  useEffect(() => {
+    const cachedUrls: Record<string, string> = {};
+    Object.entries(orgCache).forEach(([key, value]) => {
+      cachedUrls[key] = value.url;
+      // Update last accessed time
+      orgCache[key].lastAccessed = Date.now();
+    });
+
+    if (Object.keys(cachedUrls).length > 0) {
+      setMessageMediaUrls(cachedUrls);
+    }
+
+    // Clean up when component unmounts or organization changes
+    return () => {
+      // Nothing to clean up - cache persists for performance
+    };
+  }, [organizationId]);
 
   useEffect(() => {
     return () => {
@@ -236,12 +310,22 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type and size
+      if (!file.type.startsWith('image/')) {
+        toast.error('Invalid file type. Only images are allowed.');
+        return;
+      }
+
+      // Limit file size (5MB)
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error('File is too large. Maximum size is 5MB.');
+        return;
+      }
+
       try {
         // Upload file to MinIO
-        const { objectName } = await uploadFileToMinio(
-          file,
-          organizationId || '',
-        );
+        const { objectName } = await uploadFileToMinio(file, organizationId);
         setAttachmentObjectName(objectName);
 
         // Create a temporary URL for preview
@@ -249,7 +333,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         setAttachment(objectUrl);
       } catch (error) {
         console.error('Error uploading file:', error);
-        // TODO: Show error toast to user
+        toast.error('Failed to upload image. Please try again.');
       }
     }
   };
@@ -272,7 +356,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
         if (
           message.media &&
           !messageMediaUrls[message.media] &&
-          !mediaUrlCacheRef.current[message.media]
+          !orgCache[message.media]
         ) {
           uncachedMedia.add(message.media);
         }
@@ -287,10 +371,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           const mediaPromises = Array.from(uncachedMedia).map(
             async (mediaKey) => {
               try {
-                const url = await getFileFromMinio(
-                  mediaKey,
-                  organizationId || '',
-                );
+                const url = await getFileFromMinio(mediaKey, organizationId);
                 return { key: mediaKey, url };
               } catch (error) {
                 console.error(
@@ -308,17 +389,19 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           const newMediaUrls: Record<string, string> = {};
           results.forEach((result) => {
             if (result) {
+              // Update org-scoped cache
+              orgCache[result.key] = {
+                url: result.url,
+                lastAccessed: Date.now(),
+              };
               newMediaUrls[result.key] = result.url;
-              // Update global cache
-              globalMediaCache[result.key] = result.url;
             }
           });
 
+          // Trim cache if needed
+          trimCache(organizationId);
+
           if (Object.keys(newMediaUrls).length > 0 && isMountedRef.current) {
-            mediaUrlCacheRef.current = {
-              ...mediaUrlCacheRef.current,
-              ...newMediaUrls,
-            };
             setMessageMediaUrls((prev) => ({ ...prev, ...newMediaUrls }));
           }
         } catch (error) {

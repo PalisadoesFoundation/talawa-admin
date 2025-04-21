@@ -61,12 +61,11 @@ export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
   const params = useParams<{ orgId: string }>();
-  const organizationId = params.orgId!;
-
-  if (!organizationId) {
+  const { orgId } = useParams<Partial<{ orgId: string }>>();
+  if (!orgId) {
     return <Navigate to="/" replace />;
   }
-
+  const organizationId = orgId;
   const [chats, setChats] = useState<GroupChat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
