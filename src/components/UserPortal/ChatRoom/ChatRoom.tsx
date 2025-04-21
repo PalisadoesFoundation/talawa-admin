@@ -55,6 +55,8 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // ensure styles are loaded
+
 interface InterfaceChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
@@ -322,13 +324,13 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
-      alert('File is too large. Maximum file size is 5MB.');
+      toast.error('File is too large. Maximum file size is 5 MB.');
       return;
     }
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Only image files are allowed.');
+      toast.error('Only image files are allowed.');
       return;
     }
 
@@ -353,7 +355,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
       console.error('Error uploading file to MinIO:', error);
-      alert('Error uploading image. Please try again.');
+      toast.error('Error uploading image. Please try again.');
+
       // Clear any partial data
       setAttachment('');
       setAttachmentObjectName('');
@@ -403,7 +406,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               {!!chat?.messages.length && (
                 <div id="messages">
                   {chat?.messages.map((message: DirectMessage) => {
-                    const organizationId = chat?.organization?._id || 'default';
+                    if (!chat?.organization?._id) return null; // or a graceful placeholder
+                    const organizationId = chat.organization._id;
 
                     return (
                       <div
