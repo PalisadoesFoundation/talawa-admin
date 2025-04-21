@@ -128,6 +128,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   }
 
   const isMountedRef = useRef<boolean>(true);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
 
@@ -349,6 +350,15 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (chat?.messages) {
+      // Cancel any previous in-flight requests
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+
+      // Create new abort controller for this batch
+      abortControllerRef.current = new AbortController();
+      const signal = abortControllerRef.current.signal;
+
       // Collect media keys that haven't been cached yet
       const uncachedMedia = new Set<string>();
 
@@ -368,12 +378,33 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       // Load media URLs in parallel batches
       const loadMediaUrls = async () => {
         try {
+          // Check if already aborted before starting request
+          if (signal.aborted) {
+            return;
+          }
+
           const mediaPromises = Array.from(uncachedMedia).map(
             async (mediaKey) => {
               try {
+                // Check if already aborted before starting request
+                if (signal.aborted) {
+                  return null;
+                }
+
                 const url = await getFileFromMinio(mediaKey, organizationId);
+
+                // Check if aborted after request completed
+                if (signal.aborted) {
+                  return null;
+                }
+
                 return { key: mediaKey, url };
-              } catch (error) {
+              } catch (error: unknown) {
+                if (error instanceof Error && error.name === 'AbortError') {
+                  // Request was aborted, just return null
+                  return null;
+                }
+
                 console.error(
                   `Error loading media URL for ${mediaKey}:`,
                   error,
@@ -384,6 +415,11 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           );
 
           const results = await Promise.all(mediaPromises);
+
+          // Bail out if the component was unmounted or aborted
+          if (!isMountedRef.current || signal.aborted) {
+            return;
+          }
 
           // Update cache with new results
           const newMediaUrls: Record<string, string> = {};
@@ -401,17 +437,41 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
           // Trim cache if needed
           trimCache(organizationId);
 
-          if (Object.keys(newMediaUrls).length > 0 && isMountedRef.current) {
+          if (
+            Object.keys(newMediaUrls).length > 0 &&
+            isMountedRef.current &&
+            !signal.aborted
+          ) {
             setMessageMediaUrls((prev) => ({ ...prev, ...newMediaUrls }));
           }
-        } catch (error) {
-          console.error('Error batch loading media URLs:', error);
+        } catch (error: unknown) {
+          if (error instanceof Error && error.name !== 'AbortError') {
+            console.error('Error batch loading media URLs:', error);
+          }
         }
       };
 
       loadMediaUrls();
+
+      // Cleanup function to abort fetch if component unmounts or deps change
+      return () => {
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+          abortControllerRef.current = null;
+        }
+      };
     }
   }, [chat?.messages, organizationId]);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      // Abort any in-flight requests when component unmounts
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   return (
     <div
