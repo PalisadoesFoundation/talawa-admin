@@ -4,7 +4,7 @@
 
 # Interface: InterfaceActionItemList
 
-Defined in: [src/utils/interfaces.ts:413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L413)
+Defined in: [src/utils/interfaces.ts:437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L437)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/utils/interfaces.ts:413](https://github.com/PalisadoesFoundatio
 
 > **actionItemsByOrganization**: [`InterfaceActionItemInfo`](InterfaceActionItemInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L414)
+Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L438)

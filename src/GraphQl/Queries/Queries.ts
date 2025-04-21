@@ -1144,8 +1144,7 @@ export {
   GET_USER,
 } from './ActionItemCategoryQueries';
 
-// get the list of Action Items
-export { ACTION_ITEM_LIST } from './ActionItemQueries';
+// get the list of Action Items;
 
 export {
   AgendaItemByEvent,

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagChildTags
 
-Defined in: [src/utils/interfaces.ts:969](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L969)
+Defined in: [src/utils/interfaces.ts:993](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L993)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:969](https://github.com/PalisadoesFoundatio
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:972](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L972)
+Defined in: [src/utils/interfaces.ts:996](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L996)
 
 #### \_id
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:972](https://github.com/PalisadoesFoundatio
 
 > **childTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:971](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L971)
+Defined in: [src/utils/interfaces.ts:995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L995)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:971](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:970](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L970)
+Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L994)

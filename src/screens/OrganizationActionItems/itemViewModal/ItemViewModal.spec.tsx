@@ -28,6 +28,7 @@ const sampleActionItem = {
   assigneeId: 'user1',
   creatorId: 'user2',
   updaterId: 'user2',
+  allottedHours: 2, // Default value for allottedHours
   actionItemCategory: {
     id: 'cat1',
     name: 'Category 1',
@@ -73,6 +74,7 @@ describe('ItemViewModal Component', () => {
       isCompleted: true,
       completionAt: '2025-03-07T00:00:00.000Z',
       postCompletionNotes: 'Task completed successfully',
+      allottedHours: 5, // Add the required property
     };
 
     render(

@@ -4,7 +4,7 @@
 
 # Interface: InterfacePaginationArgs
 
-Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L819)
+Defined in: [src/utils/interfaces.ts:843](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L843)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundatio
 
 > **after**: `string`
 
-Defined in: [src/utils/interfaces.ts:820](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L820)
+Defined in: [src/utils/interfaces.ts:844](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L844)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:820](https://github.com/PalisadoesFoundatio
 
 > **before**: `string`
 
-Defined in: [src/utils/interfaces.ts:821](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L821)
+Defined in: [src/utils/interfaces.ts:845](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L845)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:821](https://github.com/PalisadoesFoundatio
 
 > **first**: `number`
 
-Defined in: [src/utils/interfaces.ts:822](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L822)
+Defined in: [src/utils/interfaces.ts:846](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L846)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/utils/interfaces.ts:822](https://github.com/PalisadoesFoundatio
 
 > **last**: `number`
 
-Defined in: [src/utils/interfaces.ts:823](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L823)
+Defined in: [src/utils/interfaces.ts:847](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L847)

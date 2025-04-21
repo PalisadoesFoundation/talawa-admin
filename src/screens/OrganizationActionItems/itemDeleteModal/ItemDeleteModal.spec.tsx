@@ -41,7 +41,8 @@ describe('ItemDeleteModal', () => {
     assigneeId: 'user1',
     creatorId: 'user2',
     updaterId: 'user2',
-    actionItemCategory: {
+    allottedHours: 5, // Add the required property with a sample value
+    category: {
       id: 'cat1',
       name: 'Category 1',
     },

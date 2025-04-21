@@ -31,21 +31,26 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
   }
 `;
 
-export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql`
-  query FetchActionCategoriesByOrganization(
+export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql(/* GraphQL */ `
+  query ActionCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!
   ) {
     actionCategoriesByOrganization(input: $input) {
       id
       name
-      organizationId
-      creatorId
       isDisabled
       createdAt
       updatedAt
+
+      organization {
+        id
+      }
+      creator {
+        id
+      }
     }
   }
-`;
+`);
 
 export const GET_USER = gql`
   query GetUserName($input: QueryUserInput!) {

@@ -398,13 +398,37 @@ export interface InterfaceActionItem {
   updatedAt: string;
   preCompletionNotes: string | null;
   postCompletionNotes: string | null;
+  allottedHours: number | null;
+
+  // Scalar ID references (used in mutations, forms, etc.)
   organizationId: string;
   categoryId: string | null;
   eventId: string | null;
   assigneeId: string | null;
   creatorId: string | null;
   updaterId: string | null;
-  actionItemCategory?: {
+
+  // Full object references (used in query rendering)
+  organization?: {
+    id: string;
+  };
+  category?: {
+    id: string;
+    name: string;
+  };
+  event?: {
+    id: string;
+    name: string;
+  };
+  assignee?: {
+    id: string;
+    name: string;
+  };
+  creator?: {
+    id: string;
+    name: string;
+  };
+  updater?: {
     id: string;
     name: string;
   };

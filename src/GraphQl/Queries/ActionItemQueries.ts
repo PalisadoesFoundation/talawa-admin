@@ -22,16 +22,39 @@ export const ACTION_ITEM_FOR_ORGANIZATION = gql`
       updatedAt
       preCompletionNotes
       postCompletionNotes
-      organizationId
-      categoryId
-      eventId
-      assigneeId
-      creatorId
-      updaterId
+      allottedHours
+
+      organization {
+        id
+      }
+
+      category {
+        id
+        name
+      }
+
+      event {
+        id
+        name
+      }
+
+      assignee {
+        id
+        name
+      }
+
+      creator {
+        id
+        name
+      }
+
+      updater {
+        id
+        name
+      }
     }
   }
 `;
-
 export const ACTION_ITEM_CATEGORY = gql`
   query FetchActionCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!
@@ -47,71 +70,6 @@ export const ACTION_ITEM_CATEGORY = gql`
     }
   }
 `;
-
-export const ACTION_ITEM_LIST = gql`
-  query ActionItemsByOrganization(
-    $organizationId: ID!
-    $eventId: ID
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
-  ) {
-    actionItemsByOrganization(
-      organizationId: $organizationId
-      eventId: $eventId
-      orderBy: $orderBy
-      where: $where
-    ) {
-      _id
-      assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assigneeGroup {
-        _id
-        name
-      }
-      assigneeUser {
-        _id
-        firstName
-        lastName
-        image
-      }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
-        name
-      }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
-      }
-      creator {
-        _id
-        firstName
-        lastName
-      }
-      allottedHours
-    }
-  }
-`;
-
 export const ACTION_ITEMS_BY_USER = gql`
   query ActionItemsByUser(
     $userId: ID!

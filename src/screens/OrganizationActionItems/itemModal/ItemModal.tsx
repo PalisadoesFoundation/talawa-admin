@@ -108,7 +108,7 @@ const initializeFormState = (
   actionItem: InterfaceActionItem | null,
 ): InterfaceFormStateType => ({
   dueDate: actionItem ? new Date(actionItem.assignedAt) : new Date(),
-  actionItemCategoryId: actionItem?.actionItemCategory?.id || '',
+  actionItemCategoryId: actionItem?.category?.id || '',
   assigneeId: actionItem?.assigneeId || '',
   assigneeType: 'User', // Defaulting to 'User' as the new interface no longer stores assigneeType
   preCompletionNotes: actionItem?.preCompletionNotes || '',
@@ -276,8 +276,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
         [key: string]: string | boolean | null;
       } = {};
 
-      // Update the category if it has changed
-      if (actionItemCategoryId !== actionItem?.actionItemCategory?.id) {
+      if (actionItemCategoryId !== actionItem?.category?.id) {
         updatedFields.categoryId = actionItemCategoryId;
       }
 
@@ -330,7 +329,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
     setActionItemCategory(
       actionItemCategories.find(
         (category: InterfaceActionItemCategory) =>
-          category.id === actionItem?.actionItemCategory?.id,
+          category.id === actionItem?.category?.id,
       ) || null,
     );
 

@@ -49,6 +49,7 @@ const sampleActionItemNotCompleted = {
   assigneeId: 'user1',
   creatorId: 'user2',
   updaterId: 'user2',
+  allottedHours: 5, // Added allottedHours property
   actionItemCategory: {
     id: 'cat1',
     name: 'Category 1',
@@ -71,6 +72,7 @@ const sampleActionItemCompleted = {
     assigneeId: 'user1',
     creatorId: 'user2',
     updaterId: 'user2',
+    allottedHours: 5, // Added allottedHours property
   },
 };
 

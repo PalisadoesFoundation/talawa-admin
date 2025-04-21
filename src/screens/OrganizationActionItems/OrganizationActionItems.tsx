@@ -56,7 +56,6 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -175,6 +174,12 @@ function organizationActionItems(): JSX.Element {
     variables: { input: { ids: assigneeIds } },
   });
 
+  if (actionItemsData) {
+    console.log('Fetched Action Items Data:', actionItemsData);
+  } else {
+    console.log('No Action Items Data', actionItemsError);
+  }
+
   // useEffect(() => {
   //   if (userLoading) {
   //     // console.log("Loading users ...");
@@ -219,22 +224,20 @@ function organizationActionItems(): JSX.Element {
 
   const enrichedActionItems = useMemo(() => {
     if (!actionItemsData?.actionItemsByOrganization) return [];
-    if (!categoriesData) {
-      return actionItemsData.actionItemsByOrganization.map((item) => ({
-        ...item,
-        categoryName: 'No Category',
-      }));
-    }
     return actionItemsData.actionItemsByOrganization.map((item) => {
-      const category = categoriesData.categoriesByIds.find(
-        (cat: { id: string; name: string }) => cat.id === item.categoryId,
-      );
       return {
         ...item,
-        categoryName: category ? category.name : 'No Category',
+        assigneeId: item.assignee?.id ?? null,
+        categoryId: item.category?.id ?? null,
+        eventId: item.event?.id ?? null,
+        creatorId: item.creator?.id ?? null,
+        updaterId: item.updater?.id ?? null,
+        organizationId: item.organization?.id ?? null,
+        categoryName: item.category?.name ?? 'No Category',
+        assigneeName: item.assignee?.name ?? 'Unassigned',
       };
     });
-  }, [actionItemsData, categoriesData]);
+  }, [actionItemsData]);
 
   const eventIds =
     actionItemsData?.actionItemsByOrganization
@@ -355,7 +358,7 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const name = params.row.assigneeName || 'Unassigned'; // ✅ Fetch from row data
+        const name = params.row.assignee?.name || 'Unassigned';
 
         return (
           <div
@@ -371,7 +374,6 @@ function organizationActionItems(): JSX.Element {
                 alt={name}
               />
             </div>
-
             {name}
           </div>
         );
@@ -391,7 +393,7 @@ function organizationActionItems(): JSX.Element {
           className="d-flex justify-content-center fw-bold"
           data-testid="categoryName"
         >
-          {params.row.categoryName}
+          {params.row.category?.name || 'No Category'}
         </div>
       ),
     },
@@ -416,24 +418,18 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'eventDetails',
-      headerName: 'Event',
+      field: 'allottedHours',
+      headerName: 'Allotted Hours',
       flex: 1,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="eventDetails"
-          >
-            {getEventDetails(params.row.eventId)}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div className="d-flex justify-content-center fw-bold">
+          {params.row.allottedHours ?? 'N/A'}
+        </div>
+      ),
     },
     {
       field: 'createdAt',
