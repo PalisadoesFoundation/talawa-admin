@@ -145,6 +145,7 @@
     "@vitest/ui": "^3.0.5",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
+    "depcheck": "^1.4.7",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.2",
     "eslint-config-react-app": "^7.0.1",
