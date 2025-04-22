@@ -55,6 +55,7 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
+import { validateFile } from 'utils/fileValidation';
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -70,7 +71,7 @@ interface InterfaceChatRoomProps {
 // Helper component to handle MinIO image loading
 interface MessageImageProps {
   media: string;
-  organizationId: string;
+  organizationId?: string;
   getFileFromMinio: (
     objectName: string,
     organizationId: string,
@@ -102,9 +103,12 @@ const MessageImage: React.FC<MessageImageProps> = ({
       return;
     }
 
+    // If no organizationId is provided, use the default 'organization' value
+    const orgId = organizationId || 'organization';
+
     const loadImage = async (): Promise<void> => {
       try {
-        const url = await getFileFromMinio(media, organizationId);
+        const url = await getFileFromMinio(media, orgId);
         setImageState({ url, loading: false, error: false });
       } catch (error) {
         console.error('Error fetching image from MinIO:', error);
@@ -177,7 +181,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [attachmentObjectName, setAttachmentObjectName] = useState('');
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  const getFileFromMinio = useCallback(unstableGetFile, []); // stable ref
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
@@ -317,30 +321,26 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    // Use the fileValidation utility for validation
+    const validation = validateFile(file, 5, [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+    ]);
 
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      toast.error('File is too large. Maximum file size is 5 MB.');
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      toast.error('Only image files are allowed.');
+    if (!validation.isValid) {
+      toast.error(validation.errorMessage);
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
     try {
       // Get current organization ID from the chat data
-      if (!chat?.organization?._id) {
-        toast.info('Organization details are still loading. Please try again.');
-        return;
-      }
-      const organizationId = chat.organization._id;
-      // Upload file to MinIO
+      const organizationId = chat?.organization?._id || 'organization';
+
+      // Use MinIO for file uploads regardless of organization context
+      // If there's no organization specific ID, use 'organization' as default
       const { objectName } = await uploadFileToMinio(file, organizationId);
 
       // Store the object name for sending with the message
@@ -350,10 +350,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       const presignedUrl = await getFileFromMinio(objectName, organizationId);
       setAttachment(presignedUrl);
 
-      // allow re‑selecting the same file
+      // Allow re-selecting the same file
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
-      console.error('Error uploading file to MinIO:', error);
+      console.error('Error uploading file:', error);
       toast.error('Error uploading image. Please try again.');
 
       // Clear any partial data
@@ -406,8 +406,9 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               {!!chat?.messages.length && (
                 <div id="messages">
                   {chat?.messages.map((message: DirectMessage) => {
-                    if (!chat?.organization?._id) return null; // or a graceful placeholder
-                    const organizationId = chat.organization._id;
+                    // Get organization ID if available, otherwise use default
+                    const organizationId =
+                      chat?.organization?._id || 'organization';
 
                     return (
                       <div
