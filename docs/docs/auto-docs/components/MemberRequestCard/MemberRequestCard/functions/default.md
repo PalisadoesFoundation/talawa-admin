@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestCard.tsx#L51)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://
 
 ## Returns
 
-`JSX.Element`
+`Element`
