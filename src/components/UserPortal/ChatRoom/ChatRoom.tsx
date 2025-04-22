@@ -55,7 +55,6 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // ensure styles are loaded
 
 interface InterfaceChatRoomProps {
   selectedContact: string;
@@ -83,31 +82,37 @@ const MessageImage: React.FC<MessageImageProps> = ({
   organizationId,
   getFileFromMinio,
 }) => {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(
-    !!media && !media.startsWith('data:'),
-  );
-  const [error, setError] = useState(false);
+  const [imageState, setImageState] = useState<{
+    url: string | null;
+    loading: boolean;
+    error: boolean;
+  }>({
+    url: null,
+    loading: !!media && !media.startsWith('data:'),
+    error: false,
+  });
 
   useEffect(() => {
+    // If it's a Base64 image, no need to fetch
+    if (media.startsWith('data:')) return;
+
+    // If no media provided, set error state
+    if (!media) {
+      setImageState((prev) => ({ ...prev, error: true, loading: false }));
+      return;
+    }
+
     const loadImage = async (): Promise<void> => {
-      if (media && !media.startsWith('data:')) {
-        setLoading(true);
-        try {
-          const url = await getFileFromMinio(media, organizationId);
-          setImageUrl(url);
-          setLoading(false);
-        } catch (error) {
-          console.error('Error fetching image from MinIO:', error);
-          setError(true);
-          setLoading(false);
-        }
+      try {
+        const url = await getFileFromMinio(media, organizationId);
+        setImageState({ url, loading: false, error: false });
+      } catch (error) {
+        console.error('Error fetching image from MinIO:', error);
+        setImageState({ url: null, loading: false, error: true });
       }
     };
 
-    if (media && !media.startsWith('data:')) {
-      loadImage();
-    }
+    loadImage();
   }, [media, organizationId, getFileFromMinio]);
 
   // If it's a Base64 image, use it directly
@@ -117,36 +122,28 @@ const MessageImage: React.FC<MessageImageProps> = ({
         className={styles.messageAttachment}
         src={media}
         alt="attachment"
-        onError={() => setError(true)}
+        onError={() => setImageState((prev) => ({ ...prev, error: true }))}
       />
     );
   }
 
   // If loading, show placeholder
-  if (loading) {
-    return (
-      <div className={styles.messageAttachment}>
-        <span>Loading image...</span>
-      </div>
-    );
+  if (imageState.loading) {
+    return <div className={styles.messageAttachment}>Loading image...</div>;
   }
 
   // If error or no URL, show fallback
-  if (error || !imageUrl) {
-    return (
-      <div className={styles.messageAttachment}>
-        <span>Image not available</span>
-      </div>
-    );
+  if (imageState.error || !imageState.url) {
+    return <div className={styles.messageAttachment}>Image not available</div>;
   }
 
   // Show the MinIO image
   return (
     <img
       className={styles.messageAttachment}
-      src={imageUrl}
+      src={imageState.url}
       alt="attachment"
-      onError={() => setError(true)}
+      onError={() => setImageState((prev) => ({ ...prev, error: true }))}
     />
   );
 };
@@ -325,12 +322,14 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       toast.error('File is too large. Maximum file size is 5 MB.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
       toast.error('Only image files are allowed.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
@@ -360,6 +359,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       // Clear any partial data
       setAttachment('');
       setAttachmentObjectName('');
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
