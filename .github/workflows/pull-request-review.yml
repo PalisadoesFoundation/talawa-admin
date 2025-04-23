@@ -21,7 +21,7 @@ jobs:
             const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
+              pull_number: context.issue.number
             });
 
             // Filter reviews that have a user login containing "coderabbit" (case-insensitive)
