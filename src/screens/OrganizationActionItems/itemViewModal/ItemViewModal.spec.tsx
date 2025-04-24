@@ -113,4 +113,57 @@ describe('ItemViewModal Component', () => {
 
     expect(hideMock).toHaveBeenCalled();
   });
+
+  it('falls back to "No Category" when there is no categoryId', () => {
+    const itemWithoutCategory = {
+      ...sampleActionItem,
+      categoryId: null,
+      actionItemCategory: null,
+    };
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemViewModal
+            isOpen={true}
+            hide={hideMock}
+            item={itemWithoutCategory}
+          />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // immediate fallback, no async query needed
+    expect(screen.getByDisplayValue('No Category')).toBeInTheDocument();
+  });
+
+  it('falls back to "No Category" when query returns no matching category', async () => {
+    const itemNoMatch = {
+      ...sampleActionItem,
+      categoryId: 'category2',
+      actionItemCategory: null,
+    };
+    const emptyCategoryMock = {
+      request: {
+        query: GET_CATEGORIES_BY_IDS,
+        variables: { ids: ['category2'] },
+      },
+      result: {
+        data: {
+          categoriesByIds: [],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, emptyCategoryMock]} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemViewModal isOpen={true} hide={hideMock} item={itemNoMatch} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    // should still show the fallback text
+    expect(await screen.findByDisplayValue('No Category')).toBeInTheDocument();
+  });
 });

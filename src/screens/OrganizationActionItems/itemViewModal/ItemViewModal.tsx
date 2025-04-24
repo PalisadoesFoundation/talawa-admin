@@ -108,15 +108,6 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
     return user ? user.name : defaultName;
   };
 
-  // Helper to get the category name; if none, returns "No Category"
-  const getCategoryDisplay = (): string => {
-    if (!categoryId) return 'No Category';
-    const category = categoriesData?.categoriesByIds?.find(
-      (cat: { id: string; name: string }) => cat.id === categoryId,
-    );
-    return category ? category.name : 'No Category';
-  };
-
   const getAssigneeDisplay = (): string =>
     getUserName(assigneeId, 'Unassigned');
   const getAssignerDisplay = (): string => getUserName(creatorId, 'Unknown');
