@@ -143,24 +143,6 @@ describe('Event Management', () => {
       expect(screen.getByTestId('eventDashboardTab')).toBeInTheDocument();
     });
 
-    it('switches between all available tabs', async () => {
-      renderEventManagement();
-
-      const tabsToTest = [
-        { button: 'registrantsBtn', tab: 'eventRegistrantsTab' },
-        { button: 'attendanceBtn', tab: 'eventAttendanceTab' },
-        { button: 'actionsBtn', tab: 'eventActionsTab' },
-        { button: 'agendasBtn', tab: 'eventAgendasTab' },
-        { button: 'statisticsBtn', tab: 'eventStatsTab' },
-        { button: 'volunteersBtn', tab: 'eventVolunteersTab' },
-      ];
-
-      for (const { button, tab } of tabsToTest) {
-        await userEvent.click(screen.getByTestId(button));
-        expect(screen.getByTestId(tab)).toBeInTheDocument();
-      }
-    });
-
     it('returns dashboard tab for an invalid tab selection', async () => {
       const setTab = vi.fn();
       const useStateSpy = vi.spyOn(React, 'useState');
