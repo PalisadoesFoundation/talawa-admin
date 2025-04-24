@@ -65,11 +65,6 @@ import {
 import { HiUser, HiUserGroup } from 'react-icons/hi2';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-/**
- * The form state now uses a `dueDate` property that represents the date that will
- * be sent as `assignedAt` to the backend.
- */
-
 interface InterfaceFormStateType {
   dueDate: Date;
   assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';

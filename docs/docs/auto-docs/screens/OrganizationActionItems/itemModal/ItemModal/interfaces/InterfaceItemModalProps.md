@@ -4,7 +4,7 @@
 
 # Interface: InterfaceItemModalProps
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L92)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L87)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:92](htt
 
 > **actionItem**: [`InterfaceActionItem`](../../../../../utils/interfaces/interfaces/InterfaceActionItem.md)
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L98)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L93)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:98](htt
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L97)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L92)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:97](htt
 
 > **editMode**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L99)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L94)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:99](htt
 
 > **eventId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L96)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L91)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:96](htt
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L94)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L89)
 
 #### Returns
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:94](htt
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L93)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L88)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:93](htt
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L95)
+Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L90)

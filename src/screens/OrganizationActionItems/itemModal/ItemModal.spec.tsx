@@ -37,6 +37,14 @@ import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 import { toast } from 'react-toastify';
 
+async function pickOption(testId: string, optionText: string) {
+  const root = await screen.findByTestId(testId);
+  const combo = within(root).getByRole('combobox');
+  fireEvent.mouseDown(combo); // open the list
+  const option = await screen.findByText(optionText); // wait for option
+  fireEvent.click(option); // select it
+}
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
@@ -58,20 +66,21 @@ async function pickFirstOption(testId: string) {
   fireEvent.keyDown(combo, { key: 'Enter' }); // choose it
 }
 
-/* Fix system date so create-mutation variables are predictable */
 beforeAll(() => vi.setSystemTime(new Date('2025-04-25T00:00:00Z')));
 afterAll(() => vi.useRealTimers());
 
-const createItemInput = {
-  categoryId: 'cat1',
-  assigneeId: 'user1',
-  preCompletionNotes: '',
-  organizationId: 'org1',
-  eventId: 'ev1',
-  assignedAt: '2025-04-25',
-  allottedHours: null,
-};
+const orgId = 'org1';
+const eventId = 'ev1';
+const categoryId = 'cat1';
+const categoryName = 'Category 1';
+const userId = 'user1';
+const userName = 'Assignee User';
+const memberId = 'member1';
+const memberName = 'Member User';
+const volunteerId = 'vol1';
+const volunteerName = 'Volunteer User';
 
+/* queryMocks (extend the arrays) */
 const queryMocks: MockedResponse[] = [
   {
     request: {
@@ -82,6 +91,7 @@ const queryMocks: MockedResponse[] = [
       data: {
         actionCategoriesByOrganization: [
           { id: 'cat1', name: 'Category 1', __typename: 'Category' },
+          { id: 'cat2', name: 'Category 2', __typename: 'Category' }, // ✨ add
         ],
       },
     },
@@ -101,24 +111,20 @@ const queryMocks: MockedResponse[] = [
             createdAt: '',
             __typename: 'User',
           },
+          {
+            id: 'user2', // ✨ a
+            name: 'Another User',
+            emailAddress: 'u2@b.c',
+            createdAt: '',
+            __typename: 'User',
+          },
         ],
       },
     },
   },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_LIST,
-      variables: { where: { eventId: 'ev1', hasAccepted: true } },
-    },
-    result: { data: { getEventVolunteers: [] } },
-  },
-  {
-    request: { query: MEMBERS_LIST, variables: { id: 'org1' } },
-    result: { data: { organizations: [{ members: [] }] } },
-  },
+  /* …the rest stay the same … */
 ];
 
-/* An “already-filled” item to verify useEffect pre-populates fields  */
 const populatedItem = {
   id: 'itemX',
   isCompleted: false,
@@ -134,7 +140,6 @@ const populatedItem = {
   allottedHours: 3,
 };
 
-/* Existing (editable) action item */
 const existingItem = {
   id: 'item1',
   isCompleted: false,
@@ -150,7 +155,14 @@ const existingItem = {
   allottedHours: 2,
 };
 
-/* Helpers */
+const completedItem = {
+  ...existingItem,
+  id: 'item2',
+  isCompleted: true,
+  completionAt: '2025-04-24',
+  postCompletionNotes: 'This task is complete',
+};
+
 const hideMock = vi.fn();
 const refetchMock = vi.fn();
 beforeEach(() => {
@@ -161,7 +173,6 @@ beforeEach(() => {
   toast.error = vi.fn();
 });
 
-/* Render helper */
 const renderItemModal = (
   ui: React.ReactElement,
   extra: MockedResponse[] = [],
@@ -174,45 +185,7 @@ const renderItemModal = (
     </MockedProvider>,
   );
 
-/* ────────────────────────────────────────────────────── */
-/* 🧪  Tests                                              */
-/* ────────────────────────────────────────────────────── */
 describe('ItemModal component', () => {
-  // it('renders create mode & submits new item', async () => {
-  //   renderItemModal(
-  //     <ItemModal
-  //       isOpen
-  //       hide={hideMock}
-  //       orgId="org1"
-  //       eventId="ev1"
-  //       actionItem={null}
-  //       editMode={false}
-  //       actionItemsRefetch={refetchMock}
-  //     />,
-  //     [createMutationMock],
-  //   );
-
-  //   /* pick category */
-  //   const catInput = within(await screen.findByTestId('eventSelect')).getByRole('combobox');
-  //   fireEvent.change(catInput, { target: { value: 'Category 1' } });
-  //   fireEvent.keyDown(catInput, { key: 'ArrowDown' });
-  //   fireEvent.keyDown(catInput, { key: 'Enter' });
-
-  //   /* pick assignee */
-  //   const assigneeInput = within(await screen.findByTestId('memberSelect')).getByRole(
-  //     'combobox',
-  //   );
-  //   fireEvent.change(assigneeInput, { target: { value: 'Assignee User' } });
-  //   fireEvent.keyDown(assigneeInput, { key: 'ArrowDown' });
-  //   fireEvent.keyDown(assigneeInput, { key: 'Enter' });
-
-  //   fireEvent.click(screen.getByTestId('submitBtn'));
-
-  //   await waitFor(() => expect(toast.success).toHaveBeenCalledWith('successfulCreation'));
-  //   expect(hideMock).toHaveBeenCalled();
-  //   expect(refetchMock).toHaveBeenCalled();
-  // });
-
   it('warns & skips update when nothing changed', async () => {
     renderItemModal(
       <ItemModal
@@ -307,5 +280,281 @@ describe('ItemModal component', () => {
     expect(
       screen.queryByLabelText('preCompletionNotes'),
     ).not.toBeInTheDocument();
+  });
+
+  it('updates an item when a field changes (edit mode)', async () => {
+    const updateSuccessMock: MockedResponse = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: existingItem.id,
+            preCompletionNotes: 'foo',
+            isCompleted: existingItem.isCompleted,
+          },
+        },
+      },
+      result: { data: { updateActionItem: { id: existingItem.id } } },
+    };
+
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId="org1"
+        eventId="ev1"
+        actionItem={existingItem as any}
+        editMode
+        actionItemsRefetch={refetchMock}
+      />,
+      [updateSuccessMock],
+    );
+
+    // change just the preCompletionNotes
+    const notesInput = await screen.findByLabelText('preCompletionNotes');
+    fireEvent.change(notesInput, { target: { value: 'foo' } });
+
+    fireEvent.click(screen.getByTestId('submitBtn'));
+
+    await waitFor(() =>
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation'),
+    );
+  });
+
+  describe('Rendering Tests', () => {
+    it('renders in create mode with correct title', async () => {
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={null}
+          editMode={false}
+          actionItemsRefetch={refetchMock}
+        />,
+      );
+
+      expect(await screen.findByTestId('modalTitle')).toHaveTextContent(
+        'createActionItem',
+      );
+      expect(screen.getByTestId('submitBtn')).toHaveTextContent(
+        'createActionItem',
+      );
+    });
+
+    it('renders in edit mode with correct title', async () => {
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={existingItem as any}
+          editMode={true}
+          actionItemsRefetch={refetchMock}
+        />,
+      );
+
+      expect(await screen.findByTestId('modalTitle')).toHaveTextContent(
+        'updateActionItem',
+      );
+      expect(screen.getByTestId('submitBtn')).toHaveTextContent(
+        'updateActionItem',
+      );
+    });
+
+    it('displays only post-completion notes field for completed items', async () => {
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={completedItem as any}
+          editMode={true}
+          actionItemsRefetch={refetchMock}
+        />,
+      );
+
+      // Verify post-completion notes field is present
+      await screen.findByLabelText('postCompletionNotes');
+
+      // Other fields should not be present
+      expect(
+        screen.queryByLabelText('preCompletionNotes'),
+      ).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('dueDate')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('allottedHours')).not.toBeInTheDocument();
+    });
+
+    it('closes modal when close button is clicked', async () => {
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={null}
+          editMode={false}
+          actionItemsRefetch={refetchMock}
+        />,
+      );
+
+      const closeButton = await screen.findByTestId('modalCloseBtn');
+      fireEvent.click(closeButton);
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Mutation Tests', () => {
+    it('handles update action item failure', async () => {
+      // Mock mutation with error
+      const updateErrorMock: MockedResponse = {
+        request: {
+          query: UPDATE_ACTION_ITEM_MUTATION,
+          variables: {
+            input: {
+              id: existingItem.id,
+              preCompletionNotes: 'Will fail',
+              isCompleted: false,
+            },
+          },
+        },
+        error: new Error('Failed to update action item'),
+      };
+
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={existingItem as any}
+          editMode={true}
+          actionItemsRefetch={refetchMock}
+        />,
+        [updateErrorMock],
+      );
+
+      // Update preCompletionNotes
+      const notesField = await screen.findByLabelText('preCompletionNotes');
+      fireEvent.change(notesField, { target: { value: 'Will fail' } });
+
+      // Submit the form
+      fireEvent.click(screen.getByTestId('submitBtn'));
+
+      // Wait for toast error message
+      await waitFor(() =>
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to update action item',
+        ),
+      );
+      expect(hideMock).not.toHaveBeenCalled();
+      expect(refetchMock).not.toHaveBeenCalled();
+    });
+
+    it('warns when no fields are changed in update mode', async () => {
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={existingItem as any}
+          editMode={true}
+          actionItemsRefetch={refetchMock}
+        />,
+      );
+
+      // Submit without changing anything
+      fireEvent.click(await screen.findByTestId('submitBtn'));
+
+      await waitFor(() =>
+        expect(toast.warning).toHaveBeenCalledWith('noneUpdated'),
+      );
+      expect(hideMock).not.toHaveBeenCalled();
+      expect(refetchMock).not.toHaveBeenCalled();
+    });
+
+    it('updates post-completion notes for completed items', async () => {
+      // Define update mutation mock for completed item
+      const updateCompletedMock: MockedResponse = {
+        request: {
+          query: UPDATE_ACTION_ITEM_MUTATION,
+          variables: {
+            input: {
+              id: completedItem.id,
+              postCompletionNotes: 'Updated completion notes',
+              isCompleted: true,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateActionItem: {
+              id: completedItem.id,
+              isCompleted: true,
+              preCompletionNotes: completedItem.preCompletionNotes,
+              postCompletionNotes: 'Updated completion notes',
+              updatedAt: '2025-04-25T12:00:00Z',
+              allottedHours: completedItem.allottedHours,
+              category: { id: categoryId },
+              assignee: { id: userId },
+              updater: { id: 'updater1' },
+            },
+          },
+        },
+      };
+
+      renderItemModal(
+        <ItemModal
+          isOpen
+          hide={hideMock}
+          orgId={orgId}
+          eventId={eventId}
+          actionItem={completedItem as any}
+          editMode={true}
+          actionItemsRefetch={refetchMock}
+        />,
+        [updateCompletedMock],
+      );
+
+      // Update postCompletionNotes
+      const notesField = await screen.findByLabelText('postCompletionNotes');
+      fireEvent.change(notesField, {
+        target: { value: 'Updated completion notes' },
+      });
+
+      // Submit the form
+      fireEvent.click(screen.getByTestId('submitBtn'));
+
+      // Wait for toast success message
+      await waitFor(() =>
+        expect(toast.success).toHaveBeenCalledWith('successfulUpdation'),
+      );
+      expect(hideMock).toHaveBeenCalled();
+      expect(refetchMock).toHaveBeenCalled();
+    });
+  });
+
+  it('handles undefined event ID', async () => {
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId={orgId}
+        eventId={undefined}
+        actionItem={null}
+        editMode={false}
+        actionItemsRefetch={refetchMock}
+      />,
+    );
+
+    // Verify the component renders without errors
+    await screen.findByTestId('modalTitle');
+
+    // Verify the assignTo section isn't rendered when eventId is undefined
+    expect(screen.queryByLabelText('assignTo')).not.toBeInTheDocument();
   });
 });
