@@ -374,7 +374,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
           <Form.Group className="d-flex gap-3 mb-3">
             <Autocomplete
               className={`${styles.noOutline} w-100`}
-              data-testid="eventSelect"
+              data-testid="categoryAutocomplete"
               options={actionItemCategories as InterfaceActionItemCategory[]}
               value={actionItemCategory}
               isOptionEqualToValue={(option, value) => option.id === value?.id}
@@ -449,7 +449,7 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
               <Autocomplete
                 disablePortal
                 className={`${styles.noOutline} w-100`}
-                data-testid="memberSelect"
+                data-testid="assigneeAutocomplete"
                 options={users.filter(
                   (user: UserType) => user.__typename === 'User',
                 )}

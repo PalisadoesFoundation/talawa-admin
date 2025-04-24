@@ -40,9 +40,9 @@ import { toast } from 'react-toastify';
 async function pickOption(testId: string, optionText: string) {
   const root = await screen.findByTestId(testId);
   const combo = within(root).getByRole('combobox');
-  fireEvent.mouseDown(combo); // open the list
-  const option = await screen.findByText(optionText); // wait for option
-  fireEvent.click(option); // select it
+  fireEvent.mouseDown(combo);
+  const option = await screen.findByText(optionText);
+  fireEvent.click(option);
 }
 
 vi.mock('react-i18next', () => ({
@@ -556,5 +556,199 @@ describe('ItemModal component', () => {
 
     // Verify the assignTo section isn't rendered when eventId is undefined
     expect(screen.queryByLabelText('assignTo')).not.toBeInTheDocument();
+  });
+  it('successfully updates an action item with changed values', async () => {
+    const updateMutationMock: MockedResponse = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: existingItem.id,
+            preCompletionNotes: 'Updated notes',
+            allottedHours: 4,
+            isCompleted: false,
+          },
+        },
+      },
+      result: {
+        data: {
+          updateActionItem: {
+            id: existingItem.id,
+            isCompleted: false,
+            preCompletionNotes: 'Updated notes',
+            postCompletionNotes: null,
+            updatedAt: '2025-04-25T12:00:00Z',
+            allottedHours: 4,
+            category: { id: categoryId },
+            assignee: { id: userId },
+            updater: { id: 'updater1' },
+          },
+        },
+      },
+    };
+
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId={orgId}
+        eventId={eventId}
+        actionItem={existingItem as any}
+        editMode={true}
+        actionItemsRefetch={refetchMock}
+      />,
+      [updateMutationMock],
+    );
+
+    // 1) Change the notes
+    const notesInput = screen.getByLabelText(/preCompletionNotes/i);
+    fireEvent.change(notesInput, { target: { value: 'Updated notes' } });
+
+    // 2) Change the allotted hours
+    const hoursInputContainer = screen.getByTestId('allottedHoursInput');
+    // the `!` tells TS this will never be null at runtime
+    const hoursInput =
+      hoursInputContainer.querySelector<HTMLInputElement>('input')!;
+    fireEvent.change(hoursInput, { target: { value: '4' } });
+
+    // 3) Submit
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // 4) Assert the toast, hide and refetch were called
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+      expect(hideMock).toHaveBeenCalled();
+      expect(refetchMock).toHaveBeenCalled();
+    });
+  });
+
+  it('warns when no fields have changed', async () => {
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId={orgId}
+        eventId={eventId}
+        actionItem={existingItem as any}
+        editMode={true}
+        actionItemsRefetch={refetchMock}
+      />,
+    );
+
+    // Submit the form without changing any fields
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // Wait for async operations to complete
+    await waitFor(() => {
+      expect(toast.warning).toHaveBeenCalledWith('noneUpdated');
+      expect(hideMock).not.toHaveBeenCalled();
+      expect(refetchMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('handles errors when updating an action item', async () => {
+    const errorMock = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: existingItem.id,
+            preCompletionNotes: 'Updated notes',
+            isCompleted: false,
+          },
+        },
+      },
+      error: new Error('Failed to update action item'),
+    };
+
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId={orgId}
+        eventId={eventId}
+        actionItem={existingItem as any}
+        editMode={true}
+        actionItemsRefetch={refetchMock}
+      />,
+      [errorMock],
+    );
+
+    // Update pre-completion notes
+    const notesInput = screen.getByLabelText(/preCompletionNotes/i);
+    fireEvent.change(notesInput, { target: { value: 'Updated notes' } });
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // Wait for async operations to complete
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to update action item');
+      expect(hideMock).not.toHaveBeenCalled();
+      expect(refetchMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('handles updating post-completion notes for completed items', async () => {
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: completedItem.id,
+            postCompletionNotes: 'Updated completion notes',
+            isCompleted: true,
+          },
+        },
+      },
+      result: {
+        data: {
+          updateActionItem: {
+            id: completedItem.id,
+            isCompleted: true,
+            preCompletionNotes: '',
+            postCompletionNotes: 'Updated completion notes',
+            updatedAt: '2025-04-25T12:00:00Z',
+            allottedHours: 2,
+            category: { id: categoryId },
+            assignee: { id: userId },
+            updater: { id: 'updater1' },
+          },
+        },
+      },
+    };
+
+    renderItemModal(
+      <ItemModal
+        isOpen
+        hide={hideMock}
+        orgId={orgId}
+        eventId={eventId}
+        actionItem={completedItem as any}
+        editMode={true}
+        actionItemsRefetch={refetchMock}
+      />,
+      [updateMutationMock],
+    );
+
+    // Update post-completion notes
+    const notesInput = screen.getByLabelText(/postCompletionNotes/i);
+    fireEvent.change(notesInput, {
+      target: { value: 'Updated completion notes' },
+    });
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // Wait for async operations to complete
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+      expect(hideMock).toHaveBeenCalled();
+      expect(refetchMock).toHaveBeenCalled();
+    });
   });
 });

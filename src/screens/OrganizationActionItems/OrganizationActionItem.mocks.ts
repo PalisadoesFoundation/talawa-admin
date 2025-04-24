@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   DELETE_ACTION_ITEM_MUTATION,
@@ -8,11 +7,6 @@ import {
 import {
   actionItemCategoryListQuery,
   groupListQuery,
-  itemWithGroup,
-  itemWithUser,
-  itemWithUserImage,
-  itemWithVolunteer,
-  itemWithVolunteerImage,
   memberListQuery,
   volunteerListQuery,
 } from './testObject.mocks';
