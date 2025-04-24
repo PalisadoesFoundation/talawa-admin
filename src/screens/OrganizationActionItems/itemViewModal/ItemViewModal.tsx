@@ -36,8 +36,10 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { InterfaceActionItem } from 'utils/interfaces';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type {
+  InterfaceActionItem,
+  InterfaceActionItemInfo,
+} from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';

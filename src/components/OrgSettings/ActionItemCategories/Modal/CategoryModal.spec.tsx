@@ -2,14 +2,12 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import '@testing-library/jest-dom';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { InterfaceActionItemCategory } from './CategoryModal';
+import CategoryModal, { InterfaceActionItemCategory } from './CategoryModal';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-
-import CategoryModal from './CategoryModal';
 
 import { toast } from 'react-toastify';
 

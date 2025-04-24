@@ -6,4 +6,4 @@
 
 > `const` **default**: `FC`\<[`InterfaceViewModalProps`](../interfaces/InterfaceViewModalProps.md)\>
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L65)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L67)

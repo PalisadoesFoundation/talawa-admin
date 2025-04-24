@@ -27,7 +27,10 @@ import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery, gql } from '@apollo/client';
-import { ACTION_ITEM_CATEGORIES_BY_ORGANIZATION } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import {
+  ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
+  GET_USER,
+} from 'GraphQl/Queries/ActionItemCategoryQueries';
 import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -41,7 +44,6 @@ import { Chip, Stack } from '@mui/material';
 import CategoryModal from './Modal/CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
-import { GET_USER } from 'GraphQl/Queries/ActionItemCategoryQueries';
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',

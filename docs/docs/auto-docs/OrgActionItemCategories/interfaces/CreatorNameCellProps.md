@@ -4,7 +4,7 @@
 
 # Interface: CreatorNameCellProps
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L69)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L71)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCatego
 
 > **creatorId**: `string`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L70)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L72)

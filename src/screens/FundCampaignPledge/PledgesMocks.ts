@@ -1,5 +1,8 @@
-import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import {
+  CREATE_PLEDGE,
+  UPDATE_PLEDGE,
+  DELETE_PLEDGE,
+} from 'GraphQl/Mutations/PledgeMutation';
 import { MEMBERS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 

@@ -6,7 +6,7 @@
 
 > **CreatorNameCell**(`__namedParameters`): `Element`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L74)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx#L76)
 
 ## Parameters
 

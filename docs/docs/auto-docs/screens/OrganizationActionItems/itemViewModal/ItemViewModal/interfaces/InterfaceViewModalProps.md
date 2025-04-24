@@ -4,7 +4,7 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L59)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L61)
 
 The ItemViewModal component displays a read-only modal view of an action item.
 It shows details such as category, assignee, assigner, status, dates, and any pre-
@@ -17,7 +17,7 @@ and leverages React-Bootstrap and MUI components for the UI.
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L61)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L63)
 
 #### Returns
 
@@ -29,7 +29,7 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L60)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L62)
 
 ***
 
@@ -37,4 +37,4 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 > **item**: [`InterfaceActionItem`](../../../../../utils/interfaces/interfaces/InterfaceActionItem.md)
 
-Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L62)
+Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L64)
