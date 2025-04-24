@@ -394,6 +394,10 @@ const ItemModal: FC<InterfaceItemModalProps> = ({
                   {...params}
                   label={t('actionItemCategory')}
                   required
+                  inputProps={{
+                    ...params.inputProps,
+                    'data-testid': 'category-input',
+                  }}
                 />
               )}
             />

@@ -44,6 +44,7 @@ import { Chip, Stack } from '@mui/material';
 import CategoryModal from './Modal/CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
