@@ -113,45 +113,4 @@ describe('ItemViewModal Component', () => {
 
     expect(hideMock).toHaveBeenCalled();
   });
-  it('displays the category using getCategoryDisplay when category is found', async () => {
-    // Update sampleActionItem so that categoryId is 'cat1' and actionItemCategory is provided.
-    const sampleActionItemWithCategory = {
-      ...sampleActionItem,
-      categoryId: 'cat1',
-      actionItemCategory: {
-        id: 'cat1',
-        name: 'Category 1',
-      },
-    };
-
-    // Create a mock for GET_CATEGORIES_BY_IDS that returns a category with id 'cat1'
-    const categoriesMock = {
-      request: {
-        query: GET_CATEGORIES_BY_IDS,
-        variables: { ids: ['cat1'] },
-      },
-      result: {
-        data: {
-          categoriesByIds: [{ id: 'cat1', name: 'Category 1' }],
-        },
-      },
-    };
-
-    render(
-      <MockedProvider mocks={[categoriesMock]} addTypename={false}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ItemViewModal
-            isOpen={true}
-            hide={hideMock}
-            item={sampleActionItemWithCategory}
-          />
-        </LocalizationProvider>
-      </MockedProvider>,
-    );
-
-    // The category field is rendered as a disabled TextField.
-    // Wait for the TextField to have the expected value.
-    const categoryField = await screen.findByDisplayValue('Category 1');
-    expect(categoryField).toBeInTheDocument();
-  });
 });

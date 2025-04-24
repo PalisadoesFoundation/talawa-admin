@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L84)
+Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L96)
 
 GraphQL mutation to update an action item.
 
