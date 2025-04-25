@@ -74,7 +74,37 @@ const MOCKS = [
 
 const MOCKS3 = [
   {
-    request: { query: ORGANIZATION_LIST_BY_SEARCH },
+    request: { query: ORGANIZATION_LIST_BY_SEARCH, variables: { filter: '' } },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+            name: 'Unity Foundation - North',
+            city: 'Fort Collins',
+            state: 'CO',
+            countryCode: 'us',
+          },
+          {
+            id: '01960b81-bfed-7524-bc73-c1a67449d746',
+            name: 'Unity Foundation - South',
+            city: 'Miami',
+            state: 'FL',
+            countryCode: 'us',
+          },
+          {
+            id: '01960b81-bfed-751e-a6e6-eca1c98fc585',
+            name: 'Unity Foundation - East',
+            city: 'Boston',
+            state: 'MA',
+            countryCode: 'us',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: { query: ORGANIZATION_LIST_BY_SEARCH, variables: { filter: 'U' } },
     result: {
       data: {
         organizations: [
@@ -1051,6 +1081,39 @@ describe('Testing Login Page Screen', () => {
   });
 });
 
+it('Render the Select Organization list and change the option', async () => {
+  render(
+    <MockedProvider link={link3} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LoginPage />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait();
+
+  // Simulate navigating to the registration portion
+  const registerButton = screen.queryByTestId('goToRegisterPortion');
+  if (registerButton) {
+    await userEvent.click(registerButton);
+    await wait();
+
+    // Simulate typing in the organization search field
+    const autocomplete = screen.getByTestId('selectOrg');
+    const input = within(autocomplete).getByRole('combobox');
+    await userEvent.type(input, 'U');
+
+    // Simulate fetching organizations
+    fireEvent.change(input, { target: { value: 'U' } });
+    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
+    fireEvent.keyDown(autocomplete, { key: 'Enter' });
+  }
+});
+
 describe('Testing redirect if already logged in', () => {
   it('Logged in as USER', async () => {
     const { setItem } = useLocalStorage();
@@ -1088,49 +1151,6 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
-});
-
-it('Render the Select Organization list and change the option', async () => {
-  // Skip this test for admin path since register button is removed
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    value: {
-      reload: vi.fn(),
-      href: 'https://localhost:4321/',
-      origin: 'https://localhost:4321',
-      pathname: '/',
-    },
-  });
-
-  render(
-    <MockedProvider addTypename={false} link={link3}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await wait();
-
-  const registerButton = screen.queryByTestId('goToRegisterPortion');
-  if (registerButton) {
-    await userEvent.click(registerButton);
-    await wait();
-
-    const autocomplete = screen.getByTestId('selectOrg');
-    const input = within(autocomplete).getByRole('combobox');
-    await userEvent.click(input);
-    autocomplete.focus();
-    // the value here can be any string you want, so you may also consider to
-    // wrapper it as a function and pass in inputValue as parameter
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    fireEvent.keyDown(autocomplete, { key: 'Enter' });
-  }
 });
 
 describe('Talawa-API server fetch check', () => {
