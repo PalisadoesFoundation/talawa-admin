@@ -19,8 +19,6 @@ import { toast } from 'react-toastify';
 import type { Mock } from 'vitest';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
 
-// import OrganizationActionItems from './OrganizationActionItems';
-// --- Global Mocks for i18n and toast ---
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, opts?: unknown): string =>
@@ -38,7 +36,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// --- Mocks for custom components ---
 vi.mock('subComponents/SortingButton', () => ({
   default: ({
     dataTestIdPrefix,
@@ -164,7 +161,72 @@ vi.mock('./itemUpdateModal/ItemUpdateStatusModal.tsx', () => ({
     ) : null,
 }));
 
-// --- Sample Data ---
+const baseItems = [
+  {
+    id: 'A',
+    isCompleted: false,
+    assignedAt: '2025-01-01',
+    completionAt: '',
+    assigneeId: 'u1',
+    categoryId: null,
+    creatorId: 'creator',
+    actionItemCategory: null,
+  },
+  {
+    id: 'B',
+    isCompleted: true,
+    assignedAt: '2025-01-02',
+    completionAt: '2025-01-03',
+    assigneeId: 'u2',
+    categoryId: null,
+    creatorId: 'creator',
+    actionItemCategory: null,
+  },
+  {
+    id: 'C',
+    isCompleted: false,
+    assignedAt: '2025-01-04',
+    completionAt: '',
+    assigneeId: null,
+    categoryId: null,
+    creatorId: 'creator',
+    actionItemCategory: null,
+  },
+] as const;
+
+const inlineActionMock: MockedResponse = {
+  request: {
+    query: ACTION_ITEM_FOR_ORGANIZATION,
+    variables: { organizationId: 'org1' },
+  },
+  result: {
+    data: {
+      actionItemsByOrganization: baseItems.map((i) => ({
+        ...i,
+        preCompletionNotes: '',
+        postCompletionNotes: null,
+        createdAt: i.assignedAt,
+        updatedAt: i.assignedAt,
+        organizationId: 'org1',
+        eventId: null,
+        updaterId: 'creator',
+      })),
+    },
+  },
+};
+
+const inlineUsersMock: MockedResponse = {
+  request: {
+    query: GET_USERS_BY_IDS,
+    variables: { input: { ids: ['u1', 'u2'] } },
+  },
+  result: {
+    data: {
+      usersByIds: [{ id: 'u1', name: 'Alice Anderson' }],
+    },
+  },
+};
+
 const sampleActionItemsData = {
   actionItemsByOrganization: [
     {
@@ -244,7 +306,6 @@ describe('Testing Organization Action Items Screen', () => {
         assigneeId: 'user1',
         creatorId: 'user2',
         updaterId: 'user2',
-        // actionItemCategory is optional; enrichment sets categoryName
       },
     ],
   };
@@ -257,7 +318,6 @@ describe('Testing Organization Action Items Screen', () => {
     result: { data: customActionItemsData2 },
   };
 
-  // Provide a categories mock that returns an empty array
   const emptyCategoriesMock2: MockedResponse = {
     request: {
       query: GET_CATEGORIES_BY_IDS,
@@ -266,7 +326,6 @@ describe('Testing Organization Action Items Screen', () => {
     result: { data: { categoriesByIds: [] } },
   };
 
-  // --- GraphQL Mocks ---
   const actionItemsMock: MockedResponse = {
     request: {
       query: ACTION_ITEM_FOR_ORGANIZATION,
@@ -297,7 +356,6 @@ describe('Testing Organization Action Items Screen', () => {
     },
   };
 
-  // --- Custom Render Helper ---
   interface InterfaceRenderOptions {
     route?: string;
     mocks?: MockedResponse[];
@@ -334,17 +392,14 @@ describe('Testing Organization Action Items Screen', () => {
     vi.useRealTimers();
   });
 
-  // --- Tests ---
   describe('OrganizationActionItems Component', () => {
     it('redirects to "/" if orgId is not provided', () => {
       renderWithProviders(<OrganizationActionItems />, { route: '/orgdash/' });
-      // When orgId is missing, the route falls back.
       expect(screen.getByText('Fallback')).toBeInTheDocument();
     });
 
     it('renders the DataGrid with action items and header buttons', async () => {
       renderWithProviders(<OrganizationActionItems />);
-      // Use role query to pick the DataGrid header cell.
       await waitFor(() => {
         expect(
           screen.getByRole('columnheader', { name: /Assignee/i }),
@@ -367,26 +422,22 @@ describe('Testing Organization Action Items Screen', () => {
       });
     });
 
-    // Corrected test for sorting action items by completion date:
     it('sorts action items by completion date', async () => {
-      // Supply duplicate actionItemsMock so that the refetch triggered by sort change succeeds.
       renderWithProviders(<OrganizationActionItems />, {
         mocks: [actionItemsMock, actionItemsMock, usersMock, eventsMock],
       });
-      // Wait for the completion date cells to appear.
       await waitFor(async () => {
         const cells = await screen.findAllByTestId('completionDate');
         expect(cells.length).toBe(2);
       });
       const sortSelect = screen.getByTestId('sort');
-      // Set sort to dueDate_DESC: the row with a valid completion date should come first.
       fireEvent.change(sortSelect, { target: { value: 'dueDate_DESC' } });
       await waitFor(async () => {
         const completionCells = await screen.findAllByTestId('completionDate');
-        expect(completionCells[0].textContent).toContain('06/03/2025'); // row with valid date
+        expect(completionCells[0].textContent).toContain('06/03/2025');
         expect(completionCells[1].textContent).toContain('No Completion Date');
       });
-      // Change sort to dueDate_ASC: the row with "No Completion Date" should come first.
+
       fireEvent.change(sortSelect, { target: { value: 'dueDate_ASC' } });
       await waitFor(async () => {
         const completionCells = await screen.findAllByTestId('completionDate');
@@ -439,7 +490,6 @@ describe('Testing Organization Action Items Screen', () => {
 
     it('opens and closes the status update modal', async () => {
       renderWithProviders(<OrganizationActionItems />);
-      // Use findByTestId to ensure the checkbox is present.
       const statusCheckbox = await screen.findByTestId('statusCheckbox1');
       fireEvent.click(statusCheckbox);
       await waitFor(() => {
@@ -452,7 +502,6 @@ describe('Testing Organization Action Items Screen', () => {
     });
 
     it('displays "Unassigned" when action item has no assigneeId', async () => {
-      // Create a custom action item with a null assigneeId.
       const customActionItemsData3 = {
         actionItemsByOrganization: [
           {
@@ -485,7 +534,6 @@ describe('Testing Organization Action Items Screen', () => {
       renderWithProviders(<OrganizationActionItems />, {
         mocks: [customActionItemsMock3, usersMock, eventsMock],
       });
-      // The rendered grid cell should show "Unassigned"
       const unassignedCell = await screen.findByText('Unassigned');
       expect(unassignedCell).toBeInTheDocument();
     });
@@ -514,13 +562,11 @@ describe('Testing Organization Action Items Screen', () => {
           </MemoryRouter>
         </MockedProvider>,
       );
-      // The component should redirect to "/" and display the Home component.
       await waitFor(() => {
         expect(screen.getByText('Home')).toBeInTheDocument();
       });
     });
 
-    // Test: Enriches action items with "No Category" when categoriesData returns empty
     it('enriches action items with "No Category" when categoriesData is empty', async () => {
       renderWithProviders(<OrganizationActionItems />, {
         mocks: [
@@ -531,9 +577,98 @@ describe('Testing Organization Action Items Screen', () => {
         ],
       });
 
-      // Verify that the category cell shows "No Category"
       const categoryCell = await screen.findByTestId('categoryName');
       expect(categoryCell.textContent).toContain('No Category');
+    });
+
+    it('filters items by searchBy === "assignee"', async () => {
+      const actionMock: MockedResponse = {
+        request: {
+          query: ACTION_ITEM_FOR_ORGANIZATION,
+          variables: { organizationId: 'org1' },
+        },
+        result: {
+          data: {
+            actionItemsByOrganization: [
+              {
+                id: '1',
+                isCompleted: false,
+                assignedAt: '2025-01-01',
+                completionAt: '',
+                createdAt: '2025-01-01',
+                updatedAt: '2025-01-01',
+                organizationId: 'org1',
+                categoryId: null,
+                eventId: null,
+                assigneeId: 'u1',
+                assignee: { __typename: 'User', id: 'u1', name: 'Alice' },
+                creatorId: 'u1',
+                creator: { __typename: 'User', id: 'u1', name: 'Alice' },
+                updater: null,
+                actionItemCategory: null,
+                preCompletionNotes: '',
+                postCompletionNotes: null,
+                allottedHours: 0,
+              },
+              {
+                id: '2',
+                isCompleted: true,
+                assignedAt: '2025-01-02',
+                completionAt: '',
+                createdAt: '2025-01-02',
+                updatedAt: '2025-01-02',
+                organizationId: 'org1',
+                categoryId: null,
+                eventId: null,
+                assigneeId: 'u2',
+                assignee: { __typename: 'User', id: 'u2', name: 'Bob' },
+                creatorId: 'u2',
+                creator: { __typename: 'User', id: 'u2', name: 'Bob' },
+                updater: null,
+                actionItemCategory: null,
+                preCompletionNotes: '',
+                postCompletionNotes: null,
+                allottedHours: 0,
+              },
+            ],
+          },
+        },
+      };
+
+      const usersMock: MockedResponse = {
+        request: {
+          query: GET_USERS_BY_IDS,
+          variables: { input: { ids: ['u1', 'u2'] } },
+        },
+        result: {
+          data: {
+            usersByIds: [
+              { id: 'u1', name: 'Alice' },
+              { id: 'u2', name: 'Bob' },
+            ],
+          },
+        },
+      };
+      const catMock: MockedResponse = {
+        request: { query: GET_CATEGORIES_BY_IDS, variables: { ids: [] } },
+        result: { data: { categoriesByIds: [] } },
+      };
+
+      renderWithProviders(<OrganizationActionItems />, {
+        mocks: [actionMock, usersMock, catMock],
+      });
+      await screen.findByRole('columnheader', { name: /Assignee/i });
+      const searchInput = screen.getByTestId('searchBy');
+      fireEvent.change(searchInput, { target: { value: 'Alice' } });
+      await waitFor(() => {
+        expect(screen.getByTestId('viewItemBtn1')).toBeInTheDocument();
+        expect(screen.queryByTestId('viewItemBtn2')).toBeNull();
+      });
+      fireEvent.change(searchInput, { target: { value: 'Bob' } });
+      await waitFor(() => {
+        expect(screen.getByTestId('viewItemBtn2')).toBeInTheDocument();
+        expect(screen.queryByTestId('viewItemBtn1')).toBeNull();
+      });
     });
   });
 });

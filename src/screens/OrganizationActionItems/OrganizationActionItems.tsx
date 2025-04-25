@@ -233,11 +233,6 @@ function organizationActionItems(): JSX.Element {
     });
   }, [actionItemsData]);
 
-  const eventIds =
-    actionItemsData?.actionItemsByOrganization
-      .map((item) => item.eventId)
-      .filter((id): id is string => id !== null) || [];
-
   const filteredAndSortedActionItems = useMemo(() => {
     if (!enrichedActionItems.length) return [];
 
