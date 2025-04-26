@@ -1,10 +1,8 @@
 name: Pull Request Review
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
   pull_request_review:
-    types: [submitted, edited, dismissed]
+    types: [submitted]
 
 jobs:
   Check-CodeRabbit-Approval:
@@ -22,31 +20,25 @@ jobs:
             const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.issue.number || context.payload.pull_request.number,
+              pull_number: context.payload.pull_request.number
             });
-
-            console.log(`Found ${reviews.length} total reviews for PR #${context.issue.number}`);
 
             // Filter reviews that have a user login containing "coderabbit" (case-insensitive)
             const codeRabbitReviews = reviews.filter(review => 
-              review.user && review.user.login && review.user.login.toLowerCase().includes('coderabbit')
+              review.user.login.toLowerCase().includes('coderabbit')
             );
 
-            console.log(`Found ${codeRabbitReviews.length} CodeRabbit reviews`);
-
-            // If no CodeRabbit reviews are found, fail the check
+            // Fail if no CodeRabbit reviews are found
             if (codeRabbitReviews.length === 0) {
               core.setFailed('ERROR: CodeRabbit has not reviewed this PR.');
               return;
             }
 
-            // Sort reviews by submitted_at date in descending order to get the latest
+            // Sort reviews by submitted_at date in descending order
             codeRabbitReviews.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
             const latestReview = codeRabbitReviews[0];
 
-            console.log(`Latest CodeRabbit review state: ${latestReview.state}`);
-
-            // Check if the latest review from CodeRabbit is "APPROVED"
+            // Fail if the latest review from CodeRabbit is not "APPROVED"
             if (latestReview.state !== 'APPROVED') {
               core.setFailed('ERROR: CodeRabbit approval is required before merging this PR.');
             } else {
