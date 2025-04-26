@@ -42,15 +42,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Use Option 1: preserve real implementation, override hook only, with correct typing
-vi.mock('utils/MinioUpload', async () => {
-  const actual = await vi.importActual<typeof minioUpload>('utils/MinioUpload');
-  return {
-    ...actual,
-    useMinioUpload: () => ({ uploadFileToMinio: vi.fn() }),
-  };
-});
-
 vi.mock('utils/MinioDownload', async () => {
   const actual = await vi.importActual<typeof minioDownload>(
     'utils/MinioDownload',
