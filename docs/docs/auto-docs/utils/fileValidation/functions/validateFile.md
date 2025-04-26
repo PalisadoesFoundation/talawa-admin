@@ -26,7 +26,7 @@ Maximum file size in MB (default: 5MB)
 
 ### allowedTypes
 
-`string`[] = `...`
+readonly `string`[] = `FILE_UPLOAD_ALLOWED_TYPES`
 
 Array of allowed MIME types (default: ['image/jpeg', 'image/png', 'image/gif'])
 

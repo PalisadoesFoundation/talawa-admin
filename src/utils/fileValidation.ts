@@ -23,7 +23,7 @@ interface IFileValidationResult {
 export const validateFile = (
   file: File,
   maxSizeInMB = FILE_UPLOAD_MAX_SIZE_MB,
-  allowedTypes: string[] = Array.from(FILE_UPLOAD_ALLOWED_TYPES),
+  allowedTypes: readonly string[] = FILE_UPLOAD_ALLOWED_TYPES,
 ): IFileValidationResult => {
   const maxSize = maxSizeInMB * 1024 * 1024; // Convert MB to bytes
 
