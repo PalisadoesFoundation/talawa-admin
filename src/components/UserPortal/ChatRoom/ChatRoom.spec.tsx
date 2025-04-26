@@ -5926,4 +5926,71 @@ describe('handleImageChange', () => {
     // Since upload failed, attachment should NOT appear
     expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
   });
+
+  it('should remove attachment when close button is clicked', async () => {
+    vi.mocked(fileValidation.validateFile).mockReturnValueOnce({
+      isValid: true,
+      errorMessage: '',
+    });
+
+    vi.spyOn(minioUpload, 'useMinioUpload').mockImplementation(() => ({
+      uploadFileToMinio: vi
+        .fn()
+        .mockResolvedValue({ objectName: 'mock-object-name' }),
+    }));
+
+    vi.spyOn(minioDownload, 'useMinioDownload').mockImplementation(() => ({
+      getFileFromMinio: vi
+        .fn()
+        .mockResolvedValue('https://example.com/test-image.jpg'),
+    }));
+
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+    const file = new File(['dummy content'], 'valid-image.png', {
+      type: 'image/png',
+    });
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    // Attachment should be visible
+    const attachmentImg = await screen.findByAltText('attachment');
+    expect(attachmentImg).toBeInTheDocument();
+
+    // Find the close button inside the same parent as the attachment image
+    const attachmentDiv = attachmentImg.parentElement;
+    expect(attachmentDiv).toBeTruthy();
+    const closeBtn = attachmentDiv?.querySelector('button');
+    expect(closeBtn).toBeTruthy();
+
+    // Click the close button
+    await act(async () => {
+      if (closeBtn) {
+        fireEvent.click(closeBtn);
+      }
+    });
+
+    // Wait for the attachment to be removed
+    await waitFor(() => {
+      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    });
+  });
 });
