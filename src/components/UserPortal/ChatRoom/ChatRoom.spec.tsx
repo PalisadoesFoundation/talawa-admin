@@ -42,21 +42,34 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: () => ({
-    uploadFileToMinio: vi.fn(),
-  }),
-}));
+// Use Option 1: preserve real implementation, override hook only, with correct typing
+vi.mock('utils/MinioUpload', async () => {
+  const actual = await vi.importActual<typeof minioUpload>('utils/MinioUpload');
+  return {
+    ...actual,
+    useMinioUpload: () => ({ uploadFileToMinio: vi.fn() }),
+  };
+});
 
-vi.mock('utils/MinioDownload', () => ({
-  useMinioDownload: () => ({
-    getFileFromMinio: vi.fn(),
-  }),
-}));
+vi.mock('utils/MinioDownload', async () => {
+  const actual = await vi.importActual<typeof minioDownload>(
+    'utils/MinioDownload',
+  );
+  return {
+    ...actual,
+    useMinioDownload: () => ({ getFileFromMinio: vi.fn() }),
+  };
+});
 
-vi.mock('utils/fileValidation', () => ({
-  validateFile: vi.fn(),
-}));
+vi.mock('utils/fileValidation', async () => {
+  const actual = await vi.importActual<typeof fileValidation>(
+    'utils/fileValidation',
+  );
+  return {
+    ...actual,
+    validateFile: vi.fn(),
+  };
+});
 
 /**
  * Unit tests for the ChatRoom component
@@ -5720,11 +5733,14 @@ describe('MessageImage Component', () => {
   });
 
   it('renders loading placeholder while image is loading', async () => {
-    // Create a promise that never resolves to simulate loading state
-    const neverResolvingPromise = new Promise<string>(() => {});
-    mockGetFileFromMinio.mockReturnValueOnce(neverResolvingPromise);
+    // Create a deferred promise
+    let resolvePromise: (value: string) => void;
+    const loadingPromise = new Promise<string>((resolve) => {
+      resolvePromise = resolve;
+    });
+    mockGetFileFromMinio.mockReturnValueOnce(loadingPromise);
 
-    render(
+    const { unmount } = render(
       <MessageImage
         media="minio-image-name.png"
         getFileFromMinio={mockGetFileFromMinio}
@@ -5732,6 +5748,14 @@ describe('MessageImage Component', () => {
     );
 
     expect(await screen.findByText('Loading image...')).toBeInTheDocument();
+
+    // Clean up: resolve the promise so React can finish any effects
+    act(() => {
+      resolvePromise('https://dummy');
+    });
+
+    // Optionally, unmount to ensure no side effects
+    unmount();
   });
 
   it('renders MinIO image after successful fetch', async () => {
@@ -5759,6 +5783,11 @@ describe('MessageImage Component', () => {
     );
 
     expect(await screen.findByText('Image not available')).toBeInTheDocument();
+  });
+
+  it('shows error if media is not provided (no media prop)', () => {
+    render(<MessageImage media="" getFileFromMinio={vi.fn()} />);
+    expect(screen.getByText('Image not available')).toBeInTheDocument();
   });
 });
 

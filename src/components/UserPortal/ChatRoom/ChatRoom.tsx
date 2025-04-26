@@ -47,6 +47,10 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
 import { validateFile } from 'utils/fileValidation';
+import {
+  FILE_UPLOAD_MAX_SIZE_MB,
+  FILE_UPLOAD_ALLOWED_TYPES,
+} from '../../../Constant/fileUpload';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -315,12 +319,11 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (!file) return;
 
     // Use the fileValidation utility for validation
-    const validation = validateFile(file, 5, [
-      'image/jpeg',
-      'image/png',
-      'image/gif',
-      'image/webp',
-    ]);
+    const validation = validateFile(
+      file,
+      FILE_UPLOAD_MAX_SIZE_MB,
+      FILE_UPLOAD_ALLOWED_TYPES,
+    );
 
     if (!validation.isValid) {
       toast.error(validation.errorMessage);
