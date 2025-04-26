@@ -1,33 +1,32 @@
 /**
- * @file LoginPage.tsx
- * @description This file contains the implementation of the Login and Registration page for the Talawa Admin application.
+ * LoginPage.tsx
+ *
+ * This file contains the implementation of the Login and Registration page for the Talawa Admin application.
  * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
  * The page supports both admin and user roles and provides localization support.
  *
- * @module LoginPage
+ * Dependencies:
+ * - react
+ * - react-router-dom
+ * - react-bootstrap
+ * - react-google-recaptcha
+ * - \@apollo/client
+ * - \@mui/icons-material
+ * - \@mui/material
+ * - react-toastify
+ * - i18next
+ * - utils/errorHandler
+ * - utils/useLocalstorage
+ * - utils/useSession
+ * - utils/i18n
+ * - GraphQl/Mutations/mutations
+ * - GraphQl/Queries/Queries
+ * - components/ChangeLanguageDropdown/ChangeLanguageDropDown
+ * - components/LoginPortalToggle/LoginPortalToggle
+ * - assets/svgs/palisadoes.svg
+ * - assets/svgs/talawa.svg
  *
- * @requires react
- * @requires react-router-dom
- * @requires react-bootstrap
- * @requires react-google-recaptcha
- * @requires @apollo/client
- * @requires @mui/icons-material
- * @requires @mui/material
- * @requires react-toastify
- * @requires i18next
- * @requires utils/errorHandler
- * @requires utils/useLocalstorage
- * @requires utils/useSession
- * @requires utils/i18n
- * @requires GraphQl/Mutations/mutations
- * @requires GraphQl/Queries/Queries
- * @requires components/ChangeLanguageDropdown/ChangeLanguageDropDown
- * @requires components/LoginPortalToggle/LoginPortalToggle
- * @requires assets/svgs/palisadoes.svg
- * @requires assets/svgs/talawa.svg
- *
- * @component
- * @description The `loginPage` component renders a login and registration interface with the following features:
+ * The `LoginPage` component renders a login and registration interface with the following features:
  * - Login and registration forms with validation.
  * - Password strength checks and visibility toggles.
  * - reCAPTCHA integration for bot prevention.
@@ -35,15 +34,15 @@
  * - Social media links and community branding.
  * - Role-based navigation for admin and user.
  *
- * @returns {JSX.Element} The rendered login and registration page.
+ * @returns \{JSX.Element\} The rendered login and registration page.
  *
  * @example
  * ```tsx
  * import LoginPage from './LoginPage';
  *
- * const App = () => {
- *   return <LoginPage />;
- * };
+ * const App = () => \{
+ *   return (\<LoginPage /\>);
+ * \};
  *
  * export default App;
  * ```
@@ -208,7 +207,7 @@ const loginPage = (): JSX.Element => {
     },
   );
 
-  function debounce<T extends (...args: any[]) => void>(
+  function debounce<T extends (...args: []) => void>(
     func: T,
     delay: number,
   ): (...args: Parameters<T>) => void {
