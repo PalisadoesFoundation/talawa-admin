@@ -27,6 +27,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -135,9 +136,42 @@ const MOCKS4 = [
   },
 ];
 
+const USER_SIGNIN_MOCK = [
+  {
+    request: {
+      query: SIGNIN_QUERY,
+      variables: { email: 'user@example.com', password: 'password' },
+    },
+    result: {
+      data: {
+        signIn: {
+          user: {
+            id: 'user-id',
+            role: 'user',
+            countryCode: null,
+            name: 'Normal User',
+            emailAddress: 'user@example.com',
+            avatarURL: '',
+          },
+          authenticationToken: 'token-123',
+        },
+      },
+    },
+  },
+  {
+    request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: null } },
+    result: { data: { recaptcha: true } },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
+const userLink = new StaticMockLink(USER_SIGNIN_MOCK, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -1105,22 +1139,6 @@ describe('Testing redirect if already logged in', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
 
-  it('Redirects based on role (admin or user)', async () => {
-    const isAdmin = true;
-    const mockNavigate = vi.fn();
-    const navigate = (url: string) => mockNavigate(url);
-
-    if (isAdmin) {
-      navigate('/orglist');
-    } else {
-      navigate('/user/organizations');
-    }
-
-    expect(mockNavigate).toHaveBeenCalledWith(
-      isAdmin ? '/orglist' : '/user/organizations',
-    );
-  });
-
   it('Render the Select Organization list and change the option', async () => {
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
@@ -1158,6 +1176,59 @@ describe('Testing redirect if already logged in', () => {
       fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
       fireEvent.keyDown(autocomplete, { key: 'Enter' });
     }
+  });
+
+  it('navigates to /user/organizations after successful login as user', async () => {
+    render(
+      <MockedProvider addTypename={false} link={userLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.type(screen.getByTestId(/loginEmail/i), 'user@example.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'password',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+  });
+
+  it('Returns toast warning with wrong credentials', async () => {
+    render(
+      <MockedProvider addTypename={false} link={userLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(); // wait for any initial page loads
+    await userEvent.type(
+      screen.getByTestId(/loginEmail/i),
+      'wrong-user@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrong-password',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait(); // wait for toast/error after login click
+
+    expect(toast.warn).toHaveBeenCalledWith('Not found');
   });
 });
 
