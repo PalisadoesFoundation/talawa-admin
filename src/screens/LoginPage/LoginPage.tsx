@@ -1,10 +1,31 @@
 /**
- * LoginPage.tsx
- * 
- * This file contains the implementation of the Login and Registration page for the Talawa Admin application.
- * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
- * The page supports both admin and user roles and provides localization support.
+ * Renders the Login and Registration page for the Talawa Admin application.
+ *
+ * @remarks
+ * This page includes functionality for:
+ * - User authentication
+ * - Password validation and strength checks
+ * - reCAPTCHA verification for bot prevention
+ * - Organization selection via an autocomplete dropdown
+ * - Role-based navigation for admin and user
+ * - Localization support with language switching
+ * - Social media links and community branding
+ *
+ * External libraries used include React, React Router, Apollo Client, MUI, React Bootstrap, React Toastify, and Google reCAPTCHA.
+ *
+ * @example
+ * ```tsx
+ * import LoginPage from './LoginPage';
+ *
+ * const App = () => {
+ *   return <LoginPage />;
+ * };
+ * export default App;
+ * ```
+ *
+ * @returns The rendered login and registration page as a JSX element.
  */
+
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
@@ -44,10 +65,6 @@ import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
-declare global {
-  interface Window {}
-}
-
 const loginPage = (): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
@@ -56,10 +73,6 @@ const loginPage = (): React.ReactElement => {
   const navigate = useNavigate();
 
   const { getItem, setItem } = useLocalStorage();
-
-  useEffect(() => {
-    window.document.title = t('title');
-  }, [t]);
 
   type PasswordValidation = {
     lowercaseChar: boolean;
@@ -168,8 +181,7 @@ const loginPage = (): React.ReactElement => {
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        // Using window.fetch instead of fetch
-        await window.fetch(BACKEND_URL as string);
+        await fetch(BACKEND_URL as string);
       } catch (error) {
         errorHandler(t, error);
       }

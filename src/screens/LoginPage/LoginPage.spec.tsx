@@ -26,13 +26,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, expect, it, describe, Mock } from 'vitest';
-
-declare global {
-  interface Window {
-    location: Location;
-  }
-}
+import { vi, beforeEach, expect, it, describe } from 'vitest';
 
 const MOCKS = [
   {
