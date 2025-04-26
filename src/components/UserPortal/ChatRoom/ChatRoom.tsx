@@ -78,7 +78,7 @@ interface MessageImageProps {
   ) => Promise<string>;
 }
 
-const MessageImage: React.FC<MessageImageProps> = ({
+export const MessageImage: React.FC<MessageImageProps> = ({
   media,
   organizationId,
   getFileFromMinio,
@@ -537,6 +537,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
               ref={fileInputRef}
               style={{ display: 'none' }} // Hide the input
               onChange={handleImageChange}
+              data-testid="hidden-file-input" // <<< ADD THIS
             />
             {!!replyToDirectMessage?._id && (
               <div data-testid="replyMsg" className={styles.replyTo}>

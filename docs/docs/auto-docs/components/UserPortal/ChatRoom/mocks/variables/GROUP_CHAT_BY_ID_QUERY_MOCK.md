@@ -1,0 +1,9 @@
+[Admin Docs](/)
+
+***
+
+# Variable: GROUP\_CHAT\_BY\_ID\_QUERY\_MOCK
+
+> `const` **GROUP\_CHAT\_BY\_ID\_QUERY\_MOCK**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; \}; \}; `result`: \{ `data`: \{ `chatById`: \{ `_id`: `string`; `admins`: `object`[]; `createdAt`: `string`; `creator`: \{ `__typename`: `string`; `_id`: `string`; `createdAt`: `string`; `email`: `string`; `firstName`: `string`; `image`: `any`; `lastName`: `string`; \}; `isGroup`: `boolean`; `messages`: `object`[]; `name`: `string`; `organization`: \{ `_id`: `string`; `name`: `string`; \}; `unseenMessagesByUsers`: `string`; `users`: `object`[]; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; \}; \}; `result`: \{ `data`: \{ `chatById`: \{ `_id`: `string`; `admins`: `object`[]; `createdAt`: `string`; `creator`: \{ `__typename`: `string`; `_id`: `string`; `createdAt`: `string`; `email`: `string`; `firstName`: `string`; `image`: `any`; `lastName`: `string`; \}; `isGroup`: `boolean`; `messages`: `object`[]; `name`: `string`; `organization`: \{ `_id`: `string`; `name`: `string`; \}; `unseenMessagesByUsers`: `string`; `users`: `object`[]; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; \}; \}; `result`: \{ `data`: \{ `chatById`: \{ `_id`: `string`; `admins`: `object`[]; `createdAt`: `string`; `creator`: \{ `__typename`: `string`; `_id`: `string`; `createdAt`: `string`; `email`: `string`; `firstName`: `string`; `image`: `any`; `lastName`: `string`; \}; `isGroup`: `boolean`; `messages`: `object`[]; `name`: `string`; `organization`: \{ `_id`: `string`; `name`: `string`; \}; `unseenMessagesByUsers`: `undefined`; `users`: `object`[]; \}; \}; \}; \})[]
+
+Defined in: [src/components/UserPortal/ChatRoom/mocks.ts:4530](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/mocks.ts#L4530)
