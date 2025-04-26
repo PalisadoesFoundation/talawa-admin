@@ -42,16 +42,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('utils/MinioDownload', async () => {
-  const actual = await vi.importActual<typeof minioDownload>(
-    'utils/MinioDownload',
-  );
-  return {
-    ...actual,
-    useMinioDownload: () => ({ getFileFromMinio: vi.fn() }),
-  };
-});
-
 vi.mock('utils/fileValidation', async () => {
   const actual = await vi.importActual<typeof fileValidation>(
     'utils/fileValidation',
