@@ -41,6 +41,7 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+        lib: ["dom", "esnext"],
       },
       globals: {
         // ✅ Node.js globals

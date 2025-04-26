@@ -27,8 +27,12 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe, Mock } from 'vitest';
-import { toast } from 'react-toastify';
-import { error } from 'console';
+
+declare global {
+  interface Window {
+    location: Location;
+  }
+}
 
 const MOCKS = [
   {
@@ -174,7 +178,7 @@ vi.mock('react-google-recaptcha', async () => {
         onChange: (value: string) => void;
       } & React.InputHTMLAttributes<HTMLInputElement>,
       ref: React.LegacyRef<HTMLInputElement> | undefined,
-    ): JSX.Element => {
+    ): React.ReactElement => {
       const { onChange, ...otherProps } = props;
 
       Object.defineProperty(ref, 'current', {
@@ -1169,7 +1173,7 @@ describe('Talawa-API server fetch check', () => {
   });
 
   it('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = vi.fn(() => Promise.resolve({} as unknown as Response));
+    window.fetch = vi.fn(() => Promise.resolve({} as Response));
 
     await act(async () => {
       render(
@@ -1190,7 +1194,7 @@ describe('Talawa-API server fetch check', () => {
 
   it('displays warning message when resource loading fails', async () => {
     const mockError = new Error('Network error');
-    global.fetch = vi.fn(() => Promise.reject(mockError));
+    window.fetch = vi.fn(() => Promise.reject(mockError));
 
     await act(async () => {
       render(

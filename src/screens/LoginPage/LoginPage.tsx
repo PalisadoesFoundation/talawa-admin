@@ -1,52 +1,9 @@
 /**
- * @file LoginPage.tsx
- * @description This file contains the implementation of the Login and Registration page for the Talawa Admin application.
+ * LoginPage.tsx
+ * 
+ * This file contains the implementation of the Login and Registration page for the Talawa Admin application.
  * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
  * The page supports both admin and user roles and provides localization support.
- *
- * @module LoginPage
- *
- * @requires react
- * @requires react-router-dom
- * @requires react-bootstrap
- * @requires react-google-recaptcha
- * @requires @apollo/client
- * @requires @mui/icons-material
- * @requires @mui/material
- * @requires react-toastify
- * @requires i18next
- * @requires utils/errorHandler
- * @requires utils/useLocalstorage
- * @requires utils/useSession
- * @requires utils/i18n
- * @requires GraphQl/Mutations/mutations
- * @requires GraphQl/Queries/Queries
- * @requires components/ChangeLanguageDropdown/ChangeLanguageDropDown
- * @requires components/LoginPortalToggle/LoginPortalToggle
- * @requires assets/svgs/palisadoes.svg
- * @requires assets/svgs/talawa.svg
- *
- * @component
- * @description The `loginPage` component renders a login and registration interface with the following features:
- * - Login and registration forms with validation.
- * - Password strength checks and visibility toggles.
- * - reCAPTCHA integration for bot prevention.
- * - Organization selection using an autocomplete dropdown.
- * - Social media links and community branding.
- * - Role-based navigation for admin and user.
- *
- * @returns {JSX.Element} The rendered login and registration page.
- *
- * @example
- * ```tsx
- * import LoginPage from './LoginPage';
- *
- * const App = () => {
- *   return <LoginPage />;
- * };
- *
- * export default App;
- * ```
  */
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { Check, Clear } from '@mui/icons-material';
@@ -87,7 +44,11 @@ import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
-const loginPage = (): JSX.Element => {
+declare global {
+  interface Window {}
+}
+
+const loginPage = (): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -96,7 +57,9 @@ const loginPage = (): JSX.Element => {
 
   const { getItem, setItem } = useLocalStorage();
 
-  document.title = t('title');
+  useEffect(() => {
+    window.document.title = t('title');
+  }, [t]);
 
   type PasswordValidation = {
     lowercaseChar: boolean;
@@ -205,7 +168,8 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        await fetch(BACKEND_URL as string);
+        // Using window.fetch instead of fetch
+        await window.fetch(BACKEND_URL as string);
       } catch (error) {
         errorHandler(t, error);
       }
@@ -318,11 +282,9 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const loginLink = async (
-    e: ChangeEvent<HTMLFormElement>,
-    isAdminRoute: boolean = false,
-  ): Promise<void> => {
+  const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+    // Parameter removed as it's not used and causing a warning
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
     if (!isVerified) {
@@ -384,7 +346,7 @@ const loginPage = (): JSX.Element => {
           rel="noopener noreferrer"
           data-testid="preLoginSocialMedia"
         >
-          <img src={logo} />
+          <img src={logo} alt={tag} />
         </a>
       )
     ) : (
@@ -395,7 +357,7 @@ const loginPage = (): JSX.Element => {
         rel="noopener noreferrer"
         data-testid="PalisadoesSocialMedia"
       >
-        <img src={logo} />
+        <img src={logo} alt={tag} />
       </a>
     ),
   );
@@ -455,7 +417,6 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
                     {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
@@ -581,7 +542,6 @@ const loginPage = (): JSX.Element => {
                     {tCommon('register')}
                   </h1>
                   <Row>
-                    {/* <Col sm={6}> */}
                     <div>
                       <Form.Label>{tCommon('Name')}</Form.Label>
                       <Form.Control
@@ -600,27 +560,6 @@ const loginPage = (): JSX.Element => {
                         }}
                       />
                     </div>
-                    {/* </Col> */}
-                    {/* <Col sm={6}>
-                      <div>
-                        <Form.Label>{tCommon('lastName')}</Form.Label>
-                        <Form.Control
-                          disabled={signinLoading}
-                          type="text"
-                          id="signlastname"
-                          className="mb-3"
-                          placeholder={tCommon('lastName')}
-                          required
-                          value={signformState.signlastName}
-                          onChange={(e): void => {
-                            setSignFormState({
-                              ...signformState,
-                              signlastName: e.target.value,
-                            });
-                          }}
-                        />dwdwdw
-                      </div>
-                    </Col> */}
                   </Row>
                   <div className="position-relative">
                     <Form.Label>{tCommon('email')}</Form.Label>
