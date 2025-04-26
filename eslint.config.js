@@ -48,8 +48,8 @@ export default [
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
+        document: 'readonly',
         HTMLImageElement: 'readonly',
-        HTMLInputElement: 'readonly',
         HTMLInputElement: 'readonly',
         File: 'readonly',
 

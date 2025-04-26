@@ -2902,7 +2902,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -2991,7 +2990,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3094,7 +3092,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3183,7 +3180,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3286,7 +3282,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3375,7 +3370,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3478,7 +3472,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3567,7 +3560,6 @@ export const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -5121,7 +5113,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '4',
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5130,7 +5122,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          media: '',
+          media: null,
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -5178,7 +5170,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Hello',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5207,7 +5199,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '345678',
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5236,7 +5228,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5265,7 +5257,7 @@ export const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5765,12 +5757,6 @@ describe('MessageImage Component', () => {
         getFileFromMinio={mockGetFileFromMinio}
       />,
     );
-
-    expect(await screen.findByText('Image not available')).toBeInTheDocument();
-  });
-
-  it('renders fallback if media is empty', async () => {
-    render(<MessageImage media={''} getFileFromMinio={mockGetFileFromMinio} />);
 
     expect(await screen.findByText('Image not available')).toBeInTheDocument();
   });

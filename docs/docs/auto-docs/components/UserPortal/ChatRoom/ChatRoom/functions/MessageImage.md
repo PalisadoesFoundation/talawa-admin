@@ -6,13 +6,13 @@
 
 > **MessageImage**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L81)
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L73)
 
 ## Parameters
 
 ### props
 
-`MessageImageProps`
+`IMessageImageProps`
 
 ### deprecatedLegacyContext?
 

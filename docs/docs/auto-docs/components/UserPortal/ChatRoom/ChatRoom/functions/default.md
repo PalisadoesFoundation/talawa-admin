@@ -6,13 +6,13 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L155)
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L147)
 
 ## Parameters
 
 ### props
 
-`InterfaceChatRoomProps`
+`IChatRoomProps`
 
 ## Returns
 

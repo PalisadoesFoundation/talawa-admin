@@ -4,22 +4,13 @@
  * This component represents a chat room interface where users can send and receive messages,
  * view chat details, and manage attachments. It supports both group and direct messaging.
  *
- * @component
- * @param {InterfaceChatRoomProps} props - The props for the ChatRoom component.
- * @param {string} props.selectedContact - The ID of the selected contact or chat.
- * @param {Function} props.chatListRefetch - A function to refetch the chat list.
- *
- * @returns {JSX.Element} The rendered ChatRoom component.
- *
  * @remarks
  * - Uses Apollo Client for GraphQL queries, mutations, and subscriptions.
  * - Supports message editing, replying, and attachments.
  * - Displays group chat details when applicable.
  *
- * @dependencies
- * - React, React-Bootstrap, Material-UI, and Apollo Client.
- * - Custom hooks: `useLocalStorage`.
- * - Utility functions: `convertToBase64`.
+ * @param props - The props for the ChatRoom component.
+ * @returns The rendered ChatRoom component.
  *
  * @example
  * ```tsx
@@ -28,10 +19,10 @@
  *   chatListRefetch={refetchChatList}
  * />
  * ```
- *
  */
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, JSX } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
@@ -57,7 +48,7 @@ import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
 import { validateFile } from 'utils/fileValidation';
 
-interface InterfaceChatRoomProps {
+interface IChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
     variables?:
@@ -69,7 +60,7 @@ interface InterfaceChatRoomProps {
 }
 
 // Helper component to handle MinIO image loading
-interface MessageImageProps {
+interface IMessageImageProps {
   media: string;
   organizationId?: string;
   getFileFromMinio: (
@@ -78,7 +69,7 @@ interface MessageImageProps {
   ) => Promise<string>;
 }
 
-export const MessageImage: React.FC<MessageImageProps> = ({
+export const MessageImage: React.FC<IMessageImageProps> = ({
   media,
   organizationId,
   getFileFromMinio,
@@ -152,7 +143,7 @@ export const MessageImage: React.FC<MessageImageProps> = ({
   );
 };
 
-export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
+export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
@@ -177,8 +168,10 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
-  const [attachment, setAttachment] = useState('');
-  const [attachmentObjectName, setAttachmentObjectName] = useState('');
+  const [attachment, setAttachment] = useState<string | null>(null);
+  const [attachmentObjectName, setAttachmentObjectName] = useState<
+    string | null
+  >(null);
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio: unstableGetFile } = useMinioDownload();
   const getFileFromMinio = useCallback(unstableGetFile, []); // stable ref
@@ -205,7 +198,7 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     variables: {
       chatId: props.selectedContact,
       replyTo: replyToDirectMessage?._id,
-      media: attachmentObjectName,
+      media: attachmentObjectName || null,
       messageContent: newMessage,
     },
   });
@@ -280,8 +273,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
     await chatRefetch();
     setReplyToDirectMessage(null);
     setNewMessage('');
-    setAttachment('');
-    setAttachmentObjectName('');
+    setAttachment(null);
+    setAttachmentObjectName(null);
     await props.chatListRefetch({ id: userId as string });
   };
 
@@ -357,8 +350,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
       toast.error('Error uploading image. Please try again.');
 
       // Clear any partial data
-      setAttachment('');
-      setAttachmentObjectName('');
+      setAttachment(null);
+      setAttachmentObjectName(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -580,8 +573,8 @@ export default function chatRoom(props: InterfaceChatRoomProps): JSX.Element {
 
                 <Button
                   onClick={() => {
-                    setAttachment('');
-                    setAttachmentObjectName('');
+                    setAttachment(null);
+                    setAttachmentObjectName(null);
                     if (fileInputRef.current) fileInputRef.current.value = '';
                   }}
                   className={styles.closeBtn}
