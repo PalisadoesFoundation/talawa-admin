@@ -34,6 +34,8 @@ import * as fileValidation from 'utils/fileValidation';
 import * as minioUpload from 'utils/MinioUpload';
 import * as minioDownload from 'utils/MinioDownload';
 
+import { toast } from 'react-toastify'; // Add this with other imports at the top
+
 // Mock modules with simple functions, not referencing external variables
 vi.mock('react-toastify', () => ({
   toast: {
@@ -5350,7 +5352,6 @@ describe('Testing Chatroom Component [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   it('Chat room should display fallback content if no chat is active', async () => {
@@ -5925,6 +5926,9 @@ describe('handleImageChange', () => {
 
     // Since upload failed, attachment should NOT appear
     expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 
   it('should remove attachment when close button is clicked', async () => {
