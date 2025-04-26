@@ -5337,7 +5337,7 @@ export const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       },
     },
   },
-  ...Array(5).fill({
+  Array.from({ length: 5 }, () => ({
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
@@ -5353,7 +5353,7 @@ export const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
         },
       },
     },
-  }),
+  })),
 ];
 
 describe('Testing Chatroom Component [User Portal]', () => {
@@ -5373,7 +5373,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5400,7 +5400,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks} link={link}>
         <BrowserRouter>
@@ -5426,7 +5426,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     const link2 = new StaticMockLink(mocks, true);
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -5511,8 +5511,10 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
+
     const link2 = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -5594,7 +5596,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5619,7 +5621,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5680,7 +5682,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     const mocks = [
       ...CHAT_BY_ID_QUERY_MOCK,
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-    ];
+    ].flat();
     const mockRefetch = vi.fn();
 
     render(
@@ -5794,7 +5796,7 @@ describe('handleImageChange', () => {
     const mocks = [
       ...CHAT_BY_ID_QUERY_MOCK,
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-    ];
+    ].flat();
 
     render(
       <MockedProvider mocks={mocks}>
@@ -5827,7 +5829,7 @@ describe('handleImageChange', () => {
     const mocks = [
       ...CHAT_BY_ID_QUERY_MOCK,
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-    ];
+    ].flat();
 
     render(
       <MockedProvider mocks={mocks}>
@@ -5873,7 +5875,7 @@ describe('handleImageChange', () => {
     const mocks = [
       ...CHAT_BY_ID_QUERY_MOCK,
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-    ];
+    ].flat();
 
     render(
       <MockedProvider mocks={mocks}>
@@ -5910,7 +5912,7 @@ describe('handleImageChange', () => {
     const mocks = [
       ...CHAT_BY_ID_QUERY_MOCK,
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-    ];
+    ].flat();
 
     render(
       <MockedProvider mocks={mocks}>

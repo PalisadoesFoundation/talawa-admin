@@ -47,10 +47,6 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import type { DirectMessage, GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
 import { validateFile } from 'utils/fileValidation';
-import {
-  FILE_UPLOAD_MAX_SIZE_MB,
-  FILE_UPLOAD_ALLOWED_TYPES,
-} from '../../../Constant/fileUpload';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -101,17 +97,22 @@ export const MessageImage: React.FC<IMessageImageProps> = ({
     // If no organizationId is provided, use the default 'organization' value
     const orgId = organizationId || 'organization';
 
+    let stillMounted = true;
     const loadImage = async (): Promise<void> => {
       try {
         const url = await getFileFromMinio(media, orgId);
-        setImageState({ url, loading: false, error: false });
+        if (stillMounted) setImageState({ url, loading: false, error: false });
       } catch (error) {
         console.error('Error fetching image from MinIO:', error);
-        setImageState({ url: null, loading: false, error: true });
+        if (stillMounted)
+          setImageState({ url: null, loading: false, error: true });
       }
     };
 
     loadImage();
+    return () => {
+      stillMounted = false;
+    };
   }, [media, organizationId, getFileFromMinio]);
 
   // If it's a Base64 image, use it directly
@@ -319,11 +320,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (!file) return;
 
     // Use the fileValidation utility for validation
-    const validation = validateFile(
-      file,
-      FILE_UPLOAD_MAX_SIZE_MB,
-      FILE_UPLOAD_ALLOWED_TYPES,
-    );
+    const validation = validateFile(file);
 
     if (!validation.isValid) {
       toast.error(validation.errorMessage);
