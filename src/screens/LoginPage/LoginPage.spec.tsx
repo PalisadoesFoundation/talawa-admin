@@ -20,7 +20,6 @@ import {
 import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
-  ORGANIZATION_LIST,
   ORGANIZATION_LIST_BY_SEARCH,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
