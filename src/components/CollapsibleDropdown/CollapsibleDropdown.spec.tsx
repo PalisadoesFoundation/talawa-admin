@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
@@ -23,7 +23,7 @@ const currentLocation: Location = {
   hash: '',
 };
 
-vi.mock('react-router-dom', async (importOriginal) => {
+vi.mock('react-router', async (importOriginal) => {
   const mod = (await importOriginal()) as object;
 
   return {

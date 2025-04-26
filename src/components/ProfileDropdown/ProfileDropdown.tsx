@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'components/Avatar/Avatar';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../style/app.module.css';
 import { useTranslation } from 'react-i18next';

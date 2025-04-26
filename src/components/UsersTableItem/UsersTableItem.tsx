@@ -48,11 +48,11 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 type Props = {
   user: InterfaceQueryUserListItem;

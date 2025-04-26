@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import 'style/app.module.css';
+import 'style/app-fixed.module.css';
 //Query List
 // Check Auth
 
@@ -458,6 +458,25 @@ export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
             name
             emailAddress
             role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const IS_USER_BLOCKED = gql`
+  query IsUserBlockedInOrganization($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
           }
           cursor
         }
@@ -1083,10 +1102,9 @@ export {
 } from './PlugInQueries';
 
 // display posts
-export {
-  ORGANIZATION_POST_LIST,
-  ORGANIZATION_ADVERTISEMENT_LIST,
-} from './OrganizationQueries';
+export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
+
+export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
 export {
   ORGANIZATION_ADMINS_LIST,

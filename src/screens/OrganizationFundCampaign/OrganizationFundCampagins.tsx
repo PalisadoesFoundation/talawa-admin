@@ -8,13 +8,13 @@ import {
 } from '@mui/x-data-grid';
 import { Button, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,

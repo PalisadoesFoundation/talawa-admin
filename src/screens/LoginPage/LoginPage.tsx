@@ -8,9 +8,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import '../../style/app.module.css';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   BACKEND_URL,
@@ -28,7 +27,6 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
-// import styles from 'style/app.module.css';
 import styles from '../../style/app-fixed.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';

@@ -42,7 +42,7 @@
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { toast } from 'react-toastify';
 
 import {

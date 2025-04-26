@@ -36,6 +36,8 @@
  */
 
 :root {
+  --primary-theme-color: #1778f2;
+
   --addButton-font: #555555;
   --addButton-border: #eaebef;
   --addButton-bg: #a8c7fa;
@@ -217,7 +219,7 @@
   --secondText-color: #555555;
 
   --leftDrawer-bg: #ffffff;
-  --leftDrawer-fixedModule-bg: #f6f8fc;
+  --leftDrawer-fixedModule-bg: #ffffff;
   --leftDrawer-scrollbar-color: #eaebef;
   --leftDrawer-optionList-bg: #ffffff;
   --LeftDrawer-org-profileContainer-bg: #e0e9ff;
@@ -727,6 +729,119 @@
   --reset-btn-colour: #1778f2;
 
   --form-control-focus-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+  --primary-theme-color: #1778f2;
+  --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
+  --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --pledgeModal-header-text: #000000;
+  --pledgeModal-title-text: #4b5563;
+  --pledgeModal-close-button-bg: #f8d6dc;
+  --pledgeModal-close-button-text: #c8102e;
+  --pledgeModal-close-button-hover-bg: #ff4d4f;
+  --pledgeModal-close-button-hover-text: #ffffff;
+
+  --pledgeModal-input-bg: #ffffff;
+  --pledgeModal-input-border: #eaebef;
+  --pledgeModal-input-text: #555555;
+  --pledgeModal-input-placeholder: #737373;
+  --pledgeModal-input-focus-border: #b5b5b5;
+  --pledgeModal-input-focus-shadow: #dddddd;
+
+  --dropdownItem-bg: #fff;
+  --dropdownItem-color: #000000;
+  --dropdownItem-box-shadow: 2.5px 2.5px 2.5px rgba(0, 0, 0, 0.3);
+  --dropdownItem-outline-bg: #a8c7fa;
+  --dropdownItem-color: #555555;
+
+  --tagBadge-box-shadow: #9ca3af;
+
+  --titlemodalCustomRecurrenceModal-color: #707070;
+  --titlemodalCustomRecurrenceModal-border: #7c9beb;
+
+  --memberfontcreatedbtnUserListCard-border: #286fe0;
+  --memberfontcreatedbtnUserListCard-bg: #286fe0;
+  --memberfontcreatedbtnUserListCard-color: #ffffff;
+
+  --recurrenceDayButton-border: #808080;
+  --recurrenceDayButton-outline-focus: #0056b3;
+  --recurrenceDayButton-bg-hover: #808080;
+  --recurrenceDayButton-bg-selected: #0056b3;
+  --recurrenceDayButton-border-selected: #0056b3;
+  --recurrenceDayButton-color-selected: #fff;
+  --recurrenceDayButton-color: #808080;
+  --recurrenceDayButton-color-hover: #fff;
+  --recurrenceDayButton-color-selected: #fff;
+  --recurrenceRuleSubmitBtn-box-shadow-hover: #00000029;
+  --recurrenceRuleSubmitBtn-outline-focus: #0056b3;
+
+  --whitebtn-box-shadow: #e8e5e5;
+  --whitebtn-border: #e8e5e5;
+  --whitebtn-color: #286fe0;
+
+  --mainContainerDonateCard-bg: #ffffff;
+  --mainContainerDonateCard-border: #dddddd;
+
+  --mainContainerDonateCard-bg: #31bb6b;
+  --peopleRole-border: #dee2e6;
+  --cardStyles-bg: #ffffff;
+  --cardHeaderPostCard-bg: #ffffff;
+  --cardHeaderPostCard-border: #dddddd;
+  --customToggle-color: #000000;
+  --cardActionBtn-bg: #00000000;
+  --cardActionBtn-color: #000000;
+  --cardActionBtn-hover-bg: #eff1f7;
+  --cardActionBtn-color: #000000;
+  --cardActionBtn-outline-focus: #7c9beb;
+  --cardActionBtn-active-bg: #eaebef;
+
+  --colorPrimary-bg: #7c9beb;
+  --colorPrimary-color: #ffffff;
+
+  --modalFooter-bg: #ffffff;
+  --modalFooter-border: #dddddd;
+
+  --inputArea-bg: #f1f3f6;
+
+  --postInput-bg: #ffffff;
+
+  --cardHeaderPromotedPost-color: #a8c7fa;
+
+  --userImageUserPost-border: #286fe0;
+
+  --capacityLabel-bg: #0056b3;
+  --capacityLabel-color: #ffffff;
+  --textWhite-color: #ffffff;
+  --previewVenueModal-border: #ccc;
+
+  --closeButtonOrganizationEvents-color: #ff4d4f;
+  --closeButtonOrganizationEvents-bg: #f8d6dc;
+  --closeButtonOrganizationEvents-border: #ffffff;
+  --closeButtonOrganizationEvents-color-hover: #f8d6dc;
+  --closeButtonOrganizationEvents-bg-hover: #ff4d4f;
+  --closeButtonOrganizationEvents-border-hover: #ffffff;
+  --dateboxOrganizationEvents-border: #e8e5e5;
+
+  --infoButton-bg: #a8c7fa;
+  --infoButton-border: #555555;
+  --infoButton-color: #555555;
+  --infoButton-bg-hover: #286fe0;
+  --infoButton-border-hover: #555555;
+  --infoButton-color: #555555;
+  --actionItemDeleteButton-bg: #f8d6dc;
+  --actionItemDeleteButton-color: #ff4d4f;
+  --checkboxButton-checked-bg: #1778f2;
+  --checkboxButton-checked-color: #1778f2;
+  --checkbox-focus-border: #d1d5db;
+
+  --rowBackgroundOrganizationFundCampaign-bg: #fff;
+
+  --createorgdropdown-button-bg: #eaebef;
+
+  --dropdown-border: #555555;
+  --dropdown-bg: #fcfcfc;
+  --dropdown-font-color: #555555;
+
+  --input-bg: #f2f7ff;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1189,13 +1304,12 @@ form label,
 /* Dropdown */
 
 .dropdown {
-  background-color: var(--sortBtn-bg) !important;
+  background-color: var(--dropdown-bg) !important;
   min-width: 150px;
   border: 1px solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .customDropdown {
@@ -1211,9 +1325,9 @@ form label,
     :disabled,
     :checked
   ) {
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
-  color: var(--dropdown-font) !important;
+  color: var(--dropdown-font-color) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -1222,7 +1336,7 @@ form label,
 }
 
 .createorgdropdown {
-  background-color: var(--createorgdropdown-button-bg);
+  background-color: var(--createorgdropdown-button-bg) !important;
   border: 1px solid var(--dropdown-border) !important;
   height: 3rem;
   margin-top: 0.7rem;
@@ -1306,9 +1420,8 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  margin-right: 10px;
-  background-color: '#F2F7FF';
-  background-color: 'red';
+  margin-left: 8px;
+  background-color: var(--input-bg);
   margin-right: 180px;
   width: 425px;
 }
@@ -1524,9 +1637,6 @@ form label,
 .cardOtherSettings {
   height: 350px;
 }
-.addCard {
-  width: 28rem;
-}
 
 .dropdownContainer {
   position: relative;
@@ -1535,6 +1645,14 @@ form label,
 
 .dropdownContainer:hover .dropdownmenu {
   display: block;
+}
+
+.dropdownContainer:focus-within .dropdownmenu {
+  display: block;
+}
+
+.addCard > div:not(.dropdownContainer) {
+  flex: 0 0 200px;
 }
 
 .dropdownmenu {
@@ -1637,7 +1755,6 @@ form label,
 }
 
 .closeButtonAdvertisementRegister {
-  position: absolute;
   top: 0px;
   right: 0px;
   width: 32px;
@@ -1665,12 +1782,32 @@ form label,
 .containerAdvertisements {
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
+  width: auto;
 }
 
 .justifyspAdvertisements {
   display: grid;
   width: 100%;
   margin-top: 30px;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+@media (max-width: 1024px) {
+  .justifyspAdvertisements {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rowAdvertisements {
+  margin-top: 20px;
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+  overflow: hidden;
 }
 
 .colAdvertisements {
@@ -1706,6 +1843,7 @@ form label,
   border-radius: 8px;
   outline: 1px solid var(--orgCard-outline);
   position: relative;
+  margin-right: 2rem;
 }
 
 .orgCard .innerContainer .orgImgContainer {
@@ -2213,10 +2351,12 @@ form label,
   width: 160px;
   font-size: 0.8rem;
 }
+
 .langBtn:active {
   background-color: var(--reset-backgroundcolor-color) !important;
   border-color: var(--reset-border-color) !important;
 }
+
 /* -- TableRow.tsx -- */
 
 /* -- CheckInWrapper.tsx -- */
@@ -4347,6 +4487,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4363,6 +4504,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4400,7 +4542,7 @@ form label,
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .syncIconStyle,
@@ -4424,7 +4566,7 @@ form label,
 
 .saveChangesBtn:hover {
   background-color: var(--card-background-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .mainContainer {
@@ -4452,11 +4594,13 @@ form label,
   font-size: 1.2rem;
   font-weight: 600;
 }
+
 .scrollableCardBody {
   max-height: min(220px, 50vh);
   overflow-y: auto;
   scroll-behavior: smooth;
 }
+
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
   border-bottom: 1px solid var(--bs-gray-200);
@@ -4529,6 +4673,7 @@ form label,
   opacity: 1;
   color: black !important;
 }
+
 .opendrawer {
   position: fixed;
   display: flex;
@@ -4550,6 +4695,7 @@ form label,
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
@@ -4566,6 +4712,7 @@ form label,
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -4602,6 +4749,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4618,6 +4766,7 @@ form label,
   .imgContianer {
     margin: 1rem auto;
   }
+
   .profileContainer {
     flex-direction: column;
   }
@@ -4682,7 +4831,7 @@ form label,
 .deleteButton:focus {
   background-color: var(--removeButton-bg) !important;
   color: var(--removeButton-color);
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
   outline: none;
 }
 
@@ -4704,7 +4853,7 @@ form label,
 
 .customFileInput::file-selector-button:hover {
   color: var(--card-background-color);
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .btnConfirmDelete:hover {
@@ -4786,7 +4935,7 @@ form {
   border-width: 2px;
   border-color: var(--resetbtn-border) !important;
   color: var(--resetbtn-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow) !important;
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow) !important;
 }
 
 .syncIconStyle,
@@ -4810,7 +4959,7 @@ form {
 
 .saveChangesBtn:hover {
   background-color: var(--card-background-color) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--dropdown-shadow);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
 }
 
 .orgUpdateFormLables {
@@ -4982,7 +5131,89 @@ form {
 }
 
 /* -- ProfileDropdown.tsx -- */
+
 /* -- CustomRecurrenceModal.tsx -- */
+
+.titlemodalCustomRecurrenceModal {
+  color: var(--titlemodalCustomRecurrenceModal-color);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--titlemodalCustomRecurrenceModal-border);
+  width: 65%;
+}
+
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+.recurrenceDayButton {
+  width: 33px;
+  height: 33px;
+  border: 1px solid var(--recurrenceDayButton-border);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5rem;
+  border-radius: 50%;
+  position: relative;
+  outline: none;
+}
+
+.recurrenceDayButton:focus-visible {
+  outline: 2px solid var(--recurrenceDayButton-outline-focus);
+  outline-offset: 2px;
+}
+
+.recurrenceDayButton:hover {
+  background-color: var(--recurrenceDayButton-bg-hover);
+}
+
+.recurrenceDayButton.selected {
+  background-color: var(--recurrenceDayButton-bg-selected);
+  border-color: var(--recurrenceDayButton-border-selected);
+  color: var(--recurrenceDayButton-color-selected);
+}
+
+.recurrenceDayButton span {
+  color: var(--recurrenceDayButton-color);
+  padding: 0.25rem;
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: var(--recurrenceDayButton-color-hover);
+}
+
+.recurrenceDayButton.selected span {
+  color: var(--recurrenceDayButton-color-selected);
+}
+
+.recurrenceRuleDateBox {
+  width: 70%;
+}
+
+.recurrenceRuleSubmitBtn {
+  display: block;
+  margin-left: auto;
+  padding: 7px 15px;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.recurrenceRuleSubmitBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px var(--recurrenceRuleSubmitBtn-box-shadow-hover);
+}
+
+.recurrenceRuleSubmitBtn:focus-visible {
+  outline: 2px solid var(--recurrenceRuleSubmitBtn-outline-focus);
+  outline-offset: 2px;
+}
+
 /* -- RecurrenceOptions.tsx -- */
 /* -- RequestsTableItem.tsx -- */
 /* -- SecuredRoute.tsx -- */
@@ -5014,8 +5245,44 @@ form {
   margin-left: 10px;
 }
 
+/* SortingButton.tsx */
+
+.dropdownItem {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+}
+
+.dropdownItem:focus,
+.dropdownItem:hover {
+  outline: 2px solid var(--highlight-color, var(--dropdownItem-outline-bg));
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus,
+.dropdownItem:active {
+  background-color: var(
+    --dropdownItem-hover-bg,
+    #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5
+  ) !important;
+  color: var(--dropdownItem-color) !important;
+  outline: none !important;
+}
+
 /* -- TableLoader.tsx -- */
+
 /* -- TagActions.tsx -- */
+
+.tagBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--tagBadge-box-shadow);
+  max-width: calc(100% - 2rem);
+}
+
 /* -- TagNode.tsx -- */
 
 /* -- UpdateSession.tsx -- */
@@ -5126,7 +5393,60 @@ form {
 }
 
 /* -- UserListCard.tsx -- */
+
+.memberfontcreatedbtnUserListCard {
+  margin-top: 33px;
+  border-radius: 7px;
+  border-color: var(--memberfontcreatedbtnUserListCard-border);
+  background-color: var(--memberfontcreatedbtnUserListCard-bg);
+  color: var(--memberfontcreatedbtnUserListCard-color);
+  padding-right: 10px;
+  padding-left: 10px;
+  justify-content: flex-end;
+  float: right;
+  text-align: right;
+  box-shadow: none;
+}
+
 /* -- UserPasswordUpdate.tsx -- */
+
+.dispflexUserPasswordUpdate {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 auto;
+}
+
+.dispflexUserPasswordUpdate > div {
+  width: 50%;
+  margin-right: 50px;
+}
+
+.dispbtnflex {
+  width: 90%;
+  display: flex;
+  margin: 20px 30% 0 30%;
+}
+
+.whitebtn {
+  margin: 1rem 0 0;
+  margin-top: 10px;
+  border: 1px solid var(--whitebtn-border);
+  box-shadow: 0 2px 2px var(--whitebtn-box-shadow);
+  padding: 10px 20px;
+  border-radius: 5px;
+  background: none;
+  width: 20%;
+  font-size: 16px;
+  color: var(--whitebtn-color);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  float: left;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
 /* -- ChatRoom.tsx -- */
 /* -- CommentCard.tsx -- */
 /* -- ContactCard.tsx -- */
@@ -5167,7 +5487,45 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
+
 /* -- DonationCard.tsx -- */
+
+.mainContainerDonateCard {
+  width: 49%;
+  height: 8rem;
+  min-width: max-content;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--mainContainerDonateCard-bg);
+  border: 1px solid var(--mainContainerDonateCard-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.img {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--mainContainerDonateCard-bg);
+}
+
+.personDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.btnDonate {
+  display: flex;
+  align-items: flex-end;
+}
+
+.btnDonate button {
+  padding-inline: 2rem !important;
+  border-radius: 5px;
+}
+
 /* -- EventCard.tsx -- */
 /* -- OrganizationCard.tsx -- */
 /* -- OrganizationNavbar.tsx -- */
@@ -5194,7 +5552,7 @@ form {
 
 .people_role {
   width: 75%;
-  border: 1px solid var(--people-role-border);
+  border: 1px solid var(--peopleRole-border);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
@@ -5203,14 +5561,297 @@ form {
 }
 
 /* -- PostCard.tsx -- */
+
+.cardStyles {
+  width: 100%;
+  max-width: 20rem;
+  background-color: var(--cardStyles-bg);
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+}
+
+.cardHeaderPostCard {
+  display: flex;
+  width: 100%;
+  padding-inline: 0;
+  padding-block: 0;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: var(--cardHeaderPostCard-bg);
+  border-bottom: 1px solid var(--cardHeaderPostCard-border);
+}
+
+.creator {
+  display: flex;
+  width: 100%;
+  padding-inline: 1rem;
+  padding-block: 0;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.creator p {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.creator svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.customToggle {
+  padding: 0;
+  background: none;
+  border: none;
+  margin-right: 1rem;
+  --bs-btn-active-bg: transparent;
+  --bs-btn-focus-box-shadow: none;
+}
+
+.customToggle svg {
+  color: var(--customToggle-color);
+}
+
+.customToggle::after {
+  content: none;
+}
+
+.customToggle:hover,
+.customToggle:focus,
+.customToggle:active {
+  background: none;
+  border: none;
+}
+
+.cardBodyPostCard div {
+  padding: 0.5rem;
+}
+
+.imageContainerPostCard {
+  max-width: 100%;
+}
+
+.cardTitlePostCard {
+  --max-lines: 1;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--max-lines);
+
+  font-size: 1.3rem !important;
+  font-weight: 600;
+}
+
+.date {
+  font-weight: 600;
+}
+
+.cardText {
+  --max-lines: 2;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--max-lines);
+  padding-top: 0;
+  font-weight: 300;
+  margin-top: 0.7rem !important;
+  text-align: left;
+}
+
+.viewBtn {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0.5rem;
+}
+
+.viewBtn Button {
+  padding-inline: 1rem;
+}
+
+.cardActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1px;
+  justify-content: flex-end;
+}
+
+.cardActionBtn {
+  background-color: var(--cardActionBtn-bg);
+  padding: 0;
+  border: none;
+  color: var(--cardActionBtn-color);
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
+}
+
+.cardActionBtn:hover,
+.cardActionBtn:focus-visible {
+  background-color: var(--cardActionBtn-hover-bg);
+  border: none;
+  color: var(--cardActionBtn-color) !important;
+  outline: 2px solid var(--cardActionBtn-outline-focus);
+  outline-offset: 2px;
+}
+
+.cardActionBtn:active {
+  transform: scale(0.95);
+  background-color: var(--cardActionBtn-active-bg);
+}
+
+.creatorNameModal {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.modalActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin: 5px 0px;
+}
+
+.textModal {
+  margin-top: 10px;
+}
+
+.colorPrimary {
+  background: var(--colorPrimary-bg);
+  color: var(--colorPrimary-color);
+  cursor: pointer;
+}
+
+.commentContainer {
+  overflow: auto;
+  max-height: 18rem;
+  padding-bottom: 1rem;
+}
+
+.modalFooter {
+  background-color: var(--modalFooter-bg);
+  width: 100%;
+  padding-block: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--modalFooter-border);
+}
+
+.inputArea {
+  border: none;
+  outline: none;
+  background-color: var(--inputArea-bg);
+}
+
+.postImage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.postInput {
+  resize: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: var(--postInput-bg);
+  margin-bottom: 10px;
+}
+
+.postInput:focus {
+  box-shadow: none;
+}
+
 /* -- PromotedPost.tsx -- */
+
+.cardHeaderPromotedPost {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  color: var(--cardHeaderPromotedPost-color);
+}
+
+.imageContainerPromotedPost {
+  max-width: 100%;
+}
+
 /* -- Register.tsx -- */
 /* -- SecuredRouteForUser.tsx -- */
 /* -- StartPostModal.tsx -- */
+
+.userImageUserPost {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserPost img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  scale: 1.5;
+}
+
+.previewImage {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.previewImage img {
+  border-radius: 8px;
+}
+
 /* -- UserNavbar.tsx -- */
 /* -- EventsAttendedByUser.tsx -- */
 /* -- UserAddressFields.tsx -- */
+
 /* -- UserSidebar.tsx -- */
+
+.hideElemByDefault {
+  display: none;
+}
+
+.inactiveDrawer {
+  transform: translateX(-100%);
+
+  &[data-hidden='true'] {
+    /* Specific styles for inactive drawers if needed */
+  }
+}
+
+.activeDrawer {
+  transform: translateX(0);
+
+  &[data-hidden='false'] {
+    /* Specific styles for active drawers if needed */
+  }
+}
+
+.leftbarcompheight {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+  padding-bottom: 48px;
+}
 
 /* -- UserSidebarOrg.tsx -- */
 
@@ -5663,9 +6304,60 @@ form {
 /* -- DeleteUser.tsx -- */
 /* -- OtherSettings.tsx -- */
 /* -- UserProfile.tsx -- */
+
 /* -- UsersTableItem.tsx -- */
+
+.notJoined {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* -- VenueCard.tsx -- */
+
+.capacityLabel {
+  background-color: var(--capacityLabel-bg);
+  color: var(--capacityLabel-color);
+  height: 22.19px;
+  font-size: 12px;
+  font-weight: bolder;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.capacityLabel svg {
+  margin-bottom: 3px;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.text-white {
+  color: var(--textWhite-color);
+}
+
 /* -- VenueModal.tsx -- */
+
+.previewVenueModal {
+  display: flex;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Ensures content doesn't overflow the card */
+  justify-content: center;
+  border: 1px solid var(--previewVenueModal-border);
+}
+
+.previewVenueModal img {
+  width: 400px;
+  height: auto;
+  object-fit: cover;
+  /* Ensures the image stays within the boundaries */
+}
 
 /* Add more Class Related to a particular Component above this */
 
@@ -6046,6 +6738,12 @@ form {
 /* -- PledgeDeleteModal.tsx -- */
 
 /* -- PledgeModal.tsx -- */
+
+.pledgeModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
 
 /* -- Leaderboard.tsx -- */
 
@@ -6646,7 +7344,7 @@ form {
 
 .btnsContainerSearchBar {
   display: flex;
-  width: 100%;
+  width: 95%;
   justify-content: space-between;
   margin: 2.5rem 0 2.5rem 0;
 }
@@ -6661,7 +7359,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
@@ -7055,12 +7753,132 @@ form {
 }
 
 /* -- OrganizationActionItems.tsx -- */
+
+.infoButton {
+  background-color: var(--infoButton-bg) !important;
+  border-color: var(--infoButton-border);
+  color: var(--infoButton-color);
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.infoButton:hover {
+  background-color: var(--infoButton-bg-hover);
+  border-color: var(--infoButton-border-hover);
+  color: var(--infoButton-color) !important;
+  box-shadow: var(--drop-shadow);
+}
+
+.actionItemDeleteButton {
+  background-color: var(--actionItemDeleteButton-bg) !important;
+  color: var(--actionItemDeleteButton-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:checked {
+  background-color: var(--checkboxButton-checked-bg);
+  border-color: var(--checkboxButton-checked-color);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: none;
+  box-shadow: none;
+}
+
 /* -- OrganizationDashboard.tsx -- */
+
 /* -- OrganizationEvents.tsx -- */
+
+.closeButtonOrganizationEvents {
+  color: var(--closeButtonOrganizationEvents-color);
+  margin-right: 5px;
+  background-color: var(--closeButtonOrganizationEvents-bg);
+  border: var(--closeButtonOrganizationEvents-border);
+}
+
+.closeButtonOrganizationEvents:hover {
+  color: var(--closeButtonOrganizationEvents-color-hover) !important;
+  background-color: var(--closeButtonOrganizationEvents-bg-hover) !important;
+  border: var(--closeButtonOrganizationEvents-border-hover);
+}
+
+.datedivOrganizationEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxOrganizationEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: var(--dateboxOrganizationEvents-border);
+  outline: none;
+  box-shadow: none;
+  padding: 2px 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.checkboxdiv {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.checkboxdiv > div {
+  width: 50%;
+}
+
+.checkboxdiv > label {
+  margin-right: 50px;
+}
+
+.checkboxdiv > label > input {
+  margin-left: 10px;
+}
+
+.dispflexOrganizationEvents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dispflexOrganizationEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.dispflex {
+  display: flex;
+}
+
+.dispflex > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
 
 /* -- CampaignModal.tsx -- */
 
 /* -- OrganizationFundCampagins.tsx -- */
+
+.organizationFundCampaignContainer {
+  margin: 0.5rem 0;
+}
+
+.rowBackgroundOrganizationFundCampaign {
+  background-color: var(--rowBackgroundOrganizationFundCampaign-bg);
+  max-height: 120px;
+}
 
 /* -- FundModal.tsx -- */
 
@@ -8407,6 +9225,99 @@ form {
 /* -- Users.tsx -- */
 
 /* Add more Class Related to a particular Screen above this */
+
+.mediaContainer {
+  position: relative;
+  width: 100%;
+  height: var(--advertisement-media-height);
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.carouselContainer {
+  height: 100%;
+}
+
+.noMediaPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: var(--dropdownmenu-li-hover);
+}
+
+.carouselContainer :global(.carousel-control-prev),
+.carouselContainer :global(.carousel-control-next) {
+  z-index: 5;
+}
+
+.addCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 28rem;
+}
+
+.imageWrapper {
+  width: 100%;
+  height: var(--advertisement-media-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .addCard {
+    width: 100%;
+  }
+
+  .mediaContainer {
+    height: 10rem;
+  }
+
+  .imageWrapper {
+    height: 10rem;
+  }
+}
+
+.dropdownButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.dropdownmenu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  min-width: 120px;
+  padding: 0.5rem 0;
+  margin: 0;
+  list-style: none;
+  background-color: var(--orText-bg);
+  border: var(--advertisement-dropdown-border);
+  border-radius: 0.25rem;
+  box-shadow: var(--advertisement-dropdown-box-shadow);
+}
+
+.dropdownmenu li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.dropdownmenu li:hover {
+  background-color: #f8f9fa;
+}
 
 /* ----------------------------------------------------- */
 

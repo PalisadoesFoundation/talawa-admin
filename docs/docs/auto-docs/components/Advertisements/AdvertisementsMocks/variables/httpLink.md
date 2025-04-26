@@ -6,4 +6,4 @@
 
 > `const` **httpLink**: `HttpLink`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L19)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L143)
