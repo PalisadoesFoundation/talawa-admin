@@ -5854,6 +5854,9 @@ describe('handleImageChange', () => {
 
     expect(fileValidation.validateFile).toHaveBeenCalled();
     expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Invalid file type');
+    });
   });
 
   it('should upload and display attachment for valid image', async () => {

@@ -179,7 +179,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   >(null);
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, []); // stable ref
+  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
