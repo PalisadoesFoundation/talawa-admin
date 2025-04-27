@@ -94,7 +94,7 @@ export const MessageImage: React.FC<IMessageImageProps> = ({
       return;
     }
 
-    // If no organizationId is provided, use the default 'organization' value
+    // In direct messages, there is no organization ID, so use 'organization' as a fallback.
     const orgId = organizationId || 'organization';
 
     let stillMounted = true;
