@@ -5752,7 +5752,7 @@ describe('MessageImage Component', () => {
     );
 
     const img = await screen.findByAltText('attachment');
-    expect(img).toHaveAttribute('src', 'https://example.com/image.png');
+    expect(img.getAttribute('src')).toBe('https://example.com/image.png');
   });
 
   it('renders fallback if image fetching fails', async () => {
@@ -5981,7 +5981,7 @@ describe('handleImageChange', () => {
     // Find the close button inside the same parent as the attachment image
     const attachmentDiv = attachmentImg.parentElement;
     expect(attachmentDiv).toBeTruthy();
-    const closeBtn = attachmentDiv?.querySelector('button');
+    const closeBtn = await screen.findByTestId('removeAttachment');
     expect(closeBtn).toBeTruthy();
 
     // Click the close button

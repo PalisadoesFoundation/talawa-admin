@@ -572,6 +572,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 <img src={attachment} alt="attachment" />
 
                 <Button
+                  data-testid="removeAttachment"
                   onClick={() => {
                     setAttachment(null);
                     setAttachmentObjectName(null);
