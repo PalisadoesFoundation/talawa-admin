@@ -5721,12 +5721,13 @@ describe('MessageImage Component', () => {
   });
 
   it('renders loading placeholder while image is loading', async () => {
-    // Create a deferred promise
-    let resolvePromise: (value: string) => void;
-    const loadingPromise = new Promise<string>((resolve) => {
-      resolvePromise = resolve;
-    });
-    mockGetFileFromMinio.mockReturnValueOnce(loadingPromise);
+    // Canonical deferred promise helper
+    const deferred = (() => {
+      let resolve!: (url: string) => void;
+      const promise = new Promise<string>((r) => (resolve = r));
+      return { promise, resolve };
+    })();
+    mockGetFileFromMinio.mockReturnValueOnce(deferred.promise);
 
     const { unmount } = render(
       <MessageImage
@@ -5739,7 +5740,7 @@ describe('MessageImage Component', () => {
 
     // Clean up: resolve the promise so React can finish any effects
     act(() => {
-      resolvePromise('https://dummy');
+      deferred.resolve('https://dummy');
     });
 
     // Optionally, unmount to ensure no side effects
@@ -5785,6 +5786,11 @@ describe('handleImageChange', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks(); // resets all spyOn patches
   });
 
   it('should do nothing if no file is selected', async () => {
