@@ -5327,7 +5327,7 @@ export const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
       },
     },
   },
-  Array.from({ length: 5 }, () => ({
+  ...Array.from({ length: 5 }, () => ({
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
@@ -5702,6 +5702,7 @@ describe('MessageImage Component', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks(); // resets all spyOn patches
   });
 
   it('renders base64 image directly', () => {
