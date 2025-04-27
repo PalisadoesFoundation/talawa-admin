@@ -6,12 +6,10 @@
  * supports media attachments such as images and videos, and displays metadata like
  * creation date and author information.
  *
- * @param {InterfaceOrgPostCardProps} props - The props for the component.
- * @param {InterfacePost} props.post - The post data to be displayed in the card.
+ * @param props - The props for the component.
+ *   - post: The post data to be displayed in the card.
  *
- * @returns {JSX.Element} A React component that renders the organizational post card.
- *
- * @component
+ * @returns A React component that renders the organizational post card.
  *
  * @example
  * ```tsx
@@ -23,31 +21,15 @@
  * - It supports localization using the `react-i18next` library.
  * - Media attachments are displayed based on their MIME type (image or video).
  * - Includes modals for editing and deleting posts.
- *
- * @features
- * - View post details in a modal.
- * - Edit post caption and attachments.
- * - Delete a post with confirmation.
- * - Pin or unpin a post.
- * - Display author information fetched via GraphQL query.
- *
- * @dependencies
- * - `@apollo/client` for GraphQL operations.
- * - `react-bootstrap` for UI components.
- * - `react-toastify` for notifications.
- * - `react-i18next` for localization.
- * - `utils/convertToBase64` for file conversion.
- * - `utils/errorHandler` for error handling.
- *
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef } from 'react';
+import type { JSX } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -57,8 +39,11 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useParams } from 'react-router';
+import { validateFile } from 'utils/fileValidation';
 
-interface InterfacePostAttachment {
+interface IPostAttachment {
   id: string;
   postId: string;
   name: string;
@@ -69,29 +54,27 @@ interface InterfacePostAttachment {
   updaterId?: string | null;
 }
 
-interface InterfacePost {
+interface IPost {
   id: string;
   caption: string;
   createdAt: Date;
   updatedAt?: Date | null;
   pinnedAt?: Date | null;
   creatorId: string | null;
-  attachments: InterfacePostAttachment[];
+  attachments: IPostAttachment[];
 }
 
-interface InterfaceOrgPostCardProps {
-  post: InterfacePost;
+interface IOrgPostCardProps {
+  post: IPost;
 }
 
-interface InterfacePostFormState {
+interface IPostFormState {
   caption: string;
   attachments: { url: string; mimeType: string }[];
 }
 
-export default function OrgPostCard({
-  post,
-}: InterfaceOrgPostCardProps): JSX.Element {
-  const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
+export default function OrgPostCard({ post }: IOrgPostCardProps): JSX.Element {
+  const [postFormState, setPostFormState] = useState<IPostFormState>({
     caption: post.caption,
     attachments: [],
   });
@@ -105,6 +88,9 @@ export default function OrgPostCard({
 
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
+
+  const { uploadFileToMinio } = useMinioUpload();
+  const { orgId } = useParams();
 
   // Get media attachments
   const imageAttachment = post.attachments.find((a) =>
@@ -173,22 +159,33 @@ export default function OrgPostCard({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
-    setPostFormState((prev) => ({ ...prev, [name]: value }));
+    setPostFormState((prev: IPostFormState) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+    if (file && orgId) {
+      // Validate image file
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage || 'Invalid image file.');
+        return;
+      }
+      try {
+        const { objectName } = await uploadFileToMinio(file, orgId);
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            { url: objectName, mimeType: file.type },
+          ],
+        }));
+      } catch (error) {
+        toast.error('Image upload failed');
+        errorHandler(t, error);
+      }
     }
   };
 
@@ -196,29 +193,48 @@ export default function OrgPostCard({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+    if (file && orgId) {
+      // Validate video file
+      const validation = validateFile(file, 50, [
+        'video/mp4',
+        'video/webm',
+        'video/ogg',
+      ]);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage || 'Invalid video file.');
+        return;
+      }
+      try {
+        const { objectName } = await uploadFileToMinio(file, orgId);
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            { url: objectName, mimeType: file.type },
+          ],
+        }));
+      } catch (error) {
+        toast.error('Video upload failed');
+        errorHandler(t, error);
+      }
     }
   };
 
-  const clearImage = (url: string): void => {
-    setPostFormState((prev) => ({
+  const clearImage = (url: string) => {
+    setPostFormState((prev: IPostFormState) => ({
       ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
+      attachments: prev.attachments.filter(
+        (a: { url: string; mimeType: string }) => a.url !== url,
+      ),
     }));
   };
 
-  const clearVideo = (url: string): void => {
-    setPostFormState((prev) => ({
+  const clearVideo = (url: string) => {
+    setPostFormState((prev: IPostFormState) => ({
       ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
+      attachments: prev.attachments.filter(
+        (a: { url: string; mimeType: string }) => a.url !== url,
+      ),
     }));
   };
 
