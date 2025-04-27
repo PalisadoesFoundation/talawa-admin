@@ -34,7 +34,7 @@ import * as fileValidation from 'utils/fileValidation';
 import * as minioUpload from 'utils/MinioUpload';
 import * as minioDownload from 'utils/MinioDownload';
 
-import { toast } from 'react-toastify'; // Add this with other imports at the top
+import { toast } from 'react-toastify';
 
 // Mock modules with simple functions, not referencing external variables
 vi.mock('react-toastify', () => ({
@@ -45,9 +45,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 vi.mock('utils/fileValidation', async () => {
-  const actual = await vi.importActual<typeof fileValidation>(
-    'utils/fileValidation',
-  );
+  const actual = await import('utils/fileValidation');
   return {
     ...actual,
     validateFile: vi.fn(),
@@ -5689,7 +5687,8 @@ describe('Testing Chatroom Component [User Portal]', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/@/)).toBeInTheDocument(); // subtitle is user email
+      // Match any standard email format without being tied to a specific address
+      expect(screen.getByText(/\S+@\S+\.\S+/)).toBeInTheDocument();
     });
   });
 });
