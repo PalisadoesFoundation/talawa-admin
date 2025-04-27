@@ -5809,6 +5809,7 @@ describe('handleImageChange', () => {
 
     // No error should be shown, and no image uploaded
     expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('should show validation error for invalid file', async () => {
@@ -5843,6 +5844,9 @@ describe('handleImageChange', () => {
 
     expect(fileValidation.validateFile).toHaveBeenCalled();
     expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Invalid file type');
+    });
   });
 
   it('should upload and display attachment for valid image', async () => {
