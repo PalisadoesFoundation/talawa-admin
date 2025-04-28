@@ -11,7 +11,7 @@ import {
   act,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';

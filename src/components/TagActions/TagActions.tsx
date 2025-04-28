@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,

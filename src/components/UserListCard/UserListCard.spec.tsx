@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -13,8 +13,8 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, it, beforeEach } from 'vitest';
 
 // Mock react-router-dom
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({

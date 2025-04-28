@@ -3,7 +3,7 @@ import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
 import { GET_POSTS_BY_ORG } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';

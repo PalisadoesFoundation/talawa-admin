@@ -1219,6 +1219,7 @@
     "validLink": "Le lien est valide",
     "invalidLink": "Le lien n'est pas valide",
     "Rname": "Entrez le nom de l'annonce",
+    "Rdesc": "Entrez la description de l'annonce",
     "Rtype": "Sélectionnez le type de publicité",
     "Rmedia": "Fournir du contenu multimédia à afficher",
     "RstartDate": "Sélectionnez la date de début",
@@ -1226,6 +1227,7 @@
     "RClose": "Ferme la fenêtre",
     "addNew": "Créer une nouvelle annonce",
     "EXname": "Ex. ",
+    "EXdesc": "Ex. ",
     "EXlink": "Ex. ",
     "createAdvertisement": "Créer une publicité",
     "deleteAdvertisement": "Supprimer la publicité",
@@ -1233,7 +1235,7 @@
     "view": "Voir",
     "editAdvertisement": "Modifier l'annonce",
     "advertisementDeleted": "Publicité supprimée avec succès.",
-    "endDateGreaterOrEqual": "La date de fin doit être supérieure ou égale à la date de début",
+    "endDateGreater": "La date de fin doit être postérieure à la date de début",
     "advertisementCreated": "Publicité créée avec succès.",
     "pHeading": "Titre principal",
     "delete": "Supprimer",
@@ -1242,7 +1244,8 @@
     "yes": "Oui",
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
-    "endOfResults": "Fin des résultats"
+    "endOfResults": "Fin des résultats",
+    "noDescription": "Aucune description"
   },
   "userChat": {
     "title": "Discussions",

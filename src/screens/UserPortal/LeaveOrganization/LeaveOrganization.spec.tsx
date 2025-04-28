@@ -8,7 +8,7 @@ import {
   Routes,
   useNavigate,
   useParams,
-} from 'react-router-dom';
+} from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
 import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -32,8 +32,8 @@ Object.defineProperty(window, 'localStorage', {
 
 // Mock useParams to return a test organization ID
 
-vi.mock('react-router-dom', async () => {
-  const actualDom = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actualDom = await vi.importActual('react-router');
   return {
     ...actualDom,
     useParams: vi.fn(),

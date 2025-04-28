@@ -43,8 +43,8 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from '../../style/app-fixed.module.css';
-import { useParams } from 'react-router-dom';
+import styles from 'style/app-fixed.module.css';
+import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceUserListCardProps {

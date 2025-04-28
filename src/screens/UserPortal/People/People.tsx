@@ -48,7 +48,7 @@ import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { InterfaceUser } from 'types/User/interface';
 interface InterfaceOrganizationCardProps {
   id: string;

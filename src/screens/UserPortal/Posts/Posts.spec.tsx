@@ -9,7 +9,7 @@ import {
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -30,8 +30,8 @@ vi.mock('react-toastify', () => ({
 
 const mockUseParams = vi.fn().mockReturnValue({ orgId: 'orgId' });
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => mockUseParams(),
