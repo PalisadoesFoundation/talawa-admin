@@ -858,7 +858,7 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(data: UpdateEventInput, id: ID!): Event!
+  updateEvent(data: MutationUpdateEventInput, id: ID!): Event!
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -2079,6 +2079,18 @@ input MutationCreateEventInput {
   name: String!
   organizationId: ID!
   startAt: DateTime!
+}
+
+input MutationUpdateEventInput {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
 }
 
 input MutationUpdateUserInput {

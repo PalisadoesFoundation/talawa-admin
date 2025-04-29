@@ -3,7 +3,7 @@
  *
  * This component renders a modal for previewing and editing event details.
  * It provides functionality to view, update, and manage event properties such as
- * title, description, location, date, time, recurrence, and visibility settings.
+ * title, description, location, date, time, and visibility settings.
  *
  * @component
  * @param {InterfacePreviewEventModalProps} props - The props for the PreviewModal component.
@@ -20,15 +20,10 @@
  * @param {Function} props.setEventEndDate - Function to update the event end date.
  * @param {boolean} props.alldaychecked - Indicates if the event is an all-day event.
  * @param {Function} props.setAllDayChecked - Function to toggle the all-day event setting.
- * @param {boolean} props.recurringchecked - Indicates if the event is recurring.
- * @param {Function} props.setRecurringChecked - Function to toggle the recurring event setting.
  * @param {boolean} props.publicchecked - Indicates if the event is public.
  * @param {Function} props.setPublicChecked - Function to toggle the public event setting.
  * @param {boolean} props.registrablechecked - Indicates if the event is registrable.
  * @param {Function} props.setRegistrableChecked - Function to toggle the registrable event setting.
- * @param {Object} props.recurrenceRuleState - The state of the recurrence rule.
- * @param {Function} props.setRecurrenceRuleState - Function to update the recurrence rule state.
- * @param {string} props.recurrenceRuleText - Text representation of the recurrence rule.
  * @param {Object} props.formState - The state of the form fields.
  * @param {Function} props.setFormState - Function to update the form state.
  * @param {Function} props.registerEventHandler - Function to handle event registration.
@@ -45,10 +40,7 @@ import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
 import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
-import { Role } from 'types/Event/interface';
-import { Days, getWeekDayOccurenceInMonth } from 'utils/recurrenceUtils';
-
-import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
+import { UserRole } from 'types/Event/interface';
 
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
@@ -57,8 +49,6 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   toggleDeleteModal,
   t,
   tCommon,
-  popover,
-  weekDayOccurenceInMonth,
   isRegistered,
   userId,
   eventStartDate,
@@ -67,15 +57,10 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setEventEndDate,
   alldaychecked,
   setAllDayChecked,
-  recurringchecked,
-  setRecurringChecked,
   publicchecked,
   setPublicChecked,
   registrablechecked,
   setRegistrableChecked,
-  recurrenceRuleState,
-  setRecurrenceRuleState,
-  recurrenceRuleText,
   formState,
   setFormState,
   registerEventHandler,
@@ -86,6 +71,11 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
     return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
   };
+
+  // Check if the user has permission to edit the event
+  const canEditEvent =
+    eventListCardProps.creator?._id === userId ||
+    eventListCardProps.userRole === UserRole.ADMINISTRATOR;
 
   return (
     <Modal show={eventModalIsOpen} centered dialogClassName="" scrollable>
@@ -117,10 +107,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             onChange={(e): void => {
               setFormState({ ...formState, title: e.target.value });
             }}
-            disabled={
-              !(eventListCardProps.creator?._id === userId) &&
-              eventListCardProps.userRole === Role.USER
-            }
+            disabled={!canEditEvent}
           />
           <p className={styles.previewEventListCardModals}>
             {tCommon('description')}
@@ -140,10 +127,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             onChange={(e): void => {
               setFormState({ ...formState, eventdescrip: e.target.value });
             }}
-            disabled={
-              !(eventListCardProps.creator?._id === userId) &&
-              eventListCardProps.userRole === Role.USER
-            }
+            disabled={!canEditEvent}
           />
           <p className={styles.previewEventListCardModals}>
             {tCommon('location')}
@@ -159,10 +143,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             onChange={(e): void => {
               setFormState({ ...formState, location: e.target.value });
             }}
-            disabled={
-              !(eventListCardProps.creator?._id === userId) &&
-              eventListCardProps.userRole === Role.USER
-            }
+            disabled={!canEditEvent}
           />
           <div className={styles.datediv}>
             <div>
@@ -178,18 +159,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                         ? date?.toDate()
                         : eventEndDate,
                     );
-                    if (!eventListCardProps.recurring) {
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        recurrenceStartDate: date?.toDate(),
-                        weekDays: [Days[date?.toDate().getDay()]],
-                        weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                          ? getWeekDayOccurenceInMonth(date?.toDate())
-                          : undefined,
-                      });
-                    }
                   }
                 }}
+                disabled={!canEditEvent}
               />
             </div>
             <div>
@@ -203,6 +175,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   }
                 }}
                 minDate={dayjs(eventStartDate)}
+                disabled={!canEditEvent}
               />
             </div>
           </div>
@@ -226,7 +199,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                       });
                     }
                   }}
-                  disabled={alldaychecked}
+                  disabled={alldaychecked || !canEditEvent}
                 />
               </div>
               <div>
@@ -244,7 +217,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     }
                   }}
                   minTime={timeToDayJs(formState.startTime)}
-                  disabled={alldaychecked}
+                  disabled={alldaychecked || !canEditEvent}
                 />
               </div>
             </div>
@@ -262,27 +235,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   onChange={(): void => {
                     setAllDayChecked(!alldaychecked);
                   }}
-                  disabled={
-                    !(eventListCardProps.creator?._id === userId) &&
-                    eventListCardProps.userRole === Role.USER
-                  }
-                />
-              </div>
-              <div className={styles.dispflexEventListCardModals}>
-                <label htmlFor="recurring">{t('recurringEvent')}:</label>
-                <Form.Switch
-                  id="recurring"
-                  type="checkbox"
-                  data-testid="updateRecurring"
-                  className={styles.switch}
-                  checked={recurringchecked}
-                  onChange={(): void => {
-                    setRecurringChecked(!recurringchecked);
-                  }}
-                  disabled={
-                    !(eventListCardProps.creator?._id === userId) &&
-                    eventListCardProps.userRole === Role.USER
-                  }
+                  disabled={!canEditEvent}
                 />
               </div>
             </div>
@@ -298,10 +251,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   onChange={(): void => {
                     setPublicChecked(!publicchecked);
                   }}
-                  disabled={
-                    !(eventListCardProps.creator?._id === userId) &&
-                    eventListCardProps.userRole === Role.USER
-                  }
+                  disabled={!canEditEvent}
                 />
               </div>
               <div className={styles.dispflexEventListCardModals}>
@@ -315,43 +265,25 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   onChange={(): void => {
                     setRegistrableChecked(!registrablechecked);
                   }}
-                  disabled={
-                    !(eventListCardProps.creator?._id === userId) &&
-                    eventListCardProps.userRole === Role.USER
-                  }
+                  disabled={!canEditEvent}
                 />
               </div>
             </div>
           </div>
-
-          {/* Recurrence Options */}
-          {recurringchecked && (
-            <RecurrenceOptions
-              recurrenceRuleState={recurrenceRuleState}
-              recurrenceRuleText={recurrenceRuleText}
-              setRecurrenceRuleState={setRecurrenceRuleState}
-              popover={popover}
-              t={t}
-              tCommon={tCommon}
-            />
-          )}
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        {(eventListCardProps.userRole !== Role.USER ||
-          eventListCardProps.creator?._id === userId) && (
+        {canEditEvent && (
           <Button
             variant="success"
             onClick={openEventDashboard}
             data-testid="showEventDashboardBtn"
             className={styles.addButton}
           >
-            {' '}
-            Show Event Dashboard{' '}
+            Show Event Dashboard
           </Button>
         )}
-        {(eventListCardProps.userRole !== Role.USER ||
-          eventListCardProps.creator?._id === userId) && (
+        {canEditEvent && (
           <Button
             variant="success"
             className={styles.addButton}
@@ -361,8 +293,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {t('editEvent')}
           </Button>
         )}
-        {(eventListCardProps.userRole !== Role.USER ||
-          eventListCardProps.creator?._id === userId) && (
+        {canEditEvent && (
           <Button
             variant="danger"
             data-testid="deleteEventModalBtn"
@@ -372,7 +303,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {t('deleteEvent')}
           </Button>
         )}
-        {eventListCardProps.userRole === Role.USER &&
+        {eventListCardProps.userRole === UserRole.REGULAR &&
           !(eventListCardProps.creator?._id === userId) &&
           (isRegistered ? (
             <Button className={styles.addButton} variant="success" disabled>

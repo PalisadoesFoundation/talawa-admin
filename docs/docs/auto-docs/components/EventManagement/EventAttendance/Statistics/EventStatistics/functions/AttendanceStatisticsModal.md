@@ -6,7 +6,7 @@
 
 > **AttendanceStatisticsModal**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L83)
+Defined in: [src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L82)
 
 ## Parameters
 

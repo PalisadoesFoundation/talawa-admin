@@ -2,8 +2,7 @@
  * OrganizationEvents Component
  *
  * This component is responsible for rendering and managing the organization events page.
- * It includes functionalities for viewing events in different calendar views, creating new events,
- * and managing event recurrence options.
+ * It includes functionalities for viewing events in different calendar views and creating new events.
  *
  * @component
  * @returns {JSX.Element} The rendered OrganizationEvents component.
@@ -12,7 +11,7 @@
  * - Utilizes Apollo Client for GraphQL queries and mutations.
  * - Integrates with `react-bootstrap` for UI components and `@mui/x-date-pickers` for date/time pickers.
  * - Supports multilingual translations using `react-i18next`.
- * - Handles event creation with recurrence options and validations.
+ * - Handles event creation with validations.
  *
  * @example
  * ```tsx
@@ -22,7 +21,6 @@
  * @dependencies
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for changing calendar views and opening the event creation modal.
- * - `RecurrenceOptions`: Manages recurrence rule configurations for events.
  * - `Loader`: Displays a loading spinner during data fetching.
  *
  * @state
@@ -30,7 +28,6 @@
  * - `startDate`, `endDate` (Date): Start and end dates for the event.
  * - `viewType` (ViewType): Current calendar view type (Day, Month, Year).
  * - `formState` (object): Stores form input values for event creation.
- * - `recurrenceRuleState` (InterfaceRecurrenceRuleState): Stores recurrence rule configurations.
  *
  * @queries
  * - `ORGANIZATION_EVENT_CONNECTION_LIST`: Fetches events for the organization.
@@ -52,16 +49,16 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Form, Popover } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
-import styles from 'style/app.module.css';
+import styles from '../../style/app.module.css';
 import {
-  ORGANIZATION_EVENT_CONNECTION_LIST,
-  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_EVENTS_PG,
+  GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { Dayjs } from 'dayjs';
@@ -71,14 +68,28 @@ import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
-import {
-  Frequency,
-  Days,
-  getRecurrenceRuleText,
-  getWeekDayOccurenceInMonth,
-} from 'utils/recurrenceUtils';
-import type { InterfaceRecurrenceRuleState } from 'utils/recurrenceUtils';
-import RecurrenceOptions from 'components/RecurrenceOptions/RecurrenceOptions';
+import type { InterfaceEvent } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
+
+// Define the type for an event edge
+interface InterfaceEventEdge {
+  node: {
+    id: string;
+    name: string;
+    description?: string | null;
+    startAt: string;
+    endAt: string;
+    allDay: boolean;
+    location?: string | null;
+    isPublic: boolean;
+    isRegisterable: boolean;
+    creator: {
+      id: string;
+      name: string;
+    };
+  };
+  cursor: string;
+}
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
@@ -96,36 +107,20 @@ function organizationEvents(): JSX.Element {
     keyPrefix: 'organizationEvents',
   });
   const { t: tCommon } = useTranslation('common');
-
   const { getItem } = useLocalStorage();
 
   document.title = t('title');
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
-  const [startDate, setStartDate] = React.useState<Date>(new Date());
-  const [endDate, setEndDate] = React.useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(new Date());
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
-  const [alldaychecked, setAllDayChecked] = React.useState(true);
-  const [recurringchecked, setRecurringChecked] = React.useState(false);
-
-  const [publicchecked, setPublicChecked] = React.useState(true);
-  const [registrablechecked, setRegistrableChecked] = React.useState(false);
-  const [createChatCheck, setCreateChatCheck] = React.useState(false);
-
-  const [recurrenceRuleState, setRecurrenceRuleState] =
-    useState<InterfaceRecurrenceRuleState>({
-      recurrenceStartDate: startDate,
-      recurrenceEndDate: null,
-      frequency: Frequency.WEEKLY,
-      weekDays: [Days[startDate.getDay()]],
-      interval: 1,
-      count: undefined,
-      weekDayOccurenceInMonth: undefined,
-    });
+  const [alldaychecked, setAllDayChecked] = useState(true);
+  const [publicchecked, setPublicChecked] = useState(true);
+  const [registrablechecked, setRegistrableChecked] = useState(false);
 
   const [formState, setFormState] = useState({
     title: '',
     eventdescrip: '',
-    date: '',
     location: '',
     startTime: '08:00:00',
     endTime: '18:00:00',
@@ -133,58 +128,72 @@ function organizationEvents(): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
 
-  const showInviteModal = (): void => {
-    setCreateEventmodalisOpen(true);
-  };
-  const hideCreateEventModal = (): void => {
-    setCreateEventmodalisOpen(false);
-  };
+  const showInviteModal = (): void => setCreateEventmodalisOpen(true);
+  const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
   const handleChangeView = (item: string | null): void => {
-    if (item) {
-      setViewType(item as ViewType);
-    }
+    if (item) setViewType(item as ViewType);
   };
 
   const {
-    data,
-    loading,
+    data: eventData,
+    loading: eventLoading,
     error: eventDataError,
     refetch: refetchEvents,
-  } = useQuery(ORGANIZATION_EVENT_CONNECTION_LIST, {
+  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
-      organization_id: currentUrl,
-      title_contains: '',
-      description_contains: '',
-      location_contains: '',
+      id: currentUrl,
+      first: 10,
+      after: null,
+    },
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgDataError,
+  } = useQuery(GET_ORGANIZATION_DATA_PG, {
+    variables: {
+      id: currentUrl,
+      first: 10, // For members pagination
+      after: null,
     },
   });
 
-  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: currentUrl },
-  });
-
   const userId = getItem('id') as string;
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor') as string[];
-  const userRole = superAdmin
-    ? 'SUPERADMIN'
-    : adminFor?.length > 0
-      ? 'ADMIN'
-      : 'USER';
+  const storedRole = getItem('role') as string | null;
+  const userRole =
+    storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  const [create, { loading: loading2 }] = useMutation(CREATE_EVENT_MUTATION);
+  const [create, { loading: createLoading }] = useMutation(
+    CREATE_EVENT_MUTATION,
+  );
 
-  const {
-    recurrenceStartDate,
-    recurrenceEndDate,
-    frequency,
-    weekDays,
-    interval,
-    count,
-    weekDayOccurenceInMonth,
-  } = recurrenceRuleState;
-
-  const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
+  // Normalize event data for EventCalendar with proper typing
+  const events: InterfaceEvent[] = (
+    eventData?.organization?.events?.edges || []
+  ).map((edge: InterfaceEventEdge) => ({
+    _id: edge.node.id,
+    title: edge.node.name,
+    description: edge.node.description || '',
+    startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
+    endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
+    startTime: edge.node.allDay
+      ? undefined
+      : dayjs(edge.node.startAt).format('HH:mm:ss'),
+    endTime: edge.node.allDay
+      ? undefined
+      : dayjs(edge.node.endAt).format('HH:mm:ss'),
+    allDay: edge.node.allDay,
+    location: edge.node.location || '',
+    isPublic: edge.node.isPublic,
+    isRegisterable: edge.node.isRegisterable,
+    creator: {
+      _id: edge.node.creator.id,
+      name: edge.node.creator.name,
+    },
+    attendees: [], // Adjust if attendees are added to schema
+  }));
 
   const createEvent = async (
     e: React.ChangeEvent<HTMLFormElement>,
@@ -196,41 +205,35 @@ function organizationEvents(): JSX.Element {
       formState.location.trim().length > 0
     ) {
       try {
+        const startTimeParts = formState.startTime.split(':');
+        const endTimeParts = formState.endTime.split(':');
+
+        const input = {
+          name: formState.title,
+          description: formState.eventdescrip,
+          startAt: alldaychecked
+            ? dayjs(startDate).startOf('day').toISOString()
+            : dayjs(startDate)
+                .hour(parseInt(startTimeParts[0]))
+                .minute(parseInt(startTimeParts[1]))
+                .second(parseInt(startTimeParts[2]))
+                .toISOString(),
+          endAt: alldaychecked
+            ? dayjs(endDate).endOf('day').toISOString()
+            : dayjs(endDate)
+                .hour(parseInt(endTimeParts[0]))
+                .minute(parseInt(endTimeParts[1]))
+                .second(parseInt(endTimeParts[2]))
+                .toISOString(),
+          organizationId: currentUrl,
+          allDay: alldaychecked,
+          location: formState.location,
+          isPublic: publicchecked,
+          isRegisterable: registrablechecked,
+        };
+
         const { data: createEventData } = await create({
-          variables: {
-            title: formState.title,
-            description: formState.eventdescrip,
-            isPublic: publicchecked,
-            recurring: recurringchecked,
-            isRegisterable: registrablechecked,
-            organizationId: currentUrl,
-            startDate: dayjs(startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(endDate).format('YYYY-MM-DD'),
-            allDay: alldaychecked,
-            location: formState.location,
-            startTime: !alldaychecked ? formState.startTime : undefined,
-            endTime: !alldaychecked ? formState.endTime : undefined,
-            recurrenceStartDate: recurringchecked
-              ? dayjs(recurrenceStartDate).format('YYYY-MM-DD')
-              : undefined,
-            recurrenceEndDate: recurringchecked
-              ? recurrenceEndDate
-                ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
-                : null
-              : undefined,
-            frequency: recurringchecked ? frequency : undefined,
-            weekDays:
-              recurringchecked &&
-              (frequency === Frequency.WEEKLY ||
-                (frequency === Frequency.MONTHLY && weekDayOccurenceInMonth))
-                ? weekDays
-                : undefined,
-            interval: recurringchecked ? interval : undefined,
-            count: recurringchecked ? count : undefined,
-            weekDayOccurenceInMonth: recurringchecked
-              ? weekDayOccurenceInMonth
-              : undefined,
-          },
+          variables: { input },
         });
 
         if (createEventData) {
@@ -240,23 +243,15 @@ function organizationEvents(): JSX.Element {
           setFormState({
             title: '',
             eventdescrip: '',
-            date: '',
             location: '',
             startTime: '08:00:00',
             endTime: '18:00:00',
           });
-          setRecurringChecked(false);
-          setRecurrenceRuleState({
-            recurrenceStartDate: new Date(),
-            recurrenceEndDate: null,
-            frequency: Frequency.WEEKLY,
-            weekDays: [Days[new Date().getDay()]],
-            interval: 1,
-            count: undefined,
-            weekDayOccurenceInMonth: undefined,
-          });
           setStartDate(new Date());
           setEndDate(new Date());
+          setAllDayChecked(true);
+          setPublicChecked(true);
+          setRegistrableChecked(false);
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -264,36 +259,21 @@ function organizationEvents(): JSX.Element {
           errorHandler(t, error);
         }
       }
-    }
-    if (formState.title.trim().length === 0) {
-      toast.warning('Title can not be blank!');
-    }
-    if (formState.eventdescrip.trim().length === 0) {
-      toast.warning('Description can not be blank!');
-    }
-    if (formState.location.trim().length === 0) {
-      toast.warning('Location can not be blank!');
+    } else {
+      if (formState.title.trim().length === 0)
+        toast.warning('Title can not be blank!');
+      if (formState.eventdescrip.trim().length === 0)
+        toast.warning('Description can not be blank!');
+      if (formState.location.trim().length === 0)
+        toast.warning('Location can not be blank!');
     }
   };
 
   useEffect(() => {
-    if (eventDataError) {
-      navigate('/orglist');
-    }
-  }, [eventDataError]);
+    if (eventDataError || orgDataError) navigate('/orglist');
+  }, [eventDataError, orgDataError]);
 
-  if (loading || loading2) {
-    return <Loader />;
-  }
-
-  const popover = (
-    <Popover
-      id={`popover-recurrenceRuleText`}
-      data-testid={`popover-recurrenceRuleText`}
-    >
-      <Popover.Body>{recurrenceRuleText}</Popover.Body>
-    </Popover>
-  );
+  if (eventLoading || orgLoading || createLoading) return <Loader />;
 
   return (
     <>
@@ -307,11 +287,11 @@ function organizationEvents(): JSX.Element {
         </div>
       </div>
       <EventCalendar
-        eventData={data?.eventsByOrganizationConnection}
+        eventData={events}
         refetchEvents={refetchEvents}
-        orgData={orgData}
-        userRole={userRole}
+        orgData={orgData?.organization}
         userId={userId}
+        userRole={userRole}
         viewType={viewType}
       />
 
@@ -366,6 +346,7 @@ function organizationEvents(): JSX.Element {
               autoComplete="off"
               required
               value={formState.location}
+              className={styles.inputField}
               onChange={(e): void => {
                 setFormState({ ...formState, location: e.target.value });
               }}
@@ -378,18 +359,10 @@ function organizationEvents(): JSX.Element {
                   value={dayjs(startDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setStartDate(date?.toDate());
+                      setStartDate(date.toDate());
                       setEndDate(
-                        endDate < date?.toDate() ? date?.toDate() : endDate,
+                        endDate < date.toDate() ? date.toDate() : endDate,
                       );
-                      setRecurrenceRuleState({
-                        ...recurrenceRuleState,
-                        recurrenceStartDate: date?.toDate(),
-                        weekDays: [Days[date?.toDate().getDay()]],
-                        weekDayOccurenceInMonth: weekDayOccurenceInMonth
-                          ? getWeekDayOccurenceInMonth(date?.toDate())
-                          : undefined,
-                      });
                     }
                   }}
                 />
@@ -400,9 +373,7 @@ function organizationEvents(): JSX.Element {
                   className={styles.dateboxOrganizationEvents}
                   value={dayjs(endDate)}
                   onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEndDate(date?.toDate());
-                    }
+                    if (date) setEndDate(date.toDate());
                   }}
                   minDate={dayjs(startDate)}
                 />
@@ -420,10 +391,10 @@ function organizationEvents(): JSX.Element {
                       if (time) {
                         setFormState({
                           ...formState,
-                          startTime: time?.format('HH:mm:ss'),
+                          startTime: time.format('HH:mm:ss'),
                           endTime:
                             timeToDayJs(formState.endTime) < time
-                              ? time?.format('HH:mm:ss')
+                              ? time.format('HH:mm:ss')
                               : formState.endTime,
                         });
                       }
@@ -441,7 +412,7 @@ function organizationEvents(): JSX.Element {
                       if (time) {
                         setFormState({
                           ...formState,
-                          endTime: time?.format('HH:mm:ss'),
+                          endTime: time.format('HH:mm:ss'),
                         });
                       }
                     }}
@@ -469,24 +440,9 @@ function organizationEvents(): JSX.Element {
                   className={`me-4 ${styles.switch}`}
                   id="ispublic"
                   type="checkbox"
-                  data-testid="ispublicCheck"
                   checked={publicchecked}
+                  data-testid="ispublicCheck"
                   onChange={(): void => setPublicChecked(!publicchecked)}
-                />
-              </div>
-            </div>
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="recurring">{t('recurringEvent')}?</label>
-                <Form.Switch
-                  className={`me-4 ${styles.switch}`}
-                  id="recurring"
-                  type="checkbox"
-                  data-testid="recurringCheck"
-                  checked={recurringchecked}
-                  onChange={(): void => {
-                    setRecurringChecked(!recurringchecked);
-                  }}
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
@@ -495,40 +451,14 @@ function organizationEvents(): JSX.Element {
                   className={`me-4 ${styles.switch}`}
                   id="registrable"
                   type="checkbox"
-                  data-testid="registrableCheck"
                   checked={registrablechecked}
+                  data-testid="registrableCheck"
                   onChange={(): void =>
                     setRegistrableChecked(!registrablechecked)
                   }
                 />
               </div>
             </div>
-            <div>
-              <div className={styles.dispflex}>
-                <label htmlFor="createChat">{t('createChat')}?</label>
-                <Form.Switch
-                  className={`me-4 ${styles.switch}`}
-                  id="chat"
-                  type="checkbox"
-                  data-testid="createChat"
-                  checked={createChatCheck}
-                  onChange={(): void => setCreateChatCheck(!createChatCheck)}
-                />
-              </div>
-            </div>
-
-            {/* Recurrence Options */}
-            {recurringchecked && (
-              <RecurrenceOptions
-                recurrenceRuleState={recurrenceRuleState}
-                recurrenceRuleText={recurrenceRuleText}
-                setRecurrenceRuleState={setRecurrenceRuleState}
-                popover={popover}
-                t={t}
-                tCommon={tCommon}
-              />
-            )}
-
             <Button
               type="submit"
               className={styles.addButton}

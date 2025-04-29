@@ -1,8 +1,8 @@
 /**
  * Component: EventListCardModals
  *
- * This component manages the modals for event list cards, including preview, update, and delete modals.
- * It handles event updates, deletions, and user registration for events, with support for recurring events.
+ * This component manages the modals for event list cards, including preview and delete modals.
+ * It handles event updates, deletions, and user registration for events.
  *
  * @param eventListCardProps - The properties of the event card, including event details and refetch function.
  * @param eventModalIsOpen - Boolean indicating whether the event modal is open.
@@ -13,12 +13,9 @@
  * @returns JSX.Element - The rendered modals for event list card actions.
  *
  * @remarks
- * - Handles recurring event updates with options for "this instance," "this and following instances," or "all instances."
- * - Manages state for event properties such as all-day, recurring, public, and registrable flags.
+ * - Manages state for event properties such as all-day, public, and registrable flags.
  * - Provides functionality to register for events and navigate to the event dashboard.
  * - Uses Apollo Client mutations for updating and deleting events.
- * - Displays recurrence rule text in a popover for recurring events.
- *
  *
  * @example
  * <EventListCardModals
@@ -29,23 +26,10 @@
  *   tCommon={(key) => key}
  * />
  */
-import React, { useEffect, useState } from 'react';
-import { Popover } from 'react-bootstrap';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import type { InterfaceEvent } from 'types/Event/interface';
-import { Role } from 'types/Event/interface';
-import {
-  type InterfaceRecurrenceRuleState,
-  type RecurringEventMutationType,
-  Days,
-  Frequency,
-  allInstances,
-  getRecurrenceRuleText,
-  thisAndFollowingInstances,
-  thisInstance,
-  haveInstanceDatesChanged,
-  hasRecurrenceRuleChanged,
-} from 'utils/recurrenceUtils';
+import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -58,7 +42,6 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
-import EventListCardUpdateModal from './Update/EventListCardUpdateModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 
 interface InterfaceEventListCard extends InterfaceEvent {
@@ -89,9 +72,6 @@ function EventListCardModals({
   const navigate = useNavigate();
 
   const [alldaychecked, setAllDayChecked] = useState(eventListCardProps.allDay);
-  const [recurringchecked, setRecurringChecked] = useState(
-    eventListCardProps.recurring,
-  );
   const [publicchecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
   );
@@ -99,37 +79,12 @@ function EventListCardModals({
     eventListCardProps.isRegisterable,
   );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [recurringEventUpdateModalIsOpen, setRecurringEventUpdateModalIsOpen] =
-    useState(false);
   const [eventStartDate, setEventStartDate] = useState(
     new Date(eventListCardProps.startDate),
   );
   const [eventEndDate, setEventEndDate] = useState(
     new Date(eventListCardProps.endDate),
   );
-
-  const [recurrenceRuleState, setRecurrenceRuleState] =
-    useState<InterfaceRecurrenceRuleState>({
-      recurrenceStartDate: eventStartDate,
-      recurrenceEndDate: null,
-      frequency: Frequency.WEEKLY,
-      weekDays: [Days[eventStartDate.getDay()]],
-      interval: 1,
-      count: undefined,
-      weekDayOccurenceInMonth: undefined,
-    });
-
-  const {
-    recurrenceStartDate,
-    recurrenceEndDate,
-    frequency,
-    weekDays,
-    interval,
-    count,
-    weekDayOccurenceInMonth,
-  } = recurrenceRuleState;
-
-  const recurrenceRuleText = getRecurrenceRuleText(recurrenceRuleState);
 
   const [formState, setFormState] = useState({
     title: eventListCardProps.title,
@@ -139,157 +94,40 @@ function EventListCardModals({
     endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
   });
 
-  const [recurringEventDeleteType, setRecurringEventDeleteType] =
-    useState<RecurringEventMutationType>(thisInstance);
-
-  const [recurringEventUpdateType, setRecurringEventUpdateType] =
-    useState<RecurringEventMutationType>(thisInstance);
-
-  const [recurringEventUpdateOptions, setRecurringEventUpdateOptions] =
-    useState<RecurringEventMutationType[]>([
-      thisInstance,
-      thisAndFollowingInstances,
-      allInstances,
-    ]);
-
-  const [
-    shouldShowRecurringEventUpdateOptions,
-    setShouldShowRecurringEventUpdateOptions,
-  ] = useState(true);
-
-  useEffect(() => {
-    if (eventModalIsOpen) {
-      if (eventListCardProps.recurrenceRule) {
-        // get the recurrence rule
-        const { recurrenceRule } = eventListCardProps;
-
-        // set the recurrence rule state
-        setRecurrenceRuleState({
-          recurrenceStartDate: new Date(recurrenceRule.recurrenceStartDate),
-          recurrenceEndDate: recurrenceRule.recurrenceEndDate
-            ? new Date(recurrenceRule.recurrenceEndDate)
-            : null,
-          frequency: recurrenceRule.frequency,
-          weekDays: recurrenceRule.weekDays,
-          interval: recurrenceRule.interval,
-          count: recurrenceRule.count ?? undefined,
-          weekDayOccurenceInMonth:
-            recurrenceRule.weekDayOccurenceInMonth ?? undefined,
-        });
-      }
-    }
-  }, [eventModalIsOpen]);
-
-  // a state to specify whether the recurrence rule has changed
-  const [recurrenceRuleChanged, setRecurrenceRuleChanged] = useState(false);
-
-  // a state to specify whether the instance's startDate or endDate has changed
-  const [instanceDatesChanged, setInstanceDatesChanged] = useState(false);
-
-  // the `recurrenceRuleChanged` & `instanceDatesChanged` are required,
-  // because we will provide recurring event update options based on them, i.e.:
-  //   - if the `instanceDatesChanged` is true, we'll not provide the option to update "allInstances"
-  //   - if the `recurrenceRuleChanged` is true, we'll not provide the option to update "thisInstance"
-  //   - if both are true, we'll only provide the option to update "thisAndFollowingInstances"
-  // updating recurring events is not very straightforward,
-  // find more info on the approach in this doc https://docs.talawa.io/docs/functionalities/recurring-events
-
-  useEffect(() => {
-    setInstanceDatesChanged(
-      haveInstanceDatesChanged(
-        eventListCardProps.startDate,
-        eventListCardProps.endDate,
-        dayjs(eventStartDate).format('YYYY-MM-DD'), // convert to date string
-        dayjs(eventEndDate).format('YYYY-MM-DD'), // convert to date string
-      ),
-    );
-    setRecurrenceRuleChanged(
-      hasRecurrenceRuleChanged(
-        eventListCardProps.recurrenceRule,
-        recurrenceRuleState,
-      ),
-    );
-  }, [eventStartDate, eventEndDate, recurrenceRuleState]);
-
-  useEffect(() => {
-    if (instanceDatesChanged) {
-      setRecurringEventUpdateType(thisInstance);
-      setRecurringEventUpdateOptions([thisInstance, thisAndFollowingInstances]);
-      setShouldShowRecurringEventUpdateOptions(true);
-    }
-
-    if (recurrenceRuleChanged) {
-      setRecurringEventUpdateType(thisAndFollowingInstances);
-      setRecurringEventUpdateOptions([thisAndFollowingInstances, allInstances]);
-      setShouldShowRecurringEventUpdateOptions(true);
-    }
-
-    if (recurrenceRuleChanged && instanceDatesChanged) {
-      setRecurringEventUpdateType(thisAndFollowingInstances);
-      setShouldShowRecurringEventUpdateOptions(false);
-    }
-
-    if (!recurrenceRuleChanged && !instanceDatesChanged) {
-      setRecurringEventUpdateType(thisInstance);
-      setRecurringEventUpdateOptions([
-        thisInstance,
-        thisAndFollowingInstances,
-        allInstances,
-      ]);
-      setShouldShowRecurringEventUpdateOptions(true);
-    }
-  }, [recurrenceRuleChanged, instanceDatesChanged]);
-
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
 
-  const updateEventHandler = async (): Promise<void> => {
+  const handleEventUpdate = async (): Promise<void> => {
     try {
       const { data } = await updateEvent({
         variables: {
-          id: eventListCardProps._id,
-          title: formState.title,
-          description: formState.eventdescrip,
-          isPublic: publicchecked,
-          recurring: recurringchecked,
-          recurringEventUpdateType: recurringchecked
-            ? recurringEventUpdateType
-            : undefined,
-          isRegisterable: registrablechecked,
-          allDay: alldaychecked,
-          startDate: dayjs(eventStartDate).format('YYYY-MM-DD'),
-          endDate: dayjs(eventEndDate).format('YYYY-MM-DD'),
-          location: formState.location,
-          startTime: !alldaychecked ? formState.startTime : undefined,
-          endTime: !alldaychecked ? formState.endTime : undefined,
-          recurrenceStartDate: recurringchecked
-            ? recurringEventUpdateType === thisAndFollowingInstances &&
-              (instanceDatesChanged || recurrenceRuleChanged)
-              ? dayjs(eventStartDate).format('YYYY-MM-DD')
-              : dayjs(recurrenceStartDate).format('YYYY-MM-DD')
-            : undefined,
-          recurrenceEndDate: recurringchecked
-            ? recurrenceEndDate
-              ? dayjs(recurrenceEndDate).format('YYYY-MM-DD')
-              : null
-            : undefined,
-          frequency: recurringchecked ? frequency : undefined,
-          weekDays:
-            recurringchecked &&
-            (frequency === Frequency.WEEKLY ||
-              (frequency === Frequency.MONTHLY && weekDayOccurenceInMonth))
-              ? weekDays
-              : undefined,
-          interval: recurringchecked ? interval : undefined,
-          count: recurringchecked ? count : undefined,
-          weekDayOccurenceInMonth: recurringchecked
-            ? weekDayOccurenceInMonth
-            : undefined,
+          input: {
+            id: eventListCardProps._id,
+            name: formState.title,
+            description: formState.eventdescrip,
+            isPublic: publicchecked,
+            isRegisterable: registrablechecked,
+            allDay: alldaychecked,
+            startAt: alldaychecked
+              ? dayjs(eventStartDate).startOf('day').toISOString()
+              : dayjs(eventStartDate)
+                  .hour(parseInt(formState.startTime.split(':')[0]))
+                  .minute(parseInt(formState.startTime.split(':')[1]))
+                  .second(parseInt(formState.startTime.split(':')[2]))
+                  .toISOString(),
+            endAt: alldaychecked
+              ? dayjs(eventEndDate).endOf('day').toISOString()
+              : dayjs(eventEndDate)
+                  .hour(parseInt(formState.endTime.split(':')[0]))
+                  .minute(parseInt(formState.endTime.split(':')[1]))
+                  .second(parseInt(formState.endTime.split(':')[2]))
+                  .toISOString(),
+            location: formState.location,
+          },
         },
       });
 
       if (data) {
         toast.success(t('eventUpdated') as string);
-        setRecurringEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
           refetchEvents();
@@ -300,28 +138,15 @@ function EventListCardModals({
     }
   };
 
-  const handleEventUpdate = async (): Promise<void> => {
-    if (!eventListCardProps.recurring) {
-      await updateEventHandler();
-    } else {
-      if (shouldShowRecurringEventUpdateOptions) {
-        setRecurringEventUpdateModalIsOpen(true);
-      } else {
-        await updateEventHandler();
-      }
-    }
-  };
-
   const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
 
   const deleteEventHandler = async (): Promise<void> => {
     try {
       const { data } = await deleteEvent({
         variables: {
-          id: eventListCardProps._id,
-          recurringEventDeleteType: eventListCardProps.recurring
-            ? recurringEventDeleteType
-            : undefined,
+          input: {
+            id: eventListCardProps._id,
+          },
         },
       });
 
@@ -345,14 +170,16 @@ function EventListCardModals({
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(
     (attendee) => attendee._id === userId,
   );
-  const [registerEventMutation] = useMutation(REGISTER_EVENT);
   const [isRegistered, setIsRegistered] = useState(isInitiallyRegistered);
 
+  const [registerEventMutation] = useMutation(REGISTER_EVENT);
   const registerEventHandler = async (): Promise<void> => {
     if (!isRegistered) {
       try {
         const { data } = await registerEventMutation({
-          variables: { eventId: eventListCardProps._id },
+          variables: {
+            eventId: eventListCardProps._id,
+          },
         });
 
         if (data) {
@@ -368,28 +195,14 @@ function EventListCardModals({
     }
   };
 
-  const toggleRecurringEventUpdateModal = (): void => {
-    setRecurringEventUpdateModalIsOpen(!recurringEventUpdateModalIsOpen);
-  };
-
   const openEventDashboard = (): void => {
-    const userPath = eventListCardProps.userRole === Role.USER ? 'user/' : '';
-    console.log(`/${userPath}event/${orgId}/${eventListCardProps._id}`);
+    const userPath =
+      eventListCardProps.userRole === UserRole.REGULAR ? 'user/' : '';
     navigate(`/${userPath}event/${orgId}/${eventListCardProps._id}`);
   };
 
-  const popover = (
-    <Popover
-      id={`popover-recurrenceRuleText`}
-      data-testid={`popover-recurrenceRuleText`}
-    >
-      <Popover.Body>{recurrenceRuleText}</Popover.Body>
-    </Popover>
-  );
-
   return (
     <>
-      {/* preview modal */}
       <EventListCardPreviewModal
         eventListCardProps={eventListCardProps}
         eventModalIsOpen={eventModalIsOpen}
@@ -397,8 +210,6 @@ function EventListCardModals({
         toggleDeleteModal={toggleDeleteModal}
         t={t}
         tCommon={tCommon}
-        popover={popover}
-        weekDayOccurenceInMonth={weekDayOccurenceInMonth}
         isRegistered={isRegistered}
         userId={userId as string}
         eventStartDate={eventStartDate}
@@ -407,33 +218,15 @@ function EventListCardModals({
         setEventEndDate={setEventEndDate}
         alldaychecked={alldaychecked}
         setAllDayChecked={setAllDayChecked}
-        recurringchecked={recurringchecked}
-        setRecurringChecked={setRecurringChecked}
         publicchecked={publicchecked}
         setPublicChecked={setPublicChecked}
         registrablechecked={registrablechecked}
         setRegistrableChecked={setRegistrableChecked}
-        recurrenceRuleState={recurrenceRuleState}
-        setRecurrenceRuleState={setRecurrenceRuleState}
-        recurrenceRuleText={recurrenceRuleText}
         formState={formState}
         setFormState={setFormState}
         registerEventHandler={registerEventHandler}
         handleEventUpdate={handleEventUpdate}
         openEventDashboard={openEventDashboard}
-      />
-
-      {/* recurring event update options modal */}
-      <EventListCardUpdateModal
-        eventListCardProps={eventListCardProps}
-        recurringEventUpdateModalIsOpen={recurringEventUpdateModalIsOpen}
-        toggleRecurringEventUpdateModal={toggleRecurringEventUpdateModal}
-        t={t}
-        tCommon={tCommon}
-        recurringEventUpdateType={recurringEventUpdateType}
-        setRecurringEventUpdateType={setRecurringEventUpdateType}
-        recurringEventUpdateOptions={recurringEventUpdateOptions}
-        updateEventHandler={updateEventHandler}
       />
 
       {/* delete modal */}
@@ -443,8 +236,6 @@ function EventListCardModals({
         toggleDeleteModal={toggleDeleteModal}
         t={t}
         tCommon={tCommon}
-        recurringEventDeleteType={recurringEventDeleteType}
-        setRecurringEventDeleteType={setRecurringEventDeleteType}
         deleteEventHandler={deleteEventHandler}
       />
     </>

@@ -348,12 +348,9 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent(
-    $id: ID!
-    $recurringEventDeleteType: RecurringEventMutationType
-  ) {
-    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
-      _id
+  mutation DeleteEvent($input: MutationDeleteEventInput!) {
+    deleteEvent(input: $input) {
+      id
     }
   }
 `;
@@ -528,55 +525,31 @@ export const UPDATE_POST_MUTATION = gql`
 `;
 
 export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent(
-    $id: ID!
-    $title: String
-    $description: String
-    $recurring: Boolean
-    $recurringEventUpdateType: RecurringEventMutationType
-    $isPublic: Boolean
-    $isRegisterable: Boolean
-    $allDay: Boolean
-    $startDate: Date
-    $endDate: Date
-    $startTime: Time
-    $endTime: Time
-    $location: String
-    $recurrenceStartDate: Date
-    $recurrenceEndDate: Date
-    $frequency: Frequency
-    $weekDays: [WeekDays]
-    $count: PositiveInt
-    $interval: PositiveInt
-    $weekDayOccurenceInMonth: Int
-  ) {
-    updateEvent(
-      id: $id
-      data: {
-        title: $title
-        description: $description
-        recurring: $recurring
-        isPublic: $isPublic
-        isRegisterable: $isRegisterable
-        allDay: $allDay
-        startDate: $startDate
-        endDate: $endDate
-        startTime: $startTime
-        endTime: $endTime
-        location: $location
+  mutation UpdateEvent($input: MutationUpdateEventInput!) {
+    updateEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
       }
-      recurrenceRuleData: {
-        recurrenceStartDate: $recurrenceStartDate
-        recurrenceEndDate: $recurrenceEndDate
-        frequency: $frequency
-        weekDays: $weekDays
-        interval: $interval
-        count: $count
-        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      updater {
+        id
+        name
       }
-      recurringEventUpdateType: $recurringEventUpdateType
-    ) {
-      _id
+      organization {
+        id
+        name
+      }
     }
   }
 `;

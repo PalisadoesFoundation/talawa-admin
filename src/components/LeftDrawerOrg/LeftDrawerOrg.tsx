@@ -45,7 +45,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from 'style/app-fixed.module.css'; // Import the global CSS file
+import styles from './../../style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -56,6 +56,43 @@ export interface InterfaceLeftDrawerProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
+/**
+ * Interface for organization data from the GraphQL query
+ */
+interface InterfaceOrganizationData {
+  id: string;
+  name: string;
+  description?: string | null;
+  addressLine1?: string | null;
+  addressLine2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postalCode?: string | null;
+  countryCode?: string | null;
+  avatarURL?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
+  updater: {
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
+}
+
+/**
+ * LeftDrawerOrg component for displaying organization details and options.
+ *
+ * @param orgId - ID of the current organization.
+ * @param targets - List of navigation targets.
+ * @param hideDrawer - Determines if the drawer should be hidden or shown.
+ * @param setHideDrawer - Function to update the visibility state of the drawer.
+ * @returns JSX element for the left navigation drawer with organization details.
+ */
 const leftDrawerOrg = ({
   targets,
   orgId,
@@ -66,23 +103,22 @@ const leftDrawerOrg = ({
   const { t: tErrors } = useTranslation('errors');
   const location = useLocation();
   const { getItem } = useLocalStorage();
-  const userId = getItem('id');
+  const userId = getItem('id') as string | null;
+
+  const [isProfilePage, setIsProfilePage] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const { data, loading } = useQuery<{
+    organization: InterfaceOrganizationData;
+  }>(GET_ORGANIZATION_DATA_PG, {
+    variables: { id: orgId, first: 10, after: null }, // Added pagination defaults
+  });
+
   const getIdFromPath = (pathname: string): string => {
     if (!pathname) return '';
     const segments = pathname.split('/');
-
-    // Index 2 (third segment) represents the ID in paths like /member/{userId}
-
     return segments.length > 2 ? segments[2] : '';
   };
-  const [isProfilePage, setIsProfilePage] = useState(false);
-  const [showDropdown, setShowDropdown] = useState(false);
-  // const [organization, setOrganization] = useState<InterfaceOrganizationPg>();
-  const { data, loading } = useQuery(GET_ORGANIZATION_DATA_PG, {
-    variables: { id: orgId },
-  });
-
-  // Get the ID from the current path
 
   const pathId = useMemo(
     () => getIdFromPath(location.pathname),
@@ -93,30 +129,14 @@ const leftDrawerOrg = ({
     if (hideDrawer === null) {
       setHideDrawer(false);
     }
-  }, []);
-
+  }, [hideDrawer, setHideDrawer]);
   // Check if the current page is admin profile page
 
   useEffect(() => {
     // if param id is equal to userId, then it is a profile page
     setIsProfilePage(pathId === userId);
-  }, [location, userId]);
+  }, [pathId, userId]);
 
-  // Set organization data when query data is available
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   if (data && isMounted) {
-  //     setOrganization(data?.organization);
-  //   } else {
-  //     setOrganization(undefined);
-  //   }
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [data]);
-  /**
-   * Handles link click to hide the drawer on smaller screens.
-   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -124,118 +144,115 @@ const leftDrawerOrg = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
-        {/* Branding Section */}
-        <div className={styles.brandingContainer}>
-          <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>
-            {tCommon('talawaAdminPortal')}
-          </span>
-        </div>
-
-        {/* Organization Section */}
-        <div className={`${styles.organizationContainer} pe-3`}>
-          {loading ? (
-            <button
-              className={`${styles.profileContainer} shimmer`}
-              data-testid="orgBtn"
-            />
-          ) : data == undefined ? (
-            !isProfilePage && (
-              <button
-                className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
-                disabled
-              >
-                <div className="px-3">
-                  <WarningAmberOutlined />
-                </div>
-                {tErrors('errorLoading', { entity: 'Organization' })}
-              </button>
-            )
-          ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
-              <div className={styles.imageContainer}>
-                {data.organization?.avatarURL ? (
-                  <img
-                    src={data.organization?.avatarURL}
-                    alt={`profile picture`}
-                  />
-                ) : (
-                  <Avatar
-                    name={data.organization?.name}
-                    containerStyle={styles.avatarContainer}
-                    alt={'Dummy Organization Picture'}
-                  />
-                )}
-              </div>
-              <div className={`${styles.ProfileRightConatiner}`}>
-                <div className={styles.profileText}>
-                  <span className={styles.primaryText}>
-                    {data.organization?.name}
-                  </span>
-                  <span className={styles.secondaryText}>
-                    {data.organization?.city}
-                  </span>
-                </div>
-                <div className={`${styles.ArrowIcon}`}>
-                  <AngleRightIcon fill={'var(--bs-secondary)'} />
-                </div>
-              </div>
-            </button>
-          )}
-        </div>
-
-        {/* Options List */}
-        <h5 className={`${styles.titleHeader} text-secondary`}>
-          {tCommon('menu')}
-        </h5>
-        <div className={styles.optionList}>
-          {targets.map(({ name, url }, index) => {
-            return url ? (
-              <NavLink to={url} key={name} onClick={handleLinkClick}>
-                {({ isActive }) => (
-                  <button
-                    key={name}
-                    className={
-                      isActive
-                        ? styles.leftDrawerActiveButton
-                        : styles.leftDrawerInactiveButton
-                    }
-                  >
-                    <div className={styles.iconWrapper}>
-                      <IconComponent
-                        name={name == 'Membership Requests' ? 'Requests' : name}
-                        fill={
-                          isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
-                        }
-                      />
-                    </div>
-                    {tCommon(name)}
-                  </button>
-                )}
-              </NavLink>
-            ) : (
-              <CollapsibleDropdown
-                key={name}
-                target={targets[index]}
-                showDropdown={showDropdown}
-                setShowDropdown={setShowDropdown}
-              />
-            );
-          })}
-        </div>
+    <div
+      className={`${styles.leftDrawer} ${
+        hideDrawer === null
+          ? styles.hideElemByDefault
+          : hideDrawer
+            ? styles.inactiveDrawer
+            : styles.activeDrawer
+      }`}
+      data-testid="leftDrawerContainer"
+    >
+      {/* Branding Section */}
+      <div className={styles.brandingContainer}>
+        <TalawaLogo className={styles.talawaLogo} />
+        <span className={styles.talawaText}>
+          {tCommon('talawaAdminPortal')}
+        </span>
       </div>
-    </>
+
+      {/* Organization Section */}
+      <div className={`${styles.organizationContainer} pe-3`}>
+        {loading ? (
+          <button
+            className={`${styles.profileContainer} shimmer`}
+            data-testid="orgBtn"
+          />
+        ) : !data?.organization ? (
+          !isProfilePage && (
+            <button
+              className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
+              disabled
+            >
+              <div className="px-3">
+                <WarningAmberOutlined />
+              </div>
+              {tErrors('errorLoading', { entity: 'Organization' })}
+            </button>
+          )
+        ) : (
+          <button className={styles.profileContainer} data-testid="OrgBtn">
+            <div className={styles.imageContainer}>
+              {data.organization.avatarURL ? (
+                <img
+                  src={data.organization.avatarURL}
+                  alt={`${data.organization.name} profile picture`}
+                />
+              ) : (
+                <Avatar
+                  name={data.organization.name}
+                  containerStyle={styles.avatarContainer}
+                  alt={`${data.organization.name} Picture`}
+                />
+              )}
+            </div>
+            <div className={styles.ProfileRightConatiner}>
+              <div className={styles.profileText}>
+                <span className={styles.primaryText}>
+                  {data.organization.name}
+                </span>
+                <span className={styles.secondaryText}>
+                  {data.organization.city || 'N/A'}
+                </span>
+              </div>
+              <div className={styles.ArrowIcon}>
+                <AngleRightIcon fill={'var(--bs-secondary)'} />
+              </div>
+            </div>
+          </button>
+        )}
+      </div>
+
+      {/* Options List */}
+      <h5 className={`${styles.titleHeader} text-secondary`}>
+        {tCommon('menu')}
+      </h5>
+      <div className={styles.optionList}>
+        {targets.map(({ name, url }, index) =>
+          url ? (
+            <NavLink to={url} key={name} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <button
+                  className={
+                    isActive
+                      ? styles.leftDrawerActiveButton
+                      : styles.leftDrawerInactiveButton
+                  }
+                >
+                  <div className={styles.iconWrapper}>
+                    <IconComponent
+                      name={name === 'Membership Requests' ? 'Requests' : name}
+                      fill={
+                        isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
+                      }
+                    />
+                  </div>
+                  {tCommon(name)}
+                </button>
+              )}
+            </NavLink>
+          ) : (
+            <CollapsibleDropdown
+              key={name}
+              target={targets[index]}
+              showDropdown={showDropdown}
+              setShowDropdown={setShowDropdown}
+            />
+          ),
+        )}
+      </div>
+    </div>
   );
 };
 

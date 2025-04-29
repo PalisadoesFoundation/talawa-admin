@@ -66,7 +66,6 @@ import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
-  InterfaceRecurringEvent,
 } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 ChartJS.register(
@@ -215,13 +214,6 @@ export const AttendanceStatisticsModal: React.FC<
           data: attendeeCounts,
           fill: true,
           borderColor: '#008000',
-          pointRadius: paginatedRecurringEvents.map(
-            (event: InterfaceRecurringEvent) => (event._id === eventId ? 8 : 3),
-          ),
-          pointBackgroundColor: paginatedRecurringEvents.map(
-            (event: InterfaceRecurringEvent) =>
-              event._id === eventId ? '#008000' : 'transparent',
-          ),
         },
         {
           label: 'Male Attendees',

@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx#L50)
+Defined in: [src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/Delete/EventListCardDeleteModal.tsx#L38)
 
 ## Parameters
 

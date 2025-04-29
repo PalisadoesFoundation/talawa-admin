@@ -4,7 +4,7 @@
 
 # Interface: InterfaceStatsModal
 
-Defined in: [src/types/Event/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L89)
+Defined in: [src/types/Event/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L83)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:89](https://github.com/PalisadoesFound
 
 > **data**: `object`
 
-Defined in: [src/types/Event/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L90)
+Defined in: [src/types/Event/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L84)
 
 #### event
 

@@ -1,16 +1,17 @@
 import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
-import {
-  type InterfaceRecurrenceRuleState,
-  type RecurringEventMutationType,
-  type InterfaceRecurrenceRule,
-} from 'utils/recurrenceUtils';
+
 import type { User, Feedback } from 'types/Event/type';
 
 export const Role = {
   USER: 'USER',
   SUPERADMIN: 'SUPERADMIN',
   ADMIN: 'ADMIN',
-} as const;
+};
+
+export enum UserRole {
+  ADMINISTRATOR = 'ADMINISTRATOR',
+  REGULAR = 'REGULAR',
+}
 
 export const FilterPeriod = {
   ThisMonth: 'This Month',
@@ -52,9 +53,7 @@ export interface InterfaceEvent {
   startTime: string | null;
   endTime: string | null;
   allDay: boolean;
-  recurring: boolean;
-  recurrenceRule: InterfaceRecurrenceRule | null;
-  isRecurringEventException: boolean;
+  userId?: string;
   isPublic: boolean;
   isRegisterable: boolean;
   attendees: Partial<User>[];
@@ -63,29 +62,24 @@ export interface InterfaceEvent {
   feedback?: Feedback[];
 }
 
-export interface InterfaceRecurringEvent {
-  _id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  frequency: InterfaceEvent['recurrenceRule'] extends null
-    ? never
-    : NonNullable<InterfaceEvent['recurrenceRule']>['frequency'];
-  interval: InterfaceEvent['recurrenceRule'] extends null
-    ? never
-    : NonNullable<InterfaceEvent['recurrenceRule']>['interval'];
-  attendees: {
-    _id: string;
-    gender: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
-  }[];
-  isPublic: boolean;
-  isRegisterable: boolean;
-}
-
 export interface InterfaceIOrgList {
-  admins: { _id: string }[];
+  id: string;
+  members: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        emailAddress: string;
+        role?: string;
+      };
+      cursor: string;
+    }[];
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string;
+    };
+  };
 }
-
 export interface InterfaceStatsModal {
   data: {
     event: {
@@ -121,10 +115,6 @@ export interface InterfaceDeleteEventModalProps {
   toggleDeleteModal: () => void;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  recurringEventDeleteType: RecurringEventMutationType;
-  setRecurringEventDeleteType: React.Dispatch<
-    React.SetStateAction<RecurringEventMutationType>
-  >;
   deleteEventHandler: () => Promise<void>;
 }
 
@@ -135,8 +125,6 @@ export interface InterfacePreviewEventModalProps {
   toggleDeleteModal: () => void;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  weekDayOccurenceInMonth?: number;
-  popover: JSX.Element;
   isRegistered?: boolean;
   userId: string;
   eventStartDate: Date;
@@ -145,17 +133,10 @@ export interface InterfacePreviewEventModalProps {
   setEventEndDate: React.Dispatch<React.SetStateAction<Date>>;
   alldaychecked: boolean;
   setAllDayChecked: React.Dispatch<React.SetStateAction<boolean>>;
-  recurringchecked: boolean;
-  setRecurringChecked: React.Dispatch<React.SetStateAction<boolean>>;
   publicchecked: boolean;
   setPublicChecked: React.Dispatch<React.SetStateAction<boolean>>;
   registrablechecked: boolean;
   setRegistrableChecked: React.Dispatch<React.SetStateAction<boolean>>;
-  recurrenceRuleState: InterfaceRecurrenceRuleState;
-  setRecurrenceRuleState: React.Dispatch<
-    React.SetStateAction<InterfaceRecurrenceRuleState>
-  >;
-  recurrenceRuleText: string;
   formState: {
     title: string;
     eventdescrip: string;
@@ -181,11 +162,6 @@ export interface InterfaceUpdateEventModalProps {
   toggleRecurringEventUpdateModal: () => void;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  recurringEventUpdateType: RecurringEventMutationType;
-  setRecurringEventUpdateType: React.Dispatch<
-    React.SetStateAction<RecurringEventMutationType>
-  >;
-  recurringEventUpdateOptions: RecurringEventMutationType[];
   updateEventHandler: () => Promise<void>;
 }
 

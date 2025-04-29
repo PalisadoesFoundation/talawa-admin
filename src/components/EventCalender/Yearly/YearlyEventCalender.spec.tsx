@@ -9,12 +9,7 @@ import {
 import { vi } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import { BrowserRouter } from 'react-router-dom';
-
-enum Role {
-  USER = 'USER',
-  SUPERADMIN = 'SUPERADMIN',
-  ADMIN = 'ADMIN',
-}
+import { UserRole } from 'types/Event/interface';
 
 const renderWithRouter = (
   ui: React.ReactElement,
@@ -41,9 +36,6 @@ describe('Calendar Component', () => {
       startTime: '10:00',
       endTime: '11:00',
       allDay: false,
-      recurring: false,
-      recurrenceRule: null,
-      isRecurringEventException: false,
       isPublic: true,
       isRegisterable: true,
       attendees: [{ _id: 'user1' }],
@@ -63,9 +55,6 @@ describe('Calendar Component', () => {
       startTime: '12:00',
       endTime: '13:00',
       allDay: false,
-      recurring: false,
-      recurrenceRule: null,
-      isRecurringEventException: false,
       isPublic: false,
       isRegisterable: true,
       attendees: [{ _id: 'user2' }],
@@ -78,7 +67,38 @@ describe('Calendar Component', () => {
   ];
 
   const mockOrgData = {
-    admins: [{ _id: 'admin1' }],
+    id: 'org1',
+    name: 'Test Organization',
+    description: 'Test Description',
+    location: 'Test Location',
+    isPublic: true,
+    visibleInSearch: true,
+    members: {
+      edges: [
+        {
+          node: {
+            id: 'user1',
+            name: 'Test User',
+            emailAddress: 'user1@example.com',
+            role: 'MEMBER',
+          },
+          cursor: 'cursor1',
+        },
+        {
+          node: {
+            id: 'admin1',
+            name: 'Admin User',
+            emailAddress: 'admin1@example.com',
+            role: 'ADMIN',
+          },
+          cursor: 'cursor2',
+        },
+      ],
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: 'cursor2',
+      },
+    },
   };
 
   beforeEach(() => {
@@ -135,12 +155,12 @@ describe('Calendar Component', () => {
     });
   });
 
-  it('filters events correctly for SUPERADMIN role', async () => {
+  it('filters events correctly for ADMINISTRATOR role', async () => {
     renderWithRouter(
       <Calendar
         eventData={mockEventData}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.SUPERADMIN}
+        userRole={UserRole.ADMINISTRATOR}
         userId="user1"
         orgData={mockOrgData}
       />,
@@ -150,7 +170,7 @@ describe('Calendar Component', () => {
     expect(todayCell.length).toBeGreaterThan(0);
   });
 
-  it('filters events correctly for ADMIN role', async () => {
+  it('filters events correctly for ADMINISTRATOR role', async () => {
     const today = new Date();
     const mockEvent = {
       ...mockEventData[0],
@@ -161,7 +181,7 @@ describe('Calendar Component', () => {
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.ADMIN}
+        userRole={UserRole.ADMINISTRATOR}
         userId="admin1"
         orgData={mockOrgData}
       />,
@@ -171,7 +191,7 @@ describe('Calendar Component', () => {
     expect(todayCell.length).toBeGreaterThan(0);
   });
 
-  it('filters events correctly for regular USER role', async () => {
+  it('filters events correctly for regular REGULAR role', async () => {
     const today = new Date();
     const mockEvent = {
       ...mockEventData[0],
@@ -183,7 +203,7 @@ describe('Calendar Component', () => {
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.USER}
+        userRole={UserRole.REGULAR}
         userId="user1"
         orgData={mockOrgData}
       />,
@@ -282,7 +302,7 @@ describe('Calendar Component', () => {
     }
   });
 
-  it('filters events correctly for ADMIN role with private events', async () => {
+  it('filters events correctly for ADMINISTRATOR role with private events', async () => {
     const today = new Date();
     const mockEvent = {
       ...mockEventData[1],
@@ -294,7 +314,7 @@ describe('Calendar Component', () => {
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
-        userRole={Role.ADMIN}
+        userRole={UserRole.ADMINISTRATOR}
         userId="admin1"
         orgData={mockOrgData}
       />,
