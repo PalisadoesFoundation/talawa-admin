@@ -6,13 +6,23 @@
 
 > **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L51)
+Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L59)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-[`InterfaceAddOnEntryProps`](../../../../../../types/Advertisement/interface/interfaces/InterfaceAddOnEntryProps.md)
+#### advertisement
+
+[`Advertisement`](../../../../../../types/Advertisement/type/type-aliases/Advertisement.md)
+
+#### setAfterActive
+
+`Dispatch`\<`SetStateAction`\<`string`\>\>
+
+#### setAfterCompleted
+
+`Dispatch`\<`SetStateAction`\<`string`\>\>
 
 ## Returns
 

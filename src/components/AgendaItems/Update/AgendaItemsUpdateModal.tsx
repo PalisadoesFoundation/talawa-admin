@@ -47,7 +47,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 const AgendaItemsUpdateModal: React.FC<

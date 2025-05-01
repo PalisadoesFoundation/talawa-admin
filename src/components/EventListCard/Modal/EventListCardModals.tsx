@@ -31,7 +31,7 @@ import dayjs from 'dayjs';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import {
   DELETE_EVENT_MUTATION,
   REGISTER_EVENT,

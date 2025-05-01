@@ -45,7 +45,7 @@
  * - Includes ARIA attributes and test IDs for better accessibility and testing.
  */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';

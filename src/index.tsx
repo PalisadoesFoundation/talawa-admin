@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import type { NormalizedCacheObject } from '@apollo/client';
 import {
   ApolloClient,
@@ -32,7 +32,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
-import 'style/app.module.css';
+import './style/app-fixed.module.css';
 const theme = createTheme({
   palette: {
     primary: {
@@ -52,7 +52,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: 'Bearer ' + getItem('token') || '',
+      authorization: `Bearer ${getItem('token')}` || '',
       'Accept-Language': lng,
     },
   };

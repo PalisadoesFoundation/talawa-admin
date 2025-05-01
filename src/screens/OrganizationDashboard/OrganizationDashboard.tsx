@@ -49,8 +49,8 @@ import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-// import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
+// import { Navigate, useNavigate, useParams } from 'react-router';
 // import gold from 'assets/images/gold.png';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
@@ -62,7 +62,7 @@ import type {
   InterfaceOrganizationEventsConnectionEdgePg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
-import styles from 'style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {
@@ -311,8 +311,8 @@ function OrganizationDashboard(): JSX.Element {
                 role="button"
                 className="mb-4"
                 data-testid="postsCount"
-                onClick={(): void => {
-                  navigate(postsLink);
+                onClick={async (): Promise<void> => {
+                  await navigate(postsLink);
                 }}
               >
                 <DashBoardCard
@@ -327,8 +327,8 @@ function OrganizationDashboard(): JSX.Element {
                 role="button"
                 className="mb-4"
                 data-testid="eventsCount"
-                onClick={(): void => {
-                  navigate(eventsLink);
+                onClick={async (): Promise<void> => {
+                  await navigate(eventsLink);
                 }}
               >
                 <DashBoardCard
@@ -357,8 +357,8 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                onClick={(): void => {
-                  navigate(requestLink);
+                onClick={async (): Promise<void> => {
+                  await navigate(requestLink);
                 }}
               >
                 <DashBoardCard
@@ -382,7 +382,9 @@ function OrganizationDashboard(): JSX.Element {
                     size="sm"
                     variant="light"
                     data-testid="viewAllEvents"
-                    onClick={(): void => navigate(eventsLink)}
+                    onClick={async (): Promise<void> => {
+                      await navigate(eventsLink);
+                    }}
                   >
                     {t('viewAll')}
                   </Button>
@@ -423,7 +425,9 @@ function OrganizationDashboard(): JSX.Element {
                     variant="light"
                     data-testid="viewAllPosts"
                     className=""
-                    onClick={(): void => navigate(postsLink)}
+                    onClick={async (): Promise<void> => {
+                      await navigate(postsLink);
+                    }}
                   >
                     {t('viewAll')}
                   </Button>
@@ -474,8 +478,8 @@ function OrganizationDashboard(): JSX.Element {
                   size="sm"
                   variant="light"
                   data-testid="viewAllMembershipRequests"
-                  onClick={(): void => {
-                    navigate(requestLink);
+                  onClick={async (): Promise<void> => {
+                    await navigate(requestLink);
                   }}
                 >
                   {t('viewAll')}
@@ -521,9 +525,8 @@ function OrganizationDashboard(): JSX.Element {
                   size="sm"
                   variant="light"
                   data-testid="viewAllLeadeboard"
-                  // onClick={(): void => navigate(leaderboardLink)}
-                  onClick={(): void => {
-                    toast.success(t('comingSoon'));
+                  onClick={async (): Promise<void> => {
+                    await Promise.resolve(toast.success(t('comingSoon')));
                   }}
                 >
                   {t('viewAll')}

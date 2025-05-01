@@ -33,9 +33,9 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
-import styles from 'style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   Accordion,

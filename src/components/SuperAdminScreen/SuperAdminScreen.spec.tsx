@@ -3,13 +3,12 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
-import 'style/app.module.css';
 const { setItem } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {

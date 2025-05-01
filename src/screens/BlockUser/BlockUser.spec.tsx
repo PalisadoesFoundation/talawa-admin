@@ -17,7 +17,7 @@ import {
   BLOCK_USER_MUTATION_PG,
   UNBLOCK_USER_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
@@ -33,8 +33,8 @@ vi.mock('react-toastify', async () => {
   };
 });
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({ orgId: '123' }),

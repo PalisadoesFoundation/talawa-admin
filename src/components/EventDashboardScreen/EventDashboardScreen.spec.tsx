@@ -4,13 +4,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import 'style/app.module.css';
+import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
 const { setItem } = useLocalStorage();
 
@@ -30,8 +30,8 @@ Object.defineProperty(window, 'matchMedia', {
 
 let mockID: string | undefined = '123';
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 
