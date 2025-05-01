@@ -38,6 +38,7 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
+  GridPagination,
 } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
@@ -57,6 +58,21 @@ enum CategoryStatus {
 
 interface InterfaceActionItemCategoryProps {
   orgId: string;
+}
+
+// Define the interface for the paginated categories data structure
+interface PaginatedCategoriesData {
+  actionCategoriesByOrganization: {
+    edges: Array<{
+      node: InterfaceActionItemCategory;
+    }>;
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
 }
 
 /* -- Helper Component: CreatorNameCell -- */
@@ -114,9 +130,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     'createdAt_DESC',
   );
   const [status, setStatus] = useState<CategoryStatus | null>(null);
-  const [categories, setCategories] = useState<InterfaceActionItemCategory[]>(
-    [],
-  );
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
@@ -125,27 +138,47 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     [ModalState.DELETE]: false,
   });
 
-  // Use the provided query which expects an input object (only organizationId is supported)
+  // Pagination state
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
+
+  // Use the updated query with pagination parameters
   const {
     data: catData,
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
-  } = useQuery(ACTION_ITEM_CATEGORIES_BY_ORGANIZATION, {
-    variables: {
-      input: {
-        organizationId: orgId,
+  } = useQuery<PaginatedCategoriesData>(
+    ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
+    {
+      variables: {
+        input: {
+          organizationId: orgId,
+        },
+        first: before ? null : paginationModel.pageSize, // Only use first when not using before
+        last: before ? paginationModel.pageSize : null, // Only use last when using before
+        after: after,
+        before: before,
       },
     },
-  });
+  );
+
+  // Extract categories from the paginated data structure
+  const categories = useMemo(() => {
+    if (!catData?.actionCategoriesByOrganization?.edges) return [];
+    return catData.actionCategoriesByOrganization.edges.map(
+      (edge) => edge.node,
+    );
+  }, [catData]);
 
   // Log the data coming from the query for debugging
   useEffect(() => {
     if (catData) {
       console.log('Fetched Action Item Categories Data:', catData);
-      if (catData.actionCategoriesByOrganization) {
-        setCategories(catData.actionCategoriesByOrganization);
-      }
     }
   }, [catData]);
 
@@ -174,6 +207,75 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     });
   }, [filteredCategories, sortBy]);
 
+  // Handle pagination
+  const handlePageChange = (newPage: number) => {
+    const pageInfo = catData?.actionCategoriesByOrganization.pageInfo;
+
+    if (newPage > paginationModel.page) {
+      // Going forward - use endCursor
+      if (pageInfo?.hasNextPage) {
+        setAfter(pageInfo.endCursor);
+        setBefore(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Refetch with forward pagination parameters
+        refetchCategories({
+          input: { organizationId: orgId },
+          first: paginationModel.pageSize,
+          after: pageInfo.endCursor,
+          before: null,
+        });
+      }
+    } else if (newPage < paginationModel.page) {
+      // Going backward - use startCursor
+      if (pageInfo?.hasPreviousPage) {
+        setBefore(pageInfo.startCursor);
+        setAfter(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Refetch with backward pagination parameters
+        refetchCategories({
+          input: { organizationId: orgId },
+          last: paginationModel.pageSize,
+          before: pageInfo.startCursor,
+          after: null,
+        });
+      }
+    }
+  };
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setAfter(null);
+    setBefore(null);
+    setPaginationModel({
+      ...paginationModel,
+      page: 0,
+    });
+
+    refetchCategories({
+      input: {
+        organizationId: orgId,
+      },
+      first: paginationModel.pageSize,
+      after: null,
+      before: null,
+    });
+  }, [
+    searchTerm,
+    sortBy,
+    status,
+    refetchCategories,
+    orgId,
+    paginationModel.pageSize,
+  ]);
+
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
   const closeModal = (modal: ModalState): void =>
@@ -191,7 +293,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     [openModal],
   );
 
-  if (catLoading) {
+  if (catLoading && !categories.length) {
     return <Loader styles={styles.message} size="lg" />;
   }
 
@@ -222,9 +324,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        // Find index from the sorted categories array and add 1
-        const index = sortedCategories.findIndex((row) => row.id === params.id);
-        return <div data-testid="rowId">{index + 1}</div>;
+        // Calculate the sequential index based on the current page and page size
+        const index =
+          paginationModel.page * paginationModel.pageSize +
+          sortedCategories.findIndex((row) => row.id === params.id) +
+          1;
+        return <div data-testid="rowId">{index}</div>;
       },
     },
     {
@@ -320,6 +425,16 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     },
   ];
 
+  // Calculate total count for pagination
+  const pageInfo = catData?.actionCategoriesByOrganization.pageInfo;
+  const hasNextPage = pageInfo?.hasNextPage || false;
+  const hasPreviousPage = pageInfo?.hasPreviousPage || false;
+
+  // We don't have exact total count from the API, so we estimate based on current page
+  const rowCount = hasNextPage
+    ? (paginationModel.page + 2) * paginationModel.pageSize
+    : (paginationModel.page + 1) * paginationModel.pageSize;
+
   return (
     <div className="mx-4">
       <div
@@ -387,26 +502,58 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
         </div>
       </div>
 
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={6}
-        hideFooter
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItemCategories')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        columns={columns}
-        isRowSelectable={() => false}
-        rows={sortedCategories}
-      />
+      {catLoading && !categories.length ? (
+        <div className="text-center p-4">
+          <Loader size="lg" />
+        </div>
+      ) : (
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={6}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noActionItemCategories')}
+              </Stack>
+            ),
+            pagination: GridPagination,
+          }}
+          slotProps={{
+            pagination: {
+              showFirstButton: true,
+              showLastButton: true,
+              getItemAriaLabel: (type) => {
+                return type === 'next'
+                  ? 'Go to next page'
+                  : 'Go to previous page';
+              },
+              nextIconButtonProps: {
+                disabled: !hasNextPage,
+              },
+              backIconButtonProps: {
+                disabled: !hasPreviousPage,
+              },
+            },
+          }}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          columns={columns}
+          isRowSelectable={() => false}
+          rows={sortedCategories}
+          paginationModel={paginationModel}
+          onPaginationModelChange={(newModel) => {
+            handlePageChange(newModel.page);
+          }}
+          rowCount={rowCount}
+          pageSizeOptions={[10]}
+          paginationMode="server"
+          loading={catLoading}
+          pagination
+        />
+      )}
 
       <CategoryModal
         isOpen={modalState[ModalState.SAME]}

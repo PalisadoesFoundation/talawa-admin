@@ -32,19 +32,33 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
 `;
 
 export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql(/* GraphQL */ `
-  query actionCategoriesByOrganization(
+  query ActionItemCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
   ) {
-    actionCategoriesByOrganization(input: $input) {
-      id
-      name
-      isDisabled
-      createdAt
-      organization {
-        id
+    actionCategoriesByOrganization(
+      input: $input
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+    ) {
+      edges {
+        node {
+          id
+          name
+          isDisabled
+          createdAt
+        }
       }
-      creator {
-        id
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
       }
     }
   }

@@ -6,4 +6,4 @@
 
 > `const` **ACTION\_ITEM\_CATEGORY**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L82)
+Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L81)
