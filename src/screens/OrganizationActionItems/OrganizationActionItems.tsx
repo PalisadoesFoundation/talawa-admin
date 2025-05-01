@@ -43,6 +43,53 @@
  *
  * @returns JSX.Element - The rendered OrganizationActionItems component.
  */
+
+/**
+ * Component: OrganizationActionItems
+ *
+ * This component renders a table of action items for a specific organization and event.
+ * It provides functionality to search, filter, sort, and manage action items.
+ *
+ * Features:
+ * - Fetches action items using GraphQL query based on filters and sorting.
+ * - Displays action items in a data grid with columns for assignee, category, status, allotted hours, and due date.
+ * - Allows users to create, edit, view, delete, and update the status of action items via modals.
+ * - Includes search functionality with debounce for optimized performance.
+ * - Provides sorting and filtering options for better data management.
+ *
+ * Props:
+ * - None (Relies on URL parameters for organization and event IDs).
+ *
+ * State:
+ * - `actionItem`: Stores the currently selected action item for modal operations.
+ * - `modalMode`: Determines whether the modal is in 'create' or 'edit' mode.
+ * - `searchTerm`: Stores the search input value.
+ * - `sortBy`: Stores the sorting criteria for due dates.
+ * - `status`: Filters action items by their status (Pending, Completed, or Late).
+ * - `searchBy`: Determines whether to search by 'assignee' or 'category'.
+ * - `modalState`: Tracks the visibility of different modals (Create/Edit, View, Delete, Status Update).
+ *
+ * Dependencies:
+ * - React, React Router, Apollo Client, Material-UI, Bootstrap, Day.js, and custom components.
+ *
+ * GraphQL:
+ * - Query: `ACTION_ITEM_LIST` - Fetches action items based on organization ID, event ID, filters, and sorting.
+ *
+ * Modals:
+ * - `ItemModal`: For creating or editing action items.
+ * - `ItemViewModal`: For viewing action item details.
+ * - `ItemDeleteModal`: For confirming and deleting action items.
+ * - `ItemUpdateStatusModal`: For updating the status of an action item.
+ *
+ * Error Handling:
+ * - Displays an error message if the GraphQL query fails.
+ *
+ * Loading State:
+ * - Displays a loader while fetching data.
+ *
+ * @returns JSX.Element - The rendered OrganizationActionItems component.
+ */
+
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
@@ -51,7 +98,12 @@ import {
   GET_USERS_BY_IDS,
   GET_CATEGORIES_BY_IDS,
 } from 'GraphQl/Queries/Queries';
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import {
+  Circle,
+  WarningAmberRounded,
+  NavigateBefore,
+  NavigateNext,
+} from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
@@ -61,8 +113,9 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
+  GridPagination,
 } from '@mui/x-data-grid';
-import { Chip, debounce } from '@mui/material';
+import { Chip, debounce, IconButton } from '@mui/material';
 import ItemViewModal from './itemViewModal/ItemViewModal';
 import ItemModal from './itemModal/ItemModal';
 import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
@@ -90,6 +143,21 @@ type User = {
   name: string;
   emailAddress: string;
 };
+
+type PaginatedActionItems = {
+  actionItemsByOrganization: {
+    edges: Array<{
+      node: InterfaceActionItem;
+    }>;
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+};
+
 /**
  * Component for managing and displaying action items within an organization.
  * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
@@ -129,6 +197,14 @@ function organizationActionItems(): JSX.Element {
     [ModalState.STATUS]: false,
   });
 
+  // Pagination state
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
+
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
@@ -143,7 +219,7 @@ function organizationActionItems(): JSX.Element {
       setActionItem(actionItem);
       openModal(modal);
     },
-    [openModal],
+    [],
   );
 
   const {
@@ -151,16 +227,26 @@ function organizationActionItems(): JSX.Element {
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  } = useQuery<{ actionItemsByOrganization: InterfaceActionItem[] }>(
-    ACTION_ITEM_FOR_ORGANIZATION,
-    {
-      variables: { organizationId: orgId },
+  } = useQuery<PaginatedActionItems>(ACTION_ITEM_FOR_ORGANIZATION, {
+    variables: {
+      organizationId: orgId,
+      first: before ? null : paginationModel.pageSize, // Only use first when not using before
+      last: before ? paginationModel.pageSize : null, // Only use last when using before
+      after: after,
+      before: before,
     },
-  );
+  });
+
+  const flattenedActionItems = useMemo(() => {
+    if (!actionItemsData?.actionItemsByOrganization?.edges) return [];
+    return actionItemsData.actionItemsByOrganization.edges.map(
+      (edge) => edge.node,
+    );
+  }, [actionItemsData]);
 
   const assigneeIds =
-    actionItemsData?.actionItemsByOrganization
-      .map((item) => item.assigneeId)
+    flattenedActionItems
+      .map((item) => item.assignee?.id)
       .filter((id): id is string => id !== null) || [];
 
   const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
@@ -174,16 +260,6 @@ function organizationActionItems(): JSX.Element {
     console.log('No Action Items Data', actionItemsError);
   }
 
-  // useEffect(() => {
-  //   if (userLoading) {
-  //     // console.log("Loading users ...");
-  //   }
-
-  //   if (userError) {
-  //     // console.error("Error fetching users:", userError.message);
-  //   }
-  // }, [userLoading, userError]);
-
   const getAssigneeName = (assigneeId: string | null): string => {
     if (!assigneeId) return 'Unassigned';
 
@@ -196,7 +272,6 @@ function organizationActionItems(): JSX.Element {
     );
 
     if (user) {
-      // console.log("Found user:", user);
       return user.name;
     } else {
       return 'Unknown User';
@@ -205,8 +280,8 @@ function organizationActionItems(): JSX.Element {
 
   const categoryIds = Array.from(
     new Set(
-      actionItemsData?.actionItemsByOrganization
-        .map((item) => item.categoryId)
+      flattenedActionItems
+        .map((item) => item.category?.id)
         .filter((id): id is string => id != null),
     ),
   );
@@ -217,8 +292,8 @@ function organizationActionItems(): JSX.Element {
   });
 
   const enrichedActionItems = useMemo(() => {
-    if (!actionItemsData?.actionItemsByOrganization) return [];
-    return actionItemsData.actionItemsByOrganization.map((item) => {
+    if (!flattenedActionItems.length) return [];
+    return flattenedActionItems.map((item) => {
       return {
         ...item,
         assigneeId: item.assignee?.id ?? null,
@@ -231,7 +306,7 @@ function organizationActionItems(): JSX.Element {
         assigneeName: item.assignee?.name ?? 'Unassigned',
       };
     });
-  }, [actionItemsData]);
+  }, [flattenedActionItems]);
 
   const filteredAndSortedActionItems = useMemo(() => {
     if (!enrichedActionItems.length) return [];
@@ -276,19 +351,65 @@ function organizationActionItems(): JSX.Element {
     getAssigneeName,
   ]);
 
+  const handlePageChange = (newPage: number) => {
+    const pageInfo = actionItemsData?.actionItemsByOrganization.pageInfo;
+
+    if (newPage > paginationModel.page) {
+      // Going forward - use endCursor
+      if (pageInfo?.hasNextPage) {
+        setAfter(pageInfo.endCursor);
+        setBefore(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+      }
+    } else if (newPage < paginationModel.page) {
+      // Going backward - use startCursor
+      if (pageInfo?.hasPreviousPage) {
+        // When going backward, use last instead of first, and before instead of after
+        setBefore(pageInfo.startCursor);
+        setAfter(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Make sure refetch uses 'last' parameter instead of 'first' when going backward
+        actionItemsRefetch({
+          organizationId: orgId,
+          last: paginationModel.pageSize, // Use 'last' instead of 'first'
+          before: pageInfo.startCursor,
+          after: null,
+          where:
+            status !== null
+              ? { isCompleted: status === ItemStatus.Completed }
+              : undefined,
+        });
+        return; // Return to prevent the default refetch below
+      }
+    }
+
+    // Default refetch (for forward navigation)
+    actionItemsRefetch({
+      organizationId: orgId,
+      first: paginationModel.pageSize,
+      after: pageInfo?.endCursor || null,
+      before: null,
+      where:
+        status !== null
+          ? { isCompleted: status === ItemStatus.Completed }
+          : undefined,
+    });
+  };
+
   useEffect(() => {
     if (actionItemsLoading) {
       // console.log('⏳ Loading action items...');
     }
 
-    // if (actionItemsData) {
-    //   console.log(
-    //     ' Action Items Data:',
-    //     JSON.stringify(actionItemsData, null, 2),
-    //   );
-    // }
-
     if (actionItemsError) {
+      // Handle error
     }
   }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
@@ -296,12 +417,29 @@ function organizationActionItems(): JSX.Element {
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
-  // console.log(searchTerm);
-  useEffect(() => {
-    actionItemsRefetch();
-  }, [sortBy, status, actionItemsRefetch]);
 
-  if (actionItemsLoading) {
+  useEffect(() => {
+    // Reset pagination when filters change
+    setAfter(null);
+    setBefore(null);
+    setPaginationModel({
+      ...paginationModel,
+      page: 0,
+    });
+
+    actionItemsRefetch({
+      organizationId: orgId,
+      first: paginationModel.pageSize,
+      after: null,
+      before: null,
+      where:
+        status !== null
+          ? { isCompleted: status === ItemStatus.Completed }
+          : undefined,
+    });
+  }, [sortBy, status, actionItemsRefetch, orgId, paginationModel.pageSize]);
+
+  if (actionItemsLoading && !flattenedActionItems.length) {
     return <Loader size="xl" />;
   }
 
@@ -503,9 +641,19 @@ function organizationActionItems(): JSX.Element {
     },
   ];
 
+  // Calculate total count for pagination
+  const pageInfo = actionItemsData?.actionItemsByOrganization.pageInfo;
+  const hasNextPage = pageInfo?.hasNextPage || false;
+  const hasPreviousPage = pageInfo?.hasPreviousPage || false;
+
+  // We don't have exact total count from the API, so we estimate based on current page
+  const rowCount = hasNextPage
+    ? (paginationModel.page + 2) * paginationModel.pageSize
+    : (paginationModel.page + 1) * paginationModel.pageSize;
+
   return (
     <div>
-      {/* Header with search, filter  and Create Button */}
+      {/* Header with search, filter and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
@@ -533,7 +681,7 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="searchByToggle"
             buttonLabel={tCommon('searchBy', { item: '' })}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={tCommon('sort')}
@@ -549,7 +697,7 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="sort"
             buttonLabel={tCommon('sort')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={t('status')}
@@ -570,7 +718,7 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="filter"
             buttonLabel={t('status')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <Button
             variant="success"
@@ -584,23 +732,56 @@ function organizationActionItems(): JSX.Element {
         </div>
       </div>
 
-      <DataGrid
-        disableColumnMenu
-        disableColumnResize
-        columnBufferPx={7}
-        hideFooter
-        getRowId={(row) => row.id}
-        autoHeight
-        rowHeight={65}
-        rows={
-          filteredAndSortedActionItems.map((actionItem) => ({
-            ...actionItem,
-            status: actionItem.isCompleted ? 'Completed' : 'Pending',
-          })) || []
-        }
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      {actionItemsLoading && filteredAndSortedActionItems.length === 0 ? (
+        <div className="text-center p-4">
+          <Loader size="lg" />
+        </div>
+      ) : (
+        <DataGrid
+          disableColumnMenu
+          disableColumnResize
+          columnBufferPx={7}
+          autoHeight
+          rowHeight={65}
+          rows={
+            filteredAndSortedActionItems.map((actionItem) => ({
+              ...actionItem,
+              status: actionItem.isCompleted ? 'Completed' : 'Pending',
+            })) || []
+          }
+          columns={columns}
+          disableRowSelectionOnClick
+          paginationModel={paginationModel}
+          onPaginationModelChange={(newModel) => {
+            handlePageChange(newModel.page);
+          }}
+          rowCount={rowCount}
+          pageSizeOptions={[10]}
+          paginationMode="server"
+          loading={actionItemsLoading}
+          pagination
+          slots={{
+            pagination: GridPagination,
+          }}
+          slotProps={{
+            pagination: {
+              showFirstButton: true,
+              showLastButton: true,
+              getItemAriaLabel: (type) => {
+                return type === 'next'
+                  ? 'Go to next page'
+                  : 'Go to previous page';
+              },
+              nextIconButtonProps: {
+                disabled: !hasNextPage,
+              },
+              backIconButtonProps: {
+                disabled: !hasPreviousPage,
+              },
+            },
+          }}
+        />
+      )}
 
       <ItemModal
         isOpen={modalState[ModalState.SAME]}

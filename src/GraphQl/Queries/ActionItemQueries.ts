@@ -12,49 +12,72 @@ import gql from 'graphql-tag';
  */
 
 export const ACTION_ITEM_FOR_ORGANIZATION = gql`
-  query ActionItemsByOrganization($organizationId: String!) {
-    actionItemsByOrganization(input: { organizationId: $organizationId }) {
-      id
-      isCompleted
-      assignedAt
-      completionAt
-      createdAt
-      updatedAt
-      preCompletionNotes
-      postCompletionNotes
-      allottedHours
+  query ActionItemsByOrganization(
+    $organizationId: ID!
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+  ) {
+    actionItemsByOrganization(
+      organizationId: $organizationId
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+    ) {
+      edges {
+        node {
+          id
+          isCompleted
+          preCompletionNotes
+          postCompletionNotes
+          assignedAt
+          completionAt
+          createdAt
+          updatedAt
+          allottedHours
 
-      organization {
-        id
+          organization {
+            id
+          }
+
+          category {
+            id
+            name
+          }
+
+          event {
+            id
+            name
+          }
+
+          assignee {
+            id
+            name
+          }
+
+          creator {
+            id
+            name
+          }
+
+          updater {
+            id
+            name
+          }
+        }
       }
-
-      category {
-        id
-        name
-      }
-
-      event {
-        id
-        name
-      }
-
-      assignee {
-        id
-        name
-      }
-
-      creator {
-        id
-        name
-      }
-
-      updater {
-        id
-        name
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
       }
     }
   }
 `;
+
 export const ACTION_ITEM_CATEGORY = gql`
   query FetchActionCategoriesByOrganization(
     $input: QueryActionCategoriesByOrganizationInput!

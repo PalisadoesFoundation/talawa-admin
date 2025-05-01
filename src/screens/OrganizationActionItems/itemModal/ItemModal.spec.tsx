@@ -37,14 +37,6 @@ import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 import { toast } from 'react-toastify';
 
-async function pickOption(testId: string, optionText: string) {
-  const root = await screen.findByTestId(testId);
-  const combo = within(root).getByRole('combobox');
-  fireEvent.mouseDown(combo);
-  const option = await screen.findByText(optionText);
-  fireEvent.click(option);
-}
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
@@ -60,12 +52,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-async function pickFirstOption(testId: string) {
-  const combo = within(await screen.findByTestId(testId)).getByRole('combobox');
-  fireEvent.keyDown(combo, { key: 'ArrowDown' }); // highlight first item
-  fireEvent.keyDown(combo, { key: 'Enter' }); // choose it
-}
-
 beforeAll(() => vi.setSystemTime(new Date('2025-04-25T00:00:00Z')));
 afterAll(() => vi.useRealTimers());
 
@@ -79,6 +65,14 @@ const memberId = 'member1';
 const memberName = 'Member User';
 const volunteerId = 'vol1';
 const volunteerName = 'Volunteer User';
+
+async function pickOption(rootTestId: string, optionText: string) {
+  const root = await screen.findByTestId(rootTestId);
+  const combo = within(root).getByRole('combobox');
+  fireEvent.mouseDown(combo);
+  const option = await screen.findByText(optionText);
+  fireEvent.click(option);
+}
 
 /* queryMocks (extend the arrays) */
 const queryMocks: MockedResponse[] = [
