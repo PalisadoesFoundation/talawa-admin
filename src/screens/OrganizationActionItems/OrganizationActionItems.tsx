@@ -89,21 +89,13 @@
  *
  * @returns JSX.Element - The rendered OrganizationActionItems component.
  */
-
+import type { JSX } from 'react';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router-dom';
-import {
-  GET_USERS_BY_IDS,
-  GET_CATEGORIES_BY_IDS,
-} from 'GraphQl/Queries/Queries';
-import {
-  Circle,
-  WarningAmberRounded,
-  NavigateBefore,
-  NavigateNext,
-} from '@mui/icons-material';
+import { GET_USERS_BY_IDS } from 'GraphQl/Queries/Queries';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
@@ -115,7 +107,7 @@ import {
   type GridColDef,
   GridPagination,
 } from '@mui/x-data-grid';
-import { Chip, debounce, IconButton } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import ItemViewModal from './itemViewModal/ItemViewModal';
 import ItemModal from './itemModal/ItemModal';
 import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
@@ -277,19 +269,6 @@ function organizationActionItems(): JSX.Element {
       return 'Unknown User';
     }
   };
-
-  const categoryIds = Array.from(
-    new Set(
-      flattenedActionItems
-        .map((item) => item.category?.id)
-        .filter((id): id is string => id != null),
-    ),
-  );
-
-  const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
-    variables: { ids: categoryIds },
-    skip: !categoryIds.length,
-  });
 
   const enrichedActionItems = useMemo(() => {
     if (!flattenedActionItems.length) return [];

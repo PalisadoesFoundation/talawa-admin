@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L135)
+Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L125)
 
 GraphQL mutation to delete an action item.
 

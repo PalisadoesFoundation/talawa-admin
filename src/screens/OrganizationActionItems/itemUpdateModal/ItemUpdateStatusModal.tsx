@@ -1,21 +1,21 @@
 /**
  * A modal component for updating the status of an action item.
  *
- * @remarks
+ * remarks
  * This component allows users to update the completion status of an action item.
  * It provides a form to add post-completion notes when marking an item as completed.
  * The modal uses Apollo Client's `useMutation` hook to perform the update operation
  * and displays success or error messages using `react-toastify`.
  *
- * @param props - The props for the `ItemUpdateStatusModal` component.
- * @param props.isOpen - A boolean indicating whether the modal is open.
- * @param props.hide - A function to close the modal.
- * @param props.actionItemsRefetch - A function to refetch the list of action items.
- * @param props.actionItem - The action item object containing details to be updated.
+ * param props - The props for the `ItemUpdateStatusModal` component.
+ * param props.isOpen - A boolean indicating whether the modal is open.
+ * param props.hide - A function to close the modal.
+ * param props.actionItemsRefetch - A function to refetch the list of action items.
+ * param props.actionItem - The action item object containing details to be updated.
  *
- * @returns A React component that renders the modal for updating an action item's status.
+ * returns A React component that renders the modal for updating an action item's status.
  *
- * @example
+ * example
  * ```tsx
  * <ItemUpdateStatusModal
  *   isOpen={true}
@@ -25,25 +25,21 @@
  * />
  * ```
  *
- * @component
- * @category OrganizationActionItems
- * @requires `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * @requires `style/app-fixed.module.css`
- * @requires `GraphQl/Mutations/ActionItemMutations`
+ * component
+ * category OrganizationActionItems
+ * requires `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
+ * requires `style/app-fixed.module.css`
+ * requires `GraphQl/Mutations/ActionItemMutations`
  */
 
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
+
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-// import { DatePicker } from '@mui/x-date-pickers';
-// import dayjs from 'dayjs';
 import styles from '../../../style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  UPDATE_ACTION_ITEM_MUTATION,
-  MARK_ACTION_ITEM_AS_PENDING,
-} from 'GraphQl/Mutations/ActionItemMutations';
+import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type { InterfaceActionItem } from 'utils/interfaces';
 import {
@@ -52,14 +48,14 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 
-export interface InterfaceItemUpdateStatusModalProps {
+export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
   actionItem: InterfaceActionItem;
 }
 
-const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
+const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   hide,
   isOpen,
   actionItemsRefetch,
@@ -70,7 +66,6 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
 
-  // Destructure the action item fields as defined in InterfaceActionItem
   const {
     id,
     isCompleted,
@@ -86,8 +81,6 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     useState<string>(postCompletionNotes ?? '');
 
   const [newAssigneeId, setNewAssigneeId] = useState<string | null>(assigneeId);
-
-  const [markActionItemAsPending] = useMutation(MARK_ACTION_ITEM_AS_PENDING);
 
   const userIds = Array.from(
     new Set([assigneeId, creatorId].filter(Boolean)),
@@ -122,7 +115,6 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     return category ? category.name : 'No Category';
   };
 
-  // Mutation to update the action item using the provided mutation
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
   useEffect(() => {
@@ -138,8 +130,14 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     }
 
     try {
-      await markActionItemAsPending({
-        variables: { id: actionItem.id }, // ✅ Pass `id` correctly
+      await updateActionItem({
+        variables: {
+          input: {
+            id: actionItem.id,
+            isCompleted: false,
+            postCompletionNotes: '', // Clear notes when reverting to pending
+          },
+        },
       });
 
       actionItemsRefetch();
@@ -150,20 +148,16 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     }
   };
 
-  const updateActionItemHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     try {
       await updateActionItem({
         variables: {
           input: {
-            id, // The id remains the same
+            id,
             assigneeId: newAssigneeId,
             postCompletionNotes: isCompleted ? '' : localPostCompletionNotes,
             isCompleted: !isCompleted,
-            // Remove assignedAt and eventId because they're not in the input type
-            // If you need them, update your GraphQL schema accordingly.
           },
         },
       });
@@ -175,7 +169,6 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
     }
   };
 
-  // Update local state when actionItem changes
   useEffect(() => {
     setLocalPostCompletionNotes(postCompletionNotes ?? '');
     setNewAssigneeId(assigneeId);
