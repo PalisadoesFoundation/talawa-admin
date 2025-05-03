@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
-import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
@@ -34,7 +34,7 @@ vi.mock('react-router', async () => {
 
 const MOCKS = [
   {
-    request: { query: ORGANIZATION_EVENT_LIST, variables: { id: '123' } },
+    request: { query: GET_ORGANIZATION_EVENTS_PG, variables: { id: '123' } },
     result: {
       data: {
         eventsByOrganization: [

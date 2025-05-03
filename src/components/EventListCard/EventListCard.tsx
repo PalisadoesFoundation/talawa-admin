@@ -36,13 +36,17 @@ import styles from 'style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
-
+/**
+ * Props for the EventListCard component.
+ */
 interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
 function eventListCard(props: InterfaceEventListCard): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);

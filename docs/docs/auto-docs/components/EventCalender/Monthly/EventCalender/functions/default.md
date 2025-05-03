@@ -6,7 +6,7 @@
 
 > **default**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L55)
+Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L54)
 
 ## Parameters
 

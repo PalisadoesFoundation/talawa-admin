@@ -323,55 +323,24 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
-  mutation CreateEvent(
-    $title: String!
-    $description: String!
-    $recurring: Boolean!
-    $isPublic: Boolean!
-    $isRegisterable: Boolean!
-    $organizationId: ID!
-    $startDate: Date!
-    $endDate: Date!
-    $allDay: Boolean!
-    $startTime: Time
-    $endTime: Time
-    $location: String
-    $recurrenceStartDate: Date
-    $recurrenceEndDate: Date
-    $frequency: Frequency
-    $weekDays: [WeekDays]
-    $count: PositiveInt
-    $interval: PositiveInt
-    $weekDayOccurenceInMonth: Int
-    $createChat: Boolean!
-  ) {
-    createEvent(
-      data: {
-        title: $title
-        description: $description
-        recurring: $recurring
-        isPublic: $isPublic
-        isRegisterable: $isRegisterable
-        organizationId: $organizationId
-        startDate: $startDate
-        endDate: $endDate
-        allDay: $allDay
-        startTime: $startTime
-        endTime: $endTime
-        location: $location
-        createChat: $createChat
+  mutation Mutation_createEvent($input: MutationCreateEventInput!) {
+    createEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      organization {
+        id
       }
-      recurrenceRuleData: {
-        recurrenceStartDate: $recurrenceStartDate
-        recurrenceEndDate: $recurrenceEndDate
-        frequency: $frequency
-        weekDays: $weekDays
-        interval: $interval
-        count: $count
-        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      creator {
+        id
+        name
       }
-    ) {
-      _id
     }
   }
 `;
@@ -379,12 +348,9 @@ export const CREATE_EVENT_MUTATION = gql`
 // to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
-  mutation RemoveEvent(
-    $id: ID!
-    $recurringEventDeleteType: RecurringEventMutationType
-  ) {
-    removeEvent(id: $id, recurringEventDeleteType: $recurringEventDeleteType) {
-      _id
+  mutation DeleteEvent($input: MutationDeleteEventInput!) {
+    deleteEvent(input: $input) {
+      id
     }
   }
 `;
@@ -500,55 +466,31 @@ export const UPDATE_POST_MUTATION = gql`
 `;
 
 export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent(
-    $id: ID!
-    $title: String
-    $description: String
-    $recurring: Boolean
-    $recurringEventUpdateType: RecurringEventMutationType
-    $isPublic: Boolean
-    $isRegisterable: Boolean
-    $allDay: Boolean
-    $startDate: Date
-    $endDate: Date
-    $startTime: Time
-    $endTime: Time
-    $location: String
-    $recurrenceStartDate: Date
-    $recurrenceEndDate: Date
-    $frequency: Frequency
-    $weekDays: [WeekDays]
-    $count: PositiveInt
-    $interval: PositiveInt
-    $weekDayOccurenceInMonth: Int
-  ) {
-    updateEvent(
-      id: $id
-      data: {
-        title: $title
-        description: $description
-        recurring: $recurring
-        isPublic: $isPublic
-        isRegisterable: $isRegisterable
-        allDay: $allDay
-        startDate: $startDate
-        endDate: $endDate
-        startTime: $startTime
-        endTime: $endTime
-        location: $location
+  mutation UpdateEvent($input: MutationUpdateEventInput!) {
+    updateEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
       }
-      recurrenceRuleData: {
-        recurrenceStartDate: $recurrenceStartDate
-        recurrenceEndDate: $recurrenceEndDate
-        frequency: $frequency
-        weekDays: $weekDays
-        interval: $interval
-        count: $count
-        weekDayOccurenceInMonth: $weekDayOccurenceInMonth
+      updater {
+        id
+        name
       }
-      recurringEventUpdateType: $recurringEventUpdateType
-    ) {
-      _id
+      organization {
+        id
+        name
+      }
     }
   }
 `;

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventsAttendedMemberModalProps
 
-Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L204)
+Defined in: [src/types/Event/interface.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L180)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoun
 
 > **eventsAttended**: `Partial`\<[`InterfaceEvent`](InterfaceEvent.md)\>[]
 
-Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L205)
+Defined in: [src/types/Event/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L181)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoun
 
 > `optional` **eventsPerPage**: `number`
 
-Defined in: [src/types/Event/interface.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L208)
+Defined in: [src/types/Event/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L184)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:208](https://github.com/PalisadoesFoun
 
 > **setShow**: (`show`) => `void`
 
-Defined in: [src/types/Event/interface.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L206)
+Defined in: [src/types/Event/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L182)
 
 #### Parameters
 
@@ -46,4 +46,4 @@ Defined in: [src/types/Event/interface.ts:206](https://github.com/PalisadoesFoun
 
 > **show**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L207)
+Defined in: [src/types/Event/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L183)

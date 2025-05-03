@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDeleteEventModalProps
 
-Defined in: [src/types/Event/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L118)
+Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L112)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:118](https://github.com/PalisadoesFoun
 
 > **deleteEventHandler**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L128)
+Defined in: [src/types/Event/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L118)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoun
 
 > **eventDeleteModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L120)
+Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L114)
 
 ***
 
@@ -32,23 +32,7 @@ Defined in: [src/types/Event/interface.ts:120](https://github.com/PalisadoesFoun
 
 > **eventListCardProps**: `InterfaceEventListCard`
 
-Defined in: [src/types/Event/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L119)
-
-***
-
-### recurringEventDeleteType
-
-> **recurringEventDeleteType**: [`RecurringEventMutationType`](../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/RecurringEventMutationType.md)
-
-Defined in: [src/types/Event/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L124)
-
-***
-
-### setRecurringEventDeleteType
-
-> **setRecurringEventDeleteType**: `Dispatch`\<`SetStateAction`\<[`RecurringEventMutationType`](../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/RecurringEventMutationType.md)\>\>
-
-Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L125)
+Defined in: [src/types/Event/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L113)
 
 ***
 
@@ -56,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoun
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L122)
+Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L116)
 
 #### Parameters
 
@@ -74,7 +58,7 @@ Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoun
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L123)
+Defined in: [src/types/Event/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L117)
 
 #### Parameters
 
@@ -92,7 +76,7 @@ Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoun
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L121)
+Defined in: [src/types/Event/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L115)
 
 #### Returns
 
