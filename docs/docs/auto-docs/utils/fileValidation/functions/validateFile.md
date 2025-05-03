@@ -6,7 +6,7 @@
 
 > **validateFile**(`file`, `maxSizeInMB`, `allowedTypes`): `IFileValidationResult`
 
-Defined in: [src/utils/fileValidation.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/fileValidation.ts#L18)
+Defined in: [src/utils/fileValidation.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/fileValidation.ts#L23)
 
 Validates a file for size and type
 
@@ -20,13 +20,13 @@ The file to validate
 
 ### maxSizeInMB
 
-`number` = `5`
+`number` = `FILE_UPLOAD_MAX_SIZE_MB`
 
 Maximum file size in MB (default: 5MB)
 
 ### allowedTypes
 
-`string`[] = `...`
+readonly `string`[] = `FILE_UPLOAD_ALLOWED_TYPES`
 
 Array of allowed MIME types (default: ['image/jpeg', 'image/png', 'image/gif'])
 
@@ -34,4 +34,4 @@ Array of allowed MIME types (default: ['image/jpeg', 'image/png', 'image/gif'])
 
 `IFileValidationResult`
 
-- Object containing validation status and error message if any
+IFileValidationResult - Object containing validation status and error message if any
