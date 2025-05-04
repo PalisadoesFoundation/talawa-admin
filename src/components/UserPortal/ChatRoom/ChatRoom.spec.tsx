@@ -13,6 +13,11 @@ import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+
+import ChatRoom, { MessageImage } from './ChatRoom';
+import { StaticMockLink } from 'utils/StaticMockLink';
+import { it, vi } from 'vitest';
+import useLocalStorage from 'utils/useLocalstorage';
 import {
   CHATS_LIST,
   CHAT_BY_ID,
@@ -24,10 +29,28 @@ import {
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import ChatRoom from './ChatRoom';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi } from 'vitest';
-import useLocalStorage from 'utils/useLocalstorage';
+
+import * as fileValidation from 'utils/fileValidation';
+import * as minioUpload from 'utils/MinioUpload';
+import * as minioDownload from 'utils/MinioDownload';
+
+import { toast } from 'react-toastify';
+
+// Mock modules with simple functions, not referencing external variables
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
+vi.mock('utils/fileValidation', async () => {
+  const actual = await import('utils/fileValidation');
+  return {
+    ...actual,
+    validateFile: vi.fn(),
+  };
+});
 
 /**
  * Unit tests for the ChatRoom component
@@ -47,7 +70,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const MESSAGE_SENT_TO_CHAT_MOCK = [
+export const MESSAGE_SENT_TO_CHAT_MOCK = [
   {
     request: {
       query: MESSAGE_SENT_TO_CHAT,
@@ -166,7 +189,7 @@ const MESSAGE_SENT_TO_CHAT_MOCK = [
   },
 ];
 
-const UNREAD_CHAT_LIST_QUERY_MOCK = [
+export const UNREAD_CHAT_LIST_QUERY_MOCK = [
   {
     request: {
       query: UNREAD_CHAT_LIST,
@@ -1085,7 +1108,7 @@ const UNREAD_CHAT_LIST_QUERY_MOCK = [
   },
 ];
 
-const GROUP_CHAT_LIST_QUERY_MOCK = [
+export const GROUP_CHAT_LIST_QUERY_MOCK = [
   {
     request: {
       query: GROUP_CHAT_LIST,
@@ -1888,7 +1911,7 @@ const GROUP_CHAT_LIST_QUERY_MOCK = [
   },
 ];
 
-const CHAT_BY_ID_QUERY_MOCK = [
+export const CHAT_BY_ID_QUERY_MOCK = [
   {
     request: {
       query: CHAT_BY_ID,
@@ -2086,7 +2109,7 @@ const CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const CHATS_LIST_MOCK = [
+export const CHATS_LIST_MOCK = [
   {
     request: {
       query: CHATS_LIST,
@@ -2873,7 +2896,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -2962,7 +2984,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3065,7 +3086,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3154,7 +3174,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3257,7 +3276,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3346,7 +3364,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3449,7 +3466,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -3538,7 +3554,6 @@ const CHATS_LIST_MOCK = [
                 messageContent: 'Hello',
                 media: null,
                 replyTo: null,
-                type: 'STRING',
                 sender: {
                   _id: '2',
                   firstName: 'Test',
@@ -4564,7 +4579,7 @@ const CHATS_LIST_MOCK = [
   },
 ];
 
-const GROUP_CHAT_BY_ID_QUERY_MOCK = [
+export const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   {
     request: {
       query: CHAT_BY_ID,
@@ -5055,7 +5070,7 @@ const GROUP_CHAT_BY_ID_QUERY_MOCK = [
   },
 ];
 
-const SEND_MESSAGE_TO_CHAT_MOCK = [
+export const SEND_MESSAGE_TO_CHAT_MOCK = [
   {
     request: {
       query: SEND_MESSAGE_TO_CHAT,
@@ -5092,7 +5107,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '4',
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5101,7 +5116,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
           _id: '668ec1f1364e03ac47a151',
           createdAt: '2024-07-10T17:16:33.248Z',
           messageContent: 'Test ',
-          media: '',
+          media: null,
           replyTo: null,
           sender: {
             _id: '64378abd85008f171cf2990d',
@@ -5149,7 +5164,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Hello',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5178,7 +5193,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: '345678',
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5207,7 +5222,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5236,7 +5251,7 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
         chatId: '1',
         replyTo: undefined,
         messageContent: 'Test reply message',
-        media: '',
+        media: null,
       },
     },
     result: {
@@ -5260,307 +5275,20 @@ const SEND_MESSAGE_TO_CHAT_MOCK = [
   },
 ];
 
-const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
+export const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
   {
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
-        userId: null,
         chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '8',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: null,
-        chatId: '',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
         userId: '2',
-        chatId: '1',
       },
     },
     result: {
       data: {
         markChatMessagesAsRead: {
-          _id: '1',
+          _id: 'mocked-id-2',
+          __typename: 'ChatMessage', // Important: __typename needed
         },
       },
     },
@@ -5569,46 +5297,15 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
-        userId: '2',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '2',
-        chatId: '1',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
+        chatId: '',
         userId: null,
-        chatId: '',
       },
     },
     result: {
       data: {
         markChatMessagesAsRead: {
-          _id: '1',
+          _id: 'mocked-id-null',
+          __typename: 'ChatMessage',
         },
       },
     },
@@ -5617,57 +5314,42 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
-        userId: '1',
         chatId: '',
+        userId: 'dummyUser',
       },
     },
     result: {
       data: {
         markChatMessagesAsRead: {
-          _id: '1',
+          _id: 'mocked-id-dummy',
+          __typename: 'ChatMessage',
         },
       },
     },
   },
-  {
+  ...Array.from({ length: 5 }, () => ({
     request: {
       query: MARK_CHAT_MESSAGES_AS_READ,
       variables: {
-        userId: '1',
-        chatId: '',
+        chatId: '1',
+        userId: '8',
       },
     },
     result: {
       data: {
         markChatMessagesAsRead: {
-          _id: '1',
+          _id: 'mocked-id-8',
+          __typename: 'ChatMessage',
         },
       },
     },
-  },
-  {
-    request: {
-      query: MARK_CHAT_MESSAGES_AS_READ,
-      variables: {
-        userId: '1',
-        chatId: '',
-      },
-    },
-    result: {
-      data: {
-        markChatMessagesAsRead: {
-          _id: '1',
-        },
-      },
-    },
-  },
+  })),
 ];
 
 describe('Testing Chatroom Component [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   it('Chat room should display fallback content if no chat is active', async () => {
@@ -5680,7 +5362,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5707,7 +5389,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks} link={link}>
         <BrowserRouter>
@@ -5733,7 +5415,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     const link2 = new StaticMockLink(mocks, true);
     render(
       <MockedProvider addTypename={false} link={link2}>
@@ -5818,8 +5500,10 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
+
     const link2 = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -5901,7 +5585,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5926,7 +5610,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
-    ];
+    ].flat();
     render(
       <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
@@ -5981,5 +5665,350 @@ describe('Testing Chatroom Component [User Portal]', () => {
     });
 
     await wait(500);
+  });
+
+  it('should set chat title and subtitle for direct chat', async () => {
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+    const mockRefetch = vi.fn();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={mockRefetch} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      // Test full name for uniqueness
+      expect(screen.getByText(/Disha Talreja/i)).toBeInTheDocument();
+      // Test last name appears somewhere (in case it's split elsewhere)
+      expect(screen.getAllByText(/Talreja/i).length).toBeGreaterThan(0);
+      // Test email address presence
+      expect(screen.getByText(/disha@example\.com/i)).toBeInTheDocument();
+    });
+  });
+});
+
+describe('MessageImage Component', () => {
+  const mockGetFileFromMinio = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks(); // resets all spyOn patches
+  });
+
+  it('renders base64 image directly', () => {
+    render(
+      <MessageImage
+        media="data:image/png;base64,abc123"
+        getFileFromMinio={mockGetFileFromMinio}
+      />,
+    );
+    const img = screen.getByAltText('attachment') as HTMLImageElement;
+    expect(img.src).toContain('data:image/png;base64,abc123');
+  });
+
+  it('renders loading placeholder while image is loading', async () => {
+    // Canonical deferred promise helper
+    const deferred = (() => {
+      let resolve!: (url: string) => void;
+      const promise = new Promise<string>((r) => (resolve = r));
+      return { promise, resolve };
+    })();
+    mockGetFileFromMinio.mockReturnValueOnce(deferred.promise);
+
+    const { unmount } = render(
+      <MessageImage
+        media="minio-image-name.png"
+        getFileFromMinio={mockGetFileFromMinio}
+      />,
+    );
+
+    expect(await screen.findByText('Loading image...')).toBeInTheDocument();
+
+    // Clean up: resolve the promise so React can finish any effects
+    act(() => {
+      deferred.resolve('https://dummy');
+    });
+
+    // Optionally, unmount to ensure no side effects
+    unmount();
+  });
+
+  it('renders MinIO image after successful fetch', async () => {
+    mockGetFileFromMinio.mockResolvedValueOnce('https://example.com/image.png');
+
+    render(
+      <MessageImage
+        media="minio-image-name.png"
+        getFileFromMinio={mockGetFileFromMinio}
+      />,
+    );
+
+    const img = await screen.findByAltText('attachment');
+    expect(img.getAttribute('src')).toBe('https://example.com/image.png');
+  });
+
+  it('renders fallback if image fetching fails', async () => {
+    mockGetFileFromMinio.mockRejectedValueOnce(new Error('Failed'));
+
+    render(
+      <MessageImage
+        media="minio-fail.png"
+        getFileFromMinio={mockGetFileFromMinio}
+      />,
+    );
+
+    expect(await screen.findByText('Image not available')).toBeInTheDocument();
+  });
+
+  it('shows error if media is not provided (no media prop)', () => {
+    render(<MessageImage media="" getFileFromMinio={vi.fn()} />);
+    expect(screen.getByText('Image not available')).toBeInTheDocument();
+  });
+});
+
+describe('handleImageChange', () => {
+  const createFile = (type = 'image/png', name = 'test.png') =>
+    new File(['dummy content'], name, { type });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks(); // resets all spyOn patches
+  });
+
+  it('should do nothing if no file is selected', async () => {
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [] } });
+    });
+
+    // No error should be shown, and no image uploaded
+    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('should show validation error for invalid file', async () => {
+    vi.mocked(fileValidation.validateFile).mockReturnValueOnce({
+      isValid: false,
+      errorMessage: 'Invalid file type',
+    });
+
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+    const file = createFile('text/plain', 'test.txt');
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    expect(fileValidation.validateFile).toHaveBeenCalled();
+    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Invalid file type');
+    });
+  });
+
+  it('should upload and display attachment for valid image', async () => {
+    vi.mocked(fileValidation.validateFile).mockReturnValueOnce({
+      isValid: true,
+      errorMessage: '',
+    });
+
+    vi.spyOn(minioUpload, 'useMinioUpload').mockImplementation(() => ({
+      uploadFileToMinio: vi
+        .fn()
+        .mockResolvedValue({ objectName: 'mock-object-name' }),
+    }));
+
+    vi.spyOn(minioDownload, 'useMinioDownload').mockImplementation(() => ({
+      getFileFromMinio: vi
+        .fn()
+        .mockResolvedValue('https://example.com/test-image.jpg'),
+    }));
+
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+    const file = createFile('image/png', 'valid-image.png');
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    expect(await screen.findByAltText('attachment')).toBeInTheDocument();
+  });
+
+  it('should handle error during upload and show toast', async () => {
+    vi.mocked(fileValidation.validateFile).mockReturnValueOnce({
+      isValid: true,
+      errorMessage: '',
+    });
+
+    vi.spyOn(minioUpload, 'useMinioUpload').mockImplementation(() => ({
+      uploadFileToMinio: vi.fn().mockRejectedValue(new Error('Upload failed')),
+    }));
+
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+    const file = createFile('image/png', 'error-image.png');
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    // Since upload failed, attachment should NOT appear
+    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('should remove attachment when close button is clicked', async () => {
+    vi.mocked(fileValidation.validateFile).mockReturnValueOnce({
+      isValid: true,
+      errorMessage: '',
+    });
+
+    vi.spyOn(minioUpload, 'useMinioUpload').mockImplementation(() => ({
+      uploadFileToMinio: vi
+        .fn()
+        .mockResolvedValue({ objectName: 'mock-object-name' }),
+    }));
+
+    vi.spyOn(minioDownload, 'useMinioDownload').mockImplementation(() => ({
+      getFileFromMinio: vi
+        .fn()
+        .mockResolvedValue('https://example.com/test-image.jpg'),
+    }));
+
+    const mocks = [
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ].flat();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom selectedContact="1" chatListRefetch={vi.fn()} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = await screen.findByTestId('hidden-file-input');
+    const file = new File(['dummy content'], 'valid-image.png', {
+      type: 'image/png',
+    });
+
+    await act(async () => {
+      fireEvent.change(input, { target: { files: [file] } });
+    });
+
+    // Attachment should be visible
+    const attachmentImg = await screen.findByAltText('attachment');
+    expect(attachmentImg).toBeInTheDocument();
+
+    // Find the close button inside the same parent as the attachment image
+    const attachmentDiv = attachmentImg.parentElement;
+    expect(attachmentDiv).toBeTruthy();
+    const closeBtn = await screen.findByTestId('removeAttachment');
+    expect(closeBtn).toBeTruthy();
+
+    // Click the close button
+    await act(async () => {
+      if (closeBtn) {
+        fireEvent.click(closeBtn);
+      }
+    });
+
+    // Wait for the attachment to be removed
+    await waitFor(() => {
+      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    });
   });
 });
