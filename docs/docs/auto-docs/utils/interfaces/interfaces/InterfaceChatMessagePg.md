@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:587](https://github.com/PalisadoesFoundatio
 
 ### parentMessage
 
-> **parentMessage**: [`InterfaceChatMessagePg`](InterfaceChatMessagePg.md)
+> **parentMessage**: `InterfaceChatMessagePg`
 
 Defined in: [src/utils/interfaces.ts:592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L592)
 

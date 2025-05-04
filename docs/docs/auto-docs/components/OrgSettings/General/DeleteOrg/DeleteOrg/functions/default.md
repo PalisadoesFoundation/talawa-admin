@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx#L27)
 
@@ -17,6 +17,6 @@ success or error messages.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 JSX.Element - The rendered component with delete functionality.

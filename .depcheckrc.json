@@ -1,0 +1,31 @@
+{
+  "ignores": [
+    "GraphQl",
+    "screens",
+    "subComponents",
+    "setup",
+    "state",
+    "utils",
+    "style",
+    "components",
+    "assets",
+    "Constant",
+    "types",
+    "expect",
+    "react-router",
+    "identity-obj-proxy",
+    "@babel/plugin-proposal-private-property-in-object",
+    "@graphql-tools/graphql-file-loader",
+    "@graphql-tools/load",
+    "@graphql-tools/schema",
+    "@types/jest",
+    "@types/node-fetch",
+    "babel-jest",
+    "eslint-plugin-jest",
+    "postcss-modules",
+    "@vitest/coverage-istanbul",
+    "typedoc-plugin-markdown",
+    "whatwg-fetch",
+    "markdown-toc"
+  ]
+}

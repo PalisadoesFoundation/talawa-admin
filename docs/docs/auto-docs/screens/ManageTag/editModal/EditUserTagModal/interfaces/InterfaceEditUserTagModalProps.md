@@ -74,7 +74,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:43](https://gi
 
 ### t
 
-> **t**: `TFunction`\<`"manageTag"`\>
+> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
 Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L45)
 
@@ -82,6 +82,6 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:45](https://gi
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`\>
+> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
 Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L46)

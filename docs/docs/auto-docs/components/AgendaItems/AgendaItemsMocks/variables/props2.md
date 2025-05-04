@@ -24,4 +24,4 @@ Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:102](https://github.
 
 ### agendaItemRefetch
 
-> **agendaItemRefetch**: `Mock`
+> **agendaItemRefetch**: `Mock`\<`Procedure`\>
