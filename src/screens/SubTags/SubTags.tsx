@@ -52,8 +52,7 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationSubTagsQuery,
@@ -106,41 +105,18 @@ function SubTags(): JSX.Element {
     fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
-      id: parentTagId,
+      input: {
+        id: parentTagId,
+      },
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-      sortedBy: { id: tagSortOrder },
     },
   });
 
   const loadMoreSubTags = (): void => {
     fetchMoreSubTags({
       variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          getChildTags: {
-            ...fetchMoreResult.getChildTags,
-            childTags: {
-              ...fetchMoreResult.getChildTags.childTags,
-              edges: [
-                ...prevResult.getChildTags.childTags.edges,
-                ...fetchMoreResult.getChildTags.childTags.edges,
-              ],
-            },
-          },
-        };
+        after:
+          subTagsData?.getChildTags?.childTags?.pageInfo?.endCursor ?? null,
       },
     });
   };
@@ -175,23 +151,23 @@ function SubTags(): JSX.Element {
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading sub tags
+            Error occurred while loading sub tags
           </h6>
         </div>
       </div>
     );
   }
 
-  const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
+  const parentTag = subTagsData?.getChildTags;
+  const childTagsEdges = parentTag?.childTags?.edges ?? [];
+  const subTagsList = childTagsEdges.map((edge: { node: any }) => edge.node);
+  const parentTagName = parentTag?.name;
 
-  const parentTagName = subTagsData?.getChildTags.name;
-
-  // get the ancestorTags array and push the current tag in it
-  // used for the tag breadcrumbs
   const orgUserTagAncestors = [
-    ...(subTagsData?.getChildTags.ancestorTags ?? []),
-    { _id: parentTagId, name: parentTagName },
+    {
+      id: parentTagId,
+      name: parentTagName,
+    },
   ];
 
   const redirectToManageTag = (tagId: string): void => {
@@ -249,9 +225,9 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
+            to={`/orgtags/${orgId}/subTags/${params.row.id}`}
           >
-            {params.row.childTags.totalCount}
+            {params.row.childTags?.totalCount ?? 0}
           </Link>
         );
       },
@@ -269,9 +245,9 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
+            to={`/orgtags/${orgId}/manageTag/${params.row.id}`}
           >
-            {params.row.usersAssignedTo.totalCount}
+            {params.row.assignees?.totalCount ?? 0}
           </Link>
         );
       },
@@ -289,7 +265,7 @@ function SubTags(): JSX.Element {
         return (
           <Button
             size="sm"
-            onClick={() => redirectToManageTag(params.row._id)}
+            onClick={() => redirectToManageTag(params.row.id)}
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
@@ -328,7 +304,7 @@ function SubTags(): JSX.Element {
               data-testid="manageCurrentTagBtn"
               className={`${styles.createButton} mb-3`}
             >
-              {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+              {`${t('manageTag')}`}
             </Button>
 
             <Button
@@ -363,8 +339,8 @@ function SubTags(): JSX.Element {
                 {orgUserTagAncestors?.map((tag, index) => (
                   <div
                     key={index}
-                    className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                    onClick={() => redirectToSubTags(tag._id as string)}
+                    className={`ms-2  ${tag.id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                    onClick={() => redirectToSubTags(tag.id as string)}
                     data-testid="redirectToSubTags"
                   >
                     {tag.name}
@@ -381,11 +357,11 @@ function SubTags(): JSX.Element {
                 className={styles.subTagsScrollableDiv}
               >
                 <InfiniteScroll
-                  dataLength={subTagsList?.length ?? 0}
+                  dataLength={subTagsList.length}
                   next={loadMoreSubTags}
                   hasMore={
-                    subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                    false
+                    subTagsData?.getChildTags?.childTags?.pageInfo
+                      ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="subTagsScrollableDiv"
@@ -410,10 +386,7 @@ function SubTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={subTagsList?.map((subTag, index) => ({
-                      id: index + 1,
-                      ...subTag,
-                    }))}
+                    rows={subTagsList}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

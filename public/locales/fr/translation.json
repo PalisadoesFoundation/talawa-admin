@@ -320,9 +320,10 @@
     "createUser": "Créer un utilisateur"
   },
   "organizationTags": {
+    "manageTag": "Gérer les étiquettes",
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
-    "manageTag": "Gérer",
+    "edit": "Éditer",
     "editTag": "Modifier",
     "removeTag": "Supprimer",
     "tagDetails": "Détails de l'Étiquette",
@@ -375,7 +376,8 @@
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
-    "noMoreMembersFound": "Aucun autre membre trouvé"
+    "noMoreMembersFound": "Aucun autre membre trouvé",
+    "manageTag": "Gérer l'étiquette"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
