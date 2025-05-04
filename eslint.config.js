@@ -51,6 +51,7 @@ export default [
         document: 'readonly',
         HTMLImageElement: 'readonly',
         HTMLInputElement: 'readonly',
+        HTMLVideoElement: 'readonly',
         File: 'readonly',
 
         // ✅ Vitest globals
