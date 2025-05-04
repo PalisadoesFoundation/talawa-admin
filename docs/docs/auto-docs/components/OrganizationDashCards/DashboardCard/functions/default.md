@@ -12,7 +12,7 @@ Defined in: [src/components/OrganizationDashCards/DashboardCard.tsx:35](https://
 
 ### props
 
-#### count
+#### count?
 
 `number`
 

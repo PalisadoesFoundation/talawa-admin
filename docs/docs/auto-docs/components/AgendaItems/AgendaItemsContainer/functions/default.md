@@ -4,13 +4,19 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`props`): `Element`
 
-Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L62)
+Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsContainer.tsx#L74)
+
+Component for displaying and managing agenda items.
+Supports drag-and-drop functionality, and includes modals for previewing,
+updating, and deleting agenda items.
 
 ## Parameters
 
-### \_\_namedParameters
+### props
+
+The props for the component.
 
 #### agendaItemCategories
 
@@ -30,4 +36,6 @@ Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:62](https://git
 
 ## Returns
 
-`JSX.Element`
+`Element`
+
+JSX.Element

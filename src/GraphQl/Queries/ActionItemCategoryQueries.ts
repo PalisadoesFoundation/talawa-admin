@@ -30,3 +30,44 @@ export const ACTION_ITEM_CATEGORY_LIST = gql`
     }
   }
 `;
+
+export const ACTION_ITEM_CATEGORIES_BY_ORGANIZATION = gql(/* GraphQL */ `
+  query ActionItemCategoriesByOrganization(
+    $input: QueryActionCategoriesByOrganizationInput!
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+  ) {
+    actionCategoriesByOrganization(
+      input: $input
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+    ) {
+      edges {
+        node {
+          id
+          name
+          isDisabled
+          createdAt
+        }
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+`);
+
+export const GET_USER = gql`
+  query GetUserName($input: QueryUserInput!) {
+    user(input: $input) {
+      name
+    }
+  }
+`;

@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L59)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:59](https://githu
 
 ## Returns
 
-`JSX.Element`
+`Element`

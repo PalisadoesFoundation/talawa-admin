@@ -426,6 +426,48 @@ export const GET_USER_BY_ID = gql`
   }
 `;
 
+export const GET_EVENTS_BY_IDS = gql`
+  query FetchEventsByIds($ids: [ID!]!) {
+    eventsByIds(input: { ids: $ids }) {
+      id
+      name
+      description
+      organization {
+        id
+        name
+        countryCode
+      }
+
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USERS_BY_IDS = gql`
+  query GetUsersByIds($input: UsersByIdsInput!) {
+    usersByIds(input: $input) {
+      id
+      name
+      emailAddress
+    }
+  }
+`;
+
+export const GET_CATEGORIES_BY_IDS = gql`
+  query FetchCategoriesByIds($ids: [ID!]!) {
+    categoriesByIds(input: { ids: $ids }) {
+      id
+      name
+      organizationId
+      creatorId
+      isDisabled
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -1073,7 +1115,20 @@ export const SIGNIN_QUERY = gql`
     }
   }
 `;
-
+export const GET_ORGANIZATION_EVENTS = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        id
+        name
+        description
+        startAt
+        endAt
+      }
+    }
+  }
+`;
 export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
   query getCommunityData {
     community {
@@ -1083,10 +1138,13 @@ export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
 `;
 
 // get the list of Action Item Categories
-export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
+export {
+  ACTION_ITEM_CATEGORY_LIST,
+  ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
+  GET_USER,
+} from './ActionItemCategoryQueries';
 
-// get the list of Action Items
-export { ACTION_ITEM_LIST } from './ActionItemQueries';
+// get the list of Action Items;
 
 export {
   AgendaItemByEvent,
@@ -1110,18 +1168,3 @@ export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
 } from './OrganizationQueries';
-
-export const GET_ORGANIZATION_EVENTS = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        id
-        name
-        description
-        startAt
-        endAt
-      }
-    }
-  }
-`;

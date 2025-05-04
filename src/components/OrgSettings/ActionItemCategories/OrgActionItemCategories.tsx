@@ -6,7 +6,6 @@
  *
  * @module OrgActionItemCategories
  *
- *
  * @typedef {InterfaceActionItemCategoryProps} InterfaceActionItemCategoryProps - Props for the component.
  * @typedef {InterfaceActionItemCategoryInfo} InterfaceActionItemCategoryInfo - Interface for category data.
  *
@@ -23,19 +22,23 @@
  * <OrgActionItemCategories orgId="12345" />
  */
 import type { FC } from 'react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
-import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
+import { useQuery, gql } from '@apollo/client';
+import {
+  ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
+  GET_USER,
+} from 'GraphQl/Queries/ActionItemCategoryQueries';
+import type { InterfaceActionItemCategory } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
+  GridPagination,
 } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
@@ -57,6 +60,46 @@ interface InterfaceActionItemCategoryProps {
   orgId: string;
 }
 
+// Define the interface for the paginated categories data structure
+interface PaginatedCategoriesData {
+  actionCategoriesByOrganization: {
+    edges: Array<{
+      node: InterfaceActionItemCategory;
+    }>;
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+}
+
+/* -- Helper Component: CreatorNameCell -- */
+const GET_USER_NAME = gql`
+  query GetUser($input: QueryUserInput!) {
+    user(input: $input) {
+      name
+    }
+  }
+`;
+
+// Define a dedicated interface for the helper
+export interface CreatorNameCellProps {
+  creatorId: string;
+}
+
+// Export the helper component with its own props type
+export function CreatorNameCell({ creatorId }: CreatorNameCellProps) {
+  const { data, loading, error } = useQuery(GET_USER, {
+    variables: { input: { id: creatorId } },
+  });
+
+  if (loading) return <span data-testid="loading-text">Loading...</span>;
+  if (error || !data || !data.user) return <span>{creatorId}</span>;
+  return <span>{data.user.name}</span>;
+}
+
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
@@ -70,10 +113,6 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Represents the component for managing organization action item categories.
- * This component allows creating, updating, enabling, and disabling action item categories.
- */
 const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   orgId,
 }) => {
@@ -83,54 +122,168 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const [category, setCategory] =
-    useState<InterfaceActionItemCategoryInfo | null>(null);
+  const [category, setCategory] = useState<InterfaceActionItemCategory | null>(
+    null,
+  );
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
   const [status, setStatus] = useState<CategoryStatus | null>(null);
-  const [categories, setCategories] = useState<
-    InterfaceActionItemCategoryInfo[]
-  >([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
+  }>({
+    [ModalState.SAME]: false,
+    [ModalState.DELETE]: false,
+  });
 
-  // Query to fetch action item categories
+  // Pagination state
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
+
+  // Use the updated query with pagination parameters
   const {
     data: catData,
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
-  }: {
-    data?: {
-      actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
-    variables: {
-      organizationId: orgId,
-      where: {
-        name_contains: searchTerm,
-        is_disabled: !status ? undefined : status === CategoryStatus.Disabled,
+  } = useQuery<PaginatedCategoriesData>(
+    ACTION_ITEM_CATEGORIES_BY_ORGANIZATION,
+    {
+      variables: {
+        input: {
+          organizationId: orgId,
+        },
+        first: before ? null : paginationModel.pageSize, // Only use first when not using before
+        last: before ? paginationModel.pageSize : null, // Only use last when using before
+        after: after,
+        before: before,
       },
-      orderBy: sortBy,
     },
-  });
+  );
+
+  // Extract categories from the paginated data structure
+  const categories = useMemo(() => {
+    if (!catData?.actionCategoriesByOrganization?.edges) return [];
+    return catData.actionCategoriesByOrganization.edges.map(
+      (edge) => edge.node,
+    );
+  }, [catData]);
+
+  // Log the data coming from the query for debugging
+  useEffect(() => {
+    if (catData) {
+      console.log('Fetched Action Item Categories Data:', catData);
+    }
+  }, [catData]);
+
+  // Client-side filtering based on search term and status
+  const filteredCategories = useMemo(() => {
+    return categories.filter((cat) => {
+      const matchesSearch = cat.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        status === null
+          ? true
+          : status === CategoryStatus.Disabled
+            ? cat.isDisabled
+            : !cat.isDisabled;
+      return matchesSearch && matchesStatus;
+    });
+  }, [categories, searchTerm, status]);
+
+  // Client-side sorting based on createdAt field
+  const sortedCategories = useMemo(() => {
+    return [...filteredCategories].sort((a, b) => {
+      const aTime = new Date(a.createdAt).getTime();
+      const bTime = new Date(b.createdAt).getTime();
+      return sortBy === 'createdAt_ASC' ? aTime - bTime : bTime - aTime;
+    });
+  }, [filteredCategories, sortBy]);
+
+  // Handle pagination
+  const handlePageChange = (newPage: number) => {
+    const pageInfo = catData?.actionCategoriesByOrganization.pageInfo;
+
+    if (newPage > paginationModel.page) {
+      // Going forward - use endCursor
+      if (pageInfo?.hasNextPage) {
+        setAfter(pageInfo.endCursor);
+        setBefore(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Refetch with forward pagination parameters
+        refetchCategories({
+          input: { organizationId: orgId },
+          first: paginationModel.pageSize,
+          after: pageInfo.endCursor,
+          before: null,
+        });
+      }
+    } else if (newPage < paginationModel.page) {
+      // Going backward - use startCursor
+      if (pageInfo?.hasPreviousPage) {
+        setBefore(pageInfo.startCursor);
+        setAfter(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Refetch with backward pagination parameters
+        refetchCategories({
+          input: { organizationId: orgId },
+          last: paginationModel.pageSize,
+          before: pageInfo.startCursor,
+          after: null,
+        });
+      }
+    }
+  };
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setAfter(null);
+    setBefore(null);
+    setPaginationModel({
+      ...paginationModel,
+      page: 0,
+    });
+
+    refetchCategories({
+      input: {
+        organizationId: orgId,
+      },
+      first: paginationModel.pageSize,
+      after: null,
+      before: null,
+    });
+  }, [
+    searchTerm,
+    sortBy,
+    status,
+    refetchCategories,
+    orgId,
+    paginationModel.pageSize,
+  ]);
 
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleOpenModal = useCallback(
     (
-      category: InterfaceActionItemCategoryInfo | null,
+      category: InterfaceActionItemCategory | null,
       mode: 'edit' | 'create',
     ): void => {
       setCategory(category);
@@ -140,18 +293,10 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
     [openModal],
   );
 
-  useEffect(() => {
-    if (catData && catData.actionItemCategoriesByOrganization) {
-      setCategories(catData.actionItemCategoriesByOrganization);
-    }
-  }, [catData]);
-
-  // Show loader while data is being fetched
-  if (catLoading) {
+  if (catLoading && !categories.length) {
     return <Loader styles={styles.message} size="lg" />;
   }
 
-  // Show error message if there's an error
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -179,7 +324,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+        // Calculate the sequential index based on the current page and page size
+        const index =
+          paginationModel.page * paginationModel.pageSize +
+          sortedCategories.findIndex((row) => row.id === params.id) +
+          1;
+        return <div data-testid="rowId">{index}</div>;
       },
     },
     {
@@ -191,16 +341,14 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="categoryName"
+        >
+          {params.row.name}
+        </div>
+      ),
     },
     {
       field: 'status',
@@ -211,17 +359,16 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isDisabled ? 'Disabled' : 'Active'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
-          />
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Chip
+          data-testid="statusChip"
+          icon={<Circle className={styles.chipIcon} />}
+          label={params.row.isDisabled ? 'Disabled' : 'Active'}
+          variant="outlined"
+          color="primary"
+          className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
+        />
+      ),
     },
     {
       field: 'createdBy',
@@ -232,9 +379,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
-      },
+      renderCell: (params: GridCellParams) => (
+        <span data-testid="creatorName">
+          <CreatorNameCell creatorId={params.row.creatorId} />
+        </span>
+      ),
     },
     {
       field: 'createdOn',
@@ -245,13 +394,11 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div data-testid="createdOn">
+          {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
+        </div>
+      ),
     },
     {
       field: 'action',
@@ -262,30 +409,34 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            variant="success"
-            size="sm"
-            className="me-2 rounded"
-            data-testid={'editCategoryBtn' + params.row.id}
-            onClick={() =>
-              handleOpenModal(
-                params.row as InterfaceActionItemCategoryInfo,
-                'edit',
-              )
-            }
-          >
-            <i className="fa fa-edit" />
-          </Button>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <Button
+          variant="success"
+          size="sm"
+          className="me-2 rounded"
+          data-testid={`editCategoryBtn${params.row.id}`}
+          onClick={() =>
+            handleOpenModal(params.row as InterfaceActionItemCategory, 'edit')
+          }
+        >
+          <i className="fa fa-edit" />
+        </Button>
+      ),
     },
   ];
 
+  // Calculate total count for pagination
+  const pageInfo = catData?.actionCategoriesByOrganization.pageInfo;
+  const hasNextPage = pageInfo?.hasNextPage || false;
+  const hasPreviousPage = pageInfo?.hasPreviousPage || false;
+
+  // We don't have exact total count from the API, so we estimate based on current page
+  const rowCount = hasNextPage
+    ? (paginationModel.page + 2) * paginationModel.pageSize
+    : (paginationModel.page + 1) * paginationModel.pageSize;
+
   return (
     <div className="mx-4">
-      {/* Header with search, filter  and Create Button */}
       <div
         className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
       >
@@ -337,7 +488,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               className={styles.dropdown}
             />
           </div>
-
           <div>
             <Button
               variant="success"
@@ -345,37 +495,65 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
               style={{ marginTop: '11px' }}
               data-testid="createActionItemCategoryBtn"
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className="fa fa-plus me-2" />
               {tCommon('create')}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Table with Action Item Categories */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={6}
-        hideFooter={true}
-        getRowId={(row) => row._id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItemCategories')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={categories.map((category, index) => ({
-          id: index + 1,
-          ...category,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      {catLoading && !categories.length ? (
+        <div className="text-center p-4">
+          <Loader size="lg" />
+        </div>
+      ) : (
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={6}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noActionItemCategories')}
+              </Stack>
+            ),
+            pagination: GridPagination,
+          }}
+          slotProps={{
+            pagination: {
+              showFirstButton: true,
+              showLastButton: true,
+              getItemAriaLabel: (type) => {
+                return type === 'next'
+                  ? 'Go to next page'
+                  : 'Go to previous page';
+              },
+              nextIconButtonProps: {
+                disabled: !hasNextPage,
+              },
+              backIconButtonProps: {
+                disabled: !hasPreviousPage,
+              },
+            },
+          }}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          columns={columns}
+          isRowSelectable={() => false}
+          rows={sortedCategories}
+          paginationModel={paginationModel}
+          onPaginationModelChange={(newModel) => {
+            handlePageChange(newModel.page);
+          }}
+          rowCount={rowCount}
+          pageSizeOptions={[10]}
+          paginationMode="server"
+          loading={catLoading}
+          pagination
+        />
+      )}
 
       <CategoryModal
         isOpen={modalState[ModalState.SAME]}

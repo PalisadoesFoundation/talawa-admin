@@ -10,16 +10,19 @@ import gql from 'graphql-tag';
 
 export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
   mutation CreateActionItemCategory(
-    $name: String!
-    $isDisabled: Boolean!
-    $organizationId: ID!
+    $input: MutationCreateActionItemCategoryInput!
   ) {
-    createActionItemCategory(
-      name: $name
-      isDisabled: $isDisabled
-      organizationId: $organizationId
-    ) {
-      _id
+    createActionItemCategory(input: $input) {
+      id
+      name
+      isDisabled
+      createdAt
+      organization {
+        id
+      }
+      creator {
+        id
+      }
     }
   }
 `;
@@ -34,15 +37,20 @@ export const CREATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
 
 export const UPDATE_ACTION_ITEM_CATEGORY_MUTATION = gql`
   mutation UpdateActionItemCategory(
-    $actionItemCategoryId: ID!
-    $name: String
-    $isDisabled: Boolean
+    $input: MutationUpdateActionItemCategoryInput!
   ) {
-    updateActionItemCategory(
-      id: $actionItemCategoryId
-      data: { name: $name, isDisabled: $isDisabled }
-    ) {
-      _id
+    updateActionItemCategory(input: $input) {
+      id
+      name
+      isDisabled
+      createdAt
+
+      organization {
+        id
+      }
+      creator {
+        id
+      }
     }
   }
 `;

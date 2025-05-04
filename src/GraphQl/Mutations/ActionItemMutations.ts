@@ -37,6 +37,50 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
   }
 `;
 
+export const POSTGRES_CREATE_ACTION_ITEM_MUTATION = gql`
+  mutation CreateActionItem($input: MutationCreateActionItemInput!) {
+    createActionItem(input: $input) {
+      id
+      isCompleted
+      preCompletionNotes
+      postCompletionNotes
+      assignedAt
+      completionAt
+      updatedAt
+      allottedHours
+
+      category {
+        id
+      }
+      assignee {
+        id
+      }
+      event {
+        id
+      }
+      organization {
+        id
+      }
+      creator {
+        id
+      }
+      updater {
+        id
+      }
+    }
+  }
+`;
+
+export const POSTGRES_EVENTS_BY_ORGANIZATION_ID = gql`
+  query EventsByOrganizationId($input: EventsByOrganizationIdInput!) {
+    eventsByOrganizationId(input: $input) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 /**
  * GraphQL mutation to update an action item.
  *
@@ -50,31 +94,24 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
  */
 
 export const UPDATE_ACTION_ITEM_MUTATION = gql`
-  mutation UpdateActionItem(
-    $actionItemId: ID!
-    $assigneeId: ID!
-    $assigneeType: String!
-    $preCompletionNotes: String
-    $postCompletionNotes: String
-    $dueDate: Date
-    $completionDate: Date
-    $isCompleted: Boolean
-    $allottedHours: Float
-  ) {
-    updateActionItem(
-      id: $actionItemId
-      data: {
-        assigneeId: $assigneeId
-        assigneeType: $assigneeType
-        preCompletionNotes: $preCompletionNotes
-        postCompletionNotes: $postCompletionNotes
-        dueDate: $dueDate
-        completionDate: $completionDate
-        allottedHours: $allottedHours
-        isCompleted: $isCompleted
+  mutation UpdateActionItem($input: MutationUpdateActionItemInput!) {
+    updateActionItem(input: $input) {
+      id
+      isCompleted
+      preCompletionNotes
+      postCompletionNotes
+      updatedAt
+      allottedHours
+
+      category {
+        id
       }
-    ) {
-      _id
+      assignee {
+        id
+      }
+      updater {
+        id
+      }
     }
   }
 `;
@@ -86,9 +123,25 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
  */
 
 export const DELETE_ACTION_ITEM_MUTATION = gql`
-  mutation RemoveActionItem($actionItemId: ID!) {
-    removeActionItem(id: $actionItemId) {
-      _id
+  mutation DeleteActionItem($input: MutationDeleteActionItemInput!) {
+    deleteActionItem(input: $input) {
+      id
+      isCompleted
+      preCompletionNotes
+      postCompletionNotes
+      createdAt
+      updatedAt
+      allottedHours
+
+      category {
+        id
+      }
+      assignee {
+        id
+      }
+      organization {
+        id
+      }
     }
   }
 `;

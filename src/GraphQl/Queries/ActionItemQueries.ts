@@ -11,70 +11,88 @@ import gql from 'graphql-tag';
  * @returns The list of action item categories associated with the organization.
  */
 
-export const ACTION_ITEM_LIST = gql`
+export const ACTION_ITEM_FOR_ORGANIZATION = gql`
   query ActionItemsByOrganization(
     $organizationId: ID!
-    $eventId: ID
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
   ) {
     actionItemsByOrganization(
       organizationId: $organizationId
-      eventId: $eventId
-      orderBy: $orderBy
-      where: $where
+      first: $first
+      last: $last
+      after: $after
+      before: $before
     ) {
-      _id
-      assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
+      edges {
+        node {
+          id
+          isCompleted
+          preCompletionNotes
+          postCompletionNotes
+          assignedAt
+          completionAt
+          createdAt
+          updatedAt
+          allottedHours
+
+          organization {
+            id
+          }
+
+          category {
+            id
+            name
+          }
+
+          event {
+            id
+            name
+          }
+
+          assignee {
+            id
+            name
+          }
+
+          creator {
+            id
+            name
+          }
+
+          updater {
+            id
+            name
+          }
         }
       }
-      assigneeGroup {
-        _id
-        name
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
       }
-      assigneeUser {
-        _id
-        firstName
-        lastName
-        image
-      }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
-        name
-      }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
-      }
-      creator {
-        _id
-        firstName
-        lastName
-      }
-      allottedHours
     }
   }
 `;
 
+export const ACTION_ITEM_CATEGORY = gql`
+  query FetchActionCategoriesByOrganization(
+    $input: QueryActionCategoriesByOrganizationInput!
+  ) {
+    actionCategoriesByOrganization(input: $input) {
+      id
+      name
+      organizationId
+      creatorId
+      isDisabled
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const ACTION_ITEMS_BY_USER = gql`
   query ActionItemsByUser(
     $userId: ID!

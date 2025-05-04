@@ -1,68 +1,42 @@
-/**
- * CategoryModal Component
- *
- * This component renders a modal for creating or editing action item categories.
- * It provides a form with fields for category name and a toggle switch for enabling/disabling the category.
- * The modal supports two modes: 'create' and 'edit', and handles the respective GraphQL mutations.
- *
- * @component
- * @param {InterfaceActionItemCategoryModal} props - The props for the component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {() => void} props.refetchCategories - Function to refetch the list of categories after a mutation.
- * @param {string} props.orgId - The ID of the organization to which the category belongs.
- * @param {InterfaceActionItemCategoryInfo | null} props.category - The category data for editing, or null for creating a new category.
- * @param {'create' | 'edit'} props.mode - The mode of the modal, either 'create' or 'edit'.
- *
- * @returns {JSX.Element} The rendered CategoryModal component.
- *
- * @remarks
- * - Uses `react-bootstrap` for modal and form styling.
- * - Integrates with `@apollo/client` for GraphQL mutations.
- * - Displays success and error messages using `react-toastify`.
- * - Translations are handled using `react-i18next`.
- *
- * @example
- * ```tsx
- * <CategoryModal
- *   isOpen={true}
- *   hide={() => setShowModal(false)}
- *   refetchCategories={fetchCategories}
- *   orgId="12345"
- *   category={selectedCategory}
- *   mode="edit"
- * />
- * ```
- */
-import React, { type ChangeEvent, type FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import { useMutation } from '@apollo/client';
+import { toast } from 'react-toastify';
+import { FormControl, TextField } from '@mui/material';
+
+import styles from 'style/app-fixed.module.css';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-import { toast } from 'react-toastify';
-import { FormControl, TextField } from '@mui/material';
+
+export interface InterfaceActionItemCategory {
+  id: string;
+  name: string;
+  organizationId: string;
+  creatorId: string;
+  isDisabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface InterfaceActionItemCategoryModal {
   isOpen: boolean;
   hide: () => void;
   refetchCategories: () => void;
   orgId: string;
-  category: InterfaceActionItemCategoryInfo | null;
+  category: InterfaceActionItemCategory | null;
   mode: 'create' | 'edit';
 }
 
-const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
-  category,
-  hide,
+export const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
   isOpen,
-  mode,
+  hide,
   refetchCategories,
   orgId,
+  category,
+  mode,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const { t } = useTranslation('translation', {
@@ -73,9 +47,9 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     name: category?.name ?? '',
     isDisabled: category?.isDisabled ?? false,
   });
-
   const { name, isDisabled } = formState;
 
+  // Keep form in sync with `category` prop changes:
   useEffect(() => {
     setFormState({
       name: category?.name ?? '',
@@ -83,81 +57,75 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
     });
   }, [category]);
 
-  // Mutations for creating and updating categories
+  // GraphQL mutations
   const [createActionItemCategory] = useMutation(
     CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
-
   const [updateActionItemCategory] = useMutation(
     UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   );
 
-  /**
-   * Handles category creation.
-   *
-   * @param e - The form submission event.
-   */
-  const handleCreate = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  /** Create a new category */
+  const handleCreate = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createActionItemCategory({
-        variables: { name, isDisabled, organizationId: orgId },
+        variables: {
+          input: {
+            name,
+            isDisabled,
+            organizationId: orgId,
+          },
+        },
       });
-
       refetchCategories();
       hide();
       toast.success(t('successfulCreation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   };
 
-  /**
-   * Handles category update.
-   *
-   * @param e - The form submission event.
-   */
-  const handleEdit = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  /** Edit an existing category */
+  const handleEdit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Nothing changed?
     if (name === category?.name && isDisabled === category?.isDisabled) {
-      toast.error(t('sameNameConflict')); // Show error if the name is the same
-    } else {
-      try {
-        const updatedFields: { [key: string]: string | boolean } = {};
-        if (name != category?.name) {
-          updatedFields.name = name;
-        }
-        if (isDisabled != category?.isDisabled) {
-          updatedFields.isDisabled = isDisabled;
-        }
+      toast.error(t('sameNameConflict'));
+      return;
+    }
 
-        await updateActionItemCategory({
-          variables: { actionItemCategoryId: category?._id, ...updatedFields },
-        });
-
-        setFormState({ name: '', isDisabled: false });
-        refetchCategories();
-        hide();
-        toast.success(t('successfulUpdation'));
-      } catch (error: unknown) {
-        toast.error((error as Error).message);
-      }
+    try {
+      await updateActionItemCategory({
+        variables: {
+          input: {
+            categoryId: category!.id, // ← renamed
+            ...(name !== category!.name && { name }),
+            ...(isDisabled !== category!.isDisabled && { isDisabled }),
+          },
+        },
+      });
+      setFormState({ name: '', isDisabled: false });
+      refetchCategories();
+      hide();
+      toast.success(t('successfulUpdation'));
+    } catch (err: unknown) {
+      toast.error((err as Error).message);
     }
   };
 
   return (
     <Modal className={styles.createModal} show={isOpen} onHide={hide}>
       <Modal.Header>
-        <p className={`${styles.titlemodal}`}>{t('categoryDetails')}</p>
+        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
         <Button
           variant="danger"
           onClick={hide}
           className={styles.modalCloseBtn}
           data-testid="actionItemCategoryModalCloseBtn"
         >
-          <i className="fa fa-times"></i>
+          <i className="fa fa-times" />
         </Button>
       </Modal.Header>
       <Modal.Body>
@@ -165,8 +133,6 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
           onSubmitCapture={mode === 'create' ? handleCreate : handleEdit}
           className="p-2"
         >
-          {/* Input field to enter amount to be pledged */}
-
           <FormControl fullWidth className="mb-2">
             <TextField
               label={t('actionItemCategoryName')}
@@ -175,14 +141,16 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
               autoComplete="off"
               className={styles.noOutline}
               value={name}
-              onChange={(e): void =>
+              onChange={(e) =>
                 setFormState({ ...formState, name: e.target.value })
               }
+              inputProps={{ 'data-testid': 'categoryNameInput' }}
               required
             />
           </FormControl>
+
           <Form.Group className="d-flex flex-column mb-4">
-            <label>{tCommon('disabled')} </label>
+            <label>{tCommon('disabled')}</label>
             <Form.Switch
               type="checkbox"
               checked={isDisabled}
@@ -197,7 +165,6 @@ const CategoryModal: FC<InterfaceActionItemCategoryModal> = ({
           <Button
             type="submit"
             className={styles.regBtn}
-            value="creatActionItemCategory"
             data-testid="formSubmitButton"
           >
             {mode === 'create'

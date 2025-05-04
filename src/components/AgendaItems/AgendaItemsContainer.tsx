@@ -6,18 +6,20 @@
  * reordering agenda items using drag-and-drop. The component also integrates
  * with GraphQL mutations for updating and deleting agenda items.
  *
- * @param props - Component props
- * @param props.agendaItemConnection - The type of connection for agenda items (e.g., 'Event').
- * @param props.agendaItemData - Array of agenda item data to display.
- * @param props.agendaItemRefetch - Function to refetch agenda item data after updates.
- * @param props.agendaItemCategories - Array of available agenda item categories.
+/*
+ * AgendaItemsContainer Component
  *
- * @returns JSX.Element - Rendered component.
+ * @param agendaItemConnection – The type of connection ('Event', etc).
+ * @param agendaItemData       – Array of agenda items to display.
+ * @param agendaItemRefetch    – Callback to refetch agenda items.
+ * @param agendaItemCategories – Available agenda item categories.
+ *
+ * @returns React.JSX.Element
  *
  * @remarks
- * - Uses `react-beautiful-dnd` for drag-and-drop functionality.
- * - Integrates with `react-toastify` for user notifications.
- * - Includes modals for previewing, updating, and deleting agenda items.
+ * - Uses react-beautiful-dnd for drag & drop.
+ * - Integrates react-toastify for notifications.
+ * - Includes preview/update/delete modals.
  *
  * @example
  * ```tsx
@@ -36,6 +38,7 @@
  * - `react-toastify` for notifications.
  * - `react-i18next` for translations.
  */
+
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
@@ -58,6 +61,15 @@ import styles from 'style/app-fixed.module.css';
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
+
+/**
+ * Component for displaying and managing agenda items.
+ * Supports drag-and-drop functionality, and includes modals for previewing,
+ * updating, and deleting agenda items.
+ *
+ * @param props - The props for the component.
+ * @returns JSX.Element
+ */
 
 function AgendaItemsContainer({
   agendaItemConnection,

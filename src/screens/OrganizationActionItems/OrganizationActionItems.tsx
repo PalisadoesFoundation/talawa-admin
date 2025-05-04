@@ -43,29 +43,71 @@
  *
  * @returns JSX.Element - The rendered OrganizationActionItems component.
  */
+
+/**
+ * Component: OrganizationActionItems
+ *
+ * This component renders a table of action items for a specific organization and event.
+ * It provides functionality to search, filter, sort, and manage action items.
+ *
+ * Features:
+ * - Fetches action items using GraphQL query based on filters and sorting.
+ * - Displays action items in a data grid with columns for assignee, category, status, allotted hours, and due date.
+ * - Allows users to create, edit, view, delete, and update the status of action items via modals.
+ * - Includes search functionality with debounce for optimized performance.
+ * - Provides sorting and filtering options for better data management.
+ *
+ * Props:
+ * - None (Relies on URL parameters for organization and event IDs).
+ *
+ * State:
+ * - `actionItem`: Stores the currently selected action item for modal operations.
+ * - `modalMode`: Determines whether the modal is in 'create' or 'edit' mode.
+ * - `searchTerm`: Stores the search input value.
+ * - `sortBy`: Stores the sorting criteria for due dates.
+ * - `status`: Filters action items by their status (Pending, Completed, or Late).
+ * - `searchBy`: Determines whether to search by 'assignee' or 'category'.
+ * - `modalState`: Tracks the visibility of different modals (Create/Edit, View, Delete, Status Update).
+ *
+ * Dependencies:
+ * - React, React Router, Apollo Client, Material-UI, Bootstrap, Day.js, and custom components.
+ *
+ * GraphQL:
+ * - Query: `ACTION_ITEM_LIST` - Fetches action items based on organization ID, event ID, filters, and sorting.
+ *
+ * Modals:
+ * - `ItemModal`: For creating or editing action items.
+ * - `ItemViewModal`: For viewing action item details.
+ * - `ItemDeleteModal`: For confirming and deleting action items.
+ * - `ItemUpdateStatusModal`: For updating the status of an action item.
+ *
+ * Error Handling:
+ * - Displays an error message if the GraphQL query fails.
+ *
+ * Loading State:
+ * - Displays a loader while fetching data.
+ *
+ * @returns JSX.Element - The rendered OrganizationActionItems component.
+ */
+import type { JSX } from 'react';
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router';
-
+import { Navigate, useParams } from 'react-router-dom';
+import { GET_USERS_BY_IDS } from 'GraphQl/Queries/Queries';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
-
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
-
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
+import { ACTION_ITEM_FOR_ORGANIZATION } from 'GraphQl/Queries/ActionItemQueries';
 import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
+  GridPagination,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import ItemViewModal from './itemViewModal/ItemViewModal';
 import ItemModal from './itemModal/ItemModal';
 import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
@@ -73,6 +115,7 @@ import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+import type { InterfaceActionItem } from 'utils/interfaces';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -86,6 +129,32 @@ enum ModalState {
   VIEW = 'view',
   STATUS = 'status',
 }
+
+type User = {
+  id: string;
+  name: string;
+  emailAddress: string;
+};
+
+type PaginatedActionItems = {
+  actionItemsByOrganization: {
+    edges: Array<{
+      node: InterfaceActionItem;
+    }>;
+    pageInfo: {
+      startCursor: string;
+      endCursor: string;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+};
+
+/**
+ * Component for managing and displaying action items within an organization.
+ * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
+ * @returns The rendered component.
+ */
 
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -101,7 +170,7 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
+  const [actionItem, setActionItem] = useState<InterfaceActionItem | null>(
     null,
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -120,6 +189,14 @@ function organizationActionItems(): JSX.Element {
     [ModalState.STATUS]: false,
   });
 
+  // Pagination state
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
+  const [after, setAfter] = useState<string | null>(null);
+  const [before, setBefore] = useState<string | null>(null);
+
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
@@ -127,59 +204,221 @@ function organizationActionItems(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: InterfaceActionItem | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {
         setModalMode(actionItem ? 'edit' : 'create');
       }
       setActionItem(actionItem);
       openModal(modal);
     },
-    [openModal],
+    [],
   );
 
-  /**
-   * Query to fetch action items for the organization based on filters and sorting.
-   */
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  }: {
-    data: InterfaceActionItemList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+  } = useQuery<PaginatedActionItems>(ACTION_ITEM_FOR_ORGANIZATION, {
     variables: {
       organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
-      where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
-      },
+      first: before ? null : paginationModel.pageSize, // Only use first when not using before
+      last: before ? paginationModel.pageSize : null, // Only use last when using before
+      after: after,
+      before: before,
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
-  );
+  const flattenedActionItems = useMemo(() => {
+    if (!actionItemsData?.actionItemsByOrganization?.edges) return [];
+    return actionItemsData.actionItemsByOrganization.edges.map(
+      (edge) => edge.node,
+    );
+  }, [actionItemsData]);
+
+  const assigneeIds =
+    flattenedActionItems
+      .map((item) => item.assignee?.id)
+      .filter((id): id is string => id !== null) || [];
+
+  const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
+    skip: assigneeIds.length === 0,
+    variables: { input: { ids: assigneeIds } },
+  });
+
+  if (actionItemsData) {
+    console.log('Fetched Action Items Data:', actionItemsData);
+  } else {
+    console.log('No Action Items Data', actionItemsError);
+  }
+
+  const getAssigneeName = (assigneeId: string | null): string => {
+    if (!assigneeId) return 'Unassigned';
+
+    if (!usersData?.usersByIds) {
+      return 'Unknown User';
+    }
+
+    const user = usersData.usersByIds.find(
+      (user: User) => user.id === assigneeId,
+    );
+
+    if (user) {
+      return user.name;
+    } else {
+      return 'Unknown User';
+    }
+  };
+
+  const enrichedActionItems = useMemo(() => {
+    if (!flattenedActionItems.length) return [];
+    return flattenedActionItems.map((item) => {
+      return {
+        ...item,
+        assigneeId: item.assignee?.id ?? null,
+        categoryId: item.category?.id ?? null,
+        eventId: item.event?.id ?? null,
+        creatorId: item.creator?.id ?? null,
+        updaterId: item.updater?.id ?? null,
+        organizationId: item.organization?.id ?? null,
+        categoryName: item.category?.name ?? 'No Category',
+        assigneeName: item.assignee?.name ?? 'Unassigned',
+      };
+    });
+  }, [flattenedActionItems]);
+
+  const filteredAndSortedActionItems = useMemo(() => {
+    if (!enrichedActionItems.length) return [];
+
+    let items = [...enrichedActionItems];
+
+    // Apply search filtering
+    if (searchTerm) {
+      items = items.filter((item) =>
+        searchBy === 'assignee'
+          ? getAssigneeName(item.assigneeId)
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase())
+          : (item.categoryName || 'No Category')
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    if (status !== null) {
+      items = items.filter((item) =>
+        status === ItemStatus.Pending ? !item.isCompleted : item.isCompleted,
+      );
+    }
+
+    // Apply sorting
+    if (sortBy) {
+      items.sort((a, b) => {
+        const dateA = a.completionAt ? new Date(a.completionAt).getTime() : 0;
+        const dateB = b.completionAt ? new Date(b.completionAt).getTime() : 0;
+        return sortBy === 'dueDate_DESC' ? dateB - dateA : dateA - dateB;
+      });
+    }
+
+    return items;
+  }, [
+    enrichedActionItems,
+    searchTerm,
+    searchBy,
+    status,
+    sortBy,
+    getAssigneeName,
+  ]);
+
+  const handlePageChange = (newPage: number) => {
+    const pageInfo = actionItemsData?.actionItemsByOrganization.pageInfo;
+
+    if (newPage > paginationModel.page) {
+      // Going forward - use endCursor
+      if (pageInfo?.hasNextPage) {
+        setAfter(pageInfo.endCursor);
+        setBefore(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+      }
+    } else if (newPage < paginationModel.page) {
+      // Going backward - use startCursor
+      if (pageInfo?.hasPreviousPage) {
+        // When going backward, use last instead of first, and before instead of after
+        setBefore(pageInfo.startCursor);
+        setAfter(null);
+        setPaginationModel({
+          ...paginationModel,
+          page: newPage,
+        });
+
+        // Make sure refetch uses 'last' parameter instead of 'first' when going backward
+        actionItemsRefetch({
+          organizationId: orgId,
+          last: paginationModel.pageSize, // Use 'last' instead of 'first'
+          before: pageInfo.startCursor,
+          after: null,
+          where:
+            status !== null
+              ? { isCompleted: status === ItemStatus.Completed }
+              : undefined,
+        });
+        return; // Return to prevent the default refetch below
+      }
+    }
+
+    // Default refetch (for forward navigation)
+    actionItemsRefetch({
+      organizationId: orgId,
+      first: paginationModel.pageSize,
+      after: pageInfo?.endCursor || null,
+      before: null,
+      where:
+        status !== null
+          ? { isCompleted: status === ItemStatus.Completed }
+          : undefined,
+    });
+  };
+
+  useEffect(() => {
+    if (actionItemsLoading) {
+      // console.log('⏳ Loading action items...');
+    }
+
+    if (actionItemsError) {
+      // Handle error
+    }
+  }, [actionItemsLoading, actionItemsData, actionItemsError]);
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
 
-  // Trigger refetch on sortBy or status change
   useEffect(() => {
-    actionItemsRefetch();
-  }, [sortBy, status, actionItemsRefetch]);
+    // Reset pagination when filters change
+    setAfter(null);
+    setBefore(null);
+    setPaginationModel({
+      ...paginationModel,
+      page: 0,
+    });
 
-  if (actionItemsLoading) {
+    actionItemsRefetch({
+      organizationId: orgId,
+      first: paginationModel.pageSize,
+      after: null,
+      before: null,
+      where:
+        status !== null
+          ? { isCompleted: status === ItemStatus.Completed }
+          : undefined,
+    });
+  }, [sortBy, status, actionItemsRefetch, orgId, paginationModel.pageSize]);
+
+  if (actionItemsLoading && !flattenedActionItems.length) {
     return <Loader size="xl" />;
   }
 
@@ -205,58 +444,20 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } =
-          params.row.assigneeUser || params.row.assignee?.user || {};
-
+        const name = params.row.assignee?.name || 'Unassigned';
         return (
-          <>
-            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt="Assignee"
-                      data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.TableImage}>
-                      <Avatar
-                        key={_id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={firstName + ' ' + lastName}
-                        alt={firstName + ' ' + lastName}
-                      />
-                    </div>
-                  )}
-                  {firstName + ' ' + lastName}
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  <div className={styles.avatarContainer}>
-                    <Avatar
-                      key={_id + '1'}
-                      containerStyle={styles.imageContainer}
-                      avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name as string}
-                      alt={'assigneeGroup_avatar'}
-                    />
-                  </div>
-                  {params.row.assigneeGroup?.name as string}
-                </div>
-              </>
-            )}
-          </>
+          <div className="d-flex fw-bold align-items-center ms-2">
+            <div className={styles.TableImage}>
+              <Avatar
+                key={params.row.id}
+                containerStyle={styles.imageContainer}
+                avatarStyle={styles.TableImage}
+                name={name}
+                alt={name}
+              />
+            </div>
+            {name}
+          </div>
         );
       },
     },
@@ -269,16 +470,14 @@ function organizationActionItems(): JSX.Element {
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.actionItemCategory?.name}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="categoryName"
+        >
+          {params.row.category?.name || 'No Category'}
+        </div>
+      ),
     },
     {
       field: 'status',
@@ -303,35 +502,56 @@ function organizationActionItems(): JSX.Element {
     {
       field: 'allottedHours',
       headerName: 'Allotted Hours',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => (
+        <div className="d-flex justify-content-center fw-bold">
+          {params.row.allottedHours ?? 'N/A'}
+        </div>
+      ),
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Date of Creation',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
+        const createdDate = params.row.createdAt;
         return (
-          <div data-testid="allottedHours">
-            {params.row.allottedHours ?? '-'}
+          <div data-testid="createdDate">
+            {createdDate
+              ? dayjs(createdDate).format('DD/MM/YYYY')
+              : 'No Created Date'}
           </div>
         );
       },
     },
     {
-      field: 'dueDate',
-      headerName: 'Due Date',
+      field: 'completionAt',
+      headerName: 'Completion Date',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
+        const completionDate = params.row.completionAt;
         return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
+          <div data-testid="completionDate">
+            {completionDate
+              ? dayjs(completionDate).format('DD/MM/YYYY')
+              : 'No Completion Date'}
           </div>
         );
       },
     },
+
     {
       field: 'options',
       headerName: 'Options',
@@ -345,7 +565,6 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
               className={styles.infoButton}
@@ -401,9 +620,19 @@ function organizationActionItems(): JSX.Element {
     },
   ];
 
+  // Calculate total count for pagination
+  const pageInfo = actionItemsData?.actionItemsByOrganization.pageInfo;
+  const hasNextPage = pageInfo?.hasNextPage || false;
+  const hasPreviousPage = pageInfo?.hasPreviousPage || false;
+
+  // We don't have exact total count from the API, so we estimate based on current page
+  const rowCount = hasNextPage
+    ? (paginationModel.page + 2) * paginationModel.pageSize
+    : (paginationModel.page + 1) * paginationModel.pageSize;
+
   return (
     <div>
-      {/* Header with search, filter  and Create Button */}
+      {/* Header with search, filter and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
@@ -420,15 +649,18 @@ function organizationActionItems(): JSX.Element {
             title={tCommon('searchBy')}
             sortingOptions={[
               { label: t('assignee'), value: 'assignee' },
-              { label: t('category'), value: 'category' },
+              // { label: t('category'), value: 'category' },
             ]}
             selectedOption={t(searchBy)}
             onSortChange={(value) =>
-              setSearchBy(value as 'assignee' | 'category')
+              setSearchBy(
+                value as 'assignee',
+                // 'category'
+              )
             }
             dataTestIdPrefix="searchByToggle"
             buttonLabel={tCommon('searchBy', { item: '' })}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={tCommon('sort')}
@@ -444,7 +676,7 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="sort"
             buttonLabel={tCommon('sort')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={t('status')}
@@ -465,7 +697,7 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="filter"
             buttonLabel={t('status')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <Button
             variant="success"
@@ -479,39 +711,57 @@ function organizationActionItems(): JSX.Element {
         </div>
       </div>
 
-      {/* Table with Action Items */}
-      <DataGrid
-        disableColumnMenu
-        disableColumnResize
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row._id}
-        sx={{
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          '& .MuiDataGrid-columnHeaders': { border: 'none' },
-          '& .MuiDataGrid-cell': { border: 'none' },
-          '& .MuiDataGrid-columnSeparator': { display: 'none' },
-        }}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
-            </Stack>
-          ),
-        }}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
-          ...actionItem,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      {actionItemsLoading && filteredAndSortedActionItems.length === 0 ? (
+        <div className="text-center p-4">
+          <Loader size="lg" />
+        </div>
+      ) : (
+        <DataGrid
+          disableColumnMenu
+          disableColumnResize
+          columnBufferPx={7}
+          autoHeight
+          rowHeight={65}
+          rows={
+            filteredAndSortedActionItems.map((actionItem) => ({
+              ...actionItem,
+              status: actionItem.isCompleted ? 'Completed' : 'Pending',
+            })) || []
+          }
+          columns={columns}
+          disableRowSelectionOnClick
+          paginationModel={paginationModel}
+          onPaginationModelChange={(newModel) => {
+            handlePageChange(newModel.page);
+          }}
+          rowCount={rowCount}
+          pageSizeOptions={[10]}
+          paginationMode="server"
+          loading={actionItemsLoading}
+          pagination
+          slots={{
+            pagination: GridPagination,
+          }}
+          slotProps={{
+            pagination: {
+              showFirstButton: true,
+              showLastButton: true,
+              getItemAriaLabel: (type) => {
+                return type === 'next'
+                  ? 'Go to next page'
+                  : 'Go to previous page';
+              },
+              nextIconButtonProps: {
+                disabled: !hasNextPage,
+              },
+              backIconButtonProps: {
+                disabled: !hasPreviousPage,
+              },
+            },
+          }}
+        />
+      )}
 
-      {/* Item Modal (Create/Edit) */}
       <ItemModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
@@ -522,7 +772,6 @@ function organizationActionItems(): JSX.Element {
         editMode={modalMode === 'edit'}
       />
 
-      {/* View Modal */}
       {actionItem && (
         <>
           <ItemViewModal

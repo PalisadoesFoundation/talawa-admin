@@ -351,16 +351,17 @@ export interface InterfaceBaseEvent {
   recurring: boolean;
 }
 
-export interface InterfaceActionItemCategoryInfo {
-  _id: string;
+export interface InterfaceActionItemCategory {
+  id: string;
   name: string;
+  organizationId: string;
+  creatorId: string;
   isDisabled: boolean;
   createdAt: string;
-  creator: { _id: string; firstName: string; lastName: string };
+  updatedAt: string;
 }
-
 export interface InterfaceActionItemCategoryList {
-  actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
+  actionItemCategoriesByOrganization: InterfaceActionItemCategory[];
 }
 
 export interface InterfaceActionItemInfo {
@@ -386,6 +387,51 @@ export interface InterfaceActionItemInfo {
   } | null;
   creator: InterfaceUserInfo;
   allottedHours: number | null;
+}
+
+export interface InterfaceActionItem {
+  id: string;
+  isCompleted: boolean;
+  assignedAt: string;
+  completionAt: string;
+  createdAt: string;
+  updatedAt: string;
+  preCompletionNotes: string | null;
+  postCompletionNotes: string | null;
+  allottedHours: number | null;
+
+  // Scalar ID references (used in mutations, forms, etc.)
+  organizationId: string;
+  categoryId: string | null;
+  eventId: string | null;
+  assigneeId: string | null;
+  creatorId: string | null;
+  updaterId: string | null;
+
+  // Full object references (used in query rendering)
+  organization?: {
+    id: string;
+  };
+  category?: {
+    id: string;
+    name: string;
+  };
+  event?: {
+    id: string;
+    name: string;
+  };
+  assignee?: {
+    id: string;
+    name: string;
+  };
+  creator?: {
+    id: string;
+    name: string;
+  };
+  updater?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface InterfaceActionItemList {

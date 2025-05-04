@@ -38,6 +38,17 @@ export const EVENT_VOLUNTEER_LIST = gql`
   }
 `;
 
+export const USERS_BY_ORGANIZATION_ID = gql`
+  query GetUsersByOrganization($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      emailAddress
+      createdAt
+    }
+  }
+`;
+
 export const EVENT_VOLUNTEER_GROUP_LIST = gql`
   query GetEventVolunteerGroups(
     $where: EventVolunteerGroupWhereInput!

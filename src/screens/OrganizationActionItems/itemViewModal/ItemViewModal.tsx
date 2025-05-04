@@ -36,17 +36,32 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type {
+  InterfaceActionItem,
+  InterfaceActionItemInfo,
+} from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import Avatar from 'components/Avatar/Avatar';
+import {
+  GET_USERS_BY_IDS,
+  GET_CATEGORIES_BY_IDS,
+} from 'GraphQl/Queries/Queries';
+import { useQuery } from '@apollo/client';
+
+/**
+ * The ItemViewModal component displays a read-only modal view of an action item.
+ * It shows details such as category, assignee, assigner, status, dates, and any pre-
+ * or post-completion notes. It uses GraphQL queries to fetch user and category data,
+ * and leverages React-Bootstrap and MUI components for the UI.
+ */
 
 export interface InterfaceViewModalProps {
   isOpen: boolean;
   hide: () => void;
-  item: InterfaceActionItemInfo;
+  item: InterfaceActionItem;
 }
 
 const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
@@ -55,20 +70,47 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
   });
   const { t: tCommon } = useTranslation('common');
 
+  // Destructure fields from the action item
   const {
-    actionItemCategory,
-    assignee,
-    assigneeGroup,
-    assigneeUser,
-    assigneeType,
-    assigner,
-    completionDate,
-    dueDate,
+    // id,
     isCompleted,
-    postCompletionNotes,
+    assignedAt,
+    completionAt,
     preCompletionNotes,
-    allottedHours,
+    postCompletionNotes,
+    categoryId,
+    // eventId,
+    assigneeId,
+    creatorId,
   } = item;
+
+  // Query for user data (for assignee and creator)
+  const userIds = Array.from(
+    new Set([assigneeId, creatorId].filter(Boolean)),
+  ) as string[];
+  const { data: usersData } = useQuery(GET_USERS_BY_IDS, {
+    variables: { input: { ids: userIds } },
+    skip: userIds.length === 0,
+  });
+
+  // Query for category data
+  const { data: categoriesData } = useQuery(GET_CATEGORIES_BY_IDS, {
+    variables: { ids: categoryId ? [categoryId] : [] },
+    skip: !categoryId,
+  });
+
+  // Helper to get a user's name from their ID
+  const getUserName = (userId: string | null, defaultName: string): string => {
+    if (!userId) return defaultName;
+    const user = usersData?.usersByIds?.find(
+      (u: { id: string; name: string }) => u.id === userId,
+    );
+    return user ? user.name : defaultName;
+  };
+
+  const getAssigneeDisplay = (): string =>
+    getUserName(assigneeId, 'Unassigned');
+  const getAssignerDisplay = (): string => getUserName(creatorId, 'Unknown');
 
   return (
     <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
@@ -91,59 +133,30 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('category')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={actionItemCategory?.name}
+                value={item.category?.name ?? 'No Category'}
                 disabled
               />
             </FormControl>
           </Form.Group>
+
+          {/* Assignee & Assigner */}
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>
               <TextField
                 label={t('assignee')}
                 variant="outlined"
                 className={styles.noOutline}
-                data-testid="assignee_input"
-                value={
-                  assigneeType === 'EventVolunteer'
-                    ? `${assignee?.user?.firstName} ${assignee?.user?.lastName}`
-                    : assigneeType === 'EventVolunteerGroup'
-                      ? assigneeGroup?.name
-                      : `${assigneeUser?.firstName} ${assigneeUser?.lastName}`
-                }
+                value={getAssigneeDisplay()}
                 disabled
                 InputProps={{
                   startAdornment: (
-                    <>
-                      {assignee?.user?.image || assigneeUser?.image ? (
-                        <img
-                          src={
-                            (assignee?.user?.image ||
-                              assigneeUser?.image) as string
-                          }
-                          alt="Assignee"
-                          data-testid={`assignee_image`}
-                          className={styles.TableImage}
-                        />
-                      ) : assignee || assigneeUser ? (
-                        <Avatar
-                          key={assignee?._id || assigneeUser?._id}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImage}
-                          dataTestId={`assignee_avatar`}
-                          name={`${assignee?.user.firstName || assigneeUser?.firstName} ${assignee?.user.lastName || assigneeUser?.lastName}`}
-                          alt={`assignee_avatar`}
-                        />
-                      ) : (
-                        <Avatar
-                          key={assigneeGroup?._id}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImage}
-                          dataTestId={`assigneeGroup_avatar`}
-                          name={assigneeGroup?.name as string}
-                          alt={`assigneeGroup_avatar`}
-                        />
-                      )}
-                    </>
+                    <Avatar
+                      key={assigneeId || 'default'}
+                      containerStyle={styles.imageContainer}
+                      avatarStyle={styles.TableImage}
+                      name={getAssigneeDisplay()}
+                      alt="assignee avatar"
+                    />
                   ),
                 }}
               />
@@ -153,38 +166,24 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('assigner')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={assigner?.firstName + ' ' + assigner?.lastName}
+                value={getAssignerDisplay()}
                 disabled
                 InputProps={{
                   startAdornment: (
-                    <>
-                      {assigner.image ? (
-                        <img
-                          src={assigner.image}
-                          alt="Assigner"
-                          data-testid={`assigner_image`}
-                          className={styles.TableImage}
-                        />
-                      ) : (
-                        <div className={styles.TableImage}>
-                          <Avatar
-                            key={assigner._id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
-                            dataTestId={`assigner_avatar`}
-                            name={assigner.firstName + ' ' + assigner.lastName}
-                            alt={`assigner_avatar`}
-                          />
-                        </div>
-                      )}
-                    </>
+                    <Avatar
+                      key={creatorId || 'default'}
+                      containerStyle={styles.imageContainer}
+                      avatarStyle={styles.TableImage}
+                      name={getAssignerDisplay()}
+                      alt="assigner avatar"
+                    />
                   ),
                 }}
               />
             </FormControl>
           </Form.Group>
+          {/* Status & Dates */}
           <Form.Group className="d-flex gap-3 mx-auto mb-3">
-            {/* Status of Action Item */}
             <TextField
               label={t('status')}
               fullWidth
@@ -208,43 +207,31 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               }}
               disabled
             />
-
-            <TextField
-              label={t('allottedHours')}
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={allottedHours ?? '-'}
-              disabled
-            />
-          </Form.Group>
-          <Form.Group className={`d-flex gap-3 mb-3`}>
-            {/* Date Calendar Component to display due date of Action Item */}
             <DatePicker
               format="DD/MM/YYYY"
               label={t('dueDate')}
               className={`${styles.noOutline} w-100`}
-              value={dayjs(dueDate)}
+              value={assignedAt ? dayjs(assignedAt) : null}
               disabled
             />
-
-            {/* Date Calendar Component to display completion Date of Action Item */}
-            {isCompleted && (
+            {isCompleted && completionAt && (
               <DatePicker
                 format="DD/MM/YYYY"
                 label={t('completionDate')}
                 className={`${styles.noOutline} w-100`}
-                value={dayjs(completionDate)}
+                value={dayjs(completionAt)}
                 disabled
               />
             )}
           </Form.Group>
+          {/* Notes */}
           <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
             <FormControl fullWidth>
               <TextField
                 label={t('preCompletionNotes')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={preCompletionNotes}
+                value={preCompletionNotes || 'No pre-completion notes'}
                 multiline
                 maxRows={3}
                 disabled
@@ -256,7 +243,7 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               <TextField
                 label={t('postCompletionNotes')}
                 className={styles.noOutline}
-                value={postCompletionNotes}
+                value={postCompletionNotes || 'No post-completion notes'}
                 multiline
                 maxRows={3}
                 disabled
@@ -268,4 +255,5 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
     </Modal>
   );
 };
+
 export default ItemViewModal;
