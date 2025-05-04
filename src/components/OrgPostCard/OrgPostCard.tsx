@@ -162,74 +162,57 @@ export default function OrgPostCard({ post }: IOrgPostCardProps): JSX.Element {
     setPostFormState((prev: IPostFormState) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileUpload = async (
+    file: File | null | undefined,
+    fileType: 'image' | 'video',
+  ): Promise<void> => {
+    if (!file || !orgId) return;
+
+    // Set validation parameters based on file type
+    const validationParams =
+      fileType === 'image'
+        ? { maxSize: 5, types: ['image/jpeg', 'image/png', 'image/gif'] }
+        : { maxSize: 50, types: ['video/mp4', 'video/webm', 'video/ogg'] };
+
+    // Validate file
+    const validation = validateFile(
+      file,
+      validationParams.maxSize,
+      validationParams.types,
+    );
+    if (!validation.isValid) {
+      toast.error(validation.errorMessage || `Invalid ${fileType} file.`);
+      return;
+    }
+
+    try {
+      const { objectName } = await uploadFileToMinio(file, orgId);
+      setPostFormState((prev) => ({
+        ...prev,
+        attachments: [
+          ...prev.attachments,
+          { url: objectName, mimeType: file.type },
+        ],
+      }));
+    } catch (error) {
+      toast.error(`${fileType} upload failed`);
+      errorHandler(t, error);
+    }
+  };
+
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const file = e.target.files?.[0];
-    if (file && orgId) {
-      // Validate image file
-      const validation = validateFile(file);
-      if (!validation.isValid) {
-        toast.error(validation.errorMessage || 'Invalid image file.');
-        return;
-      }
-      try {
-        const { objectName } = await uploadFileToMinio(file, orgId);
-        setPostFormState((prev) => ({
-          ...prev,
-          attachments: [
-            ...prev.attachments,
-            { url: objectName, mimeType: file.type },
-          ],
-        }));
-      } catch (error) {
-        toast.error('Image upload failed');
-        errorHandler(t, error);
-      }
-    }
+    await handleFileUpload(e.target.files?.[0], 'image');
   };
 
   const handleVideoUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const file = e.target.files?.[0];
-    if (file && orgId) {
-      // Validate video file
-      const validation = validateFile(file, 50, [
-        'video/mp4',
-        'video/webm',
-        'video/ogg',
-      ]);
-      if (!validation.isValid) {
-        toast.error(validation.errorMessage || 'Invalid video file.');
-        return;
-      }
-      try {
-        const { objectName } = await uploadFileToMinio(file, orgId);
-        setPostFormState((prev) => ({
-          ...prev,
-          attachments: [
-            ...prev.attachments,
-            { url: objectName, mimeType: file.type },
-          ],
-        }));
-      } catch (error) {
-        toast.error('Video upload failed');
-        errorHandler(t, error);
-      }
-    }
+    await handleFileUpload(e.target.files?.[0], 'video');
   };
 
-  const clearImage = (url: string) => {
-    setPostFormState((prev: IPostFormState) => ({
-      ...prev,
-      attachments: prev.attachments.filter(
-        (a: { url: string; mimeType: string }) => a.url !== url,
-      ),
-    }));
-  };
-
-  const clearVideo = (url: string) => {
+  const clearAttachment = (url: string) => {
     setPostFormState((prev: IPostFormState) => ({
       ...prev,
       attachments: prev.attachments.filter(
@@ -479,7 +462,7 @@ export default function OrgPostCard({ post }: IOrgPostCardProps): JSX.Element {
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearImage(attachment.url)}
+                        onClick={() => clearAttachment(attachment.url)}
                       >
                         ×
                       </button>
@@ -511,7 +494,7 @@ export default function OrgPostCard({ post }: IOrgPostCardProps): JSX.Element {
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearVideo(attachment.url)}
+                        onClick={() => clearAttachment(attachment.url)}
                       >
                         ×
                       </button>
