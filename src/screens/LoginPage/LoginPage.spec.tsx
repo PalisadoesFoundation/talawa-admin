@@ -27,6 +27,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { toast } from 'react-toastify';
 
 const MOCKS = [
   {
@@ -135,9 +136,42 @@ const MOCKS4 = [
   },
 ];
 
+const USER_SIGNIN_MOCK = [
+  {
+    request: {
+      query: SIGNIN_QUERY,
+      variables: { email: 'user@example.com', password: 'password' },
+    },
+    result: {
+      data: {
+        signIn: {
+          user: {
+            id: 'user-id',
+            role: 'user',
+            countryCode: null,
+            name: 'Normal User',
+            emailAddress: 'user@example.com',
+            avatarURL: '',
+          },
+          authenticationToken: 'token-123',
+        },
+      },
+    },
+  },
+  {
+    request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: null } },
+    result: { data: { recaptcha: true } },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
+const userLink = new StaticMockLink(USER_SIGNIN_MOCK, true);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -172,7 +206,7 @@ vi.mock('react-google-recaptcha', async () => {
         onChange: (value: string) => void;
       } & React.InputHTMLAttributes<HTMLInputElement>,
       ref: React.LegacyRef<HTMLInputElement> | undefined,
-    ): JSX.Element => {
+    ): React.ReactElement => {
       const { onChange, ...otherProps } = props;
 
       Object.defineProperty(ref, 'current', {
@@ -1104,48 +1138,98 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
   });
-});
 
-it('Render the Select Organization list and change the option', async () => {
-  // Skip this test for admin path since register button is removed
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    value: {
-      reload: vi.fn(),
-      href: 'https://localhost:4321/',
-      origin: 'https://localhost:4321',
-      pathname: '/',
-    },
+  it('Render the Select Organization list and change the option', async () => {
+    // Skip this test for admin path since register button is removed
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+      await wait();
+
+      const autocomplete = screen.getByTestId('selectOrg');
+      const input = within(autocomplete).getByRole('combobox');
+      autocomplete.focus();
+      fireEvent.change(input, { target: { value: 'a' } });
+      fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
+      fireEvent.keyDown(autocomplete, { key: 'Enter' });
+    }
   });
 
-  render(
-    <MockedProvider addTypename={false} link={link3}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  it('navigates to /user/organizations after successful login as user', async () => {
+    render(
+      <MockedProvider addTypename={false} link={userLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  await wait();
-
-  const registerButton = screen.queryByTestId('goToRegisterPortion');
-  if (registerButton) {
-    await userEvent.click(registerButton);
+    await wait();
+    await userEvent.type(screen.getByTestId(/loginEmail/i), 'user@example.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'password',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
 
-    const autocomplete = screen.getByTestId('selectOrg');
-    const input = within(autocomplete).getByRole('combobox');
-    autocomplete.focus();
-    // the value here can be any string you want, so you may also consider to
-    // wrapper it as a function and pass in inputValue as parameter
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    fireEvent.keyDown(autocomplete, { key: 'Enter' });
-  }
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+  });
+
+  it('Returns toast warning with wrong credentials', async () => {
+    render(
+      <MockedProvider addTypename={false} link={userLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(); // wait for any initial page loads
+    await userEvent.type(
+      screen.getByTestId(/loginEmail/i),
+      'wrong-user@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrong-password',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait(); // wait for toast/error after login click
+
+    expect(toast.warn).toHaveBeenCalledWith('Not found');
+  });
 });
 
 describe('Talawa-API server fetch check', () => {
@@ -1154,7 +1238,7 @@ describe('Talawa-API server fetch check', () => {
   });
 
   it('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = vi.fn(() => Promise.resolve({} as unknown as Response));
+    window.fetch = vi.fn(() => Promise.resolve({} as Response));
 
     await act(async () => {
       render(
@@ -1175,7 +1259,7 @@ describe('Talawa-API server fetch check', () => {
 
   it('displays warning message when resource loading fails', async () => {
     const mockError = new Error('Network error');
-    global.fetch = vi.fn(() => Promise.reject(mockError));
+    window.fetch = vi.fn(() => Promise.reject(mockError));
 
     await act(async () => {
       render(
