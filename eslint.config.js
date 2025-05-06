@@ -46,10 +46,13 @@ export default [
       globals: {
         // ✅ Node.js globals
         window: 'readonly',
-        fetch: 'readonly',
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
+        document: 'readonly',
+        HTMLImageElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        File: 'readonly',
 
         // ✅ Vitest globals
         describe: 'readonly',
