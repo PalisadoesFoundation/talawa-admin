@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import EditUserTagModal from './EditUserTagModal';
-import { InterfaceEditUserTagModalProps } from './EditUserTagModal';
+import EditUserTagModal, {
+  InterfaceEditUserTagModalProps,
+} from './EditUserTagModal';
 import type { TFunction } from 'i18next';
 
 // Mock the CSS module
