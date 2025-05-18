@@ -1,0 +1,26 @@
+$list-group-color: var(--#{$prefix}body-color);
+$list-group-bg: var(--#{$prefix}body-bg);
+$list-group-border-color: var(--#{$prefix}border-color);
+$list-group-border-width: var(--#{$prefix}border-width);
+$list-group-border-radius: var(--#{$prefix}border-radius);
+
+$list-group-item-padding-y: $spacer * 0.5;
+$list-group-item-padding-x: $spacer;
+// fusv-disable
+$list-group-item-bg-scale: -80%; // Deprecated in v5.3.0
+$list-group-item-color-scale: 40%; // Deprecated in v5.3.0
+// fusv-enable
+
+$list-group-hover-bg: var(--#{$prefix}tertiary-bg);
+$list-group-active-color: $component-active-color;
+$list-group-active-bg: $component-active-bg;
+$list-group-active-border-color: $list-group-active-bg;
+
+$list-group-disabled-color: var(--#{$prefix}secondary-color);
+$list-group-disabled-bg: $list-group-bg;
+
+$list-group-action-color: var(--#{$prefix}secondary-color);
+$list-group-action-hover-color: var(--#{$prefix}emphasis-color);
+
+$list-group-action-active-color: var(--#{$prefix}body-color);
+$list-group-action-active-bg: var(--#{$prefix}secondary-bg);

@@ -1,0 +1,46 @@
+# Docusaurus related
+.docusaurus
+
+# generated docs using husky pre-commit hook
+# /docs/docs/auto-docs
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# files that interfere with YARN
+yarn.lock
+pnpm-lock.yaml
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+coverage/
+codecov
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# Config files
+!/.env.sample
+/.env
+/.env-*
+/.env_*
+/.env_*
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# express setup
+debug.log
+
+# No editor related files
+.idea
+.vscode
+*.swp

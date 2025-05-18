@@ -1,0 +1,35 @@
+.stackEvents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 20px;
+  padding: 10px 20px;
+  overflow: hidden;
+  gap: 2px;
+  column-gap: 2px;
+}
+
+@media screen and (min-width: 801px) {
+  .stackEvents {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 2rem;
+    margin: 0 40px;
+    gap: 5px;
+    column-gap: 4px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 800px) {
+  .stackEvents {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 2rem;
+    margin: 0 20px;
+    gap: 5px;
+    column-gap: 4px;
+  }
+}
