@@ -1,10 +1,10 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import EventManagement from './EventManagement';
@@ -56,8 +56,8 @@ const renderEventManagement = (): RenderResult => {
 
 describe('Event Management', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: vi.fn(),
@@ -83,11 +83,10 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
-      await waitFor(() => {
-        const eventsScreen = screen.getByTestId('eventsScreen');
-        expect(eventsScreen).toBeInTheDocument();
-      });
+      await act(() => fireEvent.click(backButton));
+
+      const eventsScreen = screen.getByTestId('eventsScreen');
+      expect(eventsScreen).toBeInTheDocument();
     });
 
     it('Testing back button navigation when userType is USER', async () => {
@@ -97,7 +96,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
+      await act(() => fireEvent.click(backButton));
 
       await waitFor(() => {
         const userEventsScreen = screen.getByTestId('userEventsScreen');
@@ -112,7 +111,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      userEvent.click(backButton);
+      await act(() => fireEvent.click(backButton));
 
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');
@@ -157,7 +156,7 @@ describe('Event Management', () => {
       ];
 
       for (const { button, tab } of tabsToTest) {
-        userEvent.click(screen.getByTestId(button));
+        await userEvent.click(screen.getByTestId(button));
         expect(screen.getByTestId(tab)).toBeInTheDocument();
       }
     });
@@ -203,7 +202,7 @@ describe('Event Management', () => {
       expect(dropdownContainer).toBeInTheDocument();
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -226,7 +225,7 @@ describe('Event Management', () => {
         renderEventManagement();
       });
       await act(async () => {
-        userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -240,12 +239,12 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        act(() => {
-          userEvent.click(screen.getByTestId(`${option}DropdownItem`));
+        act(async () => {
+          await userEvent.click(screen.getByTestId(`${option}DropdownItem`));
         });
 
         expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(
-          'text-secondary',
+          'd-flex gap-2 dropdown-item',
         );
       }
     });

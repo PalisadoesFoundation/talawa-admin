@@ -46,7 +46,6 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
     $location_contains: String
     $first: Int
     $skip: Int
-    $upcomingOnly: Boolean
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -57,7 +56,6 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
       }
       first: $first
       skip: $skip
-      upcomingOnly: $upcomingOnly
     ) {
       _id
       title
@@ -347,25 +345,14 @@ export const CHATS_LIST = gql`
  * @returns A boolean indicating whether the organization is a sample organization.
  */
 
+// Ensure query matches backend schema
 export const IS_SAMPLE_ORGANIZATION_QUERY = gql`
-  query ($isSampleOrganizationId: ID!) {
-    isSampleOrganization(id: $isSampleOrganizationId)
-  }
-`;
-
-/**
- * GraphQL query to retrieve custom fields for a specific organization.
- *
- * @param customFieldsByOrganizationId - The ID of the organization for which custom fields are being retrieved.
- * @returns The list of custom fields associated with the organization, including details such as ID, type, and name.
- */
-
-export const ORGANIZATION_CUSTOM_FIELDS = gql`
-  query ($customFieldsByOrganizationId: ID!) {
-    customFieldsByOrganization(id: $customFieldsByOrganizationId) {
-      _id
-      type
+  query Organization($id: String!) {
+    organization(input: { id: $id }) {
+      id
       name
+      description
+      isSampleOrganization
     }
   }
 `;

@@ -1,9 +1,46 @@
+/**
+ * @file Invitations.tsx
+ * @description This component renders the Invitations screen for the user portal,
+ * allowing users to view, search, sort, and manage their volunteer invitations.
+ * It integrates with GraphQL queries and mutations to fetch and update invitation data.
+ *
+ * @module Invitations
+ *
+ * @enum ItemFilter
+ * @description Enum for filtering invitations by type.
+ * @property {string} Group - Represents group invitations.
+ * @property {string} Individual - Represents individual invitations.
+ *
+ * @function Invitations
+ * @description Renders the Invitations screen, displaying a list of volunteer invitations
+ * with options to search, sort, filter, and accept/reject invitations.
+ *
+ * @returns {JSX.Element} The Invitations component.
+ *
+ * @remarks
+ * - Redirects to the homepage if `orgId` or `userId` is missing.
+ * - Displays a loader while fetching data and handles errors gracefully.
+ * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status.
+ * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
+ *
+ * @dependencies
+ * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
+ * - `@apollo/client` for GraphQL queries and mutations
+ * - `@mui/icons-material`, `react-icons` for icons
+ * - Custom hooks: `useLocalStorage`
+ * - Custom components: `Loader`, `SearchBar`, `SortingButton`
+ *
+ * @example
+ * ```tsx
+ * <Invitations />
+ * ```
+ */
 import React, { useMemo, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import styles from '../../../../style/app.module.css';
+import { Button } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router-dom';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { Navigate, useParams } from 'react-router';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
 import { debounce, Stack } from '@mui/material';
@@ -17,40 +54,16 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ItemFilter {
   Group = 'group',
   Individual = 'individual',
 }
 
-/**
- * The `Invitations` component displays list of invites for the user to volunteer.
- * It allows the user to search, sort, and accept/reject invites.
- *
- * @returns The rendered component displaying the upcoming events.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.searchButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userVolunteer',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -71,7 +84,6 @@ const Invitations = (): JSX.Element => {
   );
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [filter, setFilter] = useState<ItemFilter | null>(null);
   const [sortBy, setSortBy] = useState<
     'createdAt_ASC' | 'createdAt_DESC' | null
@@ -84,12 +96,7 @@ const Invitations = (): JSX.Element => {
     status: 'accepted' | 'rejected',
   ): Promise<void> => {
     try {
-      await updateMembership({
-        variables: {
-          id: id,
-          status: status,
-        },
-      });
+      await updateMembership({ variables: { id: id, status: status } });
       toast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
@@ -107,9 +114,7 @@ const Invitations = (): JSX.Element => {
     error: invitationError,
     refetch: refetchInvitations,
   }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
+    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -151,28 +156,12 @@ const Invitations = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByEventName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchByEventName')}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex gap-3 justify-space-between">
             <SortingButton

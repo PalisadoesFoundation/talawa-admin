@@ -4,31 +4,16 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L79)
-
-Component for registering or editing an advertisement.
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L65)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-`InterfaceAddOnRegisterProps`
-
-Contains form status, advertisement details, and a function to update parent state.
+[`InterfaceAddOnRegisterProps`](../../../../../../types/Advertisement/interface/interfaces/InterfaceAddOnRegisterProps.md)
 
 ## Returns
 
 `JSX.Element`
-
-A JSX element that renders a form inside a modal for creating or editing an advertisement.
-
-## Example
-
-```tsx
-<AdvertisementRegister
-  formStatus="register"
-  setAfter={(value) => console.log(value)}
-/>
-```

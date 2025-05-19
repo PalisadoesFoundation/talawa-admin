@@ -2,18 +2,26 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, act, within, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  act,
+  within,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { toast } from 'react-toastify';
 import UpdateTimeout from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
-import { UPDATE_SESSION_TIMEOUT } from 'GraphQl/Mutations/mutations';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
+import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
+
 /**
  * This file contains unit tests for the `UpdateSession` component.
  *
@@ -29,36 +37,30 @@ import { vi } from 'vitest';
 const MOCKS = [
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          timeout: 30,
+        community: {
+          inactivityTimeoutDuration: 1800,
         },
       },
     },
   },
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
-    },
-    result: {
-      data: {
-        getCommunityData: null,
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_SESSION_TIMEOUT,
+      query: UPDATE_SESSION_TIMEOUT_PG,
       variables: {
-        timeout: 30,
+        inactivityTimeoutDuration: 1800,
       },
     },
     result: {
       data: {
-        updateSessionTimeout: true,
+        updateCommunity: {
+          community: {
+            inactivityTimeoutDuration: 1800,
+          },
+        },
       },
     },
   },
@@ -105,10 +107,8 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: -999, // Adjust the clientX to simulate different slider positions
-    });
+    fireEvent.mouseDown(slider, { clientX: -999 }); // Adjust the clientX to simulate different slider positions
+    fireEvent.mouseUp(slider);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
   });
@@ -125,10 +125,8 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: 999, // Adjust the clientX to simulate different slider positions
-    });
+    fireEvent.mouseDown(slider, { clientX: 999 }); // Adjust the clientX to simulate different slider positions
+    fireEvent.mouseUp(slider);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
   });
@@ -145,10 +143,8 @@ describe('Testing UpdateTimeout Component', () => {
     const slider = await screen.findByTestId('slider-thumb');
 
     // Simulate invalid value handling
-    userEvent.click(slider, {
-      // Simulate clicking on the slider to focus
-      clientX: 0, // Adjust the clientX to simulate different slider positions
-    });
+    fireEvent.mouseDown(slider, { clientX: 0 }); // Adjust the clientX to simulate different slider positions
+    fireEvent.mouseUp(slider);
 
     // Ensure onValueChange is not called with invalid values
     expect(mockOnValueChange).not.toHaveBeenCalled();
@@ -166,11 +162,13 @@ describe('Testing UpdateTimeout Component', () => {
     // Wait for the slider to be present
     const slider = await screen.findByTestId('slider-thumb');
 
-    // Simulate slider interaction
-    userEvent.type(slider, '45'); // Simulate typing value
+    fireEvent.mouseDown(slider, { clientX: 45 }); // Adjust the clientX to simulate different slider positions
+    fireEvent.mouseUp(slider);
 
-    // Assert that the callback was called with the expected value
-    expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number)); // Adjust as needed
+    // Assert that the callback was triggered
+    await waitFor(() => {
+      expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number));
+    });
   });
 
   it('Components should render properly', async () => {
@@ -208,7 +206,11 @@ describe('Testing UpdateTimeout Component', () => {
   });
 
   it('Should update session timeout', async () => {
-    render(
+    const user = userEvent.setup();
+
+    const toastSpy = vi.spyOn(toast, 'success');
+
+    const { container } = render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
@@ -218,25 +220,47 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    // Wait for the initial query to complete
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toHaveTextContent(
+        '30 minutes',
+      );
+    });
 
+    // Get the form using querySelector
+    const form = container.querySelector('form');
+    expect(form).toBeInTheDocument();
+
+    // Get and verify submit button
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    expect(submitButton).toBeInTheDocument();
 
-    // Wait for the toast success call
+    // Click the button and submit the form
+    await user.click(submitButton);
+    if (form) {
+      // Perform actions on the form
+      fireEvent.submit(form);
+    }
 
-    await wait();
-
-    expect(toast.success).toHaveBeenCalledWith(
-      expect.stringContaining('Successfully updated the Profile Details.'),
+    // Wait for the mutation and toast
+    await waitFor(
+      () => {
+        expect(toastSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Successfully updated the Profile Details.'),
+        );
+      },
+      { timeout: 3000 },
     );
+
+    // Verify toast was called once
+    expect(toastSpy).toHaveBeenCalledTimes(1);
   });
 
   it('Should handle query errors', async () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         error: new Error('An error occurred'),
       },
@@ -261,29 +285,29 @@ describe('Testing UpdateTimeout Component', () => {
     const errorMocks = [
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         result: {
           data: {
-            getCommunityData: {
-              timeout: 30,
+            community: {
+              inactivityTimeoutDuration: 1800,
             },
           },
         },
       },
       {
         request: {
-          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
         },
         result: {
           data: {
-            getCommunityData: null,
+            community: null,
           },
         },
       },
       {
         request: {
-          query: UPDATE_SESSION_TIMEOUT,
+          query: UPDATE_SESSION_TIMEOUT_PG,
           variables: { timeout: 30 },
         },
         error: new Error('An error occurred'),
@@ -303,7 +327,7 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     const submitButton = screen.getByTestId('update-button');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     await wait();
 

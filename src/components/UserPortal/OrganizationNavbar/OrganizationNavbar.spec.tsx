@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router } from 'react-router-dom';
+import { BrowserRouter, Router } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -11,7 +11,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
-import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 import { createMemoryHistory } from 'history';
 import { vi } from 'vitest';
@@ -39,28 +39,19 @@ const organizationId = 'org1234';
 
 const MOCK_ORGANIZATION_CONNECTION = {
   request: {
-    query: USER_ORGANIZATION_CONNECTION,
+    query: ORGANIZATION_LIST,
     variables: {
       id: organizationId,
     },
   },
   result: {
     data: {
-      organizationsConnection: [
+      organizations: [
         {
           __typename: 'Organization',
-          _id: '6401ff65ce8e8406b8f07af2',
-          image: '',
-          address: {
-            city: 'abc',
-            countryCode: '123',
-            postalCode: '456',
-            state: 'def',
-            dependentLocality: 'ghi',
-            line1: 'asdfg',
-            line2: 'dfghj',
-            sortingCode: '4567',
-          },
+          id: '6401ff65ce8e8406b8f07af2',
+          avatarURL: '',
+          addressLine1: 'abc',
           name: 'anyOrganization1',
           description: 'desc',
           userRegistrationRequired: true,
@@ -109,8 +100,8 @@ const navbarProps = {
   currentPage: 'home',
 };
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({ orgId: organizationId }),
@@ -156,6 +147,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     expect(screen.queryByText('anyOrganization1')).toBeInTheDocument();
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
+    // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   it('The language is switched to English', async () => {
@@ -173,15 +165,16 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
     expect(cookies.get('i18next')).toBe('en');
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
+    // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   it('The language is switched to fr', async () => {
@@ -199,9 +192,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -223,16 +216,16 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
     expect(cookies.get('i18next')).toBe('hi');
   });
 
-  it('The language is switched to sp', async () => {
+  it('The language is switched to es', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -247,13 +240,13 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
-    expect(cookies.get('i18next')).toBe('sp');
+    expect(cookies.get('i18next')).toBe('es');
   });
 
   it('The language is switched to zh', async () => {
@@ -271,9 +264,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 
@@ -283,10 +276,9 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   it('Should handle logout properly', async () => {
     const mockStorage = {
       clear: vi.fn(),
-      getItem: vi.fn((key: 'name' | 'talawaPlugins') => {
+      getItem: vi.fn((key: 'name') => {
         const items = {
           name: JSON.stringify('Test User'),
-          talawaPlugins: JSON.stringify([]),
         };
         return items[key] || null;
       }),
@@ -317,8 +309,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    userEvent.click(screen.getByTestId('personIcon'));
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('personIcon'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
     expect(mockStorage.clear).toHaveBeenCalled();
     expect(mockLocation.replace).toHaveBeenCalledWith('/');
   });
@@ -340,7 +332,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     );
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
-    userEvent.click(homeLink);
+    await userEvent.click(homeLink);
     await wait();
     expect(history.location.pathname).toBe(
       `/user/organization/${organizationId}`,

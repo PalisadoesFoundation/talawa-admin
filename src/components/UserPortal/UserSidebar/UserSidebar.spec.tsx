@@ -3,12 +3,12 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import {
   USER_DETAILS,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -44,19 +44,11 @@ const resizeWindow = (width: number): void => {
   });
 };
 
-const props = {
-  hideDrawer: true,
-  setHideDrawer: vi.fn(),
-};
+const props = { hideDrawer: true, setHideDrawer: vi.fn() };
 
 const MOCKS = [
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'properId',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'properId' } },
     result: {
       data: {
         user: {
@@ -75,15 +67,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: 'properId',
@@ -100,79 +85,35 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: 'properId',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: 'properId', first: 10 },
     },
     result: {
       data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
+        user: {
+          organizationsWhereMember: {
+            pageInfo: { hasNextPage: false },
+            edges: [
+              {
+                node: {
+                  id: '6401ff65ce8e8406b8f07af2',
                   name: 'Any Organization',
-                  image: '',
+                  addressLine1: 'asdfg',
                   description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
+                  avatarURL: '',
+                  members: {
+                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
                   },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
                 },
-              ],
-            },
+              },
+            ],
           },
-        ],
+        },
       },
     },
   },
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'imagePresent',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'imagePresent' } },
     result: {
       data: {
         user: {
@@ -191,15 +132,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: '2',
@@ -216,87 +150,43 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: 'imagePresent',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: 'imagePresent', first: 10 },
     },
     result: {
       data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
+        user: {
+          organizationsWhereMember: {
+            edges: [
+              {
+                node: {
+                  id: '6401ff65ce8e8406b8f07af2',
                   name: 'Any Organization',
-                  image: 'dadsa',
+                  addressLine1: 'asdfg',
                   description: 'New Desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
+                  avatarURL: 'dadsa',
+                  members: {
+                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
                   },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
                 },
-              ],
-            },
+                cursor: 'cursor-1', // Optional but recommended for pagination mocks
+              },
+            ],
+            pageInfo: { hasNextPage: false },
           },
-        ],
+        },
       },
     },
   },
   {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'orgEmpty',
-      },
-    },
+    request: { query: USER_DETAILS, variables: { id: 'orgEmpty' } },
     result: {
       data: {
         user: {
           user: {
             _id: 'orgEmpty',
             image: null,
-            firstName: 'Noble',
-            lastName: 'Mittal',
+            name: 'Noble Mittal',
             email: 'noble@mittal.com',
             createdAt: '2023-02-18T09:22:27.969Z',
             joinedOrganizations: [],
@@ -307,15 +197,8 @@ const MOCKS = [
             educationGrade: '',
             employmentStatus: '',
             maritalStatus: '',
-            address: {
-              line1: '',
-              countryCode: '',
-              city: '',
-              state: '',
-            },
-            phone: {
-              mobile: '',
-            },
+            address: { line1: '', countryCode: '', city: '', state: '' },
+            phone: { mobile: '' },
           },
           appUserProfile: {
             _id: 'orgEmpty',
@@ -332,25 +215,21 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: 'orgEmpty',
-      },
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: 'orgEmpty', first: 10 },
     },
     result: {
       data: {
-        users: [
-          {
-            user: {
-              joinedOrganizations: [],
-            },
+        user: {
+          organizationsWhereMember: {
+            edges: [],
+            pageInfo: { hasNextPage: false },
           },
-        ],
+        },
       },
     },
   },
 ];
-
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -381,6 +260,7 @@ const renderUserSidebar = (
 
 describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
+    setItem('name', 'Noble Mittal');
     vi.clearAllMocks();
   });
 
@@ -427,6 +307,14 @@ describe('UserSidebar Component Tests in User Portal', () => {
     expectedLinks.forEach((link) => {
       expect(screen.getByText(link)).toBeInTheDocument();
     });
+  });
+
+  it('displays the user name from localStorage correctly', async () => {
+    await act(async () => {
+      renderUserSidebar('properId', link);
+      await wait();
+    });
+    expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
   });
 
   it('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {

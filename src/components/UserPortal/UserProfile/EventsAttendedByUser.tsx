@@ -1,13 +1,37 @@
+/**
+ * Component to display the events attended by a user.
+ *
+ * This component renders a card that lists all the events attended by a user.
+ * If the user has not attended any events, a message indicating no events
+ * attended is displayed. Each event is rendered using the `EventsAttendedByMember` component.
+ *
+ * @component
+ * @param {InterfaceUser} props - The props for the component.
+ * @param {Object} props.userDetails - The details of the user.
+ * @param {string} props.userDetails.firstName - The first name of the user.
+ * @param {string} props.userDetails.lastName - The last name of the user.
+ * @param {string} props.userDetails.createdAt - The account creation date of the user.
+ * @param {string} props.userDetails.gender - The gender of the user.
+ * @param {string} props.userDetails.email - The email address of the user.
+ * @param {string} props.userDetails.phoneNumber - The phone number of the user.
+ * @param {string} props.userDetails.birthDate - The birth date of the user.
+ * @param {string} props.userDetails.grade - The grade of the user.
+ * @param {string} props.userDetails.empStatus - The employment status of the user.
+ * @param {string} props.userDetails.maritalStatus - The marital status of the user.
+ * @param {string} props.userDetails.address - The address of the user.
+ * @param {string} props.userDetails.state - The state of the user.
+ * @param {string} props.userDetails.country - The country of the user.
+ * @param {string} props.userDetails.image - The profile image of the user.
+ * @param {Array<{_id: string}>} props.userDetails.eventsAttended - The list of events attended by the user.
+ * @param {(key: string) => string} props.t - The translation function for localization.
+ *
+ * @returns {React.FC} A React functional component that displays the events attended by the user.
+ */
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
-import EventsAttendedByMember from 'components/MemberDetail/EventsAttendedByMember';
-/**
- * Component to display events attended by a user in card format
- * @param userDetails - User information including attended events
- * @param t - Translation function
- * @returns Card component containing list of attended events
- */
+import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
+
 interface InterfaceUser {
   userDetails: {
     firstName: string;

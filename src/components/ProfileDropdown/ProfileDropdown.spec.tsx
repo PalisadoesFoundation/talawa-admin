@@ -1,14 +1,14 @@
 import React, { act } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileDropdown from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -16,52 +16,30 @@ const { setItem } = useLocalStorage();
 const mockNavigate = vi.fn();
 
 // Mock useNavigate hook
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return { ...actual, useNavigate: () => mockNavigate };
 });
 
 const MOCKS = [
   {
-    request: {
-      query: REVOKE_REFRESH_TOKEN,
-    },
-    result: {
-      data: {
-        revokeRefreshTokenForUser: true,
-      },
-    },
+    request: { query: REVOKE_REFRESH_TOKEN },
+    result: { data: { revokeRefreshTokenForUser: true } },
   },
   {
-    request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
-    },
-    result: {
-      data: {
-        getCommunityData: {
-          timeout: 30,
-        },
-      },
-    },
+    request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+    result: { data: { community: { inactivityTimeoutDuration: 1800 } } },
     delay: 1000,
   },
 ];
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
   clear: vi.fn(),
 }));
 
 beforeEach(() => {
-  setItem('FirstName', 'John');
-  setItem('LastName', 'Doe');
+  setItem('name', 'John Doe');
   setItem(
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
@@ -94,13 +72,12 @@ describe('ProfileDropdown Component', () => {
 
     expect(screen.getByTestId('display-name')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('User')).toBeInTheDocument();
     expect(screen.getByTestId('display-type')).toBeInTheDocument();
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
   test('renders Super admin', () => {
-    setItem('SuperAdmin', true);
+    setItem('role', 'API Administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -108,10 +85,10 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByText('SuperAdmin')).toBeInTheDocument();
+    expect(screen.getByText('API Administrator')).toBeInTheDocument();
   });
   test('renders Admin', () => {
-    setItem('AdminFor', ['123']);
+    setItem('role', 'administrator');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -119,7 +96,7 @@ describe('ProfileDropdown Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getByText('Admin')).toBeInTheDocument();
+    expect(screen.getByText('administrator')).toBeInTheDocument();
   });
 
   test('logout functionality clears local storage and redirects to home', async () => {
@@ -132,18 +109,17 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
 
     expect(global.window.location.pathname).toBe('/');
   });
 
   describe('Member screen routing testing', () => {
     test('member screen', async () => {
-      setItem('SuperAdmin', false);
-      setItem('AdminFor', []);
+      setItem('role', 'regular');
 
       render(
         <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -156,66 +132,19 @@ describe('ProfileDropdown Component', () => {
       );
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('togDrop'));
+        await userEvent.click(screen.getByTestId('togDrop'));
       });
 
       await act(async () => {
-        userEvent.click(screen.getByTestId('profileBtn'));
+        await userEvent.click(screen.getByTestId('profileBtn'));
       });
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
     });
   });
 
-  test('handles error when revoking refresh token during logout', async () => {
-    // Mock the revokeRefreshToken mutation to throw an error
-    const MOCKS_WITH_ERROR = [
-      {
-        request: {
-          query: REVOKE_REFRESH_TOKEN,
-        },
-        error: new Error('Failed to revoke refresh token'),
-      },
-    ];
-
-    const consoleErrorMock = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    render(
-      <MockedProvider mocks={MOCKS_WITH_ERROR} addTypename={false}>
-        <BrowserRouter>
-          <ProfileDropdown />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Open the dropdown
-    await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
-    });
-
-    // Click the logout button
-    await act(async () => {
-      userEvent.click(screen.getByTestId('logoutBtn'));
-    });
-
-    // Wait for any pending promises
-    await waitFor(() => {
-      // Assert that console.error was called
-      expect(consoleErrorMock).toHaveBeenCalledWith(
-        'Error revoking refresh token:',
-        expect.any(Error),
-      );
-    });
-
-    // Cleanup mock
-    consoleErrorMock.mockRestore();
-  });
-
   test('navigates to /user/settings for a user', async () => {
-    setItem('SuperAdmin', false);
-    setItem('AdminFor', []);
+    setItem('role', 'regular');
 
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -228,11 +157,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -256,11 +185,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/');
@@ -284,11 +213,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');

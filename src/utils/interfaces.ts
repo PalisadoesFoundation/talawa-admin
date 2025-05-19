@@ -1,3 +1,308 @@
+export enum Iso3166Alpha2CountryCode {
+  ad = 'ad',
+  ae = 'ae',
+  af = 'af',
+  ag = 'ag',
+  ai = 'ai',
+  al = 'al',
+  am = 'am',
+  ao = 'ao',
+  aq = 'aq',
+  ar = 'ar',
+  as = 'as',
+  at = 'at',
+  au = 'au',
+  aw = 'aw',
+  ax = 'ax',
+  az = 'az',
+  ba = 'ba',
+  bb = 'bb',
+  bd = 'bd',
+  be = 'be',
+  bf = 'bf',
+  bg = 'bg',
+  bh = 'bh',
+  bi = 'bi',
+  bj = 'bj',
+  bl = 'bl',
+  bm = 'bm',
+  bn = 'bn',
+  bo = 'bo',
+  bq = 'bq',
+  br = 'br',
+  bs = 'bs',
+  bt = 'bt',
+  bv = 'bv',
+  bw = 'bw',
+  by = 'by',
+  bz = 'bz',
+  ca = 'ca',
+  cc = 'cc',
+  cd = 'cd',
+  cf = 'cf',
+  cg = 'cg',
+  ch = 'ch',
+  ci = 'ci',
+  ck = 'ck',
+  cl = 'cl',
+  cm = 'cm',
+  cn = 'cn',
+  co = 'co',
+  cr = 'cr',
+  cu = 'cu',
+  cv = 'cv',
+  cw = 'cw',
+  cx = 'cx',
+  cy = 'cy',
+  cz = 'cz',
+  de = 'de',
+  dj = 'dj',
+  dk = 'dk',
+  dm = 'dm',
+  do = 'do',
+  dz = 'dz',
+  ec = 'ec',
+  ee = 'ee',
+  eg = 'eg',
+  eh = 'eh',
+  er = 'er',
+  es = 'es',
+  et = 'et',
+  fi = 'fi',
+  fj = 'fj',
+  fk = 'fk',
+  fm = 'fm',
+  fo = 'fo',
+  fr = 'fr',
+  ga = 'ga',
+  gb = 'gb',
+  gd = 'gd',
+  ge = 'ge',
+  gf = 'gf',
+  gg = 'gg',
+  gh = 'gh',
+  gi = 'gi',
+  gl = 'gl',
+  gm = 'gm',
+  gn = 'gn',
+  gp = 'gp',
+  gq = 'gq',
+  gr = 'gr',
+  gs = 'gs',
+  gt = 'gt',
+  gu = 'gu',
+  gw = 'gw',
+  gy = 'gy',
+  hk = 'hk',
+  hm = 'hm',
+  hn = 'hn',
+  hr = 'hr',
+  ht = 'ht',
+  hu = 'hu',
+  id = 'id',
+  ie = 'ie',
+  il = 'il',
+  im = 'im',
+  in = 'in',
+  io = 'io',
+  iq = 'iq',
+  ir = 'ir',
+  is = 'is',
+  it = 'it',
+  je = 'je',
+  jm = 'jm',
+  jo = 'jo',
+  jp = 'jp',
+  ke = 'ke',
+  kg = 'kg',
+  kh = 'kh',
+  ki = 'ki',
+  km = 'km',
+  kn = 'kn',
+  kp = 'kp',
+  kr = 'kr',
+  kw = 'kw',
+  ky = 'ky',
+  kz = 'kz',
+  la = 'la',
+  lb = 'lb',
+  lc = 'lc',
+  li = 'li',
+  lk = 'lk',
+  lr = 'lr',
+  ls = 'ls',
+  lt = 'lt',
+  lu = 'lu',
+  lv = 'lv',
+  ly = 'ly',
+  ma = 'ma',
+  mc = 'mc',
+  md = 'md',
+  me = 'me',
+  mf = 'mf',
+  mg = 'mg',
+  mh = 'mh',
+  mk = 'mk',
+  ml = 'ml',
+  mm = 'mm',
+  mn = 'mn',
+  mo = 'mo',
+  mp = 'mp',
+  mq = 'mq',
+  mr = 'mr',
+  ms = 'ms',
+  mt = 'mt',
+  mu = 'mu',
+  mv = 'mv',
+  mw = 'mw',
+  mx = 'mx',
+  my = 'my',
+  mz = 'mz',
+  na = 'na',
+  nc = 'nc',
+  ne = 'ne',
+  nf = 'nf',
+  ng = 'ng',
+  ni = 'ni',
+  nl = 'nl',
+  no = 'no',
+  np = 'np',
+  nr = 'nr',
+  nu = 'nu',
+  nz = 'nz',
+  om = 'om',
+  pa = 'pa',
+  pe = 'pe',
+  pf = 'pf',
+  pg = 'pg',
+  ph = 'ph',
+  pk = 'pk',
+  pl = 'pl',
+  pm = 'pm',
+  pn = 'pn',
+  pr = 'pr',
+  ps = 'ps',
+  pt = 'pt',
+  pw = 'pw',
+  py = 'py',
+  qa = 'qa',
+  re = 're',
+  ro = 'ro',
+  rs = 'rs',
+  ru = 'ru',
+  rw = 'rw',
+  sa = 'sa',
+  sb = 'sb',
+  sc = 'sc',
+  sd = 'sd',
+  se = 'se',
+  sg = 'sg',
+  sh = 'sh',
+  si = 'si',
+  sj = 'sj',
+  sk = 'sk',
+  sl = 'sl',
+  sm = 'sm',
+  sn = 'sn',
+  so = 'so',
+  sr = 'sr',
+  ss = 'ss',
+  st = 'st',
+  sv = 'sv',
+  sx = 'sx',
+  sy = 'sy',
+  sz = 'sz',
+  tc = 'tc',
+  td = 'td',
+  tf = 'tf',
+  tg = 'tg',
+  th = 'th',
+  tj = 'tj',
+  tk = 'tk',
+  tl = 'tl',
+  tm = 'tm',
+  tn = 'tn',
+  to = 'to',
+  tr = 'tr',
+  tt = 'tt',
+  tv = 'tv',
+  tw = 'tw',
+  tz = 'tz',
+  ua = 'ua',
+  ug = 'ug',
+  um = 'um',
+  us = 'us',
+  uy = 'uy',
+  uz = 'uz',
+  va = 'va',
+  vc = 'vc',
+  ve = 've',
+  vg = 'vg',
+  vi = 'vi',
+  vn = 'vn',
+  vu = 'vu',
+  wf = 'wf',
+  ws = 'ws',
+  ye = 'ye',
+  yt = 'yt',
+  za = 'za',
+  zm = 'zm',
+  zw = 'zw',
+}
+
+enum UserEducationGrade {
+  GRADE_1 = 'grade_1',
+  GRADE_2 = 'grade_2',
+  GRADE_3 = 'grade_3',
+  GRADE_4 = 'grade_4',
+  GRADE_5 = 'grade_5',
+  GRADE_6 = 'grade_6',
+  GRADE_7 = 'grade_7',
+  GRADE_8 = 'grade_8',
+  GRADE_9 = 'grade_9',
+  GRADE_10 = 'grade_10',
+  GRADE_11 = 'grade_11',
+  GRADE_12 = 'grade_12',
+  GRADUATE = 'graduate',
+  KG = 'kg',
+  NO_GRADE = 'no_grade',
+  PRE_KG = 'pre_kg',
+}
+
+enum UserEmploymentStatus {
+  FULL_TIME = 'full_time',
+  PART_TIME = 'part_time',
+  UNEMPLOYED = 'unemployed',
+}
+
+enum UserMaritalStatus {
+  DIVORCED = 'divorced',
+  ENGAGED = 'engaged',
+  MARRIED = 'married',
+  SEPARATED = 'separated',
+  SINGLE = 'single',
+  WIDOWED = 'widowed',
+}
+
+enum UserNatalSex {
+  FEMALE = 'female',
+  INTERSEX = 'intersex',
+  MALE = 'male',
+}
+
+type ID = string | number;
+
+enum UserRole {
+  Administrator = 'administrator',
+  Regular = 'regular',
+}
+
+enum AdvertisementTypePg {
+  BANNER = 'banner',
+  MENU = 'menu',
+  POP_UP = 'pop_up',
+}
+
 export interface InterfaceUserType {
   user: {
     firstName: string;
@@ -7,10 +312,28 @@ export interface InterfaceUserType {
   };
 }
 
+export interface InterfaceUserTypePG {
+  user: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+  };
+}
+
+export interface InterfaceCurrentUserTypePG {
+  currentUser: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+  };
+}
+
 export interface InterfaceUserInfo {
-  _id: string;
   firstName: string;
   lastName: string;
+  _id: string;
   image?: string | null;
 }
 
@@ -106,12 +429,32 @@ export interface InterfaceOrgConnectionInfoType {
   createdAt: string;
   address: InterfaceAddress;
 }
-export interface InterfaceOrgConnectionType {
-  organizationsConnection: InterfaceOrgConnectionInfoType[];
+
+// export interface InterfaceOrgConnectionType {
+//   organizationsConnection: InterfaceOrgConnectionInfoType[];
+// }
+
+export interface InterfaceOrgConnectionInfoTypePG {
+  organizations: InterfaceOrgInfoTypePG[];
+}
+
+export interface InterfaceOrgInfoTypePG {
+  id: string;
+  name: string;
+  addressLine1: string;
+  description: string;
+  avatarURL: string | null;
+  members: {
+    edges: {
+      node: {
+        id: string;
+      };
+    }[];
+  };
 }
 
 export interface InterfaceQueryOrganizationsListObject {
-  _id: string;
+  id: string;
   image: string | null;
   creator: {
     firstName: string;
@@ -152,6 +495,356 @@ export interface InterfaceQueryOrganizationsListObject {
   }[];
 }
 
+export interface InterfacePageInfoPg {
+  endCursor: string;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor: string;
+}
+export interface InterfaceUserPg {
+  addressLine1: string;
+  addressLine2: string;
+  avatarMimeType: string;
+  avatarURL: string;
+  birthDate: Date;
+  city: string;
+  countryCode: Iso3166Alpha2CountryCode;
+  createdAt: string;
+  creator: InterfaceUserPg;
+  description: string;
+  educationGrade: UserEducationGrade;
+  emailAddress: string;
+  employmentStatus: UserEmploymentStatus;
+  homePhoneNumber: string;
+  id: ID;
+  isEmailAddressVerified: boolean;
+  maritalStatus: UserMaritalStatus;
+  mobilePhoneNumber: string;
+  name: string;
+  natalSex: UserNatalSex;
+  postalCode: string;
+  role: UserRole;
+  state: string;
+  updatedAt: string;
+  updater: InterfaceUserPg;
+  workPhoneNumber: string;
+}
+
+export interface InterfaceAdvertisementPg {
+  id: ID;
+  name: string;
+  description: string;
+  type: AdvertisementTypePg;
+  startAt: string;
+  endAt: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+  attachments: InterfaceAdvertisementAttachmentPg[];
+}
+
+export interface InterfaceAdvertisementAttachmentPg {
+  mimeType: string;
+  url: string;
+}
+
+export interface InterfaceOrganizationAdvertisementsConnectionPg {
+  edges: InterfaceOrganizationAdvertisementsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationAdvertisementsConnectionEdgePg {
+  cursor: string;
+  node: InterfaceAdvertisementPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationBlockedUsersConnectionPg {
+  edges: InterfaceOrganizationBlockedUsersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceChatPg {
+  id: ID;
+  name: string;
+  description: string;
+  avatarMimeType: string;
+  avatarURL: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+}
+
+export interface InterfaceChatMessagePg {
+  id: ID;
+  body: string;
+  chat: InterfaceChatPg;
+  createdAt: string;
+  creator: InterfaceUserPg;
+  parentMessage: InterfaceChatMessagePg;
+  updatedAt: string;
+}
+
+type InterfaceOrganizationChatsConnectionPg = {
+  edges: InterfaceOrganizationChatsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+};
+
+type InterfaceOrganizationChatsConnectionEdgePg = {
+  cursor: string;
+  node: ChatPg;
+};
+
+type InterfaceChatMembersConnectionPg = {
+  edges: InterfaceChatMembersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+};
+
+type InterfaceChatMembersConnectionEdgePg = {
+  cursor: string;
+  node: InterfaceUserPg;
+};
+
+type InterfaceChatMessagesConnectionPg = {
+  edges: InterfaceChatMessagesConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+};
+
+type InterfaceChatMessagesConnectionEdgePg = {
+  cursor: string;
+  node: InterfaceChatMessagePg;
+};
+
+type ChatPg = {
+  id: string; // Assuming ID is a string
+  name: string;
+  description: string;
+  avatarMimeType: string; // optional
+  avatarURL: string; // optional
+  createdAt: Date;
+  updatedAt: Date;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+  members: InterfaceChatMembersConnectionPg;
+  messages: InterfaceChatMessagesConnectionPg;
+};
+
+export interface InterfaceOrganizationEventsConnectionPg {
+  edges: InterfaceOrganizationEventsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationEventsConnectionEdgePg {
+  cursor: string;
+  node: InterfaceEventPg;
+}
+
+export interface InterfaceEventPg {
+  event: {
+    id: ID;
+    name: string;
+    description: string;
+    startAt: string;
+    endAt: string;
+    createdAt: string;
+    updatedAt: string;
+    creator: InterfaceUserPg;
+    updater: InterfaceUserPg;
+    organization: InterfaceOrganizationPg;
+    attachments: InterfaceEventAttachmentPg[];
+  };
+}
+
+export interface InterfaceEventAttachmentPg {
+  mimeType: string;
+  url: string;
+}
+
+export interface InterfaceOrganizationFundsConnectionPg {
+  edges: InterfaceOrganizationFundsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationFundsConnectionEdgePg {
+  cursor: string;
+  node: InterfaceFundPg;
+}
+
+export interface InterfaceFundPg {
+  id: ID;
+  name: string;
+  organization: InterfaceOrganizationPg;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  isTaxDeductible: boolean;
+}
+
+export interface InterfaceOrganizationMembersConnectionPg {
+  edges: InterfaceOrganizationMembersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationMembersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationPinnedPostsConnectionPg {
+  edges: InterfaceOrganizationPinnedPostsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationPinnedPostsConnectionEdgePg {
+  cursor: string;
+  node: InterfacePostPg;
+}
+
+export interface InterfacePostPg {
+  id: ID;
+  caption: string;
+  commentsCount: number;
+  createdAt: string;
+  creator: InterfaceUserPg;
+  downVotesCount: number;
+  organization: InterfaceOrganizationPg;
+  pinnedAt: string;
+  upVotesCount: number;
+  updatedAt: string;
+  updater: InterfaceUserPg;
+}
+
+export interface InterfaceOrganizationPostsConnectionPg {
+  edges: InterfaceOrganizationPostsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationPostsConnectionEdgePg {
+  cursor: string;
+  node: InterfacePostPg;
+}
+
+export interface InterfaceOrganizationTagFoldersConnectionPg {
+  edges: InterfaceOrganizationTagFoldersConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationTagFoldersConnectionEdgePg {
+  cursor: string;
+  node: InterfaceTagFolderPg;
+}
+
+export interface InterfaceTagFolderPg {
+  id: ID;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+}
+
+export interface InterfaceOrganizationTagsConnectionPg {
+  edges: InterfaceOrganizationTagsConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationTagsConnectionEdgePg {
+  cursor: string;
+  node: InterfaceTagPg;
+}
+
+export interface InterfaceTagPg {
+  id: ID;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+}
+
+export interface InterfaceOrganizationVenuesConnectionPg {
+  edges: InterfaceOrganizationVenuesConnectionEdgePg[];
+  pageInfo: InterfacePageInfoPg;
+}
+
+export interface InterfaceOrganizationVenuesConnectionEdgePg {
+  cursor: string;
+  node: InterfaceVenuePg;
+}
+
+export interface InterfaceVenuePg {
+  id: ID;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: InterfaceUserPg;
+  updater: InterfaceUserPg;
+  organization: InterfaceOrganizationPg;
+}
+
+export interface InterfacePaginationArgs {
+  after: string;
+  before: string;
+  first: number;
+  last: number;
+}
+
+export interface InterfaceOrganizationPg {
+  organization: {
+    id: string;
+    name: string;
+    description: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    countryCode: Iso3166Alpha2CountryCode;
+    avatarMimeType: string;
+    avatarURL: string;
+    createdAt: Date;
+    updatedAt: Date;
+    creator: InterfaceUserPg;
+    updater: InterfaceUserPg;
+    postsCount: number;
+    pinnedPostsCount: number;
+
+    advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
+
+    blockedUsers: InterfaceOrganizationBlockedUsersConnectionPg;
+
+    chats: InterfaceOrganizationChatsConnectionPg;
+
+    events: InterfaceOrganizationEventsConnectionPg;
+
+    funds: InterfaceOrganizationFundsConnectionPg;
+
+    members: InterfaceOrganizationMembersConnectionPg;
+
+    pinnedPosts: InterfaceOrganizationPinnedPostsConnectionPg;
+
+    posts: InterfaceOrganizationPostsConnectionPg;
+
+    tagFolders: InterfaceOrganizationTagFoldersConnectionPg;
+
+    tags: InterfaceOrganizationTagsConnectionPg;
+
+    venues: InterfaceOrganizationVenuesConnectionPg;
+  };
+}
+
 export interface InterfaceQueryOrganizationListObject {
   _id: string;
   image: string | null;
@@ -181,31 +874,13 @@ export interface InterfaceQueryOrganizationPostListItem {
   posts: {
     edges: {
       node: {
-        _id: string;
-        title: string;
-        text: string;
-        imageUrl: string | null;
-        videoUrl: string | null;
+        id: string;
+        caption: string;
         creator: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          email: string;
+          id: string;
+          name: string;
         };
         createdAt: string;
-        likeCount: number;
-        commentCount: number;
-        pinned: boolean;
-
-        likedBy: { _id: string }[];
-        comments: {
-          _id: string;
-          text: string;
-          creator: { _id: string };
-          createdAt: string;
-          likeCount: number;
-          likedBy: { _id: string }[];
-        }[];
       };
       cursor: string;
     }[];
@@ -215,7 +890,6 @@ export interface InterfaceQueryOrganizationPostListItem {
       hasNextPage: boolean;
       hasPreviousPage: boolean;
     };
-    totalCount: number;
   };
 }
 
@@ -317,18 +991,23 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 export interface InterfaceQueryOrganizationFundCampaigns {
+  id: string;
   name: string;
   isArchived: boolean;
   campaigns: {
-    _id: string;
-    name: string;
-    fundingGoal: number;
-    startDate: Date;
-    endDate: Date;
-    createdAt: string;
-    currency: string;
-  }[];
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        startAt: string;
+        endAt: string;
+        currencyCode: string;
+        goalAmount: number;
+      };
+    }[];
+  };
 }
+
 export interface InterfaceUserCampaign {
   _id: string;
   name: string;
@@ -342,41 +1021,103 @@ export interface InterfaceQueryFundCampaignsPledges {
     name: string;
   };
   name: string;
-  fundingGoal: number;
-  currency: string;
+  goalAmount: number;
+  currencyCode: string;
+  startAt: Date;
+  endAt: Date;
+  pledges: {
+    edges: {
+      node: {
+        id: string;
+        amount: number;
+        createdAt: string;
+        pledger: {
+          id: string;
+          name: string;
+        };
+        campaign: {
+          id: string;
+          name: string;
+          fund: {
+            name: string;
+          };
+        };
+      };
+    }[];
+  };
+}
+
+export interface InterfaceCampaignInfoPG {
+  name: string;
+  goal: number;
   startDate: Date;
   endDate: Date;
-  pledges: InterfacePledgeInfo[];
+  currency: string;
 }
+
 export interface InterfaceFundInfo {
-  _id: string;
+  id: string;
   name: string;
   refrenceNumber: string;
-  taxDeductible: boolean;
+  isTaxDeductible: boolean;
   isArchived: boolean;
   isDefault: boolean;
   createdAt: string;
   organizationId: string;
-  creator: { _id: string; firstName: string; lastName: string };
+  creator: { name: string };
+  organization: { name: string };
+  updater: {
+    name: string;
+  };
+  edges: {
+    node: {
+      id: string;
+      name: string;
+      fundingGoal: number;
+      startDate: string;
+      endDate: string;
+      currency: string;
+      createdAt: string;
+    };
+  };
 }
 export interface InterfaceCampaignInfo {
-  _id: string;
+  id: string;
   name: string;
-  fundingGoal: number;
-  startDate: Date;
-  endDate: Date;
+  goalAmount: number;
+  startAt: Date;
+  endAt: Date;
   createdAt: string;
-  currency: string;
+  currencyCode: string;
 }
 export interface InterfacePledgeInfo {
-  _id: string;
-  campaign?: { _id: string; name: string; endDate: Date };
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
   amount: number;
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfaceUserInfo[];
+  users: InterfaceUserInfo_PG[];
 }
+
+export interface InterfacePledgeInfoPG {
+  id: string;
+  campaign?: { id: string; name: string; endDate: Date };
+  amount: number;
+  currencyCode: string;
+  endAt: string;
+  startAt: string;
+  pledges: InterfaceUserInfo_PG[];
+}
+
+export interface InterfaceUserInfo_PG {
+  firstName: string;
+  lastName: string;
+  name: string;
+  id: string;
+  image?: string | null;
+}
+
 export interface InterfaceQueryOrganizationEventListItem
   extends InterfaceBaseEvent {
   isPublic: boolean;
@@ -430,7 +1171,7 @@ export interface InterfaceQueryUserListItem {
     }[];
     createdAt: string;
     registeredEvents: { _id: string }[];
-    membershipRequests: { _id: string }[];
+    membershipRequests: { id: string }[];
   };
   appUserProfile: {
     _id: string;
@@ -465,7 +1206,7 @@ export interface InterfaceCreateFund {
   fundRef: string;
   isDefault: boolean;
   isArchived: boolean;
-  taxDeductible: boolean;
+  isTaxDeductible: boolean;
 }
 
 export interface InterfacePostCard {
@@ -506,7 +1247,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfaceUserInfo[];
+  pledgeUsers: InterfaceUserInfo_PG[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;
@@ -515,11 +1256,11 @@ export interface InterfaceCreatePledge {
 
 export interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
-    _id: string;
+    id: string;
     membershipRequests: {
-      _id: string;
+      id: string;
       user: {
-        _id: string;
+        id: string;
         firstName: string;
         lastName: string;
         email: string;
@@ -598,8 +1339,10 @@ export interface InterfaceMapType {
 }
 
 export interface InterfaceCustomFieldData {
-  type: string;
+  id?: string;
   name: string;
+  type: string;
+  organizationId?: string;
 }
 
 export interface InterfaceEventVolunteerInfo {

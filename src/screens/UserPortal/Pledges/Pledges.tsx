@@ -1,53 +1,3 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
-import { useTranslation } from 'react-i18next';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
-import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfacePledgeInfo, InterfaceUserInfo } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
-import { type ApolloQueryResult, useQuery } from '@apollo/client';
-import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
-import dayjs from 'dayjs';
-import { currencySymbols } from 'utils/currency';
-import PledgeDeleteModal from 'screens/FundCampaignPledge/PledgeDeleteModal';
-import { Navigate, useParams } from 'react-router-dom';
-import PledgeModal from '../Campaigns/PledgeModal';
-import SortingButton from 'subComponents/SortingButton';
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
-};
-
-enum ModalState {
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
 /**
  * The `Pledges` component is responsible for rendering a user's pledges within a campaign.
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
@@ -85,23 +35,68 @@ enum ModalState {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, ProgressBar } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
+import { WarningAmberRounded } from '@mui/icons-material';
+import useLocalStorage from 'utils/useLocalstorage';
+import type {
+  InterfacePledgeInfo,
+  InterfaceUserInfo_PG,
+} from 'utils/interfaces';
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { type ApolloQueryResult, useQuery } from '@apollo/client';
+import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
+import Loader from 'components/Loader/Loader';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from '@mui/x-data-grid';
+import { Stack } from '@mui/material';
+import Avatar from 'components/Avatar/Avatar';
+import dayjs from 'dayjs';
+import { currencySymbols } from 'utils/currency';
+import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDeleteModal';
+import { Navigate, useParams } from 'react-router';
+import PledgeModal from '../Campaigns/PledgeModal';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
+const dataGridStyle = {
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
+  },
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
+};
+
+enum ModalState {
+  UPDATE = 'update',
+  DELETE = 'delete',
+}
 
 const Pledges = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userCampaigns',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userIdFromStorage = getItem('userId');
   const { orgId } = useParams();
-  if (!orgId || !userId) {
+  if (!orgId || !userIdFromStorage) {
     return <Navigate to={'/'} replace />;
   }
+  const userId: string = userIdFromStorage as string;
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -113,10 +108,7 @@ const Pledges = (): JSX.Element => {
   >('endDate_DESC');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.UPDATE]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
   const open = Boolean(anchor);
   const id = open ? 'simple-popup' : undefined;
@@ -127,15 +119,11 @@ const Pledges = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: {
-      getPledgesByUserId: InterfacePledgeInfo[];
-    };
+    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
-      ApolloQueryResult<{
-        getPledgesByUserId: InterfacePledgeInfo[];
-      }>
+      ApolloQueryResult<{ getPledgesByUserId: InterfacePledgeInfo[] }>
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {
@@ -174,7 +162,7 @@ const Pledges = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo[],
+    users: InterfaceUserInfo_PG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -217,7 +205,7 @@ const Pledges = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfaceUserInfo, index: number) => (
+              .map((user: InterfaceUserInfo_PG, index: number) => (
                 <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
@@ -229,7 +217,7 @@ const Pledges = (): JSX.Element => {
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={user._id + '1'}
+                        key={user.id + '1'}
                         containerStyle={styles.imageContainer}
                         avatarStyle={styles.TableImage}
                         name={user.firstName + ' ' + user.lastName}
@@ -237,7 +225,7 @@ const Pledges = (): JSX.Element => {
                       />
                     </div>
                   )}
-                  <span key={user._id + '2'}>
+                  <span key={user.id + '2'}>
                     {user.firstName + ' ' + user.lastName}
                   </span>
                 </div>
@@ -394,26 +382,13 @@ const Pledges = (): JSX.Element => {
   return (
     <div>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledges"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={styles.btnsBlock}>
+        <SearchBar
+          placeholder={t('searchBy') + ' ' + t(searchBy)}
+          onSearch={setSearchTerm}
+          inputTestId="searchPledges"
+          buttonTestId="searchBtn"
+        />
+        <div className="d-flex gap-4 ">
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },
@@ -455,7 +430,7 @@ const Pledges = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={8}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -468,7 +443,7 @@ const Pledges = (): JSX.Element => {
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
-          _id: pledge._id,
+          id: pledge.id,
           users: pledge.users,
           startDate: pledge.startDate,
           endDate: pledge.endDate,
@@ -483,7 +458,7 @@ const Pledges = (): JSX.Element => {
       <PledgeModal
         isOpen={modalState[ModalState.UPDATE]}
         hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign ? pledge?.campaign._id : ''}
+        campaignId={pledge?.campaign ? pledge?.campaign.id : ''}
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
@@ -505,7 +480,7 @@ const Pledges = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfaceUserInfo, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={index}
@@ -521,7 +496,7 @@ const Pledges = (): JSX.Element => {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={user._id + '1'}
+                  key={user.id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
                   name={user.firstName + ' ' + user.lastName}
@@ -530,7 +505,7 @@ const Pledges = (): JSX.Element => {
                 />
               </div>
             )}
-            <span key={user._id + '2'}>
+            <span key={user.id + '2'}>
               {user.firstName + ' ' + user.lastName}
             </span>
           </div>

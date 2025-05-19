@@ -1,3 +1,46 @@
+/**
+ * EventCard Component
+ *
+ * This component renders a card displaying details of an event, including its title, description,
+ * location, start and end times, and the creator's name. It also provides functionality for users
+ * to register for the event.
+ *
+ * @param props - The event details passed as props, adhering to the `InterfaceEvent` type.
+ *
+ * @remarks
+ * - The component uses the `useTranslation` hook for internationalization.
+ * - It retrieves the user ID from local storage to determine if the user is already registered for the event.
+ * - The `useMutation` hook from Apollo Client is used to handle event registration.
+ * - The `react-toastify` library is used to display success or error messages.
+ *
+ * @component
+ *
+ * @example
+ * ```tsx
+ * <EventCard
+ *   _id="event123"
+ *   title="Community Meetup"
+ *   description="A meetup for community members."
+ *   location="Community Hall"
+ *   startDate="2023-10-01"
+ *   endDate="2023-10-01"
+ *   startTime="10:00:00"
+ *   endTime="12:00:00"
+ *   creator={{ firstName: "John", lastName: "Doe" }}
+ *   attendees={[{ _id: "user456" }]}
+ * />
+ * ```
+ *
+ * @returns JSX.Element - A styled card displaying event details and a registration button.
+ *
+ * @dependencies
+ * - `@mui/icons-material` for icons.
+ * - `dayjs` for date and time formatting.
+ * - `react-bootstrap` for UI components.
+ * - `@apollo/client` for GraphQL mutations.
+ * - `react-toastify` for notifications.
+ * - `utils/useLocalstorage` for local storage handling.
+ */
 import React from 'react';
 import styles from './EventCard.module.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -11,56 +54,9 @@ import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceEvent } from 'types/Event/interface';
 
-interface InterfaceEventCardProps {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  isRegisterable: boolean;
-  isPublic: boolean;
-  endTime: string;
-  startTime: string;
-  recurring: boolean;
-  allDay: boolean;
-  creator: {
-    firstName: string;
-    lastName: string;
-    id: string;
-  };
-  registrants: {
-    id: string;
-  }[];
-}
-
-/**
- * Displays information about an event and provides an option to register for it.
- *
- * Shows the event's title, description, location, start and end dates and times,
- * creator's name, and registration status. Includes a button to register for the event
- * if the user is not already registered.
- *
- * @param props - The properties for the event card.
- * @param id - The unique identifier of the event.
- * @param title - The title of the event.
- * @param description - A description of the event.
- * @param location - The location where the event will take place.
- * @param startDate - The start date of the event in ISO format.
- * @param endDate - The end date of the event in ISO format.
- * @param isRegisterable - Indicates if the event can be registered for.
- * @param isPublic - Indicates if the event is public.
- * @param endTime - The end time of the event in HH:mm:ss format.
- * @param startTime - The start time of the event in HH:mm:ss format.
- * @param recurring - Indicates if the event is recurring.
- * @param allDay - Indicates if the event lasts all day.
- * @param creator - The creator of the event with their name and ID.
- * @param registrants - A list of registrants with their IDs.
- *
- * @returns The event card component.
- */
-function eventCard(props: InterfaceEventCardProps): JSX.Element {
+function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
@@ -75,8 +71,8 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
 
   // Check if the user is initially registered for the event
-  const isInitiallyRegistered = props.registrants.some(
-    (registrant) => registrant.id === userId,
+  const isInitiallyRegistered = props.attendees.some(
+    (attendee) => attendee._id === userId,
   );
 
   // Set up the mutation for registering for the event
@@ -93,7 +89,7 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: props.id,
+            eventId: props._id,
           },
         });
         if (data) {

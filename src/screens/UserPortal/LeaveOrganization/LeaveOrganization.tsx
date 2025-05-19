@@ -1,12 +1,51 @@
+/**
+ * @file LeaveOrganization.tsx
+ * @description This component allows a user to leave an organization they are a member of.
+ * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
+ *
+ * @module LeaveOrganization
+ */
+
+/**
+ * @constant userEmail
+ * @description Retrieves the user's email from localStorage. Returns an empty string if unavailable or an error occurs.
+ */
+
+/**
+ * @constant userId
+ * @description Retrieves the user's ID from localStorage. Returns an empty string if unavailable or an error occurs.
+ */
+
+/**
+ * @function LeaveOrganization
+ * @description React functional component that renders the UI for leaving an organization.
+ * It includes a modal for confirmation, email verification, and handles the GraphQL mutation to remove the user.
+ *
+ * @returns {JSX.Element} The rendered LeaveOrganization component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` to fetch organization details.
+ * - Uses Apollo Client's `useMutation` to remove the user from the organization.
+ * - Displays a modal for user confirmation and email verification.
+ * - Handles errors and loading states gracefully.
+ *
+ * @dependencies
+ * - `useQuery` and `useMutation` from Apollo Client for GraphQL operations.
+ * - `useParams` and `useNavigate` from React Router for route handling.
+ * - `react-toastify` for toast notifications.
+ * - `react-bootstrap` for UI components like Modal, Button, Spinner, and Alert.
+ *
+ * @example
+ * ```tsx
+ * <LeaveOrganization />
+ * ```
+ */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import {
-  ORGANIZATIONS_LIST,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 
@@ -45,19 +84,14 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: organizationId },
-  });
+  } = useQuery(ORGANIZATIONS_LIST, { variables: { id: organizationId } });
 
   /**
    * Mutation to remove the member from the organization.
    */
   const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION, {
     refetchQueries: [
-      {
-        query: USER_ORGANIZATION_CONNECTION,
-        variables: { id: organizationId },
-      },
+      { query: ORGANIZATION_LIST, variables: { id: organizationId } },
     ],
     onCompleted: () => {
       // Use a toast notification or in-app message
@@ -87,16 +121,14 @@ const LeaveOrganization = (): JSX.Element => {
     }
     setError('');
     setLoading(true);
-    removeMember({
-      variables: { orgid: organizationId, userid: userId },
-    });
+    removeMember({ variables: { orgid: organizationId, userid: userId } });
   };
 
   /**
    * Verifies the user's email before proceeding.
    */
   const handleVerifyAndLeave = (): void => {
-    if (email.trim().toLowerCase() === userEmail.toLowerCase()) {
+    if (email.trim().toLowerCase() === (userEmail as string).toLowerCase()) {
       handleLeaveOrganization();
     } else {
       setError('Verification failed: Email does not match.');

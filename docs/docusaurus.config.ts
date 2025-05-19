@@ -62,39 +62,40 @@ const config: Config = {
         title: 'Talawa',
         logo: {
           alt: 'Talawa Logo',
-          src: 'img/icons/favicon_palisadoes.ico',
+          src: 'img/icons/logo.png',
+          href: 'https://docs.talawa.io/',
           className: 'LogoAnimation',
         },
         items: [
           {
             label: 'General',
             position: 'left',
-            href: 'https://docs.talawa.io/docs',
+            to: 'https://docs.talawa.io/docs',
             target: '_self',
           },
           {
             label: 'Mobile Guide',
             position: 'left',
-            href: 'https://docs-mobile.talawa.io/docs',
+            to: 'https://docs-mobile.talawa.io/docs',
             target: '_self',
           },
           {
+            to: '/docs',
+            activeBasePath: 'docs',
             label: 'Admin Guide',
             position: 'left',
-            href: '/docs',
-            target: '_self',
           },
           {
             label: 'API Guide',
             position: 'left',
-            href: 'https://docs-api.talawa.io/docs',
+            to: 'https://docs-api.talawa.io/docs',
             target: '_self',
           },
 
           {
             label: 'Demo',
             position: 'left',
-            href: 'http://admin-demo.talawa.io/',
+            to: 'https://demo.talawa.io/',
           },
           {
             to: 'https://github.com/PalisadoesFoundation',
@@ -109,6 +110,62 @@ const config: Config = {
             'aria-label': 'Palisadoes Youtube channel',
           },
         ],
+      },
+      footer: {
+        style: 'dark',
+        links: [
+          {
+            title: 'Community',
+            items: [
+              {
+                label: 'Slack',
+                to: 'https://github.com/PalisadoesFoundation',
+                className: 'footer__icon footer__slack',
+              },
+              {
+                label: 'News',
+                to: 'https://www.palisadoes.org/news/',
+                className: 'footer__icon footer__news',
+              },
+              {
+                label: 'Contact Us',
+                to: 'https://www.palisadoes.org/contact/',
+                className: 'footer__icon footer__contact',
+              },
+            ],
+          },
+          {
+            title: 'Social Media',
+            items: [
+              {
+                label: ' Twitter',
+                to: 'https://twitter.com/palisadoesorg?lang=en',
+                className: 'footer__icon footer__twitter',
+              },
+              {
+                label: ' Facebook',
+                to: 'https://www.facebook.com/palisadoesproject/',
+                className: 'footer__icon footer__facebook',
+              },
+              {
+                label: ' Instagram',
+                to: 'https://www.instagram.com/palisadoes/?hl=en',
+                className: 'footer__icon footer__instagram',
+              },
+            ],
+          },
+          {
+            title: 'Development',
+            items: [
+              {
+                label: ' GitHub',
+                to: 'https://github.com/PalisadoesFoundation',
+                className: 'footer__icon footer__github',
+              },
+            ],
+          },
+        ],
+        copyright: `Copyright © ${new Date().getFullYear()} The Palisadoes Foundation, LLC. Built with Docusaurus.`,
       },
       colorMode: {
         defaultMode: 'light',

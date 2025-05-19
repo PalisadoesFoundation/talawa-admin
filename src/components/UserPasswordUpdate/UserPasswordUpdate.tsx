@@ -1,9 +1,44 @@
+/**
+ * UserUpdate Component
+ *
+ * This component provides a user interface for updating a user's password.
+ * It includes form fields for entering the previous password, a new password,
+ * and confirming the new password. The component validates the input and
+ * communicates with the backend to update the password using a GraphQL mutation.
+ *
+ * @file UserPasswordUpdate.tsx
+ * @module UserUpdate
+ * @requires React
+ * @requires @apollo/client - For executing the GraphQL mutation.
+ * @requires GraphQl/Mutations/mutations - Contains the `UPDATE_USER_PASSWORD_MUTATION`.
+ * @requires react-i18next - For internationalization and translations.
+ * @requires react-bootstrap/Button - For styled buttons.
+ * @requires react-bootstrap/Form - For form controls.
+ * @requires style/app.module.css - For component-specific styles.
+ * @requires react-toastify - For displaying success and error notifications.
+ *
+ * @interface InterfaceUserPasswordUpdateProps
+ * @property {string} id - The unique identifier of the user whose password is being updated.
+ *
+ * @function UserUpdate
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @remarks
+ * - Validates that all fields are filled and that the new password matches the confirmation.
+ * - Displays success or error messages using `react-toastify`.
+ * - Reloads the page after a successful update or when the user cancels the operation.
+ *
+ * @example
+ * ```tsx
+ * <UserUpdate id="12345" />
+ * ```
+ */
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 
@@ -11,15 +46,6 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
-/**
- * UserUpdate component allows users to update their passwords.
- * It handles form submission and communicates with the backend to update the user's password.
- *
- * @param props - The properties for the UserUpdate component.
- * @param id - The ID of the user whose password is being updated.
- *
- * @returns The JSX element for updating user password.
- */
 const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
@@ -35,10 +61,6 @@ const UserUpdate: React.FC<
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
-  /**
-   * Handles the password update process.
-   * It validates the form inputs and performs the mutation to update the password.
-   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
@@ -62,7 +84,6 @@ const UserUpdate: React.FC<
           confirmNewPassword: formState.confirmNewPassword,
         },
       });
-      /* istanbul ignore next */
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
@@ -72,7 +93,6 @@ const UserUpdate: React.FC<
         }, 2000);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.toString());
       }
@@ -83,7 +103,6 @@ const UserUpdate: React.FC<
    * Handles canceling the update process.
    * It reloads the page to reset any changes.
    */
-  /* istanbul ignore next */
   const cancelUpdate = (): void => {
     window.location.reload();
   };
@@ -123,10 +142,7 @@ const UserUpdate: React.FC<
                 required
                 value={formState.newPassword}
                 onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    newPassword: e.target.value,
-                  });
+                  setFormState({ ...formState, newPassword: e.target.value });
                 }}
               />
             </div>
@@ -153,7 +169,7 @@ const UserUpdate: React.FC<
           <div className={styles.dispbtnflex}>
             <Button
               type="button"
-              className={styles.greenregbtn}
+              className={styles.regBtn}
               value="savechanges"
               onClick={loginLink}
             >

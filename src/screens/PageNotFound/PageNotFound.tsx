@@ -1,23 +1,55 @@
+/**
+ * PageNotFound Component
+ *
+ * This component renders a 404 "Page Not Found" screen with internationalization support.
+ * It displays a message and provides navigation options based on the user's admin status.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered 404 page component.
+ *
+ * @remarks
+ * - The component uses the `react-i18next` library for translations.
+ * - The `useLocalStorage` hook is used to retrieve the admin status from local storage.
+ * - The document title is dynamically set based on the translated title for the 404 page.
+ *
+ * @example
+ * ```tsx
+ * import PageNotFound from './PageNotFound';
+ *
+ * function App() {
+ *   return <PageNotFound />;
+ * }
+ * ```
+ *
+ * @dependencies
+ * - `react-router-dom`: For navigation links.
+ * - `react-i18next`: For internationalization.
+ * - `utils/useLocalstorage`: Custom hook for local storage operations.
+ * - `style/app-fixed.module.css`: CSS module for styling.
+ * - `assets/images/talawa-logo-600x600.png`: Logo image for branding.
+ *
+ * @translationKeys
+ * - `pageNotFound.title`: Title for the 404 page.
+ * - `pageNotFound.404`: The "404" error code text.
+ * - `pageNotFound.talawaUser`: Message for non-admin users.
+ * - `common.talawaAdminPortal`: Message for admin users.
+ * - `errors.notFoundMsg`: Error message for not found pages.
+ * - `pageNotFound.backToHome`: Text for the "Back to Home" button.
+ *
+ * @localStorage
+ * - `AdminFor`: Key used to determine if the user is an admin.
+ */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import Logo from 'assets/images/talawa-logo-600x600.png';
-import SignOut from 'components/SignOut/SignOut';
 
-/**
- * The `PageNotFound` component displays a 404 error page when a user navigates to a non-existent route.
- * It shows a message indicating that the page was not found and provides a link to redirect users back
- * to the appropriate home page based on their admin status.
- *
- */
 const PageNotFound = (): JSX.Element => {
   // Translation hooks for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pageNotFound',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pageNotFound' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -30,9 +62,6 @@ const PageNotFound = (): JSX.Element => {
 
   return (
     <section className={styles.pageNotFound}>
-      <div className="position-absolute top-0 end-0 w-10 mt-3 me-3">
-        <SignOut />
-      </div>
       <div className="container text-center">
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />

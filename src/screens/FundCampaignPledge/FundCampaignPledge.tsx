@@ -1,60 +1,30 @@
 import { useQuery, type ApolloQueryResult } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
-import styles from '../../style/app.module.css';
-import PledgeDeleteModal from './PledgeDeleteModal';
-import PledgeModal from './PledgeModal';
+import styles from 'style/app-fixed.module.css';
+import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
+import PledgeModal from './modal/PledgeModal';
 import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
   InterfaceQueryFundCampaignsPledges,
+  InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-
 import SortingButton from 'subComponents/SortingButton';
-
-/**
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
-
-interface InterfaceCampaignInfo {
-  name: string;
-  goal: number;
-  startDate: Date;
-  endDate: Date;
-  currency: string;
-}
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   SAME = 'same',
@@ -68,24 +38,14 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -94,7 +54,7 @@ const fundCampaignPledge = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfo>({
+  const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfoPG>({
     name: '',
     goal: 0,
     startDate: new Date(),
@@ -104,13 +64,10 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
@@ -132,54 +89,90 @@ const fundCampaignPledge = (): JSX.Element => {
     error: pledgeError,
     refetch: refetchPledge,
   }: {
-    data?: {
-      getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
-    };
+    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
       ApolloQueryResult<{
-        getFundraisingCampaigns: InterfaceQueryFundCampaignsPledges[];
+        fundCampaign: InterfaceQueryFundCampaignsPledges;
       }>
     >;
   } = useQuery(FUND_CAMPAIGN_PLEDGE, {
     variables: {
-      where: {
-        id: fundCampaignId,
-      },
-      pledgeOrderBy: sortBy,
+      input: { id: fundCampaignId },
     },
   });
 
-  const endDate = dayjs(
-    pledgeData?.getFundraisingCampaigns[0]?.endDate,
-    'YYYY-MM-DD',
-  ).toDate();
+  const endDate = dayjs(pledgeData?.fundCampaign?.endAt, 'YYYY-MM-DD').toDate();
 
-  const { pledges, totalPledged, fundName } = useMemo(() => {
+  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
     let totalPledged = 0;
-    const pledges =
-      pledgeData?.getFundraisingCampaigns[0].pledges.filter((pledge) => {
-        totalPledged += pledge.amount;
-        const search = searchTerm.toLowerCase();
-        return pledge.users.some((user) => {
-          const fullName = `${user.firstName} ${user.lastName}`;
-          return fullName.toLowerCase().includes(search);
-        });
+    let totalRaised = 0;
+
+    const pledgesList =
+      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
+        const amount = edge.node.amount || 0;
+        totalPledged += amount;
+        // Assuming there's no raised amount for now,
+        // this should be updated when raised amount data is available
+        totalRaised += 0;
+
+        const allUsers =
+          'users' in edge.node && Array.isArray(edge.node.users)
+            ? edge.node.users
+            : [edge.node.pledger];
+
+        return {
+          id: edge.node.id,
+          amount: amount,
+          pledgeDate: edge.node.createdAt
+            ? new Date(edge.node.createdAt)
+            : new Date(),
+          endDate: pledgeData.fundCampaign.endAt
+            ? new Date(pledgeData.fundCampaign.endAt)
+            : new Date(),
+          users: allUsers.filter(Boolean),
+          currency: pledgeData.fundCampaign.currencyCode || 'USD',
+        };
       }) ?? [];
+
+    const filteredPledges = searchTerm
+      ? pledgesList.filter((pledge) => {
+          const search = searchTerm.toLowerCase();
+          return pledge.users.some((user) =>
+            user.name?.toLowerCase().includes(search),
+          );
+        })
+      : pledgesList;
+
+    const sortedPledges = [...filteredPledges].sort((a, b) => {
+      switch (sortBy) {
+        case 'amount_ASC':
+          return a.amount - b.amount;
+        case 'amount_DESC':
+          return b.amount - a.amount;
+        case 'endDate_ASC':
+          return a.endDate.getTime() - b.endDate.getTime();
+        case 'endDate_DESC':
+          return b.endDate.getTime() - a.endDate.getTime();
+      }
+    });
+
+    // Get fund name from the campaign's fund property
     const fundName =
-      pledgeData?.getFundraisingCampaigns[0].fundId.name ?? tCommon('Funds');
-    return { pledges, totalPledged, fundName };
-  }, [pledgeData, searchTerm]);
+      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
+      tCommon('Funds');
+    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
+  }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
-    if (pledgeData) {
+    if (pledgeData?.fundCampaign) {
       setCampaignInfo({
-        name: pledgeData.getFundraisingCampaigns[0].name,
-        goal: pledgeData.getFundraisingCampaigns[0].fundingGoal,
-        startDate: pledgeData.getFundraisingCampaigns[0].startDate,
-        endDate: pledgeData.getFundraisingCampaigns[0].endDate,
-        currency: pledgeData.getFundraisingCampaigns[0].currency,
+        name: pledgeData.fundCampaign.name,
+        goal: pledgeData.fundCampaign.goalAmount ?? 0,
+        startDate: pledgeData.fundCampaign.startAt ?? new Date(),
+        endDate: pledgeData.fundCampaign.endAt ?? new Date(),
+        currency: pledgeData.fundCampaign.currencyCode ?? 'USD',
       });
     }
   }, [pledgeData]);
@@ -187,6 +180,7 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
+  console.log('campaignInfo', campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -215,11 +209,21 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo[],
+    users: InterfaceUserInfo_PG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
   };
+
+  const isWithinCampaignDates = useMemo(() => {
+    if (!pledgeData?.fundCampaign) return false;
+
+    const now = dayjs();
+    let start = dayjs(pledgeData.fundCampaign.startAt);
+    let end = dayjs(pledgeData.fundCampaign.endAt);
+
+    return now.isAfter(start) && now.isBefore(end);
+  }, [pledgeData]);
 
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
@@ -248,43 +252,43 @@ const fundCampaignPledge = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
+        const users = params.row.users || [];
+        const mainUsers = users.slice(0, 1);
+        const extraUsers = users.slice(1);
+
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {params.row.users
-              .slice(0, 2)
-              .map((user: InterfaceUserInfo, index: number) => (
-                <div className={styles.pledgerContainer} key={index}>
-                  {user.image ? (
-                    <img
-                      src={user.image}
-                      alt="pledge"
-                      data-testid={`image${index + 1}`}
-                      className={styles.TableImagePledge}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={user._id + '1'}
-                        containerStyle={styles.imageContainerPledge}
-                        avatarStyle={styles.TableImagePledge}
-                        name={user.firstName + ' ' + user.lastName}
-                        alt={user.firstName + ' ' + user.lastName}
-                      />
-                    </div>
-                  )}
-                  <span key={user._id + '2'}>
-                    {user.firstName + ' ' + user.lastName}
-                  </span>
-                </div>
-              ))}
-            {params.row.users.length > 2 && (
+            {mainUsers.map((user: InterfaceUserInfo_PG, index: number) => (
+              <div
+                className={styles.pledgerContainer}
+                key={`${params.row.id}-main-${index}`}
+                data-testid={`mainUser-${params.row.id}-${index}`}
+              >
+                {user.image ? (
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className={styles.TableImagePledge}
+                  />
+                ) : (
+                  <Avatar
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={user.name}
+                    alt={user.name}
+                  />
+                )}
+                <span>{user.name}</span>
+              </div>
+            ))}
+            {extraUsers.length > 0 && (
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, params.row.users.slice(2))}
+                onClick={(e) => handleClick(e, extraUsers)}
+                data-testid={`moreContainer-${params.row.id}`}
               >
-                <span>+{params.row.users.length - 2} more...</span>
+                +{extraUsers.length} more...
               </div>
             )}
           </div>
@@ -292,8 +296,8 @@ const fundCampaignPledge = (): JSX.Element => {
       },
     },
     {
-      field: 'startDate',
-      headerName: 'Start Date',
+      field: 'pledgeDate',
+      headerName: 'Pledge Date',
       flex: 1,
       minWidth: 150,
       align: 'center',
@@ -301,20 +305,7 @@ const fundCampaignPledge = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.startDate).format('DD/MM/YYYY');
-      },
-    },
-    {
-      field: 'endDate',
-      headerName: 'End Date',
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.endDate).format('DD/MM/YYYY');
+        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
       },
     },
     {
@@ -337,7 +328,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 params.row.currency as keyof typeof currencySymbols
               ]
             }
-            {params.row.amount}
+            {params.row.amount.toLocaleString('en-US')}
           </div>
         );
       },
@@ -433,7 +424,7 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {campaignInfo?.endDate.toString()}
+            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -479,40 +470,45 @@ const fundCampaignPledge = (): JSX.Element => {
 
           <div className={styles.progress}>
             <ProgressBar
-              now={progressIndicator === 'pledged' ? totalPledged : 0}
-              label={`$${progressIndicator === 'pledged' ? totalPledged : 0}`}
-              max={campaignInfo?.goal}
+              now={
+                progressIndicator === 'pledged'
+                  ? (totalPledged / (campaignInfo?.goal || 1)) * 100
+                  : (totalRaised / (campaignInfo?.goal || 1)) * 100
+              }
+              label={`${
+                currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'
+              }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
+              max={100}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
               className={`${styles.progressBar}`}
             />
             <div className={styles.endpoints}>
-              <div className={styles.start}>$0</div>
-              <div className={styles.end}>${campaignInfo?.goal}</div>
+              <div className={styles.start}>
+                {currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'}
+                0
+              </div>
+              <div className={styles.end}>
+                {currencySymbols[
+                  campaignInfo?.currency as keyof typeof currencySymbols
+                ] || '$'}
+                {campaignInfo?.goal.toLocaleString('en-US')}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainerPledge} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchPledger')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchPledger"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+      <div className={`${styles.btnsContainerPledge} align-items-center`}>
+        <SearchBar
+          placeholder={t('searchPledger')}
+          onSearch={setSearchTerm}
+          inputTestId="searchPledger"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
             <SortingButton
@@ -540,9 +536,10 @@ const fundCampaignPledge = (): JSX.Element => {
             <Button
               variant="success"
               className={styles.dropdown}
-              disabled={endDate < new Date()}
+              disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
+              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
             >
               <i className={'fa fa-plus me-2'} />
               {t('addPledge')}
@@ -554,7 +551,7 @@ const fundCampaignPledge = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -567,17 +564,16 @@ const fundCampaignPledge = (): JSX.Element => {
         autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
-          _id: pledge._id,
+          id: pledge.id,
           users: pledge.users,
-          startDate: pledge.startDate,
           endDate: pledge.endDate,
+          pledgeDate: pledge.pledgeDate,
           amount: pledge.amount,
           currency: pledge.currency,
         }))}
         columns={columns}
         isRowSelectable={() => false}
       />
-      {/* Update Pledge ModalState */}
       <PledgeModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
@@ -585,10 +581,9 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.getFundraisingCampaigns[0].endDate as Date}
+        endDate={pledgeData?.fundCampaign?.endAt as Date}
         mode={pledgeModalMode}
       />
-      {/* Delete Pledge ModalState */}
       <PledgeDeleteModal
         isOpen={modalState[ModalState.DELETE]}
         hide={() => closeModal(ModalState.DELETE)}
@@ -601,35 +596,29 @@ const fundCampaignPledge = (): JSX.Element => {
         anchor={anchor}
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+        data-testid="extra-users-popup"
       >
-        {extraUsers.map((user: InterfaceUserInfo, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
           <div
             className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+            key={user.id}
+            data-testid={`extraUser-${index}`}
           >
             {user.image ? (
               <img
                 src={user.image}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
+                alt={user.name}
                 className={styles.TableImagePledge}
               />
             ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user._id + '1'}
-                  containerStyle={styles.imageContainerPledge}
-                  avatarStyle={styles.TableImagePledge}
-                  name={user.firstName + ' ' + user.lastName}
-                  alt={user.firstName + ' ' + user.lastName}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
+              <Avatar
+                containerStyle={styles.imageContainerPledge}
+                avatarStyle={styles.TableImagePledge}
+                name={user.name}
+                alt={user.name}
+              />
             )}
-            <span key={user._id + '2'}>
-              {user.firstName + ' ' + user.lastName}
-            </span>
+            <span>{user.name}</span>
           </div>
         ))}
       </BasePopup>

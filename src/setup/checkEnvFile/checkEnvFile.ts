@@ -3,12 +3,19 @@ import fs from 'fs';
 
 dotenv.config();
 
-export function checkEnvFile(): void {
-  // create .env file if not found
+export function checkEnvFile(): boolean {
   if (!fs.existsSync('.env')) {
-    fs.copyFileSync('.env.example', '.env');
+    if (fs.existsSync('.env.example')) {
+      fs.writeFileSync('.env', '', 'utf8');
+    } else {
+      console.error('Setup requires .env.example to proceed.\n');
+      return false;
+    }
   }
+  return true;
+}
 
+export function modifyEnvFile(): void {
   const env = dotenv.parse(fs.readFileSync('.env'));
   const envSample = dotenv.parse(fs.readFileSync('.env.example'));
   const misplaced = Object.keys(envSample).filter((key) => !(key in env));

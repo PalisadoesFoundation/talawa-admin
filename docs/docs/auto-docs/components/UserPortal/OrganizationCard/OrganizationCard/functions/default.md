@@ -4,15 +4,15 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`__namedParameters`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L73)
+Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L65)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-`InterfaceOrganizationCardProps`
+[`InterfaceOrganizationCardProps`](../../../../../types/Organization/interface/interfaces/InterfaceOrganizationCardProps.md)
 
 ## Returns
 

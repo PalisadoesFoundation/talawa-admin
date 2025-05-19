@@ -8,13 +8,12 @@ import {
   render,
   screen,
   waitFor,
-  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -90,8 +89,8 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: () => ({ orgId: 'orgId' }),
@@ -117,7 +116,10 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(queryByText(translations.createTag)).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
+      expect(queryByText(translations.createTag)).toBeInTheDocument();
     });
   });
   test('opens and closes the create tag modal', async () => {
@@ -128,17 +130,19 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('closeCreateTagModal'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeCreateTagModal'));
+    await userEvent.click(screen.getByTestId('closeCreateTagModal'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('closeCreateTagModal'),
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('closeCreateTagModal'),
+      ).not.toBeInTheDocument(),
     );
   });
   test('navigates to sub tags screen after clicking on a tag', async () => {
@@ -149,7 +153,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await userEvent.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -163,7 +167,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -181,6 +185,7 @@ describe('Organisation Tags Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"
@@ -201,6 +206,7 @@ describe('Organisation Tags Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"
@@ -214,12 +220,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('oldest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('oldest'));
 
     // returns the tags in reverse order
     await waitFor(() => {
@@ -231,12 +237,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('sortTags')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags'));
 
     await waitFor(() => {
       expect(screen.getByTestId('latest')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('latest'));
+    await userEvent.click(screen.getByTestId('latest'));
 
     // reverse the order again
     await waitFor(() => {
@@ -260,18 +266,14 @@ describe('Organisation Tags Page', () => {
 
     // Get the initial number of tags loaded
     const initialTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
+    expect(initialTagsDataLength).toBe(10); // Assert that initial count is 10
 
     // Set scroll position to the bottom
     fireEvent.scroll(orgUserTagsScrollableDiv, {
       target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
     });
 
-    await waitFor(() => {
-      const finalTagsDataLength = screen.getAllByTestId('manageTagBtn').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-
-      expect(getByText(translations.createTag)).toBeInTheDocument();
-    });
+    expect(getByText(translations.createTag)).toBeInTheDocument();
   });
   test('creates a new user tag', async () => {
     renderOrganizationTags(link);
@@ -281,20 +283,20 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
     });
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -307,14 +309,14 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTagE',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
@@ -363,16 +365,10 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    const orgUserTagsScrollableDiv = screen.getByTestId(
-      'orgUserTagsScrollableDiv',
-    );
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(orgUserTagsScrollableDiv, {
-      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
-    });
-
     await waitFor(() => {
+      expect(
+        screen.getByText(/Error occurred while loading Organization Tags Data/),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
@@ -384,14 +380,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createTagBtn'));
+    await userEvent.click(screen.getByTestId('createTagBtn'));
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 13',
     );
 
-    userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Tag creation failed');

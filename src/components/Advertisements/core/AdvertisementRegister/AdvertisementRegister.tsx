@@ -1,6 +1,49 @@
+/**
+ * AdvertisementRegister Component
+ *
+ * This component handles the creation and editing of advertisements for an organization.
+ * It provides a modal-based form to input advertisement details such as name, media, type,
+ * start date, and end date. The component supports both "register" and "edit" modes.
+ *
+ * @component
+ * @param {InterfaceAddOnRegisterProps} props - The properties for the component.
+ * @param {string} [props.formStatus='register'] - Determines whether the form is in "register" or "edit" mode.
+ * @param {string} [props.idEdit] - The ID of the advertisement being edited (used in "edit" mode).
+ * @param {string} [props.nameEdit=''] - The name of the advertisement being edited.
+ * @param {string} [props.typeEdit='BANNER'] - The type of the advertisement being edited.
+ * @param {string} [props.advertisementMediaEdit=''] - The media file of the advertisement being edited.
+ * @param {Date} [props.startDateEdit=new Date()] - The start date of the advertisement being edited.
+ * @param {Date} [props.endDateEdit=new Date()] - The end date of the advertisement being edited.
+ * @param {Function} props.setAfter - Callback to reset pagination or refetch data after mutation.
+ *
+ * @returns {JSX.Element} The AdvertisementRegister component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and form components.
+ * - Integrates with Apollo Client for GraphQL mutations and queries.
+ * - Validates date ranges to ensure the end date is not earlier than the start date.
+ * - Converts uploaded media files to Base64 format for preview and submission.
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="register"
+ *   setAfter={setAfterCallback}
+ * />
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="edit"
+ *   idEdit="123"
+ *   nameEdit="Sample Ad"
+ *   typeEdit="POPUP"
+ *   advertisementMediaEdit="base64string"
+ *   startDateEdit={new Date()}
+ *   endDateEdit={new Date()}
+ *   setAfter={setAfterCallback}
+ * />
+ */
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import styles from '../../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -10,119 +53,129 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
-import convertToBase64 from 'utils/convertToBase64';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
+import type {
+  InterfaceAddOnRegisterProps,
+  InterfaceFormStateTypes,
+} from 'types/Advertisement/interface';
+import { FaTrashCan } from 'react-icons/fa6';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 
-/**
- * Props for the `advertisementRegister` component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.dropdown`
- * - `.inputField`
- * - `.removeButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
-interface InterfaceAddOnRegisterProps {
-  id?: string; // Optional organization ID
-  createdBy?: string; // Optional user who created the advertisement
-  formStatus?: string; // Determines if the form is in register or edit mode
-  idEdit?: string; // ID of the advertisement to edit
-  nameEdit?: string; // Name of the advertisement to edit
-  typeEdit?: string; // Type of the advertisement to edit
-  orgIdEdit?: string; // Organization ID associated with the advertisement
-  advertisementMediaEdit?: string; // Media URL of the advertisement to edit
-  endDateEdit?: Date; // End date of the advertisement to edit
-  startDateEdit?: Date; // Start date of the advertisement to edit
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>; // Function to update parent state
-}
-
-/**
- * State for the advertisement form.
- */
-interface InterfaceFormStateTypes {
-  name: string; // Name of the advertisement
-  advertisementMedia: string; // Base64-encoded media of the advertisement
-  type: string; // Type of advertisement (e.g., BANNER, POPUP)
-  startDate: Date; // Start date of the advertisement
-  endDate: Date; // End date of the advertisement
-  organizationId: string | undefined; // Organization ID
-}
-
-/**
- * Component for registering or editing an advertisement.
- *
- * @param props - Contains form status, advertisement details, and a function to update parent state.
- * @returns A JSX element that renders a form inside a modal for creating or editing an advertisement.
- *
- * @example
- * ```tsx
- * <AdvertisementRegister
- *   formStatus="register"
- *   setAfter={(value) => console.log(value)}
- * />
- * ```
- */
-function advertisementRegister({
+function AdvertisementRegister({
   formStatus = 'register',
   idEdit,
   nameEdit = '',
-  typeEdit = 'BANNER',
-  advertisementMediaEdit = '',
-  endDateEdit = new Date(),
-  startDateEdit = new Date(),
-  setAfter,
+  typeEdit = 'banner',
+  descriptionEdit = null,
+  endAtEdit = new Date(new Date().setDate(new Date().getDate() + 1)),
+  startAtEdit = new Date(),
+  setAfterActive,
+  setAfterCompleted,
 }: InterfaceAddOnRegisterProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   const { orgId: currentOrg } = useParams();
-
   const [show, setShow] = useState(false);
-  const handleClose = (): void => setShow(false); // Closes the modal
-  const handleShow = (): void => setShow(true); // Shows the modal
 
-  const [create] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
+  if (currentOrg === undefined) {
+    return <PageNotFound />;
+  }
+  /*
+   * Mutation to add advertisement and refetch the advertisement list
+   */
+  const [createAdvertisement] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
         query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: { first: 6, after: null, id: currentOrg },
+        variables: {
+          id: currentOrg,
+          first: 6,
+          after: null,
+          before: null,
+          where: { isCompleted: false },
+        },
+      },
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: currentOrg,
+          first: 6,
+          after: null,
+          before: null,
+          where: { isCompleted: true },
+        },
       },
     ],
   });
 
-  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION, {
-    refetchQueries: [
-      {
-        query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: { first: 6, after: null, id: currentOrg },
-      },
-    ],
-  });
+  /*
+   * Mutation to update advertisement and refetch the advertisement list
+   */
+  const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
 
-  // Initialize form state
+  // Set Initial Form State While Creating an Advertisemnt
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
-    advertisementMedia: '',
-    type: 'BANNER',
-    startDate: new Date(),
-    endDate: new Date(),
-    organizationId: currentOrg,
+    description: null,
+    type: 'banner',
+    startAt: new Date(),
+    endAt: dayjs().add(1, 'day').toDate(),
+    attachments: undefined,
   });
+
+  const handleClose = (): void => {
+    setFormState({
+      name: '',
+      type: 'banner',
+      description: null,
+      startAt: new Date(),
+      endAt: dayjs().add(1, 'day').toDate(),
+      attachments: undefined,
+    });
+    setShow(false);
+  };
+
+  const handleShow = (): void => setShow(true); // Shows the modal
+
+  // Handle file uploads
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const validFiles: File[] = [];
+      const maxFileSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+
+      Array.from(files).forEach((file) => {
+        if (!allowedTypes.includes(file.type)) {
+          toast.error(`Invalid file type: ${file.name}`);
+        } else if (file.size > maxFileSize) {
+          toast.error(`File too large: ${file.name}`);
+        } else {
+          validFiles.push(file);
+        }
+      });
+
+      if (validFiles.length > 0) {
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [...(prev.attachments || []), ...validFiles],
+        }));
+      }
+    }
+  };
+
+  // Handle file removal
+  const removeFile = (index: number): void => {
+    setFormState((prev) => ({
+      ...prev,
+      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
+    }));
+  };
 
   // Set form state if editing
   useEffect(() => {
@@ -130,56 +183,82 @@ function advertisementRegister({
       setFormState((prevState) => ({
         ...prevState,
         name: nameEdit || '',
-        advertisementMedia: advertisementMediaEdit || '',
-        type: typeEdit || 'BANNER',
-        startDate: startDateEdit || new Date(),
-        endDate: endDateEdit || new Date(),
-        orgId: currentOrg,
+        description: descriptionEdit || null,
+        type: typeEdit || 'banner',
+        startAt: startAtEdit || new Date(),
+        endAt: endAtEdit || new Date(),
+        organizationId: currentOrg,
       }));
     }
   }, [
     formStatus,
     nameEdit,
-    advertisementMediaEdit,
+    descriptionEdit,
     typeEdit,
-    startDateEdit,
-    endDateEdit,
+    startAtEdit,
+    endAtEdit,
     currentOrg,
   ]);
-  /**
-   * Handles advertisement registration.
-   * Validates the date range and performs the mutation to create an advertisement.
-   */
+
+  // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
     try {
-      console.log('At handle register', formState);
-      if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual') as string);
+      const startDate = dayjs(formState.startAt).startOf('day');
+      const endDate = dayjs(formState.endAt).startOf('day');
+
+      if (!endDate.isAfter(startDate)) {
+        toast.error(t('endDateGreater') as string);
         return;
       }
-      const { data } = await create({
-        variables: {
-          organizationId: currentOrg,
-          name: formState.name as string,
-          type: formState.type as string,
-          startDate: dayjs(formState.startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(formState.endDate).format('YYYY-MM-DD'),
-          file: formState.advertisementMedia as string,
-        },
-      });
 
+      if (!formState.name) {
+        toast.error('Invalid arguments for this action.');
+        return;
+      }
+
+      let variables: {
+        organizationId: string;
+        name: string;
+        type: string;
+        startAt: string;
+        endAt: string;
+        attachments: File[] | undefined;
+        description?: string | null;
+      } = {
+        organizationId: currentOrg,
+        name: formState.name as string,
+        type: formState.type as string,
+        startAt: dayjs(formState.startAt).toISOString(),
+        endAt: dayjs(formState.endAt).toISOString(),
+        attachments: formState.attachments,
+      };
+
+      if (formState.description !== null) {
+        variables = {
+          ...variables,
+          description: formState.description,
+        };
+      }
+
+      const { data } = await createAdvertisement({
+        variables,
+      });
       if (data) {
         toast.success(t('advertisementCreated') as string);
+        handleClose();
         setFormState({
           name: '',
-          advertisementMedia: '',
-          type: 'BANNER',
-          startDate: new Date(),
-          endDate: new Date(),
+          type: 'banner',
+          description: null,
+          startAt: new Date(formState.startAt || new Date()),
+          endAt: new Date(),
           organizationId: currentOrg,
+          attachments: undefined,
+          existingAttachments: undefined,
         });
+        setAfterActive(null);
+        setAfterCompleted(null);
       }
-      setAfter(null);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(
@@ -187,15 +266,11 @@ function advertisementRegister({
             entity: 'advertisement',
           }) as string,
         );
-        console.log('error occured', error.message);
       }
     }
   };
 
-  /**
-   * Handles advertisement update.
-   * Validates the date range and performs the mutation to update the advertisement.
-   */
+  // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
@@ -204,50 +279,54 @@ function advertisementRegister({
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
       }
-      if (formState.advertisementMedia !== advertisementMediaEdit) {
-        updatedFields.advertisementMedia = formState.advertisementMedia;
-      }
       if (formState.type !== typeEdit) {
         updatedFields.type = formState.type;
       }
-      if (formState.endDate < formState.startDate) {
-        toast.error(t('endDateGreaterOrEqual') as string);
-        return;
+      if (formState.description !== descriptionEdit) {
+        updatedFields.description = formState.description;
       }
-      const startDateFormattedString = dayjs(formState.startDate).format(
-        'YYYY-MM-DD',
-      );
-      const endDateFormattedString = dayjs(formState.endDate).format(
-        'YYYY-MM-DD',
-      );
-
-      const startDateDate = dayjs(
-        startDateFormattedString,
-        'YYYY-MM-DD',
-      ).toDate();
-      const endDateDate = dayjs(endDateFormattedString, 'YYYY-MM-DD').toDate();
-
-      if (!dayjs(startDateDate).isSame(startDateEdit, 'day')) {
-        updatedFields.startDate = startDateDate;
+      if (formState.startAt !== startAtEdit) {
+        updatedFields.startAt = formState.startAt;
       }
-      if (!dayjs(endDateDate).isSame(endDateEdit, 'day')) {
-        updatedFields.endDate = endDateDate;
+      if (formState.endAt !== endAtEdit) {
+        updatedFields.endAt = formState.endAt;
       }
 
-      console.log('At handle update', updatedFields);
+      // if both are updated, check if end date is greater or not
+      if (updatedFields.endAt && updatedFields.startAt) {
+        const startDate = dayjs(updatedFields.startAt).startOf('day');
+        const endDate = dayjs(updatedFields.endAt).startOf('day');
+
+        if (!endDate.isAfter(startDate)) {
+          toast.error(t('endDateGreater') as string);
+          return;
+        }
+      }
+
+      const startAt = formState.startAt
+        ? dayjs(formState.startAt).toISOString()
+        : null;
+      const endAt = formState.endAt
+        ? dayjs(formState.endAt).toISOString()
+        : null;
+
+      const mutationVariables = {
+        id: idEdit,
+        ...(updatedFields.name && { name: updatedFields.name }),
+        ...(updatedFields.attachments && {
+          attachments: updatedFields.attachments,
+        }),
+        ...(updatedFields.description && {
+          description: updatedFields.description,
+        }),
+        ...(updatedFields.type && { type: updatedFields.type }),
+        ...(startAt && { startAt }),
+        ...(endAt && { endAt }),
+      };
+
+      // query to update the advertisement.
       const { data } = await updateAdvertisement({
-        variables: {
-          id: idEdit,
-          ...(updatedFields.name && { name: updatedFields.name }),
-          ...(updatedFields.advertisementMedia && {
-            file: updatedFields.advertisementMedia,
-          }),
-          ...(updatedFields.type && { type: updatedFields.type }),
-          ...(updatedFields.startDate && {
-            startDate: startDateFormattedString,
-          }),
-          ...(updatedFields.endDate && { endDate: endDateFormattedString }),
-        },
+        variables: mutationVariables,
       });
 
       if (data) {
@@ -255,7 +334,8 @@ function advertisementRegister({
           tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
-        setAfter(null);
+        setAfterActive(null);
+        setAfterCompleted(null);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -263,6 +343,7 @@ function advertisementRegister({
       }
     }
   };
+
   return (
     //If register show register button else show edit button
     <>
@@ -273,7 +354,8 @@ function advertisementRegister({
           onClick={handleShow}
           data-testid="createAdvertisement"
         >
-          <i className="fa fa-plus"></i>
+          <i className="fa fa-plus" />
+          &nbsp;
           {t('createAdvertisement')}
         </Button>
       ) : (
@@ -308,75 +390,73 @@ function advertisementRegister({
                 className={styles.inputField}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="advertisementMedia">
-                {t('Rmedia')}
-              </Form.Label>
+            <Form.Group className="mb-3" controlId="registerForm.Rdesc">
+              <Form.Label>{t('Rdesc')}</Form.Label>
               <Form.Control
-                accept="image/*, video/*"
-                data-testid="advertisementMedia"
-                name="advertisementMedia"
-                type="file"
-                id="advertisementMedia"
-                multiple={false}
-                onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
-                ): Promise<void> => {
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  if (file) {
-                    const mediaBase64 = await convertToBase64(file);
-                    setFormState({
-                      ...formState,
-                      advertisementMedia: mediaBase64,
-                    });
-                  }
+                type="text"
+                placeholder={t('EXdesc')}
+                autoComplete="off"
+                value={formState.description || ''}
+                onChange={(e): void => {
+                  setFormState({
+                    ...formState,
+                    description: e.target.value,
+                  });
                 }}
                 className={styles.inputField}
               />
-              {formState.advertisementMedia && (
-                <div
-                  className={styles.previewAdvertisementRegister}
-                  data-testid="mediaPreview"
-                >
-                  {formState.advertisementMedia.includes('video') ? (
-                    <video
-                      muted
-                      autoPlay={true}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      <source
-                        src={formState.advertisementMedia}
-                        type="video/mp4"
-                      />
-                    </video>
-                  ) : (
-                    <img src={formState.advertisementMedia} />
-                  )}
-                  <button
-                    className={styles.closeButtonAdvertisementRegister}
-                    onClick={(e): void => {
-                      e.preventDefault();
-                      setFormState({
-                        ...formState,
-                        advertisementMedia: '',
-                      });
-                      const fileInput = document.getElementById(
-                        'advertisementMedia',
-                      ) as HTMLInputElement;
-                      if (fileInput) {
-                        fileInput.value = '';
-                      }
-                    }}
-                    data-testid="closePreview"
-                  >
-                    <i className="fa fa-times"></i>
-                  </button>
-                </div>
-              )}
             </Form.Group>
+            {formStatus === 'register' && (
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="advertisementMedia">
+                  {t('Rmedia')}
+                </Form.Label>
+                <Form.Control
+                  accept="image/*, video/*"
+                  data-testid="advertisementMedia"
+                  name="advertisementMedia"
+                  type="file"
+                  id="advertisementMedia"
+                  multiple={true}
+                  onChange={handleFileUpload}
+                  className={styles.inputField}
+                />
+                {/* Preview section */}
+                {(formState.attachments || []).map((file, index) => (
+                  <div key={index}>
+                    {file.type.startsWith('video/') ? (
+                      <video
+                        data-testid="mediaPreview"
+                        controls
+                        src={encodeURI(URL.createObjectURL(file))}
+                        className={styles.previewAdvertisementRegister}
+                      >
+                        <track
+                          kind="captions"
+                          srcLang="en"
+                          label="English captions"
+                        />
+                      </video>
+                    ) : (
+                      <img
+                        data-testid="mediaPreview"
+                        src={encodeURI(URL.createObjectURL(file))}
+                        alt="Preview"
+                        className={styles.previewAdvertisementRegister}
+                      />
+                    )}
+                    <Button
+                      variant="danger"
+                      data-testid="closePreview"
+                      className={styles.removeButton}
+                      onClick={() => removeFile(index)}
+                    >
+                      <FaTrashCan />
+                    </Button>
+                  </div>
+                ))}
+              </Form.Group>
+            )}
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
               <Form.Select
@@ -390,37 +470,48 @@ function advertisementRegister({
                 }}
                 className={styles.inputField}
               >
-                <option value="POPUP">Popup Ad</option>
-                <option value="BANNER">Banner Ad </option>
+                <option value="banner">Banner Ad </option>
+                <option value="pop_up">Popup Ad</option>
+                <option value="menu">Menu Ad</option>
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="registerForm.RstartDate">
+            <Form.Group className="mb-3" controlId="registerForm.RstartAt">
               <Form.Label>{t('RstartDate')}</Form.Label>
               <Form.Control
                 type="date"
                 required
-                value={formState.startDate.toISOString().slice(0, 10)}
+                value={
+                  formState.startAt instanceof Date
+                    ? dayjs(formState.startAt).format('YYYY-MM-DD')
+                    : ''
+                }
                 onChange={(e): void => {
+                  // Preserve the time component when updating the date
+                  const newDate = dayjs(e.target.value).toDate();
                   setFormState({
                     ...formState,
-                    startDate: new Date(e.target.value),
+                    startAt: newDate,
                   });
                 }}
                 className={styles.inputField}
               />
             </Form.Group>
-
             <Form.Group className="mb-3" controlId="registerForm.RDate">
               <Form.Label>{t('RendDate')}</Form.Label>
               <Form.Control
                 type="date"
                 required
-                value={formState.endDate.toISOString().slice(0, 10)}
+                value={
+                  formState.endAt instanceof Date
+                    ? dayjs(formState.endAt).format('YYYY-MM-DD')
+                    : ''
+                }
                 onChange={(e): void => {
+                  const newDate = dayjs(e.target.value).toDate();
                   setFormState({
                     ...formState,
-                    endDate: new Date(e.target.value),
+                    endAt: newDate,
                   });
                 }}
                 className={styles.inputField}
@@ -460,14 +551,4 @@ function advertisementRegister({
   );
 }
 
-advertisementRegister.propTypes = {
-  name: PropTypes.string,
-  advertisementMedia: PropTypes.string,
-  type: PropTypes.string,
-  startDate: PropTypes.instanceOf(Date),
-  endDate: PropTypes.instanceOf(Date),
-  organizationId: PropTypes.string,
-  formStatus: PropTypes.string,
-};
-
-export default advertisementRegister;
+export default AdvertisementRegister;

@@ -1,32 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { useTranslation } from 'react-i18next';
-import { Button, Dropdown } from 'react-bootstrap';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
-import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import useLocalStorage from 'utils/useLocalstorage';
-import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from './Chat.module.css';
-import {
-  CHATS_LIST,
-  GROUP_CHAT_LIST,
-  UNREAD_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
-import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
-import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
-import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
 /**
  * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
  * It features a contact list with search functionality and displays the chat room for the selected contact.
@@ -53,59 +24,41 @@ interface InterfaceContactCardProps {
  *
  * @returns  The rendered `chat` component.
  */
-
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  replyTo:
-    | {
-        _id: string;
-        createdAt: Date;
-        sender: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string;
-        };
-        messageContent: string;
-        receiver: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-        };
-      }
-    | undefined;
-  messageContent: string;
-};
-
-export type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name: string;
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import { Button, Dropdown } from 'react-bootstrap';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
+import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
+import useLocalStorage from 'utils/useLocalstorage';
+import NewChat from 'assets/svgs/newChat.svg?react';
+import styles from 'style/app-fixed.module.css';
+import {
+  CHATS_LIST,
+  GROUP_CHAT_LIST,
+  UNREAD_CHAT_LIST,
+} from 'GraphQl/Queries/PlugInQueries';
+import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
+import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
+import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
+import type { GroupChat } from 'types/Chat/type';
+interface InterfaceContactCardProps {
+  id: string;
+  title: string;
   image: string;
-  messages: DirectMessage[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string;
-  }[];
-  unseenMessagesByUsers: string;
-};
+  selectedContact: string;
+  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
+  isGroup: boolean;
+  unseenMessages: number;
+  lastMessage: string;
+}
+
 export default function chat(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
 
-  const [chats, setChats] = useState<Chat[]>([]);
+  const [chats, setChats] = useState<GroupChat[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
   const { getItem } = useLocalStorage();
@@ -136,11 +89,7 @@ export default function chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, {
-    variables: {
-      id: userId,
-    },
-  });
+  } = useQuery(CHATS_LIST, { variables: { id: userId } });
 
   const { data: groupChatListData, refetch: groupChatListRefetch } =
     useQuery(GROUP_CHAT_LIST);
@@ -149,10 +98,7 @@ export default function chat(): JSX.Element {
     useQuery(UNREAD_CHAT_LIST);
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-    variables: {
-      chatId: selectedContact,
-      userId: userId,
-    },
+    variables: { chatId: selectedContact, userId: userId },
   });
 
   useEffect(() => {
@@ -282,25 +228,29 @@ export default function chat(): JSX.Element {
                     className={styles.contactCardContainer}
                   >
                     {!!chats.length &&
-                      chats.map((chat: Chat) => {
+                      chats.map((chat: GroupChat) => {
                         const cardProps: InterfaceContactCardProps = {
                           id: chat._id,
                           title: !chat.isGroup
                             ? chat.users[0]?._id === userId
-                              ? `${chat.users[1]?.firstName} ${chat.users[1]?.lastName}`
-                              : `${chat.users[0]?.firstName} ${chat.users[0]?.lastName}`
-                            : chat.name,
+                              ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
+                              : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
+                            : (chat.name ?? ''),
                           image: chat.isGroup
-                            ? chat.image
+                            ? (chat.image ?? '')
                             : userId
-                              ? chat.users[1]?.image
-                              : chat.users[0]?.image,
+                              ? (chat.users[1]?.image ?? '')
+                              : (chat.users[0]?.image ?? ''),
                           setSelectedContact,
                           selectedContact,
                           isGroup: chat.isGroup,
-                          unseenMessages: JSON.parse(
-                            chat.unseenMessagesByUsers,
-                          )[userId],
+                          unseenMessages: Number(
+                            (
+                              JSON.parse(
+                                chat.unseenMessagesByUsers as string,
+                              ) as Record<string, number>
+                            )[userId as string],
+                          ),
                           lastMessage:
                             chat.messages[chat.messages.length - 1]
                               ?.messageContent,

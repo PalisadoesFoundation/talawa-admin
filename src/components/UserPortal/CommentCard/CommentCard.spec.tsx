@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -223,7 +223,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
 
     await wait();
 
@@ -269,7 +269,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
 
     if (beforeUserId) {
       setItem('userId', beforeUserId);
@@ -302,7 +302,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     expect(toast.error).toHaveBeenCalled();
@@ -335,7 +335,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     expect(toast.error).toHaveBeenCalled();
@@ -375,7 +375,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
@@ -416,7 +416,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
@@ -457,7 +457,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
 
     // HourglassBottomIcon should be visible during loading
     expect(
@@ -501,7 +501,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
@@ -541,7 +541,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     // Verify that the likes count hasn't changed
@@ -584,7 +584,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     // Verify that the likes count hasn't changed

@@ -1,45 +1,37 @@
 import { useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
-import FundModal from './FundModal';
+import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
-  borderRadius: '20px',
-  backgroundColor: '#EAEBEF',
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
-    backgroundColor: '#eff1f7',
-    '&:focus-within': {
-      outline: '2px solid #000',
-      outlineOffset: '-2px',
-    },
+    backgroundColor: 'var(--row-background)',
+    '&:focus-within': { outline: 'none' },
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#EAEBEF',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--row-background)',
   },
-  '& .MuiDataGrid-cell:focus': {
-    outline: '2px solid #000',
-    outlineOffset: '-2px',
-  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -100,10 +92,11 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'funds',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
+
+  // Set the document title based on the translation
+  document.title = t('title');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -113,7 +106,7 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -122,6 +115,8 @@ const organizationFunds = (): JSX.Element => {
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
+
+  const [searchText, setSearchText] = useState('');
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -139,20 +134,50 @@ const organizationFunds = (): JSX.Element => {
     refetch: refetchFunds,
   }: {
     data?: {
-      fundsByOrganization: InterfaceFundInfo[];
+      organization: {
+        funds: {
+          edges: { node: InterfaceFundInfo }[];
+        };
+      };
     };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
     variables: {
-      organizationId: orgId,
-      filter: searchTerm,
-      orderBy: sortBy,
+      input: {
+        id: orgId,
+      },
     },
   });
 
-  const funds = useMemo(() => fundData?.fundsByOrganization ?? [], [fundData]);
+  const funds = useMemo(() => {
+    return (
+      fundData?.organization?.funds?.edges.map(
+        (edge: { node: InterfaceFundInfo }) => edge.node,
+      ) ?? []
+    );
+  }, [fundData]);
+
+  const filteredAndSortedFunds = useMemo(() => {
+    let result = [...funds];
+
+    // Apply search filter
+    if (searchText) {
+      result = result.filter((fund) =>
+        fund.name.toLowerCase().includes(searchText.toLowerCase()),
+      );
+    }
+
+    // Apply sorting with strict timestamp comparison
+    return result.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+
+      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      return (dateA - dateB) * sortMultiplier;
+    });
+  }, [funds, searchText, sortBy]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -179,7 +204,7 @@ const organizationFunds = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'id',
-      headerName: 'Sr. No.',
+      headerName: '#',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -202,9 +227,9 @@ const organizationFunds = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className={`d-flex justify-content-center fw-bold ${styles.subtleBlueGrey}`}
+            className={styles.hyperlinkText}
             data-testid="fundName"
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
           >
             {params.row.name}
           </div>
@@ -221,7 +246,7 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.creator.firstName + ' ' + params.row.creator.lastName;
+        return params.row.creator.name;
       },
     },
     {
@@ -296,7 +321,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
-            onClick={() => handleClick(params.row._id as string)}
+            onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
@@ -311,25 +336,12 @@ const organizationFunds = (): JSX.Element => {
     <div>
       <div className={styles.head}>
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <div className={`${styles.input} mb-1`}>
-            <Form.Control
-              type="name"
-              placeholder={tCommon('searchByName')}
-              autoComplete="off"
-              required
-              className={styles.inputField}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              data-testid="searchByName"
-            />
-            <Button
-              tabIndex={-1}
-              className={` ${styles.searchButton} `}
-              data-testid="searchBtn"
-            >
-              <Search className={styles.searchIcon} />
-            </Button>
-          </div>
+          <SearchBar
+            placeholder={tCommon('searchByName')}
+            inputTestId="searchByName"
+            buttonTestId="searchBtn"
+            onSearch={(text) => setSearchText(text)}
+          />
           <div className="d-flex gap-4 mb-1">
             <SortingButton
               title={tCommon('sort')}
@@ -347,19 +359,18 @@ const organizationFunds = (): JSX.Element => {
               }
               dataTestIdPrefix="filter"
               buttonLabel={tCommon('sort')}
+              className={styles.dropdown}
             />
-            <div>
-              <Button
-                variant="success"
-                onClick={() => handleOpenModal(null, 'create')}
-                className={styles.createButton}
-                style={{ marginTop: '0px' }}
-                data-testid="createFundBtn"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createFund')}
-              </Button>
-            </div>
+            <Button
+              variant="success"
+              onClick={() => handleOpenModal(null, 'create')}
+              className={styles.createButton}
+              style={{ marginTop: '0px' }}
+              data-testid="createFundBtn"
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('createFund')}
+            </Button>
           </div>
         </div>
       </div>
@@ -368,7 +379,7 @@ const organizationFunds = (): JSX.Element => {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -380,10 +391,7 @@ const organizationFunds = (): JSX.Element => {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={funds.map((fund, index) => ({
-          id: index + 1,
-          ...fund,
-        }))}
+        rows={filteredAndSortedFunds}
         columns={columns}
         isRowSelectable={() => false}
       />

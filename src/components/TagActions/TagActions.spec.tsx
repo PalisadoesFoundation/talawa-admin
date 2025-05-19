@@ -10,7 +10,7 @@ import {
   act,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
@@ -110,8 +110,8 @@ const renderTagActionsModal = (
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actualModule = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actualModule = await vi.importActual('react-router');
       return {
         ...actualModule,
       };
@@ -167,7 +167,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
+    await userEvent.click(screen.getByTestId('closeTagActionsModalBtn'));
 
     await waitFor(() => {
       expect(hideTagActionsModalMock).toHaveBeenCalled();
@@ -193,7 +193,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('expandSubTags1'));
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
 
     await waitFor(() => {
       expect(
@@ -258,22 +258,22 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag1'));
+    await userEvent.click(screen.getByTestId('checkTag1'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag2'));
+    await userEvent.click(screen.getByTestId('checkTag2'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag1'));
+    await userEvent.click(screen.getByTestId('checkTag1'));
 
     await waitFor(() => {
       expect(screen.getByTestId('clearSelectedTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('clearSelectedTag2'));
+    await userEvent.click(screen.getByTestId('clearSelectedTag2'));
   });
 
   test('fetches and lists the child tags and then selects and deselects them', async () => {
@@ -285,7 +285,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('expandSubTags1'));
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
@@ -311,34 +311,34 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTagsubTag1'));
+    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTagsubTag2'));
+    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag1'));
+    await userEvent.click(screen.getByTestId('checkTag1'));
 
     // deselect subtags 1 & 2
     await waitFor(() => {
       expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTagsubTag1'));
+    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTagsubTag2'));
+    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
     // hide subtags of tag 1
     await waitFor(() => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('expandSubTags1'));
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
   });
 
   test('Toasts error when no tag is selected while assigning', async () => {
@@ -349,7 +349,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
@@ -362,7 +362,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
@@ -377,14 +377,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag2'));
+    await userEvent.click(screen.getByTestId('checkTag2'));
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTag3')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag3'));
+    await userEvent.click(screen.getByTestId('checkTag3'));
 
-    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
@@ -402,9 +402,9 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('checkTag2'));
+    await userEvent.click(screen.getByTestId('checkTag2'));
 
-    userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(

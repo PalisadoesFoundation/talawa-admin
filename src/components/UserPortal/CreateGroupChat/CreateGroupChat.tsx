@@ -1,7 +1,53 @@
+/**
+ * Component for creating a new group chat.
+ *
+ * This component provides a modal interface for creating a group chat,
+ * allowing users to set a title, description, and add members to the group.
+ * It also supports uploading a group image and integrates with GraphQL
+ * mutations and queries for managing chat data.
+ *
+ * @component
+ * @param {InterfaceCreateGroupChatProps} props - Component props.
+ * @param {() => void} props.toggleCreateGroupChatModal - Function to toggle the visibility of the create group chat modal.
+ * @param {boolean} props.createGroupChatModalisOpen - Boolean indicating whether the create group chat modal is open.
+ * @param {(variables?: Partial<{ id: string }> | undefined) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
+ *
+ * @returns {JSX.Element} The rendered CreateGroupChat component.
+ *
+ * @remarks
+ * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
+ * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
+ * - Allows users to search for and add members to the group.
+ * - Supports image upload functionality using MinIO.
+ *
+ * @example
+ * ```tsx
+ * <CreateGroupChat
+ *   toggleCreateGroupChatModal={toggleModal}
+ *   createGroupChatModalisOpen={isModalOpen}
+ *   chatsListRefetch={refetchChats}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - React
+ * - @apollo/client
+ * - @mui/material
+ * - react-bootstrap
+ * - react-router-dom
+ * - utils/useLocalstorage
+ * - utils/MinioUpload
+ * - components/Loader
+ * - components/Avatar
+ *
+ * @fileoverview
+ * This file defines the `CreateGroupChat` component, which is used in the
+ * user portal for creating group chats within an organization.
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
-import styles from './CreateGroupChat.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -17,35 +63,38 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import convertToBase64 from 'utils/convertToBase64';
+import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
+    variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
+
+/**
+ * Styled table container with custom styles.
+ */
+
+const StyledTableContainer = styled(TableContainer)<{
+  component?: React.ElementType;
+}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
 
 /**
  * Styled table cell with custom styles.
  */
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+    backgroundColor: 'var(--table-head-bg)',
+    color: 'var(--table-header-color)',
+    fontSize: 'var(--font-size-header)',
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
 }));
 
 /**
@@ -53,9 +102,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
  */
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
 }));
 
 const { getItem } = useLocalStorage();
@@ -66,9 +113,7 @@ export default function CreateGroupChat({
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId');
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   const [createChat] = useMutation(CREATE_CHAT);
 
@@ -77,15 +122,17 @@ export default function CreateGroupChat({
   const [userIds, setUserIds] = useState<string[]>([]);
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { orgId: currentOrg } = useParams();
+  const { uploadFileToMinio } = useMinioUpload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
   }
 
-  const toggleAddUserModal = /* istanbul ignore next */ (): void =>
+  const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
-
-  const { orgId: currentOrg } = useParams();
 
   function reset(): void {
     setTitle('');
@@ -119,30 +166,18 @@ export default function CreateGroupChat({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
-
     const newFilterData = {
       firstName_contains: firstName || '',
       lastName_contains: lastName || '',
     };
-
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
-
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
     fileInputRef?.current?.click();
@@ -152,9 +187,13 @@ export default function CreateGroupChat({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
+    if (file && currentOrg) {
+      try {
+        const { objectName } = await uploadFileToMinio(file, currentOrg);
+        setSelectedImage(objectName);
+      } catch (error) {
+        console.error('Error uploading image to MinIO:', error);
+      }
     }
   };
 
@@ -174,7 +213,7 @@ export default function CreateGroupChat({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }} // Hide the input
+            style={{ display: 'none' }}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -256,7 +295,7 @@ export default function CreateGroupChat({
                     data-testid="searchUser"
                     placeholder="searchFullName"
                     autoComplete="off"
-                    className={styles.inputFieldModal}
+                    className={styles.inputField}
                     value={userName}
                     onChange={(e): void => {
                       const { value } = e.target;
@@ -266,14 +305,14 @@ export default function CreateGroupChat({
                   <Button
                     type="submit"
                     data-testid="submitBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
+                    className={styles.searchButton}
                   >
                     <Search />
                   </Button>
                 </Form>
               </div>
 
-              <TableContainer className={styles.userData} component={Paper}>
+              <StyledTableContainer component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
@@ -320,6 +359,7 @@ export default function CreateGroupChat({
                                 </Button>
                               ) : (
                                 <Button
+                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
                                   onClick={() => {
                                     setUserIds([
                                       ...userIds,
@@ -337,7 +377,7 @@ export default function CreateGroupChat({
                       )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </StyledTableContainer>
             </>
           )}
           <Button

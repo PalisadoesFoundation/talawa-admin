@@ -1,10 +1,37 @@
+/**
+ * A React functional component that renders a card displaying information about a person.
+ * The card includes the person's serial number, image, name, email, and role.
+ *
+ * @component
+ * @param {InterfaceOrganizationCardProps} props - The properties passed to the component.
+ * @param {string} props.id - The unique identifier for the person.
+ * @param {string} props.name - The name of the person.
+ * @param {string} props.image - The URL of the person's image. Defaults to a placeholder image if not provided.
+ * @param {string} props.email - The email address of the person.
+ * @param {string} props.role - The role or designation of the person.
+ * @param {string} props.sno - The serial number of the person in the list.
+ * @returns {JSX.Element} A JSX element representing the person's card.
+ *
+ * @remarks
+ * - The component uses a default image (`defaultImg.png`) if no image URL is provided.
+ * - Styling is applied using CSS modules from `app-fixed.module.css`.
+ *
+ * @example
+ * ```tsx
+ * <PeopleCard
+ *   id="1"
+ *   name="John Doe"
+ *   image="https://example.com/johndoe.jpg"
+ *   email="john.doe@example.com"
+ *   role="Administrator"
+ *   sno="1"
+ * />
+ * ```
+ */
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
-import styles from './../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 
-/**
- * Props interface for the PeopleCard component.
- */
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -14,36 +41,6 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-/**
- * PeopleCard component displays information about a person within an organization.
- *
- * It includes:
- * - An image of the person or a default image if none is provided.
- * - The serial number of the person.
- * - The person's name.
- * - The person's email address.
- * - The person's role within the organization, styled with a border.
- *
- * @param props - The properties passed to the component.
- * @returns JSX.Element representing a card with the person's details.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.blueText`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   // Determine the image URL; use default image if no image URL is provided
   const imageUrl = props.image ? props.image : aboutImg;

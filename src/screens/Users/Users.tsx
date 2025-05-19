@@ -1,24 +1,3 @@
-import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
-import { Form, Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-
-import { Search } from '@mui/icons-material';
-import {
-  ORGANIZATION_CONNECTION_LIST,
-  USER_LIST,
-} from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
-import type { ApolloError } from '@apollo/client';
-import SortingButton from 'subComponents/SortingButton';
-
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -32,7 +11,7 @@ import SortingButton from 'subComponents/SortingButton';
  *
  * ## GraphQL Queries:
  * - `USER_LIST`: Fetches a list of users with specified search, sorting, and pagination parameters.
- * - `ORGANIZATION_CONNECTION_LIST`: Fetches a list of organizations to verify organization existence.
+ * - `ORGANIZATION_LIST`: Fetches a list of organizations to verify organization existence.
  *
  *
  * ## Component State:
@@ -81,6 +60,23 @@ import SortingButton from 'subComponents/SortingButton';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
+import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { Table } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import TableLoader from 'components/TableLoader/TableLoader';
+import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import styles from 'style/app-fixed.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
+import type { ApolloError } from '@apollo/client';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -103,7 +99,7 @@ const Users = (): JSX.Element => {
     : getItem('AdminFor')
       ? 'ADMIN'
       : 'USER';
-  const loggedInUserId = getItem('id');
+  const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<
     { users: InterfaceQueryUserListItem[] } | undefined
   >(undefined);
@@ -120,9 +116,7 @@ const Users = (): JSX.Element => {
       variables: Record<string, unknown>;
       updateQuery: (
         previousQueryResult: { users: InterfaceQueryUserListItem[] },
-        options: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        options: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => { users: InterfaceQueryUserListItem[] };
     }) => void;
     refetch: (variables?: Record<string, unknown>) => void;
@@ -144,7 +138,7 @@ const Users = (): JSX.Element => {
     }
   }, [data, isLoading]);
 
-  const { data: dataOrgs } = useQuery(ORGANIZATION_CONNECTION_LIST);
+  const { data: dataOrgs } = useQuery(ORGANIZATION_LIST);
   const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
 
   // Manage loading more state
@@ -168,16 +162,17 @@ const Users = (): JSX.Element => {
     };
   }, []);
 
-  // Warn if there is no organization
+  // Show a warning if there are no organizations
   useEffect(() => {
     if (!dataOrgs) {
       return;
     }
 
-    if (dataOrgs.organizationsConnection.length === 0) {
+    // Add null check before accessing organizations.length
+    if (dataOrgs.organizations?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
-  }, [dataOrgs]);
+  }, [dataOrgs, t]);
 
   // Send to orgList page if user is not superadmin
   useEffect(() => {
@@ -215,22 +210,6 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.target as HTMLInputElement;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputElement = document.getElementById(
-      'searchUsers',
-    ) as HTMLInputElement;
-    const inputValue = inputElement?.value || '';
-    handleSearch(inputValue);
-  };
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
@@ -254,9 +233,7 @@ const Users = (): JSX.Element => {
         prev: { users: InterfaceQueryUserListItem[] } | undefined,
         {
           fetchMoreResult,
-        }: {
-          fetchMoreResult?: { users: InterfaceQueryUserListItem[] };
-        },
+        }: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
       ) => {
         setIsLoadingMore(false);
         if (!fetchMoreResult) return prev || { users: [] };
@@ -361,32 +338,12 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <div
-          className={styles.input}
-          style={{
-            display: userType === 'SUPERADMIN' ? 'block' : 'none',
-          }}
-        >
-          <Form.Control
-            type="name"
-            id="searchUsers"
-            className={styles.inputField}
-            placeholder={t('enterName')}
-            data-testid="searchByName"
-            autoComplete="off"
-            required
-            onKeyUp={handleSearchByEnter}
-          />
-          <Button
-            tabIndex={-1}
-            className={styles.searchButton}
-            data-testid="searchButton"
-            onClick={handleSearchByBtnClick}
-          >
-            <Search />
-          </Button>
-        </div>
-
+        <SearchBar
+          placeholder={t('enterName')}
+          onSearch={handleSearch}
+          inputTestId="searchByName"
+          buttonTestId="searchButton"
+        />
         <div className={styles.btnsBlock}>
           <div className="d-flex">
             <SortingButton

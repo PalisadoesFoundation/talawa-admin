@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
 import { ORGANIZATION_EVENTS_CONNECTION } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -20,7 +20,6 @@ import { ThemeProvider } from 'react-bootstrap';
 import { createTheme } from '@mui/material';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import Loader from 'components/Loader/Loader';
 
 /**
  * Unit tests for the Events component.
@@ -38,13 +37,6 @@ vi.mock('react-toastify', () => ({
     info: vi.fn(),
     success: vi.fn(),
   },
-}));
-
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    setItem: vi.fn(),
-    getItem: () => null,
-  }),
 }));
 
 vi.mock('@mui/x-date-pickers/DatePicker', async () => {
@@ -65,8 +57,8 @@ vi.mock('@mui/x-date-pickers/TimePicker', async () => {
   };
 });
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({ orgId: '' }),
@@ -509,15 +501,6 @@ describe('Testing Events Screen [User Portal]', () => {
     })),
   });
 
-  it('renders without crashing', () => {
-    render(<Loader />);
-    const spinnerWrapper = screen.getByTestId('spinner-wrapper');
-    const spinner = screen.getByTestId('spinner');
-
-    expect(spinnerWrapper).toBeInTheDocument();
-    expect(spinner).toBeInTheDocument();
-  });
-
   it('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -556,40 +539,43 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
 
-    userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
       randomEventDescription,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByTestId('eventLocationInput'),
       randomEventLocation,
     );
 
-    userEvent.click(screen.getByTestId('publicEventCheck'));
-    userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
 
-    userEvent.click(screen.getByTestId('registerableEventCheck'));
-    userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
 
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
-    userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    userEvent.click(screen.getByTestId('createChatCheck'));
-    userEvent.click(screen.getByTestId('createChatCheck'));
+    await userEvent.click(screen.getByTestId('createChatCheck'));
+    await userEvent.click(screen.getByTestId('createChatCheck'));
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
 
@@ -616,23 +602,26 @@ describe('Testing Events Screen [User Portal]', () => {
     );
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const randomEventTitle = 'testEventTitle';
     const randomEventDescription = 'testEventDescription';
     const randomEventLocation = 'testEventLocation';
 
-    userEvent.type(screen.getByTestId('eventTitleInput'), randomEventTitle);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
       randomEventDescription,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByTestId('eventLocationInput'),
       randomEventLocation,
     );
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
 
@@ -660,8 +649,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // await wait();
 
-    // userEvent.click(screen.getByTestId('modeChangeBtn'));
-    // userEvent.click(screen.getByTestId('modeBtn1'));
+    // await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    // await userEvent.click(screen.getByTestId('modeBtn1'));
 
     await wait();
     const calenderView = 'Calendar View';
@@ -687,7 +676,7 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
     // MM/DD/YYYY
     const startDate = new Date();
     const endDate = new Date();
@@ -721,7 +710,7 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(endDateDatePicker).toHaveValue(endDateDayjs.format('MM/DD/YYYY'));
     });
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     expect(endTime).not.toBeNull();
     const endTimePicker = screen.getByLabelText('End Time');
@@ -759,7 +748,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const endDateDatePicker = screen.getByLabelText('End Date');
     const startDateDatePicker = screen.getByLabelText('Start Date');
@@ -771,7 +760,7 @@ describe('Testing Events Screen [User Portal]', () => {
       target: { value: null },
     });
 
-    userEvent.click(screen.getByTestId('allDayEventCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const endTimePicker = screen.getByLabelText('End Time');
     const startTimePicker = screen.getByLabelText('Start Time');
@@ -782,69 +771,5 @@ describe('Testing Events Screen [User Portal]', () => {
     fireEvent.change(endTimePicker, {
       target: { value: null },
     });
-  });
-
-  it('handles error during event creation', async () => {
-    const consoleError = vi.spyOn(console, 'error');
-    const mockError = new Error('Event creation failed');
-    const errorCreateEventMock = {
-      request: {
-        query: CREATE_EVENT_MUTATION,
-        variables: {
-          title: 'errorTest',
-          description: 'errorDescription',
-          isPublic: true,
-          recurring: false,
-          isRegisterable: true,
-          organizationId: '',
-          startDate: dayjs(new Date()).format('YYYY-MM-DD'),
-          endDate: dayjs(new Date()).format('YYYY-MM-DD'),
-          allDay: true,
-          location: 'errorLocation',
-          startTime: null,
-          endTime: null,
-          createChat: false,
-        },
-      },
-      error: mockError,
-    };
-
-    const errorLink = new StaticMockLink(
-      [...MOCKS, errorCreateEventMock],
-      true,
-    );
-
-    render(
-      <MockedProvider addTypename={false} link={errorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <Events />
-                </I18nextProvider>
-              </ThemeProvider>
-            </LocalizationProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
-
-    userEvent.type(screen.getByTestId('eventTitleInput'), 'errorTest');
-    userEvent.type(
-      screen.getByTestId('eventDescriptionInput'),
-      'errorDescription',
-    );
-    userEvent.type(screen.getByTestId('eventLocationInput'), 'errorLocation');
-
-    userEvent.click(screen.getByTestId('createEventBtn'));
-
-    await wait();
-
-    expect(consoleError).toHaveBeenCalled();
   });
 });

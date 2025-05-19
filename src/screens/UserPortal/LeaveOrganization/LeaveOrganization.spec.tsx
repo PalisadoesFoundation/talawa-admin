@@ -8,12 +8,9 @@ import {
   Routes,
   useNavigate,
   useParams,
-} from 'react-router-dom';
+} from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
-import {
-  ORGANIZATIONS_LIST,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -35,8 +32,8 @@ Object.defineProperty(window, 'localStorage', {
 
 // Mock useParams to return a test organization ID
 
-vi.mock('react-router-dom', async () => {
-  const actualDom = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actualDom = await vi.importActual('react-router');
   return {
     ...actualDom,
     useParams: vi.fn(),
@@ -159,12 +156,12 @@ const mocks = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: { id: 'test-org-id' },
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 'org123',
             name: 'Tech Enthusiasts Club',
@@ -231,7 +228,7 @@ const errorMocks = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: { id: 'test-org-id' },
     },
     error: new Error('Operation Failed'),
@@ -528,5 +525,215 @@ describe('LeaveOrganization Component', () => {
     );
     const errorAlert = await screen.findByRole('alert');
     expect(errorAlert).toHaveTextContent(/Error:/i);
+  });
+
+  test('handles network error in removeMember mutation', async () => {
+    // Create a network error mock for the removeMember mutation
+    const networkErrorMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION,
+        variables: { orgid: 'test-org-id', userid: '12345' },
+      },
+      error: new Error('Network error'),
+    };
+
+    // Combine regular organization query mock with network error mock
+    const combinedMocks = [mocks[0], networkErrorMock];
+
+    render(
+      <MockedProvider mocks={combinedMocks} addTypename={false}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for organization data to load
+    await waitFor(() => {
+      expect(screen.getByText('Test Organization')).toBeInTheDocument();
+    });
+
+    // Click leave organization button
+    const leaveButton = screen.getByRole('button', {
+      name: 'Leave Organization',
+    });
+    fireEvent.click(leaveButton);
+
+    // Continue to verification step
+    fireEvent.click(screen.getByText('Continue'));
+
+    // Enter correct email and submit
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+
+    // Use aria-label to find the confirm button
+    const confirmButton = screen.getByRole('button', {
+      name: 'confirm-leave-button',
+    });
+    fireEvent.click(confirmButton);
+
+    // Verify network error message is displayed
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Unable to process your request. Please check your connection.',
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('handles GraphQL error in removeMember mutation', async () => {
+    // Create a GraphQL error mock for the removeMember mutation
+    const graphQLErrorMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION,
+        variables: { orgid: 'test-org-id', userid: '12345' },
+      },
+      result: {
+        errors: [new Error('GraphQL error')],
+      },
+    };
+
+    // Combine regular organization query mock with GraphQL error mock
+    const combinedMocks = [mocks[0], graphQLErrorMock];
+
+    render(
+      <MockedProvider mocks={combinedMocks} addTypename={false}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for organization data to load
+    await waitFor(() => {
+      expect(screen.getByText('Test Organization')).toBeInTheDocument();
+    });
+
+    // Click leave organization button
+    const leaveButton = screen.getByRole('button', {
+      name: 'Leave Organization',
+    });
+    fireEvent.click(leaveButton);
+
+    // Continue to verification step
+    fireEvent.click(screen.getByText('Continue'));
+
+    // Enter correct email and submit
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+
+    // Use aria-label to find the confirm button
+    const confirmButton = screen.getByRole('button', {
+      name: 'confirm-leave-button',
+    });
+    fireEvent.click(confirmButton);
+
+    // Verify GraphQL error message is displayed
+    await waitFor(() => {
+      expect(
+        screen.getByText('Failed to leave organization. Please try again.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('handles missing organizationId or userId', async () => {
+    // Mock useParams to return undefined orgId
+    (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      orgId: undefined,
+    });
+
+    // Render with mocks that don't depend on specific orgId
+    render(
+      <MockedProvider
+        mocks={[
+          {
+            request: {
+              query: ORGANIZATIONS_LIST,
+              variables: { id: undefined },
+            },
+            result: {
+              data: {
+                organizations: [
+                  {
+                    _id: 'test-org-id',
+                    name: 'Test Organization',
+                    description: 'This is a test organization.',
+                  },
+                ],
+              },
+            },
+          },
+        ]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Skip waiting for organization data since we're testing the error path
+
+    // Click leave organization button
+    const leaveButton = await screen.findByRole('button', {
+      name: 'Leave Organization',
+    });
+    fireEvent.click(leaveButton);
+
+    // Continue to verification step
+    fireEvent.click(screen.getByText('Continue'));
+
+    // Enter correct email and submit
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+
+    // Use aria-label to find the confirm button
+    const confirmButton = screen.getByRole('button', {
+      name: 'confirm-leave-button',
+    });
+    fireEvent.click(confirmButton);
+
+    // Verify error message is displayed
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Unable to process request: Missing required information.',
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('displays "Organization not found" when no organization data is returned', async () => {
+    // Create a mock that returns empty organizations array
+    const emptyOrgMock = {
+      request: {
+        query: ORGANIZATIONS_LIST,
+        variables: { id: 'test-org-id' },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[emptyOrgMock]} addTypename={false}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(
+        screen.queryByText('Loading organization details...'),
+      ).not.toBeInTheDocument();
+    });
+
+    // Verify "Organization not found" message is displayed
+    expect(screen.getByText('Organization not found')).toBeInTheDocument();
   });
 });

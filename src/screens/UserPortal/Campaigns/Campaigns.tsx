@@ -1,9 +1,42 @@
+/**
+ * Campaigns Component
+ *
+ * This component renders a list of fundraising campaigns for a specific organization.
+ * It provides functionality for searching, sorting, and adding pledges to campaigns.
+ * The component also handles loading states, error handling, and navigation.
+ *
+ * @component
+ *
+ * @remarks
+ * - Redirects to the homepage if `orgId` or `userId` is missing.
+ * - Fetches campaigns using the `USER_FUND_CAMPAIGNS` GraphQL query.
+ * - Displays a loader while campaigns are being fetched.
+ * - Shows an error message if there is an issue loading campaigns.
+ * - Allows users to search campaigns by name and sort them by funding goal or end date.
+ * - Enables users to add pledges to active campaigns via a modal.
+ *
+ * @returns {JSX.Element} The rendered Campaigns component.
+ *
+ * @dependencies
+ * - React, React Router, React Bootstrap, Material UI, Apollo Client, and custom utilities/components.
+ *
+ * @example
+ * ```tsx
+ * <Campaigns />
+ * ```
+ *
+ * @see {@link PledgeModal} for the modal used to add pledges.
+ * @see {@link USER_FUND_CAMPAIGNS} for the GraphQL query fetching campaigns.
+ *
+ * @function
+ * @name Campaigns
+ */
 import React, { useEffect, useState } from 'react';
-import { Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import { Button, ProgressBar } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Navigate, useNavigate, useParams } from 'react-router';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -20,47 +53,17 @@ import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
-/**
- * The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
- * It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.
- *
- * @returns The rendered component displaying the campaigns.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButton`
- * - `.btnsBlock`
- * - `.regularBtn`
- * - `.outlineBtn`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userCampaigns',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   // Retrieves stored user ID from local storage
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') as string;
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
@@ -89,18 +92,13 @@ const Campaigns = (): JSX.Element => {
     error: campaignError,
     refetch: refetchCampaigns,
   }: {
-    data?: {
-      getFundraisingCampaigns: InterfaceUserCampaign[];
-    };
+    data?: { getFundraisingCampaigns: InterfaceUserCampaign[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(USER_FUND_CAMPAIGNS, {
     variables: {
-      where: {
-        organizationId: orgId,
-        name_contains: searchTerm,
-      },
+      where: { organizationId: orgId, name_contains: searchTerm },
       campaignOrderBy: sortBy,
     },
   });
@@ -153,60 +151,48 @@ const Campaigns = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchCampaigns"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
-        <div className={`${styles.btnsBlock}`}>
-          <SortingButton
-            sortingOptions={[
-              { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-              { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-              { label: t('latestEndDate'), value: 'endDate_DESC' },
-              { label: t('earliestEndDate'), value: 'endDate_ASC' },
-            ]}
-            selectedOption={sortBy}
-            onSortChange={(value) =>
-              setSortBy(
-                value as
-                  | 'fundingGoal_ASC'
-                  | 'fundingGoal_DESC'
-                  | 'endDate_ASC'
-                  | 'endDate_DESC',
-              )
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={tCommon('sort')}
-          />
-        </div>
-        <div className={`${styles.btnsBlock}`}>
-          {/* Button to navigate to the user's pledges */}
-          <Button
-            variant="success"
-            data-testid="myPledgesBtn"
-            onClick={() =>
-              navigate(`/user/pledges/${orgId}`, { replace: true })
-            }
-            className={styles.regularBtn}
-          >
-            {t('myPledges')}
-            <i className="fa fa-angle-right ms-2" />
-          </Button>
+        <SearchBar
+          placeholder={t('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchCampaigns"
+          buttonTestId="searchBtn"
+        />
+        <div className="d-flex gap-4 mb-1">
+          <div className="d-flex justify-space-between">
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
+          </div>
+          <div>
+            {/* Button to navigate to the user's pledges */}
+            <Button
+              variant="success"
+              data-testid="myPledgesBtn"
+              onClick={() =>
+                navigate(`/user/pledges/${orgId}`, { replace: true })
+              }
+            >
+              {t('myPledges')}
+              <i className="fa fa-angle-right ms-2" />
+            </Button>
+          </div>
         </div>
       </div>
       {campaigns.length < 1 ? (
@@ -234,7 +220,11 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                      className={`${styles.chip} ${
+                        new Date(campaign.endDate) < new Date()
+                          ? styles.pending
+                          : styles.active
+                      }`}
                     />
                   </div>
 

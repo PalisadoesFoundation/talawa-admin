@@ -1,7 +1,44 @@
+/**
+ * EventManagement Component
+ *
+ * This component serves as the main interface for managing events within the application.
+ * It provides a tab-based navigation system to access various event management features
+ * such as dashboard, registrants, attendance, agendas, actions, volunteers, and statistics.
+ *
+ * Features:
+ * - Dynamically renders content based on the selected tab.
+ * - Supports internationalization using the `useTranslation` hook.
+ * - Determines user roles (SUPERADMIN, ADMIN, USER) based on local storage.
+ * - Redirects to the organization list if event or organization IDs are missing.
+ * - Responsive design with buttons for desktop and dropdown for mobile views.
+ *
+ * Tabs:
+ * - `dashboard`: Displays the event dashboard.
+ * - `registrants`: Manages event registrants.
+ * - `attendance`: Tracks event attendance.
+ * - `agendas`: Manages event agenda items.
+ * - `actions`: Displays organization action items.
+ * - `volunteers`: Manages event volunteers.
+ * - `statistics`: Placeholder for event statistics.
+ *
+ * Props:
+ * - None
+ *
+ * State:
+ * - `tab`: Tracks the currently selected tab.
+ *
+ * Hooks:
+ * - `useTranslation`: For internationalization.
+ * - `useLocalStorage`: For accessing local storage.
+ * - `useNavigate`: For navigation.
+ * - `useParams`: For extracting event and organization IDs from the URL.
+ *
+ * @returns {JSX.Element} The rendered EventManagement component.
+ */
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
@@ -10,14 +47,14 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
-import EventAttendance from 'components/EventManagement/EventAttendance/EventAttendance';
+import EventAttendance from 'components/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/EventManagement/EventRegistrant/EventRegistrants';
 
 /**
@@ -38,30 +75,9 @@ interface InterfaceTabConfig {
   component: JSX.Element;
 }
 
-/**
- * `EventManagement` component handles the display and navigation of different event management sections.
- *
- * It provides a tabbed interface for:
- * - Viewing event dashboard
- * - Managing event registrants
- * - Handling event actions
- * - Reviewing event agendas
- * - Viewing event statistics
- * - Managing event volunteers
- * - Managing event attendance
- *
- * @returns JSX.Element - The `EventManagement` component.
- *
- * @example
- * ```tsx
- * <EventManagement />
- * ```
- */
 const EventManagement = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventManagement',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventManagement' });
 
   // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
@@ -81,7 +97,7 @@ const EventManagement = (): JSX.Element => {
 
   // Determine user role based on local storage
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor: string | string[] = getItem('AdminFor') || [];
   const userRole = superAdmin
     ? 'SUPERADMIN'
     : adminFor?.length > 0

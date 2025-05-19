@@ -1,21 +1,41 @@
+/**
+ * EventStatsWrapper Component
+ *
+ * This component serves as a wrapper for displaying event statistics. It includes a button
+ * that toggles the visibility of the `EventStats` component, which provides detailed statistics
+ * for a specific event.
+ *
+ * @param _id - The unique identifier of the event for which statistics are displayed.
+ *
+ * @returns A JSX element containing a button to view event statistics and the `EventStats` component.
+ *
+ * @remarks
+ * - The `showModal` state is used to control the visibility of the `EventStats` component.
+ * - The `Button` component triggers the display of the event statistics modal.
+ * - The `EventStats` component is rendered conditionally based on the `showModal` state.
+ *
+ * @example
+ * ```tsx
+ * <EventStatsWrapper _id="12345" />
+ * ```
+ *
+ * @component
+ * @category Event Management
+ * @subcategory Statistics
+ *
+ * @dependencies
+ * - `react-bootstrap/Button`: For rendering the button to toggle the modal.
+ * - `components/IconComponent`: For displaying an icon inside the button.
+ * - `style/app-fixed.module.css`: For styling the button's icon wrapper.
+ * - `./Statistics/EventStats`: The modal component that displays event statistics.
+ */
 import React, { useState } from 'react';
-import { EventStats } from './EventStats';
+import { EventStats } from './Statistics/EventStats';
 import { Button } from 'react-bootstrap';
 import IconComponent from 'components/IconComponent/IconComponent';
-import styles from './EventStatsWrapper.module.css';
+import styles from 'style/app-fixed.module.css';
 
-// Props for the EventStatsWrapper component
-type PropType = {
-  eventId: string;
-};
-
-/**
- * Wrapper component that displays a button to show event statistics.
- *
- * @param eventId - The ID of the event.
- * @returns JSX element representing the wrapper with a button to view event statistics.
- */
-export const EventStatsWrapper = ({ eventId }: PropType): JSX.Element => {
+export const EventStatsWrapper = ({ _id }: { _id: string }): JSX.Element => {
   // State to control the visibility of the EventStats component
   const [showModal, setShowModal] = useState(false);
 
@@ -40,8 +60,8 @@ export const EventStatsWrapper = ({ eventId }: PropType): JSX.Element => {
       <EventStats
         show={showModal}
         handleClose={(): void => setShowModal(false)} // Hide the EventStats component when closed
-        key={eventId || 'eventStatsDetails'} // Use eventId as key for the component
-        eventId={eventId}
+        key={_id || 'eventStatsDetails'} // Use _id as key for the component
+        eventId={_id}
       />
     </>
   );

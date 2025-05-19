@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import OrgAdminListCard from './OrgAdminListCard';
 import i18nForTest from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 import { errorHandler } from 'utils/errorHandler'; // Make sure this import is available
@@ -98,7 +98,7 @@ describe('Testing Organization Admin List Card', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId(/removeAdminBtn/i));
+    await userEvent.click(screen.getByTestId(/removeAdminBtn/i));
 
     await wait(2000);
   });
@@ -152,7 +152,7 @@ describe('Testing Organization Admin List Card', () => {
     );
 
     // Simulate user click on "Yes"
-    userEvent.click(screen.getByTestId('removeAdminBtn'));
+    await userEvent.click(screen.getByTestId('removeAdminBtn'));
 
     await waitFor(() => {
       // Verify that neither toast.success nor window.location.reload are called
@@ -194,7 +194,7 @@ describe('Testing Organization Admin List Card', () => {
     );
 
     // Simulate user click on "Yes"
-    userEvent.click(screen.getByTestId('removeAdminBtn'));
+    await userEvent.click(screen.getByTestId('removeAdminBtn'));
 
     // Wait for the errorHandler to be called
     await waitFor(() => {

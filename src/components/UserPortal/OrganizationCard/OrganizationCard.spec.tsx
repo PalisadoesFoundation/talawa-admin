@@ -1,51 +1,29 @@
+import '@testing-library/dom';
+import { vi } from 'vitest';
 import React from 'react';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-
-import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider } from 'react-i18next';
-
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { toast } from 'react-toastify';
+import i18n from 'i18next';
 import OrganizationCard from './OrganizationCard';
-import {
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/OrganizationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+import { TestWrapper } from '../../../components/test-utils/TestWrapper';
 import {
   SEND_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
   CANCEL_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import { toast } from 'react-toastify';
-import { vi } from 'vitest';
+import {
+  USER_JOINED_ORGANIZATIONS_PG,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
+import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
-/**
- * Unit tests for the OrganizationCard component in the User Portal
- *
- * These tests validate the behavior and rendering of the OrganizationCard component.
- * The tests ensure the component displays properly with various states and that interactions
- * such as sending membership requests and visiting organizations work as expected.
- *
- * 1. **Component should be rendered properly**: Tests if the component renders correctly with the provided props.
- * 2. **Component should render properly with an image**: Verifies the component's behavior when an organization image is available.
- * 3. **Visit organization**: Simulates a click on the "manage" button and verifies that the user is redirected to the correct organization page.
- * 4. **Send membership request**: Tests if the membership request is successfully sent and verifies the success toast message.
- * 5. **Send membership request to a public organization**: Validates sending a membership request to a public organization and verifies multiple success toast messages.
- * 6. **Withdraw membership request**: Simulates withdrawing a membership request and verifies that the button works as expected.
- *
- * Mocked GraphQL queries and mutations are used to simulate the backend behavior for testing.
- */
-const { getItem } = useLocalStorage();
+// Mock hooks
+const mockGetItem = vi.fn();
+vi.mock('utils/useLocalstorage', () => ({
+  getItem: () => mockGetItem(),
+  setItem: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -54,422 +32,741 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const MOCKS = [
-  // Successful membership request
-  {
-    request: {
-      query: SEND_MEMBERSHIP_REQUEST,
-      variables: {
-        organizationId: '1',
-      },
-    },
-    result: {
-      data: {
-        sendMembershipRequest: {
-          _id: 'edgwrgui4y28urfejwiwfw',
-          organization: {
-            _id: '1',
-            name: 'organizationName',
-          },
-          user: {
-            _id: '1',
-          },
+const mockNavigate = vi.fn();
+vi.mock('react-router', () => {
+  const actual = vi.importActual('react-router');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    BrowserRouter: ({
+      children,
+    }: {
+      children: React.ReactNode;
+    }): JSX.Element => <div>{children}</div>,
+  };
+});
+
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        users: {
+          MembershipRequestSent: 'Request sent',
+          orgJoined: 'Joined',
+          AlreadyJoined: 'Already joined',
+          errorOccured: 'error occurred',
+          UserIdNotFound: 'User ID not found',
+          MembershipRequestNotFound: 'Request not found',
+          MembershipRequestWithdrawn: 'Request withdrawn',
+          visit: 'Visit',
+          withdraw: 'Withdraw',
+          joinNow: 'joinNow',
+        },
+        common: {
+          admins: 'Admins',
+          members: 'Members',
         },
       },
     },
   },
-  // Successful public organization join
+});
+
+// Success mocks updated for new interface
+const successMocks: MockedResponse[] = [
+  {
+    request: {
+      query: SEND_MEMBERSHIP_REQUEST,
+      variables: { organizationId: '123' },
+    },
+    result: {
+      data: {
+        sendMembershipRequest: {
+          success: true,
+          __typename: 'MembershipRequest',
+        },
+      },
+    },
+  },
   {
     request: {
       query: JOIN_PUBLIC_ORGANIZATION,
       variables: {
-        organizationId: '2',
+        input: {
+          organizationId: '123',
+        },
       },
     },
     result: {
       data: {
         joinPublicOrganization: {
-          _id: 'edgwrgui4y28urfejwiwfw',
+          organizationId: '123',
+          __typename: 'Organization',
         },
-      },
-    },
-  },
-  // Error: User is already a member
-  {
-    request: {
-      query: SEND_MEMBERSHIP_REQUEST,
-      variables: {
-        organizationId: '3', // A different org ID to test error handling
-      },
-    },
-    error: new Error('User is already a member'),
-  },
-  // Error: Generic error occurred
-  {
-    request: {
-      query: SEND_MEMBERSHIP_REQUEST,
-      variables: {
-        organizationId: '4', // Another org ID to test generic errors
-      },
-    },
-    error: new Error('Some unexpected error occurred'),
-  },
-  // User joined organizations
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        users: {
-          joinedOrganizations: [
-            {
-              __typename: 'Organization',
-              _id: '2',
-              image: 'organizationImage',
-              name: 'organizationName',
-              description: 'organizationDescription',
-            },
-          ],
-        },
-      },
-    },
-  },
-  // Organization connection data
-  {
-    request: {
-      query: USER_ORGANIZATION_CONNECTION,
-      variables: {
-        id: '1',
-      },
-    },
-    result: {
-      data: {
-        organizationsConnection: [
-          {
-            __typename: 'Organization',
-            _id: '2',
-            image: 'organizationImage',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            name: 'organizationName',
-            description: 'organizationDescription',
-            userRegistrationRequired: false,
-            createdAt: '12345678900',
-            creator: { __typename: 'User', firstName: 'John', lastName: 'Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: getItem('userId'),
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-          },
-        ],
       },
     },
   },
   {
     request: {
       query: CANCEL_MEMBERSHIP_REQUEST,
-      variables: {
-        membershipRequestId: '56gheqyr7deyfuiwfewifruy8',
-      },
+      variables: { membershipRequestId: 'requestId' },
+    },
+    result: {
+      data: { cancelMembershipRequest: { success: true } },
+    },
+  },
+  {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: 'mockUserId', first: 5, filter: undefined },
     },
     result: {
       data: {
-        cancelMembershipRequest: {
-          _id: '56gheqyr7deyfuiwfewifruy8',
+        user: {
+          __typename: 'User',
+          organizationsWhereMember: {
+            __typename: 'OrganizationConnection',
+            pageInfo: {
+              hasNextPage: false,
+              __typename: 'PageInfo',
+            },
+            edges: [
+              {
+                __typename: 'OrganizationEdge',
+                node: {
+                  __typename: 'Organization',
+                  id: '123',
+                  name: 'Test Org',
+                  description: '',
+                  avatarURL: '',
+                  membersCount: 10,
+                  adminsCount: 2,
+                  city: '',
+                  countryCode: '',
+                  addressLine1: '',
+                  postalCode: '',
+                  state: '',
+                  members: {
+                    __typename: 'UserConnection',
+                    edges: [],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {},
+    },
+    result: {
+      data: {
+        organizations: {
+          __typename: 'OrganizationConnection',
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            __typename: 'PageInfo',
+          },
         },
       },
     },
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-let props = {
-  id: '1',
-  name: 'organizationName',
-  image: '',
-  description: 'organizationDescription',
-  admins: [
-    {
-      id: '123',
+// Error mocks remain largely unchanged
+const errorMocks: MockedResponse[] = [
+  {
+    request: {
+      query: SEND_MEMBERSHIP_REQUEST,
+      variables: { organizationId: '123' },
     },
-  ],
+    error: new Error('Failed to send request'),
+  },
+  {
+    request: {
+      query: JOIN_PUBLIC_ORGANIZATION,
+      variables: {
+        input: {
+          organizationId: '123',
+        },
+      },
+    },
+    error: new Error('Failed to join organization'),
+  },
+  {
+    request: {
+      query: CANCEL_MEMBERSHIP_REQUEST,
+      variables: { membershipRequestId: 'requestId' },
+    },
+    error: new Error('Failed to cancel request'),
+  },
+];
+
+// Define default props based on new interface
+const defaultProps: InterfaceOrganizationCardProps = {
+  id: '123',
+  name: 'Sample',
+  image: 'https://via.placeholder.com/80',
+  description: '',
   members: [],
   address: {
-    city: 'Sample City',
-    countryCode: 'US',
-    line1: '123 Sample Street',
+    city: '',
+    countryCode: '',
+    line1: '',
     postalCode: '',
     state: '',
   },
+  membersCount: 0,
+  adminsCount: 0,
   membershipRequestStatus: '',
-  userRegistrationRequired: true,
-  membershipRequests: [
-    {
-      _id: '',
-      user: {
-        _id: '',
-      },
-    },
-  ],
+  userRegistrationRequired: false,
+  membershipRequests: [],
+  isJoined: false,
 };
 
-describe('Testing OrganizationCard Component [User Portal]', () => {
-  it('Component should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
+describe('OrganizationCard Component with New Interface', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockGetItem.mockReturnValue('mockUserId');
   });
 
-  it('Component should be rendered properly if organization Image is not undefined', async () => {
-    props = {
-      ...props,
-      image: 'organizationImage',
-    };
+  // Basic Rendering Tests
+  describe('Rendering', () => {
+    it('should render props and text elements', () => {
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...defaultProps} />
+        </TestWrapper>,
+      );
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
+      expect(screen.getByText(/Admins/i)).toBeInTheDocument();
+      expect(screen.getByText(/Members/i)).toBeInTheDocument();
+    });
 
-    await wait();
-  });
+    it('should render without image', () => {
+      const props = { ...defaultProps, image: '' };
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
 
-  it('Visit organization', async () => {
-    const cardProps = {
-      ...props,
-      id: '3',
-      image: 'organizationImage',
-      userRegistrationRequired: true,
-      membershipRequestStatus: 'accepted',
-    };
+      expect(screen.getByText(props.name)).toBeInTheDocument();
+    });
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    it('should render full address when provided', () => {
+      const props = {
+        ...defaultProps,
+        address: {
+          city: 'Test City',
+          countryCode: 'TC',
+          line1: 'Test Line 1',
+          postalCode: '12345',
+          state: 'TS',
+        },
+      };
 
-    await wait();
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
 
-    expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
+      expect(screen.getByText(/Test Line 1/)).toBeInTheDocument();
+      expect(screen.getByText(/Test City/)).toBeInTheDocument();
+      expect(screen.getByText(/TC/)).toBeInTheDocument();
+    });
 
-    fireEvent.click(screen.getByTestId('manageBtn'));
+    it('should display membersCount and adminsCount', () => {
+      const props = {
+        ...defaultProps,
+        membersCount: 15,
+        adminsCount: 3,
+      };
 
-    await wait();
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
 
-    expect(window.location.pathname).toBe(`/user/organization/${cardProps.id}`);
-  });
+      const membersElements = screen.queryAllByText((content, element) => {
+        if (!element) return false;
+        const text = element.textContent ?? '';
+        return text.includes('members') && text.includes('15');
+      });
+      const adminsElements = screen.queryAllByText((content, element) => {
+        if (!element) return false;
+        const text = element.textContent ?? '';
+        return text.includes('admins') && text.includes('3');
+      });
 
-  it('Send membership request', async () => {
-    props = {
-      ...props,
-      image: 'organizationImage',
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('joinBtn'));
-    await wait();
-
-    expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
-  });
-
-  it('send membership request to public org', async () => {
-    const cardProps = {
-      ...props,
-      id: '2',
-      image: 'organizationImage',
-      userRegistrationRequired: false,
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId('joinBtn'));
-    await wait();
-
-    expect(toast.success).toHaveBeenCalledTimes(2);
-  });
-
-  it('Displays error when user is already a member', async () => {
-    const errorProps = { ...props, id: '3' }; // Using organizationId '3'
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...errorProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for component to render
-    await waitFor(() =>
-      expect(screen.getByTestId('joinBtn')).toBeInTheDocument(),
-    );
-
-    // Simulate clicking the join button
-    fireEvent.click(screen.getByTestId('joinBtn'));
-
-    // Wait for the error handling
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined'); // Verify toast error
+      expect(membersElements.length).toBeGreaterThan(0);
+      expect(membersElements[0]).toBeInTheDocument();
+      expect(adminsElements.length).toBeGreaterThan(0);
+      expect(adminsElements[0]).toBeInTheDocument();
     });
   });
 
-  it('Displays generic error when a different error occurs', async () => {
-    const errorProps = { ...props, id: '4' }; // Using organizationId '4'
+  // Hook Tests
+  describe('Hooks Behavior', () => {
+    it('should handle localStorage error gracefully', () => {
+      mockGetItem.mockImplementation(() => {
+        throw new Error('localStorage error');
+      });
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...errorProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...defaultProps} />
+        </TestWrapper>,
+      );
 
-    // Wait for component to render
-    await waitFor(() =>
-      expect(screen.getByTestId('joinBtn')).toBeInTheDocument(),
-    );
+      const joinButton = screen.getByTestId('joinBtn');
+      expect(joinButton).toBeInTheDocument();
+      expect(joinButton).toHaveTextContent('joinNow');
+    });
 
-    // Simulate clicking the join button
-    fireEvent.click(screen.getByTestId('joinBtn'));
+    it('should navigate to organization page on visit when isJoined is true', () => {
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...defaultProps} isJoined={true} />
+        </TestWrapper>,
+      );
 
-    // Wait for the error handling
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured'); // Verify generic error toast
+      const visitButton = screen.getByTestId('manageBtn');
+      fireEvent.click(visitButton);
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/user/organization/${defaultProps.id}`,
+      );
     });
   });
 
-  it('withdraw membership request', async () => {
-    const cardProps = {
-      ...props,
-      id: '3',
-      image: 'organizationImage',
-      userRegistrationRequired: true,
-      membershipRequestStatus: 'pending',
-      membershipRequests: [
+  // Mutation Tests
+  describe('Mutations', () => {
+    it('should handle joining a private organization successfully', async () => {
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={true}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByText('joinNow');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Request sent');
+      });
+    });
+
+    it('should handle joining a public organization successfully', async () => {
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByText('joinNow');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Joined');
+      });
+    });
+
+    it('should handle private organization join error', async () => {
+      render(
+        <TestWrapper mocks={errorMocks}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={true}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByTestId('joinBtn');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+    });
+
+    it('should handle membership withdrawal successfully', async () => {
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      render(
+        <TestWrapper mocks={successMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Request withdrawn');
+      });
+    });
+
+    it('should log development error and show generic error toast', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      process.env.NODE_ENV = 'development';
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      const errorMocks: MockedResponse[] = [
         {
-          _id: '56gheqyr7deyfuiwfewifruy8',
-          user: {
-            _id: getItem('userId'),
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          error: new Error('Withdrawal failed'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={errorMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Failed to withdraw membership request:',
+          expect.any(Error),
+        );
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+
+      process.env.NODE_ENV = undefined;
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle already joined error when joining organization', async () => {
+      const errorMocksWithAlreadyJoined: MockedResponse[] = [
+        {
+          request: {
+            query: JOIN_PUBLIC_ORGANIZATION,
+            variables: {
+              input: {
+                organizationId: '123',
+              },
+            },
+          },
+          result: {
+            errors: [
+              {
+                message: 'Already a member',
+                extensions: { code: 'ALREADY_MEMBER' },
+              },
+            ],
           },
         },
-      ],
-    };
+      ];
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      render(
+        <TestWrapper mocks={errorMocksWithAlreadyJoined}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
 
-    await wait();
+      const joinButton = screen.getByText('joinNow');
+      await fireEvent.click(joinButton);
 
-    expect(screen.getByTestId('withdrawBtn')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Already joined');
+      });
+    });
 
-    fireEvent.click(screen.getByTestId('withdrawBtn'));
+    it('should handle membership request not found', async () => {
+      mockGetItem.mockReturnValue('testUserId');
+
+      const cancelRequestSpy = vi.fn(() => ({
+        data: {
+          cancelMembershipRequest: { success: true },
+        },
+      }));
+
+      const mocksWithSpy = [
+        ...successMocks,
+        {
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          result: cancelRequestSpy,
+        },
+      ];
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [
+          {
+            id: 'requestId',
+            user: { id: 'differentUserId' },
+          },
+        ],
+      };
+
+      render(
+        <TestWrapper mocks={mocksWithSpy}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Request not found');
+      });
+
+      expect(cancelRequestSpy).not.toHaveBeenCalled();
+    });
+
+    it('should handle withdrawal attempt with no userId', async () => {
+      mockGetItem.mockReturnValue(null);
+
+      const cancelRequestSpy = vi.fn(() => ({
+        data: {
+          cancelMembershipRequest: { success: true },
+        },
+      }));
+
+      const mocksWithSpy = [
+        ...successMocks,
+        {
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          result: cancelRequestSpy,
+        },
+      ];
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      render(
+        <TestWrapper mocks={mocksWithSpy}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('User ID not found');
+      });
+
+      expect(cancelRequestSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not log error in production mode', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      process.env.NODE_ENV = 'production';
+
+      const props = {
+        ...defaultProps,
+        membershipRequestStatus: 'pending',
+        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+      };
+
+      const errorMocks: MockedResponse[] = [
+        {
+          request: {
+            query: CANCEL_MEMBERSHIP_REQUEST,
+            variables: { membershipRequestId: 'requestId' },
+          },
+          error: new Error('Withdrawal failed'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={errorMocks}>
+          <OrganizationCard {...props} />
+        </TestWrapper>,
+      );
+
+      const withdrawButton = screen.getByTestId('withdrawBtn');
+      await fireEvent.click(withdrawButton);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+
+      process.env.NODE_ENV = undefined;
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle generic thrown error (non-GraphQL)', async () => {
+      const genericErrorMock: MockedResponse[] = [
+        {
+          request: {
+            query: JOIN_PUBLIC_ORGANIZATION,
+            variables: {
+              input: {
+                organizationId: '123',
+              },
+            },
+          },
+          error: new Error('Network error'),
+        },
+      ];
+
+      render(
+        <TestWrapper mocks={genericErrorMock}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByText('joinNow');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('error occurred');
+      });
+    });
+
+    it('should refetch queries after successful join', async () => {
+      const organizationListMock = {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: {},
+        },
+        result: {
+          data: {
+            organizations: {
+              __typename: 'OrganizationConnection',
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                __typename: 'PageInfo',
+              },
+            },
+          },
+        },
+      };
+
+      const joinMutation = {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: {
+            input: {
+              organizationId: '123',
+            },
+          },
+        },
+        result: {
+          data: {
+            joinPublicOrganization: {
+              organizationId: '123',
+              __typename: 'Organization',
+            },
+          },
+        },
+      };
+
+      const userOrgQuery = {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: 'mockUserId', first: 5, filter: undefined },
+        },
+        result: {
+          data: {
+            user: {
+              __typename: 'User',
+              organizationsWhereMember: {
+                __typename: 'OrganizationConnection',
+                pageInfo: {
+                  hasNextPage: false,
+                  __typename: 'PageInfo',
+                },
+                edges: [],
+              },
+            },
+          },
+        },
+      };
+
+      // Mock window.location.reload
+      const reloadMock = vi.fn();
+      Object.defineProperty(window, 'location', {
+        value: { reload: reloadMock },
+        writable: true,
+      });
+
+      render(
+        <TestWrapper mocks={[joinMutation, userOrgQuery, organizationListMock]}>
+          <OrganizationCard
+            {...defaultProps}
+            userRegistrationRequired={false}
+            isJoined={false}
+          />
+        </TestWrapper>,
+      );
+
+      const joinButton = screen.getByTestId('joinBtn');
+      await fireEvent.click(joinButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Joined');
+      });
+
+      // Wait for reload to be called
+      await waitFor(
+        () => {
+          expect(reloadMock).toHaveBeenCalled();
+        },
+        { timeout: 2000 },
+      );
+    });
   });
 });

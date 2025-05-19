@@ -15,7 +15,7 @@ import {
   ORGANIZATION_ADMINS_LIST,
 } from 'GraphQl/Queries/Queries';
 import type { DocumentNode } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -196,8 +196,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => ({ orgId: '' }),
@@ -252,7 +252,7 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
+    await userEvent.type(screen.getByTestId('searchInput'), 'j{enter}');
     await wait();
 
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
@@ -274,11 +274,11 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    userEvent.type(screen.getByTestId('searchInput'), '');
-    userEvent.click(searchBtn);
+    await userEvent.clear(screen.getByTestId('searchInput'));
+    await userEvent.click(searchBtn);
     await wait();
-    userEvent.type(screen.getByTestId('searchInput'), 'j');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId('searchInput'), 'j');
+    await userEvent.click(searchBtn);
     await wait();
 
     expect(screen.queryByText('John Cena')).toBeInTheDocument();
@@ -300,9 +300,9 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
     await wait();
-    userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
     expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
@@ -426,8 +426,8 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     });
 
     // Mock useParams
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: () => ({ orgId: '' }),
@@ -445,7 +445,7 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Change rows per page to 10
     const select = screen.getByRole('combobox');
-    userEvent.selectOptions(select, '10');
+    await userEvent.selectOptions(select, '10');
     await wait();
 
     // Should now show all items on one page
@@ -548,9 +548,9 @@ describe('People Component Mode Switch Coverage', () => {
     });
 
     // Open dropdown and switch to admin mode
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('modeBtn1'));
     });
 
     // Verify admin view
@@ -663,9 +663,9 @@ describe('People Component Mode Switch Coverage', () => {
     expect(screen.getByText('Nothing to show')).toBeInTheDocument();
 
     // Switch to admin mode
-    userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await waitFor(() => {
-      userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('modeChangeBtn'));
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('modeBtn1'));
     });
 
     // Verify admin is shown in admin view
@@ -720,8 +720,8 @@ describe('People Additional Flow Tests', () => {
 
     renderComponent([aliMembersMock]);
 
-    userEvent.type(screen.getByTestId('searchInput'), 'Ali');
-    userEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.type(screen.getByTestId('searchInput'), 'Ali');
+    await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Alice Test')).toBeInTheDocument();
@@ -776,12 +776,16 @@ describe('People Additional Flow Tests', () => {
     const modeSwitchBtn = screen.getByTestId('modeChangeBtn');
 
     // Switch to admin mode
-    userEvent.click(modeSwitchBtn);
-    await waitFor(() => userEvent.click(screen.getByTestId('modeBtn1')));
+    await userEvent.click(modeSwitchBtn);
+    await waitFor(
+      async () => await userEvent.click(screen.getByTestId('modeBtn1')),
+    );
 
     // Switch back to all members
-    userEvent.click(modeSwitchBtn);
-    await waitFor(() => userEvent.click(screen.getByTestId('modeBtn0')));
+    await userEvent.click(modeSwitchBtn);
+    await waitFor(
+      async () => await userEvent.click(screen.getByTestId('modeBtn0')),
+    );
 
     expect(screen.getByText('Charlie Test')).toBeInTheDocument();
   });
@@ -871,7 +875,7 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
     const options = Array.from(select.getElementsByTagName('option'));
     const allOption = options.find((option) => option.textContent === 'All');
     if (allOption) {
-      userEvent.selectOptions(select, allOption.value);
+      await userEvent.selectOptions(select, allOption.value);
     }
     await wait();
 
@@ -925,7 +929,7 @@ describe('People Component Additional Coverage Tests', () => {
     const searchInput = screen.getByTestId('searchInput');
     searchInput.remove();
 
-    userEvent.click(searchBtn);
+    await userEvent.click(searchBtn);
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
@@ -1070,7 +1074,7 @@ describe('People Component Pagination Tests', () => {
     // Test last page navigation
     const lastPageButton = screen.getByRole('button', { name: /last page/i });
     await act(async () => {
-      userEvent.click(lastPageButton);
+      await userEvent.click(lastPageButton);
     });
 
     // Verify last page content
@@ -1079,7 +1083,7 @@ describe('People Component Pagination Tests', () => {
     // Test first page navigation
     const firstPageButton = screen.getByRole('button', { name: /first page/i });
     await act(async () => {
-      userEvent.click(firstPageButton);
+      await userEvent.click(firstPageButton);
     });
 
     // Verify return to first page

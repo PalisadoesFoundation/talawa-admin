@@ -14,7 +14,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -91,8 +91,8 @@ const renderRequests = (link: ApolloLink): RenderResult => {
 
 describe('Testing Requests Screen', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
     }));
   });
@@ -167,8 +167,9 @@ describe('Testing Requests Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
+    await userEvent.type(searchInput, 'T');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const volunteerName = screen.getAllByTestId('volunteerName');
@@ -203,7 +204,7 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
@@ -220,7 +221,7 @@ describe('Testing Requests Screen', () => {
     expect(rejectBtn).toHaveLength(2);
 
     // Reject Request
-    userEvent.click(rejectBtn[0]);
+    await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
@@ -237,7 +238,7 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();

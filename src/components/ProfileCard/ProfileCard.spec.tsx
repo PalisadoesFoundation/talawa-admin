@@ -1,14 +1,14 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { GET_COMMUNITY_SESSION_TIMEOUT_DATA } from 'GraphQl/Queries/Queries';
+import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
@@ -16,8 +16,8 @@ const { setItem } = useLocalStorage();
 const mockNavigate = vi.fn();
 
 // Mock useNavigate hook
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -37,12 +37,12 @@ const MOCKS = [
   },
   {
     request: {
-      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA,
+      query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
     },
     result: {
       data: {
-        getCommunityData: {
-          timeout: 30,
+        community: {
+          inactivityTimeoutDuration: 1800,
         },
       },
     },
@@ -135,7 +135,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -156,7 +156,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -180,7 +180,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/');
@@ -204,7 +204,7 @@ describe('Member screen routing testing', () => {
     );
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');

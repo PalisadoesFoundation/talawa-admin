@@ -1,3 +1,39 @@
+/**
+ * OrganizationNavbar Component
+ *
+ * This component renders a responsive navigation bar for an organization portal.
+ * It includes branding, navigation links, language selection, and user account options.
+ *
+ * @file OrganizationNavbar.tsx
+ * @module components/UserPortal/OrganizationNavbar
+ * @author Talawa Team
+ *
+ * @param {InterfaceNavbarProps} props - Component props.
+ * @param {string | null} props.currentPage - The current active page identifier.
+ *
+ * @returns {JSX.Element} The rendered OrganizationNavbar component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for layout and styling.
+ * - Integrates `i18next` for language translation.
+ * - Fetches organization details using Apollo GraphQL query.
+ * - Provides user logout functionality and redirects to the home page.
+ *
+ * @requires react
+ * @requires react-bootstrap
+ * @requires i18next
+ * @requires js-cookie
+ * @requires @apollo/client
+ * @requires @mui/icons-material
+ * @requires react-router-dom
+ * @requires utils/useLocalstorage
+ * @requires utils/languages
+ *
+ * @example
+ * ```tsx
+ * <OrganizationNavbar currentPage="home" />
+ * ```
+ */
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
@@ -9,27 +45,14 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
-import { USER_ORGANIZATION_CONNECTION } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceNavbarProps {
   currentPage: string | null;
 }
 
-/**
- * Displays the organization navbar with navigation options, user settings, and language selection.
- *
- * The navbar includes:
- * - Organization branding and name.
- * - Language dropdown for changing the interface language.
- * - User dropdown for accessing settings and logging out.
- *
- * @param props - The properties for the navbar.
- * @param currentPage - The current page identifier for highlighting the active navigation link.
- *
- * @returns The organization navbar component.
- */
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userNavbar',
@@ -46,7 +69,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const { data } = useQuery(USER_ORGANIZATION_CONNECTION, {
+  const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -54,12 +77,12 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     cookies.get('i18next') || 'en',
   );
 
-  const { getItem } = useLocalStorage();
+  const { getItem, setItem } = useLocalStorage();
 
   /**
    * Handles user logout by clearing local storage and redirecting to the home page.
    */
-  const handleLogout = (): void => {
+  const handleLogout = async (): Promise<void> => {
     localStorage.clear();
     window.location.replace('/');
   };
@@ -68,7 +91,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   React.useEffect(() => {
     if (data) {
-      setOrganizationDetails({ name: data.organizationsConnection[0].name });
+      setOrganizationDetails({ name: data.organizations[0].name });
     }
   }, [data]);
 
@@ -99,7 +122,9 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
             <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
               <Nav.Link
                 active={props.currentPage === 'home'}
-                onClick={(): void => navigate(homeLink)}
+                onClick={async (): Promise<void> => {
+                  await navigate(homeLink);
+                }}
               >
                 {t('home')}
               </Nav.Link>
@@ -151,7 +176,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.ItemText>
-                    <b>{userName}</b>
+                    <b>{userName as string}</b>
                   </Dropdown.ItemText>
                   <Dropdown.Item>
                     <Link to="/user/settings" className={styles.link}>

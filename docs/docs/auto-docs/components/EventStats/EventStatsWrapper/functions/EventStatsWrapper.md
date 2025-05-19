@@ -4,22 +4,18 @@
 
 # Function: EventStatsWrapper()
 
-> **EventStatsWrapper**(`eventId`): `Element`
+> **EventStatsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/EventStatsWrapper.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L18)
-
-Wrapper component that displays a button to show event statistics.
+Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L38)
 
 ## Parameters
 
-### eventId
+### \_\_namedParameters
 
-`PropType`
+#### _id
 
-The ID of the event.
+`string`
 
 ## Returns
 
 `Element`
-
-JSX element representing the wrapper with a button to view event statistics.

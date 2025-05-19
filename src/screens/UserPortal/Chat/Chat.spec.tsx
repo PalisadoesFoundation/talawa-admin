@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { expect, describe, test, vi } from 'vitest';
 import { store } from 'state/store';
@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import Chat from './Chat';
 import {
   USERS_CONNECTION_LIST,
-  USER_JOINED_ORGANIZATIONS,
+  USER_JOINED_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -143,9 +143,10 @@ const MARK_CHAT_MESSAGES_AS_READ_MOCK = [
 const USER_JOINED_ORG_MOCK = [
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -211,9 +212,10 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -279,9 +281,10 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: '1',
+        first: 10,
       },
     },
     result: {
@@ -347,9 +350,10 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {
@@ -415,9 +419,10 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {
@@ -483,9 +488,10 @@ const USER_JOINED_ORG_MOCK = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS,
+      query: USER_JOINED_ORGANIZATIONS_PG,
       variables: {
         id: null,
+        first: 10,
       },
     },
     result: {

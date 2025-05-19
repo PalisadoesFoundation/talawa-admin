@@ -1,5 +1,5 @@
 import {
-  ORGANIZATION_CONNECTION_LIST,
+  ORGANIZATION_LIST,
   USER_LIST,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
@@ -192,11 +192,11 @@ export const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 123,
             image: null,
@@ -427,11 +427,11 @@ export const MOCKS2 = [
   },
   {
     request: {
-      query: ORGANIZATION_CONNECTION_LIST,
+      query: ORGANIZATION_LIST,
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: 123,
             image: null,

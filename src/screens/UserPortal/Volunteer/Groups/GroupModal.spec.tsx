@@ -6,7 +6,7 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
@@ -145,7 +145,7 @@ describe('Testing GroupModal', () => {
 
     const requestsBtn = screen.getByText(t.requests);
     expect(requestsBtn).toBeInTheDocument();
-    userEvent.click(requestsBtn);
+    await userEvent.click(requestsBtn);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -154,7 +154,7 @@ describe('Testing GroupModal', () => {
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
     });
@@ -166,7 +166,7 @@ describe('Testing GroupModal', () => {
 
     const requestsBtn = screen.getByText(t.requests);
     expect(requestsBtn).toBeInTheDocument();
-    userEvent.click(requestsBtn);
+    await userEvent.click(requestsBtn);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -175,7 +175,7 @@ describe('Testing GroupModal', () => {
 
     const rejectBtn = screen.getAllByTestId('rejectBtn');
     expect(rejectBtn).toHaveLength(2);
-    userEvent.click(rejectBtn[0]);
+    await userEvent.click(rejectBtn[0]);
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
     });
@@ -187,11 +187,11 @@ describe('Testing GroupModal', () => {
 
     const requestsBtn = screen.getByText(t.requests);
     expect(requestsBtn).toBeInTheDocument();
-    userEvent.click(requestsBtn);
+    await userEvent.click(requestsBtn);
 
     const detailsBtn = await screen.findByText(t.details);
     expect(detailsBtn).toBeInTheDocument();
-    userEvent.click(detailsBtn);
+    await userEvent.click(detailsBtn);
   });
 
   it('GroupModal -> Details -> Update', async () => {
@@ -215,7 +215,7 @@ describe('Testing GroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
@@ -245,7 +245,7 @@ describe('Testing GroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
@@ -258,7 +258,7 @@ describe('Testing GroupModal', () => {
 
     const requestsBtn = screen.getByText(t.requests);
     expect(requestsBtn).toBeInTheDocument();
-    userEvent.click(requestsBtn);
+    await userEvent.click(requestsBtn);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -267,7 +267,7 @@ describe('Testing GroupModal', () => {
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
@@ -285,8 +285,8 @@ describe('Testing GroupModal', () => {
       expect(vrInput).toHaveValue('');
     });
 
-    userEvent.clear(vrInput);
-    userEvent.type(vrInput, '1{backspace}');
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '1{backspace}');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue('');
@@ -309,7 +309,7 @@ describe('Testing GroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();

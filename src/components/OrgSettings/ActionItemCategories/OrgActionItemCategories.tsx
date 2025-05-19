@@ -1,14 +1,37 @@
+/**
+ * @file OrgActionItemCategories.tsx
+ * @description This file contains the `OrgActionItemCategories` component, which is responsible for managing
+ *              action item categories within an organization. It provides functionality to create, update,
+ *              enable, disable, and search for action item categories.
+ *
+ * @module OrgActionItemCategories
+ *
+ *
+ * @typedef {InterfaceActionItemCategoryProps} InterfaceActionItemCategoryProps - Props for the component.
+ * @typedef {InterfaceActionItemCategoryInfo} InterfaceActionItemCategoryInfo - Interface for category data.
+ *
+ * @component
+ * @param {InterfaceActionItemCategoryProps} props - Component props containing the organization ID.
+ *
+ * @description
+ * - Displays a table of action item categories with options to sort, filter, and search.
+ * - Allows creating and editing categories via a modal.
+ * - Fetches data using GraphQL queries and handles loading and error states.
+ * - Provides a user-friendly interface with Material-UI components and Bootstrap styling.
+ *
+ * @example
+ * <OrgActionItemCategories orgId="12345" />
+ */
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import { Button } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { InterfaceActionItemCategoryInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
@@ -16,8 +39,9 @@ import {
 } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
-import CategoryModal from './CategoryModal';
+import CategoryModal from './Modal/CategoryModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   SAME = 'same',
@@ -40,18 +64,10 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -70,7 +86,6 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [category, setCategory] =
     useState<InterfaceActionItemCategoryInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
     'createdAt_DESC',
   );
@@ -81,10 +96,7 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-  });
+  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   // Query to fetch action item categories
   const {
@@ -277,33 +289,12 @@ const OrgActionItemCategories: FC<InterfaceActionItemCategoryProps> = ({
       <div
         className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
       >
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onKeyUp={(e) => {
-              if (e.key === 'Enter') {
-                setSearchTerm(searchValue);
-              } else if (e.key === 'Backspace' && searchValue === '') {
-                setSearchTerm('');
-              }
-            }}
-            data-testid="searchByName"
-          />
-          <Button
-            tabIndex={-1}
-            className={styles.searchButton}
-            onClick={() => setSearchTerm(searchValue)}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchByName"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-4">
             <SortingButton

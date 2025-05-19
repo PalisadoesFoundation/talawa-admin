@@ -6,18 +6,13 @@
 
 > **UserAddressFields**(`props`, `deprecatedLegacyContext`?): `ReactNode`
 
-Defined in: [src/components/UserPortal/UserProfile/UserAddressFields.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfile/UserAddressFields.tsx#L26)
-
-Form component containing address-related input fields for user profile
-Includes fields for address, city, state, and country
+Defined in: [src/components/UserPortal/UserProfile/UserAddressFields.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfile/UserAddressFields.tsx#L55)
 
 ## Parameters
 
 ### props
 
 `InterfaceUserAddressFieldsProps`
-
-Component props
 
 ### deprecatedLegacyContext?
 
@@ -32,5 +27,3 @@ Component props
 ## Returns
 
 `ReactNode`
-
-Form group with address input fields

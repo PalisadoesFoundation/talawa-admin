@@ -1,72 +1,52 @@
-import { useQuery } from '@apollo/client';
-import type { VerifyRoleResponse } from 'components/CheckIn/types';
-import { UserRole } from 'components/CheckIn/types';
-import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
-import React, { useEffect } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+/**
+ * A secured route component for user access control in the application.
+ *
+ * This component ensures that only authenticated users with the appropriate
+ * role can access certain routes. It uses a custom hook to interact with
+ * local storage for retrieving authentication and role information.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} - A JSX element that conditionally renders:
+ * - The child route components if the user is logged in and does not have an admin role.
+ * - A `PageNotFound` component if the user has an admin role.
+ * - A redirection to the home page (`"/"`) if the user is not logged in.
+ *
+ * @example
+ * ```tsx
+ * <Route path="/user" element={<SecuredRouteForUser />}>
+ *   <Route path="dashboard" element={<UserDashboard />} />
+ * </Route>
+ * ```
+ *
+ * @remarks
+ * - The `isLoggedIn` value is retrieved from local storage using the key `'IsLoggedIn'`.
+ * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
+ * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
+ * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
+ *
+ * @requires `react-router-dom` for navigation and route handling.
+ * @requires `useLocalStorage` custom hook for local storage interaction.
+ */
+import React from 'react';
+import { Navigate, Outlet } from 'react-router';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 
-/**
- * A component that guards routes by checking if the user is logged in.
- * If the user is logged in and does not have 'AdminFor' set, the child routes are rendered.
- * If the user is not logged in, they are redirected to the homepage.
- * If the user is logged in but has 'AdminFor' set, a 404 page is shown.
- *
- * @returns JSX.Element - Rendered component based on user authentication and role.
- */
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem } = useLocalStorage();
-  const { data, loading, error, refetch } = useQuery<VerifyRoleResponse>(
-    VERIFY_ROLE,
-    {
-      skip: !getItem('token'),
-      context: {
-        headers: {
-          Authorization: `Bearer ${getItem('token')}`,
-        },
-      },
-    },
+
+  // Check if the user is logged in and the role of the user
+  const isLoggedIn = getItem('IsLoggedIn');
+  const adminFor = getItem('AdminFor');
+
+  // Conditional rendering based on authentication status and role
+  return isLoggedIn === 'TRUE' ? (
+    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
+  ) : (
+    <Navigate to="/" replace />
   );
-  const [token, setToken] = React.useState(getItem('token'));
-
-  useEffect(() => {
-    const newToken = getItem('token');
-    if (newToken !== token) {
-      setToken(newToken);
-    }
-  }, []);
-
-  useEffect(() => {
-    refetch(); // Refetch when token updates
-  }, [token]);
-
-  if (loading) {
-    return <div> Loading.....</div>;
-  } else if (error) {
-    return <div>Error During Routing ...</div>;
-  } else {
-    if (!data?.verifyRole) {
-      return <Navigate to="/" replace />;
-    }
-
-    const { isAuthorized, role } = data.verifyRole;
-
-    if (isAuthorized) {
-      if (
-        role === UserRole.USER ||
-        role === UserRole.ADMIN ||
-        role === UserRole.SUPER_ADMIN
-      ) {
-        return <Outlet />;
-      } else {
-        return <PageNotFound />;
-      }
-    } else {
-      return <Navigate to="/" replace />;
-    }
-  }
 };
 
 export default SecuredRouteForUser;

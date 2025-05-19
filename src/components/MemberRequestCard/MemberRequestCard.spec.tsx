@@ -3,130 +3,12 @@ import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
-import {
-  ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-  REJECT_ORGANIZATION_REQUEST_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, vi, expect } from 'vitest';
+import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
-const MOCKS = [
-  {
-    request: {
-      query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-        acceptMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { userid: '234' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '2',
-          },
-        ],
-        rejectMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-];
-const MOCKS2 = [
-  {
-    request: {
-      query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { id: '1' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-        acceptMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { userid: '1' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-        rejectMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-];
-const MOCKS3 = [
-  {
-    request: {
-      query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { id: '5' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-        acceptMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { userid: '5' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-        rejectMembershipRequest: {
-          _id: '1',
-        },
-      },
-    },
-  },
-];
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 
@@ -164,8 +46,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -194,8 +76,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -230,7 +112,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Accept/i));
+      await userEvent.click(screen.getByText(/Accept/i));
       await wait(2100);
       expect(window.location.reload).toHaveBeenCalled();
     } finally {
@@ -262,7 +144,7 @@ describe('Testing Member Request Card', () => {
         </MockedProvider>,
       );
       await wait();
-      userEvent.click(screen.getByText(/Accept/i));
+      await userEvent.click(screen.getByText(/Accept/i));
       await wait(2100);
       expect(window.location.reload).not.toHaveBeenCalled();
     } finally {
@@ -288,7 +170,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Reject/i));
+      await userEvent.click(screen.getByText(/Reject/i));
       await wait();
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).toHaveBeenCalled();
@@ -315,7 +197,7 @@ describe('Testing Member Request Card', () => {
       );
 
       await wait();
-      userEvent.click(screen.getByText(/Reject/i));
+      await userEvent.click(screen.getByText(/Reject/i));
       await wait();
       expect(window.confirm).toHaveBeenCalled();
       expect(window.location.reload).not.toHaveBeenCalled();

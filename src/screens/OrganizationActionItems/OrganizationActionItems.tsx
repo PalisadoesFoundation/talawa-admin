@@ -1,9 +1,54 @@
+/**
+ * Component: OrganizationActionItems
+ *
+ * This component renders a table of action items for a specific organization and event.
+ * It provides functionality to search, filter, sort, and manage action items.
+ *
+ * Features:
+ * - Fetches action items using GraphQL query based on filters and sorting.
+ * - Displays action items in a data grid with columns for assignee, category, status, allotted hours, and due date.
+ * - Allows users to create, edit, view, delete, and update the status of action items via modals.
+ * - Includes search functionality with debounce for optimized performance.
+ * - Provides sorting and filtering options for better data management.
+ *
+ * Props:
+ * - None (Relies on URL parameters for organization and event IDs).
+ *
+ * State:
+ * - `actionItem`: Stores the currently selected action item for modal operations.
+ * - `modalMode`: Determines whether the modal is in 'create' or 'edit' mode.
+ * - `searchTerm`: Stores the search input value.
+ * - `sortBy`: Stores the sorting criteria for due dates.
+ * - `status`: Filters action items by their status (Pending, Completed, or Late).
+ * - `searchBy`: Determines whether to search by 'assignee' or 'category'.
+ * - `modalState`: Tracks the visibility of different modals (Create/Edit, View, Delete, Status Update).
+ *
+ * Dependencies:
+ * - React, React Router, Apollo Client, Material-UI, Bootstrap, Day.js, and custom components.
+ *
+ * GraphQL:
+ * - Query: `ACTION_ITEM_LIST` - Fetches action items based on organization ID, event ID, filters, and sorting.
+ *
+ * Modals:
+ * - `ItemModal`: For creating or editing action items.
+ * - `ItemViewModal`: For viewing action item details.
+ * - `ItemDeleteModal`: For confirming and deleting action items.
+ * - `ItemUpdateStatusModal`: For updating the status of an action item.
+ *
+ * Error Handling:
+ * - Displays an error message if the GraphQL query fails.
+ *
+ * Loading State:
+ * - Displays a loader while fetching data.
+ *
+ * @returns JSX.Element - The rendered OrganizationActionItems component.
+ */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -13,7 +58,7 @@ import type {
   InterfaceActionItemInfo,
   InterfaceActionItemList,
 } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -21,12 +66,13 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from './ItemViewModal';
-import ItemModal from './ItemModal';
-import ItemDeleteModal from './ItemDeleteModal';
+import ItemViewModal from './itemViewModal/ItemViewModal';
+import ItemModal from './itemModal/ItemModal';
+import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './ItemUpdateStatusModal';
+import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -41,13 +87,6 @@ enum ModalState {
   STATUS = 'status',
 }
 
-/**
- * Component for managing and displaying action items within an organization.
- *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
- * @returns The rendered component.
- */
 function organizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -66,7 +105,6 @@ function organizationActionItems(): JSX.Element {
     null,
   );
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
@@ -367,26 +405,16 @@ function organizationActionItems(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input}`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button className={styles.searchButton} data-testid="searchBtn">
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={(value) => {
+            debouncedSearch(value);
+          }}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3">
           <SortingButton
             title={tCommon('searchBy')}
@@ -439,17 +467,15 @@ function organizationActionItems(): JSX.Element {
             buttonLabel={t('status')}
             className={styles.dropdown} // Pass a custom class name if needed
           />
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              className={`mt-2 ${styles.actionsButton}`}
-              data-testid="createActionItemBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
-            </Button>
-          </div>
+          <Button
+            variant="success"
+            onClick={() => handleModalClick(null, ModalState.SAME)}
+            className={styles.createButton}
+            data-testid="createActionItemBtn"
+          >
+            <i className={'fa fa-plus me-2'} />
+            {tCommon('create')}
+          </Button>
         </div>
       </div>
 
@@ -463,15 +489,9 @@ function organizationActionItems(): JSX.Element {
         sx={{
           backgroundColor: 'white',
           borderRadius: '16px',
-          '& .MuiDataGrid-columnHeaders': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-cell': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-columnSeparator': {
-            display: 'none',
-          },
+          '& .MuiDataGrid-columnHeaders': { border: 'none' },
+          '& .MuiDataGrid-cell': { border: 'none' },
+          '& .MuiDataGrid-columnSeparator': { display: 'none' },
         }}
         slots={{
           noRowsOverlay: () => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
@@ -42,7 +42,7 @@ afterEach(() => {
 
 describe('Testing Event Card In User portal', () => {
   const props = {
-    id: '123',
+    _id: '123',
     title: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
@@ -57,13 +57,15 @@ describe('Testing Event Card In User portal', () => {
     creator: {
       firstName: 'Joe',
       lastName: 'David',
-      id: '123',
+      _id: '123',
     },
-    registrants: [
+    attendees: [
       {
-        id: '234',
+        _id: '234',
       },
     ],
+    recurrenceRule: null,
+    isRecurringEventException: false,
   };
 
   it('The card should be rendered properly, and all the details should be displayed correct', async () => {
@@ -137,7 +139,7 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
       expect(
         queryByText('Successfully registered for Test Event'),
@@ -172,7 +174,7 @@ describe('Testing Event Card In User portal', () => {
       </MockedProvider>,
     );
 
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -184,7 +186,7 @@ describe('Testing Event Card In User portal', () => {
 
 describe('Event card when start and end time are not given', () => {
   const props = {
-    id: '123',
+    _id: '123',
     title: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
@@ -199,13 +201,15 @@ describe('Event card when start and end time are not given', () => {
     creator: {
       firstName: 'Joe',
       lastName: 'David',
-      id: '123',
+      _id: '123',
     },
-    registrants: [
+    attendees: [
       {
-        id: '234',
+        _id: '234',
       },
     ],
+    recurrenceRule: null,
+    isRecurringEventException: false,
   };
 
   it('Card is rendered correctly', async () => {

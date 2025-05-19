@@ -11,9 +11,9 @@ import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
-  USER_ORGANIZATION_CONNECTION,
+  ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -55,14 +55,14 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_ORGANIZATION_CONNECTION,
+      query: ORGANIZATION_LIST,
       variables: {
         id: '',
       },
     },
     result: {
       data: {
-        organizationsConnection: [
+        organizations: [
           {
             _id: '6401ff65ce8e8406b8f07af3',
             image: '',
@@ -144,8 +144,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: vi.fn(() => ({ orgId: '' })),
 }));
 
@@ -440,9 +440,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('changeCurrencyBtn'));
+    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
 
-    userEvent.click(screen.getByTestId('currency0'));
+    await userEvent.click(screen.getByTestId('currency0'));
     await wait();
 
     expect(screen.getByTestId('currency0')).toBeInTheDocument();
@@ -463,9 +463,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('changeCurrencyBtn'));
+    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
 
-    userEvent.click(screen.getByTestId('currency1'));
+    await userEvent.click(screen.getByTestId('currency1'));
 
     await wait();
   });
@@ -485,9 +485,9 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('changeCurrencyBtn'));
+    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
 
-    userEvent.click(screen.getByTestId('currency2'));
+    await userEvent.click(screen.getByTestId('currency2'));
 
     await wait();
   });
@@ -527,8 +527,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '123');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '123');
+    await userEvent.click(screen.getByTestId('donateBtn'));
     await wait();
   });
 
@@ -547,8 +547,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '0.5');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
 
@@ -572,8 +572,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
 
@@ -597,7 +597,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
 
@@ -621,8 +621,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), 'abc');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
 
@@ -650,8 +650,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), ' 123 ');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), ' 123 ');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
     expect(toast.success).toHaveBeenCalled();
@@ -728,7 +728,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await wait();
 
     // Leave amount empty
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
@@ -794,8 +794,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), 'abc');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
@@ -817,8 +817,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '0.5');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
@@ -840,8 +840,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
@@ -890,8 +890,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '100');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '100');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait(500);
     expect(mockErrorHandler).toHaveBeenCalledWith(
@@ -944,8 +944,8 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    userEvent.type(screen.getByTestId('donationAmount'), '100');
-    userEvent.click(screen.getByTestId('donateBtn'));
+    await userEvent.type(screen.getByTestId('donationAmount'), '100');
+    await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait(500);
     expect(mockErrorHandler).toHaveBeenCalled();

@@ -1,15 +1,45 @@
+/**
+ * @file Actions.tsx
+ * @description This component renders a table of action items assigned to a user within an organization.
+ * It provides functionalities for searching, sorting, and updating the status of action items.
+ * The component also includes modals for viewing and updating action item details.
+ *
+ * @module Actions
+ *
+ *
+ * @component
+ * @returns {JSX.Element} A React component that displays a searchable and sortable table of action items.
+ *
+ * @example
+ * // Usage
+ * import Actions from './Actions';
+ *
+ * function App() {
+ *   return <Actions />;
+ * }
+ *
+ * @remarks
+ * - The component fetches action items using GraphQL queries.
+ * - It uses Material-UI's DataGrid for displaying the table.
+ * - Modals are used for viewing and updating action item details.
+ * - Includes search and sorting functionalities for better user experience.
+ *
+ * @todo
+ * - Add pagination support for the DataGrid.
+ * - Improve error handling and user feedback mechanisms.
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 
 import type { InterfaceActionItemInfo } from 'utils/interfaces';
-import styles from '../../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -17,12 +47,13 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/ItemViewModal';
+import ItemViewModal from 'screens/OrganizationActionItems/itemViewModal/ItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'screens/OrganizationActionItems/itemUpdateModal/ItemUpdateStatusModal';
 import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   VIEW = 'view',
@@ -36,46 +67,12 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing and displaying action items within an organization.
- *
- * This component allows users to view, filter, sort, and create action items. It also handles fetching and displaying related data such as action item categories and members.
- *
- * @returns The rendered component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.switch`
- * - `.searchButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -95,7 +92,6 @@ function actions(): JSX.Element {
   const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
     null,
   );
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
@@ -103,10 +99,7 @@ function actions(): JSX.Element {
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
-  });
+  }>({ [ModalState.VIEW]: false, [ModalState.STATUS]: false });
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
@@ -136,9 +129,7 @@ function actions(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data?: {
-      actionItemsByUser: InterfaceActionItemInfo[];
-    };
+    data?: { actionItemsByUser: InterfaceActionItemInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -367,31 +358,14 @@ function actions(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton

@@ -1,32 +1,37 @@
 import gql from 'graphql-tag';
-
+import 'style/app-fixed.module.css';
 //Query List
 // Check Auth
-export const CHECK_AUTH = gql`
-  query {
-    checkAuth {
-      _id
-      firstName
-      lastName
-      createdAt
-      image
-      email
+
+// Query to get info about current user
+export const CURRENT_USER = gql`
+  query CurrentUser {
+    currentUser {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
       birthDate
+      city
+      countryCode
+      createdAt
+      description
       educationGrade
+      emailAddress
       employmentStatus
-      gender
+      homePhoneNumber
+      id
+      isEmailAddressVerified
       maritalStatus
-      phone {
-        mobile
-      }
-      address {
-        line1
-        state
-        countryCode
-      }
-      eventsAttended {
-        _id
-      }
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
     }
   }
 `;
@@ -35,71 +40,67 @@ export const CHECK_AUTH = gql`
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      _id
-      image
-      creator {
-        firstName
-        lastName
-      }
+      id
       name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
+        pageInfo {
+          hasNextPage
+        }
       }
     }
   }
 `;
 
-// Query to take the Organization list with filter  and sort option
-export const ORGANIZATION_CONNECTION_LIST = gql`
-  query OrganizationsConnection(
-    $filter: String
-    $first: Int
-    $skip: Int
-    $orderBy: OrganizationOrderByInput
-  ) {
-    organizationsConnection(
-      where: { name_contains: $filter }
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-    ) {
-      _id
-      image
-      creator {
-        firstName
-        lastName
+export const USER_JOINED_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations($id: String!, $first: Int!) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            addressLine1
+            description
+            avatarURL
+            members(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
       }
+    }
+  }
+`;
+
+export const ALL_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations {
+    organizations {
+      id
       name
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
+      addressLine1
+      description
+      avatarURL
+      members(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
@@ -203,20 +204,35 @@ export const USER_LIST = gql`
   }
 `;
 export const USER_LIST_FOR_TABLE = gql`
-  query Users($firstName_contains: String, $lastName_contains: String) {
-    users(
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
+  query allUsers(
+    $first: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: $where
     ) {
-      user {
-        _id
-        firstName
-        lastName
-        email
-        image
-        createdAt
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+        }
       }
     }
   }
@@ -373,56 +389,206 @@ export const EVENT_FEEDBACKS = gql`
 `;
 
 // Query to take the Organization with data
-export const ORGANIZATIONS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      image
+
+export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
+  query getOrganizationPostsCount($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      postsCount
+    }
+  }
+`;
+
+export const GET_POSTS_BY_ORG = gql`
+  query GetPostsByOrg($input: GetPostsByOrgInput!) {
+    postsByOrganization(input: $input) {
+      id
+      caption
+      pinnedAt
+      createdAt
+      updatedAt
+      attachments {
+        url
+      }
       creator {
-        firstName
-        lastName
-        email
+        id
       }
+    }
+  }
+`;
+
+export const GET_USER_BY_ID = gql`
+  query GetUserById($input: QueryUserInput!) {
+    user(input: $input) {
+      id
       name
-      description
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
-      }
-      userRegistrationRequired
-      visibleInSearch
-      members {
-        _id
-        firstName
-        lastName
-        email
-      }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        createdAt
-      }
-      membershipRequests {
-        _id
-        user {
-          firstName
-          lastName
-          email
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_MEMBERS_PG = gql`
+  query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      members(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
-      blockedUsers {
-        _id
-        firstName
-        lastName
-        email
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
+  query GetOrganizationBlockedUsers($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const IS_USER_BLOCKED = gql`
+  query IsUserBlockedInOrganization($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      blockedUsers(first: $first, after: $after) {
+        edges {
+          node {
+            id
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_EVENTS_PG = gql`
+  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      events(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            creator {
+              id
+              name
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_POSTS_PG = gql`
+  query GetOrganizationPosts($id: String!, $first: Int) {
+    organization(input: { id: $id }) {
+      posts(first: $first) {
+        edges {
+          node {
+            id
+            caption
+            createdAt
+            creator {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_DATA_PG = gql`
+  query getOrganizationData($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      avatarURL
+      name
+      city
+    }
+  }
+`;
+
+export const ORGANIZATIONS_LIST = gql`
+  query getOrganization($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      name
+      description
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      countryCode
+      avatarURL
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
+      }
+      updater {
+        id
+        name
+        emailAddress
+      }
+    }
+  }
+`;
+
+export const MEMBERS_LIST_PG = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      members(first: 32) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            createdAt
+          }
+        }
       }
     }
   }
@@ -477,28 +643,38 @@ export const BLOCK_PAGE_MEMBER_LIST = gql`
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
-    $orgId: ID!
-    $firstName_contains: String
-    $lastName_contains: String
+    $orgId: String!
     $first: Int
-    $skip: Int
+    $after: String
+    $last: Int
+    $before: String
+    $where: MembersWhereInput
   ) {
-    organizationsMemberConnection(
-      orgId: $orgId
-      first: $first
-      skip: $skip
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-    ) {
-      edges {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
+    organization(input: { id: $orgId }) {
+      members(
+        first: $first
+        after: $after
+        last: $last
+        before: $before
+        where: $where
+      ) {
+        pageInfo {
+          endCursor
+          hasPreviousPage
+          hasNextPage
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            name
+            role
+            avatarURL
+            emailAddress
+            createdAt
+          }
+        }
       }
     }
   }
@@ -608,20 +784,21 @@ export const USER_DETAILS = gql`
 
 // to take the organization event list
 export const ORGANIZATION_EVENT_LIST = gql`
-  query EventsByOrganization($id: ID!) {
-    eventsByOrganization(id: $id) {
-      _id
-      title
-      description
-      startDate
-      endDate
-      location
-      startTime
-      endTime
-      allDay
-      recurring
-      isPublic
-      isRegisterable
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+          }
+        }
+      }
     }
   }
 `;
@@ -721,25 +898,26 @@ export const ADMIN_LIST = gql`
 
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
-  query Organizations(
-    $id: ID!
+  query Organization(
+    $input: QueryOrganizationInput!
     $skip: Int
     $first: Int
-    $firstName_contains: String
+    $name_contains: String
   ) {
-    organizations(id: $id) {
-      _id
+    organization(input: $input) {
+      id
       membershipRequests(
         skip: $skip
         first: $first
-        where: { user: { firstName_contains: $firstName_contains } }
+        where: { user: { name_contains: $name_contains } }
       ) {
-        _id
+        membershipRequestId
+        createdAt
+        status
         user {
-          _id
-          firstName
-          lastName
-          email
+          id
+          name
+          emailAddress
         }
       }
     }
@@ -835,12 +1013,36 @@ export const USERS_CONNECTION_LIST = gql`
   }
 `;
 
-export const GET_COMMUNITY_DATA = gql`
+export const GET_COMMUNITY_DATA_PG = gql`
   query getCommunityData {
-    getCommunityData {
-      _id
-      websiteLink
+    community {
+      createdAt
+      facebookURL
+      githubURL
+      id
+      inactivityTimeoutDuration
+      instagramURL
+      linkedInURL
+      logoMimeType
+      logoURL
       name
+      redditURL
+      slackURL
+      updatedAt
+      updater
+      websiteURL
+      xURL
+      youtubeURL
+    }
+  }
+`;
+
+export const GET_COMMUNITY_DATA = gql`
+  query CommunityInfo {
+    community {
+      id
+      name
+      websiteLink
       logoUrl
       socialMediaUrls {
         facebook
@@ -856,18 +1058,26 @@ export const GET_COMMUNITY_DATA = gql`
   }
 `;
 
-export const GET_COMMUNITY_SESSION_TIMEOUT_DATA = gql`
-  query getCommunityData {
-    getCommunityData {
-      timeout
+export const SIGNIN_QUERY = gql`
+  query SignIn($email: EmailAddress!, $password: String!) {
+    signIn(input: { emailAddress: $email, password: $password }) {
+      user {
+        id
+        name
+        emailAddress
+        role
+        countryCode
+        avatarURL
+      }
+      authenticationToken
     }
   }
 `;
-export const VERIFY_ROLE = gql`
-  query verifyRole {
-    verifyRole {
-      isAuthorized
-      role
+
+export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
+  query getCommunityData {
+    community {
+      inactivityTimeoutDuration
     }
   }
 `;
@@ -888,19 +1098,30 @@ export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 export {
   ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
-  ORGANIZATION_CUSTOM_FIELDS,
   ORGANIZATION_EVENTS_CONNECTION,
 } from './PlugInQueries';
 
 // display posts
-export {
-  ORGANIZATION_POST_LIST,
-  ORGANIZATION_ADVERTISEMENT_LIST,
-} from './OrganizationQueries';
+export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
+
+export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
 export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
 } from './OrganizationQueries';
+
+export const GET_ORGANIZATION_EVENTS = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        id
+        name
+        description
+        startAt
+        endAt
+      }
+    }
+  }
+`;

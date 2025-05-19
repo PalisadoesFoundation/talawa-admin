@@ -1,11 +1,11 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 import { useQuery } from '@apollo/client';
-import { CHECK_AUTH } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 
 const OrganizationScreen = lazy(
@@ -107,17 +107,16 @@ const { setItem } = useLocalStorage();
  */
 
 function app(): JSX.Element {
-  const { data, loading } = useQuery(CHECK_AUTH);
+  const { data, loading } = useQuery(CURRENT_USER);
 
   useEffect(() => {
-    if (!loading && data?.checkAuth) {
-      const auth = data.checkAuth;
+    if (!loading && data?.currentUser) {
+      const auth = data.currentUser;
       setItem('IsLoggedIn', 'TRUE');
-      setItem('name', `${auth.firstName} ${auth.lastName}`);
-      setItem('FirstName', auth.firstName);
-      setItem('LastName', auth.lastName);
-      setItem('email', auth.email);
-      setItem('UserImage', auth.image);
+      setItem('id', auth.id);
+      setItem('name', auth.name);
+      setItem('email', auth.emailAddress);
+      // setItem('UserImage', auth.avatarURL|| "");
     }
   }, [data, loading, setItem]);
 
@@ -126,6 +125,8 @@ function app(): JSX.Element {
       <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<LoginPage />} />
+          <Route path="/admin" element={<LoginPage />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />

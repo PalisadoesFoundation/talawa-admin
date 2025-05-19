@@ -40,17 +40,6 @@ type Address {
   state: String
 }
 
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
 type Advertisement {
   _id: ID!
   createdAt: DateTime!
@@ -64,16 +53,15 @@ type Advertisement {
   updatedAt: DateTime!
 }
 
+enum AdvertisementType {
+  BANNER
+  MENU
+  POPUP
+}
+
 type AdvertisementEdge {
   cursor: String
   node: Advertisement
-}
-
-type DefaultConnectionPageInfo implements ConnectionPageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
 }
 
 type AdvertisementsConnection {
@@ -120,6 +108,8 @@ type AuthData {
   refreshToken: String!
   user: User!
 }
+
+scalar BigInt
 
 type CheckIn {
   _id: ID!
@@ -170,9 +160,29 @@ type Community {
   websiteLink: String
 }
 
+type CommunityPg {
+  createdAt: String
+  facebookURL: String
+  githubURL: String
+  id: ID!
+  inactivityTimeoutDuration: Int
+  instagramURL: String
+  linkedInURL: String
+  logoMimeType: String
+  logoURL: String
+  name: String
+  redditURL: String
+  slackURL: String
+  updatedAt: String
+  updater: User
+  websiteURL: String
+  xURL: String
+  youtubeURL: String
+}
+
 union ConnectionError = InvalidCursor | MaximumValueError
 
-interface ConnectionPageInfo {
+type ConnectionPageInfo {
   endCursor: String
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -410,6 +420,187 @@ enum Frequency {
   YEARLY
 }
 
+enum Iso4217CurrencyCode {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BOV
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BZD
+  CAD
+  CDF
+  CHE
+  CHF
+  CHW
+  CLF
+  CLP
+  CNY
+  COP
+  COU
+  CRC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  GBP
+  GEL
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HTG
+  HUF
+  IDR
+  ILS
+  INR
+  IQD
+  IRR
+  ISK
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KMF
+  KPW
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MXV
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLE
+  SOS
+  SRD
+  SSP
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  USN
+  UYI
+  UYU
+  UYW
+  UZS
+  VED
+  VES
+  VND
+  VUV
+  WST
+  XAF
+  XAG
+  XAU
+  XBA
+  XBB
+  XBC
+  XBD
+  XCD
+  XDR
+  XOF
+  XPD
+  XPF
+  XPT
+  XSU
+  XTS
+  XUA
+  XXX
+  YER
+  ZAR
+  ZMW
+  ZWG
+}
+
 type Group {
   _id: ID!
   admins: [User!]!
@@ -417,31 +608,6 @@ type Group {
   description: String
   organization: Organization!
   title: String!
-  updatedAt: DateTime!
-}
-
-type SocialMediaUrls {
-  X: String
-  facebook: String
-  gitHub: String
-  instagram: String
-  linkedIn: String
-  reddit: String
-  slack: String
-  youTube: String
-}
-
-type FundraisingCampaign {
-  _id: ID!
-  createdAt: DateTime!
-  currency: Currency!
-  endDate: Date!
-  fundId: Fund!
-  fundingGoal: Float!
-  name: String!
-  organizationId: Organization!
-  pledges: [FundraisingCampaignPledge]
-  startDate: Date!
   updatedAt: DateTime!
 }
 
@@ -536,178 +702,6 @@ type MinimumValueError implements FieldError {
   path: [String!]!
 }
 
-enum AdvertisementType {
-  BANNER
-  MENU
-  POPUP
-}
-
-enum Currency {
-  AED
-  AFN
-  ALL
-  AMD
-  ANG
-  AOA
-  ARS
-  AUD
-  AWG
-  AZN
-  BAM
-  BBD
-  BDT
-  BGN
-  BHD
-  BIF
-  BMD
-  BND
-  BOB
-  BRL
-  BSD
-  BTN
-  BWP
-  BYN
-  BZD
-  CAD
-  CDF
-  CHF
-  CLP
-  CNY
-  COP
-  CRC
-  CUP
-  CVE
-  CZK
-  DJF
-  DKK
-  DOP
-  DZD
-  EGP
-  ERN
-  ETB
-  EUR
-  FJD
-  FKP
-  FOK
-  FRO
-  GBP
-  GEL
-  GGP
-  GHS
-  GIP
-  GMD
-  GNF
-  GTQ
-  GYD
-  HKD
-  HNL
-  HRK
-  HTG
-  HUF
-  IDR
-  ILS
-  IMP
-  INR
-  IQD
-  IRR
-  ISK
-  JEP
-  JMD
-  JOD
-  JPY
-  KES
-  KGS
-  KHR
-  KID
-  KMF
-  KRW
-  KWD
-  KYD
-  KZT
-  LAK
-  LBP
-  LKR
-  LRD
-  LSL
-  LYD
-  MAD
-  MDL
-  MGA
-  MKD
-  MMK
-  MNT
-  MOP
-  MRU
-  MUR
-  MVR
-  MWK
-  MXN
-  MYR
-  MZN
-  NAD
-  NGN
-  NIO
-  NOK
-  NPR
-  NZD
-  OMR
-  PAB
-  PEN
-  PGK
-  PHP
-  PKR
-  PLN
-  PYG
-  QAR
-  RON
-  RSD
-  RUB
-  RWF
-  SAR
-  SBD
-  SCR
-  SDG
-  SEK
-  SGD
-  SHP
-  SLL
-  SOS
-  SPL
-  SRD
-  STN
-  SVC
-  SYP
-  SZL
-  THB
-  TJS
-  TMT
-  TND
-  TOP
-  TRY
-  TTD
-  TVD
-  TWD
-  TZS
-  UAH
-  UGX
-  USD
-  UYU
-  UZS
-  VEF
-  VND
-  VUV
-  WST
-  XAF
-  XCD
-  XDR
-  XOF
-  XPF
-  YER
-  ZAR
-  ZMW
-  ZWD
-}
-
 input CreateAdvertisementInput {
   endDate: Date!
   name: String!
@@ -727,6 +721,20 @@ input EditVenueInput {
   file: String
   id: ID!
   name: String
+}
+
+input MutationCreateAdvertisementInput {
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
+  type: AdvertisementType!
+}
+
+input QueryOrganizationInput {
+  id: String!
 }
 
 type Mutation {
@@ -762,14 +770,7 @@ type Mutation {
     organizationId: ID!
   ): ActionItemCategory!
   createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  createAdvertisement(
-    endDate: Date!
-    link: String!
-    name: String!
-    orgId: ID!
-    startDate: Date!
-    type: String!
-  ): Advertisement!
+  createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
   createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
   createComment(data: CommentInput!, postId: ID!): Comment
   createChat(data: chatInput!): Chat!
@@ -793,8 +794,7 @@ type Mutation {
   createUserFamily(data: createUserFamilyInput!): UserFamily!
   createUserTag(input: CreateUserTagInput!): UserTag
   createVenue(data: VenueInput!): Venue
-  deleteAdvertisement(id: ID!): DeletePayload!
-  deleteAdvertisementById(id: ID!): DeletePayload!
+  deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
   deleteVenue(id: ID!): Venue
@@ -804,7 +804,6 @@ type Mutation {
   leaveOrganization(organizationId: ID!): User!
   likeComment(id: ID!): Comment
   likePost(id: ID!): Post
-  login(data: LoginInput!): AuthData!
   logout: Boolean!
   otp(data: OTPInput!): OtpData!
   recaptcha(data: RecaptchaVerification!): Boolean!
@@ -819,6 +818,9 @@ type Mutation {
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
   removeMember(data: UserAndOrganizationInput!): Organization!
+  deleteOrganizationMembership(
+    input: deleteOrganizationMembershipInput
+  ): Organization!
   removeOrganization(id: ID!): UserData!
   removeOrganizationCustomField(
     customFieldId: ID!
@@ -841,7 +843,8 @@ type Mutation {
     type: String!
     replyTo: ID
   ): ChatMessage!
-  signUp(data: UserInput!, file: String): AuthData!
+  signUp(input: UserInput!, file: String): AuthData!
+  createUser(input: createUserInput!): AuthData!
   togglePostPin(id: ID!, title: String): Post!
   unassignUserTag(input: ToggleUserTagAssignInput!): User
   unblockUser(organizationId: ID!, userId: ID!): User!
@@ -853,13 +856,12 @@ type Mutation {
     data: UpdateActionItemCategoryInput!
     id: ID!
   ): ActionItemCategory
-  updateAdvertisement(
-    input: UpdateAdvertisementInput!
-  ): UpdateAdvertisementPayload
+  updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
   updateAgendaCategory(
     id: ID!
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
+  updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
   updateEvent(data: UpdateEventInput, id: ID!): Event!
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
@@ -873,8 +875,7 @@ type Mutation {
   ): Organization!
   updatePost(data: PostUpdateInput, id: ID!): Post!
   updateSessionTimeout(timeout: Int!): Boolean!
-  updateUserPassword(data: UpdateUserPasswordInput!): UserData!
-  updateUserProfile(data: UpdateUserInput, file: String): User!
+  updateUser(input: MutationUpdateUserInput!): UserPg
   updateUserRoleInOrganization(
     organizationId: ID!
     role: String!
@@ -889,8 +890,12 @@ input OTPInput {
   email: EmailAddress!
 }
 
+input AdvertisementWhereInput {
+  isCompleted: Boolean!
+}
+
 type Organization {
-  _id: ID!
+  id: ID!
   actionItemCategories: [ActionItemCategory]
   address: Address
   admins(adminId: ID): [User!]
@@ -918,6 +923,713 @@ type Organization {
   venues: [Venue]
 }
 
+type OrganizationPg {
+  id: ID!
+  name: String
+  description: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  postalCode: String
+  countryCode: Iso3166Alpha2CountryCode
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  postsCount: Int
+  pinnedPostsCount: Int
+
+  advertisements(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    where: AdvertisementWhereInput
+  ): OrganizationAdvertisementsConnectionPg
+
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnectionPg
+
+  chats(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationChatsConnectionPg
+
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationEventsConnectionPg
+
+  funds(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationFundsConnectionPg
+
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationMembersConnectionPg
+
+  pinnedPosts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPinnedPostsConnectionPg
+
+  posts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPostsConnectionPg
+
+  tagFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagFoldersConnectionPg
+
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagsConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationVenuesConnectionPg
+}
+
+type PageInfoPg {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type OrganizationAdvertisementsConnectionPg {
+  edges: [OrganizationAdvertisementsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationAdvertisementsConnectionEdgePg {
+  cursor: String!
+  node: AdvertisementPg
+}
+
+enum AdvertisementTypePg {
+  banner
+  menu
+  pop_up
+}
+
+type AdvertisementAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type AdvertisementPg {
+  id: ID!
+  name: String
+  description: String
+  type: AdvertisementTypePg
+  startAt: DateTime
+  endAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [AdvertisementAttachmentPg!]
+}
+
+type BlockedUserPg {
+  createdAt: Date
+  id: ID!
+  organization: OrganizationPg
+  user: UserPg
+}
+
+type OrganizationBlockedUsersConnectionPg {
+  edges: [OrganizationBlockedUsersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationBlockedUsersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type OrganizationChatsConnectionPg {
+  edges: [OrganizationChatsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationChatsConnectionEdgePg {
+  cursor: String!
+  node: ChatPg
+}
+
+type ChatMembersConnectionPg {
+  edges: [ChatMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type ChatMessagesConnectionPg {
+  edges: [ChatMessagesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMessagePg {
+  id: ID!
+  body: String
+  chat: ChatPg
+  createdAt: DateTime
+  creator: UserPg
+  parentMessage: ChatMessagePg
+  updatedAt: DateTime
+}
+
+type ChatMessagesConnectionEdgePg {
+  cursor: String!
+  node: ChatMessagePg
+}
+
+type ChatPg {
+  id: ID!
+  name: String
+  description: String
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMembersConnectionPg
+
+  messages(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMessagesConnectionPg
+}
+
+type OrganizationEventsConnectionPg {
+  edges: [OrganizationEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
+type EventAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type EventAgendaFoldersConnectionPg {
+  edges: [EventAgendaFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventAgendaFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderChildFoldersConnectionPg {
+  edges: [AgendaFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderItemsConnectionPg {
+  edges: [AgendaFolderItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderItemsConnectionEdgePg {
+  cursor: String!
+  node: AgendaItemPg
+}
+
+enum AgendaItemTypePg {
+  general
+  note
+  scripture
+  song
+}
+
+type AgendaItemPg {
+  id: ID!
+  name: String
+  description: String
+  duration: String
+  event: AgendaFolderPg
+  key: String
+  type: AgendaItemTypePg
+  createdAt: DateTime
+  creator: UserPg
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type AgendaFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  creator: UserPg
+  event: EventPg
+  isAgendaItemFolder: Boolean
+  updatedAt: DateTime
+  updater: UserPg
+  parentFolder: AgendaFolderPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderChildFoldersConnectionPg
+  items(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderItemsConnectionPg
+}
+
+type EventPg {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [EventAttachmentPg!]
+
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnectionPg
+}
+
+type EventVenuesConnectionPg {
+  edges: [EventVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventVenuesConnectionEdgePg {
+  node: VenuePg!
+  cursor: String!
+}
+
+type VenuePg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [VenueAttachmentPg!]!
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): VenueEventsConnectionPg
+}
+
+type OrganizationFundsConnectionPg {
+  edges: [OrganizationFundsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationFundsConnectionEdgePg {
+  cursor: String!
+  node: FundPg
+}
+
+type FundPg {
+  campaigns(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignsConnectionPg
+  createdAt: DateTime
+  creator: User
+  id: ID!
+  isTaxDeductible: Boolean
+  name: String
+  organization: Organization
+  updatedAt: DateTime
+  updater: User
+}
+
+type FundCampaignsConnectionPg {
+  edges: [FundCampaignsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignsConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPg
+}
+
+type FundCampaignPg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  startAt: DateTime!
+  endAt: DateTime!
+  goalAmount: Int!
+  pledgedAmount: BigInt!
+  currencyCode: Iso4217CurrencyCode!
+  creator: UserPg!
+  updater: UserPg
+  fund: FundPg!
+  pledges(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignPledgesConnectionPg
+}
+
+type FundCampaignPledgesConnectionPg {
+  edges: [FundCampaignPledgesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignPledgesConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPledgePg
+}
+
+type FundCampaignPledgePg {
+  id: ID!
+  amount: Int!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  campaign: FundCampaignPg!
+  creator: UserPg!
+  pledger: UserPg!
+  updater: UserPg
+}
+
+type OrganizationMembersConnectionPg {
+  edges: [OrganizationMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type OrganizationPinnedPostsConnectionPg {
+  edges: [OrganizationPinnedPostsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationPinnedPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type PostPg {
+  attachments: [PostAttachmentPg!]
+  caption: String
+  comments(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostCommentsConnectionPg
+  commentsCount: Int
+  createdAt: DateTime
+  creator: UserPg
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostDownVotersConnectionPg
+  downVotesCount: Int
+  id: ID!
+  organization: OrganizationPg
+  pinnedAt: DateTime
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostUpVotersConnectionPg
+  upVotesCount: Int
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type PostCommentsConnectionPg {
+  edges: [PostCommentsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostCommentsConnectionEdgePg {
+  cursor: String!
+  node: CommentPg
+}
+
+type CommentPg {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  post: PostPg!
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentDownVotersConnectionPg
+  downVotesCount: Int!
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentUpVotersConnectionPg
+  upVotesCount: Int!
+}
+
+type CommentDownVotersConnectionPg {
+  edges: [CommentDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostUpVotersConnectionPg {
+  edges: [PostUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostDownVotersConnectionPg {
+  edges: [PostDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type CommentUpVotersConnectionPg {
+  edges: [CommentUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type OrganizationPostsConnectionPg {
+  edges: [OrganizationPostsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type OrganizationTagFoldersConnectionPg {
+  edges: [OrganizationTagFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderChildFoldersConnectionPg {
+  edges: [TagFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  parentFolder: TagFolderPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderChildFoldersConnectionPg
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderTagsConnectionPg
+}
+
+type TagFolderTagsConnectionPg {
+  edges: [TagFolderTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
+}
+
+type OrganizationTagsConnectionPg {
+  edges: [OrganizationTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
+}
+
+type TagAssigneesConnectionPg {
+  edges: [TagAssigneesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagAssigneesConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type TagPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  folder: TagFolderPg
+  assignees(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagAssigneesConnectionPg
+  organization: OrganizationPg
+}
+
+type OrganizationVenuesConnectionPg {
+  edges: [OrganizationVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationVenuesConnectionEdgePg {
+  cursor: String!
+  node: VenuePg
+}
+
+type VenueAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type VenueEventsConnectionPg {
+  edges: [VenueEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type VenueEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
 type OrganizationCustomField {
   _id: ID!
   name: String!
@@ -936,6 +1648,10 @@ type OrganizationInfoNode {
   visibleInSearch: Boolean!
 }
 
+type AuthenticationPayload {
+  authenticationToken: String
+  user: User
+}
 input OrganizationInput {
   address: AddressInput!
   apiUrl: URL
@@ -1113,14 +1829,19 @@ input PostWhereInput {
   title_starts_with: String
 }
 
+input OueryAllUsersWhereInput {
+  name: String
+}
+
 type Query {
+  signIn(input: LoginInput!): AuthenticationPayload
   actionItem(id: ID!): ActionItem
   actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
   actionItemCategory(id: ID!): ActionItemCategory
   actionItemsByEvent(eventId: ID!): [ActionItem]
   actionItemsByOrganization(organizationId: ID!): [ActionItem]
   agendaCategory(id: ID!): AgendaCategory!
-  checkAuth: User!
+  currentUser: UserPg!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
   customFieldsByOrganization(id: ID!): [OrganizationCustomField]
   chatById(id: ID!): Chat!
@@ -1156,13 +1877,8 @@ type Query {
   me: UserData!
   myLanguage: String
   fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
+  organization(input: QueryOrganizationInput!): OrganizationPg
   organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
-  organizationsConnection(
-    first: Int
-    orderBy: OrganizationOrderByInput
-    skip: Int
-    where: OrganizationWhereInput
-  ): [Organization]!
   organizationsMemberConnection(
     first: Int
     orderBy: UserOrderByInput
@@ -1182,7 +1898,7 @@ type Query {
   ): PostConnection
   registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
   registrantsByEvent(id: ID!): [User]
-  user(id: ID!): UserData!
+  user(input: QueryUserInput!): UserPg!
   userLanguage(userId: ID!): String
   users(
     first: Int
@@ -1279,6 +1995,19 @@ input UpdateAdvertisementInput {
   type: AdvertisementType
 }
 
+input MutationUpdateAdvertisementInput {
+  description: String
+  endAt: DateTime
+  id: ID!
+  name: String
+  startAt: DateTime
+  type: AdvertisementType
+}
+
+input MutationDeleteAdvertisementInput {
+  id: ID!
+}
+
 type UpdateAdvertisementPayload {
   advertisement: Advertisement
 }
@@ -1320,6 +2049,17 @@ input UpdateOrganizationInput {
   visibleInSearch: Boolean
 }
 
+input AddressInput {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
 enum EducationGrade {
   GRADE_1
   GRADE_2
@@ -1351,32 +2091,53 @@ enum Gender {
   OTHER
 }
 
-enum MaritalStatus {
-  DIVORCED
-  ENGAGED
-  MARRIED
-  SEPERATED
-  SINGLE
-  WIDOWED
-}
-
-input UpdateUserInput {
-  address: AddressInput
+input MutationUpdateUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
   birthDate: Date
-  educationGrade: EducationGrade
-  email: EmailAddress
-  employmentStatus: EmploymentStatus
-  firstName: String
-  gender: Gender
-  lastName: String
-  maritalStatus: MaritalStatus
-  phone: UserPhoneInput
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  role: UserRole
+  state: String
+  workPhoneNumber: PhoneNumber
 }
 
-input UpdateUserPasswordInput {
-  confirmNewPassword: String!
-  newPassword: String!
-  previousPassword: String!
+input MutationUpdateCurrentUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  state: String
+  workPhoneNumber: PhoneNumber
 }
 
 input UpdateUserTagInput {
@@ -1405,7 +2166,7 @@ type User {
   image: String
   joinedOrganizations: [Organization]
   lastName: String!
-  maritalStatus: MaritalStatus
+  maritalStatus: UserMaritalStatus
   membershipRequests: [MembershipRequest]
   organizationsBlockedBy: [Organization]
   phone: UserPhone
@@ -1421,14 +2182,555 @@ type User {
   updatedAt: DateTime!
 }
 
-type FundraisingCampaignPledge {
-  _id: ID!
-  amount: Float!
-  campaign: FundraisingCampaign!
-  currency: Currency!
-  endDate: Date
-  startDate: Date
-  users: [User]!
+type UserPg {
+  addressLine1: String
+  addressLine2: String
+  avatarMimeType: String
+  avatarURL: String
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  createdAt: DateTime
+  creator: UserPg
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: String
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  organizationsWhereMember(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserOrganizationsWhereMemberConnection
+  postalCode: String
+  naturalLanguageCode: Iso639Set1LanguageCode
+  role: UserRole
+  state: String
+  updatedAt: DateTime
+  updater: User
+  workPhoneNumber: PhoneNumber
+}
+
+input QueryUserInput {
+  id: String!
+}
+
+input createUserInput {
+  name: String!
+  emailAddress: EmailAddress!
+  password: String!
+  role: UserRole!
+  isEmailAddressVerified: Boolean!
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
+input deleteOrganizationMembershipInput {
+  organizationId: String!
+  memberID: String!
+}
+
+enum Iso3166Alpha2CountryCode {
+  ad
+  ae
+  af
+  ag
+  ai
+  al
+  am
+  ao
+  aq
+  ar
+  as
+  at
+  au
+  aw
+  ax
+  az
+  ba
+  bb
+  bd
+  be
+  bf
+  bg
+  bh
+  bi
+  bj
+  bl
+  bm
+  bn
+  bo
+  bq
+  br
+  bs
+  bt
+  bv
+  bw
+  by
+  bz
+  ca
+  cc
+  cd
+  cf
+  cg
+  ch
+  ci
+  ck
+  cl
+  cm
+  cn
+  co
+  cr
+  cu
+  cv
+  cw
+  cx
+  cy
+  cz
+  de
+  dj
+  dk
+  dm
+  do
+  dz
+  ec
+  ee
+  eg
+  eh
+  er
+  es
+  et
+  fi
+  fj
+  fk
+  fm
+  fo
+  fr
+  ga
+  gb
+  gd
+  ge
+  gf
+  gg
+  gh
+  gi
+  gl
+  gm
+  gn
+  gp
+  gq
+  gr
+  gs
+  gt
+  gu
+  gw
+  gy
+  hk
+  hm
+  hn
+  hr
+  ht
+  hu
+  id
+  ie
+  il
+  im
+  in
+  io
+  iq
+  ir
+  is
+  it
+  je
+  jm
+  jo
+  jp
+  ke
+  kg
+  kh
+  ki
+  km
+  kn
+  kp
+  kr
+  kw
+  ky
+  kz
+  la
+  lb
+  lc
+  li
+  lk
+  lr
+  ls
+  lt
+  lu
+  lv
+  ly
+  ma
+  mc
+  md
+  me
+  mf
+  mg
+  mh
+  mk
+  ml
+  mm
+  mn
+  mo
+  mp
+  mq
+  mr
+  ms
+  mt
+  mu
+  mv
+  mw
+  mx
+  my
+  mz
+  na
+  nc
+  ne
+  nf
+  ng
+  ni
+  nl
+  no
+  np
+  nr
+  nu
+  nz
+  om
+  pa
+  pe
+  pf
+  pg
+  ph
+  pk
+  pl
+  pm
+  pn
+  pr
+  ps
+  pt
+  pw
+  py
+  qa
+  re
+  ro
+  rs
+  ru
+  rw
+  sa
+  sb
+  sc
+  sd
+  se
+  sg
+  sh
+  si
+  sj
+  sk
+  sl
+  sm
+  sn
+  so
+  sr
+  ss
+  st
+  sv
+  sx
+  sy
+  sz
+  tc
+  td
+  tf
+  tg
+  th
+  tj
+  tk
+  tl
+  tm
+  tn
+  to
+  tr
+  tt
+  tv
+  tw
+  tz
+  ua
+  ug
+  um
+  us
+  uy
+  uz
+  va
+  vc
+  ve
+  vg
+  vi
+  vn
+  vu
+  wf
+  ws
+  ye
+  yt
+  za
+  zm
+  zw
+}
+
+enum Iso639Set1LanguageCode {
+  aa
+  ab
+  ae
+  af
+  ak
+  am
+  an
+  ar
+  as
+  av
+  ay
+  az
+  ba
+  be
+  bg
+  bi
+  bm
+  bn
+  bo
+  br
+  bs
+  ca
+  ce
+  ch
+  co
+  cr
+  cs
+  cu
+  cv
+  cy
+  da
+  de
+  dv
+  dz
+  ee
+  el
+  en
+  eo
+  es
+  et
+  eu
+  fa
+  ff
+  fi
+  fj
+  fo
+  fr
+  fy
+  ga
+  gd
+  gl
+  gn
+  gu
+  gv
+  ha
+  he
+  hi
+  ho
+  hr
+  ht
+  hu
+  hy
+  hz
+  ia
+  id
+  ie
+  ig
+  ii
+  ik
+  io
+  is
+  it
+  iu
+  ja
+  jv
+  ka
+  kg
+  ki
+  kj
+  kk
+  kl
+  km
+  kn
+  ko
+  kr
+  ks
+  ku
+  kv
+  kw
+  ky
+  la
+  lb
+  lg
+  li
+  ln
+  lo
+  lt
+  lu
+  lv
+  mg
+  mh
+  mi
+  mk
+  ml
+  mn
+  mr
+  ms
+  mt
+  my
+  na
+  nb
+  nd
+  ne
+  ng
+  nl
+  nn
+  no
+  nr
+  nv
+  ny
+  oc
+  oj
+  om
+  or
+  os
+  pa
+  pi
+  pl
+  ps
+  pt
+  qu
+  rm
+  rn
+  ro
+  ru
+  rw
+  sa
+  sc
+  sd
+  se
+  sg
+  si
+  sk
+  sl
+  sm
+  sn
+  so
+  sq
+  sr
+  ss
+  st
+  su
+  sv
+  sw
+  ta
+  te
+  tg
+  th
+  ti
+  tk
+  tl
+  tn
+  to
+  tr
+  ts
+  tt
+  tw
+  ty
+  ug
+  uk
+  ur
+  uz
+  ve
+  vi
+  vo
+  wa
+  wo
+  xh
+  yi
+  yo
+  za
+  zh
+  zu
+}
+
+enum UserEducationGrade {
+  grade_1
+  grade_2
+  grade_3
+  grade_4
+  grade_5
+  grade_6
+  grade_7
+  grade_8
+  grade_9
+  grade_10
+  grade_11
+  grade_12
+  graduate
+  kg
+  no_grade
+  pre_kg
+}
+
+enum UserEmploymentStatus {
+  full_time
+  part_time
+  unemployed
+}
+
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
+}
+
+enum UserNatalSex {
+  female
+  intersex
+  male
+}
+
+type UserOrganizationsWhereMemberConnection {
+  edges: [UserOrganizationsWhereMemberConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type UserOrganizationsWhereMemberConnectionEdge {
+  cursor: String!
+  node: Organization
+}
+
+enum UserRole {
+  administrator
+  regular
 }
 
 type Fund {
@@ -1637,4 +2939,37 @@ input chatInput {
   organizationId: ID
   userIds: [ID!]!
   name: String
+}
+
+type DefaultConnectionPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type SocialMediaUrls {
+  facebook: String
+  instagram: String
+  twitter: String
+  linkedin: String
+  youtube: String
+  website: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  name: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  fundingGoal: Float!
+  description: String
+  creator: User
+  organization: Organization!
+  members: [User]
+  isPublic: Boolean!
+  isArchived: Boolean!
+  refrenceNumber: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

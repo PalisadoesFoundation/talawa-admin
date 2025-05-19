@@ -6,8 +6,11 @@ export async function askForTalawaApiUrl(): Promise<string> {
       type: 'input',
       name: 'endpoint',
       message: 'Enter your talawa-api endpoint:',
-      default: 'http://localhost:4000/graphql/',
+      default: 'http://localhost:4000/graphql',
     },
   ]);
-  return endpoint;
+
+  const correctEndpoint = endpoint.replace(/\/graphql\/$/, '/graphql');
+
+  return correctEndpoint;
 }

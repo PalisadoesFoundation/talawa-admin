@@ -1,3 +1,54 @@
+/**
+ * OrganizationScreen Component
+ *
+ * This component serves as the main screen for managing an organization.
+ * It includes a side drawer for navigation, a header with a title and profile dropdown,
+ * and dynamically renders child routes using React Router's `Outlet`.
+ *
+ * @component
+ *
+ * @remarks
+ * - The component uses Redux for state management and Apollo Client for GraphQL queries.
+ * - It dynamically updates the page title and event name based on the current route.
+ * - The side drawer visibility is responsive to screen resizing.
+ *
+ * @returns {JSX.Element} The rendered OrganizationScreen component.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationScreen />
+ * ```
+ *
+ * @dependencies
+ * - `useLocation`, `useParams`, `useMatch`, `Navigate`, and `Outlet` from `react-router-dom`
+ * - `useSelector` and `useAppDispatch` for Redux state management
+ * - `useQuery` from `@apollo/client` for fetching organization events
+ * - `useTranslation` from `react-i18next` for internationalization
+ *
+ * @state
+ * - `hideDrawer` (`boolean | null`): Manages the visibility of the side drawer.
+ * - `eventName` (`string | null`): Stores the name of the currently selected event.
+ *
+ * @redux
+ * - `appRoutes.targets`: Contains the application routes for the organization.
+ * - Dispatches `updateTargets` action to update targets based on the organization ID.
+ *
+ * @graphql
+ * - Query: `ORGANIZATION_EVENT_LIST` to fetch events for the organization.
+ *
+ * @hooks
+ * - `useEffect`: Handles side drawer visibility, updates targets, and sets the event name.
+ * - `useQuery`: Fetches organization events data.
+ *
+ * @styles
+ * - Uses CSS modules for styling (`app-fixed.module.css`).
+ *
+ * @translation
+ * - Dynamically sets the page title using `useTranslation` and a mapping object.
+ *
+ * @events
+ * - Listens to window resize events to toggle the side drawer visibility.
+ */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,32 +59,18 @@ import {
   useLocation,
   useParams,
   useMatch,
-} from 'react-router-dom';
+} from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './OrganizationScreen.module.css';
+import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
-import { Button } from 'react-bootstrap';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
-interface InterfaceEvent {
-  _id: string;
-  title: string;
-}
+import type { InterfaceEvent } from 'types/Event/interface';
 
-/**
- * Component for the organization screen
- *
- * This component displays the organization screen and handles the layout
- * including a side drawer, header, and main content area. It adjusts
- * the layout based on the screen size and shows the appropriate content
- * based on the route.
- *
- * @returns JSX.Element representing the organization screen
- */
 const OrganizationScreen = (): JSX.Element => {
   // Get the current location to determine the translation key
   const location = useLocation();
@@ -55,9 +92,9 @@ const OrganizationScreen = (): JSX.Element => {
   }
 
   // Get the application routes from the Redux store
-  const appRoutes: {
-    targets: TargetsType[];
-  } = useSelector((state: RootState) => state.appRoutes);
+  const appRoutes: { targets: TargetsType[] } = useSelector(
+    (state: RootState) => state.appRoutes,
+  );
   const { targets } = appRoutes;
 
   const dispatch = useAppDispatch();
@@ -77,6 +114,7 @@ const OrganizationScreen = (): JSX.Element => {
       const event = eventsData.eventsByOrganization.find(
         (e: InterfaceEvent) => e._id === eventId,
       );
+
       if (!event) {
         console.warn(`Event with id ${eventId} not found`);
         setEventName(null);
@@ -106,28 +144,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   return (
     <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
-      <div className={styles.drawer}>
+      <div className={styles.opendrawerdrawer}>
         <LeftDrawerOrg
           orgId={orgId}
           targets={targets}
@@ -179,6 +196,7 @@ const map: InterfaceMapType = {
   orgfundcampaign: 'fundCampaign',
   fundCampaignPledge: 'pledges',
   orgsetting: 'orgSettings',
+  orgstore: 'addOnStore',
   blockuser: 'blockUnblockUser',
   orgvenues: 'organizationVenues',
   event: 'eventManagement',

@@ -1,9 +1,38 @@
+/**
+ * Component for managing and displaying agenda item categories for an organization.
+ *
+ * @component
+ * @param {InterfaceAgendaCategoryProps} props - The props for the component.
+ * @param {string} props.orgId - The ID of the organization.
+ *
+ * @remarks
+ * This component fetches, displays, and allows the creation of agenda item categories
+ * for a specific organization. It includes a search bar for filtering categories by name
+ * and a modal for creating new categories.
+ *
+ * @requires {@link useQuery} - For fetching agenda item categories.
+ * @requires {@link useMutation} - For creating new agenda item categories.
+ * @requires {@link useTranslation} - For internationalization.
+ * @requires {@link AgendaCategoryContainer} - For displaying the list of agenda categories.
+ * @requires {@link AgendaCategoryCreateModal} - For creating new agenda categories.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationAgendaCategory orgId="12345" />
+ * ```
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @throws {Error} If there is an error while fetching agenda item categories.
+ *
+ * @todo Add additional error handling and improve UI for error states.
+ */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-import { WarningAmberRounded, Search } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
 import { useMutation, useQuery } from '@apollo/client';
@@ -12,21 +41,14 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
-import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
-import styles from 'style/app.module.css';
+import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
+import SearchBar from 'subComponents/SearchBar';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;
 }
-
-/**
- * Component for managing and displaying agenda item categories within an organization.
- *
- * This component allows users to view, create, and manage agenda item categories. It includes functionality for displaying categories, handling creation, and managing modal visibility.
- *
- * @returns The rendered component.
- */
 
 const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
@@ -39,7 +61,6 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
     useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -60,12 +81,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     error?: unknown | undefined;
     refetch: () => void;
   } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
-    variables: {
-      organizationId: orgId,
-      where: {
-        name_contains: searchTerm,
-      },
-    },
+    variables: { organizationId: orgId, where: { name_contains: searchTerm } },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -145,33 +161,12 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
       <div className={` bg-transparent rounded-4 my-3`}>
         <div className={`mx-4`}>
           <div className={`${styles.btnsContainer} my-0`}>
-            <div className={`${styles.input} mb-1`}>
-              <Form.Control
-                type="name"
-                placeholder={tCommon('searchByName')}
-                autoComplete="off"
-                required
-                className={styles.inputField}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onKeyUp={(e) => {
-                  if (e.key === 'Enter') {
-                    setSearchTerm(searchValue);
-                  } else if (e.key === 'Backspace' && searchValue === '') {
-                    setSearchTerm('');
-                  }
-                }}
-                data-testid="searchByName"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                onClick={() => setSearchTerm(searchValue)}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={setSearchTerm}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
 
             <Button
               variant="success"

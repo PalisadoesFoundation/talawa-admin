@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -136,7 +136,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.click(screen.getByTestId('setLoginBtn'));
+    await userEvent.click(screen.getByTestId('setLoginBtn'));
 
     expect(setCurrentMode).toHaveBeenCalledWith('login');
   });
@@ -156,7 +156,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -176,8 +176,8 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -197,9 +197,12 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -219,10 +222,16 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
   });
@@ -242,11 +251,20 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
+    await userEvent.type(
+      screen.getByTestId('lastNameInput'),
+      formData.lastName,
+    );
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     expect(toast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
@@ -268,15 +286,24 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    userEvent.type(screen.getByTestId('passwordInput'), formData.password);
-    userEvent.type(
+    await userEvent.type(
+      screen.getByTestId('passwordInput'),
+      formData.password,
+    );
+    await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
       formData.confirmPassword,
     );
-    userEvent.type(screen.getByTestId('emailInput'), formData.email);
-    userEvent.type(screen.getByTestId('firstNameInput'), formData.firstName);
-    userEvent.type(screen.getByTestId('lastNameInput'), formData.lastName);
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(screen.getByTestId('emailInput'), formData.email);
+    await userEvent.type(
+      screen.getByTestId('firstNameInput'),
+      formData.firstName,
+    );
+    await userEvent.type(
+      screen.getByTestId('lastNameInput'),
+      formData.lastName,
+    );
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     await waitForAsync();
 
@@ -302,12 +329,15 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Fill out the form with error-triggering values
-    userEvent.type(screen.getByTestId('passwordInput'), 'password');
-    userEvent.type(screen.getByTestId('confirmPasswordInput'), 'password');
-    userEvent.type(screen.getByTestId('emailInput'), 'error@test.com');
-    userEvent.type(screen.getByTestId('firstNameInput'), 'Error');
-    userEvent.type(screen.getByTestId('lastNameInput'), 'Test');
-    userEvent.click(screen.getByTestId('registerBtn'));
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password');
+    await userEvent.type(
+      screen.getByTestId('confirmPasswordInput'),
+      'password',
+    );
+    await userEvent.type(screen.getByTestId('emailInput'), 'error@test.com');
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'Error');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Test');
+    await userEvent.click(screen.getByTestId('registerBtn'));
 
     await waitForAsync();
 

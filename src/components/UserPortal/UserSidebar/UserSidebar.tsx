@@ -1,11 +1,41 @@
+/**
+ * UserSidebar Component
+ *
+ * This component renders the sidebar for the user portal, providing navigation
+ * options such as "My Organizations" and "Settings". It also includes a profile
+ * dropdown for user-specific actions. The sidebar's visibility can be toggled
+ * based on the viewport width or user interaction.
+ *
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for styling buttons.
+ * - Internationalization is handled using the `react-i18next` library.
+ * - The sidebar adapts its visibility based on the `hideDrawer` prop and viewport width.
+ *
+ * @param {InterfaceUserSidebarProps} props - The props for the UserSidebar component.
+ * @param {boolean | null} props.hideDrawer - Determines the visibility of the sidebar.
+ *   - `null`: Sidebar is hidden by default.
+ *   - `true`: Sidebar is inactive (hidden).
+ *   - `false`: Sidebar is active (visible).
+ * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
+ * Function to update the `hideDrawer` state.
+ *
+ * @returns {JSX.Element} The rendered UserSidebar component.
+ *
+ * @example
+ * ```tsx
+ * <UserSidebar hideDrawer={false} setHideDrawer={setHideDrawer} />
+ * ```
+ *
+ */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 export interface InterfaceUserSidebarProps {
@@ -13,19 +43,6 @@ export interface InterfaceUserSidebarProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-/**
- * Sidebar component for user navigation, including links to organizations and settings.
- *
- * Provides:
- * - A logo and title for the sidebar.
- * - Navigation buttons for "My Organizations" and "Settings".
- * - Dynamic styling based on the active route.
- *
- * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
- * @param setHideDrawer - Function to update the `hideDrawer` state.
- *
- * @returns JSX.Element - The rendered sidebar component.
- */
 const userSidebar = ({
   hideDrawer,
   setHideDrawer,
@@ -34,10 +51,6 @@ const userSidebar = ({
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
-  /**
-   * Handles click events on navigation links.
-   * Closes the sidebar if the viewport width is 820px or less.
-   */
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);

@@ -6,12 +6,12 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
-import styles from '../../style/app.module.css';
+import styles from '../../style/app-fixed.module.css';
 
 import {
   MOCKS,
@@ -21,10 +21,7 @@ import {
 import { vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -58,8 +55,8 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 describe('Testing Organization Action Items Screen', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
     }));
   });
@@ -354,12 +351,12 @@ describe('Testing Organization Action Items Screen', () => {
 
     const addItemBtn = await screen.findByTestId('createActionItemBtn');
     expect(addItemBtn).toBeInTheDocument();
-    userEvent.click(addItemBtn);
+    await userEvent.click(addItemBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(t.createActionItem)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -391,12 +388,12 @@ describe('Testing Organization Action Items Screen', () => {
 
     const viewItemBtn = await screen.findByTestId('viewItemBtn1');
     expect(viewItemBtn).toBeInTheDocument();
-    userEvent.click(viewItemBtn);
+    await userEvent.click(viewItemBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -428,12 +425,12 @@ describe('Testing Organization Action Items Screen', () => {
 
     const editItemBtn = await screen.findByTestId('editItemBtn1');
     await waitFor(() => expect(editItemBtn).toBeInTheDocument());
-    userEvent.click(editItemBtn);
+    await userEvent.click(editItemBtn);
 
     await waitFor(() =>
       expect(screen.getAllByText(t.updateActionItem)).toHaveLength(2),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -465,12 +462,12 @@ describe('Testing Organization Action Items Screen', () => {
 
     const deleteItemBtn = await screen.findByTestId('deleteItemBtn1');
     expect(deleteItemBtn).toBeInTheDocument();
-    userEvent.click(deleteItemBtn);
+    await userEvent.click(deleteItemBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -502,12 +499,12 @@ describe('Testing Organization Action Items Screen', () => {
 
     const statusCheckbox = await screen.findByTestId('statusCheckbox1');
     expect(statusCheckbox).toBeInTheDocument();
-    userEvent.click(statusCheckbox);
+    await userEvent.click(statusCheckbox);
 
     await waitFor(() =>
       expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument(),
     );
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -540,18 +537,19 @@ describe('Testing Organization Action Items Screen', () => {
     const searchByToggle = await screen.findByTestId('searchByToggle');
     expect(searchByToggle).toBeInTheDocument();
 
-    userEvent.click(searchByToggle);
+    await userEvent.click(searchByToggle);
     await waitFor(() => {
       expect(screen.getByTestId('assignee')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('assignee'));
+    await userEvent.click(screen.getByTestId('assignee'));
 
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'John');
+    await userEvent.type(searchInput, 'John');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -586,18 +584,19 @@ describe('Testing Organization Action Items Screen', () => {
     const searchByToggle = await screen.findByTestId('searchByToggle');
     expect(searchByToggle).toBeInTheDocument();
 
-    userEvent.click(searchByToggle);
+    await userEvent.click(searchByToggle);
     await waitFor(() => {
       expect(screen.getByTestId('category')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('category'));
+    await userEvent.click(screen.getByTestId('category'));
 
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    userEvent.type(searchInput, 'Category 1');
+    await userEvent.type(searchInput, 'Category 1');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -688,7 +687,7 @@ describe('OrganizationActionItems CSS Styles', () => {
   it('should apply correct styles to action buttons', async () => {
     renderComponent();
     const createButton = await screen.findByTestId('createActionItemBtn');
-    expect(createButton).toHaveClass(styles.actionsButton);
+    expect(createButton).toHaveClass(styles.createButton);
     const infoButton = await screen.findByTestId('viewItemBtn1');
     expect(infoButton).toHaveClass(styles.infoButton);
     const deleteButton = await screen.findByTestId('deleteItemBtn1');

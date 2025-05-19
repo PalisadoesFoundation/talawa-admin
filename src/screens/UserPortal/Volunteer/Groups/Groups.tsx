@@ -1,8 +1,52 @@
+/**
+ * Groups Component
+ *
+ * This component renders a table of volunteer groups for a specific organization and event.
+ * It provides functionalities such as searching, sorting, and viewing/editing group details.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Groups component.
+ *
+ * @remarks
+ * - Uses `@apollo/client` to fetch volunteer group data from the GraphQL API.
+ * - Implements debounced search functionality for better performance.
+ * - Displays a loader while data is being fetched and an error message if the query fails.
+ * - Integrates modals for viewing and editing group details.
+ *
+ * @requires
+ * - `react`, `react-i18next` for translations.
+ * - `@apollo/client` for GraphQL queries.
+ * - `@mui/x-data-grid` for rendering the data grid.
+ * - `react-bootstrap` for UI components.
+ * - Custom components: `Loader`, `Avatar`, `GroupModal`, `VolunteerGroupViewModal`, `SearchBar`, `SortingButton`.
+ *
+ * @enum {ModalState}
+ * - `EDIT`: Represents the edit modal state.
+ * - `VIEW`: Represents the view modal state.
+ *
+ * @state
+ * - `group`: Stores the currently selected group for modal interactions.
+ * - `searchTerm`: Stores the search input value.
+ * - `sortBy`: Stores the sorting criteria for volunteer groups.
+ * - `searchBy`: Determines whether to search by group name or leader name.
+ * - `modalState`: Tracks the visibility of the edit and view modals.
+ *
+ * @query
+ * - `EVENT_VOLUNTEER_GROUP_LIST`: Fetches the list of volunteer groups based on filters and sorting.
+ *
+ * @param {string} orgId - The organization ID retrieved from the URL parameters.
+ * @param {string} userId - The user ID retrieved from local storage.
+ *
+ * @example
+ * ```tsx
+ * <Groups />
+ * ```
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { Button } from 'react-bootstrap';
+import { Navigate, useParams } from 'react-router';
+import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { debounce, Stack } from '@mui/material';
 
@@ -14,12 +58,13 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/VolunteerGroupViewModal';
+import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   EDIT = 'edit',
@@ -33,46 +78,14 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing volunteer groups for an event.
- * This component allows users to view, filter, sort, and create action items. It also provides a modal for creating and editing action items.
- * @returns The rendered component.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.searchButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
 function groups(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -87,7 +100,6 @@ function groups(): JSX.Element {
   }
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'volunteers_ASC' | 'volunteers_DESC' | null
@@ -95,10 +107,7 @@ function groups(): JSX.Element {
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
-  }>({
-    [ModalState.EDIT]: false,
-    [ModalState.VIEW]: false,
-  });
+  }>({ [ModalState.EDIT]: false, [ModalState.VIEW]: false });
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
@@ -114,9 +123,7 @@ function groups(): JSX.Element {
     error: groupsError,
     refetch: refetchGroups,
   }: {
-    data?: {
-      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
-    };
+    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -302,31 +309,14 @@ function groups(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`${styles.searchButton}`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -371,10 +361,7 @@ function groups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={groups.map((group, index) => ({
-          id: index + 1,
-          ...group,
-        }))}
+        rows={groups.map((group, index) => ({ id: index + 1, ...group }))}
         columns={columns}
         isRowSelectable={() => false}
       />

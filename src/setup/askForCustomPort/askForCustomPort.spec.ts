@@ -2,7 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import inquirer from 'inquirer';
 import { askForCustomPort, validatePort } from './askForCustomPort';
 
-vi.mock('inquirer');
+// ✅ Fix Inquirer Mocking for v12+
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    default: {
+      ...actual,
+      prompt: vi.fn(),
+    },
+  };
+});
 
 describe('askForCustomPort', () => {
   beforeEach(() => {

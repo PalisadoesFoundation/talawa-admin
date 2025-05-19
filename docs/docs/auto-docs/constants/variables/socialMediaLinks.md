@@ -20,4 +20,4 @@ Defined in: [src/constants.ts:12](https://github.com/PalisadoesFoundation/talawa
 
 ### tag
 
-> **tag**: `string` = `'facebook'`
+> **tag**: `string` = `'facebookURL'`

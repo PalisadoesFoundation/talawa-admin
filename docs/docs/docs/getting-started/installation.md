@@ -223,21 +223,21 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
 
 ```
-REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql/"
+REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql"
 
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
-REACT_APP_TALAWA_URL="http://localhost:4000/graphql/"
+REACT_APP_TALAWA_URL="http://localhost:4000/graphql"
 
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
-REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
+REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql"
 
 ```
 
@@ -246,21 +246,21 @@ REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql/"
 The endpoint for accessing talawa-api WebSocket graphql service for handling subscriptions is automatically added to the variable named `REACT_APP_BACKEND_WEBSOCKET_URL` in the `.env` file.
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://API-IP-ADRESS:4000/graphql"
 
 ```
 
 If you are a software developer working on your local system, then the URL would be:
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql"
 
 ```
 
 If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
 
 ```
-REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql/"
+REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql"
 
 ```
 
@@ -289,102 +289,116 @@ REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
 
-## Post Configuration Steps
+## First Time SignIn as Admin
 
-It's now time to start Talawa-Admin and get it running
+After setting up **`talawa-admin`** and **`talawa-api`**, your PostgreSQL database will have only one user: **Administrator**.  
+To sign in as an **Admin**, you need to **register a user** and then manually grant them **Administrator** privileges.
 
-### Running Talawa-Admin
+---
 
-Run the following command to start `talawa-admin` development server:
+## 📌 Steps to Sign In as an Administrator
 
-```bash
-npm run serve
+### 1️⃣ Register as an Admin
 
-```
+You can register using the **frontend**.
 
-### Accessing Talawa-Admin
+> **Optional:** If needed, insert an image showing the registration page here:  
+> ![Registering a new user](../../../static/img/markdown/installation/Register.png)
 
-By default `talawa-admin` runs on port `4321` on your system's localhost. It is available on the following endpoint:
+---
 
-```
+### 2️⃣ Grant Administrator Role to the Registered User
 
-http://localhost:4321/
+> 🔹 **Note:** Since the **Super Admin** is not yet configured, we will use the **GraphQL frontend** for this.
+ > 🔹 **Note**: Replace **"user-id"** with the actual ID of the registered user and **org-id** with organization ID wherever necessary. You can obtain this form the postgres database via cloudbeaver.
 
-```
+1. Open **GraphiQL** in your browser:
 
-If you have specified a custom port number in your `.env` file, Talawa-Admin will run on the following endpoint:
+2. **Sign in as Administrator**
 
-```
+   - Use the following GraphQL **query** to get an **authentication token** for authorization in later queries:
 
-http://localhost:\$\{\{customPort\}\}/
+   ```graphql
+   mutation {
+     signIn(
+       input: { emailAddress: "administrator@email.com", password: "password" }
+     ) {
+       authenticationToken
+       user {
+         id
+         name
+       }
+     }
+   }
+   ```
 
-```
+2) **Make the registered user an Administrator**
 
-Replace `${{customPort}}` with the actual custom port number you have configured in your `.env` file.
+   - Use the following GraphQL **mutation** to assign **administrator** role to user:
 
-### Talawa-Admin Registration
+   ```graphql
+   mutation {
+     updateUser(input: { id: "user-id", role: administrator }) {
+       id
+       name
+     }
+   }
+   ```
 
-The first time you navigate to the running talawa-admin's website you'll land at talawa-admin registration page. Sign up using whatever credentials you want and create the account. Make sure to remember the email and password you entered because they'll be used to sign you in later on.
+3) **Next create an organization**
 
-### Talawa-Admin Login
+   - Use the following GraphQL **mutation** to create an organization:
 
-Now sign in to talawa-admin using the `email` and `password` you used to sign up.
+   ```graphql
+   mutation {
+     createOrganization(
+       input: {
+         addressLine1: "Los Angeles"
+         addressLine2: "USA"
+         city: "Los Angeles"
+         countryCode: in
+         description: "testing"
+         name: "Test Org 7"
+         postalCode: "876876"
+         state: "California"
+       }
+     ) {
+       id
+     }
+   }
+   ```
 
-## Testing
+4) **Make user an administrator of the organization**
 
-It is important to test our code. If you are a contributor, please follow these steps.
+   - Use the following GraphQL **mutation** to assign **administrator** role to user:
 
-### Running tests
+   ```graphql
+     createOrganizationMembership(
+    input: {
+      memberId: "user-id"
+      organizationId: "org-id"
+      role: administrator
+    }
+   ) {
+    id
+    name
+    addressLine1
+    createdAt
+    members(first: 5) {
+      pageInfo {
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+        }
+      }
+    }
+   }
+   }
+   ```
 
-You can run the tests for `talawa-admin` using this command:
-
-```bash
-npm run test
-
-```
-
-### Debugging tests
-
-You can see the output of failing tests in broswer by running `jest-preview` package before running your tests
-
-```bash
-npm run jest-preview
-npm run test
-
-```
-
-You don't need to re-run the `npm run jest-preview` command each time, simply run the `npm run test` command if the Jest Preview server is already running in the background, it'll automatically detect any failing tests and show the preview at `http://localhost:3336` as shown in this screenshot -
-
-![Debugging Test Demo](../../../static/img/markdown/installation/jest-preview.webp)
-
-### Linting code files
-
-You can lint your code files using this command:
-
-```bash
-npm run lint:fix
-```
-
-### Husky for Git Hooks
-
-We are using the package `Husky` to run git hooks that run according to different git workflows.
-
-##### pre-commit hook
-
-We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
-
-If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
-
-```bash
-git commit -m "commit message" --no-verify
-```
-
-##### post-merge hook
-
-We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to pakage.json file so that the developer has all the required dependencies when pulling files from remote.
-
-If you don't want this hook to run, you can manually opt out of this using the `--no-verify` flag while using the merge command `git pull`:
-
-```bash
-git pull --no-verify
-```
+Now sign successfully in with your registered ADMIN.

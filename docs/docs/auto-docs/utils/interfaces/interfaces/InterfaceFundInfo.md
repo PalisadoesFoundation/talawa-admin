@@ -4,23 +4,15 @@
 
 # Interface: InterfaceFundInfo
 
-Defined in: [src/utils/interfaces.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L351)
+Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1058)
 
 ## Properties
-
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L352)
-
-***
 
 ### createdAt
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L358)
+Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1065)
 
 ***
 
@@ -28,19 +20,59 @@ Defined in: [src/utils/interfaces.ts:358](https://github.com/PalisadoesFoundatio
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L360)
+Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1067)
 
-#### \_id
+#### name
 
-> **\_id**: `string`
+> **name**: `string`
 
-#### firstName
+***
 
-> **firstName**: `string`
+### edges
 
-#### lastName
+> **edges**: `object`
 
-> **lastName**: `string`
+Defined in: [src/utils/interfaces.ts:1072](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1072)
+
+#### node
+
+> **node**: `object`
+
+##### node.createdAt
+
+> **createdAt**: `string`
+
+##### node.currency
+
+> **currency**: `string`
+
+##### node.endDate
+
+> **endDate**: `string`
+
+##### node.fundingGoal
+
+> **fundingGoal**: `number`
+
+##### node.id
+
+> **id**: `string`
+
+##### node.name
+
+> **name**: `string`
+
+##### node.startDate
+
+> **startDate**: `string`
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:1059](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1059)
 
 ***
 
@@ -48,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:360](https://github.com/PalisadoesFoundatio
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:356](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L356)
+Defined in: [src/utils/interfaces.ts:1063](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1063)
 
 ***
 
@@ -56,7 +88,15 @@ Defined in: [src/utils/interfaces.ts:356](https://github.com/PalisadoesFoundatio
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L357)
+Defined in: [src/utils/interfaces.ts:1064](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1064)
+
+***
+
+### isTaxDeductible
+
+> **isTaxDeductible**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:1062](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1062)
 
 ***
 
@@ -64,7 +104,19 @@ Defined in: [src/utils/interfaces.ts:357](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:353](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L353)
+Defined in: [src/utils/interfaces.ts:1060](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1060)
+
+***
+
+### organization
+
+> **organization**: `object`
+
+Defined in: [src/utils/interfaces.ts:1068](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1068)
+
+#### name
+
+> **name**: `string`
 
 ***
 
@@ -72,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:353](https://github.com/PalisadoesFoundatio
 
 > **organizationId**: `string`
 
-Defined in: [src/utils/interfaces.ts:359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L359)
+Defined in: [src/utils/interfaces.ts:1066](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1066)
 
 ***
 
@@ -80,12 +132,16 @@ Defined in: [src/utils/interfaces.ts:359](https://github.com/PalisadoesFoundatio
 
 > **refrenceNumber**: `string`
 
-Defined in: [src/utils/interfaces.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L354)
+Defined in: [src/utils/interfaces.ts:1061](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1061)
 
 ***
 
-### taxDeductible
+### updater
 
-> **taxDeductible**: `boolean`
+> **updater**: `object`
 
-Defined in: [src/utils/interfaces.ts:355](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L355)
+Defined in: [src/utils/interfaces.ts:1069](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1069)
+
+#### name
+
+> **name**: `string`

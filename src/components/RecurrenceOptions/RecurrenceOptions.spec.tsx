@@ -8,10 +8,10 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 
-import OrganizationEvents from '../../screens/OrganizationEvents/OrganizationEvents';
+import OrganizationEvents from 'screens/OrganizationEvents/OrganizationEvents';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
@@ -21,16 +21,10 @@ import { createTheme } from '@mui/material';
 import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MOCKS } from '../../screens/OrganizationEvents/OrganizationEventsMocks';
+import { MOCKS } from 'screens/OrganizationEvents/OrganizationEventsMocks';
 import { describe, test, expect, vi } from 'vitest';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#31bb6b',
-    },
-  },
-});
+const theme = createTheme({ palette: { primary: { main: '#31bb6b' } } });
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -56,17 +50,11 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
   );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
+  return { DateTimePicker: actual.DesktopDateTimePicker };
 });
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    warning: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
 }));
 
 describe('Testing the creaction of recurring events through recurrence options', () => {
@@ -103,7 +91,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -111,7 +99,7 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
@@ -141,7 +129,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -149,13 +137,13 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
@@ -185,7 +173,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -193,19 +181,19 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('customRecurrence'));
+    await userEvent.click(screen.getByTestId('customRecurrence'));
 
     await waitFor(() => {
       expect(
@@ -213,7 +201,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
 
     await waitFor(() => {
       expect(
@@ -245,7 +233,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     const startDatePicker = screen.getByLabelText('Start Date');
     const endDatePicker = screen.getByLabelText('End Date');
@@ -254,9 +242,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
@@ -264,29 +250,29 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     expect(screen.queryByTestId('recurrenceOptions')).not.toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('dailyRecurrence')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('dailyRecurrence'));
+    await userEvent.click(screen.getByTestId('dailyRecurrence'));
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('weeklyRecurrence')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('weeklyRecurrence'));
+    await userEvent.click(screen.getByTestId('weeklyRecurrence'));
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -294,9 +280,9 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatDay'));
+    await userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatDay'));
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -304,9 +290,11 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('monthlyRecurrenceOnThatOccurence'));
+    await userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOnThatOccurence'),
+    );
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -314,22 +302,22 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('monthlyRecurrenceOnLastOccurence'));
+    await userEvent.click(
+      screen.getByTestId('monthlyRecurrenceOnLastOccurence'),
+    );
 
     // changing the startDate would change the weekDayOccurenceInMonth, if it is defined
-    fireEvent.change(startDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(startDatePicker, { target: { value: formData.endDate } });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('yearlyRecurrence')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('yearlyRecurrence'));
+    await userEvent.click(screen.getByTestId('yearlyRecurrence'));
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -337,7 +325,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
+    await userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent(
@@ -369,20 +357,23 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
       formData.location,
     );
@@ -394,11 +385,9 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
@@ -411,27 +400,25 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startTime },
     });
 
-    fireEvent.change(endTimePicker, {
-      target: { value: formData.endTime },
-    });
+    fireEvent.change(endTimePicker, { target: { value: formData.endTime } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(screen.getByTestId('dailyRecurrence')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('dailyRecurrence'));
+    await userEvent.click(screen.getByTestId('dailyRecurrence'));
 
     expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
       formData.title,
@@ -451,7 +438,7 @@ describe('Testing the creaction of recurring events through recurrence options',
 
     expect(screen.getByTestId('recurrenceOptions')).toHaveTextContent('Daily');
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
@@ -487,20 +474,23 @@ describe('Testing the creaction of recurring events through recurrence options',
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
     });
 
-    userEvent.type(screen.getByPlaceholderText(/Enter Title/i), formData.title);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Title/i),
+      formData.title,
+    );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Description/i),
       formData.description,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(/Enter Location/i),
       formData.location,
     );
@@ -512,11 +502,9 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startDate },
     });
 
-    fireEvent.change(endDatePicker, {
-      target: { value: formData.endDate },
-    });
+    fireEvent.change(endDatePicker, { target: { value: formData.endDate } });
 
-    userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
       expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
@@ -529,21 +517,19 @@ describe('Testing the creaction of recurring events through recurrence options',
       target: { value: formData.startTime },
     });
 
-    fireEvent.change(endTimePicker, {
-      target: { value: formData.endTime },
-    });
+    fireEvent.change(endTimePicker, { target: { value: formData.endTime } });
 
     await waitFor(() => {
       expect(screen.getByTestId('recurringCheck')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurringCheck'));
+    await userEvent.click(screen.getByTestId('recurringCheck'));
 
     await waitFor(() => {
       expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('recurrenceOptions'));
+    await userEvent.click(screen.getByTestId('recurrenceOptions'));
 
     await waitFor(() => {
       expect(
@@ -551,7 +537,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       ).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
+    await userEvent.click(screen.getByTestId('mondayToFridayRecurrence'));
 
     expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
       formData.title,
@@ -573,7 +559,7 @@ describe('Testing the creaction of recurring events through recurrence options',
       'Monday to Friday',
     );
 
-    userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);

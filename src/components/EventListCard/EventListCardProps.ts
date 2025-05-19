@@ -1,13 +1,17 @@
 import { Frequency, WeekDays } from 'utils/recurrenceUtils';
-import type { InterfaceEventListCardProps } from './EventListCard';
+import type { InterfaceEvent } from 'types/Event/interface';
 
-export const props: InterfaceEventListCardProps[] = [
+interface InterfaceEventListCard extends InterfaceEvent {
+  refetchEvents?: () => void;
+}
+
+export const props: InterfaceEventListCard[] = [
   {
     key: '',
-    id: '',
-    eventLocation: '',
-    eventName: '',
-    eventDescription: '',
+    _id: '',
+    location: '',
+    title: '',
+    description: '',
     startDate: '',
     endDate: '',
     startTime: '',
@@ -21,13 +25,15 @@ export const props: InterfaceEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
     startDate: '2022-03-19',
     endDate: '2022-03-26',
     startTime: '02:00',
@@ -41,14 +47,16 @@ export const props: InterfaceEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'USER',
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
     startDate: '2022-03-19',
     endDate: '2022-03-26',
     startTime: '02:00',
@@ -64,7 +72,7 @@ export const props: InterfaceEventListCardProps[] = [
       lastName: 'David',
       _id: '123',
     },
-    registrants: [
+    attendees: [
       {
         _id: '234',
       },
@@ -76,10 +84,10 @@ export const props: InterfaceEventListCardProps[] = [
   {
     userRole: 'USER',
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Dogs',
-    eventDescription: 'This is shelter for dogs event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
     startDate: '2022-03-19',
     endDate: '2022-03-26',
     startTime: '02:00',
@@ -95,7 +103,7 @@ export const props: InterfaceEventListCardProps[] = [
       lastName: 'David',
       _id: '123',
     },
-    registrants: [
+    attendees: [
       {
         _id: '456',
       },
@@ -107,10 +115,10 @@ export const props: InterfaceEventListCardProps[] = [
   {
     userRole: 'ADMIN',
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Cats',
-    eventDescription: 'This is shelter for cat event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
     startDate: '2022-03-19',
     endDate: '2022-03-19',
     startTime: '2:00',
@@ -132,14 +140,16 @@ export const props: InterfaceEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'ADMIN',
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Cats',
-    eventDescription: 'This is shelter for cat event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
     startDate: '2022-03-17',
     endDate: '2022-03-17',
     startTime: null,
@@ -161,14 +171,16 @@ export const props: InterfaceEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
   {
     userRole: 'ADMIN',
     key: '123',
-    id: '1',
-    eventLocation: 'India',
-    eventName: 'Shelter for Cats',
-    eventDescription: 'This is shelter for cat event',
+    _id: '1',
+    location: 'India',
+    title: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
     startDate: '2022-03-17',
     endDate: '2022-03-17',
     startTime: null,
@@ -190,5 +202,7 @@ export const props: InterfaceEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    attendees: [],
+    creator: {},
   },
 ];

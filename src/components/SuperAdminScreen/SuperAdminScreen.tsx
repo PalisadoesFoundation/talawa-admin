@@ -1,16 +1,45 @@
+/**
+ * SuperAdminScreen component.
+ *
+ * This component serves as the main screen for the Super Admin interface.
+ * It includes a collapsible sidebar (LeftDrawer), a dynamic page title based
+ * on the current route, and a profile dropdown for user actions. The layout
+ * adjusts responsively based on the window size.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered SuperAdminScreen component.
+ *
+ * @remarks
+ * - The sidebar visibility is toggled based on the window width or user interaction.
+ * - The page title is dynamically translated using the `react-i18next` library.
+ * - The `map` object maps route segments to translation keys for page titles.
+ *
+ * @example
+ * ```tsx
+ * import SuperAdminScreen from './SuperAdminScreen';
+ *
+ * function App() {
+ *   return <SuperAdminScreen />;
+ * }
+ * ```
+ *
+ * @see {@link LeftDrawer} for the sidebar component.
+ * @see {@link ProfileDropdown} for the profile dropdown component.
+ *
+ * @property {boolean | null} hideDrawer - State to control the visibility of the sidebar.
+ * @property {Function} setHideDrawer - Function to update the `hideDrawer` state.
+ * @property {Object} map - A mapping of route segments to translation keys for page titles.
+ *
+ * @listens window:resize - Adjusts the sidebar visibility on window resize.
+ */
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
-import styles from '../../style/app.module.css';
+import { Outlet, useLocation } from 'react-router';
+import styles from 'style/app-fixed.module.css';
+import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
-/**
- * The SuperAdminScreen component manages the layout for the Super Admin screen,
- * including handling the sidebar visibility and page title based on the current route.
- *
- * @returns The JSX element representing the Super Admin screen layout.
- */
 const superAdminScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey = map[location.pathname.split('/')[1]];
@@ -57,6 +86,7 @@ const superAdminScreen = (): JSX.Element => {
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
       )}
+
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.pageContainer} ${
@@ -68,9 +98,10 @@ const superAdminScreen = (): JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h2>{t('title')}</h2>
+        <div>
+          <div className={`${styles.navContainer}`}>
+            <h1>{t('title')}</h1>
+            <ProfileDropdown />
           </div>
         </div>
         <Outlet />

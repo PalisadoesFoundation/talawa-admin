@@ -1,17 +1,24 @@
-import Layout from '@theme/Layout';
+import React from 'react';
 import Head from '@docusaurus/Head';
+import Layout from '@theme/Layout';
+import HeaderHero from '../components/layout/HeaderHero';
 
-export default function Home(): JSX.Element {
+const Index = () => {
   const pageTitle = 'Talawa-Docs: Powered by The Palisadoes';
 
   return (
     <Layout
-      title={pageTitle}
-      description="Description will go into a meta tag in <head />"
+      description="Powering Closer Communities"
+      wrapperClassName="homepage"
     >
       <Head>
-        <meta name="robots" content="noindex" />
+        <title>{pageTitle}</title>
+        <meta property="og:title" content={pageTitle} />
+        <meta property="twitter:title" content={pageTitle} />
       </Head>
+      <HeaderHero />
     </Layout>
   );
-}
+};
+
+export default Index;

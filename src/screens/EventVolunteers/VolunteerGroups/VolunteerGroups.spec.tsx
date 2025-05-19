@@ -7,13 +7,13 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import VolunteerGroups from './VolunteerGroups';
 import type { ApolloLink } from '@apollo/client';
-import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './VolunteerGroups.mocks';
+import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './modal/VolunteerGroups.mocks';
 import { vi } from 'vitest';
 
 const link1 = new StaticMockLink(MOCKS);
@@ -66,12 +66,9 @@ const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
 
 describe('Testing VolunteerGroups Screen', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => {
-      const actualDom = await vi.importActual('react-router-dom');
-      return {
-        ...actualDom,
-        useParams: vi.fn(),
-      };
+    vi.mock('react-router', async () => {
+      const actualDom = await vi.importActual('react-router');
+      return { ...actualDom, useParams: vi.fn() };
     });
   });
 
@@ -154,13 +151,13 @@ describe('Testing VolunteerGroups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByGroup = await screen.findByTestId('group');
     expect(searchByGroup).toBeInTheDocument();
-    userEvent.click(searchByGroup);
+    await userEvent.click(searchByGroup);
 
-    userEvent.type(searchInput, '1');
+    await userEvent.type(searchInput, '1');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -175,14 +172,14 @@ describe('Testing VolunteerGroups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    userEvent.click(searchToggle);
+    await userEvent.click(searchToggle);
 
     const searchByLeader = await screen.findByTestId('leader');
     expect(searchByLeader).toBeInTheDocument();
-    userEvent.click(searchByLeader);
+    await userEvent.click(searchByLeader);
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'Bruce');
+    await userEvent.type(searchInput, 'Bruce');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -213,10 +210,12 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
-    userEvent.click(viewGroupBtn[0]);
+    await userEvent.click(viewGroupBtn[0]);
 
     expect(await screen.findByText(t.groupDetails)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('volunteerViewModalCloseBtn'));
+    await userEvent.click(
+      await screen.findByTestId('volunteerViewModalCloseBtn'),
+    );
   });
 
   it('Open and Close Delete Modal', async () => {
@@ -224,10 +223,10 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const deleteGroupBtn = await screen.findAllByTestId('deleteGroupBtn');
-    userEvent.click(deleteGroupBtn[0]);
+    await userEvent.click(deleteGroupBtn[0]);
 
     expect(await screen.findByText(t.deleteGroup)).toBeInTheDocument();
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close GroupModal (Edit)', async () => {
@@ -235,10 +234,10 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
-    userEvent.click(editGroupBtn[0]);
+    await userEvent.click(editGroupBtn[0]);
 
     expect(await screen.findAllByText(t.updateGroup)).toHaveLength(2);
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close GroupModal (Create)', async () => {
@@ -246,9 +245,9 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const createGroupBtn = await screen.findByTestId('createGroupBtn');
-    userEvent.click(createGroupBtn);
+    await userEvent.click(createGroupBtn);
 
     expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);
-    userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 });

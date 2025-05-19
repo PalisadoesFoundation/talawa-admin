@@ -1,9 +1,45 @@
+/**
+ * @file Requests.tsx
+ * @description This component renders a table displaying volunteer membership requests for a specific event.
+ * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
+ *
+ * @module Requests
+ *
+ * @requires react
+ * @requires react-i18next
+ * @requires react-bootstrap
+ * @requires react-router-dom
+ * @requires @apollo/client
+ * @requires @mui/x-data-grid
+ * @requires dayjs
+ * @requires react-toastify
+ * @requires components/Loader/Loader
+ * @requires components/Avatar/Avatar
+ * @requires subComponents/SortingButton
+ * @requires subComponents/SearchBar
+ * @requires GraphQl/Queries/EventVolunteerQueries
+ * @requires GraphQl/Mutations/EventVolunteerMutation
+ * @requires utils/interfaces
+ *
+ * @function requests
+ * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
+ *
+ * @remarks
+ * - Displays a loader while fetching data and handles errors gracefully.
+ * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
+ * - Provides search functionality with debouncing and sorting options.
+ * - Displays volunteer details, request date, and action buttons for accepting or rejecting requests.
+ * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
+ *
+ * @example
+ * <Requests />
+ */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -13,7 +49,7 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -21,50 +57,28 @@ import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 const dataGridStyle = {
   backgroundColor: 'white',
   borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-cell': {
-    border: 'none',
-  },
-  '& .MuiDataGrid-columnSeparator': {
-    display: 'none',
-  },
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing and displaying Volunteer Membership requests for an event.
- *
- * This component allows users to view, filter, sort, and create action items. It also allows users to accept or reject volunteer membership requests.
- *
- * @returns The rendered component.
- */
 function requests(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -75,7 +89,6 @@ function requests(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'createdAt_ASC' | 'createdAt_DESC' | null
@@ -93,12 +106,7 @@ function requests(): JSX.Element {
     status: 'accepted' | 'rejected',
   ): Promise<void> => {
     try {
-      await updateMembership({
-        variables: {
-          id: id,
-          status: status,
-        },
-      });
+      await updateMembership({ variables: { id: id, status: status } });
       toast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
@@ -119,9 +127,7 @@ function requests(): JSX.Element {
     error: requestsError,
     refetch: refetchRequests,
   }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
+    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -263,42 +269,13 @@ function requests(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div
-          className={styles.input}
-          style={{ position: 'relative', width: '200px', display: 'flex' }}
-        >
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: 'Name',
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            className={`${styles.searchButton}`}
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              height: '100%',
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-              marginRight: '290px',
-            }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
+        <SearchBar
+          placeholder={tCommon('searchBy', { item: 'Name' })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton

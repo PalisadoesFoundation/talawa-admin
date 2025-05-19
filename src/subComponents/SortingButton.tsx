@@ -3,7 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import PropTypes from 'prop-types';
-import styles from '../style/app.module.css';
+import styles from '../style/app-fixed.module.css';
 
 interface InterfaceSortingOption {
   /** The label to display for the sorting option */
@@ -61,7 +61,8 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         data-testid={`${dataTestIdPrefix}`}
         className={className}
       >
-        <IconComponent className={'me-1'} /> {/* Use the appropriate icon */}
+        <IconComponent className={'me-1'} data-testid="sorting-icon" />{' '}
+        {/* Use the appropriate icon */}
         {buttonLabel || selectedOption}
         {/* Use buttonLabel if provided, otherwise use selectedOption */}
       </Dropdown.Toggle>

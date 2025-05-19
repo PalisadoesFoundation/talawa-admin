@@ -6,24 +6,14 @@
 
 > **default**(`props`): `JSX.Element`
 
-Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L63)
-
-Displays information about an event and provides an option to register for it.
-
-Shows the event's title, description, location, start and end dates and times,
-creator's name, and registration status. Includes a button to register for the event
-if the user is not already registered.
+Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L59)
 
 ## Parameters
 
 ### props
 
-`InterfaceEventCardProps`
-
-The properties for the event card.
+[`InterfaceEvent`](../../../../../types/Event/interface/interfaces/InterfaceEvent.md)
 
 ## Returns
 
 `JSX.Element`
-
-The event card component.

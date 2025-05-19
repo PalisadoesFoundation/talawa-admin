@@ -1,3 +1,49 @@
+/**
+ * The `events` component is responsible for managing and displaying events for a user portal.
+ * It includes functionality for creating, viewing, and managing events within an organization.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered events component.
+ *
+ * @remarks
+ * - Utilizes Apollo Client for GraphQL queries and mutations.
+ * - Integrates with `react-bootstrap` for UI components and modals.
+ * - Uses `dayjs` for date and time manipulation.
+ * - Includes localization support via `react-i18next`.
+ *
+ * @dependencies
+ * - `EventCalendar`: Displays events in a calendar view.
+ * - `EventHeader`: Provides controls for calendar view and event creation.
+ * - `DatePicker` and `TimePicker`: Used for selecting event dates and times.
+ *
+ * @state
+ * - `events`: List of events fetched from the server.
+ * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
+ * - `startDate`, `endDate`: Start and end dates for the event.
+ * - `startTime`, `endTime`: Start and end times for the event.
+ * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
+ * - `viewType`: Current calendar view type (e.g., month, week).
+ * - `createEventModal`: Controls visibility of the event creation modal.
+ * - `createChatCheck`: Determines if a chat should be created for the event.
+ *
+ * @methods
+ * - `createEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
+ * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
+ * - `handleEventTitleChange`, `handleEventLocationChange`, `handleEventDescriptionChange`:
+ *   Update respective state variables when input fields change.
+ * - `handleChangeView`: Updates the calendar view type.
+ *
+ * @hooks
+ * - `useQuery`: Fetches events and organization details.
+ * - `useMutation`: Executes the event creation mutation.
+ * - `useLocalStorage`: Retrieves user details from local storage.
+ * - `useEffect`: Updates the event list when query data changes.
+ *
+ * @example
+ * ```tsx
+ * <Events />
+ * ```
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -5,137 +51,72 @@ import {
   ORGANIZATIONS_LIST,
   ORGANIZATION_EVENTS_CONNECTION,
 } from 'GraphQl/Queries/Queries';
-import EventCalendar from 'components/EventCalendar/EventCalendar';
-import EventHeader from 'components/EventCalendar/EventHeader';
+import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
+import EventHeader from 'components/EventCalender/Header/EventHeader';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../../style/app.module.css';
-import Loader from 'components/Loader/Loader';
+import styles from 'style/app-fixed.module.css';
 
-/**
- * Converts a time string to a Dayjs object.
- *
- * @param time - The time string to convert, in HH:mm:ss format.
- * @returns A Dayjs object representing the time.
- */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
-/**
- * Component to manage and display events for an organization.
- *
- * This component allows users to view, create, and manage events within an organization.
- * It includes a calendar view, a form to create new events, and various filters and settings.
- *
- * @returns The JSX element for the events management interface.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.inputField`
- * - `.switch`
- * - `.addButton`
- *
- * For more details on the reusable classes, refer to the global CSS file.
- */
-export default function Events(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userEvents',
-  });
+export default function events(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
   // State variables to manage event details and UI
-  const [events, setEvents] = useState([]);
-  const [eventTitle, setEventTitle] = useState('');
-  const [eventDescription, setEventDescription] = useState('');
-  const [eventLocation, setEventLocation] = useState('');
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [isPublic, setIsPublic] = useState(true);
-  const [isRegisterable, setIsRegisterable] = useState(true);
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [isAllDay, setIsAllDay] = useState(true);
-  const [startTime, setStartTime] = useState('08:00:00');
-  const [endTime, setEndTime] = useState('10:00:00');
-  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
-  const [createEventModal, setCreateEventmodalisOpen] = useState(false);
-  const [createChatCheck, setCreateChatCheck] = useState(false);
+  const [events, setEvents] = React.useState([]);
+  const [eventTitle, setEventTitle] = React.useState('');
+  const [eventDescription, setEventDescription] = React.useState('');
+  const [eventLocation, setEventLocation] = React.useState('');
+  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [isPublic, setIsPublic] = React.useState(true);
+  const [isRegisterable, setIsRegisterable] = React.useState(true);
+  const [isRecurring, setIsRecurring] = React.useState(false);
+  const [isAllDay, setIsAllDay] = React.useState(true);
+  const [startTime, setStartTime] = React.useState('08:00:00');
+  const [endTime, setEndTime] = React.useState('10:00:00');
+  const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
+  const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
+  const [createChatCheck, setCreateChatCheck] = React.useState(false);
   const { orgId: organizationId } = useParams();
+
+  // Query to fetch events for the organization
+  const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
+    variables: { organization_id: organizationId, title_contains: '' },
+  });
 
   // Query to fetch organization details
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
     variables: { id: organizationId },
-    fetchPolicy: 'cache-first', // Use cached data if available
-  });
-
-  // Query to fetch events for the organization
-  const { data, loading, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
-    variables: {
-      organization_id: organizationId,
-      title_contains: '',
-      upcomingOnly: true, // Fetch only upcoming events
-      first: 400, // Fetch up to 400 events
-    },
-    skip: !organizationId, // skip if organization ID is not available
-    fetchPolicy: 'cache-and-network', // Fetch from cache if available, then fetch from network
-    errorPolicy: 'all', // show partial data if some data is available
-    onError: (error) => {
-      // log error if query fails
-      console.error('Query error:', error);
-    },
   });
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION);
 
-  // Update the list of events when the data from the query changes
-  useEffect(() => {
-    if (data) {
-      setEvents(data.eventsByOrganizationConnection);
-    }
-  }, [data]);
-
-  // Show loading spinner while fetching data
-  if (loading) {
-    return (
-      <div>
-        <Loader />
-      </div>
-    );
-  }
-
   // Get user details from local storage
   const userId = getItem('id') as string;
 
   const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor');
+  const adminFor = getItem('AdminFor') as string[] | null;
   const userRole = superAdmin
     ? 'SUPERADMIN'
-    : adminFor?.length > 0
+    : Array.isArray(adminFor) && adminFor.length > 0
       ? 'ADMIN'
       : 'USER';
 
@@ -200,7 +181,7 @@ export default function Events(): JSX.Element {
    * @returns Void.
    */
   const handleEventTitleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventTitle(event.target.value);
   };
@@ -212,7 +193,7 @@ export default function Events(): JSX.Element {
    * @returns Void.
    */
   const handleEventLocationChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventLocation(event.target.value);
   };
@@ -224,10 +205,17 @@ export default function Events(): JSX.Element {
    * @returns Void.
    */
   const handleEventDescriptionChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
     setEventDescription(event.target.value);
   };
+
+  // Update the list of events when the data from the query changes
+  React.useEffect(() => {
+    if (data) {
+      setEvents(data.eventsByOrganizationConnection);
+    }
+  }, [data]);
 
   /**
    * Shows the modal for creating a new event.
@@ -445,16 +433,14 @@ export default function Events(): JSX.Element {
                 />
               </div>
             </div>
-            <div className={styles.createEventBtn}>
-              <Button
-                type="submit"
-                className={styles.addButton}
-                value="createevent"
-                data-testid="createEventBtn"
-              >
-                {t('createEvent')}
-              </Button>
-            </div>
+            <Button
+              type="submit"
+              className={styles.addButton}
+              value="createevent"
+              data-testid="createEventBtn"
+            >
+              {t('createEvent')}
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>

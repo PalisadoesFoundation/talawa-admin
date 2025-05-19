@@ -1,7 +1,5 @@
-import type { Dispatch } from 'redux';
-
 export const updateTargets = (orgId: string | undefined) => {
-  return (dispatch: Dispatch): void => {
+  return (dispatch: any): void => {
     dispatch({
       type: 'UPDATE_TARGETS',
       payload: orgId,

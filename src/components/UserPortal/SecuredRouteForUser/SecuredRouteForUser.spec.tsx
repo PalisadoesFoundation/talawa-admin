@@ -1,98 +1,66 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
 import React from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router';
+import { render, screen, waitFor } from '@testing-library/react';
 import SecuredRouteForUser from './SecuredRouteForUser';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
-import { VERIFY_ROLE } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { Mock } from 'vitest';
-import { vi } from 'vitest';
 
-// Correctly mock the `useLocalStorage` module
-vi.mock('utils/useLocalstorage', () => ({
-  __esModule: true, // Ensure this is marked as an ES module
-  default: vi.fn(),
-}));
+/**
+ * Unit tests for SecuredRouteForUser component:
+ *
+ * 1. **Logged-in user**: Verifies that the route renders when 'IsLoggedIn' is set to 'TRUE'.
+ * 2. **Not logged-in user**: Ensures redirection to the login page when 'IsLoggedIn' is 'FALSE'.
+ * 3. **Logged-in user with admin access**: Checks that the route renders for a logged-in user with 'AdminFor' set (i.e., admin of an organization).
+ *
+ * LocalStorage values like 'IsLoggedIn' and 'AdminFor' are set to simulate different user states.
+ */
+
+const { setItem } = useLocalStorage();
 
 describe('SecuredRouteForUser', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  const mockQuery = (role: string, isAuthorized: boolean): MockedResponse => ({
-    request: {
-      query: VERIFY_ROLE,
-      context: {
-        headers: { Authorization: `Bearer mock_token` },
-      },
-    },
-    result: {
-      data: {
-        verifyRole: {
-          role,
-          isAuthorized,
-        },
-      },
-    },
-  });
-
-  it('renders the route when the user is logged in as a user', async () => {
-    // Mocking useLocalStorage to return the token as 'mock_token' and 'TRUE' for IsLoggedIn
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => (key === 'token' ? 'mock_token' : 'TRUE')),
-      setItem: vi.fn(),
-    });
+  it('renders the route when the user is logged in', () => {
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
+    setItem('IsLoggedIn', 'TRUE');
 
     render(
-      <MockedProvider mocks={[mockQuery('user', true)]} addTypename={false}>
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <Routes>
-            <Route element={<SecuredRouteForUser />}>
-              <Route
-                path="/user/organizations"
-                element={
-                  <div data-testid="organizations-content">
-                    Organizations Component
-                  </div>
-                }
-              />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>,
+      <MemoryRouter initialEntries={['/user/organizations']}>
+        <Routes>
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/user/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
   });
 
   it('redirects to /user when the user is not logged in', async () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn(() => 'FALSE'),
-      setItem: vi.fn(),
-    });
+    // Set the user as not logged in in local storage
+    setItem('IsLoggedIn', 'FALSE');
 
     render(
-      <MockedProvider mocks={[mockQuery('', false)]} addTypename={false}>
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <Routes>
-            <Route path="/" element={<div>User Login Page</div>} />
-            <Route element={<SecuredRouteForUser />}>
-              <Route
-                path="/user/organizations"
-                element={
-                  <div data-testid="organizations-content">
-                    Organizations Component
-                  </div>
-                }
-              />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>,
+      <MemoryRouter initialEntries={['/user/organizations']}>
+        <Routes>
+          <Route path="/" element={<div>User Login Page</div>} />
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/user/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
@@ -100,91 +68,39 @@ describe('SecuredRouteForUser', () => {
     });
   });
 
-  it('renders PageNotFound when user is an admin', async () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => (key === 'token' ? 'mock_token' : 'TRUE')),
-      setItem: vi.fn(),
-    });
+  it('renders the route when the user is logged in and user is ADMIN', () => {
+    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and set 'AdminFor' to simulate ADMIN of some Organization.
+    setItem('IsLoggedIn', 'TRUE');
+    setItem('AdminFor', [
+      {
+        _id: '6537904485008f171cf29924',
+        __typename: 'Organization',
+      },
+    ]);
 
     render(
-      <MockedProvider mocks={[mockQuery('admin', true)]} addTypename={false}>
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <Routes>
-            <Route element={<SecuredRouteForUser />}>
-              <Route path="/user/organizations" element={<PageNotFound />} />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>,
+      <MemoryRouter initialEntries={['/user/organizations']}>
+        <Routes>
+          <Route
+            path="/user/organizations"
+            element={<div>Oops! The Page you requested was not found!</div>}
+          />
+          <Route element={<SecuredRouteForUser />}>
+            <Route
+              path="/user/organizations"
+              element={
+                <div data-testid="organizations-content">
+                  Organizations Component
+                </div>
+              }
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
     );
 
-    // Check for the 404 text or the notFoundMsg text
-    await waitFor(() => {
-      expect(screen.getByText(/404/i)).toBeInTheDocument(); // Matching the 404 text in <h1>
-      expect(screen.getByText(/notFoundMsg/i)).toBeInTheDocument(); // Matching the notFoundMsg text in <p>
-    });
-  });
-
-  it('shows loading state while query is in progress', async () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn(() => 'mock_token'),
-      setItem: vi.fn(),
-    });
-
-    render(
-      <MockedProvider mocks={[mockQuery('user', true)]} addTypename={false}>
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <Routes>
-            <Route element={<SecuredRouteForUser />}>
-              <Route
-                path="/user/organizations"
-                element={<div>Test Page</div>}
-              />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.getByText('Loading.....')).toBeInTheDocument();
-  });
-
-  it('shows error state if query fails', async () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn(() => 'mock_token'),
-      setItem: vi.fn(),
-    });
-
-    render(
-      <MockedProvider
-        mocks={[
-          {
-            request: {
-              query: VERIFY_ROLE,
-              context: {
-                headers: { Authorization: `Bearer mock_token` },
-              },
-            },
-            error: new Error('GraphQL error'),
-          },
-        ]}
-        addTypename={false}
-      >
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <Routes>
-            <Route element={<SecuredRouteForUser />}>
-              <Route
-                path="/user/organizations"
-                element={<div>Test Page</div>}
-              />
-            </Route>
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/Error During Routing/i)).toBeInTheDocument();
-    });
+    expect(
+      screen.getByText(/Oops! The Page you requested was not found!/i),
+    ).toBeTruthy();
   });
 });
