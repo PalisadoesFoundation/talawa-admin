@@ -3,48 +3,14 @@ import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-
-import {
-  ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-  REJECT_ORGANIZATION_REQUEST_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, vi, expect } from 'vitest';
+import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
-const MOCKS = [
-  {
-    request: {
-      query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '1',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-      variables: { userid: '234' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '2',
-          },
-        ],
-      },
-    },
-  },
-];
+const link2 = new StaticMockLink(MOCKS2, true);
+const link3 = new StaticMockLink(MOCKS3, true);
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -80,8 +46,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -110,8 +76,8 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    userEvent.click(screen.getByText(/Accept/i));
-    userEvent.click(screen.getByText(/Reject/i));
+    await userEvent.click(screen.getByText(/Accept/i));
+    await userEvent.click(screen.getByText(/Reject/i));
 
     expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
@@ -119,5 +85,124 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
     expect(screen.getByText(props.email)).toBeInTheDocument();
+  });
+
+  it('should reload window after 2 seconds if addMember is clicked', async () => {
+    const props = {
+      id: '1',
+      memberName: 'John Doe',
+      memberLocation: 'India',
+      joinDate: '18/03/2022',
+      memberImage: 'image',
+      email: 'johndoe@gmail.com',
+    };
+    global.confirm = (): boolean => true;
+    const originalLocation = window.location;
+    try {
+      window.location = {
+        ...originalLocation,
+        reload: vi.fn(),
+      };
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...props} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await wait();
+      await userEvent.click(screen.getByText(/Accept/i));
+      await wait(2100);
+      expect(window.location.reload).toHaveBeenCalled();
+    } finally {
+      window.location = originalLocation;
+    }
+  });
+
+  it('should not reload window if acceptMutation fails', async () => {
+    const props = {
+      id: '1',
+      memberName: 'John Doe',
+      memberLocation: 'India',
+      joinDate: '18/03/2022',
+      memberImage: 'image',
+      email: '',
+    };
+    global.confirm = (): boolean => true;
+    const originalLocation = window.location;
+    try {
+      window.location = {
+        ...originalLocation,
+        reload: vi.fn(),
+      };
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...props} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+      await wait();
+      await userEvent.click(screen.getByText(/Accept/i));
+      await wait(2100);
+      expect(window.location.reload).not.toHaveBeenCalled();
+    } finally {
+      window.location = originalLocation;
+    }
+  });
+
+  it('should reload window if rejectMember is clicked', async () => {
+    global.confirm = (): boolean => true;
+    const originalLocation = window.location;
+    try {
+      window.location = {
+        ...originalLocation,
+        reload: vi.fn(),
+      };
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...props} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await wait();
+      await userEvent.click(screen.getByText(/Reject/i));
+      await wait();
+      expect(window.confirm).toHaveBeenCalled();
+      expect(window.location.reload).toHaveBeenCalled();
+    } finally {
+      window.location = originalLocation;
+    }
+  });
+
+  it('should not reload window if rejectMutation fails', async () => {
+    global.confirm = (): boolean => true;
+    const originalLocation = window.location;
+    try {
+      window.location = {
+        ...originalLocation,
+        reload: vi.fn(),
+      };
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...props} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await wait();
+      await userEvent.click(screen.getByText(/Reject/i));
+      await wait();
+      expect(window.confirm).toHaveBeenCalled();
+      expect(window.location.reload).not.toHaveBeenCalled();
+    } finally {
+      window.location = originalLocation;
+    }
   });
 });

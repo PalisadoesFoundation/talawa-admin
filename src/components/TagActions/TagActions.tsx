@@ -1,13 +1,45 @@
+/**
+ * Component for managing tag actions such as assigning or removing tags
+ * for users within an organization. It provides a modal interface for
+ * selecting tags, searching tags, and performing the desired action.
+ *
+ * @component
+ * @param {InterfaceTagActionsProps} props - The props for the component.
+ * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hideTagActionsModal - Function to close the modal.
+ * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
+ * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
+ * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
+ *
+ * @returns {React.FC} A React functional component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
+ * - Implements infinite scrolling for loading tags.
+ * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
+ *
+ * @example
+ * ```tsx
+ * <TagActions
+ *   tagActionsModalIsOpen={true}
+ *   hideTagActionsModal={() => setModalOpen(false)}
+ *   tagActionType="assignToTags"
+ *   t={t}
+ *   tCommon={tCommon}
+ * />
+ * ```
+ *
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from './TagActions.module.css';
+import styles from '../../style/app-fixed.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -21,7 +53,7 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
-import TagNode from './TagNode';
+import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 
@@ -30,9 +62,6 @@ interface InterfaceUserTagsAncestorData {
   name: string;
 }
 
-/**
- * Props for the `AssignToTags` component.
- */
 export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
@@ -82,7 +111,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           organizations: [
@@ -106,7 +135,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const userTagsList =
     orgUserTagsData?.organizations[0]?.userTags.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -129,7 +158,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-    /* istanbul ignore next */
+
     addAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -148,7 +177,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   useEffect(() => {
     const newCheckedTags = new Set(checkedTags);
     const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
-    /* istanbul ignore next */
+
     removeAncestorTagsData.forEach(
       (ancestorTag: InterfaceUserTagsAncestorData) => {
         const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
@@ -178,7 +207,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const deSelectTag = (tag: InterfaceTagData): void => {
     if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
-      /* istanbul ignore next */
       return;
     }
 
@@ -240,7 +268,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         hideTagActionsModal();
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -270,7 +297,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={styles.modalHeader}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -312,7 +339,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               <Form.Control
                 type="text"
                 id="userName"
-                className="bg-light"
+                className={styles.inputField}
                 placeholder={tCommon('searchByName')}
                 onChange={(e) => setTagSearchName(e.target.value.trim())}
                 data-testid="searchByName"
@@ -332,10 +359,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 <div
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
-                  style={{
-                    height: 300,
-                    overflow: 'auto',
-                  }}
+                  style={{ height: 300, overflow: 'auto' }}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}
@@ -388,13 +412,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
           <Modal.Footer>
             <Button
-              variant="secondary"
+              className={`btn btn-danger ${styles.removeButton}`}
               onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}
             </Button>
-            <Button type="submit" value="add" data-testid="tagActionSubmitBtn">
+            <Button
+              type="submit"
+              value="add"
+              data-testid="tagActionSubmitBtn"
+              className={`btn ${styles.addButton}`}
+            >
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </Modal.Footer>

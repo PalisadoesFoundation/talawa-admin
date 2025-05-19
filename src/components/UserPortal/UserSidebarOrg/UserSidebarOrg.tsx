@@ -1,18 +1,60 @@
-import { useQuery } from '@apollo/client';
-import { WarningAmberOutlined } from '@mui/icons-material';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+/**
+ * UserSidebarOrg Component
+ *
+ * This component represents the sidebar for the user portal, providing
+ * navigation options and user-related functionalities. It includes branding,
+ * menu options, and user profile actions.
+ *
+ * @component
+ * @param {InterfaceUserSidebarOrgProps} props - The props for the component.
+ * @param {string} props.orgId - The ID of the organization (currently unused).
+ * @param {TargetsType[]} props.targets - Array of navigation targets, each containing
+ *   a name and URL or nested dropdown options.
+ * @param {boolean | null} props.hideDrawer - State to determine the visibility of the sidebar.
+ *   `null` hides the sidebar by default, `true` hides it, and `false` shows it.
+ * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer - Function
+ *   to update the `hideDrawer` state.
+ *
+ * @returns {JSX.Element} The rendered UserSidebarOrg component.
+ *
+ * @remarks
+ * - The sidebar includes branding with the Talawa logo and text.
+ * - Navigation links are dynamically generated based on the `targets` prop.
+ * - The sidebar auto-hides on smaller screens (viewport width <= 820px) when a link is clicked.
+ * - The organization section is currently commented out and not in use.
+ *
+ * @example
+ * ```tsx
+ * <UserSidebarOrg
+ *   orgId="123"
+ *   targets={[
+ *     { name: 'dashboard', url: '/dashboard' },
+ *     { name: 'settings', url: '/settings' },
+ *   ]}
+ *   hideDrawer={false}
+ *   setHideDrawer={setHideDrawerFunction}
+ * />
+ * ```
+ *
+ */
+// import { useQuery } from '@apollo/client';
+// import { WarningAmberOutlined } from '@mui/icons-material';
+// import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+// import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
+// import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+// import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import styles from './UserSidebarOrg.module.css';
-import Avatar from 'components/Avatar/Avatar';
+import styles from 'style/app-fixed.module.css';
+// import Avatar from 'components/Avatar/Avatar';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from './../../SignOut/SignOut';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -21,24 +63,9 @@ export interface InterfaceUserSidebarOrgProps {
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-/**
- * Sidebar component for user navigation within an organization.
- *
- * Provides:
- * - Branding with the Talawa logo.
- * - Displays the current organization's details.
- * - Navigation options with links and collapsible dropdowns.
- *
- * @param orgId - ID of the current organization.
- * @param targets - List of navigation targets.
- * @param hideDrawer - Boolean indicating if the sidebar should be hidden or shown.
- * @param setHideDrawer - Function to update the `hideDrawer` state.
- *
- * @returns JSX.Element - The rendered sidebar component.
- */
 const UserSidebarOrg = ({
   targets,
-  orgId,
+  // orgId,
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
@@ -50,32 +77,32 @@ const UserSidebarOrg = ({
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   // State for organization data
-  const [organization, setOrganization] =
-    useState<InterfaceQueryOrganizationsListObject>();
+  // const [organization, setOrganization] =
+  // useState<InterfaceQueryOrganizationsListObject>();
 
   // Query to fetch organization data
-  const {
-    data,
-    loading,
-  }: {
-    data:
-      | { organizations: InterfaceQueryOrganizationsListObject[] }
-      | undefined;
-    loading: boolean;
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: orgId },
-  });
+  // const {
+  //   data,
+  //   loading,
+  // }: {
+  //   data:
+  //     | { organizations: InterfaceQueryOrganizationsListObject[] }
+  //     | undefined;
+  //   loading: boolean;
+  // } = useQuery(ORGANIZATIONS_LIST, {
+  //   variables: { id: orgId },
+  // });
 
   // Set organization data once the query is complete
-  useEffect(() => {
-    let isMounted = true;
-    if (data && isMounted) {
-      setOrganization(data?.organizations[0]);
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [data]);
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (data && isMounted) {
+  //     setOrganization(data?.organizations[0]);
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  // }, [data]);
 
   /**
    * Handles click events on navigation links.
@@ -106,7 +133,7 @@ const UserSidebarOrg = ({
         </div>
 
         {/* Organization Section */}
-        <div className={styles.organizationContainer}>
+        {/* <div className={styles.organizationContainer}>
           {loading ? (
             <>
               <button
@@ -147,31 +174,25 @@ const UserSidebarOrg = ({
               <AngleRightIcon fill={'var(--bs-secondary)'} />
             </button>
           )}
-        </div>
+        </div> */}
 
         {/* Options List */}
+        <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
         <div className={styles.optionList}>
-          <h5 className={`${styles.titleHeader} text-secondary`}>
-            {tCommon('menu')}
-          </h5>
           {targets.map(({ name, url }, index) => {
             return url ? (
               <NavLink to={url} key={name} onClick={handleLinkClick}>
                 {({ isActive }) => (
                   <Button
                     key={name}
-                    variant={isActive === true ? 'success' : ''}
-                    className={`${
-                      isActive === true ? 'text-white' : 'text-secondary'
-                    }`}
+                    variant=""
+                    className={isActive === true ? styles.activeItem : ''}
                   >
                     <div className={styles.iconWrapper}>
                       <IconComponent
                         name={name}
                         fill={
-                          isActive === true
-                            ? 'var(--bs-white)'
-                            : 'var(--bs-secondary)'
+                          isActive === true ? '#000000' : 'var(--bs-secondary)'
                         }
                       />
                     </div>
@@ -188,6 +209,10 @@ const UserSidebarOrg = ({
               />
             );
           })}
+        </div>
+        <div className={styles.userSidebarOrgFooter}>
+          <ProfileCard />
+          <SignOut />
         </div>
       </div>
     </>

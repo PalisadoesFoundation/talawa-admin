@@ -1,9 +1,42 @@
+/**
+ * Campaigns Component
+ *
+ * This component renders a list of fundraising campaigns for a specific organization.
+ * It provides functionality for searching, sorting, and adding pledges to campaigns.
+ * The component also handles loading states, error handling, and navigation.
+ *
+ * @component
+ *
+ * @remarks
+ * - Redirects to the homepage if `orgId` or `userId` is missing.
+ * - Fetches campaigns using the `USER_FUND_CAMPAIGNS` GraphQL query.
+ * - Displays a loader while campaigns are being fetched.
+ * - Shows an error message if there is an issue loading campaigns.
+ * - Allows users to search campaigns by name and sort them by funding goal or end date.
+ * - Enables users to add pledges to active campaigns via a modal.
+ *
+ * @returns {JSX.Element} The rendered Campaigns component.
+ *
+ * @dependencies
+ * - React, React Router, React Bootstrap, Material UI, Apollo Client, and custom utilities/components.
+ *
+ * @example
+ * ```tsx
+ * <Campaigns />
+ * ```
+ *
+ * @see {@link PledgeModal} for the modal used to add pledges.
+ * @see {@link USER_FUND_CAMPAIGNS} for the GraphQL query fetching campaigns.
+ *
+ * @function
+ * @name Campaigns
+ */
 import React, { useEffect, useState } from 'react';
-import { Form, Button, ProgressBar } from 'react-bootstrap';
-import styles from './Campaigns.module.css';
+import { Button, ProgressBar } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Navigate, useNavigate, useParams } from 'react-router';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -20,24 +53,17 @@ import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
-/**
- * The `Campaigns` component displays a list of fundraising campaigns for a specific organization.
- * It allows users to search, sort, and view details about each campaign. Users can also add pledges to active campaigns.
- *
- * @returns The rendered component displaying the campaigns.
- */
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userCampaigns',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   // Retrieves stored user ID from local storage
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') as string;
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
@@ -66,18 +92,13 @@ const Campaigns = (): JSX.Element => {
     error: campaignError,
     refetch: refetchCampaigns,
   }: {
-    data?: {
-      getFundraisingCampaigns: InterfaceUserCampaign[];
-    };
+    data?: { getFundraisingCampaigns: InterfaceUserCampaign[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(USER_FUND_CAMPAIGNS, {
     variables: {
-      where: {
-        organizationId: orgId,
-        name_contains: searchTerm,
-      },
+      where: { organizationId: orgId, name_contains: searchTerm },
       campaignOrderBy: sortBy,
     },
   });
@@ -130,25 +151,12 @@ const Campaigns = (): JSX.Element => {
     <>
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByName')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            data-testid="searchCampaigns"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0  d-flex justify-content-center align-items-center`}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchCampaigns"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-4 mb-1">
           <div className="d-flex justify-space-between">
             <SortingButton
@@ -198,7 +206,7 @@ const Campaigns = (): JSX.Element => {
             <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
               <div className={styles.accordionSummary}>
                 <div
-                  className={styles.titleContainer}
+                  className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
                   <div className="d-flex">
@@ -212,7 +220,11 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date() ? styles.pending : styles.active}`}
+                      className={`${styles.chip} ${
+                        new Date(campaign.endDate) < new Date()
+                          ? styles.pending
+                          : styles.active
+                      }`}
                     />
                   </div>
 
@@ -245,6 +257,7 @@ const Campaigns = (): JSX.Element => {
                     data-testid="addPledgeBtn"
                     disabled={new Date(campaign.endDate) < new Date()}
                     onClick={() => openModal(campaign)}
+                    className={styles.outlineBtn}
                   >
                     <i className={'fa fa-plus me-2'} />
                     {t('addPledge')}
@@ -254,13 +267,13 @@ const Campaigns = (): JSX.Element => {
             </AccordionSummary>
             <AccordionDetails className="d-flex gap-3 ms-2">
               <span className="fw-bold">Amount Raised: </span>
-              <div className={styles.progress}>
+              <div className={styles.progressAccordion}>
                 <span>$0</span>
                 <ProgressBar
                   now={0}
                   label={`${(200 / 1000) * 100}%`}
                   max={1000}
-                  className={styles.progressBar}
+                  className={styles.progressBarAccordion}
                   data-testid="progressBar"
                 />
                 <span>$1000</span>

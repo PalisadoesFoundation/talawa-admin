@@ -1,8 +1,8 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -12,6 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
+import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -41,7 +42,7 @@ afterEach(() => {
 
 describe('Testing Event Card In User portal', () => {
   const props = {
-    id: '123',
+    _id: '123',
     title: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
@@ -56,13 +57,15 @@ describe('Testing Event Card In User portal', () => {
     creator: {
       firstName: 'Joe',
       lastName: 'David',
-      id: '123',
+      _id: '123',
     },
-    registrants: [
+    attendees: [
       {
-        id: '234',
+        _id: '234',
       },
     ],
+    recurrenceRule: null,
+    isRecurringEventException: false,
   };
 
   it('The card should be rendered properly, and all the details should be displayed correct', async () => {
@@ -136,18 +139,54 @@ describe('Testing Event Card In User portal', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    userEvent.click(screen.getByText('Register'));
+    await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
       expect(
         queryByText('Successfully registered for Test Event'),
       ).toBeInTheDocument(),
     );
   });
+
+  it('should display an error toast when the register mutation fails', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const errorMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { eventId: '123' },
+        },
+        error: new Error('Failed to register for the event'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await userEvent.click(screen.getByText('Register'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        `Failed to register for the event`,
+      );
+    });
+  });
 });
 
 describe('Event card when start and end time are not given', () => {
   const props = {
-    id: '123',
+    _id: '123',
     title: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
@@ -162,13 +201,15 @@ describe('Event card when start and end time are not given', () => {
     creator: {
       firstName: 'Joe',
       lastName: 'David',
-      id: '123',
+      _id: '123',
     },
-    registrants: [
+    attendees: [
       {
-        id: '234',
+        _id: '234',
       },
     ],
+    recurrenceRule: null,
+    isRecurringEventException: false,
   };
 
   it('Card is rendered correctly', async () => {

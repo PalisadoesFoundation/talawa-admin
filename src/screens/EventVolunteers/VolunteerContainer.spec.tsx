@@ -1,10 +1,10 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18n';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerContainer from './VolunteerContainer';
@@ -22,35 +22,38 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
  * All tests are covered.
  */
 
-const link1 = new StaticMockLink(MOCKS);
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: {
+        changeLanguage: () => new Promise(() => {}),
+      },
+    }),
+  };
+});
 
 const mockedUseParams = vi.fn();
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => mockedUseParams(),
+    Navigate: () => <div data-testid="paramsError">Navigated to root</div>,
   };
 });
 
 const renderVolunteerContainer = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link1}>
+    <MockedProvider addTypename={false} link={new StaticMockLink(MOCKS)}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider>
             <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route
-                  path="/event/:orgId/:eventId"
-                  element={<VolunteerContainer />}
-                />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError">paramsError</div>}
-                />
-              </Routes>
+              <VolunteerContainer />
             </I18nextProvider>
           </LocalizationProvider>
         </Provider>
@@ -66,53 +69,26 @@ describe('Testing Volunteer Container', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     mockedUseParams.mockReturnValue({});
-
     renderVolunteerContainer();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+    const errorElement = await screen.findByTestId('paramsError');
+    expect(errorElement).toBeInTheDocument();
   });
 
   it('Testing Volunteer Container Screen -> Toggle screens', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route path="/event/" element={<VolunteerContainer />} />
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
     mockedUseParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
 
     renderVolunteerContainer();
 
-    const groupRadio = await screen.findByTestId('groupsRadio');
-    const requestsRadio = await screen.findByTestId('requestsRadio');
-    const individualRadio = await screen.findByTestId('individualRadio');
+    const individualLabel = await screen.findByTestId('individualRadio');
+    const groupsLabel = await screen.findByTestId('groupsRadio');
+    const requestsLabel = await screen.findByTestId('requestsRadio');
 
-    expect(groupRadio).toBeInTheDocument();
-    expect(requestsRadio).toBeInTheDocument();
-    expect(individualRadio).toBeInTheDocument();
-
-    await waitFor(async () => {
-      await userEvent.click(groupRadio);
-      await userEvent.click(requestsRadio);
-      await userEvent.click(individualRadio);
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+    expect(await screen.findByTestId('individualRadio')).toBeInTheDocument();
+    await userEvent.click(groupsLabel);
+    expect(await screen.findByTestId('groupsRadio')).toBeInTheDocument();
+    await userEvent.click(requestsLabel);
+    expect(await screen.findByTestId('requestsRadio')).toBeInTheDocument();
+    await userEvent.click(individualLabel);
   });
 });

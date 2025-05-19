@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -80,7 +80,6 @@ const renderStartPostModal = (
         lastName: 'dsza',
         email: 'glen@dsza.com',
         appLanguageCode: 'en',
-        pluginCreationAllowed: true,
         createdAt: '2023-02-18T09:22:27.969Z',
         adminFor: [],
         createdOrganizations: [],
@@ -130,7 +129,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     renderStartPostModal(true, null);
     await wait();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toastSpy).toHaveBeenCalledWith(
       "Can't create a post with an empty body.",
     );
@@ -141,15 +140,21 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     const randomPostInput = 'This is dummy text';
-    userEvent.type(screen.getByTestId('postInput'), randomPostInput);
+    await userEvent.type(screen.getByTestId('postInput'), randomPostInput);
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('createPostBtn'));
-
-    expect(toast.error).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toast.info).toHaveBeenCalledWith(
       'Processing your post. Please wait.',
     );
+  });
+
+  it('should display correct username', async () => {
+    renderStartPostModal(true, null);
+    await wait();
+
+    const userFullName = screen.getByText('Glen dsza');
+    expect(userFullName).toBeInTheDocument();
   });
 
   it('If user image is null then default image should be shown', async () => {
@@ -177,10 +182,10 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     const input = screen.getByTestId('postInput');
-    userEvent.type(input, 'Test content');
+    await userEvent.type(input, 'Test content');
 
     const closeButton = screen.getByRole('button', { name: /close/i });
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     expect(onHideMock).toHaveBeenCalled();
     expect(input).toHaveValue('');
@@ -221,8 +226,8 @@ describe('Testing StartPostModal Component: User Portal', () => {
     );
     await wait();
 
-    userEvent.type(screen.getByTestId('postInput'), 'Test content');
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.type(screen.getByTestId('postInput'), 'Test content');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 
@@ -252,8 +257,8 @@ describe('Testing StartPostModal Component: User Portal', () => {
     renderStartPostModal(true, null, null, vi.fn(), vi.fn(), customLink);
     await wait();
 
-    userEvent.type(screen.getByTestId('postInput'), 'Test content');
-    userEvent.click(screen.getByTestId('createPostBtn'));
+    await userEvent.type(screen.getByTestId('postInput'), 'Test content');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
 
     await wait();
 

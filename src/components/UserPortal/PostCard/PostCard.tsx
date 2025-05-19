@@ -1,3 +1,31 @@
+/**
+ * Component representing a post card in the user portal.
+ *
+ * This component displays a post with its details such as title, content, creator,
+ * likes, comments, and associated actions like editing, deleting, liking, and commenting.
+ * It also includes modals for viewing the post in detail and editing the post content.
+ *
+ * @param props - The properties of the post card.
+ * @param props.id - Unique identifier for the post.
+ * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
+ * @param props.title - Title of the post.
+ * @param props.text - Content of the post.
+ * @param props.image - URL of the post's image.
+ * @param props.postedAt - Date when the post was created.
+ * @param props.likeCount - Number of likes on the post.
+ * @param props.likedBy - Array of users who liked the post.
+ * @param props.comments - Array of comments on the post.
+ * @param props.commentCount - Total number of comments on the post.
+ * @param props.fetchPosts - Function to refresh the list of posts.
+ *
+ * @returns A JSX.Element representing the post card.
+ *
+ * @remarks
+ * - Includes GraphQL mutations for liking, unliking, commenting, editing, and deleting posts.
+ * - Uses `react-bootstrap` for UI components and `@apollo/client` for GraphQL operations.
+ * - Handles state for likes, comments, and modals using React hooks.
+ * - Displays error messages and success notifications using `react-toastify`.
+ */
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -33,49 +61,27 @@ import {
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
   id: string;
-  creator: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
+  creator: { id: string; firstName: string; lastName: string; email: string };
   likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
+  likedBy: { id: string }[];
   text: string;
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;
 }
 
-/**
- * PostCard component displays an individual post, including its details, interactions, and comments.
- *
- * The component allows users to:
- * - View the post's details in a modal.
- * - Edit or delete the post.
- * - Like or unlike the post.
- * - Add comments to the post.
- * - Like or dislike individual comments.
- *
- * @param props - The properties passed to the component including post details, comments, and related actions.
- * @returns JSX.Element representing a post card with interactive features.
- */
 export default function postCard(props: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'postCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
   // Retrieve user ID from local storage
-  const userId = getItem('userId');
+  const userId = getItem('userId') as string;
   // Check if the post is liked by the current user
   const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
 
@@ -116,11 +122,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   const handleToggleLike = async (): Promise<void> => {
     if (isLikedByUser) {
       try {
-        const { data } = await unLikePost({
-          variables: {
-            postId: props.id,
-          },
-        });
+        const { data } = await unLikePost({ variables: { postId: props.id } });
 
         if (data) {
           setLikes((likes) => likes - 1);
@@ -131,11 +133,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       }
     } else {
       try {
-        const { data } = await likePost({
-          variables: {
-            postId: props.id,
-          },
-        });
+        const { data } = await likePost({ variables: { postId: props.id } });
 
         if (data) {
           setLikes((likes) => likes + 1);
@@ -184,7 +182,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       ) {
         updatedComment = {
           ...comment,
-          likedBy: [...comment.likedBy, { id: userId }],
+          likedBy: [...comment.likedBy, { id: userId as string }],
           likeCount: comment.likeCount + 1,
         };
       }
@@ -196,11 +194,14 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   // Create a new comment
   const createComment = async (): Promise<void> => {
     try {
+      // Ensure the input is not empty
+      if (!commentInput.trim()) {
+        toast.error(t('emptyCommentError'));
+        return;
+      }
+
       const { data: createEventData } = await create({
-        variables: {
-          postId: props.id,
-          comment: commentInput,
-        },
+        variables: { postId: props.id, comment: commentInput },
       });
 
       if (createEventData) {
@@ -225,39 +226,54 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         setComments([...comments, newComment]);
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      // Handle errors
+      // Log error with context for debugging
+      console.error('Error creating comment:', error);
+
+      // Show user-friendly translated message based on error type
+      if (error instanceof Error) {
+        const isValidationError = error.message.includes(
+          'Comment validation failed',
+        );
+        toast.error(
+          isValidationError ? t('emptyCommentError') : t('unexpectedError'),
+        );
+      } else {
+        toast.error(t('unexpectedError'));
+      }
     }
   };
 
   // Edit the post
-  const handleEditPost = (): void => {
+  const handleEditPost = async (): Promise<void> => {
     try {
-      editPost({
-        variables: {
-          id: props.id,
-          text: postContent,
-        },
+      const { data: createEventData } = await editPost({
+        variables: { id: props.id, text: postContent },
       });
 
-      props.fetchPosts(); // Refresh the posts
-      toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
+      if (createEventData) {
+        props.fetchPosts(); // Refresh the posts
+        toggleEditPost();
+        toast.success(
+          tCommon('updatedSuccessfully', { item: 'Post' }) as string,
+        );
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
   };
 
   // Delete the post
-  const handleDeletePost = (): void => {
+  const handleDeletePost = async (): Promise<void> => {
     try {
-      deletePost({
-        variables: {
-          id: props.id,
-        },
+      const { data: createEventData } = await deletePost({
+        variables: { id: props.id },
       });
 
-      props.fetchPosts(); // Refresh the posts
-      toast.success('Successfully deleted the Post.');
+      if (createEventData) {
+        props.fetchPosts(); // Refresh the posts
+        toast.success('Successfully deleted the Post.');
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
@@ -324,8 +340,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
           <div className={`${styles.cardActions}`}>
             <Button
               size="sm"
-              variant="success"
-              className="px-4"
+              className={`px-4 ${styles.addButton}`}
               data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
@@ -440,7 +455,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         </Modal.Body>
       </Modal>
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
-        <Modal.Header closeButton className="py-2 ">
+        <Modal.Header closeButton className={`py-2`}>
           <p className="fs-3" data-testid={'editPostModalTitle'}>
             {t('editPost')}
           </p>
@@ -461,8 +476,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
         <ModalFooter>
           <Button
             size="sm"
-            variant="success"
-            className="px-4"
+            className={`px-4 ${styles.addButton}`}
             data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >

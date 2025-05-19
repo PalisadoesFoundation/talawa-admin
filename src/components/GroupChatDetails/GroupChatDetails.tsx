@@ -1,8 +1,51 @@
+/**
+ * Component for displaying and managing group chat details.
+ *
+ * @module GroupChatDetails
+ *
+ * @description
+ * This component provides a modal interface for viewing and editing group chat details,
+ * including the chat name, image, description, and members. It also allows adding new users
+ * to the group chat and updating chat information.
+ *
+ * @param {InterfaceGroupChatDetailsProps} props - The props for the component.
+ * @param {boolean} props.groupChatDetailsModalisOpen - Determines if the group chat details modal is open.
+ * @param {Function} props.toggleGroupChatDetailsModal - Function to toggle the visibility of the modal.
+ * @param {Object} props.chat - The chat object containing details like name, image, description, and users.
+ * @param {Function} props.chatRefetch - Function to refetch chat data after updates.
+ *
+ * @returns {JSX.Element} The rendered GroupChatDetails component.
+ *
+ * @remarks
+ * - Uses `@mui/material` for table and modal styling.
+ * - Integrates `react-bootstrap` for modal and form elements.
+ * - Utilizes GraphQL queries and mutations for fetching and updating chat data.
+ * - Includes localization support via `react-i18next`.
+ * - Displays a loader while fetching user data.
+ *
+ * @example
+ * ```tsx
+ * <GroupChatDetails
+ *   groupChatDetailsModalisOpen={true}
+ *   toggleGroupChatDetailsModal={handleToggle}
+ *   chat={chatData}
+ *   chatRefetch={refetchChatData}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - `@mui/material`
+ * - `react-bootstrap`
+ * - `@apollo/client`
+ * - `react-i18next`
+ * - `react-toastify`
+ * - `react-icons`
+ *
+ */
 import { Paper, TableBody } from '@mui/material';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
-import styles from './GroupChatDetails.module.css';
-import type { ApolloQueryResult } from '@apollo/client';
+import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ADD_USER_TO_GROUP_CHAT,
@@ -24,118 +67,69 @@ import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
 import convertToBase64 from 'utils/convertToBase64';
 import useLocalStorage from 'utils/useLocalstorage';
-
-type DirectMessage = {
-  _id: string;
-  createdAt: Date;
-  sender: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string;
-  };
-  replyTo:
-    | {
-        _id: string;
-        createdAt: Date;
-        sender: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string;
-        };
-        messageContent: string;
-        receiver: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-        };
-      }
-    | undefined;
-  messageContent: string;
-  media: string;
-};
-
-type Chat = {
-  _id: string;
-  isGroup: boolean;
-  name?: string;
-  image?: string;
-  messages: DirectMessage[];
-  admins: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  }[];
-  unseenMessagesByUsers: string;
-  description: string;
-};
-
-interface InterfaceGoroupChatDetailsProps {
-  toggleGroupChatDetailsModal: () => void;
-  groupChatDetailsModalisOpen: boolean;
-  chat: Chat;
-  chatRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
-}
+import { toast } from 'react-toastify';
+import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: ['#31bb6b', '!important'],
     color: theme.palette.common.white,
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
+  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
+  '&:last-child td, &:last-child th': { border: 0 },
 }));
 
-/**
- * Component for displaying and managing group chat details.
- *
- * @param props - The component props.
- * @param toggleGroupChatDetailsModal - Function to toggle the group chat details modal.
- * @param groupChatDetailsModalisOpen - Boolean indicating if the group chat details modal is open.
- * @param chat - The chat object containing details about the group chat.
- * @param chatRefetch - Function to refetch the chat data.
- * @returns The rendered component.
- */
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
   chatRefetch,
-}: InterfaceGoroupChatDetailsProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChat',
-  });
+}: InterfaceGroupChatDetailsProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
-  const [userName, setUserName] = useState('');
+  //storage
+
   const { getItem } = useLocalStorage();
-
   const userId = getItem('userId');
 
+  useEffect(() => {
+    if (!userId) {
+      toast.error(t('userNotFound'));
+    }
+  }, [userId, t]);
+
+  if (!userId) {
+    return (
+      <Modal
+        data-testid="groupChatDetailsModal"
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
+        contentClassName={styles.modalContent}
+      >
+        <Modal.Header closeButton data-testid="groupChatDetails">
+          <Modal.Title>{t('Error')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>User not found</Modal.Body>
+      </Modal>
+    );
+  }
+
+  //states
+
+  const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
+  const [selectedImage, setSelectedImage] = useState(chat?.image || '');
+
+  //mutations
 
   const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
+  const [updateChat] = useMutation(UPDATE_CHAT);
+
+  //modal
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
 
@@ -151,24 +145,15 @@ export default function groupChatDetails({
     loading: allUsersLoading,
     refetch: allUsersRefetch,
   } = useQuery(USERS_CONNECTION_LIST, {
-    variables: {
-      firstName_contains: '',
-      lastName_contains: '',
-    },
+    variables: { firstName_contains: '', lastName_contains: '' },
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        userId,
-        chatId: chat._id,
-      },
-    });
+    await addUser({ variables: { userId, chatId: chat._id } });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    /* istanbul ignore next */
     const [firstName, lastName] = userName.split(' ');
 
     const newFilterData = {
@@ -176,14 +161,8 @@ export default function groupChatDetails({
       lastName_contains: lastName || '',
     };
 
-    allUsersRefetch({
-      ...newFilterData,
-    });
+    allUsersRefetch({ ...newFilterData });
   };
-
-  const [selectedImage, setSelectedImage] = useState('');
-
-  const [updateChat] = useMutation(UPDATE_CHAT);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -200,6 +179,8 @@ export default function groupChatDetails({
       setSelectedImage(base64);
       await updateChat();
       await chatRefetch();
+      setSelectedImage('');
+    } else {
       setSelectedImage('');
     }
   };
@@ -297,7 +278,9 @@ export default function groupChatDetails({
               {chat.users.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
-              {chat.admins.map((admin) => admin._id).includes(userId) && (
+              {chat.admins
+                .map((admin) => admin._id)
+                .includes(userId as string) && (
                 <ListGroup.Item
                   data-testid="addMembers"
                   className={styles.listItem}

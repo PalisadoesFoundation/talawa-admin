@@ -1,3 +1,39 @@
+/**
+ * @EventRegistrants Component
+ *
+ * This component is responsible for displaying a list of event registrants
+ * and attendees in a tabular format. It fetches data from GraphQL queries
+ * and combines registrants and attendees data to display relevant information.
+ *
+ * @Features
+ * - Fetches event registrants and attendees using GraphQL lazy queries.
+ * - Combines registrants and attendees data to display enriched information.
+ * - Displays a table with serial number, registrant name, registration date,
+ *   and creation time.
+ * - Provides a button to add new registrants and a wrapper for event check-in.
+ *
+ * @Props
+ * - None
+ *
+ * @Hooks
+ * - `useTranslation`: For internationalization of text content.
+ * - `useParams`: To extract `orgId` and `eventId` from the route parameters.
+ * - `useLazyQuery`: To fetch event registrants and attendees data.
+ * - `useState`: To manage state for registrants, attendees, and combined data.
+ * - `useEffect`: To fetch and combine data on component mount and updates.
+ * - `useCallback`: To memoize the data refresh function.
+ *
+ * @GraphQLQueries
+ * - `EVENT_REGISTRANTS`: Fetches the list of registrants for the event.
+ * - `EVENT_ATTENDEES`: Fetches the list of attendees for the event.
+ *
+ * @Returns
+ * - A JSX element containing a table of event registrants and attendees.
+ *
+ * @Usage
+ * - This component is used in the event management section of the application
+ *   to display and manage event registrants and attendees.
+ */
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   Paper,
@@ -9,46 +45,31 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
-import { useParams } from 'react-router-dom';
-import type { InterfaceMember } from '../EventAttendance/InterfaceEvents';
+import { useParams } from 'react-router';
+import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-/**
- * Interface for user data
- */
-interface InterfaceUser {
-  _id: string;
-  userId: string;
-  isRegistered: boolean;
-  __typename: string;
-  time: string;
-}
-/**
- * Component to manage and display event registrant information
- * Includes adding new registrants and check-in functionality for registrants
- * @returns JSX element containing the event attendance interface
- */
+import type { InterfaceUserAttendee } from 'types/User/interface';
+
 function EventRegistrants(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventRegistrant',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
-  const [registrants, setRegistrants] = useState<InterfaceUser[]>([]);
+  const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
   const [attendees, setAttendees] = useState<InterfaceMember[]>([]);
   const [combinedData, setCombinedData] = useState<
-    (InterfaceUser & Partial<InterfaceMember>)[]
+    (InterfaceUserAttendee & Partial<InterfaceMember>)[]
   >([]);
-  // Fetch registrants
+
   const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
     variables: { eventId },
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       if (data?.getEventAttendeesByEventId) {
         const mappedData = data.getEventAttendeesByEventId.map(
-          (attendee: InterfaceUser) => ({
+          (attendee: InterfaceUserAttendee) => ({
             _id: attendee._id,
             userId: attendee.userId,
             isRegistered: attendee.isRegistered,
@@ -123,13 +144,17 @@ function EventRegistrants(): JSX.Element {
           {t('allRegistrants')}
         </Button>
       </div>
-      <TableContainer component={Paper} className={`mt-3 ${styles.tableHead}`}>
+      <TableContainer
+        component={Paper}
+        className="mt-3"
+        sx={{ borderRadius: '16px' }}
+      >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
-            <TableRow role="row" className={`${styles.rowBackground}`}>
+            <TableRow role="row">
               <TableCell
                 data-testid="table-header-serial"
-                className={styles.tableHeader}
+                className={styles.customcell}
                 role="columnheader"
                 aria-sort="none"
               >
@@ -137,25 +162,25 @@ function EventRegistrants(): JSX.Element {
               </TableCell>
               <TableCell
                 data-testid="table-header-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registrant')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registered-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('registeredAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-created-at"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('createdAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-add-registrant"
-                className={styles.tableHeader}
+                className={styles.customcell}
               >
                 {t('addRegistrant')}
               </TableCell>
@@ -163,7 +188,7 @@ function EventRegistrants(): JSX.Element {
           </TableHead>
           <TableBody>
             {combinedData.length === 0 ? (
-              <TableRow>
+              <TableRow className={styles.noBorderRow}>
                 <TableCell
                   colSpan={5}
                   align="center"

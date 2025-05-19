@@ -4,14 +4,14 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-
+import '../../style/app-fixed.module.css';
+import { MOCKS } from './EventDashboardScreenMocks';
 const { setItem } = useLocalStorage();
 
 Object.defineProperty(window, 'matchMedia', {
@@ -30,55 +30,11 @@ Object.defineProperty(window, 'matchMedia', {
 
 let mockID: string | undefined = '123';
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: () => ({ orgId: mockID }),
-  };
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 
-const MOCKS = [
-  {
-    request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: '123' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: '123',
-            image: null,
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'JohnDoe@example.com',
-            },
-            name: 'Test Organization',
-            description: 'Testing this organization',
-            address: {
-              city: 'Mountain View',
-              countryCode: 'US',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Main Street',
-              line2: 'Apt 456',
-              postalCode: '94040',
-              sortingCode: 'XYZ-789',
-              state: 'CA',
-            },
-            userRegistrationRequired: true,
-            visibleInSearch: true,
-            members: [],
-            admins: [],
-            membershipRequests: [],
-            blockedUsers: [],
-          },
-        ],
-      },
-    },
-  },
-];
 const link = new StaticMockLink(MOCKS, true);
 
 const resizeWindow = (width: number): void => {
@@ -122,6 +78,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   });
   it('Testing LeftDrawer in page functionality', async () => {
     setItem('IsLoggedIn', true);
+    setItem('name', 'John Doe');
     setItem('AdminFor', [
       { _id: '6637904485008f171cf29924', __typename: 'Organization' },
     ]);

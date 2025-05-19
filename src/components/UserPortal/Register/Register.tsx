@@ -1,3 +1,26 @@
+/**
+ * @file Register.tsx
+ * @description This component provides a user registration form with fields for first name, last name, email,
+ * password, and confirm password. It includes validation, error handling, and integration with a GraphQL mutation
+ * for user registration. The component also allows switching to the login mode.
+ *
+ * @module Register
+ *
+ * @param {InterfaceRegisterProps} props - Props containing a function to change the current mode.
+ *
+ * @returns {JSX.Element} A registration form with input fields, validation, and a submit button.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for UI components and `@mui/icons-material` for icons.
+ * - Integrates with `react-toastify` for notifications and `@apollo/client` for GraphQL mutation.
+ * - Includes i18n support using `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <Register setCurrentMode={setModeFunction} />
+ * ```
+ *
+ */
 import type { ChangeEvent, SetStateAction } from 'react';
 import React from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
@@ -76,7 +99,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         toast.success(t('afterRegister') as string); // Success message
 
         // Reset form fields
-        /* istanbul ignore next */
         setRegisterVariables({
           firstName: '',
           lastName: '',
@@ -86,7 +108,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         });
       } catch (error: unknown) {
         // Handle any errors during registration
-        /* istanbul ignore next */
         errorHandler(t, error);
       }
     }
@@ -96,7 +117,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
    * Updates the state with the first name input value.
    * @param e - Change event from the input element
    */
-  /* istanbul ignore next */
   const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
     const firstName = e.target.value;
     setRegisterVariables({ ...registerVariables, firstName });
@@ -106,7 +126,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
    * Updates the state with the last name input value.
    * @param e - Change event from the input element
    */
-  /* istanbul ignore next */
   const handleLastName = (e: ChangeEvent<HTMLInputElement>): void => {
     const lastName = e.target.value;
     setRegisterVariables({ ...registerVariables, lastName });
@@ -116,7 +135,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
    * Updates the state with the email input value.
    * @param e - Change event from the input element
    */
-  /* istanbul ignore next */
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
     setRegisterVariables({ ...registerVariables, email });
@@ -126,7 +144,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
    * Updates the state with the password input value.
    * @param e - Change event from the input element
    */
-  /* istanbul ignore next */
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
 
@@ -137,7 +154,6 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
    * Updates the state with the confirm password input value.
    * @param e - Change event from the input element
    */
-  /* istanbul ignore next */
   const handleConfirmPasswordChange = (
     e: ChangeEvent<HTMLInputElement>,
   ): void => {

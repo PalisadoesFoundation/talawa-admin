@@ -1,11 +1,16 @@
+import type { Mock } from 'vitest';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock modules
-vi.mock('inquirer', () => ({
-  default: {
-    prompt: vi.fn(),
-  },
-}));
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    default: {
+      ...actual,
+      prompt: vi.fn(),
+    },
+  };
+});
 
 vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
   default: vi.fn(),
@@ -27,10 +32,10 @@ describe('askAndSetDockerOption', () => {
   });
 
   it('should set up Docker when user selects yes', async () => {
-    (inquirer.prompt as unknown as jest.Mock).mockResolvedValueOnce({
+    (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       useDocker: true,
     });
-    (askForDocker as jest.Mock).mockResolvedValueOnce(8080);
+    (askForDocker as Mock).mockResolvedValueOnce(8080);
 
     await askAndSetDockerOption();
 
@@ -39,7 +44,7 @@ describe('askAndSetDockerOption', () => {
   });
 
   it('should set up without Docker when user selects no', async () => {
-    (inquirer.prompt as unknown as jest.Mock).mockResolvedValueOnce({
+    (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       useDocker: false,
     });
 
@@ -49,12 +54,10 @@ describe('askAndSetDockerOption', () => {
   });
 
   it('should handle errors when askForDocker fails', async () => {
-    (inquirer.prompt as unknown as jest.Mock).mockResolvedValueOnce({
+    (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       useDocker: true,
     });
-    (askForDocker as jest.Mock).mockRejectedValueOnce(
-      new Error('Docker error'),
-    );
+    (askForDocker as Mock).mockRejectedValueOnce(new Error('Docker error'));
 
     await expect(askAndSetDockerOption()).rejects.toThrow('Docker error');
   });

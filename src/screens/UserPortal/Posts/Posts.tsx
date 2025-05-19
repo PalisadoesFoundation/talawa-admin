@@ -1,3 +1,51 @@
+/**
+ * The `home` component serves as the main user interface for displaying posts,
+ * advertisements, and pinned posts within an organization. It also provides
+ * functionality for creating new posts and interacting with existing ones.
+ *
+ * @returns {JSX.Element} The rendered home component.
+ *
+ * @remarks
+ * - This component uses GraphQL queries to fetch posts, advertisements, and user details.
+ * - It includes a post creation modal and a carousel for pinned posts.
+ * - The component redirects to the user page if the organization ID is not available.
+ *
+ * @component
+ * @category Screens
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries.
+ * - `@mui/icons-material` for icons.
+ * - `react-bootstrap` for UI components.
+ * - `react-multi-carousel` for carousel functionality.
+ * - Custom components like `PostCard`, `PromotedPost`, and `StartPostModal`.
+ *
+ * @example
+ * ```tsx
+ * <home />
+ * ```
+ *
+ * @remarks
+ * The component uses the following GraphQL queries:
+ * - `ORGANIZATION_ADVERTISEMENT_LIST` to fetch advertisements.
+ * - `ORGANIZATION_POST_LIST` to fetch posts.
+ * - `USER_DETAILS` to fetch user details.
+ *
+ * @remarks
+ * The component maintains the following state variables:
+ * - `posts`: Stores the list of posts fetched from the server.
+ * - `pinnedPosts`: Stores the list of pinned posts.
+ * - `adContent`: Stores the list of advertisements.
+ * - `showModal`: Controls the visibility of the post creation modal.
+ * - `postImg`: Stores the base64-encoded image for a new post.
+ *
+ * @remarks
+ * The component includes the following key functionalities:
+ * - Fetching and displaying posts and advertisements.
+ * - Filtering and displaying pinned posts in a carousel.
+ * - Handling post creation through a modal.
+ * - Redirecting to the user page if the organization ID is missing.
+ */
 import { useQuery } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import SendIcon from '@mui/icons-material/Send';
@@ -18,30 +66,19 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from './Posts.module.css';
+import styles from 'style/app-fixed.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import Carousel from 'react-multi-carousel';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
-
+import { PostComments, PostLikes, PostNode } from 'types/Post/type';
 const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 600 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 600, min: 0 },
-    items: 1,
-  },
+  superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+  tablet: { breakpoint: { max: 1024, min: 600 }, items: 2 },
+  mobile: { breakpoint: { max: 600, min: 0 }, items: 1 },
 };
 
 type Ad = {
@@ -53,61 +90,6 @@ type Ad = {
   startDate: string; // Assuming it's a string in the format 'yyyy-MM-dd'
 };
 
-type InterfacePostComments = {
-  id: string;
-  creator: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-
-  likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
-  text: string;
-}[];
-
-type InterfacePostLikes = {
-  firstName: string;
-  lastName: string;
-  id: string;
-}[];
-
-type InterfacePostNode = {
-  commentCount: number;
-  createdAt: string;
-  creator: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    _id: string;
-  };
-  imageUrl: string | null;
-  likeCount: number;
-  likedBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  pinned: boolean;
-  text: string;
-  title: string;
-  videoUrl: string | null;
-  _id: string;
-
-  comments: InterfacePostComments;
-  likes: InterfacePostLikes;
-};
-
-/**
- * `home` component displays the main feed for a user, including posts, promoted content, and options to create a new post.
- *
- * It utilizes Apollo Client for fetching and managing data through GraphQL queries. The component fetches and displays posts from an organization, promoted advertisements, and handles user interactions for creating new posts. It also manages state for displaying modal dialogs and handling file uploads for new posts.
- *
- * @returns JSX.Element - The rendered `home` component.
- */
 export default function home(): JSX.Element {
   // Translation hook for localized text
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
@@ -133,30 +115,26 @@ export default function home(): JSX.Element {
   const {
     data: promotedPostsData,
   }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationAdvertisementListItem[];
-    };
+    data?: { organizations: InterfaceQueryOrganizationAdvertisementListItem[] };
     refetch: () => void;
   } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: orgId,
-      first: 6,
-    },
+    variables: { id: orgId, first: 6 },
   });
 
   const {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, {
-    variables: { id: orgId, first: 10 },
-  });
+  } = useQuery(ORGANIZATION_POST_LIST, { variables: { id: orgId, first: 10 } });
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
 
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+    variables: {
+      id: userId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE, // This is for tagsAssignedWith pagination
+    },
   });
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
@@ -182,7 +160,7 @@ export default function home(): JSX.Element {
 
   useEffect(() => {
     setPinnedPosts(
-      posts.filter(({ node }: { node: InterfacePostNode }) => {
+      posts.filter(({ node }: { node: PostNode }) => {
         return node.pinned;
       }),
     );
@@ -194,7 +172,7 @@ export default function home(): JSX.Element {
    * @param node - The post node to convert.
    * @returns The props for the `PostCard` component.
    */
-  const getCardProps = (node: InterfacePostNode): InterfacePostCard => {
+  const getCardProps = (node: PostNode): InterfacePostCard => {
     const {
       creator,
       _id,
@@ -208,13 +186,13 @@ export default function home(): JSX.Element {
       comments,
     } = node;
 
-    const allLikes: InterfacePostLikes = likedBy.map((value) => ({
+    const allLikes: PostLikes = likedBy.map((value) => ({
       firstName: value.firstName,
       lastName: value.lastName,
       id: value._id,
     }));
 
-    const postComments: InterfacePostComments = comments?.map((value) => ({
+    const postComments: PostComments = comments?.map((value) => ({
       id: value.id,
       creator: {
         firstName: value.creator?.firstName ?? '',
@@ -273,18 +251,18 @@ export default function home(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+      <div className={`d-flex flex-row ${styles.containerHeightUserPost}`}>
+        <div className={`${styles.colorLight} ${styles.mainContainer50}`}>
           <div className={`${styles.postContainer}`}>
             <div className={`${styles.heading}`}>{t('startPost')}</div>
             <div className={styles.postInputContainer}>
               <Row className="d-flex gap-1">
-                <Col className={styles.maxWidth}>
+                <Col className={styles.maxWidthUserPost}>
                   <Form.Control
                     type="file"
                     accept="image/*"
                     multiple={false}
-                    className={styles.inputArea}
+                    className={styles.inputField}
                     data-testid="postImageInput"
                     autoComplete="off"
                     onChange={async (
@@ -305,7 +283,7 @@ export default function home(): JSX.Element {
                 size="sm"
                 data-testid={'postBtn'}
                 onClick={handlePostButtonClick}
-                className="px-4 py-sm-2"
+                className={`px-4 py-sm-2 ${styles.addButton}`}
               >
                 {t('post')} <SendIcon />
               </Button>
@@ -321,7 +299,7 @@ export default function home(): JSX.Element {
             <h2>{t('feed')}</h2>
             {pinnedPosts.length > 0 && (
               <Carousel responsive={responsive}>
-                {pinnedPosts.map(({ node }: { node: InterfacePostNode }) => {
+                {pinnedPosts.map(({ node }: { node: PostNode }) => {
                   const cardProps = getCardProps(node);
                   return <PostCard key={node._id} {...cardProps} />;
                 })}
@@ -343,27 +321,28 @@ export default function home(): JSX.Element {
             </div>
           )}
           <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
-          <div className={` ${styles.postsCardsContainer}`}></div>
-          {loadingPosts ? (
-            <div className={`d-flex flex-row justify-content-center`}>
-              <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
-            </div>
-          ) : (
-            <>
-              {posts.length > 0 ? (
-                <Row className="my-2">
-                  {posts.map(({ node }: { node: InterfacePostNode }) => {
-                    const cardProps = getCardProps(node);
-                    return <PostCard key={node._id} {...cardProps} />;
-                  })}
-                </Row>
-              ) : (
-                <p className="container flex justify-content-center my-4">
-                  {t(`nothingToShowHere`)}
-                </p>
-              )}
-            </>
-          )}
+          <div className={` ${styles.postsCardsContainer}`}>
+            {loadingPosts ? (
+              <div className={`d-flex flex-row justify-content-center`}>
+                <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
+              </div>
+            ) : (
+              <>
+                {posts.length > 0 ? (
+                  <Row className="my-2">
+                    {posts.map(({ node }: { node: PostNode }) => {
+                      const cardProps = getCardProps(node);
+                      return <PostCard key={node._id} {...cardProps} />;
+                    })}
+                  </Row>
+                ) : (
+                  <p className="container flex justify-content-center my-4">
+                    {t(`nothingToShowHere`)}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
           <StartPostModal
             show={showModal}
             onHide={handleModalClose}

@@ -17,6 +17,7 @@
     "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
     "userLogin": "Inicio de sesión de usuario",
+    "adminLogin": "Inicio de sesión de administrador",
     "register": "Registro",
     "firstName": "Primer nombre",
     "lastName": "Apellido",
@@ -121,8 +122,6 @@
     "Contributions": "Contribuciones",
     "Posts": "Publicaciones",
     "Block/Unblock": "Bloquear/Desbloquear",
-    "Plugins": "Complementos",
-    "Plugin Store": "Tienda de complementos",
     "allOrganizations": "Todas las organizaciones",
     "yourOrganization": "Tu organización",
     "notification": "Notificación",
@@ -147,6 +146,8 @@
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",
     "description": "Descripción",
+    "addressLine1": "Dirección Línea 1",
+    "addressLine2": "Dirección Línea 2",
     "location": "Ubicación",
     "address": "Dirección",
     "city": "Ciudad",
@@ -157,7 +158,7 @@
     "dependentLocality": "Localidad Dependiente",
     "sortingCode": "Código de Ordenamiento",
     "state": "Estado / Provincia",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Es público",
     "visibleInSearch": "Visible en la búsqueda",
     "displayImage": "Mostrar imagen",
     "enterName": "Ingrese su nombre",
@@ -174,8 +175,6 @@
     "OR": "O",
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
-    "manageFeaturesInfo": "Información de gestión de funciones",
-    "goToStore": "Ir a la tienda",
     "enableEverything": "Habilitar todo"
   },
   "orgListCard": {
@@ -280,7 +279,8 @@
     "noMembershipRequests": "No Hay Solicitudes de Membresía",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "volunteerRankings": "Clasificación de Voluntarios",
-    "noVolunteers": "¡No Se Encontraron Voluntarios!"
+    "noVolunteers": "¡No Se Encontraron Voluntarios!",
+    "comingSoon": "¡Próximamente!"
   },
   "organizationPeople": {
     "title": "Miembros Talawa",
@@ -316,7 +316,8 @@
     "addMembers": "Agregar miembros",
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "createUser": "Crear usuario"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -813,7 +814,7 @@
     "title": "Configuración",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
-    "updateOrganization": "Actualizar organización",
+    "editOrganization": "Editar organización",
     "seeRequest": "Ver solicitud",
     "noData": "Sin datos",
     "otherSettings": "Otras configuraciones",
@@ -823,7 +824,7 @@
   },
   "deleteOrg": {
     "deleteOrganization": "Eliminar organización",
-    "deleteSampleOrganization": "Eliminar organización de muestra",
+    "delete": "eliminar",
     "deleteMsg": "¿Desea eliminar esta organización?",
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
@@ -876,44 +877,14 @@
     "sortingCode": "Código de Ordenamiento",
     "state": "Estado / Provincia",
     "displayImage": "Mostrar imagen",
-    "userRegistrationRequired": "Registro de usuario requerido",
+    "isPublic": "Es público",
     "isVisibleInSearch": "Visible en la búsqueda",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar",
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
-  "addOnRegister": {
-    "addNew": "Agregar nueva",
-    "addPlugin": "Agregar complemento",
-    "pluginName": "Nombre del complemento",
-    "creatorName": "Nombre del creadora",
-    "pluginDesc": "Descripción del complemento",
-    "close": "Cerca",
-    "register": "Registro",
-    "pName": "Ej: Donaciones",
-    "cName": "Ej: John Doe",
-    "pDesc": "Este complemento habilita la interfaz de usuario para"
-  },
-  "addOnStore": {
-    "title": "Tienda de complementos",
-    "searchName": "Ej: Donaciones",
-    "search": "Buscar",
-    "enable": "Activada",
-    "disable": "Desactivada",
-    "pHeading": "Complementos",
-    "install": "Instalada",
-    "available": "Disponible",
-    "pMessage": "El complemento no existe",
-    "filter": "filtros"
-  },
-  "addOnEntry": {
-    "enable": "Activada",
-    "install": "Instalar",
-    "uninstall": "Desinstalar",
-    "uninstallMsg": "Mensaje de desinstalación",
-    "installMsg": "Mensaje de instalación"
+    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
+    "enterOrganizationDescription": "Ingrese la descripción de la organización"
   },
   "memberDetail": {
     "title": "Detalles del usuario",
@@ -949,7 +920,6 @@
     "appLanguageCode": "Elegir Idioma",
     "delete": "Eliminar Usuario",
     "saveChanges": "Guardar Cambios",
-    "pluginCreationAllowed": "Permitir creación de complementos",
     "joined": "Unido",
     "created": "Creado",
     "adminForOrganizations": "Administrador de organizaciones",
@@ -1053,7 +1023,9 @@
     "comments": "Comentarios",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
-    "postedOn": "Publicado el {{date}}"
+    "postedOn": "Publicado el {{date}}",
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
   },
   "home": {
     "posts": "Publicaciones",
@@ -1177,7 +1149,16 @@
     "partTime": "Medio Tiempo",
     "enterState": "Ingresar ciudad o estado",
     "selectCountry": "Seleccionar un país",
-    "joined": "Unido"
+    "joined": "Unido",
+    "enterPhoneNo": "Ingrese número de teléfono",
+    "workPhoneNumber": "Número de teléfono del trabajo",
+    "homePhoneNumber": "Número de teléfono de casa",
+    "addressLine1": "Dirección Línea 1",
+    "addressLine2": "Dirección Línea 2",
+    "postalCode": "Código Postal",
+    "city": "Ciudad",
+    "description": "Descripción",
+    "enterDescription": "Ingrese descripción"
   },
   "donate": {
     "title": "Donaciones",
@@ -1235,7 +1216,7 @@
     "title": "Anuncios",
     "pHeading": "Gestionar anuncios",
     "activeAds": "Campañas activas",
-    "archievedAds": "Campañas completadas",
+    "archivedAds": "Campañas completadas",
     "pMessage": "No hay anuncios disponibles para esta campaña.",
     "delete": "Eliminar",
     "validLink": "El enlace es válido.",
@@ -1250,19 +1231,22 @@
     "edit": "Editar",
     "editAdvertisement": "Editar Anuncio",
     "advertisementDeleted": "Anuncio eliminado con éxito.",
-    "endDateGreaterOrEqual": "La fecha de finalización debe ser mayor o igual a la fecha de inicio",
+    "endDateGreater": "La fecha de inicio debe ser menor que la fecha de finalización",
     "advertisementCreated": "Anuncio creado con éxito.",
     "saveChanges": "Guardar Cambios",
     "endOfResults": "Fin de los resultados",
     "Rname": "Nombre",
+    "Rdesc": "Descripción",
     "Rtype": "Tipo",
     "RstartDate": "Fecha de inicio",
     "RendDate": "Fecha de finalización",
     "RClose": "Cerrar",
     "addNew": "Agregar nuevo",
     "EXname": "Nombre",
+    "EXdesc": "Descripción",
     "EXlink": "Enlace",
-    "createAdvertisement": "Crear publicidad"
+    "createAdvertisement": "Crear publicidad",
+    "noDescription": "No hay descripción"
   },
   "userChat": {
     "title": "Chats",
@@ -1282,21 +1266,6 @@
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
     "reply": "responder"
-  },
-  "orgProfileField": {
-    "loading": "Cargando..",
-    "noCustomField": "No hay campos personalizados disponibles",
-    "customFieldName": "Nombre del Campo",
-    "enterCustomFieldName": "Ingrese el Nombre del Campo",
-    "customFieldType": "Tipo de Campo",
-    "saveChanges": "Guardar Cambios",
-    "Remove Custom Field": "Eliminar Campo Personalizado",
-    "fieldSuccessMessage": "Campo añadido exitosamente",
-    "fieldRemovalSuccess": "Campo eliminado exitosamente",
-    "String": "Cadena",
-    "Boolean": "Booleano",
-    "Date": "Fecha",
-    "Number": "Número"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -1353,10 +1322,8 @@
     "existingUser": "Usuario existente",
     "newUser": "Usuario nuevo",
     "searchFullName": "Buscar por nombre completo",
-    "firstName": "Nombre",
-    "enterFirstName": "Ingrese el nombre",
-    "lastName": "Apellido",
-    "enterLastName": "Ingrese el apellido",
+    "name": "Nombre",
+    "enterName": "Ingrese un nombre",
     "emailAddress": "Dirección de correo electrónico",
     "enterEmail": "Ingrese el correo electrónico",
     "password": "Contraseña",

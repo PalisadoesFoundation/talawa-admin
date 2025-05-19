@@ -1,327 +1,162 @@
-import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import {
-  ORGANIZATIONS_LIST,
-  ORGANIZATION_EVENT_CONNECTION_LIST,
-  ORGANIZATION_POST_LIST,
+  GET_ORGANIZATION_MEMBERS_PG,
+  GET_ORGANIZATION_POSTS_COUNT_PG,
+  GET_ORGANIZATION_EVENTS_PG, // re-enabled!
+  GET_ORGANIZATION_POSTS_PG,
+  MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 
 export const MOCKS = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: GET_ORGANIZATION_MEMBERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              { node: { id: '1', role: 'administrator' }, cursor: 'cursor1' },
+              { node: { id: '2', role: 'member' }, cursor: 'cursor2' },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
+
+  // --- Organization Posts Count (duplicated) ---
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: 'orgId',
-            image: '',
-            name: 'Dummy Organization',
-            description: 'This is a Dummy Organization',
-            address: {
-              city: 'Delhi',
-              countryCode: 'IN',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Random Street',
-              line2: 'Apartment 456',
-              postalCode: '110001',
-              sortingCode: 'ABC-123',
-              state: 'Delhi',
-            },
-            userRegistrationRequired: true,
-            visibleInSearch: false,
-            creator: {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-            members: [
-              {
-                _id: '123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@gmail.com',
-              },
-            ],
-            admins: [
-              {
-                _id: '123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@gmail.com',
-                createdAt: '12-03-2024',
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: 'requestId1',
-                user: {
-                  firstName: 'Jane',
-                  lastName: 'Doe',
-                  email: 'janedoe@gmail.com',
-                },
-              },
-            ],
-            blockedUsers: [
-              {
-                _id: '789',
-                firstName: 'Steve',
-                lastName: 'Smith',
-                email: 'stevesmith@gmail.com',
-              },
-            ],
-          },
-        ],
+        organization: { id: 'orgId', postsCount: 10 },
       },
+      loading: false,
     },
   },
+
+  // --- Organization Events (duplicated) ---
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
-      variables: { id: 'orgId', first: 10 },
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
     },
     result: {
       data: {
-        organizations: [
-          {
-            posts: {
-              edges: [
-                {
-                  node: {
-                    _id: 'postId1',
-                    title: 'postone',
-                    text: 'This is the first post',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    comments: [],
-                    pinned: true,
-                    likedBy: [],
-                  },
-                  cursor: 'postId1',
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event1',
+                  name: 'Event One',
+                  description: 'Description for Event One',
+                  startAt: '2025-10-29T00:00:00.000Z',
+                  endAt: '2025-10-30T00:00:00.000Z',
+                  creator: { id: 'creator1', name: 'John Doe' },
                 },
-                {
-                  node: {
-                    _id: 'postId2',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: false,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: 'postId2',
-                },
-                {
-                  node: {
-                    _id: 'postId3',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: true,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: 'postId3',
-                },
-                {
-                  node: {
-                    _id: 'postId4',
-                    title: 'posttwo',
-                    text: 'Tis is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2023-08-24T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Aditya',
-                      lastName: 'Shelke',
-                      email: 'adidacreator1@gmail.com',
-                    },
-                    likeCount: 0,
-                    commentCount: 0,
-                    pinned: false,
-                    likedBy: [],
-                    comments: [],
-                  },
-                  cursor: 'postId4',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'postId1',
-                endCursor: 'postId4',
-                hasNextPage: false,
-                hasPreviousPage: false,
+                cursor: 'cursor1',
               },
-              totalCount: 4,
-            },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
-        ],
+        },
       },
+      loading: false,
+    },
+  },
+
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_PG,
+      variables: { id: 'orgId', first: 5 },
+    },
+    result: {
+      data: {
+        organization: {
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: 'post1',
+                  caption: 'First Post',
+                  createdAt: '2025-01-01T12:00:00.000Z',
+                  creator: { id: 'user1', name: 'John Doe' },
+                },
+                cursor: 'cursor1',
+              },
+            ],
+          },
+        },
+      },
+      loading: false,
     },
   },
   {
     request: {
-      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      query: MEMBERSHIP_REQUEST,
       variables: {
-        organization_id: 'orgId',
+        input: { id: 'orgId' },
+        skip: 0,
+        first: 8,
+        name_contains: '',
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [
-          {
-            _id: 'eventId1',
-            title: 'Event 1',
-            description: 'Sample Description',
-            startDate: '2025-10-29T00:00:00.000Z',
-            endDate: '2023-10-29T23:59:59.000Z',
-            location: 'Sample Location',
-            startTime: '08:00:00',
-            endTime: '17:00:00',
-            allDay: false,
-            recurring: false,
-            attendees: [
-              {
-                _id: 'userId1',
-                createdAt: '2023-01-01T00:00:00.000Z',
-                firstName: 'John',
-                lastName: 'Doe',
-                gender: 'Male',
-                eventsAttended: {
-                  _id: 'eventId1',
-                  endDate: '2023-10-29T23:59:59.000Z',
-                },
+        organization: {
+          id: 'orgId',
+          membershipRequests: [
+            {
+              membershipRequestId: 'request1',
+              createdAt: '2023-01-01T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user1',
+                name: 'Pending User 1',
+                emailAddress: 'user1@example.com',
               },
-            ],
-            recurrenceRule: null,
-            isRecurringEventException: false,
-            isPublic: true,
-            isRegisterable: true,
-          },
-          {
-            _id: 'eventId2',
-            title: 'Event 2',
-            description: 'Sample Description',
-            startDate: '2022-10-29T00:00:00.000Z',
-            endDate: '2023-10-29T23:59:59.000Z',
-            location: 'Sample Location',
-            startTime: '08:00:00',
-            endTime: '17:00:00',
-            allDay: false,
-            attendees: [
-              {
-                _id: 'userId1',
-                createdAt: '2023-01-01T00:00:00.000Z',
-                firstName: 'John',
-                lastName: 'Doe',
-                gender: 'Male',
-                eventsAttended: {
-                  _id: 'eventId1',
-                  endDate: '2023-10-29T23:59:59.000Z',
-                },
+            },
+            {
+              membershipRequestId: 'request2',
+              createdAt: '2023-01-02T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user2',
+                name: 'Pending User 2',
+                emailAddress: 'user2@example.com',
               },
-            ],
-            recurring: false,
-            recurrenceRule: null,
-            isRecurringEventException: false,
-            isPublic: true,
-            isRegisterable: true,
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: VOLUNTEER_RANKING,
-      variables: {
-        orgId: 'orgId',
-        where: {
-          orderBy: 'hours_DESC',
-          timeFrame: 'allTime',
-          limit: 3,
+            },
+          ],
         },
       },
     },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_MEMBERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
     result: {
       data: {
-        getVolunteerRanks: [
-          {
-            rank: 1,
-            hoursVolunteered: 5,
-            user: {
-              _id: 'userId1',
-              lastName: 'Bradley',
-              firstName: 'Teresa',
-              image: null,
-              email: 'testuser4@example.com',
-            },
+        organization: {
+          members: {
+            edges: [
+              { node: { id: '1', role: 'administrator' }, cursor: 'cursor1' },
+              { node: { id: '2', role: 'member' }, cursor: 'cursor2' },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
-          {
-            rank: 2,
-            hoursVolunteered: 4,
-            user: {
-              _id: 'userId2',
-              lastName: 'Garza',
-              firstName: 'Bruce',
-              image: null,
-              email: 'testuser5@example.com',
-            },
-          },
-          {
-            rank: 3,
-            hoursVolunteered: 3,
-            user: {
-              _id: 'userId3',
-              lastName: 'John',
-              firstName: 'Doe',
-              image: null,
-              email: 'testuser6@example.com',
-            },
-          },
-          {
-            rank: 4,
-            hoursVolunteered: 2,
-            user: {
-              _id: 'userId4',
-              lastName: 'Jane',
-              firstName: 'Doe',
-              image: null,
-              email: 'testuser7@example.com',
-            },
-          },
-        ],
+        },
       },
+      loading: false,
     },
   },
 ];
@@ -329,158 +164,186 @@ export const MOCKS = [
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: GET_ORGANIZATION_MEMBERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: 123,
-            image: '',
-            name: 'Dummy Organization',
-            description: 'This is a Dummy Organization',
-            address: {
-              city: 'Delhi',
-              countryCode: 'IN',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Random Street',
-              line2: 'Apartment 456',
-              postalCode: '110001',
-              sortingCode: 'ABC-123',
-              state: 'Delhi',
-            },
-            userRegistrationRequired: true,
-            visibleInSearch: false,
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'johndoe@gmail.com',
-            },
-            members: [
-              {
-                _id: '123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@gmail.com',
-              },
-            ],
-            admins: [
-              {
-                _id: '123',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@gmail.com',
-                createdAt: '12-03-2024',
-              },
-            ],
-            membershipRequests: [],
-            blockedUsers: [
-              {
-                _id: '789',
-                firstName: 'Steve',
-                lastName: 'Smith',
-                email: 'stevesmith@gmail.com',
-              },
-            ],
-          },
-        ],
+        organization: { id: 'orgId', postsCount: 0 },
       },
     },
   },
+
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
-      variables: { id: 'orgId', first: 10 },
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
     },
     result: {
       data: {
-        organizations: [
-          {
-            posts: {
-              edges: [],
-              pageInfo: {
-                startCursor: '',
-                endCursor: '',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 0,
-            },
+        organization: {
+          events: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_EVENT_CONNECTION_LIST,
-      variables: {
-        organization_id: 'orgId',
-      },
-    },
-    result: {
-      data: {
-        eventsByOrganizationConnection: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: VOLUNTEER_RANKING,
-      variables: {
-        orgId: '123',
-        where: {
-          orderBy: 'hours_DESC',
-          timeFrame: 'allTime',
-          limit: 3,
         },
       },
     },
+  },
+
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        input: { id: 'orgId' },
+        skip: 0,
+        first: 8,
+        name_contains: '',
+      },
+    },
     result: {
       data: {
-        getVolunteerRanks: [],
+        organization: {
+          id: 'orgId',
+          membershipRequests: [],
+        },
+      },
+    },
+  },
+
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_PG,
+      variables: { id: 'orgId', first: 5 },
+    },
+    result: {
+      data: {
+        organization: { posts: { edges: [] } },
       },
     },
   },
 ];
 
-export const ERROR_MOCKS = [
+export const MIXED_REQUESTS_MOCK = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: 'orgId' },
-    },
-    error: new Error('Mock Graphql ORGANIZATIONS_LIST Error'),
-  },
-  {
-    request: {
-      query: ORGANIZATION_POST_LIST,
-      variables: { id: 'orgId', first: 10 },
-    },
-    error: new Error('Mock Graphql ORGANIZATION_POST_LIST Error'),
-  },
-  {
-    request: {
-      query: ORGANIZATION_EVENT_CONNECTION_LIST,
+      query: MEMBERSHIP_REQUEST,
       variables: {
-        organization_id: 'orgId',
+        input: { id: 'orgId' },
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
       },
     },
-    error: new Error('Mock Graphql ORGANIZATION_EVENT_LIST Error'),
-  },
-  {
-    request: {
-      query: VOLUNTEER_RANKING,
-      variables: {
-        orgId: '123',
-        where: {
-          orderBy: 'hours_DESC',
-          timeFrame: 'allTime',
-          limit: 3,
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          membershipRequests: [
+            {
+              membershipRequestId: 'request1',
+              createdAt: '2023-01-01T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user1',
+                name: 'Pending User 1',
+                emailAddress: 'user1@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request2',
+              createdAt: '2023-01-02T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user2',
+                name: 'Pending User 2',
+                emailAddress: 'user2@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request3',
+              createdAt: '2023-01-03T00:00:00Z',
+              status: 'pending',
+              user: {
+                id: 'user3',
+                name: 'Pending User 3',
+                emailAddress: 'user3@example.com',
+              },
+            },
+            {
+              membershipRequestId: 'request4',
+              createdAt: '2023-01-04T00:00:00Z',
+              status: 'rejected',
+              user: {
+                id: 'user4',
+                name: 'Rejected User',
+                emailAddress: 'rejected@example.com',
+              },
+            },
+          ],
         },
       },
     },
-    error: new Error('Mock Graphql VOLUNTEER_RANKING Error'),
+  },
+  ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST),
+];
+
+export const ERROR_MOCKS = [
+  {
+    request: {
+      query: GET_ORGANIZATION_MEMBERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_MEMBERS_PG Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_COUNT_PG,
+      variables: { id: 'orgId' },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_POSTS_COUNT_PG Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_EVENTS_PG Error'),
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        input: { id: 'orgId' },
+        skip: 0,
+        first: 8,
+        name_contains: '',
+      },
+    },
+    error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
+  },
+
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_PG,
+      variables: { id: 'orgId', first: 5 },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_POSTS_PG Error'),
   },
 ];

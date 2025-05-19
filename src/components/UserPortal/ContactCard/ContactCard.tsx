@@ -1,38 +1,45 @@
+/**
+ * Represents a contact card component used in the user portal.
+ * This component displays a contact's avatar, name, last message,
+ * and the count of unseen messages. It also highlights the selected contact.
+ *
+ * @component
+ * @param {InterfaceContactCardProps} props - The properties for the contact card.
+ * @param {string} props.id - The unique identifier for the contact.
+ * @param {string} props.title - The name or title of the contact.
+ * @param {string} [props.image] - The URL of the contact's avatar image.
+ * @param {string} [props.lastMessage] - The last message sent or received from the contact.
+ * @param {number} [props.unseenMessages] - The count of unseen messages for the contact.
+ * @param {string} props.selectedContact - The ID of the currently selected contact.
+ * @param {(id: string) => void} props.setSelectedContact - Callback to update the selected contact.
+ *
+ * @returns {JSX.Element} A styled contact card component.
+ *
+ * @remarks
+ * - The component uses `React.useState` to manage the selection state of the contact.
+ * - The `React.useEffect` hook ensures the selection state updates when the selected contact changes.
+ * - The component conditionally renders an avatar image or a fallback avatar component.
+ * - The `Badge` component is used to display the count of unseen messages.
+ *
+ * @example
+ * ```tsx
+ * <ContactCard
+ *   id="123"
+ *   title="John Doe"
+ *   image="https://example.com/avatar.jpg"
+ *   lastMessage="Hello!"
+ *   unseenMessages={3}
+ *   selectedContact="123"
+ *   setSelectedContact={(id) => console.log(id)}
+ * />
+ * ```
+ */
 import React from 'react';
 import styles from './ContactCard.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { Badge } from 'react-bootstrap';
+import type { InterfaceContactCardProps } from 'types/Chat/interface';
 
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
-
-/**
- * Displays a card for a contact in a contact list.
- *
- * Shows the contact's name, email, and an image or avatar.
- * The card changes background color based on whether it is selected.
- * Clicking on the card sets it as the selected contact and updates the contact name.
- *
- * @param  props - The properties passed to the component.
- * @param  id - The unique identifier of the contact.
- * @param  firstName - The first name of the contact.
- * @param  lastName - The last name of the contact.
- * @param  email - The email address of the contact.
- * @param  image - The URL of the contact's image.
- * @param  selectedContact - The ID of the currently selected contact.
- * @param  setSelectedContact - Function to set the ID of the selected contact.
- * @param  setSelectedContactName - Function to set the name of the selected contact.
- *
- * @returns  The rendered contact card component.
- */
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);

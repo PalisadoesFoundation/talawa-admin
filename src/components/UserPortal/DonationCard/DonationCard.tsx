@@ -1,21 +1,36 @@
+/**
+ * @file DonationCard.tsx
+ * @description A React functional component that displays a donation card with donor details,
+ *              donation amount, and the date of the donation. Includes a button for further actions.
+ * @module components/UserPortal/DonationCard
+ *
+ * @function donationCard
+ * @description Renders a donation card with donor information, donation amount, and formatted date.
+ * @param {InterfaceDonationCardProps} props - The properties required to render the donation card.
+ * @param {string} props.name - The name of the donor.
+ * @param {number} props.amount - The amount donated.
+ * @param {string} props.updatedAt - The date when the donation was last updated, in ISO string format.
+ * @returns {JSX.Element} A JSX element representing the donation card.
+ *
+ * @example
+ * ```tsx
+ * <donationCard
+ *   name="John Doe"
+ *   amount={100}
+ *   updatedAt="2023-03-15T12:00:00Z"
+ * />
+ * ```
+ *
+ * @remarks
+ * - The `updatedAt` property is parsed into a `Date` object and formatted into a readable string.
+ * - The component uses CSS modules for styling and Bootstrap for the button.
+ * - Ensure that the `InterfaceDonationCardProps` type is correctly defined in the `types/Donation/interface` module.
+ */
 import React from 'react';
-import styles from './DonationCard.module.css';
-import { type InterfaceDonationCardProps } from 'screens/UserPortal/Donate/Donate';
+import styles from '../../../style/app-fixed.module.css';
+import { type InterfaceDonationCardProps } from 'types/Donation/interface';
 import { Button } from 'react-bootstrap';
 
-/**
- * Displays a card with details about a donation.
- *
- * Shows the donor's name, the amount donated, and the date of the donation.
- * Includes a button to view more details about the donation.
- *
- * @param  props - The properties passed to the component.
- * @param  name - The name of the donor.
- * @param amount - The amount donated.
- * @param  updatedAt - The date of the donation, in ISO format.
- *
- * @returns The rendered donation card component.
- */
 function donationCard(props: InterfaceDonationCardProps): JSX.Element {
   // Create a date object from the donation date string
   const date = new Date(props.updatedAt);
@@ -29,7 +44,7 @@ function donationCard(props: InterfaceDonationCardProps): JSX.Element {
   }).format(date);
 
   return (
-    <div className={`${styles.mainContainer}`}>
+    <div className={`${styles.mainContainerDonateCard}`}>
       <div className={styles.img}></div>
       <div className={styles.personDetails}>
         <span>
@@ -38,8 +53,8 @@ function donationCard(props: InterfaceDonationCardProps): JSX.Element {
         <span>Amount: {props.amount}</span>
         <span>Date: {formattedDate}</span>
       </div>
-      <div className={styles.btn}>
-        <Button size="sm" variant="success">
+      <div className={styles.btnDonate}>
+        <Button size="sm" className={styles.addButton}>
           View
         </Button>
       </div>

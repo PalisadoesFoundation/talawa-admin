@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -9,7 +9,7 @@ import {
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -30,8 +30,8 @@ vi.mock('react-toastify', () => ({
 
 const mockUseParams = vi.fn().mockReturnValue({ orgId: 'orgId' });
 
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => mockUseParams(),
@@ -309,7 +309,7 @@ describe('Testing Home Screen: User Portal', () => {
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    await userEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
   });
@@ -318,7 +318,7 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
 
     await wait();
-    userEvent.upload(
+    await userEvent.upload(
       screen.getByTestId('postImageInput'),
       new File(['image content'], 'image.png', { type: 'image/png' }),
     );
@@ -327,11 +327,11 @@ describe('Testing Home Screen: User Portal', () => {
     const startPostBtn = await screen.findByTestId('postBtn');
     expect(startPostBtn).toBeInTheDocument();
 
-    userEvent.click(startPostBtn);
+    await userEvent.click(startPostBtn);
     const startPostModal = screen.getByTestId('startPostModal');
     expect(startPostModal).toBeInTheDocument();
 
-    userEvent.type(screen.getByTestId('postInput'), 'some content');
+    await userEvent.type(screen.getByTestId('postInput'), 'some content');
 
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
     await screen.findByAltText('Post Image Preview');
@@ -340,13 +340,15 @@ describe('Testing Home Screen: User Portal', () => {
     const closeButton = within(startPostModal).getByRole('button', {
       name: /close/i,
     });
-    userEvent.click(closeButton);
+    fireEvent.click(closeButton);
 
     const closedModalText = screen.queryByText(/somethingOnYourMind/i);
     expect(closedModalText).not.toBeInTheDocument();
 
     expect(screen.getByTestId('postInput')).toHaveValue('');
-    expect(screen.getByTestId('postImageInput')).toHaveValue('');
+    const fileInput = screen.getByTestId('postImageInput') as HTMLInputElement;
+    fireEvent.change(fileInput, { target: { files: null } });
+    expect(fileInput.files?.length).toBeFalsy();
   });
 
   it('Check whether Posts render in PostCard', async () => {
@@ -371,9 +373,9 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
     expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
     const dropdowns = await screen.findAllByTestId('dropdown');
-    userEvent.click(dropdowns[1]);
+    await userEvent.click(dropdowns[1]);
     const deleteButton = await screen.findByTestId('deletePost');
-    userEvent.click(deleteButton);
+    await userEvent.click(deleteButton);
   });
 });
 

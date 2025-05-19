@@ -17,7 +17,7 @@ export function validatePort(input: string): string | boolean {
 }
 
 export async function reservedPortWarning(port: number): Promise<boolean> {
-  const { confirmPort } = await inquirer.prompt<{ confirmPort: boolean }>([
+  const answer = await inquirer.prompt([
     {
       type: 'confirm',
       name: 'confirmPort',
@@ -26,14 +26,14 @@ export async function reservedPortWarning(port: number): Promise<boolean> {
     },
   ]);
 
-  return confirmPort;
+  return answer.confirmPort;
 }
 
 export async function askForCustomPort(): Promise<number> {
   let remainingAttempts = MAX_RETRY_ATTEMPTS;
 
   while (remainingAttempts--) {
-    const { customPort } = await inquirer.prompt<{ customPort: string }>([
+    const answer = await inquirer.prompt([
       {
         type: 'input',
         name: 'customPort',
@@ -42,6 +42,8 @@ export async function askForCustomPort(): Promise<number> {
         validate: validatePort,
       },
     ]);
+
+    const customPort = answer.customPort;
 
     if (customPort && validatePort(customPort) === true) {
       if (Number(customPort) >= 1024) {

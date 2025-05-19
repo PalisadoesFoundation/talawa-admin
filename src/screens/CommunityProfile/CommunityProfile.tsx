@@ -1,3 +1,39 @@
+/**
+ * CommunityProfile Component
+ *
+ * This component renders a form to manage and update the community profile.
+ * It includes fields for community name, website URL, logo, and various social media links.
+ * The component fetches existing community data using GraphQL queries and allows
+ * users to update or reset the profile information.
+ *
+ * Features:
+ * - Fetches community data using the `GET_COMMUNITY_DATA_PG` query.
+ * - Updates community data using the `UPDATE_COMMUNITY_PG` mutation.
+ * - Resets community data using the `RESET_COMMUNITY` mutation.
+ * - Displays a loader while data is being fetched.
+ * - Provides form validation and disables buttons when inputs are empty.
+ *
+ * Dependencies:
+ * - React, React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
+ * - Custom components: `Loader` and `UpdateSession`.
+ * - Utility functions: `convertToBase64` and `errorHandler`.
+ *
+ * @returns {JSX.Element} The rendered CommunityProfile component.
+ *
+ * @component
+ * @example
+ * // Usage in a parent component
+ * import CommunityProfile from './CommunityProfile';
+ *
+ * function App() {
+ *   return <CommunityProfile />;
+ * }
+ *
+ * @remarks
+ * - The component uses `useEffect` to populate the form with fetched data.
+ * - Social media links are displayed with corresponding icons.
+ * - Form submission and reset operations are handled asynchronously.
+ */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
@@ -5,8 +41,11 @@ import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 
 import Loader from 'components/Loader/Loader';
-import { GET_COMMUNITY_DATA } from 'GraphQl/Queries/Queries';
-import { UPDATE_COMMUNITY, RESET_COMMUNITY } from 'GraphQl/Mutations/mutations';
+import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
+import {
+  UPDATE_COMMUNITY_PG,
+  RESET_COMMUNITY,
+} from 'GraphQl/Mutations/mutations';
 import {
   FacebookLogo,
   InstagramLogo,
@@ -18,25 +57,10 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
-/**
- * `CommunityProfile` component allows users to view and update their community profile details.
- *
- * It includes functionalities to:
- * - Display current community profile information
- * - Update profile details including social media links and logo
- * - Reset profile changes to the initial state
- *
- * @returns JSX.Element - The `CommunityProfile` component.
- *
- * @example
- * ```tsx
- * <CommunityProfile />
- * ```
- */
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', {
@@ -48,61 +72,61 @@ const CommunityProfile = (): JSX.Element => {
 
   // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
-    _id: string;
+    id: string;
     name: string | undefined;
-    websiteLink: string | undefined;
-    logoUrl: string | undefined;
-    socialMediaUrls: {
-      facebook: string | undefined;
-      instagram: string | undefined;
-      X: string | undefined;
-      linkedIn: string | undefined;
-      gitHub: string | undefined;
-      youTube: string | undefined;
-      reddit: string | undefined;
-      slack: string | undefined;
-    };
+    websiteURL: string | undefined;
+    logo: string | undefined;
+    inactivityTimeoutDuration: number;
+    facebookURL: string | undefined;
+    instagramURL: string | undefined;
+    xURL: string | undefined;
+    linkedInURL: string | undefined;
+    githubURL: string | undefined;
+    youtubeURL: string | undefined;
+    redditURL: string | undefined;
+    slackURL: string | undefined;
   };
 
   // State hook for managing profile variables
   const [profileVariable, setProfileVariable] = React.useState({
     name: '',
-    websiteLink: '',
-    logoUrl: '',
-    facebook: '',
-    instagram: '',
-    X: '',
-    linkedIn: '',
-    github: '',
-    youtube: '',
-    reddit: '',
-    slack: '',
+    websiteURL: '',
+    logo: '',
+    facebookURL: '',
+    instagramURL: '',
+    inactivityTimeoutDuration: 0,
+    xURL: '',
+    linkedInURL: '',
+    githubURL: '',
+    youtubeURL: '',
+    redditURL: '',
+    slackURL: '',
   });
 
   // Query to fetch community data
-  const { data, loading } = useQuery(GET_COMMUNITY_DATA);
+  const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
 
   // Mutations for updating and resetting community data
-  const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY);
+  const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY_PG);
   const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);
 
   // Effect to set profile data from fetched data
   React.useEffect(() => {
-    const preLoginData: PreLoginImageryDataType | undefined =
-      data?.getCommunityData;
+    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
     if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
-        websiteLink: preLoginData.websiteLink ?? '',
-        logoUrl: preLoginData.logoUrl ?? '',
-        facebook: preLoginData.socialMediaUrls.facebook ?? '',
-        instagram: preLoginData.socialMediaUrls.instagram ?? '',
-        X: preLoginData.socialMediaUrls.X ?? '',
-        linkedIn: preLoginData.socialMediaUrls.linkedIn ?? '',
-        github: preLoginData.socialMediaUrls.gitHub ?? '',
-        youtube: preLoginData.socialMediaUrls.youTube ?? '',
-        reddit: preLoginData.socialMediaUrls.reddit ?? '',
-        slack: preLoginData.socialMediaUrls.slack ?? '',
+        websiteURL: preLoginData.websiteURL ?? '',
+        logo: preLoginData.logo ?? '',
+        facebookURL: preLoginData.facebookURL ?? '',
+        inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
+        instagramURL: preLoginData.instagramURL ?? '',
+        xURL: preLoginData.xURL ?? '',
+        linkedInURL: preLoginData.linkedInURL ?? '',
+        githubURL: preLoginData.githubURL ?? '',
+        youtubeURL: preLoginData.youtubeURL ?? '',
+        redditURL: preLoginData.redditURL ?? '',
+        slackURL: preLoginData.slackURL ?? '',
       });
     }
   }, [data]);
@@ -113,10 +137,7 @@ const CommunityProfile = (): JSX.Element => {
    * @param e - Change event for input elements
    */
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setProfileVariable({
-      ...profileVariable,
-      [e.target.name]: e.target.value,
-    });
+    setProfileVariable({ ...profileVariable, [e.target.name]: e.target.value });
   };
 
   /**
@@ -131,26 +152,21 @@ const CommunityProfile = (): JSX.Element => {
     try {
       await uploadPreLoginImagery({
         variables: {
-          data: {
-            name: profileVariable.name,
-            websiteLink: profileVariable.websiteLink,
-            logo: profileVariable.logoUrl,
-            socialMediaUrls: {
-              facebook: profileVariable.facebook,
-              instagram: profileVariable.instagram,
-              X: profileVariable.X,
-              linkedIn: profileVariable.linkedIn,
-              gitHub: profileVariable.github,
-              youTube: profileVariable.youtube,
-              reddit: profileVariable.reddit,
-              slack: profileVariable.slack,
-            },
-          },
+          name: profileVariable.name,
+          websiteURL: profileVariable.websiteURL,
+          inactivityTimeoutDuration: data?.community?.inactivityTimeoutDuration,
+          facebookURL: profileVariable.facebookURL || undefined,
+          instagramURL: profileVariable.instagramURL || undefined,
+          xURL: profileVariable.xURL || undefined,
+          linkedinURL: profileVariable.linkedInURL || undefined,
+          githubURL: profileVariable.githubURL || undefined,
+          youtubeURL: profileVariable.youtubeURL || undefined,
+          redditURL: profileVariable.redditURL || undefined,
+          slackURL: profileVariable.slackURL || undefined,
         },
       });
       toast.success(t('profileChangedMsg') as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error as Error);
     }
   };
@@ -159,31 +175,28 @@ const CommunityProfile = (): JSX.Element => {
    * Resets profile data to initial values and performs a reset operation.
    */
   const resetData = async (): Promise<void> => {
-    const preLoginData: PreLoginImageryDataType | undefined =
-      data?.getCommunityData;
+    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
     try {
       setProfileVariable({
         name: '',
-        websiteLink: '',
-        logoUrl: '',
-        facebook: '',
-        instagram: '',
-        X: '',
-        linkedIn: '',
-        github: '',
-        youtube: '',
-        reddit: '',
-        slack: '',
+        websiteURL: '',
+        logo: '',
+        facebookURL: '',
+        instagramURL: '',
+        inactivityTimeoutDuration: 0,
+        xURL: '',
+        linkedInURL: '',
+        githubURL: '',
+        youtubeURL: '',
+        redditURL: '',
+        slackURL: '',
       });
 
       await resetPreLoginImagery({
-        variables: {
-          resetPreLoginImageryId: preLoginData?._id,
-        },
+        variables: { resetPreLoginImageryId: preLoginData?.id },
       });
       toast.success(t(`resetData`) as string);
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error as Error);
     }
   };
@@ -196,8 +209,8 @@ const CommunityProfile = (): JSX.Element => {
   const isDisabled = (): boolean => {
     if (
       profileVariable.name == '' &&
-      profileVariable.websiteLink == '' &&
-      profileVariable.logoUrl == ''
+      profileVariable.websiteURL == '' &&
+      profileVariable.logo == ''
     ) {
       return true;
     } else {
@@ -228,7 +241,7 @@ const CommunityProfile = (): JSX.Element => {
                 name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 placeholder={t('communityName')}
                 autoComplete="off"
                 required
@@ -240,11 +253,11 @@ const CommunityProfile = (): JSX.Element => {
               </Form.Label>
               <Form.Control
                 type="url"
-                id="websiteLink"
-                name="websiteLink"
-                value={profileVariable.websiteLink}
+                id="websiteURL"
+                name="websiteURL"
+                value={profileVariable.websiteURL}
                 onChange={handleOnChange}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 placeholder={t('wesiteLink')}
                 autoComplete="off"
                 required
@@ -271,10 +284,10 @@ const CommunityProfile = (): JSX.Element => {
                   const base64file = file && (await convertToBase64(file));
                   setProfileVariable({
                     ...profileVariable,
-                    logoUrl: base64file ?? '',
+                    logo: base64file ?? '',
                   });
                 }}
-                className="mb-3"
+                className={`mb-3 ${styles.inputField}`}
                 autoComplete="off"
                 required
               />
@@ -289,10 +302,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="facebook"
-                  name="facebook"
+                  name="facebookURL"
                   data-testid="facebook"
-                  className={styles.socialInput}
-                  value={profileVariable.facebook}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.facebookURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -303,10 +316,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="instagram"
-                  name="instagram"
+                  name="instagramURL"
                   data-testid="instagram"
-                  className={styles.socialInput}
-                  value={profileVariable.instagram}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.instagramURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -317,10 +330,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="X"
-                  name="X"
+                  name="xURL"
                   data-testid="X"
-                  className={styles.socialInput}
-                  value={profileVariable.X}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.xURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -331,10 +344,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="linkedIn"
-                  name="linkedIn"
+                  name="linkedInURL"
                   data-testid="linkedIn"
-                  className={styles.socialInput}
-                  value={profileVariable.linkedIn}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.linkedInURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -345,10 +358,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="github"
-                  name="github"
+                  name="githubURL"
                   data-testid="github"
-                  className={styles.socialInput}
-                  value={profileVariable.github}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.githubURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -359,10 +372,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="youtube"
-                  name="youtube"
+                  name="youtubeURL"
                   data-testid="youtube"
-                  className={styles.socialInput}
-                  value={profileVariable.youtube}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.youtubeURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -373,10 +386,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="reddit"
-                  name="reddit"
+                  name="redditURL"
                   data-testid="reddit"
-                  className={styles.socialInput}
-                  value={profileVariable.reddit}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.redditURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -387,10 +400,10 @@ const CommunityProfile = (): JSX.Element => {
                 <Form.Control
                   type="url"
                   id="slack"
-                  name="slack"
+                  name="slackURL"
                   data-testid="slack"
-                  className={styles.socialInput}
-                  value={profileVariable.slack}
+                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  value={profileVariable.slackURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
@@ -401,7 +414,7 @@ const CommunityProfile = (): JSX.Element => {
               className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >
               <Button
-                variant="outline-success"
+                className={styles.outlineBtn}
                 onClick={resetData}
                 data-testid="resetChangesBtn"
                 disabled={isDisabled()}
@@ -412,6 +425,7 @@ const CommunityProfile = (): JSX.Element => {
                 type="submit"
                 data-testid="saveChangesBtn"
                 disabled={isDisabled()}
+                className={styles.addButton}
               >
                 {tCommon('saveChanges')}
               </Button>

@@ -1,60 +1,111 @@
+/**
+ * AdvertisementEntry component displays an advertisement entry card with options to view, edit, or delete the advertisement.
+ * It supports media content (images or videos) and provides functionality for managing advertisements.
+ *
+ * @component
+ * @param {InterfaceAddOnEntryProps} props - The properties for the AdvertisementEntry component.
+ * @param {string} props.id - The unique identifier for the advertisement.
+ * @param {string} [props.name=''] - The name of the advertisement.
+ * @param {string} [props.type=''] - The type/category of the advertisement.
+ * @param {string} [props.mediaUrl=''] - The URL of the advertisement's media (image or video).
+ * @param {Date} [props.endDate=new Date()] - The end date of the advertisement.
+ * @param {string} [props.organizationId=''] - The ID of the organization associated with the advertisement.
+ * @param {Date} [props.startDate=new Date()] - The start date of the advertisement.
+ * @param {(after: string | null) => void} [props.setAfter] - Callback to update the pagination cursor after an action.
+ *
+ * @returns {JSX.Element} A JSX element representing the advertisement entry card.
+ *
+ * @remarks
+ * - Includes a dropdown menu for editing or deleting the advertisement.
+ * - Displays a confirmation modal before deleting an advertisement.
+ * - Uses Apollo Client's `useMutation` hook for deleting advertisements and refetching the advertisement list.
+ * - Supports translations using the `react-i18next` library.
+ *
+ * @example
+ * ```tsx
+ * <AdvertisementEntry
+ *   id="123"
+ *   name="Sample Ad"
+ *   type="Banner"
+ *   mediaUrl="https://example.com/image.jpg"
+ *   endDate={new Date('2023-12-31')}
+ *   organizationId="org123"
+ *   startDate={new Date('2023-01-01')}
+ *   setAfter={(after) => console.log(after)}
+ * />
+ * ```
+ */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from './AdvertisementEntry.module.css';
-import { Button, Card, Col, Row, Spinner, Modal } from 'react-bootstrap';
-import { DELETE_ADVERTISEMENT_BY_ID } from 'GraphQl/Mutations/mutations';
+import styles from 'style/app-fixed.module.css';
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Spinner,
+  Modal,
+  Carousel,
+} from 'react-bootstrap';
+import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { toast } from 'react-toastify';
+import { Advertisement } from 'types/Advertisement/type';
+import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 
-interface InterfaceAddOnEntryProps {
-  id: string;
-  name?: string;
-  mediaUrl?: string;
-  type?: string;
-  organizationId?: string;
-  startDate?: Date;
-  endDate?: Date;
-  setAfter: React.Dispatch<React.SetStateAction<string | null | undefined>>;
-}
-
-/**
- * Component for displaying an advertisement entry.
- * Allows viewing, editing, and deleting of the advertisement.
- *
- * @param  props - Component properties
- * @returns  The rendered component
- */
 function AdvertisementEntry({
-  id,
-  name = '',
-  type = '',
-  mediaUrl = '',
-  endDate = new Date(),
-  organizationId = '',
-  startDate = new Date(),
-  setAfter,
-}: InterfaceAddOnEntryProps): JSX.Element {
-  console.log(id, type);
+  advertisement,
+  setAfterActive,
+  setAfterCompleted,
+}: {
+  advertisement: Advertisement;
+  setAfterActive: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >;
+  setAfterCompleted: React.Dispatch<
+    React.SetStateAction<string | null | undefined>
+  >;
+}): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
 
   // State for loading button
   const [buttonLoading, setButtonLoading] = useState(false);
+
   // State for dropdown menu visibility
   const [dropdown, setDropdown] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
   // State for delete confirmation modal visibility
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Mutation hook for deleting an advertisement
-  const [deleteAdById] = useMutation(DELETE_ADVERTISEMENT_BY_ID, {
+  const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
         query: ORGANIZATION_ADVERTISEMENT_LIST,
-        variables: { first: 6, after: null, id: organizationId },
+        variables: {
+          id: advertisement.organization.id,
+          after: null,
+          first: 6,
+          where: {
+            isCompleted: true,
+          },
+        },
+      },
+      {
+        query: ORGANIZATION_ADVERTISEMENT_LIST,
+        variables: {
+          id: advertisement.organization.id,
+          after: null,
+          first: 6,
+          where: {
+            isCompleted: false,
+          },
+        },
       },
     ],
   });
@@ -71,14 +122,17 @@ function AdvertisementEntry({
   const onDelete = async (): Promise<void> => {
     setButtonLoading(true);
     try {
-      await deleteAdById({
+      await deleteAd({
         variables: {
-          id: id.toString(),
+          id: advertisement.id,
         },
       });
       toast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
-      setAfter?.(null);
+      setAfterCompleted?.(null);
+      setAfterActive?.(null);
+      setDropdown(false); // Close dropdown after deletion
+      toggleShowDeleteModal(); // Close the modal after deletion
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -87,23 +141,16 @@ function AdvertisementEntry({
     }
   };
 
-  /**
-   * Toggles the visibility of the dropdown menu.
-   */
-  const handleOptionsClick = (): void => {
-    setDropdown(!dropdown);
-  };
-
   return (
     <>
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
-            <Card className={styles.card}>
-              <div className={styles.dropdownContainer}>
+            <Card className={styles.addCard}>
+              <div className={styles.dropdownContainer} ref={dropdownRef}>
                 <button
                   className={styles.dropdownButton}
-                  onClick={handleOptionsClick}
+                  onClick={() => setDropdown(!dropdown)}
                   data-testid="moreiconbtn"
                 >
                   <MoreVertIcon />
@@ -113,57 +160,128 @@ function AdvertisementEntry({
                     <li>
                       <AdvertisementRegister
                         formStatus="edit"
-                        idEdit={id}
-                        nameEdit={name}
-                        typeEdit={type}
-                        orgIdEdit={organizationId}
-                        advertisementMediaEdit={mediaUrl}
-                        endDateEdit={endDate}
-                        startDateEdit={startDate}
-                        setAfter={setAfter}
+                        idEdit={advertisement.id}
+                        nameEdit={advertisement.name}
+                        typeEdit={advertisement.type}
+                        endAtEdit={advertisement.endAt}
+                        descriptionEdit={advertisement.description}
+                        startAtEdit={advertisement.startAt}
+                        setAfterActive={setAfterActive}
+                        setAfterCompleted={setAfterCompleted}
                       />
                     </li>
-                    <li onClick={toggleShowDeleteModal} data-testid="deletebtn">
+                    <li
+                      onClick={() => {
+                        toggleShowDeleteModal();
+                        setDropdown(false); // Close dropdown after clicking
+                      }}
+                      data-testid="deletebtn"
+                    >
                       {tCommon('delete')}
                     </li>
                   </ul>
                 )}
               </div>
-              {mediaUrl?.includes('videos') ? (
+              {advertisement.attachments?.[0]?.mimeType?.includes('videos') ? (
                 <video
                   muted
-                  className={styles.admedia}
+                  className={`${styles.admedia} ${styles.mediaContainer}`}
                   autoPlay={true}
                   loop={true}
                   playsInline
                   data-testid="media"
                   crossOrigin="anonymous"
                 >
-                  <source src={mediaUrl} type="video/mp4" />
+                  <source
+                    src={advertisement.attachments[0].url}
+                    type="video/mp4"
+                  />
                 </video>
               ) : (
-                <Card.Img
-                  className={styles.admedia}
-                  variant="top"
-                  src={mediaUrl}
-                  data-testid="media"
-                />
+                <div className={styles.mediaContainer}>
+                  {advertisement.attachments &&
+                  advertisement.attachments.length > 0 ? (
+                    advertisement.attachments.length > 1 ? (
+                      <Carousel className={styles.carouselContainer}>
+                        {advertisement.attachments.map((attachment, index) => (
+                          <Carousel.Item key={index}>
+                            <div className={styles.imageWrapper}>
+                              <img
+                                className={`d-block w-100 ${styles.cardImage}`}
+                                src={attachment.url}
+                                alt={`Advertisement image #${index + 1} for ${advertisement.name ?? 'ad'}`}
+                                data-testid="media"
+                                crossOrigin="anonymous"
+                              />
+                            </div>
+                          </Carousel.Item>
+                        ))}
+                      </Carousel>
+                    ) : (
+                      <div className={styles.imageWrapper}>
+                        <img
+                          className={`d-block w-100 ${styles.cardImage}`}
+                          src={advertisement.attachments[0].url}
+                          alt="Advertisement media"
+                          data-testid="media"
+                          crossOrigin="anonymous"
+                        />
+                      </div>
+                    )
+                  ) : (
+                    <div
+                      className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
+                      data-testid="media"
+                    >
+                      No media available
+                    </div>
+                  )}
+                </div>
               )}
               <Card.Body>
-                <Card.Title className="t-bold">{name}</Card.Title>
-                <Card.Text data-testid="Ad_end_date">
-                  Starts on {startDate?.toDateString()}
+                <Card.Title className="t-bold" data-testid="Ad_name">
+                  {advertisement.name}
+                </Card.Title>
+                <Card.Text
+                  data-testid="Ad_desc"
+                  style={{
+                    color:
+                      advertisement.description &&
+                      advertisement.description.length > 0
+                        ? 'inherit'
+                        : 'gray',
+                  }}
+                >
+                  {advertisement.description &&
+                  advertisement.description.length > 0
+                    ? advertisement.description
+                    : t('noDescription')}
                 </Card.Text>
                 <Card.Text data-testid="Ad_end_date">
-                  Ends on {endDate?.toDateString()}
+                  Starts :{' '}
+                  {advertisement.startAt
+                    ? new Date(advertisement.startAt).toDateString()
+                    : 'N/A'}
+                </Card.Text>
+                <Card.Text data-testid="Ad_end_date">
+                  Ends :{' '}
+                  {advertisement.endAt
+                    ? new Date(advertisement.endAt).toDateString()
+                    : 'N/A'}
                 </Card.Text>
 
-                <Card.Subtitle className="mb-2 text-muted author">
-                  {type}
+                <Card.Subtitle
+                  className="mb-2 text-muted author"
+                  data-testid="Ad_type"
+                >
+                  Type:{' '}
+                  {advertisement.type === 'pop_up'
+                    ? 'pop up'
+                    : advertisement.type}
                 </Card.Subtitle>
                 <div className={styles.buttons}>
                   <Button
-                    className={styles.entryaction}
+                    className={`${styles.entryaction} ${styles.addButton}`}
                     variant="primary"
                     disabled={buttonLoading}
                     data-testid="AddOnEntry_btn_install"
@@ -189,12 +307,16 @@ function AdvertisementEntry({
                     {t('deleteAdvertisementMsg')}
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                    <Button
+                      className={`btn btn-danger ${styles.removeButton}`}
+                      onClick={toggleShowDeleteModal}
+                      data-testid="delete_no"
+                    >
                       {tCommon('no')}
                     </Button>
                     <Button
                       type="button"
-                      className="btn btn-success"
+                      className={`btn ${styles.addButton}`}
                       onClick={(): void => {
                         onDelete();
                       }}

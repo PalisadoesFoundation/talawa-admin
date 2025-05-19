@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -38,11 +40,32 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+
+          # Count all changed files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
+
+          # Check if any files changed
+          if [ "$ALL_CHANGED_FILES_COUNT" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Set only_changed to false by default (adjust logic as needed)
+          echo "only_changed=false" >> $GITHUB_OUTPUT
+
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
         run: npm run format:check
@@ -65,9 +88,7 @@ jobs:
         run: npm run check-tsdoc # Run the TSDoc check script
 
       - name: Check for localStorage Usage
-        run: |
-          chmod +x scripts/githooks/check-localstorage-usage.js
-          node scripts/githooks/check-localstorage-usage.js --scan-entire-repo
+        run: npx tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
       - name: Compare translation files
         run: |
@@ -90,57 +111,40 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
       - name: Get Changed Unauthorized files
         id: changed-unauth-files
-        uses: tj-actions/changed-files@v45
-        with:
-          files: |
-            .env*
-            vitest.config.js
-            src/App.tsx
-            .github/**
-            env.example
-            .node-version
-            .husky/**
-            scripts/**
-            src/style/** 
-            schema.graphql
-            package.json
-            package-lock.json
-            tsconfig.json
-            .gitignore
-            .eslintrc.json
-            .eslintignore
-            .prettierrc
-            .prettierignore
-            vite.config.ts
-            docker-compose.yaml
-            Dockerfile
-            CODEOWNERS
-            LICENSE
-            setup.ts
-            .coderabbit.yaml
-            CODE_OF_CONDUCT.md
-            CODE_STYLE.md
-            CONTRIBUTING.md
-            DOCUMENTATION.md
-            INSTALLATION.md
-            ISSUE_GUIDELINES.md
-            PR_GUIDELINES.md
-            README.md
-            *.pem
-            *.key
-            *.cert
-            *.password
-            *.secret
-            *.credentials
-            .nojekyll
-            yarn.lock
-            docs/docusaurus.config.ts
-            docs/sidebar*
-            CNAME
-            
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Define sensitive files pattern
+          SENSITIVE_FILES=".flake8 .pydocstyle pyproject.toml .env* vitest.config.js src/App.tsx .github/** env.example .node-version .husky/** scripts/** src/style/** schema.graphql package.json package-lock.json tsconfig.json .gitignore .eslintrc.json .eslintignore .prettierrc .prettierignore vite.config.ts docker/docker-compose.prod.yaml docker/docker-compose.dev.yaml docker/Dockerfile.dev docker/Dockerfile.prod config/docker/setup/nginx.conf config/docker/setup/nginx.prod.conf CODEOWNERS LICENSE setup.ts .coderabbit.yaml CODE_OF_CONDUCT.md CODE_STYLE.md CONTRIBUTING.md DOCUMENTATION.md INSTALLATION.md ISSUE_GUIDELINES.md PR_GUIDELINES.md README.md *.pem *.key *.cert *.password *.secret *.credentials .nojekyll yarn.lock docs/docusaurus.config.ts docs/sidebar* CNAME"
+
+          # Check for changes in sensitive files
+          CHANGED_UNAUTH_FILES=""
+          for pattern in $SENSITIVE_FILES; do
+            FILES=$(git diff --name-only --diff-filter=ACMRD $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E "$pattern" || true)
+            if [ ! -z "$FILES" ]; then
+              CHANGED_UNAUTH_FILES="$CHANGED_UNAUTH_FILES $FILES"
+            fi
+          done
+
+          # Trim and format output
+          CHANGED_UNAUTH_FILES=$(echo "$CHANGED_UNAUTH_FILES" | xargs)
+          echo "all_changed_files=$CHANGED_UNAUTH_FILES" >> $GITHUB_OUTPUT
+
+          # Check if any unauthorized files changed
+          if [ ! -z "$CHANGED_UNAUTH_FILES" ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+            echo "any_deleted=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+            echo "any_deleted=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: List all changed unauthorized files
         if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
         env: 
@@ -159,10 +163,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Count all changed files excluding .md files
+          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -v -i "\.md$" | wc -l | tr -d ' ')
+          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
         env: 
@@ -187,10 +199,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -207,10 +227,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v45
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -224,10 +252,12 @@ jobs:
   Test-Application:
     name: Test Application
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Check-ESlint-Disable,Check-Code-Coverage-Disable]
+    needs: [Code-Quality-Checks, Check-ESlint-Disable, Check-Code-Coverage-Disable]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -235,58 +265,55 @@ jobs:
           node-version: '22.x'
 
       - name: Install Dependencies
-        run: npm install
-      
+        run: npm ci
+
       - name: Get changed TypeScript files
         id: changed-files
-        uses: tj-actions/changed-files@v45
-          
-      - name: Run Jest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
-        env:
-          NODE_V8_COVERAGE: './coverage/jest'
         run: |
-          npm run test -- --watchAll=false --coverage
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Check if any files changed
+          ANY_CHANGED=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l)
+          if [ "$ANY_CHANGED" -gt 0 ]; then
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+          # Get all changed files
+          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
+
+          # Get TypeScript files specifically
+          TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
+          echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
+
+      - name: TypeScript compilation
+        run: |
+          npx tsc --noEmit
 
       - name: Run Vitest Tests
-        if: steps.changed-files.outputs.only_changed != 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
+          NODE_OPTIONS: "--max-old-space-size=6144"
         run: |
-          npm run test:vitest:coverage
+          npm run test:coverage
 
-      - name: Merge Coverage Reports
-        if: steps.changed-files.outputs.only_changed != 'true'
-        run: |
-          mkdir -p coverage
-          if ! npx lcov-result-merger 'coverage/*/lcov.info' > 'coverage/lcov.info'; then
-            echo "Failed to merge coverage reports"
-            exit 1
-          fi     
-      
-      - name: TypeScript compilation for changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_files }}; do
-            if [[ "$file" == *.ts || "$file" == *.tsx ]]; then
-              npx tsc --noEmit "$file"
-            fi
-          done
-
-      - name: Present and Upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+      - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
-          gcov_ignore: 'docs/'
-          fail_ci_if_error: false
-          files: './coverage/lcov.info'
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
+          exclude: 'docs/'
+          files: ./coverage/vitest/lcov.info
+          fail_ci_if_error: true
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: "./coverage/lcov.info"
-          min_coverage: 0.0
+          path: "./coverage/vitest/lcov.info"
+          min_coverage: 86.0
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
@@ -315,7 +342,7 @@ jobs:
 
   #     - name: Validate Documents
   #       run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
-        
+
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
@@ -373,53 +400,88 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Generate `.env` File with Hardcoded Values
+        run: |
+          cat <<EOF > .env
+          PORT=4321
+          REACT_APP_TALAWA_URL=http://localhost:4000/graphql
+          REACT_APP_USE_RECAPTCHA=
+          REACT_APP_RECAPTCHA_SITE_KEY=
+          REACT_APP_BACKEND_WEBSOCKET_URL=ws://localhost:4000/graphql
+          ALLOW_LOGS=NO
+          USE_DOCKER=YES
+          DOCKER_PORT=4321
+          EOF
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: |
             image=moby/buildkit:latest
-      - name: Build Docker image
+
+      - name: Build Docker images
         run: |
           set -e
-          echo "Building Docker image..."
-          docker build -t talawa-admin-app .
-          echo "Docker image built successfully"
-      - name: Run Docker Container
+          echo "Building Docker images..."
+          docker compose -f docker/docker-compose.prod.yaml build
+          docker compose -f docker/docker-compose.dev.yaml build
+          echo "Docker images built successfully"
+
+      - name: Run Docker Containers (Production)
         run: |
           set -e
-          echo "Started Docker container..."
-          docker run -d --name talawa-admin-app-container -p 4321:4321 talawa-admin-app
-          echo "Docker container started successfully"
-      - name: Check if Talawa Admin App is running
+          echo "Starting Docker container for production..."
+          docker compose -f docker/docker-compose.prod.yaml up -d
+          echo "Production Docker container started successfully"
+
+      - name: Check if Talawa Admin App is running (Production)
         run: |
           chmod +x .github/workflows/scripts/app_health_check.sh
           .github/workflows/scripts/app_health_check.sh 4321 120 true
-      - name: Stop Docker Container
+
+      - name: Stop prod Docker Containers
         if: always()
         run: |
-          docker stop talawa-admin-app-container
-          docker rm talawa-admin-app-container
+          docker compose -f docker/docker-compose.prod.yaml down
+          echo "Prod Docker container stopped and removed"
+
+      - name: Run Docker Containers (Development)
+        run: |
+          set -e
+          echo "Starting Docker container for development..."
+          docker compose -f docker/docker-compose.dev.yaml up -d
+          echo "Development Docker container started successfully"
+
+      - name: Check if Talawa Admin App is running (Development)
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
+
+      - name: Stop dev Docker Containers
+        if: always()
+        run: |
+          docker compose -f docker/docker-compose.dev.yaml down
+          echo "Dev Docker containers stopped and removed"
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
     needs: [Docker-Start-Check, Start-App-Without-Docker]
-    # Run only if the develop-postgres branch and not dependabot    
-    if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop-postgres' }}
+    # Run only if the develop branch and not dependabot
+    if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: yarn
-          cache-dependency-path: 'docs/'
-      # Run Docusaurus in the ./docs directory
+          node-version: '20.x' 
       - name: Install dependencies
         working-directory: ./docs
-        run: yarn install --frozen-lockfile
+        run: npm install
       - name: Test building the website
         working-directory: ./docs
-        run: yarn build
+        run: npm run build
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -427,25 +489,58 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the target branch is develop
-        if: github.event.pull_request.base.ref != 'develop-postgres'
+        if: github.event.pull_request.base.ref != 'develop'
         run: |
-          echo "Error: Pull request target branch must be 'develop-postgres'. Please refer PR_GUIDELINES.md"
+          echo "Error: Pull request target branch must be 'develop'. Please refer PR_GUIDELINES.md"
           echo "Error: Close this PR and try again."
           exit 1
 
-  Validate-Coderabbit:
-    name: Validate CodeRabbit Approval
+  Python-Compliance:
+    name: Check Python Code Style
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
-    needs: [Test-Docusaurus-Deployment]
+    needs: [Code-Quality-Checks]
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Validate CodeRabbit.ai Approval
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
         run: |
-          chmod +x $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
-          $GITHUB_WORKSPACE/.github/workflows/scripts/validate-coderabbit.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r .github/workflows/requirements.txt
+
+      - name: Run Black Formatter Check
+        run: |
+          source venv/bin/activate
+          black --check .
+
+      - name: Run Flake8 Linter
+        run: |
+          source venv/bin/activate
+          flake8 --docstring-convention google --ignore E402,E722,E203,F401,W503 .github
+
+      - name: Run pydocstyle
+        run: |
+          source venv/bin/activate
+          pydocstyle --convention=google --add-ignore=D415,D205 .github
+
+      - name: Run docstring compliance check
+        run: |
+          source venv/bin/activate
+          python .github/workflows/scripts/check_docstrings.py --directories .github

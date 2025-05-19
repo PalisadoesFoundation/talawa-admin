@@ -1,22 +1,49 @@
+/**
+ * EventDashboard Component
+ *
+ * This component is responsible for rendering the event dashboard, which includes
+ * event details, statistics, and modals for editing event information. It fetches
+ * event data using the `EVENT_DETAILS` GraphQL query and displays it in a structured
+ * layout using Bootstrap and custom styles.
+ *
+ * @component
+ * @param {Object} props - Component properties.
+ * @param {string} props.eventId - The unique identifier of the event to be displayed.
+ *
+ * @returns {JSX.Element} The rendered EventDashboard component.
+ *
+ * @remarks
+ * - The component uses the `useQuery` hook from Apollo Client to fetch event data.
+ * - It displays a loader while the event data is being fetched.
+ * - The `EventListCardModals` component is used to handle modals for event editing.
+ * - The `formatTime` and `formatDate` utility functions are used to format time and date values.
+ *
+ * @example
+ * ```tsx
+ * <EventDashboard eventId="12345" />
+ * ```
+ *
+ * @dependencies
+ * - `react`, `react-bootstrap`, `@apollo/client`, `@mui/icons-material`
+ * - Custom components: `Loader`, `EventListCardModals`
+ * - Utility functions: `formatDate`
+ *
+ * @fileoverview
+ * This file defines the EventDashboard component, which is part of the Event Management
+ * module in the Talawa Admin application.
+ */
 import React, { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
-import EventListCardModals from 'components/EventListCard/EventListCardModals';
-import type { InterfaceEventListCardProps } from 'components/EventListCard/EventListCard';
+import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 
-/**
- * Component that displays event details.
- *
- * @param  props - The props for the EventDashboard component.
- * @param eventId - The ID of the event to fetch and display.
- * @returns The rendered EventDashboard component.
- */
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
   const { t } = useTranslation(['translation', 'common']);
@@ -26,17 +53,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
 
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,
-    {
-      variables: { id: eventId },
-    },
+    { variables: { id: eventId } },
   );
 
-  /**
-   * Formats a time string (HH:MM) to a more readable format.
-   *
-   * @param  timeString - The time string to format.
-   * @returns - The formatted time string.
-   */
   function formatTime(timeString: string): string {
     const [hours, minutes] = timeString.split(':').slice(0, 2);
     return `${hours}:${minutes}`;
@@ -54,13 +73,13 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return <Loader data-testid="loader" />;
   }
 
-  const eventListCardProps: InterfaceEventListCardProps = {
+  const eventListCardProps: InterfaceEvent = {
     userRole: '',
     key: eventData.event._id,
-    id: eventData.event._id,
-    eventLocation: eventData.event.location,
-    eventName: eventData.event.title,
-    eventDescription: eventData.event.description,
+    _id: eventData.event._id,
+    location: eventData.event.location,
+    title: eventData.event.title,
+    description: eventData.event.description,
     startDate: eventData.event.startDate,
     endDate: eventData.event.endDate,
     startTime: eventData.event.startTime,
@@ -71,11 +90,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     isRecurringEventException: eventData.event.isRecurringEventException,
     isPublic: eventData.event.isPublic,
     isRegisterable: eventData.event.isRegisterable,
-    registrants: eventData.event.attendees,
+    attendees: eventData.event.attendees,
     creator: eventData.event.creator,
   };
 
-  // Render event details
   return (
     <div data-testid="event-dashboard">
       <Row className="">

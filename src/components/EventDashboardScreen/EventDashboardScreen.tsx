@@ -1,23 +1,50 @@
+/**
+ * EventDashboardScreen Component
+ *
+ * This component serves as the main dashboard screen for events within an organization.
+ * It handles the layout, sidebar drawer functionality, and routing for various event-related
+ * pages. The component also manages user authentication and organization-specific data.
+ *
+ * Features:
+ * - Redirects users to the home page if `orgId` is missing or the user is not logged in.
+ * - Dynamically updates the sidebar targets based on the selected organization.
+ * - Responsive sidebar drawer that toggles visibility based on window size.
+ * - Displays a title and profile dropdown in the header.
+ * - Renders nested routes using React Router's `Outlet`.
+ *
+ * Hooks:
+ * - `useLocalStorage`: Retrieves user authentication and organization data from local storage.
+ * - `useSelector`: Accesses Redux store to fetch application routes and targets.
+ * - `useAppDispatch`: Dispatches actions to update Redux state.
+ * - `useEffect`: Handles side effects such as updating targets and managing window resize events.
+ *
+ * Props:
+ * - None
+ *
+ * State:
+ * - `hideDrawer` (boolean | null): Tracks the visibility of the sidebar drawer.
+ *
+ * Dependencies:
+ * - React Router for navigation and route management.
+ * - Redux for state management.
+ * - `useTranslation` for internationalization.
+ *
+ * @returns {JSX.Element} The rendered EventDashboardScreen component.
+ */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useParams } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './EventDashboardScreen.module.css';
+import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
 
-/**
- * The EventDashboardScreen component is the main dashboard view for event management.
- * It includes navigation, a sidebar, and a profile dropdown.
- *
- * @returns JSX.Element - The rendered EventDashboardScreen component.
- */
 const EventDashboardScreen = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
@@ -33,12 +60,14 @@ const EventDashboardScreen = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  if (isLoggedIn === false) return <Navigate to="/" replace />;
+  if (isLoggedIn === 'false') return <Navigate to="/" replace />;
   if (adminFor === null) {
     return (
       <>
-        <div className={`d-flex flex-row ${styles.containerHeight}`}>
-          <div className={`${styles.colorLight} ${styles.mainContainer}`}>
+        <div className={`d-flex flex-row ${styles.containerHeightEventDash}`}>
+          <div
+            className={`${styles.colorLight} ${styles.mainContainerEventDashboard}`}
+          >
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
@@ -54,9 +83,9 @@ const EventDashboardScreen = (): JSX.Element => {
   }
 
   // Access targets from Redux store
-  const appRoutes: {
-    targets: TargetsType[];
-  } = useSelector((state: RootState) => state.appRoutes);
+  const appRoutes: { targets: TargetsType[] } = useSelector(
+    (state: RootState) => state.appRoutes,
+  );
   const { targets } = appRoutes;
 
   const dispatch = useAppDispatch();

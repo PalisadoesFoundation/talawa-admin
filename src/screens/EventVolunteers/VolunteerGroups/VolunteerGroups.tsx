@@ -1,9 +1,27 @@
+/**
+ * Component for managing volunteer groups within an event.
+ *
+ * This component provides functionality to:
+ * - View, filter, and sort volunteer groups.
+ * - Create, edit, and delete volunteer groups using modals.
+ * - Display volunteer group details such as group name, leader,
+ *   number of volunteers, and completed actions.
+ *
+ * Features:
+ * - Search functionality to filter groups by leader or group name.
+ * - Sorting options for volunteer count (ascending/descending).
+ * - Integration with GraphQL to fetch and manage volunteer group data.
+ * - Customizable modals for creating, editing, viewing, and deleting groups.
+ * - Error handling and loading states with appropriate UI feedback.
+ *
+ * @returns The rendered volunteer groups management component.
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { Navigate, useParams } from 'react-router';
 
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 
@@ -16,12 +34,13 @@ import {
 } from '@mui/x-data-grid';
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupModal from './VolunteerGroupModal';
-import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
-import VolunteerGroupViewModal from './VolunteerGroupViewModal';
+import VolunteerGroupModal from './modal/VolunteerGroupModal';
+import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
+import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum ModalState {
   SAME = 'same',
@@ -30,24 +49,21 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
 /**
@@ -56,9 +72,7 @@ const dataGridStyle = {
  * @returns The rendered component.
  */
 function volunteerGroups(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -71,7 +85,6 @@ function volunteerGroups(): JSX.Element {
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'volunteers_ASC' | 'volunteers_DESC' | null
@@ -94,9 +107,7 @@ function volunteerGroups(): JSX.Element {
     error: groupsError,
     refetch: refetchGroups,
   }: {
-    data?: {
-      getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
-    };
+    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -162,7 +173,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -182,7 +193,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.leader;
         return (
@@ -220,7 +231,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -236,7 +247,7 @@ function volunteerGroups(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
@@ -253,7 +264,7 @@ function volunteerGroups(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -295,31 +306,14 @@ function volunteerGroups(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -351,6 +345,7 @@ function volunteerGroups(): JSX.Element {
               variant="success"
               onClick={() => handleModalClick(null, ModalState.SAME)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="createGroupBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -377,10 +372,7 @@ function volunteerGroups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={groups.map((group, index) => ({
-          id: index + 1,
-          ...group,
-        }))}
+        rows={groups.map((group, index) => ({ id: index + 1, ...group }))}
         columns={columns}
         isRowSelectable={() => false}
       />

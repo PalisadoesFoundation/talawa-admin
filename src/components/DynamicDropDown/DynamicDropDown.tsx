@@ -1,14 +1,50 @@
+/**
+ * A reusable dynamic dropdown component built using React and React-Bootstrap.
+ * This component allows for dynamic field selection and state management.
+ *
+ * @template T - A generic type extending `Record<string, unknown>` to represent the form state.
+ *
+ * @param parentContainerStyle - Optional CSS class for the parent container of the dropdown.
+ * @param btnStyle - Optional CSS class for the dropdown button.
+ * @param setFormState - A state setter function to update the form state.
+ * @param formState - The current state of the form.
+ * @param fieldOptions - An array of objects representing the dropdown options,
+ * each containing a `value` and `label`.
+ * @param fieldName - The name of the field being represented by the dropdown.
+ * @param handleChange - Optional custom change handler for the dropdown selection.
+ *
+ * @returns A JSX.Element representing the dropdown component.
+ *
+ * @remarks
+ * - If `handleChange` is provided, it will be called with a synthetic change event
+ *   when an option is selected. Otherwise, the `setFormState` function will be used
+ *   to update the form state directly.
+ * - The dropdown button displays the label of the currently selected option,
+ *   or "None" if no option is selected.
+ * - Keyboard accessibility is supported for navigating and selecting options.
+ *
+ * @example
+ * ```tsx
+ * const [formState, setFormState] = useState({ category: '' });
+ * const options = [
+ *   { value: '1', label: 'Option 1' },
+ *   { value: '2', label: 'Option 2' },
+ * ];
+ *
+ * <DynamicDropDown
+ *   fieldName="category"
+ *   fieldOptions={options}
+ *   formState={formState}
+ *   setFormState={setFormState}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import styles from './DynamicDropDown.module.css';
+import styles from 'style/app-fixed.module.css';
+import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 
-/**
- * Props for the DynamicDropDown component.
- */
-interface InterfaceChangeDropDownProps<T> {
-  parentContainerStyle?: string;
-  btnStyle?: string;
-  btnTextStyle?: string;
+interface InterfaceChangeDropDownProps<T> extends InterfaceDropDownProps {
   setFormState: React.Dispatch<React.SetStateAction<T>>;
   formState: T;
   fieldOptions: { value: string; label: string }[];
@@ -16,21 +52,6 @@ interface InterfaceChangeDropDownProps<T> {
   handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-/**
- * A dynamic dropdown component that allows users to select an option.
- *
- * This component renders a dropdown with a toggle button. Clicking the button
- * opens a menu with options. When an option is selected, it updates the form state.
- *
- * @param parentContainerStyle - Optional CSS class for styling the container.
- * @param btnStyle - Optional CSS class for styling the dropdown button.
- * @param setFormState - Function to update the form state with the selected option.
- * @param formState - Current state of the form, used to determine the selected value.
- * @param fieldOptions - Options to display in the dropdown. Each option has a value and a label.
- * @param fieldName - The name of the field, used for labeling and key identification.
- * @param handleChange - Optional callback function when selection changes
- * @returns JSX.Element - The rendered dropdown component.
- */
 const DynamicDropDown = <T extends Record<string, unknown>>({
   parentContainerStyle = '',
   btnStyle = '',
@@ -43,10 +64,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
   const handleFieldChange = (value: string): void => {
     if (handleChange) {
       const event = {
-        target: {
-          name: fieldName,
-          value: value,
-        },
+        target: { name: fieldName, value: value },
       } as React.ChangeEvent<HTMLSelectElement>;
       handleChange(event);
     } else {

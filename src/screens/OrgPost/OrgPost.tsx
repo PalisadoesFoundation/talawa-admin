@@ -1,11 +1,9 @@
-import { useMutation, useQuery, type ApolloError } from '@apollo/client';
-import { Search } from '@mui/icons-material';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import { GET_POSTS_BY_ORG } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
-import NotFound from 'components/NotFound/NotFound';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -16,45 +14,29 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryOrganizationPostListItem } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
-
-interface InterfaceOrgPost {
-  _id: string;
-  title: string;
-  text: string;
-  imageUrl: string | null;
-  videoUrl: string | null;
-  creator: { _id: string; firstName: string; lastName: string; email: string };
-  pinned: boolean;
-  createdAt: string;
-  likeCount: number;
-  commentCount: number;
-  likedBy: { _id: string }[];
-  comments: {
-    _id: string;
-    text: string;
-    creator: { _id: string };
-    createdAt: string;
-    likeCount: number;
-    likedBy: { _id: string }[];
-  }[];
-}
+import PostsRenderer from './Posts';
+// import SearchingButton from 'subComponents/SearchingButton';
+import SearchBar from 'subComponents/SearchBar';
+import type {
+  InterfacePostEdge,
+  InterfaceOrganizationPostListData,
+  InterfaceMutationCreatePostInput,
+  InterfacePost,
+} from '../../types/Post/interface';
 
 /**
- * This function is used to display the posts of the organization. It displays the posts in a card format.
- * It also provides the functionality to create a new post. The user can also sort the posts based on the date of creation.
- * The user can also search for a post based on the title of the post.
- * @returns JSX.Element which contains the posts of the organization.
+ * OrgPost Component
+ * This component is responsible for rendering and managing organization posts.
  */
-function orgPost(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPost',
-  });
+
+function OrgPost(): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
   const { t: tCommon } = useTranslation('common');
 
   document.title = t('title');
+
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState({
     posttitle: '',
@@ -64,15 +46,32 @@ function orgPost(): JSX.Element {
     addMedia: '',
     pinPost: false,
   });
-  const [sortingOption, setSortingOption] = useState('latest');
+  const [sortingOption, setSortingOption] = useState('None');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
+  const [displayPosts, setDisplayPosts] = useState<InterfacePost[]>([]);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
   const [showTitle, setShowTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
   const [last, setLast] = useState<number | null>(null);
+  const [sortedPosts, setSortedPosts] = useState<InterfacePost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<InterfacePostEdge[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFiltering, setIsFiltering] = useState(false);
+  const {
+    data,
+    loading,
+    error,
+    refetch: refetchPosts,
+  } = useQuery(GET_POSTS_BY_ORG, {
+    variables: { input: { organizationId: currentUrl } },
+    fetchPolicy: 'network-only',
+  });
 
   const showInviteModal = (): void => {
     setPostModalIsOpen(true);
@@ -95,82 +94,56 @@ function orgPost(): JSX.Element {
     loading: orgPostListLoading,
     error: orgPostListError,
     refetch,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationPostListItem[];
-    };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: (filterData?: {
-      id: string | undefined;
-      // title_contains: string | null;
-      // text_contains: string | null;
-      after: string | null | undefined;
-      before: string | null | undefined;
-      first: number | null;
-      last: number | null;
-    }) => void;
-  } = useQuery(ORGANIZATION_POST_LIST, {
+  } = useQuery<InterfaceOrganizationPostListData>(ORGANIZATION_POST_LIST, {
     variables: {
-      id: currentUrl as string,
+      input: { id: currentUrl as string },
       after: after ?? null,
       before: before ?? null,
       first: first,
       last: last,
     },
   });
+
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
-  const [displayedPosts, setDisplayedPosts] = useState(
-    orgPostListData?.organizations[0].posts.edges.map((edge) => edge.node) ||
-      [],
-  );
-
-  // ...
-
-  useEffect(() => {
-    if (orgPostListData && orgPostListData.organizations) {
-      const newDisplayedPosts: InterfaceOrgPost[] = sortPosts(
-        orgPostListData.organizations[0].posts.edges.map((edge) => edge.node),
-        sortingOption,
-      );
-      setDisplayedPosts(newDisplayedPosts);
-    }
-  }, [orgPostListData, sortingOption]);
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    const {
-      posttitle: _posttitle,
-      postinfo: _postinfo,
-      postImage,
-      postVideo,
-      pinPost,
-    } = postformState;
-
-    const posttitle = _posttitle.trim();
-    const postinfo = _postinfo.trim();
-
     try {
-      if (!posttitle || !postinfo) {
-        throw new Error('Text fields cannot be empty strings');
+      if (!postformState.posttitle.trim()) {
+        throw new Error('Title field cannot be empty');
+      }
+
+      if (!currentUrl) {
+        throw new Error('Organization ID is required');
+      }
+
+      // Create the typed input object
+      const input: InterfaceMutationCreatePostInput = {
+        caption: postformState.posttitle.trim(),
+        organizationId: currentUrl,
+        isPinned: postformState.pinPost,
+      };
+
+      // Handle file upload
+      if (file instanceof File) {
+        // With apollo-upload-client, we can directly pass the File object
+        input.attachments = [file];
       }
 
       const { data } = await create({
-        variables: {
-          title: posttitle,
-          text: postinfo,
-          organizationId: currentUrl,
-          file: postImage || postVideo || postformState.addMedia,
-          pinned: pinPost,
+        variables: { input },
+        context: {
+          // Ensure the file upload request includes the required header
+          headers: { 'Apollo-Require-Preflight': 'true' },
         },
       });
 
-      /* istanbul ignore next */
-      if (data) {
+      if (data?.createPost) {
         toast.success(t('postCreatedSuccess') as string);
-        refetch();
+        await refetch();
+
         setPostFormState({
           posttitle: '',
           postinfo: '',
@@ -179,6 +152,7 @@ function orgPost(): JSX.Element {
           addMedia: '',
           pinPost: false,
         });
+        setFile(null);
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
@@ -186,146 +160,259 @@ function orgPost(): JSX.Element {
     }
   };
 
+  console.log(setShowTitle);
+  const handleAddMediaChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      // Validate file type
+      if (
+        !selectedFile.type.startsWith('image/') &&
+        !selectedFile.type.startsWith('video/')
+      ) {
+        toast.error('Please select an image or video file');
+        return;
+      }
+
+      if (filteredPosts.length === 0) {
+        console.log('No filtered posts found');
+      }
+
+      setFile(selectedFile);
+
+      try {
+        const base64 = await convertToBase64(selectedFile);
+        setPostFormState((prev) => ({ ...prev, addMedia: base64 }));
+      } catch {
+        toast.error('Could not generate preview');
+      }
+    } else {
+      setFile(null);
+      setPostFormState((prev) => ({ ...prev, addMedia: '' }));
+    }
+  };
+
+  const handleVideoAddMediaChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      if (!selectedFile.type.startsWith('video/')) {
+        toast.error('Please select a video file');
+        return;
+      }
+      setVideoFile(selectedFile);
+      try {
+        const base64 = await convertToBase64(selectedFile);
+        setVideoPreview(base64);
+      } catch {
+        toast.error('Could not generate video preview');
+      }
+    } else {
+      setVideoFile(null);
+      setVideoPreview('');
+    }
+  };
+
+  useEffect(() => {
+    if (sortingOption !== 'None' && sortedPosts.length > 0) {
+      const startIndex = (currentPage - 1) * postsPerPage;
+      const endIndex = startIndex + postsPerPage;
+      const paginatedPosts = sortedPosts.slice(startIndex, endIndex);
+      setDisplayPosts(paginatedPosts);
+    }
+  }, [currentPage, sortingOption, sortedPosts]);
+
   useEffect(() => {
     if (orgPostListError) {
-      navigate('/orglist');
+      console.error('Organization post list error:', orgPostListError);
+      // Add proper error handling here
     }
   }, [orgPostListError]);
+
+  useEffect(() => {
+    if (data?.postsByOrganization) {
+      const posts = [...data.postsByOrganization];
+
+      // Sort posts based on the selected option
+      const sorted = posts.sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
+      });
+
+      setSortedPosts(sorted);
+    }
+  }, [data, sortingOption]);
 
   if (createPostLoading || orgPostListLoading) {
     return <Loader />;
   }
 
-  const handleAddMediaChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    setPostFormState((prevPostFormState) => ({
-      ...prevPostFormState,
-      addMedia: '',
-    }));
-
-    const selectedFile = e.target.files?.[0];
-
-    if (selectedFile) {
-      setFile(selectedFile);
-      setPostFormState({
-        ...postformState,
-        addMedia: await convertToBase64(selectedFile),
-      });
-    }
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const { value } = e.target;
-    const filterData = {
-      id: currentUrl,
-      title_contains: showTitle ? value : null,
-      text_contains: !showTitle ? value : null,
-      after: after || null,
-      before: before || null,
-      first: first || null,
-      last: last || null,
-    };
-    refetch(filterData);
-  };
-
-  const debouncedHandleSearch = handleSearch;
-
+  const content = (
+    <div
+      data-testid="posts-renderer"
+      data-loading={String(loading)}
+      data-is-filtering={String(isFiltering)}
+      data-sorting-option={sortingOption}
+    >
+      <PostsRenderer
+        loading={loading}
+        error={error}
+        data={isFiltering ? data : orgPostListData}
+        isFiltering={isFiltering}
+        searchTerm={searchTerm}
+        sortingOption={sortingOption}
+        displayPosts={displayPosts}
+      />
+    </div>
+  );
   const handleSorting = (option: string): void => {
+    setCurrentPage(1);
     setSortingOption(option);
+
+    if (option === 'None') {
+      setDisplayPosts([]);
+
+      refetchPosts({ input: { organizationId: currentUrl } });
+      return;
+    }
+    if (loading || error || !data?.postsByOrganization) {
+      return;
+    }
+
+    const posts = [...data.postsByOrganization];
+    const sorted = posts.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
+      return option === 'oldest' ? dateA - dateB : dateB - dateA;
+    });
+
+    setSortedPosts(sorted);
+
+    const initialPosts = sorted.slice(0, postsPerPage);
+    setDisplayPosts(initialPosts);
   };
+
+  const handleSearch = async (term: string): Promise<void> => {
+    setSearchTerm(term);
+
+    try {
+      const { data: searchData } = await refetchPosts({
+        input: { organizationId: currentUrl },
+      });
+
+      if (!term.trim()) {
+        setIsFiltering(false);
+        setFilteredPosts([]);
+        return;
+      }
+
+      if (searchData?.postsByOrganization) {
+        setIsFiltering(true);
+
+        const filtered = searchData.postsByOrganization.filter(
+          (post: InterfacePost) =>
+            post.caption.toLowerCase().includes(term.toLowerCase()),
+        );
+        setFilteredPosts(filtered);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('Error searching posts');
+      setIsFiltering(false);
+    }
+  };
+
+  const totalPages =
+    sortingOption === 'None'
+      ? Math.ceil(
+          (orgPostListData?.organization?.posts?.totalCount || 0) /
+            postsPerPage,
+        )
+      : Math.ceil(sortedPosts.length / postsPerPage);
+
+  const hasPreviousPage =
+    sortingOption === 'None'
+      ? orgPostListData?.organization?.posts?.pageInfo?.hasPreviousPage
+      : currentPage > 1;
+
+  const hasNextPage =
+    sortingOption === 'None'
+      ? orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
+      : currentPage < totalPages;
+
+  // Update the totalPages calculation
+
   const handleNextPage = (): void => {
-    setAfter(orgPostListData?.organizations[0].posts.pageInfo.endCursor);
-    setBefore(null);
-    setFirst(6);
-    setLast(null);
+    if (sortingOption === 'None') {
+      const endCursor =
+        orgPostListData?.organization?.posts?.pageInfo?.endCursor;
+      if (endCursor) {
+        setAfter(endCursor);
+        setBefore(null);
+        setFirst(postsPerPage);
+        setLast(null);
+        setCurrentPage((prev) => prev + 1);
+      }
+    } else {
+      const maxPage = Math.ceil(sortedPosts.length / postsPerPage);
+      if (currentPage < maxPage) {
+        setCurrentPage((prev) => prev + 1);
+      }
+    }
   };
+
   const handlePreviousPage = (): void => {
-    setBefore(orgPostListData?.organizations[0].posts.pageInfo.startCursor);
-    setAfter(null);
-    setFirst(null);
-    setLast(6);
+    if (sortingOption === 'None') {
+      const startCursor =
+        orgPostListData?.organization?.posts?.pageInfo?.startCursor;
+      if (startCursor) {
+        setBefore(startCursor);
+        setAfter(null);
+        setFirst(null);
+        setLast(postsPerPage);
+        setCurrentPage((prev) => prev - 1);
+      }
+    } else {
+      if (currentPage > 1) {
+        setCurrentPage((prev) => prev - 1);
+      }
+    }
   };
-  // console.log(orgPostListData?.organizations[0].posts);
-  const sortPosts = (
-    posts: InterfaceOrgPost[],
-    sortingOption: string,
-  ): InterfaceOrgPost[] => {
-    const sortedPosts = [...posts];
-
-    if (sortingOption === 'latest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else if (sortingOption === 'oldest') {
-      sortedPosts.sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-    }
-
-    return sortedPosts;
-  };
-
-  const sortedPostsList: InterfaceOrgPost[] = [...displayedPosts];
-  sortedPostsList.sort((a: InterfaceOrgPost, b: InterfaceOrgPost) => {
-    if (a.pinned === b.pinned) {
-      return 0;
-    }
-    /* istanbul ignore next */
-    if (a.pinned) {
-      return -1;
-    }
-    return 1;
-  });
 
   return (
     <>
       <Row className={styles.head}>
         <div className={styles.mainpagerightOrgPost}>
           <div className={styles.btnsContainerOrgPost}>
-            <div className={styles.inputOrgPost}>
-              <Form.Control
-                type="text"
-                id="posttitle"
-                className={styles.inputField}
-                placeholder={showTitle ? t('searchTitle') : t('searchText')}
-                data-testid="searchByName"
-                autoComplete="off"
-                onChange={debouncedHandleSearch}
-                required
-              />
-              <Button tabIndex={-1} className={`${styles.searchButton} `}>
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={showTitle ? t('searchTitle') : t('searchText')}
+              onSearch={handleSearch}
+              inputTestId="searchByName"
+            />
+
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
-                <SortingButton
-                  title="SearchBy"
-                  sortingOptions={[
-                    { label: t('Text'), value: 'Text' },
-                    { label: t('Title'), value: 'Title' },
-                  ]}
-                  selectedOption={showTitle ? t('Title') : t('Text')}
-                  onSortChange={(value) => setShowTitle(value === 'Title')}
-                  dataTestIdPrefix="searchBy"
-                  buttonLabel={t('searchBy')}
+                {/* <SearchingButton
+                  text="Search" 
+                  dataTestIdPrefix="sort-button"
+                  type="sort" 
                   className={`${styles.dropdown} `}
-                />
+                /> */}
                 <SortingButton
                   title="Sort Post"
                   sortingOptions={[
-                    { label: t('Latest'), value: 'latest' },
-                    { label: t('Oldest'), value: 'oldest' },
+                    { label: 'Latest', value: 'latest' },
+                    { label: 'Oldest', value: 'oldest' },
+                    { label: 'None', value: 'None' },
                   ]}
                   selectedOption={sortingOption}
                   onSortChange={handleSorting}
-                  dataTestIdPrefix="sortpost"
-                  dropdownTestId="sort"
-                  className={`${styles.dropdown} `}
-                  buttonLabel={t('sortPost')}
+                  dataTestIdPrefix="sortpost-toggle"
+                  dropdownTestId="sortpost-dropdown"
                 />
               </div>
 
@@ -340,63 +427,31 @@ function orgPost(): JSX.Element {
               </Button>
             </div>
           </div>
-          <div className={`row ${styles.list_box}`}>
-            {sortedPostsList && sortedPostsList.length > 0 ? (
-              sortedPostsList.map(
-                (datas: {
-                  _id: string;
-                  title: string;
-                  text: string;
-                  imageUrl: string | null;
-                  videoUrl: string | null;
-
-                  creator: { firstName: string; lastName: string };
-                  pinned: boolean;
-                }) => (
-                  <OrgPostCard
-                    key={datas._id}
-                    id={datas._id}
-                    postTitle={datas.title}
-                    postInfo={datas.text}
-                    postAuthor={`${datas.creator.firstName} ${datas.creator.lastName}`}
-                    postPhoto={datas?.imageUrl}
-                    postVideo={datas?.videoUrl}
-                    pinned={datas.pinned}
-                    postID={''}
-                  />
-                ),
-              )
-            ) : (
-              <NotFound title="post" keyPrefix="postNotFound" />
-            )}
-          </div>
+          <div className={`row ${styles.list_box}`}>{content}</div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">
           <div className="col-auto">
             <Button
               onClick={handlePreviousPage}
-              className={`${styles.createButton} btn-sm `}
-              disabled={
-                !orgPostListData?.organizations[0].posts.pageInfo
-                  .hasPreviousPage
-              }
+              disabled={!hasPreviousPage}
+              data-testid="previous-page-button"
             >
-              {t('Previous')}
+              Previous
             </Button>
           </div>
+          <div className="col-auto"></div>
           <div className="col-auto">
             <Button
               onClick={handleNextPage}
-              className={`${styles.createButton} btn-sm `}
-              disabled={
-                !orgPostListData?.organizations[0].posts.pageInfo.hasNextPage
-              }
+              disabled={!hasNextPage}
+              data-testid="next-page-button"
             >
-              {t('Next')}
+              Next
             </Button>
           </div>
         </div>
       </Row>
+
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}
@@ -413,7 +468,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -430,7 +485,7 @@ function orgPost(): JSX.Element {
             <Form.Control
               type="descrip"
               id="descrip"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
               autoComplete="off"
@@ -444,7 +499,7 @@ function orgPost(): JSX.Element {
               }}
             />
           </Modal.Body>
-          <Modal.Body>
+          <Modal.Body data-testid="modalOrganizationUpload">
             <Form.Label htmlFor="addMedia">{t('addMedia')}</Form.Label>
             <Form.Control
               id="addMedia"
@@ -455,11 +510,22 @@ function orgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              className={`mb-3 ${styles.inputField}`}
+            />
+
+            <Form.Control
+              id="videoAddMedia"
+              name="videoAddMedia"
+              type="file"
+              accept="video/*"
+              placeholder={t('addVideo')}
+              onChange={handleVideoAddMediaChange}
+              data-testid="addVideoField"
+              className={`mb-3 ${styles.inputField}`}
             />
 
             {postformState.addMedia && file && (
               <div className={styles.previewOrgPost} data-testid="mediaPreview">
-                {/* Display preview for both image and video */}
                 {file.type.startsWith('image') ? (
                   <img
                     src={postformState.addMedia}
@@ -475,10 +541,7 @@ function orgPost(): JSX.Element {
                 <button
                   className={styles.closeButtonOrgPost}
                   onClick={(): void => {
-                    setPostFormState({
-                      ...postformState,
-                      addMedia: '',
-                    });
+                    setPostFormState({ ...postformState, addMedia: '' });
                     const fileInput = document.getElementById(
                       'addMedia',
                     ) as HTMLInputElement;
@@ -487,6 +550,34 @@ function orgPost(): JSX.Element {
                     }
                   }}
                   data-testid="mediaCloseButton"
+                >
+                  <i className="fa fa-times"></i>
+                </button>
+              </div>
+            )}
+
+            {videoPreview && videoFile && (
+              <div
+                className={styles.previewOrgPost}
+                data-testid="videoPreviewContainer"
+              >
+                <video controls data-testid="videoPreview">
+                  <source src={videoPreview} type={videoFile.type} />({t('tag')}
+                  )
+                </video>
+                <button
+                  className={styles.closeButtonOrgPost}
+                  onClick={(): void => {
+                    setVideoPreview('');
+                    setVideoFile(null);
+                    const fileInput = document.getElementById(
+                      'videoAddMedia',
+                    ) as HTMLInputElement;
+                    if (fileInput) {
+                      fileInput.value = '';
+                    }
+                  }}
+                  data-testid="videoMediaCloseButton"
                 >
                   <i className="fa fa-times"></i>
                 </button>
@@ -506,13 +597,14 @@ function orgPost(): JSX.Element {
                   pinPost: !postformState.pinPost,
                 })
               }
+              className={styles.switch}
             />
           </Modal.Body>
 
           <Modal.Footer>
             <Button
               variant="secondary"
-              className={styles.closeButtonOrgPost}
+              className={styles.removeButton}
               onClick={(): void => hideInviteModal()}
               data-testid="closeOrganizationModal"
             >
@@ -522,7 +614,7 @@ function orgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
-              className={`${styles.addButtonOrgPost} mt-2`}
+              className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}
             </Button>
@@ -533,4 +625,4 @@ function orgPost(): JSX.Element {
   );
 }
 
-export default orgPost;
+export default OrgPost;

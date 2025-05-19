@@ -5,7 +5,7 @@ import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerManagement from './VolunteerManagement';
@@ -44,8 +44,8 @@ const renderVolunteerManagement = (): RenderResult => {
 
 describe('Volunteer Management', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom'); // Import the actual implementation
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router'); // Import the actual implementation
       return {
         ...actual,
         useParams: () => ({ orgId: 'orgId' }),
@@ -103,7 +103,7 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const backButton = await screen.findByTestId('backBtn');
-    userEvent.click(backButton);
+    await userEvent.click(backButton);
     await waitFor(() => {
       const orgHome = screen.getByTestId('orgHome');
       expect(orgHome).toBeInTheDocument();
@@ -114,19 +114,19 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const invitationsBtn = screen.getByTestId('invitationsBtn');
-    userEvent.click(invitationsBtn);
+    await userEvent.click(invitationsBtn);
 
     const invitationsTab = screen.getByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
 
     const actionsBtn = screen.getByTestId('actionsBtn');
-    userEvent.click(actionsBtn);
+    await userEvent.click(actionsBtn);
 
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
 
     const groupsBtn = screen.getByTestId('groupsBtn');
-    userEvent.click(groupsBtn);
+    await userEvent.click(groupsBtn);
 
     const groupsTab = screen.getByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();
@@ -137,7 +137,7 @@ describe('Volunteer Management', () => {
     const upcomingEventsBtn = screen.getByTestId('upcomingEventsBtn');
     const invitationsBtn = screen.getByTestId('invitationsBtn');
     // Click the invitations tab
-    userEvent.click(invitationsBtn);
+    await userEvent.click(invitationsBtn);
     await waitFor(() => {
       expect(invitationsBtn).toHaveClass('btn-success');
       expect(upcomingEventsBtn).not.toHaveClass('btn-success');
@@ -147,7 +147,7 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     const actionsBtn = screen.getByTestId('actionsBtn');
-    userEvent.click(actionsBtn);
+    await userEvent.click(actionsBtn);
     const actionsTab = screen.getByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
   });

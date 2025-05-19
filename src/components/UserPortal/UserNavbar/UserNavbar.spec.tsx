@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -86,9 +86,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
 
     await wait();
 
@@ -110,9 +110,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
 
     await wait();
 
@@ -134,9 +134,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
 
     await wait();
 
@@ -158,13 +158,13 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
 
     await wait();
 
-    expect(cookies.get('i18next')).toBe('sp');
+    expect(cookies.get('i18next')).toBe('es');
   });
 
   it('The language is switched to zh', async () => {
@@ -182,9 +182,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('languageIcon'));
 
-    userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
 
     await wait();
 
@@ -206,7 +206,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('logoutDropdown'));
+    await userEvent.click(screen.getByTestId('logoutDropdown'));
     expect(screen.getByText('Settings')).toBeInTheDocument();
     expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
   });
@@ -226,8 +226,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('logoutDropdown'));
-    userEvent.click(screen.getByText('Settings'));
+    await userEvent.click(screen.getByTestId('logoutDropdown'));
+    await userEvent.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
   });
   it('Logs out the user and clears local storage', async () => {
@@ -247,8 +247,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    userEvent.click(screen.getByTestId('logoutDropdown'));
-    userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('logoutDropdown'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
 
     await wait();
 

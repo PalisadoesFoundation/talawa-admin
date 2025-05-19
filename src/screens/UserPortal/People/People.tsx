@@ -1,18 +1,55 @@
+/**
+ * The `people` component is responsible for rendering a list of members and admins
+ * of an organization. It provides functionality for searching, filtering, and paginating
+ * through the list of users. The component uses GraphQL queries to fetch data and
+ * displays it in a structured format with user details such as name, email, role, etc.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered People component.
+ *
+ * @remarks
+ * - This component uses Apollo Client's `useQuery` hook to fetch data from GraphQL endpoints.
+ * - It supports filtering between "All Members" and "Admins" using a dropdown menu.
+ * - Pagination is implemented to manage the display of users in chunks.
+ * - Users can search for members by their first name using the search bar.
+ *
+ * @requires `react`, `react-bootstrap`, `@apollo/client`, `@mui/icons-material`
+ * @requires `components/UserPortal/PeopleCard/PeopleCard`
+ * @requires `components/Pagination/PaginationList/PaginationList`
+ * @requires `GraphQl/Queries/Queries`
+ * @requires `style/app-fixed.module.css`
+ * @requires `types/User/interface`
+ *
+ * @param {number} page - The current page number for pagination.
+ * @param {number} rowsPerPage - The number of rows displayed per page.
+ * @param {Partial<InterfaceUser>[]} members - The list of members to display.
+ * @param {Partial<InterfaceUser>[]} allMembers - The complete list of members fetched.
+ * @param {Partial<InterfaceUser>[]} admins - The list of admins fetched.
+ * @param {number} mode - The current filter mode (0 for "All Members", 1 for "Admins").
+ * @param {string} organizationId - The ID of the organization extracted from URL parameters.
+ *
+ * @function handleChangePage - Handles the change of the current page in pagination.
+ * @function handleChangeRowsPerPage - Handles the change in the number of rows per page.
+ * @function handleSearch - Refetches the members list based on the search input.
+ * @function handleSearchByEnter - Triggers search when the Enter key is pressed.
+ * @function handleSearchByBtnClick - Triggers search when the search button is clicked.
+ */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
-import PaginationList from 'components/PaginationList/PaginationList';
+import { Dropdown, Form, Button } from 'react-bootstrap';
+import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_ADMINS_LIST,
 } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { FilterAltOutlined, SearchOutlined } from '@mui/icons-material';
-import styles from './People.module.css';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { FilterAltOutlined } from '@mui/icons-material';
+import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { useParams } from 'react-router-dom';
-
+import { useParams } from 'react-router';
+import { InterfaceUser } from 'types/User/interface';
 interface InterfaceOrganizationCardProps {
   id: string;
   name: string;
@@ -22,24 +59,8 @@ interface InterfaceOrganizationCardProps {
   sno: string;
 }
 
-interface InterfaceMember {
-  firstName: string;
-  lastName: string;
-  image: string;
-  _id: string;
-  email: string;
-  userType: string;
-}
-
-/**
- * `People` component displays a list of people associated with an organization.
- * It allows users to filter between all members and admins, search for members by their first name,
- * and paginate through the list.
- */
 export default function people(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'people',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'people' });
 
   const { t: tCommon } = useTranslation('common');
 
@@ -47,9 +68,9 @@ export default function people(): JSX.Element {
 
   // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState<InterfaceMember[]>([]);
-  const [allMembers, setAllMembers] = useState<InterfaceMember[]>([]);
-  const [admins, setAdmins] = useState<InterfaceMember[]>([]);
+  const [members, setMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [allMembers, setAllMembers] = useState<Partial<InterfaceUser>[]>([]);
+  const [admins, setAdmins] = useState<Partial<InterfaceUser>[]>([]);
   const [mode, setMode] = useState<number>(0);
 
   // Extracting organization ID from URL parameters
@@ -61,12 +82,7 @@ export default function people(): JSX.Element {
   // Query to fetch list of members of the organization
   const { data, loading, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        firstName_contains: '',
-      },
-    },
+    { variables: { orgId: organizationId, firstName_contains: '' } },
   );
   // Query to fetch list of admins of the organization
   const { data: data2 } = useQuery(ORGANIZATION_ADMINS_LIST, {
@@ -90,9 +106,7 @@ export default function people(): JSX.Element {
   };
 
   const handleSearch = (newFilter: string): void => {
-    refetch({
-      firstName_contains: newFilter,
-    });
+    refetch({ firstName_contains: newFilter });
   };
 
   const handleSearchByEnter = (
@@ -112,171 +126,140 @@ export default function people(): JSX.Element {
   };
 
   useEffect(() => {
-    if (data2) {
-      const admin = data2.organizations[0].admins[0];
-      const updatedAdmin: InterfaceMember = {
-        ...admin,
-        userType: 'Admin',
-      };
-      setAdmins([updatedAdmin]);
+    if (data2?.organizations?.[0]?.admins) {
+      const adminsList = data2.organizations[0].admins.map(
+        (admin: Partial<InterfaceUser>) => ({ ...admin, userType: 'Admin' }),
+      );
+      setAdmins(adminsList);
     }
   }, [data2]);
 
+  // Updated members effect
   useEffect(() => {
-    if (data) {
-      const updatedAdmins = data.organizationsMemberConnection.edges.map(
-        (memberData: InterfaceMember) => ({
-          ...memberData, // Spread the existing properties
+    if (data?.organizationsMemberConnection?.edges) {
+      const membersList = data.organizationsMemberConnection.edges.map(
+        (memberData: Partial<InterfaceUser>) => ({
+          ...memberData,
           userType: admins?.some((admin) => admin._id === memberData._id)
             ? 'Admin'
             : 'Member',
         }),
       );
-
-      setAllMembers(updatedAdmins);
-      setMembers(updatedAdmins);
+      setAllMembers(membersList);
+      setMembers(mode === 0 ? membersList : admins);
     }
-  }, [data, admins]);
+  }, [data, admins, mode]);
 
-  if (admins && admins.length > 0) {
-    const adminIds = admins.map((adm) => adm._id);
-    for (let i = 0; i < allMembers.length; i++) {
-      if (adminIds.includes(allMembers[i]._id)) {
-        allMembers[i].userType = 'Admin';
-      } else {
-        allMembers[i].userType = 'Member';
-      }
-    }
-  }
   useEffect(() => {
-    if (mode == 0) {
-      if (data) {
-        setMembers(allMembers);
-      }
-    } else if (mode == 1) {
-      if (data2) {
-        setMembers(admins);
-      }
-    }
-  }, [mode]);
+    setMembers(mode === 0 ? allMembers : admins);
+  }, [mode, allMembers, admins]);
 
   return (
     <>
-      <div className={`d-flex flex-row`}>
-        <div className={`${styles.mainContainer}`}>
-          <div
-            className={`mt-4 d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
-          >
-            <InputGroup className={`${styles.maxWidth} ${styles.shadow}`}>
-              <Form.Control
-                placeholder={t('searchUsers')}
-                id="searchPeople"
-                type="text"
-                className={`${styles.borderBox} ${styles.backgroundWhite} ${styles.placeholderColor}`}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
+      <div className={`${styles.mainContainer_people}`}>
+        <div className={styles.people__header}>
+          <div className={styles.input}>
+            <Form.Control
+              placeholder={t('searchUsers')}
+              id="searchPeople"
+              type="text"
+              className={styles.inputField}
+              onKeyUp={handleSearchByEnter}
+              data-testid="searchInput"
+            />
+
+            <Button
+              className={styles.searchButton}
+              data-testid="searchBtn"
+              style={{ cursor: 'pointer' }}
+              onClick={handleSearchByBtnClick}
+            >
+              <SearchOutlinedIcon />
+            </Button>
+          </div>
+
+          <Dropdown drop="down-centered">
+            <Dropdown.Toggle
+              className={styles.dropdown}
+              id="dropdown-basic"
+              data-testid={`modeChangeBtn`}
+            >
+              <FilterAltOutlined
+                sx={{
+                  fontSize: '25px',
+                  marginBottom: '2px',
+                  marginRight: '2px',
+                }}
               />
-              <InputGroup.Text
-                className={`${styles.colorPrimary} ${styles.borderRounded5}`}
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-              >
-                <SearchOutlined className={`${styles.colorWhite}`} />
-              </InputGroup.Text>
-            </InputGroup>
-            <Dropdown drop="down-centered">
-              <Dropdown.Toggle
-                className={`${styles.greenBorder} ${styles.backgroundWhite} ${styles.colorGreen} ${styles.semiBold} ${styles.shadow} ${styles.borderRounded8}`}
-                id="dropdown-basic"
-                data-testid={`modeChangeBtn`}
-              >
-                <FilterAltOutlined />
-                {tCommon('filter').toUpperCase()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {modes.map((value, index) => {
-                  return (
-                    <Dropdown.Item
-                      key={index}
-                      data-testid={`modeBtn${index}`}
-                      onClick={(): void => setMode(index)}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div className={`d-flex flex-column ${styles.content}`}>
-            <div
-              className={`d-flex border py-3 px-4 mt-4 bg-white ${styles.topRadius}`}
-            >
-              <span style={{ flex: '1' }} className="d-flex">
-                <span style={{ flex: '1' }}>S.No</span>
-                <span style={{ flex: '1' }}>Avatar</span>
-              </span>
-              <span style={{ flex: '2' }}>Name</span>
-              <span style={{ flex: '2' }}>Email</span>
-              <span style={{ flex: '2' }}>Role</span>
-            </div>
-
-            <div
-              className={`d-flex flex-column border px-4 p-3 mt-0 ${styles.gap} ${styles.bottomRadius} ${styles.backgroundWhite}`}
-            >
-              {loading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>Loading...</span>
-                </div>
-              ) : (
-                <>
-                  {members && members.length > 0 ? (
-                    (rowsPerPage > 0
-                      ? members.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
-                      : /* istanbul ignore next */
-                        members
-                    ).map((member: InterfaceMember, index) => {
-                      const name = `${member.firstName} ${member.lastName}`;
-
-                      const cardProps: InterfaceOrganizationCardProps = {
-                        name,
-                        image: member.image,
-                        id: member._id,
-                        email: member.email,
-                        role: member.userType,
-                        sno: (index + 1).toString(),
-                      };
-                      return <PeopleCard key={index} {...cardProps} />;
-                    })
-                  ) : (
-                    <span>{t('nothingToShow')}</span>
-                  )}
-                </>
-              )}
-            </div>
-            <table>
-              <tbody>
-                <tr>
-                  <PaginationList
-                    count={
-                      /* istanbul ignore next */
-                      members ? members.length : 0
-                    }
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              {tCommon('filter')}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {modes.map((value, index) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    data-testid={`modeBtn${index}`}
+                    onClick={(): void => setMode(index)}
+                  >
+                    {value}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-        {/* <OrganizationSidebar /> */}
+        <div className={styles.people_content}>
+          <div className={styles.people_card_header}>
+            <span style={{ flex: '1' }} className={styles.display_flex}>
+              <span style={{ flex: '1' }}>S.No</span>
+              <span style={{ flex: '1' }}>Avatar</span>
+            </span>
+            <span style={{ flex: '2' }}>Name</span>
+            <span style={{ flex: '2' }}>Email</span>
+            <span style={{ flex: '2' }}>Role</span>
+          </div>
+
+          <div className={styles.people_card_main_container}>
+            {loading ? (
+              <div className={styles.custom_row_center}>
+                <HourglassBottomIcon /> <span>Loading...</span>
+              </div>
+            ) : (
+              <>
+                {members && members.length > 0 ? (
+                  (rowsPerPage > 0
+                    ? members.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage,
+                      )
+                    : members
+                  ).map((member: Partial<InterfaceUser>, index) => {
+                    const name = `${member.firstName} ${member.lastName}`;
+
+                    const cardProps: InterfaceOrganizationCardProps = {
+                      name,
+                      image: member.image ?? '',
+                      id: member._id ?? '',
+                      email: member.email ?? '',
+                      role: member.userType ?? '',
+                      sno: (index + 1).toString(),
+                    };
+                    return <PeopleCard key={index} {...cardProps} />;
+                  })
+                ) : (
+                  <span>{t('nothingToShow')}</span>
+                )}
+              </>
+            )}
+          </div>
+          <PaginationList
+            count={members ? members.length : 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
       </div>
     </>
   );

@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
 // import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -32,8 +26,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -138,18 +132,20 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('createAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
 
-    await waitForElementToBeRemoved(() =>
-      screen.queryByTestId('createAgendaItemModalCloseBtn'),
-    );
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createAgendaItemModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it('creates new agenda item', async () => {
@@ -172,7 +168,7 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
       expect(
@@ -180,27 +176,27 @@ describe('Testing Agenda Items Components', () => {
       ).toBeInTheDocument();
     });
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterTitle),
       formData.title,
     );
 
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterDescription),
       formData.description,
     );
-    userEvent.type(
+    await userEvent.type(
       screen.getByPlaceholderText(translations.enterDuration),
       formData.duration,
     );
     const categorySelect = screen.getByTestId('categorySelect');
-    userEvent.click(categorySelect);
-    await waitFor(() => {
+    await userEvent.click(categorySelect);
+    await waitFor(async () => {
       const categoryOption = screen.getByText('Category 1');
-      userEvent.click(categoryOption);
+      await userEvent.click(categoryOption);
     });
 
-    userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
+    await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
       // expect(toast.success).toBeCalledWith(translations.agendaItemCreated);

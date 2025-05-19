@@ -6,7 +6,16 @@ import inquirer from 'inquirer';
 
 vi.mock('setup/askForCustomPort/askForCustomPort');
 vi.mock('setup/updateEnvFile/updateEnvFile');
-vi.mock('inquirer');
+// Fix Inquirer mock for v12+
+vi.mock('inquirer', async () => {
+  const actual = await vi.importActual('inquirer');
+  return {
+    default: {
+      ...actual,
+      prompt: vi.fn(),
+    },
+  };
+});
 
 describe('askAndUpdatePort', () => {
   afterEach(() => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { CheckInWrapper } from './CheckInWrapper';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { checkInQueryMock } from './mocks';
+import { checkInQueryMock } from './CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 /**
@@ -64,5 +64,35 @@ describe('Testing CheckIn Wrapper', () => {
     await waitFor(() =>
       expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument(),
     );
+  });
+});
+
+describe('CheckInWrapper CSS Tests', () => {
+  const props = {
+    eventId: 'event123',
+  };
+
+  const renderComponent = (): ReturnType<typeof render> => {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <CheckInWrapper {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('should render the options-outline SVG image with correct dimensions', () => {
+    renderComponent();
+    const image = screen.getByAltText('Sort');
+    expect(image).toHaveAttribute('src', '/images/svg/options-outline.svg');
+    expect(image).toHaveAttribute('width', '30.63');
+    expect(image).toHaveAttribute('height', '30.63');
   });
 });

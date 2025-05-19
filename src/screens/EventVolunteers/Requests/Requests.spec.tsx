@@ -14,10 +14,11 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import i18n from 'utils/i18nForTest';
+import i18nForTest from 'utils/i18nForTest';
+const i18n = i18nForTest;
 import Requests from './Requests';
 import type { ApolloLink } from '@apollo/client';
 import {
@@ -58,6 +59,14 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
+async function wait(ms = 100): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link}>
@@ -82,8 +91,8 @@ const renderRequests = (link: ApolloLink): RenderResult => {
 
 describe('Testing Requests Screen', () => {
   beforeAll(() => {
-    vi.mock('react-router-dom', async () => ({
-      ...(await vi.importActual('react-router-dom')),
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
       useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
     }));
   });
@@ -158,8 +167,9 @@ describe('Testing Requests Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    userEvent.type(searchInput, 'T');
+    await userEvent.type(searchInput, 'T');
     await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const volunteerName = screen.getAllByTestId('volunteerName');
@@ -194,7 +204,7 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
@@ -211,7 +221,7 @@ describe('Testing Requests Screen', () => {
     expect(rejectBtn).toHaveLength(2);
 
     // Reject Request
-    userEvent.click(rejectBtn[0]);
+    await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
@@ -228,10 +238,52 @@ describe('Testing Requests Screen', () => {
     expect(acceptBtn).toHaveLength(2);
 
     // Accept Request
-    userEvent.click(acceptBtn[0]);
+    await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
+  });
+});
+
+describe('Requests Component CSS Styling', () => {
+  const renderComponent = (): RenderResult => {
+    return render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  test('DataGrid should have correct styling', async () => {
+    const { container } = renderComponent();
+    await wait();
+
+    const dataGrid = container.querySelector('.MuiDataGrid-root');
+    expect(dataGrid).toBeInTheDocument();
+    expect(dataGrid).toHaveClass('MuiDataGrid-root');
+    expect(dataGrid).toHaveStyle({
+      backgroundColor: 'white',
+      borderRadius: '16px',
+    });
+  });
+
+  test('Sort button container should have correct spacing', async () => {
+    const { container } = renderComponent();
+    await wait();
+
+    const sortContainer = container.querySelector('.d-flex.gap-3.mb-1');
+    expect(sortContainer).toBeInTheDocument();
+
+    const sortButtonWrapper = container.querySelector(
+      '.d-flex.justify-space-between.align-items-center.gap-3',
+    );
+    expect(sortButtonWrapper).toBeInTheDocument();
   });
 });

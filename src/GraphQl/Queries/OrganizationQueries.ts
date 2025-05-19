@@ -12,47 +12,91 @@ import gql from 'graphql-tag';
  * @param id - Optional. The ID of a specific organization to retrieve.
  * @returns The list of organizations based on the applied filters.
  */
+
 export const ORGANIZATION_POST_LIST = gql`
-  query Organizations(
-    $id: ID!
+  query OrganizationPostList(
+    $input: QueryOrganizationInput!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
+    $first: Int
+    $last: Int
   ) {
-    organizations(id: $id) {
+    organization(input: $input) {
+      id
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
-            _id
-            title
-            text
+            id
+            caption
             creator {
-              _id
-              firstName
-              lastName
-              email
+              id
             }
             createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
+export const GET_POSTS_BY_ORG = gql`
+  query GetPostsByOrganization($input: GetPostsByOrgInput!) {
+    postsByOrganization(input: $input) {
+      id
+      createdAt
+      updatedAt
+      caption
+      attachments {
+        url
+      }
+      creator {
+        id
+      }
+    }
+  }
+`;
+
+export const FILTERED_ORGANIZATION_POSTS = gql`
+  query FilteredOrganizationPosts(
+    $input: QueryOrganizationInput!
+    $title_contains: String
+    $text_contains: String
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organization(input: $input) {
+      id
+      posts(
+        title_contains: $title_contains
+        text_contains: $text_contains
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+      ) {
+        edges {
+          node {
+            id
+            title
+            text
+            imageUrl
+            creator {
+              id
+              name
+            }
+            createdAt
+            updatedAt
             likeCount
-            likedBy {
-              _id
-              firstName
-              lastName
-            }
             commentCount
-            comments {
-              _id
-              text
-              creator {
-                _id
-              }
-              createdAt
-              likeCount
-              likedBy {
-                _id
-              }
-            }
             pinned
           }
           cursor
@@ -63,7 +107,38 @@ export const ORGANIZATION_POST_LIST = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
+      }
+    }
+  }
+`;
+// GraphQL query to retrieve all the Organizations user is Part of with filter by name
+export const USER_JOINED_ORGANIZATIONS_PG = gql`
+  query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first, filter: $filter) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            id
+            name
+            city
+            countryCode
+            addressLine1
+            postalCode
+            state
+            description
+            avatarURL
+            members(first: $first) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -131,135 +206,39 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
   }
 `;
 
-export const ORGANIZATION_ADVERTISEMENT_LIST = gql`
-  query Organizations(
-    $id: ID!
+export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
+  query OrganizationTags(
+    $input: QueryOrganizationInput!
     $after: String
     $before: String
     $first: Int
     $last: Int
   ) {
-    organizations(id: $id) {
-      _id
-      advertisements(
-        after: $after
-        before: $before
-        first: $first
-        last: $last
-      ) {
+    organization(input: $input) {
+      id
+      name
+      tags(after: $after, before: $before, first: $first, last: $last) {
         edges {
-          node {
-            _id
-            name
-            startDate
-            endDate
-            mediaUrl
-          }
           cursor
+          node {
+            id
+            name
+            createdAt
+            updater {
+              id
+              name
+            }
+            folder {
+              id
+              name
+            }
+          }
         }
         pageInfo {
-          startCursor
-          endCursor
           hasNextPage
           hasPreviousPage
-        }
-        totalCount
-      }
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve organizations based on user connection.
- *
- * @param first - Optional. Number of organizations to retrieve in the first batch.
- * @param skip - Optional. Number of organizations to skip before starting to collect the result set.
- * @param filter - Optional. Filter organizations by a specified string.
- * @param id - Optional. The ID of a specific organization to retrieve.
- * @returns The list of organizations based on the applied filters.
- */
-
-export const USER_ORGANIZATION_CONNECTION = gql`
-  query organizationsConnection(
-    $first: Int
-    $skip: Int
-    $filter: String
-    $id: ID
-  ) {
-    organizationsConnection(
-      first: $first
-      skip: $skip
-      where: { name_contains: $filter, id: $id }
-      orderBy: name_ASC
-    ) {
-      _id
-      name
-      image
-      description
-      userRegistrationRequired
-      creator {
-        firstName
-        lastName
-      }
-      members {
-        _id
-      }
-      admins {
-        _id
-      }
-      createdAt
-      address {
-        city
-        countryCode
-        dependentLocality
-        line1
-        line2
-        postalCode
-        sortingCode
-        state
-      }
-      membershipRequests {
-        _id
-        user {
-          _id
-        }
-      }
-    }
-  }
-`;
-
-/**
- * GraphQL query to retrieve organizations joined by a user.
- *
- * @param id - The ID of the user for which joined organizations are being retrieved.
- * @returns The list of organizations joined by the user.
- */
-
-export const USER_JOINED_ORGANIZATIONS = gql`
-  query UserJoinedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      user {
-        joinedOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
+          startCursor
+          endCursor
         }
       }
     }
@@ -274,31 +253,18 @@ export const USER_JOINED_ORGANIZATIONS = gql`
  */
 
 export const USER_CREATED_ORGANIZATIONS = gql`
-  query UserCreatedOrganizations($id: ID!) {
-    users(where: { id: $id }) {
-      appUserProfile {
-        createdOrganizations {
-          _id
-          name
-          description
-          image
-          members {
-            _id
-          }
-          address {
-            city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
-          }
-          admins {
-            _id
-          }
-        }
+  query UserCreatedOrganizations($id: String!, $filter: String) {
+    user(input: { id: $id }) {
+      id
+      createdOrganizations(filter: $filter) {
+        id
+        name
+        description
+        createdAt
+        avatarMimeType
+        isMember
+        membersCount
+        adminsCount
       }
     }
   }

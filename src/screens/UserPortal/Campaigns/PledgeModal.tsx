@@ -1,3 +1,44 @@
+/**
+ * @file PledgeModal.tsx
+ * @description This file defines the `PledgeModal` component, which provides a modal interface for creating or editing pledges
+ *              in a campaign. It includes form fields for selecting pledgers, specifying pledge amounts, currencies, and dates.
+ *              The component supports internationalization and integrates with GraphQL mutations and queries for data handling.
+ *
+ * @module PledgeModal
+ *
+ * @typedef {InterfacePledgeModal} InterfacePledgeModal
+ * @property {boolean} isOpen - Indicates whether the modal is open or closed.
+ * @property {() => void} hide - Function to close the modal.
+ * @property {string} campaignId - The ID of the campaign associated with the pledge.
+ * @property {string} userId - The ID of the user creating or editing the pledge.
+ * @property {InterfacePledgeInfo | null} pledge - The pledge data to edit, or null for creating a new pledge.
+ * @property {() => void} refetchPledge - Function to refetch the pledge data after updates.
+ * @property {Date} endDate - The maximum allowed end date for the pledge.
+ * @property {'create' | 'edit'} mode - The mode of the modal, either 'create' or 'edit'.
+ */
+
+/**
+ * @component
+ * @name PledgeModal
+ * @description A modal component for creating or editing pledges. It includes form fields for selecting pledgers,
+ *              specifying pledge amounts, currencies, and dates. The component supports internationalization and
+ *              integrates with GraphQL for data handling.
+ *
+ * @param {InterfacePledgeModal} props - The props for the PledgeModal component.
+ * @returns {JSX.Element} The rendered PledgeModal component.
+ *
+ * @example
+ * <PledgeModal
+ *   isOpen={true}
+ *   hide={() => {}}
+ *   campaignId="123"
+ *   userId="456"
+ *   pledge={null}
+ *   refetchPledge={() => {}}
+ *   endDate={new Date()}
+ *   mode="create"
+ * />
+ */
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { ChangeEvent } from 'react';
@@ -6,13 +47,13 @@ import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo,
+  InterfaceUserInfo_PG,
 } from 'utils/interfaces';
-import styles from './Campaigns.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PlEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
   Autocomplete,
@@ -24,9 +65,6 @@ import {
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
-/**
- * Interface representing the properties for the `PledgeModal` component.
- */
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -38,19 +76,6 @@ export interface InterfacePledgeModal {
   mode: 'create' | 'edit';
 }
 
-/**
- * `PledgeModal` is a React component that allows users to create or edit a pledge for a specific campaign.
- * It displays a form with inputs for pledge details such as amount, currency, dates, and users involved in the pledge.
- *
- * @param isOpen - Determines if the modal is visible or hidden.
- * @param hide - Function to close the modal.
- * @param campaignId - The ID of the campaign for which the pledge is being made.
- * @param userId - The ID of the user making or editing the pledge.
- * @param pledge - The current pledge information if in edit mode, or null if creating a new pledge.
- * @param refetchPledge - Function to refresh the pledge data after a successful operation.
- * @param endDate - The maximum date allowed for the pledge's end date, based on the campaign's end date.
- * @param mode - Specifies whether the modal is used for creating a new pledge or editing an existing one.
- */
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -62,9 +87,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   // Translation functions to support internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'pledges',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
@@ -77,13 +100,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
 
   // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
 
   // Mutation to create a new pledge
-  const [createPledge] = useMutation(CREATE_PlEDGE);
+  const [createPledge] = useMutation(CREATE_PLEDGE);
 
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
@@ -107,9 +130,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: {
-      id: userId,
-    },
+    variables: { id: userId },
   });
 
   // Effect to update the pledgers state when user data is fetched
@@ -117,9 +138,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          _id: userData.user.user._id,
+          id: userData.user.user._id,
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
+          name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
           image: userData.user.user.image,
         },
       ]);
@@ -133,7 +155,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @param e - The form submission event.
    * @returns A promise that resolves when the pledge is successfully updated.
    */
-  /*istanbul ignore next*/
+
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
@@ -157,14 +179,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         updatedFields.endDate = endDate;
       }
       if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user._id);
+        updatedFields.users = pledgeUsers.map((user) => user.id);
       }
       try {
         await updatePledge({
-          variables: {
-            id: pledge?._id,
-            ...updatedFields,
-          },
+          variables: { id: pledge?.id, ...updatedFields },
         });
         toast.success(t('pledgeUpdated') as string);
         refetchPledge();
@@ -194,7 +213,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             currency: pledgeCurrency,
             startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
             endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user._id),
+            userIds: pledgeUsers.map((user) => user.id),
           },
         });
 
@@ -209,7 +228,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        /*istanbul ignore next*/
         toast.error((error as Error).message);
       }
     },
@@ -239,7 +257,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {/* A Multi-select dropdown enables user to view participating pledgers */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
@@ -248,29 +265,21 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               data-testid="pledgerSelect"
               options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
-              // TODO: Remove readOnly function once User Family implementation is done
-              readOnly={mode === 'edit' ? true : false}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              readOnly={mode === 'edit'}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
+              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
                 `${member.firstName} ${member.lastName}`
               }
-              onChange={
-                /*istanbul ignore next*/
-                (_, newPledgers): void => {
-                  setFormState({
-                    ...formState,
-                    pledgeUsers: newPledgers,
-                  });
-                }
-              }
+              onChange={(_, newPledgers): void => {
+                setFormState({ ...formState, pledgeUsers: newPledgers });
+              }}
               renderInput={(params) => (
                 <TextField {...params} label="Pledgers" />
               )}
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Date Calendar Component to select start date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('startDate')}
@@ -283,7 +292,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                     pledgeStartDate: date.toDate(),
                     pledgeEndDate:
                       pledgeEndDate &&
-                      /*istanbul ignore next*/
                       (pledgeEndDate < date?.toDate()
                         ? date.toDate()
                         : pledgeEndDate),
@@ -293,7 +301,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               minDate={dayjs(pledgeStartDate)}
               maxDate={dayjs(endDate)}
             />
-            {/* Date Calendar Component to select end Date of an event */}
             <DatePicker
               format="DD/MM/YYYY"
               label={tCommon('endDate')}
@@ -301,10 +308,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={dayjs(pledgeEndDate)}
               onChange={(date: Dayjs | null): void => {
                 if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
+                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
                 }
               }}
               minDate={dayjs(pledgeStartDate)}
@@ -312,7 +316,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
-            {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
                 {t('currency')}
@@ -322,15 +325,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 value={pledgeCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
-                onChange={
-                  /*istanbul ignore next*/
-                  (e) => {
-                    setFormState({
-                      ...formState,
-                      pledgeCurrency: e.target.value,
-                    });
-                  }
-                }
+                onChange={(e) => {
+                  setFormState({
+                    ...formState,
+                    pledgeCurrency: e.target.value,
+                  });
+                }}
               >
                 {currencyOptions.map((currency) => (
                   <MenuItem key={currency.label} value={currency.value}>
@@ -339,7 +339,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 ))}
               </Select>
             </FormControl>
-            {/* Input field to enter amount to be pledged */}
             <FormControl fullWidth>
               <TextField
                 label={t('amount')}
@@ -357,10 +356,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               />
             </FormControl>
           </Form.Group>
-          {/* Button to submit the pledge form */}
           <Button
             type="submit"
-            className={styles.greenregbtn}
+            className={styles.addButton}
             data-testid="submitPledgeBtn"
           >
             {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}

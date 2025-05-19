@@ -1,3 +1,43 @@
+/**
+ * AddPeopleToTag Component
+ *
+ * This component provides a modal interface for assigning members to a specific tag.
+ * It allows users to search for members by first name or last name, select members,
+ * and assign them to the tag. The component uses Apollo Client for GraphQL queries
+ * and mutations, and Material-UI's DataGrid for displaying member data.
+ *
+ * @props
+ * - `addPeopleToTagModalIsOpen` (boolean): Controls the visibility of the modal.
+ * - `hideAddPeopleToTagModal` (function): Callback to close the modal.
+ * - `refetchAssignedMembersData` (function): Callback to refetch the assigned members data.
+ * - `t` (function): Translation function for component-specific strings.
+ * - `tCommon` (function): Translation function for common strings.
+ *
+ * @state
+ * - `assignToMembers` (InterfaceMemberData[]): List of members selected for assignment.
+ * - `memberToAssignToSearchFirstName` (string): Search filter for first name.
+ * - `memberToAssignToSearchLastName` (string): Search filter for last name.
+ *
+ * @queries
+ * - `USER_TAGS_MEMBERS_TO_ASSIGN_TO`: Fetches members available for assignment to the tag.
+ *
+ * @mutations
+ * - `ADD_PEOPLE_TO_TAG`: Assigns selected members to the tag.
+ *
+ * @features
+ * - Infinite scrolling for loading more members.
+ * - Search functionality for filtering members by name.
+ * - Displays selected members with the ability to remove them.
+ * - Handles errors and loading states with appropriate UI feedback.
+ *
+ * @dependencies
+ * - React, Apollo Client, Material-UI, React-Bootstrap, React-Toastify, React-Infinite-Scroll.
+ *
+ * @usage
+ * This component is used in the context of managing tags and their associated members.
+ * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
+ */
+
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
@@ -5,14 +45,8 @@ import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
-import type { InterfaceQueryUserTagsMembersToAssignTo } from 'utils/interfaces';
-import styles from './AddPeopleToTag.module.css';
-import type { InterfaceTagUsersToAssignToQuery } from 'utils/organizationTagsUtils';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'utils/organizationTagsUtils';
+import { useParams } from 'react-router';
+import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
 import { toast } from 'react-toastify';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
@@ -20,24 +54,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import type { TFunction } from 'i18next';
-
-/**
- * Props for the `AddPeopleToTag` component.
- */
-export interface InterfaceAddPeopleToTagProps {
-  addPeopleToTagModalIsOpen: boolean;
-  hideAddPeopleToTagModal: () => void;
-  refetchAssignedMembersData: () => void;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
-}
-
-interface InterfaceMemberData {
-  _id: string;
-  firstName: string;
-  lastName: string;
-}
+import type {
+  InterfaceAddPeopleToTagProps,
+  InterfaceMemberData,
+  InterfaceTagUsersToAssignToQuery,
+  InterfaceQueryUserTagsMembersToAssignTo,
+} from 'types/Tag/interface';
+import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -106,7 +129,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) /* istanbul ignore next */ return prevResult;
+        if (!fetchMoreResult) return prevResult;
 
         return {
           getUsersToAssignTo: {
@@ -127,7 +150,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const userTagMembersToAssignTo =
     userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
       (edge) => edge.node,
-    ) ?? /* istanbul ignore next */ [];
+    ) ?? [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
@@ -173,7 +196,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
-    } catch (error: unknown) /* istanbul ignore next */ {
+    } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
       toast.error(errorMessage);
@@ -244,7 +267,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             data-testid={
               isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
             }
-            variant={!isToBeAssigned ? 'primary' : 'danger'}
+            // variant={!isToBeAssigned ? 'primary' : 'danger'}
+            className={
+              !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
+            }
           >
             {isToBeAssigned ? 'x' : '+'}
           </Button>
@@ -263,7 +289,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         centered
       >
         <Modal.Header
-          className="bg-primary"
+          className={`bg-primary ${styles.modalHeader}`}
           data-testid="modalOrganizationHeader"
           closeButton
         >
@@ -301,7 +327,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="firstName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('firstName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchFirstName(e.target.value.trim())
@@ -315,7 +341,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <Form.Control
                   type="text"
                   id="lastName"
-                  className="bg-light"
+                  className={`bg-light ${styles.inputField}`}
                   placeholder={tCommon('lastName')}
                   onChange={(e) =>
                     setMemberToAssignToSearchLastName(e.target.value.trim())
@@ -335,18 +361,14 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
-                  style={{
-                    height: 300,
-                    overflow: 'auto',
-                  }}
+                  style={{ height: 300, overflow: 'auto' }}
                 >
                   <InfiniteScroll
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
                     next={loadMoreMembersToAssignTo}
                     hasMore={
                       userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ??
-                      /* istanbul ignore next */ false
+                        .usersToAssignTo.pageInfo.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="addPeopleToTagScrollableDiv"
@@ -357,7 +379,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       hideFooter={true}
                       getRowId={(row) => row.id}
                       slots={{
-                        noRowsOverlay: /* istanbul ignore next */ () => (
+                        noRowsOverlay: () => (
                           <Stack
                             height="100%"
                             alignItems="center"
@@ -369,9 +391,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                       }}
                       sx={{
                         ...dataGridStyle,
-                        '& .MuiDataGrid-topContainer': {
-                          position: 'static',
-                        },
+                        '& .MuiDataGrid-topContainer': { position: 'static' },
                         '& .MuiDataGrid-virtualScrollerContent': {
                           marginTop: '0',
                         },
@@ -396,16 +416,17 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           <Modal.Footer>
             <Button
               onClick={hideAddPeopleToTagModal}
-              variant="outline-secondary"
+              variant="outline-danger"
               data-testid="closeAddPeopleToTagModal"
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>
             <Button
               type="submit"
               disabled={addPeopleToTagLoading}
-              variant="primary"
               data-testid="assignPeopleBtn"
+              className={styles.addButton}
             >
               {t('assign')}
             </Button>

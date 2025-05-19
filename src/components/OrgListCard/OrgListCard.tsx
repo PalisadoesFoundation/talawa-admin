@@ -1,76 +1,67 @@
+/**
+ * OrgListCard Component
+ *
+ * This component represents a card displaying information about an organization.
+ * It includes the organization's name, description, address, avatar, and the number of members.
+ * A button is provided to navigate to the organization's dashboard for management.
+ *
+ * @component
+ * @param {InterfaceOrgListCardPropsPG} props - The props for the component.
+ * @param {InterfaceOrgInfoTypePG} props.data - The organization data.
+ * @param {string} props.data.id - The unique identifier for the organization.
+ * @param {string} props.data.avatarURL - The URL of the organization's avatar image.
+ * @param {string} props.data.addressLine1 - The primary address of the organization.
+ * @param {string} props.data.name - The name of the organization.
+ * @param {string} props.data.description - A brief description of the organization.
+ * @param {object} props.data.members - The members of the organization.
+ * @param {Array} props.data.members.edges - The list of members in the organization.
+ *
+ * @returns {JSX.Element} A JSX element representing the organization card.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for the button and `@mui/material` for the tooltip.
+ * - The `useNavigate` hook from `react-router-dom` is used for navigation.
+ * - The `useTranslation` hook from `react-i18next` is used for localization.
+ *
+ * @example
+ * ```tsx
+ * <OrgListCard
+ *   data={{
+ *     id: '1',
+ *     avatarURL: 'https://example.com/avatar.png',
+ *     addressLine1: '123 Main St',
+ *     name: 'Example Org',
+ *     description: 'An example organization',
+ *     members: { edges: [{ id: '1' }, { id: '2' }] },
+ *   }}
+ * />
+ * ```
+ */
 import React from 'react';
 import TruncatedText from './TruncatedText';
-// import {useState} from 'react';
-import FlaskIcon from 'assets/svgs/flask.svg?react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrgListCard.module.css';
-import { useNavigate } from 'react-router-dom';
-import type {
-  InterfaceOrgConnectionInfoType,
-  InterfaceQueryOrganizationsListObject,
-} from 'utils/interfaces';
-import {
-  IS_SAMPLE_ORGANIZATION_QUERY,
-  ORGANIZATIONS_LIST,
-} from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import styles from 'style/app-fixed.module.css';
+import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
+import { useNavigate } from 'react-router';
 
-/**
- * Props for the OrgListCard component
- */
-export interface InterfaceOrgListCardProps {
-  data: InterfaceOrgConnectionInfoType;
+export interface InterfaceOrgListCardPropsPG {
+  data: InterfaceOrgInfoTypePG;
 }
 
-/**
- * Component for displaying a list card for an organization
- *
- * This component renders a card that displays information about an organization,
- * including its name, address, members, and admins. It also provides a button
- * to manage the organization, navigating to the organization's dashboard.
- *
- * @param props - The properties passed to the component
- * @returns JSX.Element representing an organization list card
- */
-function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
-  // Destructure data from props
-  const { _id, admins, image, address, members, name } = props.data;
-
-  // Query to check if the organization is a sample organization
-  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
-    variables: {
-      isSampleOrganizationId: _id,
-    },
-  });
-
-  // Use navigate hook from react-router-dom to navigate to the organization dashboard
+function OrgListCard({
+  data: { id, avatarURL, addressLine1, name, description, members },
+}: InterfaceOrgListCardPropsPG): JSX.Element {
   const navigate = useNavigate();
 
-  // Query to get the organization list
-  const {
-    data: userData,
-  }: {
-    data?: {
-      organizations: InterfaceQueryOrganizationsListObject[];
-    };
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: _id },
-  });
-
-  // Handle click event to navigate to the organization dashboard
   function handleClick(): void {
-    const url = '/orgdash/' + _id;
-
-    // Dont change the below two lines
+    const url = `/orgdash/${id}`;
     navigate(url);
   }
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgListCard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'orgListCard' });
   const { t: tCommon } = useTranslation('common');
 
   return (
@@ -80,8 +71,8 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
         <div className={styles.innerContainer}>
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
-            {image ? (
-              <img src={image} alt={`${name} image`} />
+            {avatarURL ? (
+              <img src={avatarURL} alt={`${name} image`} />
             ) : (
               <Avatar
                 name={name}
@@ -91,40 +82,37 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
             )}
           </div>
           <div className={styles.content}>
-            {/* Tooltip for the organization name */}
-            <Tooltip title={name} placement="top-end">
-              <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
-            </Tooltip>
-            {/* Description of the organization */}
-            <div className={`${styles.orgdesc} fw-semibold`}>
-              <TruncatedText
-                text={userData?.organizations[0]?.description || ''}
-              />
-            </div>
-
-            {/* Display the organization address if available */}
-            {address?.city && (
-              <div className={styles.address}>
-                <TruncatedText
-                  text={`${address?.line1}, ${address?.city}, ${address?.countryCode}`}
-                />
+            <div>
+              {/* Tooltip for the organization name */}
+              <Tooltip title={name} placement="top-end">
+                <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+              </Tooltip>
+              {/* Description of the organization */}
+              <div className={`${styles.orgdesc} fw-semibold`}>
+                <TruncatedText text={description} />
               </div>
-            )}
-            {/* Display the number of admins and members */}
-            <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{admins.length}</span> &nbsp; &nbsp;
-              &nbsp; {tCommon('members')}: <span>{members.length}</span>
-            </h6>
-          </div>
-        </div>
-        {/* Button to manage the organization */}
-        <Button
-          onClick={handleClick}
-          data-testid="manageBtn"
-          className={styles.manageBtn}
-        >
-          {/* Show flask icon if the organization is a sample organization */}
-          {data && data?.isSampleOrganization && (
+
+              {/* Display the organization address if available */}
+              {addressLine1 && (
+                <div className={styles.address}>
+                  <TruncatedText text={`${addressLine1}`} />
+                </div>
+              )}
+              {/* Display the number of admins and members */}
+              <h6 className={styles.orgadmin}>
+                <div>
+                  {tCommon('members')}: <span>{members.edges.length}</span>
+                </div>
+              </h6>
+            </div>
+            {/* Button to manage the organization */}
+            <Button
+              onClick={handleClick}
+              data-testid="manageBtn"
+              className={styles.manageBtn}
+            >
+              {/* Show flask icon if the organization is a sample organization */}
+              {/* {data && data?.isSampleOrganization && (
             <FlaskIcon
               fill="var(--bs-white)"
               width={12}
@@ -133,11 +121,13 @@ function orgListCard(props: InterfaceOrgListCardProps): JSX.Element {
               data-testid="flaskIcon"
             />
           )}
-          {'  '}
-          {t('manage')}
-        </Button>
+          {'  '} */}
+              {t('manage')}
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );
 }
-export default orgListCard;
+export default OrgListCard;

@@ -3,16 +3,17 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { REGISTRANTS_MOCKS } from './Registrations.mocks';
-import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/Attendance.mocks';
+import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
 import { vi } from 'vitest';
 import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
+import styles from 'style/app-fixed.module.css';
 
 const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
 
@@ -40,8 +41,8 @@ const renderEventRegistrants = (): RenderResult => {
 
 describe('Event Registrants Component', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
       return {
         ...actual,
         useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
@@ -86,24 +87,14 @@ describe('Event Registrants Component', () => {
           query: EVENT_REGISTRANTS,
           variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
         },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [],
-          },
-        },
+        result: { data: { getEventAttendeesByEventId: [] } },
       },
       {
         request: {
           query: EVENT_ATTENDEES,
           variables: { id: '660fdf7d2c1ef6c7db1649ad' },
         },
-        result: {
-          data: {
-            event: {
-              attendees: [],
-            },
-          },
-        },
+        result: { data: { event: { attendees: [] } } },
       },
     ];
 
@@ -146,10 +137,7 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
-        },
+        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
         result: {
           data: {
             event: {
@@ -216,10 +204,7 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
-        },
+        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
         result: {
           data: {
             event: {
@@ -260,5 +245,66 @@ describe('Event Registrants Component', () => {
     expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
       'N/A',
     );
+  });
+});
+
+describe('EventRegistrants CSS Tests', () => {
+  const renderEventRegistrants = (): RenderResult => {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <EventRegistrants />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  beforeEach(() => {
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
+      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    }));
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should apply correct styles to the filter button', () => {
+    renderEventRegistrants();
+    const filterButton = screen.getByTestId('filter-button');
+
+    expect(filterButton).toHaveClass('border-1', 'mx-4', styles.createButton);
+  });
+
+  it('should apply correct styles to the table container', () => {
+    renderEventRegistrants();
+    const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
+    expect(tableContainer).toHaveClass('mt-3');
+    expect(tableContainer).toHaveStyle({ borderRadius: '16px' });
+  });
+
+  it('should style table header cells with custom cell class', () => {
+    renderEventRegistrants();
+    const headerCells = [
+      screen.getByTestId('table-header-serial'),
+      screen.getByTestId('table-header-registrant'),
+      screen.getByTestId('table-header-registered-at'),
+      screen.getByTestId('table-header-created-at'),
+      screen.getByTestId('table-header-add-registrant'),
+    ];
+    headerCells.forEach((cell) => {
+      expect(cell).toHaveClass(styles.customcell);
+    });
+  });
+
+  it('should apply proper spacing between buttons', () => {
+    renderEventRegistrants();
+    const filterButton = screen.getByTestId('filter-button');
+    expect(filterButton).toHaveClass('mx-4');
   });
 });

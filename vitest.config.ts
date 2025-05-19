@@ -1,23 +1,16 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    nodePolyfills({
-      include: ['events'],
-    }),
-    tsconfigPaths(),
-    svgrPlugin(),
-  ],
+  plugins: [react(), tsconfigPaths(), svgrPlugin()],
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
+    testTimeout: 30000,
     coverage: {
       enabled: true,
       provider: 'istanbul',

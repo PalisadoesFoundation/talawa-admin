@@ -1,5 +1,49 @@
-import React from 'react';
-import styles from './OrganizationCard.module.css';
+/**
+ * OrganizationCard Component
+ *
+ * This component represents a card displaying information about an organization.
+ * It provides functionality for users to join, withdraw membership requests, or visit
+ * the organization's page based on their membership status.
+ *
+ * @param props - The properties for the OrganizationCard component.
+ * @param props.id - The unique identifier of the organization.
+ * @param props.name - The name of the organization.
+ * @param props.image - The URL of the organization's image.
+ * @param props.description - A brief description of the organization.
+ * @param props.adminsCount - The number of admins in the organization.
+ * @param props.membersCount - The number of members in the organization.
+ * @param props.address - The address of the organization, including city and country code.
+ * @param props.membershipRequestStatus - The current membership request status for the user.
+ * @param props.userRegistrationRequired - Indicates if user registration is required to join.
+ * @param props.membershipRequests - List of membership requests for the organization.
+ * @param props.isJoined - Indicates if the user is already a member of the organization.
+ *
+ * @returns A JSX.Element representing the organization card.
+ *
+ * @remarks
+ * - Uses GraphQL mutations and queries to handle membership actions.
+ * - Displays success or error messages using `react-toastify`.
+ * - Handles user ID retrieval from localStorage and manages state accordingly.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationCard
+ *   id="org123"
+ *   name="Sample Organization"
+ *   image="https://example.com/image.jpg"
+ *   description="A sample organization"
+ *   adminsCount={5}
+ *   membersCount={100}
+ *   address={{ city: "New York", countryCode: "US", line1: "123 Main St" }}
+ *   membershipRequestStatus="pending"
+ *   userRegistrationRequired={true}
+ *   membershipRequests={[]}
+ *   isJoined={false}
+ * />
+ * ```
+ */
+import { useEffect, useState } from 'react';
+import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -10,92 +54,65 @@ import {
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { useMutation, useQuery } from '@apollo/client';
-import {
-  USER_JOINED_ORGANIZATIONS,
-  USER_ORGANIZATION_CONNECTION,
-} from 'GraphQl/Queries/OrganizationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import type { ApolloError } from '@apollo/client';
+import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
+import { getItem } from 'utils/useLocalstorage';
+import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 
-const { getItem } = useLocalStorage();
+function OrganizationCard({
+  id,
+  name,
+  image,
+  description,
+  adminsCount,
+  membersCount,
+  address,
+  membershipRequestStatus,
+  userRegistrationRequired,
+  membershipRequests,
+  isJoined,
+}: InterfaceOrganizationCardProps): JSX.Element {
+  const [userId, setUserId] = useState<string | null>(null);
 
-interface InterfaceOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: {
-    id: string;
-  }[];
-  members: {
-    id: string;
-  }[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
-}
+  useEffect(() => {
+    try {
+      const storedUserId = getItem('Talawa-admin', 'id');
+      setUserId(storedUserId as string | null);
+    } catch (error) {
+      // Handle localStorage error silently
+      console.error('Failed to get userId from localStorage:', error);
+    }
+  }, []);
 
-/**
- * Displays an organization card with options to join or manage membership.
- *
- * Shows the organization's name, image, description, address, number of admins and members,
- * and provides buttons for joining, withdrawing membership requests, or visiting the organization page.
- *
- * @param props - The properties for the organization card.
- * @param id - The unique identifier of the organization.
- * @param name - The name of the organization.
- * @param image - The URL of the organization's image.
- * @param description - A description of the organization.
- * @param admins - The list of admins with their IDs.
- * @param members - The list of members with their IDs.
- * @param address - The address of the organization including city, country code, line1, postal code, and state.
- * @param membershipRequestStatus - The status of the membership request (accepted, pending, or empty).
- * @param userRegistrationRequired - Indicates if user registration is required to join the organization.
- * @param membershipRequests - The list of membership requests with user IDs.
- *
- * @returns The organization card component.
- */
-const userId: string | null = getItem('userId');
-
-function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'users',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
-
   const navigate = useNavigate();
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
+      { query: ORGANIZATION_LIST },
+      {
+        query: USER_JOINED_ORGANIZATIONS_PG,
+        variables: { id: userId, first: 5 },
+      },
     ],
+    onCompleted: () => {
+      window.location.reload(); // Force refresh after successful join
+    },
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
-    refetchQueries: [
-      { query: USER_ORGANIZATION_CONNECTION, variables: { id: props.id } },
-    ],
+    refetchQueries: [{ query: ORGANIZATION_LIST }],
   });
-  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS, {
-    variables: { id: userId },
+  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+    variables: { id: userId, first: 5 },
+    skip: !userId,
   });
 
   /**
@@ -104,26 +121,20 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
    */
   async function joinOrganization(): Promise<void> {
     try {
-      if (props.userRegistrationRequired) {
-        await sendMembershipRequest({
-          variables: {
-            organizationId: props.id,
-          },
-        });
+      if (userRegistrationRequired) {
+        await sendMembershipRequest({ variables: { organizationId: id } });
         toast.success(t('MembershipRequestSent') as string);
       } else {
         await joinPublicOrganization({
-          variables: {
-            organizationId: props.id,
-          },
+          variables: { input: { organizationId: id } },
         });
         toast.success(t('orgJoined') as string);
       }
-      refetch();
     } catch (error: unknown) {
-      /* istanbul ignore next */
       if (error instanceof Error) {
-        if (error.message === 'User is already a member') {
+        const apolloError = error as ApolloError;
+        const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
+        if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('AlreadyJoined') as string);
         } else {
           toast.error(t('errorOccured') as string);
@@ -136,71 +147,86 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
    * Handles withdrawing a membership request. Finds the request for the current user and cancels it.
    */
   async function withdrawMembershipRequest(): Promise<void> {
-    const membershipRequest = props.membershipRequests.find(
-      (request) => request.user._id === userId,
+    if (!userId) {
+      toast.error(t('UserIdNotFound') as string);
+      return;
+    }
+
+    const membershipRequest = membershipRequests.find(
+      (request) => request.user.id === userId,
     );
 
-    await cancelMembershipRequest({
-      variables: {
-        membershipRequestId: membershipRequest?._id,
-      },
-    });
+    try {
+      if (!membershipRequest) {
+        toast.error(t('MembershipRequestNotFound') as string);
+        return;
+      }
+
+      await cancelMembershipRequest({
+        variables: { membershipRequestId: membershipRequest.id },
+      });
+
+      toast.success(t('MembershipRequestWithdrawn') as string);
+    } catch (error: unknown) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to withdraw membership request:', error);
+      }
+      toast.error(t('errorOccured') as string);
+    }
   }
 
   return (
-    <>
-      <div className={styles.orgCard}>
-        <div className={styles.innerContainer}>
-          <div className={styles.orgImgContainer}>
-            {props.image ? (
-              <img src={props.image} alt={`${props.name} image`} />
-            ) : (
-              <Avatar
-                name={props.name}
-                alt={`${props.name} image`}
-                dataTestId="emptyContainerForImage"
-              />
-            )}
-          </div>
-          <div className={styles.content}>
-            <Tooltip title={props.name} placement="top-end">
-              <h4 className={`${styles.orgName} fw-semibold`}>{props.name}</h4>
-            </Tooltip>
-            <h6 className={`${styles.orgdesc} fw-semibold`}>
-              <span>{props.description}</span>
-            </h6>
-            {props.address && props.address.city && (
-              <div className={styles.address}>
-                <h6 className="text-secondary">
-                  <span className="address-line">{props.address.line1}, </span>
-                  <span className="address-line">{props.address.city}, </span>
-                  <span className="address-line">
-                    {props.address.countryCode}
-                  </span>
-                </h6>
-              </div>
-            )}
-            <h6 className={styles.orgadmin}>
-              {tCommon('admins')}: <span>{props.admins?.length}</span> &nbsp;
-              &nbsp; &nbsp; {tCommon('members')}:{' '}
-              <span>{props.members?.length}</span>
-            </h6>
-          </div>
+    <div className={styles.orgCard}>
+      <div className={styles.innerContainer}>
+        <div className={styles.orgImgContainer}>
+          {image ? (
+            <img src={image} alt={`${name} image`} />
+          ) : (
+            <Avatar
+              name={name}
+              alt={`${name} image`}
+              dataTestId="emptyContainerForImage"
+            />
+          )}
         </div>
-        {props.membershipRequestStatus === 'accepted' && (
+        <div className={styles.content}>
+          <Tooltip title={name} placement="top-end">
+            <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+          </Tooltip>
+          <h6 className={`${styles.orgdesc} fw-semibold`}>
+            <span>{description}</span>
+          </h6>
+          {address && address.city && (
+            <div className={styles.address}>
+              <h6 className="text-secondary">
+                <span className="address-line">{address.line1}, </span>
+                <span className="address-line">{address.city}, </span>
+                <span className="address-line">{address.countryCode}</span>
+              </h6>
+            </div>
+          )}
+          <h6 className={styles.orgadmin}>
+            <div>
+              {tCommon('admins')}: <span>{adminsCount}</span>
+            </div>
+            <div>
+              {tCommon('members')}: <span>{membersCount}</span>
+            </div>
+          </h6>
+        </div>
+      </div>
+
+      <div className={styles.buttonContainer}>
+        {isJoined ? (
           <Button
-            variant="success"
             data-testid="manageBtn"
-            className={styles.joinedBtn}
-            onClick={() => {
-              navigate(`/user/organization/${props.id}`);
-            }}
+            className={styles.addButton}
+            onClick={() => navigate(`/user/organization/${id}`)}
+            style={{ width: '8rem' }}
           >
             {t('visit')}
           </Button>
-        )}
-
-        {props.membershipRequestStatus === 'pending' && (
+        ) : membershipRequestStatus === 'pending' ? (
           <Button
             variant="danger"
             onClick={withdrawMembershipRequest}
@@ -209,20 +235,19 @@ function organizationCard(props: InterfaceOrganizationCardProps): JSX.Element {
           >
             {t('withdraw')}
           </Button>
-        )}
-        {props.membershipRequestStatus === '' && (
+        ) : (
           <Button
             onClick={joinOrganization}
             data-testid="joinBtn"
-            className={styles.joinBtn}
-            variant="outline-success"
+            className={styles.outlineBtn}
+            style={{ width: '8rem' }}
           >
             {t('joinNow')}
           </Button>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
-export default organizationCard;
+export default OrganizationCard;

@@ -1,5 +1,38 @@
+/**
+ * A reusable `Loader` component that displays a spinner to indicate loading state.
+ *
+ * @remarks
+ * This component uses the `react-bootstrap` Spinner for the loading animation
+ * and applies custom styles from the `app-fixed.module.css` stylesheet.
+ *
+ * @param props - The properties to configure the Loader component.
+ *
+ * @property styles - Optional custom styles for the spinner wrapper.
+ * Can be a `StyleSheet` object or a string representing CSS class names.
+ * Defaults to the `spinner_wrapper` class from the imported stylesheet.
+ *
+ * @property size - Optional size of the spinner. Accepts:
+ * - `'sm'` for a small spinner.
+ * - `'lg'` for a large spinner.
+ * - `'xl'` for an extra-large spinner.
+ * Defaults to the `spinnerXl` class if no size is specified.
+ *
+ * @returns A JSX element containing a styled spinner.
+ *
+ * @example
+ * ```tsx
+ * import Loader from './Loader';
+ *
+ * const App = () => (
+ *   <div>
+ *     <Loader size="sm" />
+ *     <Loader size="lg" styles="custom-spinner-class" />
+ *   </div>
+ * );
+ * ```
+ */
 import React from 'react';
-import styles from './Loader.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Spinner } from 'react-bootstrap';
 
 interface InterfaceLoaderProps {
@@ -7,13 +40,6 @@ interface InterfaceLoaderProps {
   size?: 'sm' | 'lg' | 'xl'; // Size of the spinner
 }
 
-/**
- * Loader component for displaying a loading spinner.
- *
- * @param styles - Optional custom styles for the spinner wrapper.
- * @param size - Size of the spinner. Can be 'sm', 'lg', or 'xl'.
- * @returns JSX element for a loading spinner.
- */
 const Loader = (props: InterfaceLoaderProps): JSX.Element => {
   return (
     <>

@@ -1,9 +1,9 @@
 import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
-import type { InterfaceCollapsibleDropdown } from './CollapsibleDropdown';
+import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 import { store } from 'state/store';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -23,7 +23,7 @@ const currentLocation: Location = {
   hash: '',
 };
 
-vi.mock('react-router-dom', async (importOriginal) => {
+vi.mock('react-router', async (importOriginal) => {
   const mod = (await importOriginal()) as object;
 
   return {
@@ -88,18 +88,19 @@ describe('Testing CollapsibleDropdown component', () => {
       fireEvent.click(activeDropdownBtn);
     });
     expect(parentDropdownBtn).toBeInTheDocument();
-    expect(parentDropdownBtn).toHaveClass('text-white');
-    expect(parentDropdownBtn).toHaveClass('btn-success');
+    expect(parentDropdownBtn).toHaveClass('_leftDrawerActiveButton_d00707');
 
     // Check if active dropdown is rendered with correct classes
     expect(activeDropdownBtn).toBeInTheDocument();
-    expect(activeDropdownBtn).toHaveClass('text-white');
-    expect(activeDropdownBtn).toHaveClass('btn-success');
+    expect(activeDropdownBtn).toHaveClass(
+      '_leftDrawerCollapseActiveButton_d00707',
+    );
 
     // Check if inactive dropdown is rendered with correct classes
     expect(nonActiveDropdownBtn).toBeInTheDocument();
-    expect(nonActiveDropdownBtn).toHaveClass('text-secondary');
-    expect(nonActiveDropdownBtn).toHaveClass('btn-light');
+    expect(nonActiveDropdownBtn).toHaveClass(
+      '_leftDrawerInactiveButton_d00707',
+    );
 
     // Check if dropdown is collapsed after clicking on it
     act(() => {

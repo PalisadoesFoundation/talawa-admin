@@ -13,10 +13,10 @@ const userDetailsQuery = {
     data: {
       user: {
         user: {
-          _id: 'userId',
+          id: 'userId',
           joinedOrganizations: [
             {
-              _id: '6537904485008f171cf29924',
+              id: '6537904485008f171cf29924',
               __typename: 'Organization',
             },
           ],
@@ -43,11 +43,10 @@ const userDetailsQuery = {
           __typename: 'User',
         },
         appUserProfile: {
-          _id: '67078abd85008f171cf2991d',
+          id: '67078abd85008f171cf2991d',
           adminFor: [],
           isSuperAdmin: false,
           appLanguageCode: 'en',
-          pluginCreationAllowed: true,
           createdOrganizations: [],
           createdEvents: [],
           eventAdmin: [],
@@ -75,12 +74,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -88,28 +87,28 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId2',
+                id: 'userId2',
                 firstName: 'Deanne',
                 lastName: 'Marks',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId3',
+                id: 'userId3',
                 firstName: 'Jeramy',
                 lastName: 'Garcia',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId4',
+                id: 'userId4',
                 firstName: 'Praise',
                 lastName: 'Norris',
                 image: null,
@@ -119,12 +118,12 @@ export const MOCKS = [
             __typename: 'FundraisingCampaignPledge',
           },
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -132,14 +131,14 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId6',
+                id: 'userId6',
                 firstName: 'Jane',
                 lastName: 'Doe',
                 image: null,
@@ -167,12 +166,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -180,7 +179,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: null,
@@ -208,12 +207,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -221,14 +220,14 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId6',
+                id: 'userId6',
                 firstName: 'Jane',
                 lastName: 'Doe',
                 image: null,
@@ -256,12 +255,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -269,7 +268,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
@@ -279,12 +278,12 @@ export const MOCKS = [
             __typename: 'FundraisingCampaignPledge',
           },
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -292,7 +291,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: 'image-url',
@@ -320,12 +319,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -333,7 +332,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: 'image-url',
@@ -343,12 +342,12 @@ export const MOCKS = [
             __typename: 'FundraisingCampaignPledge',
           },
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -356,7 +355,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
@@ -384,12 +383,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -397,7 +396,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: 'image-url',
@@ -407,12 +406,12 @@ export const MOCKS = [
             __typename: 'FundraisingCampaignPledge',
           },
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-14',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -420,7 +419,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
@@ -448,12 +447,12 @@ export const MOCKS = [
       data: {
         getPledgesByUserId: [
           {
-            _id: 'pledgeId2',
+            id: 'pledgeId2',
             amount: 100,
             startDate: '2024-07-28',
             endDate: '2024-08-14',
             campaign: {
-              _id: 'campaignId2',
+              id: 'campaignId2',
               name: 'School Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -461,49 +460,49 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId5',
+                id: 'userId5',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId6',
+                id: 'userId6',
                 firstName: 'Jane',
                 lastName: 'Doe',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId7',
+                id: 'userId7',
                 firstName: 'John2',
                 lastName: 'Doe2',
                 image: 'image-url3',
                 __typename: 'User',
               },
               {
-                _id: 'userId8',
+                id: 'userId8',
                 firstName: 'Jane2',
                 lastName: 'Doe2',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId9',
+                id: 'userId9',
                 firstName: 'John3',
                 lastName: 'Doe3',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId10',
+                id: 'userId10',
                 firstName: 'Jane3',
                 lastName: 'Doe3',
                 image: null,
                 __typename: 'User',
               },
               {
-                _id: 'userId11',
+                id: 'userId11',
                 firstName: 'John4',
                 lastName: 'Doe4',
                 image: null,
@@ -513,12 +512,12 @@ export const MOCKS = [
             __typename: 'FundraisingCampaignPledge',
           },
           {
-            _id: 'pledgeId1',
+            id: 'pledgeId1',
             amount: 700,
             startDate: '2024-07-28',
             endDate: '2024-08-13',
             campaign: {
-              _id: 'campaignId1',
+              id: 'campaignId1',
               name: 'Hospital Campaign',
               endDate: '2024-08-30',
               __typename: 'FundraisingCampaign',
@@ -526,7 +525,7 @@ export const MOCKS = [
             currency: 'USD',
             users: [
               {
-                _id: 'userId',
+                id: 'userId',
                 firstName: 'Harve',
                 lastName: 'Lance',
                 image: 'image-url',
@@ -549,7 +548,7 @@ export const MOCKS = [
     result: {
       data: {
         removeFundraisingCampaignPledge: {
-          _id: '1',
+          id: '1',
         },
       },
     },

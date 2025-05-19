@@ -1,3 +1,32 @@
+/**
+ * A modal component for creating a new post in the user portal.
+ *
+ * @remarks
+ * This component allows users to create a new post by entering text content
+ * and optionally attaching an image. It uses Apollo Client's `useMutation` hook
+ * to handle the post creation process and displays toast notifications for feedback.
+ *
+ * @param show - A boolean indicating whether the modal is visible.
+ * @param onHide - A callback function to hide the modal.
+ * @param fetchPosts - A function to refresh the list of posts after a new post is created.
+ * @param userData - The data of the currently logged-in user, including their name and image.
+ * @param organizationId - The ID of the organization where the post will be created.
+ * @param img - An optional image to attach to the post.
+ *
+ * @returns A JSX element representing the modal for creating a new post.
+ *
+ * @example
+ * ```tsx
+ * <StartPostModal
+ *   show={isModalVisible}
+ *   onHide={handleCloseModal}
+ *   fetchPosts={refreshPosts}
+ *   userData={currentUser}
+ *   organizationId="org123"
+ *   img={selectedImage}
+ * />
+ * ```
+ */
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
@@ -7,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import styles from './StartPostModal.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 
@@ -20,23 +49,6 @@ interface InterfaceStartPostModalProps {
   img: string | null;
 }
 
-/**
- * A modal component for creating a new post.
- *
- * This modal includes:
- * - A form where users can input the content of the post.
- * - A preview of the image if provided.
- * - User's profile image and name displayed in the modal header.
- *
- * @param show - Whether the modal is visible.
- * @param onHide - Function to call when the modal is hidden.
- * @param fetchPosts - Function to refresh the posts after creating a new one.
- * @param userData - User data to display in the modal header.
- * @param organizationId - The ID of the organization for the post.
- * @param img - The URL of the image to be included in the post.
- *
- * @returns JSX.Element - The rendered modal component.
- */
 const startPostModal = ({
   show,
   onHide,
@@ -113,13 +125,13 @@ const startPostModal = ({
       data-testid="startPostModal"
     >
       <Modal.Header
-        className="bg-primary"
+        className={styles.modalHeader}
         closeButton
         data-testid="modalHeader"
       >
-        <Modal.Title className="text-white">
+        <Modal.Title>
           <span className="d-flex gap-2 align-items-center">
-            <span className={styles.userImage}>
+            <span className={styles.userImageUserPost}>
               <Image
                 src={userData?.user?.image || UserDefault}
                 roundedCircle
@@ -131,6 +143,7 @@ const startPostModal = ({
           </span>
         </Modal.Title>
       </Modal.Header>
+      <hr style={{ margin: 0 }}></hr>
       <Form>
         <Modal.Body>
           <Form.Control
@@ -138,7 +151,7 @@ const startPostModal = ({
             as="textarea"
             rows={3}
             id="orgname"
-            className={styles.postInput}
+            className={styles.inputField}
             data-testid="postInput"
             autoComplete="off"
             required
@@ -155,8 +168,7 @@ const startPostModal = ({
         <Modal.Footer>
           <Button
             size="sm"
-            variant="success"
-            className="px-4"
+            className={`px-4 ${styles.addButton}`}
             value="invite"
             data-testid="createPostBtn"
             onClick={handlePost}

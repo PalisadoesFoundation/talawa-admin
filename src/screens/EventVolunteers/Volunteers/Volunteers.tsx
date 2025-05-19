@@ -1,9 +1,55 @@
+/**
+ * @file Volunteers.tsx
+ * @description This component renders the Volunteers page for an event in the Talawa Admin application.
+ * It provides functionalities to view, search, filter, sort, and manage volunteers for a specific event.
+ * The page includes a data grid to display volunteer details and modals for adding, viewing, and deleting volunteers.
+ *
+ * @module Volunteers
+ *
+ * @requires react
+ * @requires react-i18next
+ * @requires react-bootstrap
+ * @requires react-router-dom
+ * @requires @mui/icons-material
+ * @requires @apollo/client
+ * @requires @mui/x-data-grid
+ * @requires @mui/material
+ * @requires components/Loader/Loader
+ * @requires components/Avatar/Avatar
+ * @requires subComponents/SortingButton
+ * @requires subComponents/SearchBar
+ * @requires GraphQl/Queries/EventVolunteerQueries
+ * @requires utils/interfaces
+ * @requires ./createModal/VolunteerCreateModal
+ * @requires ./deleteModal/VolunteerDeleteModal
+ * @requires ./viewModal/VolunteerViewModal
+ * @requires style/app.module.css
+ *
+ * @typedef {InterfaceEventVolunteerInfo} InterfaceEventVolunteerInfo - Interface for volunteer information.
+ *
+ * @component
+ * @returns {JSX.Element} The Volunteers page component.
+ *
+ * @example
+ * // Usage
+ * import Volunteers from './Volunteers';
+ *
+ * function App() {
+ *   return <Volunteers />;
+ * }
+ *
+ * @remarks
+ * - The component uses Apollo Client's `useQuery` to fetch volunteer data.
+ * - It supports search, sorting, and filtering functionalities.
+ * - Modals are used for adding, viewing, and deleting volunteers.
+ * - Displays a loader while fetching data and handles errors gracefully.
+ */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { Navigate, useParams } from 'react-router';
 
-import { Circle, Search, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -14,13 +60,14 @@ import {
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import VolunteerCreateModal from './VolunteerCreateModal';
-import VolunteerDeleteModal from './VolunteerDeleteModal';
-import VolunteerViewModal from './VolunteerViewModal';
+import VolunteerCreateModal from './createModal/VolunteerCreateModal';
+import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
+import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum VolunteerStatus {
   All = 'all',
@@ -35,37 +82,25 @@ enum ModalState {
 }
 
 const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component for managing and displaying event volunteers related to an event.
- *
- * This component allows users to view, filter, sort, and create volunteers. It also handles fetching and displaying related data such as volunteer acceptance status, etc.
- *
- * @returns The rendered component.
- */
 function volunteers(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -78,7 +113,6 @@ function volunteers(): JSX.Element {
 
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<
     'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
@@ -120,9 +154,7 @@ function volunteers(): JSX.Element {
     error: volunteersError,
     refetch: refetchVolunteers,
   }: {
-    data?: {
-      getEventVolunteers: InterfaceEventVolunteerInfo[];
-    };
+    data?: { getEventVolunteers: InterfaceEventVolunteerInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
@@ -174,7 +206,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
         return (
@@ -214,7 +246,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <Chip
@@ -234,7 +266,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -252,7 +284,7 @@ function volunteers(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
@@ -273,7 +305,7 @@ function volunteers(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeaders}`,
+      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
           <>
@@ -306,31 +338,12 @@ function volunteers(): JSX.Element {
     <div>
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={tCommon('searchBy', {
-              item: 'Name',
-            })}
-            autoComplete="off"
-            required
-            className={styles.inputFields}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={tCommon('searchBy', { item: 'Name' })}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -372,6 +385,7 @@ function volunteers(): JSX.Element {
               variant="success"
               onClick={() => handleOpenModal(null, ModalState.ADD)}
               style={{ marginTop: '11px' }}
+              className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -384,6 +398,7 @@ function volunteers(): JSX.Element {
       {/* Table with Volunteers */}
       <DataGrid
         disableColumnMenu
+        disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
         getRowId={(row) => row._id}

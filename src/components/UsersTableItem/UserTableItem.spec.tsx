@@ -8,14 +8,14 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import type * as RouterTypes from 'react-router-dom';
+import type * as RouterTypes from 'react-router';
 
 const { setItem } = useLocalStorage();
 
@@ -45,10 +45,8 @@ Object.defineProperty(window, 'location', {
 
 const mockNavgatePush = vi.fn();
 
-vi.mock('react-router-dom', async () => {
-  const actual = (await vi.importActual(
-    'react-router-dom',
-  )) as typeof RouterTypes;
+vi.mock('react-router', async () => {
+  const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return {
     ...actual,
     useNavigate: () => mockNavgatePush,
@@ -1315,9 +1313,9 @@ describe('Testing User Table Item', () => {
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
     expect(changeRoleBtn).toBeInTheDocument();
-    userEvent.selectOptions(changeRoleBtn, 'ADMIN');
+    await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
     await wait();
-    userEvent.selectOptions(changeRoleBtn, 'USER');
+    await userEvent.selectOptions(changeRoleBtn, 'USER');
     await wait();
     expect(changeRoleBtn.value).toBe(`USER?abc`);
     await wait();

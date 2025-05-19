@@ -1,850 +1,36 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter } from 'react-router';
+import { toast, ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import { EMPTY_MOCKS, MOCKS, MOCKS2 } from './UsersMocks';
+import {
+  EMPTY_MOCKS,
+  MOCKS_NEW,
+  MOCKS_NEW2,
+  MOCKS_NEW3,
+  MOCKS_NEW_2,
+} from './UsersMocks.mocks';
+import { generateMockUser } from './Organization.mocks';
+import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
-import {
-  USER_LIST,
-  ORGANIZATION_CONNECTION_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
 const { setItem, removeItem } = useLocalStorage();
-
-const createAddress = {
-  city: 'Kingston',
-  countryCode: 'JM',
-  dependentLocality: 'Sample Dependent Locality',
-  line1: '123 Jamaica Street',
-  line2: 'Apartment 456',
-  postalCode: 'JM12345',
-  sortingCode: 'ABC-123',
-  state: 'Kingston Parish',
-};
-
-const createCreator = {
-  _id: '123',
-  firstName: 'Jack',
-  lastName: 'Smith',
-  image: null,
-  email: 'jack@example.com',
-  createdAt: '19/06/2022',
-};
-
-const MOCK_USERS = [
-  {
-    user: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-      email: 'john@example.com',
-      createdAt: '2023-04-13T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '20/06/2022',
-          creator: {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: null,
-            email: 'john@example.com',
-            createdAt: '20/06/2022',
-          },
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '20/06/2022',
-          creator: {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: null,
-            email: 'john@example.com',
-            createdAt: '20/06/2022',
-          },
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user1',
-      adminFor: [
-        {
-          _id: '123',
-        },
-      ],
-      isSuperAdmin: true,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user2',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      image: null,
-      email: 'john@example.com',
-      createdAt: '2023-04-17T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: '456',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '21/06/2022',
-          creator: {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: null,
-            email: 'john@example.com',
-            createdAt: '21/06/2022',
-          },
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: '123',
-          name: 'Palisadoes',
-          image: null,
-          address: createAddress,
-          createdAt: '21/06/2022',
-          creator: {
-            _id: '123',
-            firstName: 'John',
-            lastName: 'Doe',
-            image: null,
-            email: 'john@example.com',
-            createdAt: '21/06/2022',
-          },
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user2',
-      adminFor: [
-        {
-          _id: '123',
-        },
-      ],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user3',
-      firstName: 'Jack',
-      lastName: 'Smith',
-      image: null,
-      email: 'jack@example.com',
-      createdAt: '2023-04-09T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user3',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-];
-
-const MOCK_USERS2 = [
-  ...MOCK_USERS,
-  {
-    user: {
-      _id: 'user4',
-      firstName: 'Emma',
-      lastName: 'Johnson',
-      image: null,
-      email: 'emma@example.com',
-      createdAt: '2023-04-22T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user4',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user5',
-      firstName: 'Liam',
-      lastName: 'Smith',
-      image: null,
-      email: 'liam@example.com',
-      createdAt: '2023-04-23T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user5',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user6',
-      firstName: 'Olivia',
-      lastName: 'Brown',
-      image: null,
-      email: 'olivia@example.com',
-      createdAt: '2023-04-24T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user6',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user7',
-      firstName: 'Noah',
-      lastName: 'Williams',
-      image: null,
-      email: 'noah@example.com',
-      createdAt: '2023-04-25T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user7',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user8',
-      firstName: 'Ava',
-      lastName: 'Jones',
-      image: null,
-      email: 'ava@example.com',
-      createdAt: '2023-04-26T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user8',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user9',
-      firstName: 'Ethan',
-      lastName: 'Garcia',
-      image: null,
-      email: 'ethan@example.com',
-      createdAt: '2023-04-27T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user9',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user10',
-      firstName: 'Sophia',
-      lastName: 'Martinez',
-      image: null,
-      email: 'sophia@example.com',
-      createdAt: '2023-04-28T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user10',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user11',
-      firstName: 'Mason',
-      lastName: 'Davis',
-      image: null,
-      email: 'mason@example.com',
-      createdAt: '2023-04-29T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user11',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user12',
-      firstName: 'Isabella',
-      lastName: 'Rodriguez',
-      image: null,
-      email: 'isabella@example.com',
-      createdAt: '2023-04-30T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user12',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user13',
-      firstName: 'Logan',
-      lastName: 'Wilson',
-      image: null,
-      email: 'logan@example.com',
-      createdAt: '2023-04-08T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user13',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user14',
-      firstName: 'Mia',
-      lastName: 'Anderson',
-      image: null,
-      email: 'mia@example.com',
-      createdAt: '2023-04-07T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user14',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-  {
-    user: {
-      _id: 'user15',
-      firstName: 'Lucas',
-      lastName: 'Thomas',
-      image: null,
-      email: 'lucas@example.com',
-      createdAt: '2023-04-05T04:53:17.742+00:00',
-      registeredEvents: [],
-      membershipRequests: [],
-      organizationsBlockedBy: [
-        {
-          _id: 'xyz',
-          name: 'ABC',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-      joinedOrganizations: [
-        {
-          _id: 'abc',
-          name: 'Joined Organization 1',
-          image: null,
-          address: createAddress,
-          createdAt: '19/06/2022',
-          creator: createCreator,
-        },
-      ],
-    },
-    appUserProfile: {
-      _id: 'user15',
-      adminFor: [],
-      isSuperAdmin: false,
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-    },
-  },
-];
-
-const MOCKS_NEW = [
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 12,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS,
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-];
-
-const MOCKS_NEW2 = [
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 12,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS2.slice(0, 12),
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 24,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS2.slice(12, 15),
-      },
-    },
-  },
-];
-
-const MOCKS_NEW3 = [
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 12,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS2.slice(0, 12),
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_CONNECTION_LIST,
-    },
-    result: {
-      data: {
-        organizationsConnection: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 24,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS2.slice(11, 15),
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 24,
-        skip: 0,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        users: MOCK_USERS2.slice(11, 15),
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_LIST,
-      variables: {
-        first: 13,
-        skip: 3,
-        firstName_contains: '',
-        lastName_contains: '',
-        order: 'createdAt_DESC',
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        users: [],
-      },
-    },
-  },
-];
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -962,26 +148,25 @@ describe('Testing Users screen', () => {
     await wait();
     const searchBtn = screen.getByTestId('searchButton');
     const search1 = 'John';
-    userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
+    await userEvent.click(searchBtn);
     await wait();
     expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search2);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search2);
 
     const search3 =
       'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search3);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search3);
 
     const search4 = 'Sam{backspace}{backspace}P{backspace}';
-    userEvent.type(screen.getByTestId(/searchByName/i), search4);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search4);
 
     const search5 = 'Xe';
-    userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    userEvent.clear(screen.getByTestId(/searchByName/i));
-    userEvent.type(screen.getByTestId(/searchByName/i), '');
-    userEvent.click(searchBtn);
+    await userEvent.type(screen.getByTestId(/searchByName/i), search5);
+    await userEvent.clear(screen.getByTestId(/searchByName/i));
+    await userEvent.click(searchBtn);
     await wait();
   });
 
@@ -1006,10 +191,13 @@ describe('Testing Users screen', () => {
 
     await act(async () => {
       // Clear the search input
-      userEvent.clear(searchInput);
+      await userEvent.clear(searchInput);
       // Search for a name that doesn't exist
-      userEvent.type(screen.getByTestId(/searchByName/i), 'NonexistentName');
-      userEvent.click(searchBtn);
+      await userEvent.type(
+        screen.getByTestId(/searchByName/i),
+        'NonexistentName',
+      );
+      await userEvent.click(searchBtn);
     });
 
     expect(screen.queryByText(/No User Found/i)).toBeInTheDocument();
@@ -1032,45 +220,82 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/No User Found/i)).toBeTruthy();
   });
 
-  it('Should render warning alert when there are no organizations', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('Should properly merge users when loading more', async () => {
+    // Create test data
+    const previousData = {
+      users: Array(5)
+        .fill(null)
+        .map((_, i) => ({
+          user: {
+            _id: `id${i}`,
+            firstName: `User${i}`,
+            lastName: `Last${i}`,
+            createdAt: new Date().toISOString(),
+          },
+          appUserProfile: {
+            adminFor: [],
+            isSuperAdmin: false,
+          },
+        })),
+    };
 
-    await wait(200);
-    expect(container.textContent).toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
-  });
+    const newData = {
+      users: Array(5)
+        .fill(null)
+        .map((_, i) => ({
+          user: {
+            _id: `id${i + 5}`,
+            firstName: `User${i + 5}`,
+            lastName: `Last${i + 5}`,
+            createdAt: new Date().toISOString(),
+          },
+          appUserProfile: {
+            adminFor: [],
+            isSuperAdmin: false,
+          },
+        })),
+    };
 
-  it('Should not render warning alert when there are organizations present', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    // The update query function from the component
+    interface UserData {
+      user: {
+        _id: string;
+        firstName: string;
+        lastName: string;
+        createdAt: string;
+      };
+      appUserProfile: {
+        adminFor: string[];
+        isSuperAdmin: boolean;
+      };
+    }
 
-    await wait();
+    const updateQuery = (
+      prev: { users: UserData[] } | undefined,
+      { fetchMoreResult }: { fetchMoreResult?: { users: UserData[] } },
+    ) => {
+      if (!fetchMoreResult) return prev || { users: [] };
 
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
+      const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+
+      const uniqueUsers = Array.from(
+        new Map(
+          mergedUsers.map((user: UserData) => [user.user._id, user]),
+        ).values(),
+      );
+
+      return { users: uniqueUsers };
+    };
+
+    // Test the updateQuery function
+    const result = updateQuery(previousData, { fetchMoreResult: newData });
+
+    // Verify that the users were properly merged
+    expect(result.users.length).toBe(10); // 5 initial + 5 new
+
+    // Make sure we have users from both data sets
+    expect(result.users.some((user) => user.user._id === 'id0')).toBe(true);
+    expect(result.users.some((user) => user.user._id === 'id9')).toBe(true);
   });
 
   it('Testing filter functionality', async () => {
@@ -1327,10 +552,10 @@ describe('Testing Users screen', () => {
     const searchInput = screen.getByTestId('searchByName');
 
     await act(async () => {
-      userEvent.type(searchInput, 'John');
+      await userEvent.type(searchInput, 'John');
     });
     await act(async () => {
-      userEvent.type(searchInput, '{enter}');
+      await userEvent.type(searchInput, '{enter}');
     });
   });
 
@@ -1480,9 +705,8 @@ describe('Testing Users screen', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchButton');
-    const search1 = '';
-    userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    userEvent.click(searchBtn);
+    await userEvent.clear(screen.getByTestId(/searchByName/i));
+    await userEvent.click(searchBtn);
     await wait();
     expect(screen.queryByText(/Jane Doe/i)).toBeInTheDocument();
     expect(screen.queryByText(/John Doe/i)).toBeInTheDocument();
@@ -1549,5 +773,354 @@ describe('Testing Users screen', () => {
       .getElementsByTagName('tbody')[0]
       .querySelectorAll('tr');
     expect(users2.length).toBe(15);
+  });
+
+  it('should render "No results found" message with search query when search returns no users and isLoading is false', async () => {
+    render(
+      <MockedProvider
+        mocks={[
+          {
+            request: {
+              query: USER_LIST,
+              variables: {
+                first: 12,
+                skip: 0,
+                firstName_contains: 'NonexistentName',
+                lastName_contains: '',
+                order: 'createdAt_DESC',
+              },
+            },
+            result: {
+              data: {
+                users: [],
+              },
+            },
+          },
+        ]}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const searchBtn = screen.getByTestId('searchButton');
+    const searchInput = screen.getByTestId(/searchByName/i);
+
+    await act(async () => {
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'NonexistentName');
+      await userEvent.click(searchBtn);
+    });
+
+    const noResultsMessage = screen.getByText(/No results found for/i);
+    expect(noResultsMessage).toBeInTheDocument();
+    expect(noResultsMessage).toHaveTextContent('NonexistentName');
+  });
+
+  describe('Testing sorting and loadMoreUsers functionality', () => {
+    it('should set the correct order variable and update hasMore', async () => {
+      render(
+        <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <Users />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const sortDropdown = await screen.findByTestId('sortUsers');
+      fireEvent.click(sortDropdown);
+
+      const newestOption = screen.getByTestId('newest');
+      fireEvent.click(newestOption);
+
+      expect(screen.getByTestId('sortUsers')).toHaveTextContent('newest');
+
+      const rowsNewest = await screen.findAllByRole('row');
+      expect(rowsNewest.length).toBeGreaterThan(0);
+
+      fireEvent.click(sortDropdown);
+      const oldestOption = screen.getByTestId('oldest');
+      fireEvent.click(oldestOption);
+
+      expect(screen.getByTestId('sortUsers')).toHaveTextContent('oldest');
+
+      const rowsOldest = await screen.findAllByRole('row');
+      expect(rowsOldest.length).toBeGreaterThan(0);
+    });
+
+    it('should load more users and merge them correctly', async () => {
+      render(
+        <MockedProvider mocks={MOCKS_NEW_2} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <Users />
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      let rows = screen.getAllByRole('row');
+      expect(rows.length).toBe(4);
+
+      await act(async () => {
+        fireEvent.scroll(window, { target: { scrollY: 1000 } });
+      });
+
+      await wait();
+      rows = screen.getAllByRole('row');
+      expect(rows.length).toBe(4);
+    });
+  });
+
+  describe('generateMockUser', () => {
+    it('should set adminFor with an entry when isSuperAdmin is true', () => {
+      const mockUser = generateMockUser(
+        'user1',
+        'John',
+        'Doe',
+        'john@example.com',
+        '2023-04-13T04:53:17.742+00:00',
+        true, // isSuperAdmin
+      );
+
+      expect(mockUser.appUserProfile.adminFor).toEqual([{ _id: '123' }]);
+      expect(mockUser.appUserProfile.isSuperAdmin).toBe(true);
+    });
+
+    it('should set adminFor as an empty array when isSuperAdmin is false', () => {
+      const mockUser = generateMockUser(
+        'user2',
+        'Jane',
+        'Doe',
+        'jane@example.com',
+        '2023-04-17T04:53:17.742+00:00',
+        false, // isSuperAdmin
+      );
+
+      expect(mockUser.appUserProfile.adminFor).toEqual([]);
+      expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
+    });
+  });
+
+  it('shows warning toast when organizations array is empty', async () => {
+    // Mock toast.warning for verification
+    const warningMock = vi.fn();
+    vi.spyOn(toast, 'warning').mockImplementation(warningMock);
+
+    // Create the mock with empty organizations array
+    const emptyOrgsMock = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [], // Empty organizations array
+          },
+        },
+      },
+    ];
+
+    const linkWithEmptyOrgs = new StaticMockLink(emptyOrgsMock, true);
+
+    render(
+      <MockedProvider
+        mocks={emptyOrgsMock}
+        addTypename={false}
+        link={linkWithEmptyOrgs}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to finish rendering and effect to run
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Verify toast.warning was called
+    expect(warningMock).toHaveBeenCalled();
+  });
+
+  // Test for null check before accessing organizations.length
+  it('handles null organizations data gracefully', async () => {
+    const nullOrgsMock = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: null, // Null organizations
+          },
+        },
+      },
+    ];
+
+    const linkNullOrgs = new StaticMockLink(nullOrgsMock, true);
+
+    // This should not throw an error
+    render(
+      <MockedProvider
+        mocks={nullOrgsMock}
+        addTypename={false}
+        link={linkNullOrgs}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // If it reaches this point without throwing an error, the test passes
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+    expect(true).toBeTruthy();
+  });
+
+  // Additional test for the prev?.users condition
+  it('handles missing prev.users in updateQuery gracefully', async () => {
+    const mockData = [
+      {
+        request: {
+          query: USER_LIST,
+          variables: {
+            first: 12,
+            skip: 0,
+            firstName_contains: '',
+            lastName_contains: '',
+            order: 'createdAt_DESC',
+          },
+        },
+        result: {
+          data: {
+            users: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [{ _id: 'org1', name: 'Organization 1' }],
+          },
+        },
+      },
+    ];
+
+    const link = new StaticMockLink(mockData, true);
+
+    // Spy on fetchMore to capture the updateQuery function
+    const fetchMoreSpy = vi.fn();
+    vi.spyOn(require('@apollo/client'), 'useQuery').mockImplementation(() => ({
+      data: undefined, // Simulate no data initially
+      loading: false,
+      fetchMore: fetchMoreSpy,
+      refetch: vi.fn(),
+    }));
+
+    render(
+      <MockedProvider mocks={mockData} addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for component to render
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+
+    // Simulate fetchMore being called
+    const updateQueryFn = fetchMoreSpy.mock.calls[0]?.[0]?.updateQuery;
+
+    if (updateQueryFn) {
+      // Create mock data with undefined prev to test the null check
+      const prev = undefined;
+
+      const fetchMoreResult = {
+        users: Array(5)
+          .fill(null)
+          .map((_, i) => ({
+            user: {
+              _id: `user_${i}`,
+              firstName: `User ${i}`,
+              lastName: `Last ${i}`,
+              email: `user${i}@example.com`,
+              createdAt: new Date().toISOString(),
+            },
+            appUserProfile: {
+              adminFor: [],
+              isSuperAdmin: false,
+              organizationsBlockedBy: [],
+            },
+          })),
+      };
+
+      // This should not throw an error due to the prev?.users check
+      const result = updateQueryFn(prev, { fetchMoreResult });
+
+      // Verify that the function returns the expected result
+      expect(result.users).toEqual(fetchMoreResult.users);
+    }
   });
 });

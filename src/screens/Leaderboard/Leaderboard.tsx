@@ -1,15 +1,60 @@
+/**
+ * Leaderboard component for displaying volunteer rankings within an organization.
+ *
+ * This component fetches and displays a leaderboard of volunteers based on their
+ * hours volunteered. It includes features such as search, sorting, and filtering
+ * by time frame. The leaderboard is displayed in a table format using the MUI DataGrid.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered leaderboard component.
+ *
+ * @remarks
+ * - Redirects to the home page if `orgId` is not present in the URL parameters.
+ * - Displays a loader while fetching data and an error message if the query fails.
+ * - Uses Apollo Client's `useQuery` to fetch volunteer rankings from the GraphQL API.
+ * - Supports debounced search functionality to filter volunteers by name.
+ *
+ * @example
+ * ```tsx
+ * <Leaderboard />
+ * ```
+ *
+ * @dependencies
+ * - `@mui/x-data-grid` for table rendering.
+ * - `@apollo/client` for GraphQL queries.
+ * - `react-router-dom` for navigation and URL parameter handling.
+ * - `@mui/material` for UI components like `Stack`.
+ * - Custom components: `Loader`, `Avatar`, `SortingButton`, `SearchBar`.
+ *
+ * @enum {TimeFrame}
+ * - `All`: All-time rankings.
+ * - `Weekly`: Rankings for the past week.
+ * - `Monthly`: Rankings for the past month.
+ * - `Yearly`: Rankings for the past year.
+ *
+ * @query
+ * - `VOLUNTEER_RANKING`: Fetches volunteer rankings based on organization ID, sort order,
+ *   time frame, and search term.
+ *
+ * @state
+ * - `searchTerm` (`string`): The current search term for filtering volunteers.
+ * - `sortBy` (`'hours_ASC' | 'hours_DESC'`): The current sorting order.
+ * - `timeFrame` (`TimeFrame`): The selected time frame for filtering rankings.
+ *
+ * @styles
+ * - Custom styles are applied using `styles` imported from `app-fixed.module.css`.
+ */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import gold from 'assets/images/gold.png';
 import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -21,6 +66,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
 
 enum TimeFrame {
   All = 'allTime',
@@ -36,33 +82,14 @@ const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
     outline: 'none',
   },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'transparent',
-  },
-  '& .MuiDataGrid-root': {
-    borderRadius: '0.5rem',
-  },
-  '& .MuiDataGrid-main': {
-    borderRadius: '0.5rem',
-  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-/**
- * Component to display the leaderboard of volunteers.
- *
- * This component shows a leaderboard of volunteers ranked by hours contributed,
- * with features for filtering by time frame and sorting by hours. It displays
- * volunteer details including rank, name, email, and hours volunteered.
- *
- * @returns The rendered component.
- */
 function leaderboard(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'leaderboard',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -74,7 +101,6 @@ function leaderboard(): JSX.Element {
   }
 
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'hours_ASC' | 'hours_DESC'>(
     'hours_DESC',
@@ -89,9 +115,7 @@ function leaderboard(): JSX.Element {
     loading: rankingsLoading,
     error: rankingsError,
   }: {
-    data?: {
-      getVolunteerRanks: InterfaceVolunteerRank[];
-    };
+    data?: { getVolunteerRanks: InterfaceVolunteerRank[] };
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(VOLUNTEER_RANKING, {
@@ -246,29 +270,12 @@ function leaderboard(): JSX.Element {
     <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <div className={`${styles.input} mb-1`}>
-          <Form.Control
-            type="name"
-            placeholder={t('searchByVolunteer')}
-            autoComplete="off"
-            required
-            className={styles.inputField}
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
-            data-testid="searchBy"
-          />
-          <Button
-            tabIndex={-1}
-            className={`position-absolute z-10 bottom-0 end-0 d-flex justify-content-center align-items-center`}
-            style={{ marginBottom: '10px' }}
-            data-testid="searchBtn"
-          >
-            <Search />
-          </Button>
-        </div>
+        <SearchBar
+          placeholder={t('searchByVolunteer')}
+          onSearch={debouncedSearch}
+          inputTestId="searchBy"
+          buttonTestId="searchBtn"
+        />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
@@ -317,10 +324,7 @@ function leaderboard(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={rankings.map((ranking, index) => ({
-          id: index + 1,
-          ...ranking,
-        }))}
+        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
         columns={columns}
         isRowSelectable={() => false}
       />

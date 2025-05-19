@@ -1,7 +1,41 @@
+/**
+ * `VolunteerManagement` component provides a tabbed interface for managing various aspects
+ * of volunteer activities within an organization. It allows users to navigate between
+ * different sections such as upcoming events, invitations, actions, and groups.
+ *
+ * ## Features:
+ * - **Tabbed Navigation**: Users can switch between tabs to view and manage specific sections.
+ * - **Responsive Design**: Includes a dropdown for smaller screens and buttons for larger screens.
+ * - **Dynamic Content Rendering**: Displays content based on the selected tab.
+ * - **Internationalization**: Supports translations for tab labels and content.
+ *
+ * ## Tabs:
+ * - **Upcoming Events**: Displays a list of upcoming events for volunteers.
+ * - **Invitations**: Manages volunteer invitations.
+ * - **Actions**: Handles volunteer-related tasks and actions.
+ * - **Groups**: Manages volunteer groups.
+ *
+ * ## Props:
+ * - None
+ *
+ * ## State:
+ * - `tab` (`TabOptions`): Tracks the currently selected tab.
+ *
+ * ## Hooks:
+ * - `useTranslation`: For internationalization of tab labels and content.
+ * - `useParams`: Extracts the organization ID from the URL.
+ * - `useNavigate`: Enables navigation to other routes.
+ *
+ * ## Methods:
+ * - `renderButton`: Renders a button for each tab with the appropriate icon and label.
+ * - `handleBack`: Navigates back to the organization page.
+ *
+ * @returns JSX.Element - The rendered `VolunteerManagement` component.
+ */
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
@@ -11,16 +45,9 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
+import styles from 'style/app-fixed.module.css';
 
-/**
- * List of tabs for the volunteer dashboard.
- *
- * Each tab is associated with an icon and value.
- */
-const volunteerDashboardTabs: {
-  value: TabOptions;
-  icon: JSX.Element;
-}[] = [
+const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
     icon: <TbCalendarEvent size={21} className="me-1" />,
@@ -29,14 +56,8 @@ const volunteerDashboardTabs: {
     value: 'invitations',
     icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
   },
-  {
-    value: 'actions',
-    icon: <FaTasks size={18} className="me-2" />,
-  },
-  {
-    value: 'groups',
-    icon: <FaUserGroup size={18} className="me-2" />,
-  },
+  { value: 'actions', icon: <FaTasks size={18} className="me-2" /> },
+  { value: 'groups', icon: <FaUserGroup size={18} className="me-2" /> },
 ];
 
 /**
@@ -57,9 +78,7 @@ type TabOptions = 'upcomingEvents' | 'invitations' | 'actions' | 'groups';
  */
 const VolunteerManagement = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userVolunteer',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
 
   // Extract organization ID from URL parameters
   const { orgId } = useParams();
@@ -93,12 +112,11 @@ const VolunteerManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? 'px-4 d-flex align-items-center rounded-3 shadow-sm'
-      : 'text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm';
+      ? `rounded-3 shadow-sm ${styles.activeTab}`
+      : `rounded-3 shadow-sm ${styles.inActiveTab}`;
     const props = {
       variant,
       className,
-      style: { height: '2.5rem' },
       onClick: () => setTab(value),
       'data-testid': `${value}Btn`,
     };
@@ -144,7 +162,7 @@ const VolunteerManagement = (): JSX.Element => {
               id="dropdown-basic"
               data-testid="tabsDropdownToggle"
             >
-              <span className="me-1">{t(tab)}</span>
+              <span className={`me-1 ${styles.dropdown}`}>{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}

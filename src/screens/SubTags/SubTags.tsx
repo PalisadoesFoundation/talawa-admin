@@ -1,8 +1,49 @@
+/**
+ * SubTags Component
+ *
+ * This component is responsible for managing and displaying the sub-tags
+ * of a parent tag within an organization. It provides functionality to
+ * view, search, sort, and add sub-tags, as well as navigate between tags
+ * and their sub-tags.
+ *
+ * Features:
+ * - Displays a list of sub-tags in a paginated and scrollable DataGrid.
+ * - Allows searching sub-tags by name.
+ * - Provides sorting options for sub-tags (e.g., Latest, Oldest).
+ * - Enables navigation to manage or view sub-tags and their assigned users.
+ * - Includes breadcrumbs for navigating the tag hierarchy.
+ * - Allows adding new sub-tags via a modal form.
+ *
+ * Queries and Mutations:
+ * - Fetches sub-tags using the `USER_TAG_SUB_TAGS` GraphQL query.
+ * - Adds new sub-tags using the `CREATE_USER_TAG` GraphQL mutation.
+ *
+ * Props:
+ * - None (uses React Router hooks for parameters and navigation).
+ *
+ * State:
+ * - `addSubTagModalIsOpen`: Controls the visibility of the "Add Sub-Tag" modal.
+ * - `tagName`: Stores the name of the new sub-tag being created.
+ * - `tagSearchName`: Stores the search term for filtering sub-tags.
+ * - `tagSortOrder`: Stores the sorting order for sub-tags (ascending/descending).
+ *
+ * Dependencies:
+ * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, React-Toastify.
+ *
+ * Error Handling:
+ * - Displays an error message if the sub-tags query fails.
+ *
+ * Usage:
+ * - This component is used in the context of managing organizational tags
+ *   and their hierarchy within the Talawa Admin application.
+ *
+ * @returns {JSX.Element} The rendered SubTags component.
+ */
 import { useMutation, useQuery } from '@apollo/client';
-import { Search, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -12,7 +53,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from '../../style/app.module.css';
+import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationSubTagsQuery,
@@ -29,13 +70,7 @@ import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SortingButton from 'subComponents/SortingButton';
-
-/**
- * Component that renders the SubTags screen when the app navigates to '/orgtags/:orgId/subtags/:tagId'.
- *
- * This component does not accept any props and is responsible for displaying
- * the content associated with the corresponding route.
- */
+import SearchBar from 'subComponents/SearchBar';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -92,7 +127,6 @@ function SubTags(): JSX.Element {
           fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
         },
       ) => {
-        /* istanbul ignore next -- @preserve */
         if (!fetchMoreResult) return prevResult;
 
         return {
@@ -119,14 +153,9 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: {
-          name: tagName,
-          organizationId: orgId,
-          parentTagId,
-        },
+        variables: { name: tagName, organizationId: orgId, parentTagId },
       });
 
-      /* istanbul ignore next -- @preserve */
       if (data) {
         toast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
@@ -134,7 +163,6 @@ function SubTags(): JSX.Element {
         setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next -- @preserve */
       if (error instanceof Error) {
         toast.error(error.message);
       }
@@ -155,7 +183,6 @@ function SubTags(): JSX.Element {
   }
 
   const subTagsList =
-    /* istanbul ignore next -- @preserve */
     subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const parentTagName = subTagsData?.getChildTags.name;
@@ -164,10 +191,7 @@ function SubTags(): JSX.Element {
   // used for the tag breadcrumbs
   const orgUserTagAncestors = [
     ...(subTagsData?.getChildTags.ancestorTags ?? []),
-    {
-      _id: parentTagId,
-      name: parentTagName,
-    },
+    { _id: parentTagId, name: parentTagName },
   ];
 
   const redirectToManageTag = (tagId: string): void => {
@@ -265,9 +289,9 @@ function SubTags(): JSX.Element {
         return (
           <Button
             size="sm"
-            variant="outline-primary"
             onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
+            className={styles.editButton}
           >
             {t('manageTag')}
           </Button>
@@ -281,24 +305,12 @@ function SubTags(): JSX.Element {
       <Row>
         <div>
           <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-            <div className={`${styles.input} mb-1`}>
-              <Form.Control
-                type="text"
-                id="tagName"
-                className={`${styles.inputField} `}
-                placeholder={tCommon('searchByName')}
-                onChange={(e) => setTagSearchName(e.target.value.trim())}
-                data-testid="searchByName"
-                autoComplete="off"
-              />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                data-testid="searchBtn"
-              >
-                <Search />
-              </Button>
-            </div>
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              onSearch={(term) => setTagSearchName(term.trim())}
+              inputTestId="searchByName"
+              buttonTestId="searchBtn"
+            />
 
             <SortingButton
               sortingOptions={[
@@ -373,7 +385,6 @@ function SubTags(): JSX.Element {
                   next={loadMoreSubTags}
                   hasMore={
                     subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                    /* istanbul ignore next -- @preserve */
                     false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -385,16 +396,15 @@ function SubTags(): JSX.Element {
                     hideFooter={true}
                     getRowId={(row) => row.id}
                     slots={{
-                      noRowsOverlay:
-                        /* istanbul ignore next -- @preserve */ () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            {t('noTagsFound')}
-                          </Stack>
-                        ),
+                      noRowsOverlay: () => (
+                        <Stack
+                          height="100%"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {t('noTagsFound')}
+                        </Stack>
+                      ),
                     }}
                     sx={dataGridStyle}
                     getRowClassName={() => `${styles.rowBackground}`}
@@ -423,7 +433,7 @@ function SubTags(): JSX.Element {
         centered
       >
         <Modal.Header
-          className={styles.tableHeader}
+          className={styles.modalHeader}
           data-testid="tagHeader"
           closeButton
         >
@@ -435,7 +445,7 @@ function SubTags(): JSX.Element {
             <Form.Control
               type="name"
               id="tagname"
-              className="mb-3"
+              className={`mb-3 ${styles.inputField}`}
               placeholder={t('tagNamePlaceholder')}
               data-testid="modalTitle"
               autoComplete="off"
@@ -452,7 +462,7 @@ function SubTags(): JSX.Element {
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
               data-testid="addSubTagModalCloseBtn"
-              className={styles.closeButton}
+              className={styles.removeButton}
             >
               {tCommon('cancel')}
             </Button>

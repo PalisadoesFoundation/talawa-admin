@@ -1,3 +1,42 @@
+/**
+ * UsersTableItem Component
+ *
+ * This component renders a table row representing a user in the users table.
+ * It provides functionality to view the organizations a user has joined,
+ * organizations that have blocked the user, and allows role management
+ * within organizations. It also supports removing a user from an organization.
+ *
+ * @component
+ * @param {Props} props - The props for the component.
+ * @param {InterfaceQueryUserListItem} props.user - The user data to display.
+ * @param {number} props.index - The index of the user in the table.
+ * @param {string} props.loggedInUserId - The ID of the logged-in user.
+ * @param {() => void} props.resetAndRefetch - Function to reset and refetch data.
+ *
+ * @returns {JSX.Element} The rendered UsersTableItem component.
+ *
+ * @remarks
+ * - Uses `@apollo/client` for GraphQL mutations.
+ * - Integrates `react-bootstrap` for UI components and modals.
+ * - Includes search functionality for filtering organizations.
+ * - Provides role management and user removal features.
+ *
+ * @dependencies
+ * - `@mui/icons-material` for icons.
+ * - `dayjs` for date formatting.
+ * - `react-toastify` for toast notifications.
+ * - `react-router-dom` for navigation.
+ *
+ * @example
+ * ```tsx
+ * <UsersTableItem
+ *   user={user}
+ *   index={0}
+ *   loggedInUserId="12345"
+ *   resetAndRefetch={fetchData}
+ * />
+ * ```
+ */
 import { useMutation } from '@apollo/client';
 import { Search } from '@mui/icons-material';
 import {
@@ -9,11 +48,12 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from './UsersTableItem.module.css';
+import styles from '../../style/app-fixed.module.css';
+
 type Props = {
   user: InterfaceQueryUserListItem;
   index: number;
@@ -32,11 +72,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     orgName: string;
     orgId: string;
     setShowOnCancel: 'JOINED' | 'BLOCKED' | '';
-  }>({
-    orgName: '',
-    orgId: '',
-    setShowOnCancel: '',
-  });
+  }>({ orgName: '', orgId: '', setShowOnCancel: '' });
   const [joinedOrgs, setJoinedOrgs] = useState(user.user.joinedOrganizations);
   const [orgsBlockedBy, setOrgsBlockedBy] = useState(
     user.user.organizationsBlockedBy,
@@ -50,10 +86,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
-        variables: {
-          userid: user.user._id,
-          orgid: removeUserProps.orgId,
-        },
+        variables: { userid: user.user._id, orgid: removeUserProps.orgId },
       });
       if (data) {
         toast.success(
@@ -161,7 +194,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{user.user.email}</td>
         <td>
           <Button
-            className="btn btn-success"
+            className={`btn ${styles.editButton}`}
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.user._id}`}
           >
@@ -170,7 +203,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </td>
         <td>
           <Button
-            variant="danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             data-testid={`showBlockedByOrgsBtn${user.user._id}`}
             onClick={() => setShowBlockedOrganizations(true)}
           >
@@ -185,7 +218,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-joined-org-${user.user._id}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
-        <Modal.Header className="bg-primary" closeButton>
+        <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
             {t('orgJoinedBy')} {`${user.user.firstName}`}{' '}
             {`${user.user.lastName}`} ({user.user.joinedOrganizations.length})
@@ -196,7 +229,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-joined-orgs"
-                className="bg-white"
+                className={styles.inputField}
                 defaultValue={searchByNameJoinedOrgs}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameJoinedOrgs"
@@ -205,7 +238,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               />
               <Button
                 tabIndex={-1}
-                className={`position-absolute z-10 bottom-0 end-0 h-100 d-flex justify-content-center align-items-center`}
+                className={styles.searchButton}
                 onClick={handleSearchButtonClickJoinedOrgs}
                 data-testid="searchBtnJoinedOrgs"
               >
@@ -334,8 +367,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         </td>
                         <td colSpan={1.5}>
                           <Button
-                            className={styles.button}
-                            variant="danger"
+                            className={`btn btn-danger ${styles.removeButton}`}
                             size="sm"
                             data-testid={`removeUserFromOrgBtn${org._id}`}
                             onClick={() => {
@@ -388,7 +420,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-blocked-by"
-                className="bg-white"
+                className={styles.inputField}
                 defaultValue={searchByNameOrgsBlockedBy}
                 placeholder={t('searchByOrgName')}
                 data-testid="searchByNameOrgsBlockedBy"
@@ -558,11 +590,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
         data-testid={`modal-remove-user-${user.user._id}`}
         onHide={() => onHideRemoveUserModal()}
       >
-        <Modal.Header className="bg-danger" closeButton>
+        <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
+        <hr style={{ margin: 0 }}></hr>
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
@@ -580,7 +613,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {tCommon('close')}
           </Button>
           <Button
-            variant="danger"
+            className={`btn btn-danger ${styles.removeButton}`}
             onClick={() => confirmRemoveUser()}
             data-testid={`confirmRemoveUser${user.user._id}`}
           >

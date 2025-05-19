@@ -8,21 +8,27 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  act,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import type { InterfaceAddPeopleToTagProps } from './AddPeopleToTag';
+import type { InterfaceAddPeopleToTagProps } from 'types/Tag/interface';
 import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
-import { MOCKS, MOCKS_ERROR } from './AddPeopleToTagsMocks';
+import {
+  MOCK_EMPTY,
+  MOCK_NULL_FETCH_MORE,
+  MOCK_NO_DATA,
+  MOCK_NON_ERROR,
+  MOCKS,
+  MOCKS_ERROR,
+} from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
@@ -48,6 +54,14 @@ const translations = {
   ),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+};
+
+const defaultProps: InterfaceAddPeopleToTagProps = {
+  addPeopleToTagModalIsOpen: false,
+  hideAddPeopleToTagModal: vi.fn(),
+  refetchAssignedMembersData: vi.fn(),
+  t: ((key: string) => key) as TFunction<'translation', 'manageTag'>,
+  tCommon: ((key: string) => key) as TFunction<'common', undefined>,
 };
 
 const props: InterfaceAddPeopleToTagProps = {
@@ -113,11 +127,33 @@ const renderAddPeopleToTagModal = (
   );
 };
 
+const renderComponent = (
+  customProps?: Partial<InterfaceAddPeopleToTagProps>,
+): RenderResult =>
+  render(
+    <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+      <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <Routes>
+              <Route
+                path="/orgtags/:orgId/manageTag/:tagId"
+                element={
+                  <AddPeopleToTag {...defaultProps} {...(customProps ?? {})} />
+                }
+              />
+            </Routes>
+          </I18nextProvider>
+        </Provider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
     // Mocking `react-router-dom` to return the actual module and override `useParams`
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom'); // Import the actual module
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router'); // Import the actual module
       return {
         ...actual,
         useParams: () => ({ orgId: '1', tagId: '1' }), // Mock `useParams` to return a custom object
@@ -161,24 +197,24 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
+    await userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
@@ -284,7 +320,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
@@ -300,24 +336,132 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
     });
-    userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
 
-    userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         translations.successfullyAssignedToPeople,
       );
+    });
+  });
+
+  it('Displays "no more members found" overlay when data is empty', async () => {
+    const link = new StaticMockLink(MOCK_EMPTY, true);
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('infiniteScrollLoader'),
+      ).not.toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText(translations.noMoreMembersFound),
+    ).toBeInTheDocument();
+  });
+
+  it('Resets the search state and refetches when the modal transitions from closed to open', async () => {
+    const { rerender } = renderComponent({ addPeopleToTagModalIsOpen: false });
+
+    act(() => {
+      rerender(
+        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgtags/:orgId/manageTag/:tagId"
+                    element={
+                      <AddPeopleToTag
+                        {...defaultProps}
+                        addPeopleToTagModalIsOpen={true}
+                      />
+                    }
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('firstName')).toHaveValue('');
+      expect(screen.getByPlaceholderText('lastName')).toHaveValue('');
+    });
+  });
+
+  it('displays the unknownError toast if a non-Error is thrown', async () => {
+    const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR, true);
+
+    const customProps = {
+      ...props,
+      addPeopleToTagModalIsOpen: true,
+    };
+
+    renderAddPeopleToTagModal(customProps, linkWithNonError);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('returns prevResult if fetchMoreResult is null', async () => {
+    const linkWithNullFetchMore = new StaticMockLink(
+      MOCK_NULL_FETCH_MORE,
+      true,
+    );
+
+    renderAddPeopleToTagModal(props, linkWithNullFetchMore);
+
+    await waitFor(() => {
+      expect(screen.getByText('member 1')).toBeInTheDocument();
+    });
+
+    const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollY: 99999 },
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')).toHaveLength(1);
+    });
+  });
+
+  it('skips the if(data) block when the mutation returns data = null', async () => {
+    const linkNoData = new StaticMockLink(MOCK_NO_DATA, true);
+    renderAddPeopleToTagModal(props, linkNoData);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.success).not.toHaveBeenCalled();
     });
   });
 });

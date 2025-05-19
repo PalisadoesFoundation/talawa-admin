@@ -1,0 +1,23 @@
+###############################################################################
+#
+# DO NOT EDIT!!!
+#
+# This file is used to deploy the https://test.talawa.io site
+#
+###############################################################################
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.deploy
+    ports:
+      - '4321:4321'
+    env_file:
+      - ../.env
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:4321']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped

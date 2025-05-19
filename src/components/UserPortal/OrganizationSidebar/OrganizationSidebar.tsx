@@ -1,9 +1,39 @@
+/**
+ * OrganizationSidebar Component
+ *
+ * This component displays a sidebar for an organization, showing a list of members
+ * and upcoming events. It fetches data using GraphQL queries and provides links
+ * to view all members and events.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered OrganizationSidebar component.
+ *
+ * @remarks
+ * - Uses `useQuery` from Apollo Client to fetch members and events data.
+ * - Displays loading indicators while data is being fetched.
+ * - Uses `useTranslation` for internationalization.
+ * - Extracts `organizationId` from URL parameters using `useParams`.
+ *
+ * @dependencies
+ * - React, React Router, Apollo Client, dayjs, react-bootstrap, Material-UI icons.
+ * - Custom styles from `OrganizationSidebar.module.css`.
+ * - GraphQL queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `ORGANIZATION_EVENT_CONNECTION_LIST`.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationSidebar />
+ * ```
+ *
+ * @remarks
+ * - Members and events are displayed in a list format with a maximum of 3 items each.
+ * - Provides fallback UI when no members or events are available.
+ */
 import React, { useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -18,21 +48,6 @@ import type {
   InterfaceMemberInfo,
 } from 'utils/interfaces';
 
-/**
- * OrganizationSidebar displays the sidebar for an organization, showing a list of members and events.
- *
- * This component fetches and displays:
- * - The top 3 members of the organization with their images and names.
- * - The top 3 upcoming events for the organization with their titles, start, and end dates.
- *
- * It includes:
- * - A link to view all members.
- * - A link to view all events.
- *
- * The sidebar handles loading states and displays appropriate messages while data is being fetched.
- *
- * @returns JSX.Element representing the organization sidebar.
- */
 export default function organizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
   const { t } = useTranslation('translation', {

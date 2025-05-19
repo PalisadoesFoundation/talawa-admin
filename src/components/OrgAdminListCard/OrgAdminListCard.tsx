@@ -1,3 +1,38 @@
+/**
+ * A React functional component that renders a modal for removing an admin
+ * from an organization. It provides a confirmation dialog with "Yes" and "No"
+ * options and handles the admin removal process using a GraphQL mutation.
+ *
+ * @param props - The properties passed to the component.
+ * @param props.id - The unique identifier of the admin to be removed.
+ * @param props.toggleRemoveModal - A function to toggle the visibility of the modal.
+ *
+ * @returns A JSX element representing the modal for removing an admin.
+ *
+ * @remarks
+ * - If the `id` prop is not provided, the user is redirected to the organization list page.
+ * - The `removeAdmin` function executes the `REMOVE_ADMIN_MUTATION` to remove the admin
+ *   and displays a success message upon completion.
+ * - In case of an error during the mutation, the `errorHandler` utility is used to handle it.
+ *
+ * @example
+ * ```tsx
+ * <OrgAdminListCard
+ *   id="12345"
+ *   toggleRemoveModal={() => setShowModal(false)}
+ * />
+ * ```
+ *
+ * @dependencies
+ * - React
+ * - react-bootstrap (Button, Modal)
+ * - @apollo/client (useMutation)
+ * - react-toastify (toast)
+ * - react-i18next (useTranslation)
+ * - react-router-dom (Navigate, useParams)
+ * - utils/errorHandler
+ *
+ */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -5,20 +40,10 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
 
-interface InterfaceOrgPeopleListCardProps {
-  id: string | undefined;
-  toggleRemoveModal: () => void;
-}
-/**
- * Component to confirm and handle the removal of an admin.
- *
- * @param id - ID of the admin to be removed.
- * @param toggleRemoveModal - Function to toggle the visibility of the modal.
- * @returns JSX element for the removal confirmation modal.
- */
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
     return <Navigate to={'/orglist'} />;
@@ -50,7 +75,6 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         }, 2000);
       }
     } catch (error: unknown) {
-      /* istanbul ignore next */
       errorHandler(t, error);
     }
   };

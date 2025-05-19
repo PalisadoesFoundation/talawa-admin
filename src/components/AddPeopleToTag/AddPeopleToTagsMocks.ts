@@ -1,6 +1,6 @@
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/Tag/utils';
 
 export const MOCKS = [
   {
@@ -288,5 +288,164 @@ export const MOCKS_ERROR = [
       },
     },
     error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCK_EMPTY = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          usersToAssignTo: {
+            edges: [], // No data
+            pageInfo: {
+              hasNextPage: false,
+            },
+          },
+        },
+      },
+    },
+  },
+];
+
+export const MOCK_NON_ERROR = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          usersToAssignTo: {
+            edges: [
+              {
+                node: { _id: '1', firstName: 'Test', lastName: 'User' },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: 'cursor1' },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_PEOPLE_TO_TAG,
+      variables: { tagId: '1', userIds: ['1'] },
+    },
+    error: {
+      graphQLErrors: [{ message: 'Plain object' }],
+    } as unknown as Error,
+  },
+];
+
+export const MOCK_NULL_FETCH_MORE = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          usersToAssignTo: {
+            edges: [
+              {
+                node: { _id: '1', firstName: 'member', lastName: '1' },
+                cursor: '1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: '1',
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '1',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: null,
+    },
+  },
+];
+
+export const MOCK_NO_DATA = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          usersToAssignTo: {
+            edges: [
+              {
+                node: { _id: '1', firstName: 'NoData', lastName: 'Test' },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: 'cursor1' },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_PEOPLE_TO_TAG,
+      variables: { tagId: '1', userIds: ['1'] },
+    },
+    result: {
+      data: null,
+    },
   },
 ];
