@@ -1,0 +1,16 @@
+{
+  "talawaApiUnavailable": "Talawa-API service is unavailable!. Is it running? Check your network connectivity too.",
+  "notFound": "Not found",
+  "unknownError": "An unknown error occurred. Please try again later. {{msg}}",
+  "notAuthorised": "Sorry! you are not Authorised!",
+  "errorSendingMail": "Error sending mail",
+  "emailNotRegistered": "Email not registered",
+  "notFoundMsg": "Oops! The Page you requested was not found!",
+  "errorOccurredCouldntCreate": "Ocurrió un error. No se pudo crear {{entity}}",
+  "errorLoading": "Ocurrió un error al cargar los datos de {{entity}}",
+  "invalidPhoneNumber": "Por favor, introduzca un número de teléfono válido",
+  "invalidEducationGrade": "Por favor seleccione un grado de educación válido",
+  "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
+  "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
+  "error400": "Respuesta no exitosa. Se recibió el código de estado 400 del servidor"
+}

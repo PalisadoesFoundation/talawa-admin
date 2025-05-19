@@ -1,0 +1,27 @@
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 500px;
+}
+
+.modal-body {
+  text-align: center;
+}
+
+.modal-header,
+.modal-footer {
+  justify-content: center;
+  text-align: center;
+}
+
+.confirmation {
+  text-align: center;
+  margin-top: 30px;
+}
