@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { vi } from 'vitest';
 
 // Mock the imported modules

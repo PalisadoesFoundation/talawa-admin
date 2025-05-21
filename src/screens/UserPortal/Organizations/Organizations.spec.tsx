@@ -11,7 +11,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import { describe, it, expect, type Mock, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
