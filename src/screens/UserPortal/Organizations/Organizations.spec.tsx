@@ -1,3 +1,4 @@
+/* global HTMLSelectElement */
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
