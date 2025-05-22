@@ -1,11 +1,9 @@
-import React from 'react';
-import type { ReactNode } from 'react';
+import React, { act, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
-import { act } from 'react';
-import { vi } from 'vitest';
+import { it, vi } from 'vitest';
 
 // Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
@@ -189,21 +187,21 @@ describe('TestWrapper', () => {
 
   it('allows error boundaries to catch errors from children', () => {
     // Define types for the error boundary
-    interface ErrorBoundaryProps {
+    interface IErrorBoundaryProps {
       children: ReactNode;
     }
 
-    interface ErrorBoundaryState {
+    interface IErrorBoundaryState {
       hasError: boolean;
       error: Error | null;
     }
 
     // Create a properly typed error boundary for testing
     class TestErrorBoundary extends React.Component<
-      ErrorBoundaryProps,
-      ErrorBoundaryState
+      IErrorBoundaryProps,
+      IErrorBoundaryState
     > {
-      constructor(props: ErrorBoundaryProps) {
+      constructor(props: IErrorBoundaryProps) {
         super(props);
         this.state = {
           hasError: false,
@@ -211,7 +209,7 @@ describe('TestWrapper', () => {
         };
       }
 
-      static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+      static getDerivedStateFromError(error: Error): IErrorBoundaryState {
         return {
           hasError: true,
           error,

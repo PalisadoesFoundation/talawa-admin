@@ -1,12 +1,11 @@
+import React, { act } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
-import { act } from 'react';
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
@@ -289,7 +288,7 @@ describe('UserDetailsForm', () => {
       const datePickerOnChange = screen
         .getByLabelText(mockT('birthDate'))
         .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new Event('change'));
+        ?.dispatchEvent(new globalThis.Event('change'));
       if (datePickerOnChange) {
         if (typeof datePickerOnChange === 'function') {
           (datePickerOnChange as (date: dayjs.Dayjs) => void)(
@@ -313,7 +312,7 @@ describe('UserDetailsForm', () => {
       const datePickerOnChange = screen
         .getByLabelText(mockT('birthDate'))
         .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new Event('change'));
+        ?.dispatchEvent(new globalThis.Event('change'));
       if (datePickerOnChange) {
         if (typeof datePickerOnChange === 'function') {
           (datePickerOnChange as (date: dayjs.Dayjs | null) => void)(null);
