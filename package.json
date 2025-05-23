@@ -20,7 +20,7 @@
     "@mui/material": "^6.1.6",
     "@mui/private-theming": "^6.3.0",
     "@mui/system": "^7.0.1",
-    "@mui/x-charts": "^7.28.0",
+    "@mui/x-charts": "^8.4.0",
     "@mui/x-data-grid": "^7.28.3",
     "@mui/x-date-pickers": "^7.28.3",
     "@pdfme/common": "^5.2.11",

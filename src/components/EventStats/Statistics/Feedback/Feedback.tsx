@@ -95,7 +95,7 @@ export const FeedbackStats = ({ data }: InterfaceStatsModal): JSX.Element => {
                   paddingAngle: 2,
                   cornerRadius: 5,
                   startAngle: 0,
-                  highlightScope: { faded: 'global', highlighted: 'item' },
+                  highlightScope: { fade: 'global', highlight: 'item' },
                   faded: { innerRadius: 30, additionalRadius: -30 },
                 },
               ]}
