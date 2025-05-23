@@ -1,30 +1,52 @@
+/* eslint-disable react/no-multi-comp */
 import React, { act, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
 import { it, vi } from 'vitest';
-import { TestErrorBoundary } from './TestErrorBoundary';
-import {
-  MockedCustomProvider,
-  MockI18nextProvider,
-  MockBrowserRouter,
-} from './mocks/MockProviders';
+import type { i18n } from 'i18next';
+import type { MockedResponse } from '@apollo/client/testing';
 
 // Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
     ...actual,
-    MockedProvider: MockedCustomProvider,
+    MockedProvider: ({
+      children,
+      mocks = [],
+    }: {
+      children: ReactNode;
+      mocks?: MockedResponse[];
+    }) => (
+      <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
+        {children}
+      </div>
+    ),
   };
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: MockI18nextProvider,
+  I18nextProvider: ({
+    children,
+    i18n,
+  }: {
+    children: ReactNode;
+    i18n: i18n;
+  }) => (
+    <div
+      data-testid="i18next-provider"
+      data-i18n={i18n ? 'provided' : 'missing'}
+    >
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock('react-router', () => ({
-  BrowserRouter: MockBrowserRouter,
+  BrowserRouter: ({ children }: { children: ReactNode }) => (
+    <div data-testid="browser-router">{children}</div>
+  ),
 }));
 
 vi.mock('utils/i18n', () => ({
@@ -172,6 +194,48 @@ describe('TestWrapper', () => {
   });
 
   it('allows error boundaries to catch errors from children', () => {
+    // Define types for the error boundary
+    interface IErrorBoundaryProps {
+      children: ReactNode;
+    }
+
+    interface IErrorBoundaryState {
+      hasError: boolean;
+      error: Error | null;
+    }
+
+    // Create a properly typed error boundary for testing
+    class TestErrorBoundary extends React.Component<
+      IErrorBoundaryProps,
+      IErrorBoundaryState
+    > {
+      constructor(props: IErrorBoundaryProps) {
+        super(props);
+        this.state = {
+          hasError: false,
+          error: null,
+        };
+      }
+
+      static getDerivedStateFromError(error: Error): IErrorBoundaryState {
+        return {
+          hasError: true,
+          error,
+        };
+      }
+
+      render(): React.ReactNode {
+        const { hasError, error } = this.state;
+        const { children } = this.props;
+
+        if (hasError && error) {
+          return <div data-testid="error-message">{error.message}</div>;
+        }
+
+        return children;
+      }
+    }
+
     // Component that throws during render
     const ErrorComponent = (): ReactNode => {
       throw new Error('Test error');
