@@ -1,4 +1,5 @@
-import React from 'react';
+/* global HTMLSelectElement */
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
   render,
@@ -11,8 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { act } from 'react-dom/test-utils';
-import { describe, it, expect, type Mock, vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -23,7 +23,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { useQuery } from '@apollo/client';
 
 const { setItem, getItem } = useLocalStorage();
 
@@ -514,7 +513,7 @@ const MOCKS = [
 ];
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const TEST_USER_NAME = 'Noble Mittal';
@@ -984,7 +983,7 @@ test('setPage updates page state correctly when pagination controls are used', a
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -1001,7 +1000,7 @@ test('setPage updates page state correctly when pagination controls are used', a
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {

@@ -1,11 +1,11 @@
-import React from 'react';
-import type { ReactNode } from 'react';
+/* eslint-disable react/no-multi-comp */
+import React, { act, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
+import { it, vi } from 'vitest';
+import type { i18n } from 'i18next';
 import type { MockedResponse } from '@apollo/client/testing';
-import { act } from 'react-dom/test-utils';
-import { vi } from 'vitest';
 
 // Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
@@ -27,7 +27,13 @@ vi.mock('@apollo/client/testing', async () => {
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: ({ children, i18n }: { children: ReactNode; i18n: any }) => (
+  I18nextProvider: ({
+    children,
+    i18n,
+  }: {
+    children: ReactNode;
+    i18n: i18n;
+  }) => (
     <div
       data-testid="i18next-provider"
       data-i18n={i18n ? 'provided' : 'missing'}
@@ -189,21 +195,21 @@ describe('TestWrapper', () => {
 
   it('allows error boundaries to catch errors from children', () => {
     // Define types for the error boundary
-    interface ErrorBoundaryProps {
+    interface IErrorBoundaryProps {
       children: ReactNode;
     }
 
-    interface ErrorBoundaryState {
+    interface IErrorBoundaryState {
       hasError: boolean;
       error: Error | null;
     }
 
     // Create a properly typed error boundary for testing
     class TestErrorBoundary extends React.Component<
-      ErrorBoundaryProps,
-      ErrorBoundaryState
+      IErrorBoundaryProps,
+      IErrorBoundaryState
     > {
-      constructor(props: ErrorBoundaryProps) {
+      constructor(props: IErrorBoundaryProps) {
         super(props);
         this.state = {
           hasError: false,
@@ -211,7 +217,7 @@ describe('TestWrapper', () => {
         };
       }
 
-      static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+      static getDerivedStateFromError(error: Error): IErrorBoundaryState {
         return {
           hasError: true,
           error,
@@ -219,12 +225,14 @@ describe('TestWrapper', () => {
       }
 
       render(): React.ReactNode {
-        if (this.state.hasError && this.state.error) {
-          return (
-            <div data-testid="error-message">{this.state.error.message}</div>
-          );
+        const { hasError, error } = this.state;
+        const { children } = this.props;
+
+        if (hasError && error) {
+          return <div data-testid="error-message">{error.message}</div>;
         }
-        return this.props.children;
+
+        return children;
       }
     }
 
