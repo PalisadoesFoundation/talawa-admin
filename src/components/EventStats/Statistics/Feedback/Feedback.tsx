@@ -4,12 +4,12 @@
  * This component renders a feedback analysis section for an event, including a pie chart
  * visualization of feedback ratings and a summary of the number of attendees who provided feedback.
  *
- * @param {InterfaceStatsModal} props - The props object containing event data.
- * @param {Object} props.data - The data object containing event details.
- * @param {Object} props.data.event - The event object.
- * @param {Feedback[]} props.data.event.feedback - An array of feedback objects for the event.
+ * @param props - The props object containing event data. It includes:
+ *   - data: The data object containing event details.
+ *   - data.event: The event object.
+ *   - data.event.feedback: An array of feedback objects for the event.
  *
- * @returns {JSX.Element} A React component that displays a feedback analysis card with a pie chart.
+ * @returns A React component that displays a feedback analysis card with a pie chart.
  *
  * @remarks
  * - The pie chart uses the `@mui/x-charts/PieChart` library for visualization.
@@ -41,7 +41,9 @@ import Card from 'react-bootstrap/Card';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 
-export const FeedbackStats = ({ data }: InterfaceStatsModal): JSX.Element => {
+export const FeedbackStats = ({
+  data,
+}: InterfaceStatsModal): React.JSX.Element => {
   // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
   const ratingColors = [
     '#57bb8a', // Green
