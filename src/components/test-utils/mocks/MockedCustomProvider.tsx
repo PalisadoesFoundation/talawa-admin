@@ -1,5 +1,24 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
+
+/**
+ * Props interface for the MockedCustomProvider component
+ */
+interface MockedCustomProviderProps {
+  children: ReactNode;
+  mocks?: MockedResponse[];
+}
+
+/**
+ * Safely serializes mock data, falling back to length if serialization fails
+ */
+const safeSerializeMocks = (mocks: MockedResponse[]): string => {
+  try {
+    return JSON.stringify(mocks);
+  } catch {
+    return `[${mocks.length} mocks]`;
+  }
+};
 
 /**
  * A mock implementation of Apollo's MockedProvider for testing purposes.
@@ -12,11 +31,8 @@ import type { MockedResponse } from '@apollo/client/testing';
 export const MockedCustomProvider = ({
   children,
   mocks = [],
-}: {
-  children: ReactNode;
-  mocks?: MockedResponse[];
-}) => (
-  <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
+}: MockedCustomProviderProps): JSX.Element => (
+  <div data-testid="mocked-provider" data-mocks={safeSerializeMocks(mocks)}>
     {children}
   </div>
 );

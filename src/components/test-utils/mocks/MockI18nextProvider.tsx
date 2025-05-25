@@ -1,5 +1,13 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import type { i18n } from 'i18next';
+
+/**
+ * Props interface for the MockI18nextProvider component
+ */
+interface MockI18nextProviderProps {
+  children: ReactNode;
+  i18n: i18n;
+}
 
 /**
  * A mock implementation of I18nextProvider for testing purposes.
@@ -12,10 +20,7 @@ import type { i18n } from 'i18next';
 export const MockI18nextProvider = ({
   children,
   i18n,
-}: {
-  children: ReactNode;
-  i18n: i18n;
-}) => (
+}: MockI18nextProviderProps): JSX.Element => (
   <div data-testid="i18next-provider" data-i18n={i18n ? 'provided' : 'missing'}>
     {children}
   </div>
