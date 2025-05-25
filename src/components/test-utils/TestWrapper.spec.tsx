@@ -1,52 +1,28 @@
-/* eslint-disable react/no-multi-comp */
 import React, { act, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
 import { it, vi } from 'vitest';
-import type { i18n } from 'i18next';
-import type { MockedResponse } from '@apollo/client/testing';
+import { MockedCustomProvider } from './mocks/MockedCustomProvider';
+import { MockI18nextProvider } from './mocks/MockI18nextProvider';
+import { MockBrowserRouter } from './mocks/MockBrowserRouter';
+import { AsyncComponent } from './mocks/AsyncComponent';
 
 // Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
     ...actual,
-    MockedProvider: ({
-      children,
-      mocks = [],
-    }: {
-      children: ReactNode;
-      mocks?: MockedResponse[];
-    }) => (
-      <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
-        {children}
-      </div>
-    ),
+    MockedProvider: MockedCustomProvider,
   };
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: ({
-    children,
-    i18n,
-  }: {
-    children: ReactNode;
-    i18n: i18n;
-  }) => (
-    <div
-      data-testid="i18next-provider"
-      data-i18n={i18n ? 'provided' : 'missing'}
-    >
-      {children}
-    </div>
-  ),
+  I18nextProvider: MockI18nextProvider,
 }));
 
 vi.mock('react-router', () => ({
-  BrowserRouter: ({ children }: { children: ReactNode }) => (
-    <div data-testid="browser-router">{children}</div>
-  ),
+  BrowserRouter: MockBrowserRouter,
 }));
 
 vi.mock('utils/i18n', () => ({
@@ -159,22 +135,6 @@ describe('TestWrapper', () => {
   });
 
   it('handles async operations within wrapped components', async () => {
-    // Create a component with an effect
-    const AsyncComponent = () => {
-      const [loaded, setLoaded] = React.useState(false);
-
-      React.useEffect(() => {
-        // Simulate async operation
-        setTimeout(() => {
-          setLoaded(true);
-        }, 0);
-      }, []);
-
-      return (
-        <div data-testid="async-component">{loaded ? 'Loaded' : 'Loading'}</div>
-      );
-    };
-
     render(
       <TestWrapper>
         <AsyncComponent />
