@@ -1,6 +1,15 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
 
+/**
+ * A mock implementation of Apollo's MockedProvider for testing purposes.
+ * Allows inspection of provided mocks through data attributes.
+ *
+ * @param props - Component properties
+ * @param props.children - Child elements to be wrapped by the provider
+ * @param props.mocks - Array of mock responses for GraphQL operations
+ * @returns A div element containing the children with mock data attributes
+ */
 export const MockedCustomProvider = ({
   children,
   mocks = [],
