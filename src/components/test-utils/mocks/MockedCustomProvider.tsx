@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, type ReactElement } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
 
 /**
  * Props interface for the MockedCustomProvider component
  */
-interface MockedCustomProviderProps {
+interface IMockedCustomProviderProps {
   children: ReactNode;
   mocks?: MockedResponse[];
 }
@@ -31,7 +31,7 @@ const safeSerializeMocks = (mocks: MockedResponse[]): string => {
 export const MockedCustomProvider = ({
   children,
   mocks = [],
-}: MockedCustomProviderProps): JSX.Element => (
+}: IMockedCustomProviderProps): ReactElement => (
   <div data-testid="mocked-provider" data-mocks={safeSerializeMocks(mocks)}>
     {children}
   </div>
