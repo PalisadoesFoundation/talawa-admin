@@ -12,7 +12,7 @@ Defined in: [src/components/EventStats/Statistics/Feedback/Feedback.tsx:44](http
 
 ### \_\_namedParameters
 
-[`InterfaceStatsModal`](../../../../../../types/Event/interface/interfaces/InterfaceStatsModal.md)
+[`IStatsModal`](../../../../../../types/Event/interface/interfaces/IStatsModal.md)
 
 ## Returns
 

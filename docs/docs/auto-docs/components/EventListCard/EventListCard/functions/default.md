@@ -4,16 +4,16 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
-Defined in: [src/components/EventListCard/EventListCard.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/EventListCard.tsx#L44)
+Defined in: [src/components/EventListCard/EventListCard.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/EventListCard.tsx#L46)
 
 ## Parameters
 
 ### props
 
-`InterfaceEventListCard`
+`IEventListCard`
 
 ## Returns
 
-`JSX.Element`
+`Element`

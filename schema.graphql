@@ -258,32 +258,34 @@ interface Error {
 }
 
 type Event {
-  _id: ID!
-  actionItems: [ActionItem]
-  admins(adminId: ID): [User!]
-  allDay: Boolean!
-  attendees: [User]
-  attendeesCheckInStatus: [CheckInStatus!]!
-  averageFeedbackScore: Float
-  createdAt: DateTime!
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnectionPg
+
+  allDay: Boolean
+  attachments: [EventAttachmentPg!]
+  createdAt: DateTime
   creator: User
-  description: String!
-  endDate: Date
-  endTime: Time
-  feedback: [Feedback!]!
+  description: String
+  endAt: DateTime
+  id: ID!
   isPublic: Boolean!
   isRegisterable: Boolean!
-  latitude: Latitude
   location: String
-  longitude: Longitude
+  name: String
   organization: Organization
-  recurrance: Recurrance
-  recurring: Boolean!
-  startDate: Date!
-  startTime: Time
-  status: Status!
-  title: String!
-  updatedAt: DateTime!
+  startAt: DateTime
+  updatedAt: DateTime
+  updater: User
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnectionPg
 }
 
 input EventAttendeeInput {
@@ -302,7 +304,6 @@ input EventInput {
   location: String
   longitude: Longitude
   organizationId: ID!
-  recurrance: Recurrance
   recurring: Boolean!
   startDate: Date!
   startTime: Time
@@ -322,8 +323,6 @@ enum EventOrderByInput {
   id_DESC
   location_ASC
   location_DESC
-  recurrance_ASC
-  recurrance_DESC
   startDate_ASC
   startDate_DESC
   startTime_ASC
@@ -782,10 +781,8 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(
-    data: EventInput!
-    recurrenceRuleData: RecurrenceRuleInput
-  ): Event!
+  createEvent(input: MutationCreateEventInput!): Event
+
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
   createOrganization(data: OrganizationInput, file: String): Organization!
@@ -862,7 +859,7 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(data: UpdateEventInput, id: ID!): Event!
+  updateEvent(data: MutationUpdateEventInput, id: ID!): Event!
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -1919,20 +1916,6 @@ input RecaptchaVerification {
   recaptchaToken: String!
 }
 
-enum Recurrance {
-  DAILY
-  MONTHLY
-  ONCE
-  WEEKLY
-  YEARLY
-}
-
-input RecurrenceRuleInput {
-  count: Int
-  frequency: Frequency
-  weekDays: [WeekDays]
-}
-
 enum Status {
   ACTIVE
   BLOCKED
@@ -2027,7 +2010,6 @@ input UpdateEventInput {
   latitude: Latitude
   location: String
   longitude: Longitude
-  recurrance: Recurrance
   recurring: Boolean
   startDate: Date
   startTime: Time
@@ -2089,6 +2071,31 @@ enum Gender {
   FEMALE
   MALE
   OTHER
+}
+
+input MutationCreateEventInput {
+  allDay: Boolean!
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
+}
+
+input MutationUpdateEventInput {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
 }
 
 input MutationUpdateUserInput {

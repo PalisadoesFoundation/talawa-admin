@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, fireEvent } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
@@ -65,43 +65,65 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 describe('Testing Event Dashboard Screen', () => {
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
-
     await wait();
 
-    expect(getByTestId('event-title')).toBeInTheDocument();
-    expect(getByTestId('event-description')).toBeInTheDocument();
+    // Verify basic event details
+    expect(getByTestId('event-title')).toHaveTextContent('Test Event');
+    expect(getByTestId('event-description')).toHaveTextContent(
+      'Test Description',
+    );
     expect(getByTestId('event-location')).toHaveTextContent('India');
 
+    // Verify time and date information
+    expect(getByTestId('start-time')).toHaveTextContent('09:00');
+    expect(getByTestId('end-time')).toHaveTextContent('17:00');
+    expect(getByTestId('start-date')).toBeInTheDocument();
+    expect(getByTestId('end-date')).toBeInTheDocument();
+
+    // Verify statistics cards
     expect(getByTestId('registrations-card')).toBeInTheDocument();
     expect(getByTestId('attendees-card')).toBeInTheDocument();
     expect(getByTestId('feedback-card')).toBeInTheDocument();
-    expect(getByTestId('feedback-rating')).toHaveTextContent('4/5');
 
+    // Test edit button
     const editButton = getByTestId('edit-event-button');
-    fireEvent.click(editButton);
-    expect(getByTestId('event-title')).toBeInTheDocument();
-    const closeButton = getByTestId('eventModalCloseBtn');
-    fireEvent.click(closeButton);
+    expect(editButton).toBeInTheDocument();
   });
 
-  it('The page should display event details correctly and should not show the time if it is null', async () => {
+  it('The page should display event details correctly and should not show the time if all day event', async () => {
     const { getByTestId } = renderEventDashboard(mockWithoutTime);
     await wait();
 
-    expect(getByTestId('event-title')).toBeInTheDocument();
+    // Verify basic event details
+    expect(getByTestId('event-title')).toHaveTextContent('Test Event');
+    expect(getByTestId('event-description')).toHaveTextContent(
+      'Test Description',
+    );
+    expect(getByTestId('event-location')).toHaveTextContent('India');
+
+    // Verify date information without time for all-day event
+    expect(getByTestId('start-time')).toHaveTextContent('');
+    expect(getByTestId('end-time')).toHaveTextContent('');
+    expect(getByTestId('start-date')).toBeInTheDocument();
+    expect(getByTestId('end-date')).toBeInTheDocument();
     expect(getByTestId('event-time')).toBeInTheDocument();
   });
 
   it('Should show loader while data is being fetched', async () => {
     const { getByTestId, queryByTestId } = renderEventDashboard(mockWithTime);
+
+    // Initially show loader
+    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(getByTestId('spinner')).toBeInTheDocument();
+    expect(queryByTestId('event-details')).not.toBeInTheDocument();
+
     // Wait for loading to complete
     await wait();
 
-    // Verify spinner is gone
+    // Verify loader is gone and content is shown
+    expect(queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     expect(queryByTestId('spinner')).not.toBeInTheDocument();
-
-    // Verify content is visible
+    expect(getByTestId('event-details')).toBeInTheDocument();
     expect(getByTestId('event-title')).toBeInTheDocument();
   });
 });

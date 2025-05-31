@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, MemoryRouter } from 'react-router';
 
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceLeftDrawerProps } from './LeftDrawerOrg';
+import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
@@ -19,7 +19,7 @@ import { vi, describe, test, expect } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
-const props: InterfaceLeftDrawerProps = {
+const props: ILeftDrawerProps = {
   orgId: '123',
   targets: [
     {
@@ -252,7 +252,7 @@ async function wait(ms = 100): Promise<void> {
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent.resize(window);
 };
 
 beforeEach(() => {
@@ -357,7 +357,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     await userEvent.click(screen.getByText('Dashboard'));
-    expect(global.window.location.pathname).toContain('/orgdash/123');
+    expect(window.location.pathname).toContain('/orgdash/123');
   });
 
   test('Testing when screen size is less than 820px', async () => {
