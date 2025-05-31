@@ -5,15 +5,14 @@
  * for each day. It allows navigation between years and provides
  * functionality to expand and view events for specific days.
  *
- * @component
- * @param {InterfaceCalendarProps} props - The props for the calendar component.
- * @param {InterfaceEvent[]} props.eventData - Array of event data to display.
- * @param {Function} props.refetchEvents - Function to refetch events.
- * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
- * @param {string} [props.userRole] - Role of the user for access control.
- * @param {string} [props.userId] - ID of the user for filtering events they are attending.
+ * @param  props - The props for the calendar component.
+ * @param eventData - Array of event data to display.
+ * @param refetchEvents - Function to refetch events.
+ * @param orgData - Organization data for filtering events.
+ * @param userRole - Role of the user for access control.
+ * @param userId - ID of the user for filtering events they are attending.
  *
- * @returns {JSX.Element} The rendered yearly calendar component.
+ * @returns JSX.Element The rendered yearly calendar component.
  *
  * @remarks
  * - The calendar supports filtering events based on user role, organization data, and user ID.
