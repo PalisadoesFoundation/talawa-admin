@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
 Defined in: [src/App.tsx:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L109)
 
@@ -22,6 +22,6 @@ and `Route` components to map different URL paths to corresponding screens and c
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered routes and components of the application.

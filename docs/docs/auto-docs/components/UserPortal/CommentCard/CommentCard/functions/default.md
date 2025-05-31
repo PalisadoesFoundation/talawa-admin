@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L66)
 
@@ -16,4 +16,4 @@ Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:66](https://g
 
 ## Returns
 
-`JSX.Element`
+`Element`

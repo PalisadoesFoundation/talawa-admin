@@ -263,10 +263,10 @@ type Event {
     before: String
     first: Int
     last: Int
-  ): EventAgendaFoldersConnection
+  ): EventAgendaFoldersConnectionPg
 
   allDay: Boolean
-  attachments: [EventAttachment!]
+  attachments: [EventAttachmentPg!]
   createdAt: DateTime
   creator: User
   description: String
@@ -285,7 +285,7 @@ type Event {
     before: String
     first: Int
     last: Int
-  ): EventVenuesConnection
+  ): EventVenuesConnectionPg
 }
 
 input EventAttendeeInput {
@@ -304,7 +304,6 @@ input EventInput {
   location: String
   longitude: Longitude
   organizationId: ID!
-  recurrance: Recurrance
   recurring: Boolean!
   startDate: Date!
   startTime: Time
@@ -324,8 +323,6 @@ enum EventOrderByInput {
   id_DESC
   location_ASC
   location_DESC
-  recurrance_ASC
-  recurrance_DESC
   startDate_ASC
   startDate_DESC
   startTime_ASC
@@ -2013,7 +2010,6 @@ input UpdateEventInput {
   latitude: Latitude
   location: String
   longitude: Longitude
-  recurrance: Recurrance
   recurring: Boolean
   startDate: Date
   startTime: Time
