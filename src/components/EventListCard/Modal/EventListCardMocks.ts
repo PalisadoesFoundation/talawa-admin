@@ -3,12 +3,17 @@ import {
   REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
     request: {
       query: DELETE_EVENT_MUTATION,
-      variables: { id: '1' },
+      variables: {
+        input: {
+          id: '1',
+        },
+      },
     },
     result: {
       data: {
@@ -18,155 +23,159 @@ export const MOCKS = [
       },
     },
   },
-  {
-    request: {
-      query: DELETE_EVENT_MUTATION,
-      variables: { id: '1', recurringEventDeleteType: 'thisInstance' },
-    },
-    result: {
-      data: {
-        removeEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
+  // Mock for updating event when switching to all-day (first part of test)
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
       variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: false,
-        recurring: false,
-        isRegisterable: true,
-        allDay: true,
-        startDate: '2022-03-18',
-        endDate: '2022-03-20',
-        location: 'New Delhi',
+        input: {
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          isPublic: true,
+          isRegisterable: true,
+          allDay: true,
+          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          location: 'New Delhi',
+        },
       },
     },
     result: {
       data: {
         updateEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          allDay: true,
+          location: 'New Delhi',
+          isPublic: true,
+          isRegisterable: true,
+          createdAt: '2022-03-18',
+          updatedAt: '2022-03-18',
+          creator: {
+            id: '123',
+            name: 'Test Creator',
+          },
+          updater: {
+            id: '123',
+            name: 'Test Updater',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Org',
+          },
         },
       },
     },
   },
+  // Mock for updating event when it's not all-day (second test)
+  // This mock matches the failing test scenario
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
       variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: false,
-        recurring: false,
-        isRegisterable: true,
-        allDay: false,
-        startDate: '2022-03-18',
-        endDate: '2022-03-20',
-        location: 'New Delhi',
-        startTime: '09:00:00',
-        endTime: '17:00:00',
+        input: {
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          isPublic: false, // props[4].isPublic is true, clicking toggle makes it false
+          isRegisterable: true, // props[4].isRegisterable is false, clicking toggle makes it true
+          allDay: false, // props[4].allDay is false, not clicking allDay toggle keeps it false
+          startAt: dayjs('2022-03-18')
+            .hour(9) // 09:00 AM from updateData.startTime
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs('2022-03-20')
+            .hour(17) // 05:00 PM from updateData.endTime
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          location: 'New Delhi',
+        },
       },
     },
     result: {
       data: {
         updateEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          startAt: dayjs('2022-03-18')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs('2022-03-20').hour(17).minute(0).second(0).toISOString(),
+          allDay: false,
+          location: 'New Delhi',
+          isPublic: false,
+          isRegisterable: true,
+          createdAt: '2022-03-18',
+          updatedAt: '2022-03-18',
+          creator: {
+            id: '123',
+            name: 'Test Creator',
+          },
+          updater: {
+            id: '123',
+            name: 'Test Updater',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Org',
+          },
         },
       },
     },
   },
+  // Additional mock to catch any variations in the update
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
       variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: false,
-        recurring: true,
-        recurringEventUpdateType: 'thisInstance',
-        isRegisterable: true,
-        allDay: true,
-        startDate: '2022-03-18',
-        endDate: '2022-03-20',
-        location: 'New Delhi',
-        recurrenceStartDate: '2022-03-18',
-        recurrenceEndDate: null,
-        frequency: 'WEEKLY',
-        weekDays: ['FRIDAY'],
-        interval: 1,
+        input: {
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          isPublic: false, // Note: this might be different based on initial state
+          isRegisterable: true,
+          allDay: true,
+          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          location: 'New Delhi',
+        },
       },
     },
     result: {
       data: {
         updateEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_EVENT_MUTATION,
-      variables: {
-        id: '1',
-        title: 'Updated title',
-        description: 'This is a new update',
-        isPublic: true,
-        recurring: true,
-        recurringEventUpdateType: 'allInstances',
-        isRegisterable: false,
-        allDay: true,
-        startDate: '2022-03-17',
-        endDate: '2022-03-17',
-        location: 'New Delhi',
-        recurrenceStartDate: '2022-03-17',
-        recurrenceEndDate: '2023-03-17',
-        frequency: 'MONTHLY',
-        weekDays: ['THURSDAY'],
-        interval: 1,
-        weekDayOccurenceInMonth: 3,
-      },
-    },
-    result: {
-      data: {
-        updateEvent: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_EVENT_MUTATION,
-      variables: {
-        id: '1',
-        title: 'Shelter for Cats',
-        description: 'This is shelter for cat event',
-        isPublic: true,
-        recurring: true,
-        recurringEventUpdateType: 'thisAndFollowingInstances',
-        isRegisterable: false,
-        allDay: true,
-        startDate: '2022-03-18',
-        endDate: '2022-03-20',
-        location: 'India',
-        recurrenceStartDate: '2022-03-18',
-        recurrenceEndDate: null,
-        frequency: 'DAILY',
-        interval: 1,
-      },
-    },
-    result: {
-      data: {
-        updateEvent: {
-          _id: '1',
+          id: '1',
+          name: 'Updated title',
+          description: 'This is a new update',
+          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          allDay: true,
+          location: 'New Delhi',
+          isPublic: false,
+          isRegisterable: true,
+          createdAt: '2022-03-18',
+          updatedAt: '2022-03-18',
+          creator: {
+            id: '123',
+            name: 'Test Creator',
+          },
+          updater: {
+            id: '123',
+            name: 'Test Updater',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Org',
+          },
         },
       },
     },
@@ -193,7 +202,9 @@ export const ERROR_MOCKS = [
     request: {
       query: DELETE_EVENT_MUTATION,
       variables: {
-        id: '1',
+        input: {
+          id: '1',
+        },
       },
     },
     error: new Error('Something went wrong'),
