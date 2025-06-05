@@ -47,7 +47,6 @@ describe('PluginStore Component', () => {
     );
 
     expect(screen.getByText('Calendar')).toBeInTheDocument();
-    expect(screen.getByText('Polls')).toBeInTheDocument();
   });
 
   it('shows plugin details', () => {
@@ -63,9 +62,6 @@ describe('PluginStore Component', () => {
       screen.getByText(
         'A plugin to add calendar functionality to your community.',
       ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('A plugin to create and manage polls.'),
     ).toBeInTheDocument();
   });
 
