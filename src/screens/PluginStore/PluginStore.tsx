@@ -43,56 +43,6 @@ const availablePlugins: IPluginMeta[] = [
     author: 'Talawa Team',
     icon: '/images/logo512.png',
   },
-  {
-    id: 'polls',
-    name: 'Polls',
-    description: 'A plugin to create and manage polls.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'events',
-    name: 'Events',
-    description: 'A plugin to manage events and RSVPs.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'chat',
-    name: 'Chat',
-    description: 'A real-time chat plugin for members to communicate.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'filesharing',
-    name: 'FileSharing',
-    description: 'Enables users to upload and share files securely.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'forums',
-    name: 'Forums',
-    description: 'A plugin for threaded community discussions.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'donations',
-    name: 'Donations',
-    description:
-      'Allows collection of donations via multiple payment gateways.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
-  {
-    id: 'analytics',
-    name: 'Analytics',
-    description: 'Provides usage statistics and insights.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-  },
 ];
 
 // Debounce hook
