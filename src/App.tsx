@@ -88,6 +88,8 @@ const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
 
+const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
+
 const { setItem } = useLocalStorage();
 
 /**
@@ -106,7 +108,7 @@ const { setItem } = useLocalStorage();
  * @returns  The rendered routes and components of the application.
  */
 
-function app(): JSX.Element {
+function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
 
   useEffect(() => {
@@ -133,6 +135,7 @@ function app(): JSX.Element {
               <Route path="/member" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
+              <Route path="/pluginstore" element={<PluginStore />} />
             </Route>
             <Route element={<OrganizationScreen />}>
               <Route path="/requests/:orgId" element={<Requests />} />
@@ -225,4 +228,4 @@ function app(): JSX.Element {
   );
 }
 
-export default app;
+export default App;

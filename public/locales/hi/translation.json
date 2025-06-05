@@ -105,12 +105,13 @@
   },
   "leftDrawer": {
     "my organizations": "मेरे संगठन",
+    "plugin store": "प्लगइन स्टोर",
     "requests": "सदस्यता अनुरोध",
     "communityProfile": "समुदाय प्रोफ़ाइल",
-    "talawaAdminPortal": "तालावा व्यवस्थापक पोर्टल",
+    "talawaAdminPortal": "तलावा एडमिन पोर्टल",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
-    "logout": "लॉगआउट"
+    "logout": "लॉग आउट"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
@@ -1472,5 +1473,9 @@
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण"
+  },
+  "pluginStore": {
+    "title": "प्लगइन स्टोर",
+    "searchPlaceholder": "प्लगइन खोजें..."
   }
 }

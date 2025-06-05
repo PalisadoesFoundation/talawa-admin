@@ -1,38 +1,15 @@
 /**
- * LeftDrawer Component
- *
- * This component represents the left navigation drawer for the Talawa Admin Portal.
- * It provides navigation options for different sections of the application, such as
- * organizations, users, and community profile. The drawer's visibility can be toggled
- * based on the screen size or user interaction.
- *
- * @component
- * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
- * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
- *                                            `null` indicates the initial state.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
- *                                            Function to update the visibility state of the drawer.
- *
- * @returns {JSX.Element} The rendered LeftDrawer component.
+ * Represents the left navigation drawer for the Talawa Admin Portal.
  *
  * @remarks
- * - The component uses `useTranslation` for internationalization.
- * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
- * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ * - Uses `useTranslation` for i18n.
+ * - Automatically hides on screen widths ≤ 820px after clicking a link.
+ * - Conditionally renders the "Users" section based on SuperAdmin status.
  *
- * @example
- * ```tsx
- * <LeftDrawer
- *   hideDrawer={false}
- *   setHideDrawer={setHideDrawerFunction}
- * />
- * ```
- *
- * @fileoverview
- * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
- * - Uses SVG icons for visual representation of navigation options.
- * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
+ * @param props - Props including drawer visibility state and setter function.
+ * @returns The rendered LeftDrawer component.
  */
+
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
@@ -40,10 +17,11 @@ import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
+import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
-export interface InterfaceLeftDrawerProps {
+export interface ILeftDrawerProps {
   hideDrawer: boolean | null;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
@@ -51,7 +29,7 @@ export interface InterfaceLeftDrawerProps {
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
+}: ILeftDrawerProps): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
   const { t: tCommon } = useTranslation('common');
 
@@ -110,6 +88,30 @@ const leftDrawer = ({
                   />
                 </div>
                 {t('my organizations')}
+              </button>
+            )}
+          </NavLink>
+
+          <NavLink to={'/pluginstore'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
+                data-testid="pluginStoreBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <PluginLogo
+                    fill="none"
+                    fontSize={25}
+                    stroke={
+                      isActive
+                        ? 'var(--sidebar-icon-stroke-active)'
+                        : 'var(--sidebar-icon-stroke-inactive)'
+                    }
+                  />
+                </div>
+                {t('plugin store')}
               </button>
             )}
           </NavLink>

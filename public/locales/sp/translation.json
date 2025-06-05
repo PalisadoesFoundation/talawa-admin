@@ -104,12 +104,13 @@
     "logout": "Cerrar sesión"
   },
   "leftDrawer": {
-    "talawaAdminPortal": "Portal de administración de Talawa",
-    "menu": "Menú",
-    "my organizations": "Mis Organizaciones",
-    "users": "Usuarios",
-    "requests": "Solicitudes",
+    "my organizations": "Mis organizaciones",
+    "plugin store": "Tienda de Plugins",
+    "requests": "Solicitudes de membresía",
     "communityProfile": "Perfil de la comunidad",
+    "talawaAdminPortal": "Portal de Administrador de Talawa",
+    "menu": "Menú",
+    "users": "Usuarios",
     "logout": "Cerrar sesión"
   },
   "leftDrawerOrg": {
@@ -1475,5 +1476,9 @@
     "recurring": "Recurrente",
     "groupInvitationSubject": "Invitación a unirse al grupo de voluntarios",
     "eventInvitationSubject": "Invitación a ser voluntario para el evento"
+  },
+  "pluginStore": {
+    "title": "Tienda de Plugins",
+    "searchPlaceholder": "Buscar plugins..."
   }
 }

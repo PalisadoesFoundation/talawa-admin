@@ -105,6 +105,7 @@
   },
   "leftDrawer": {
     "my organizations": "Mes organisations",
+    "plugin store": "Boutique de Plugins",
     "requests": "Demandes d'adhésion",
     "communityProfile": "Profil de la communauté",
     "talawaAdminPortal": "Portail Administrateur Talawa",
@@ -1472,5 +1473,9 @@
     "recurring": "Récurrent",
     "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
     "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement"
+  },
+  "pluginStore": {
+    "title": "Boutique de Plugins",
+    "searchPlaceholder": "Rechercher des plugins..."
   }
 }

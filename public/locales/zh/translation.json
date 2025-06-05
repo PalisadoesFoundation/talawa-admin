@@ -105,12 +105,13 @@
   },
   "leftDrawer": {
     "my organizations": "我的组织",
-    "requests": "会员申请",
-    "communityProfile": "社区简介",
-    "talawaAdminPortal": "塔拉瓦管理员门户",
+    "plugin store": "插件商店",
+    "requests": "会员请求",
+    "communityProfile": "社区资料",
+    "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "退出登录"
+    "logout": "登出"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -1472,5 +1473,9 @@
     "recurring": "重复",
     "groupInvitationSubject": "邀请加入志愿者小组",
     "eventInvitationSubject": "邀请参加活动志愿服务"
+  },
+  "pluginStore": {
+    "title": "插件商店",
+    "searchPlaceholder": "搜索插件..."
   }
 }
