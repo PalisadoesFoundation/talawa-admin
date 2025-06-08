@@ -16,3 +16,4 @@ updates:
     # Customize commit message prefix
     commit-message:
       prefix: "chore(deps):"
+    update-lockfile: true
