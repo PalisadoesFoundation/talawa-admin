@@ -1,0 +1,106 @@
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  e2e: {
+    baseUrl: 'http://localhost:4321',
+
+    // Viewport settings
+    viewportWidth: 1280,
+    viewportHeight: 720,
+    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    supportFile: 'cypress/support/e2e.ts',
+
+    defaultCommandTimeout: 10000,
+    requestTimeout: 10000,
+    responseTimeout: 10000,
+    pageLoadTimeout: 30000,
+
+    watchForFileChanges: true,
+    chromeWebSecurity: false,
+    retries: {
+      runMode: 2,
+      openMode: 0,
+    },
+
+    // Environment variables
+    env: {
+      // apiUrl: "http://localhost:8000/api",
+    },
+
+    setupNodeEvents(on, config) {
+      // require("cypress-localstorage-commands/plugin")(on, config); // eslint-disable-line
+
+      // Task registration
+      on('task', {
+        log(message) {
+          console.log(message);
+          return null;
+        },
+      });
+
+      // File handling tasks
+      on('task', {
+        readFileMaybe(filename) {
+          if (require('fs').existsSync(filename)) {
+            return require('fs').readFileSync(filename, 'utf8');
+          }
+          return null;
+        },
+      });
+
+      // Browser launch options for both Chrome and Firefox
+      on('before:browser:launch', (browser, launchOptions) => {
+        // Chrome specific configurations
+        if (browser.name === 'chrome') {
+          if (browser.isHeadless) {
+            launchOptions.args.push('--max_old_space_size=4096');
+          }
+
+          // Chrome performance optimizations
+          launchOptions.args.push('--disable-dev-shm-usage');
+          launchOptions.args.push('--no-sandbox');
+        }
+
+        // Firefox specific configurations
+        if (browser.name === 'firefox') {
+          // Firefox preferences
+          launchOptions.preferences = {
+            ...launchOptions.preferences,
+            'signon.rememberSignons': false,
+            'browser.safebrowsing.enabled': false,
+            'browser.safebrowsing.malware.enabled': false,
+            'app.update.enabled': false,
+            'browser.download.folderList': 2,
+            'browser.download.manager.showWhenStarting': false,
+            'browser.helperApps.neverAsk.saveToDisk':
+              'application/pdf,text/csv,application/csv',
+          };
+          launchOptions.args = launchOptions.args || [];
+        }
+
+        return launchOptions;
+      });
+
+      // Custom plugins can be registered here
+      // Example: require('@cypress/code-coverage/task')(on, config);
+
+      return config;
+    },
+  },
+
+  // // Component testing configuration (if using)
+  // component: {
+  //   devServer: {
+  //     framework: 'react',
+  //     bundler: 'vite',
+  //   },
+  //   specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
+  //   supportFile: 'cypress/support/component.ts',
+  // },
+
+  includeShadowDom: true,
+  experimentalStudio: true,
+
+  downloadsFolder: 'cypress/downloads',
+  fixturesFolder: 'cypress/fixtures',
+});

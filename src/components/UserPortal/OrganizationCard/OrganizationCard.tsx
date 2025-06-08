@@ -223,6 +223,7 @@ function OrganizationCard({
             className={styles.addButton}
             onClick={() => navigate(`/user/organization/${id}`)}
             style={{ width: '8rem' }}
+            data-cy="manageBtn"
           >
             {t('visit')}
           </Button>
