@@ -8,7 +8,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';
 import { BrowserRouter as Router } from 'react-router';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import { eventData, MOCKS } from '../EventCalenderMocks';
 
 const link = new StaticMockLink(MOCKS, true);
@@ -29,6 +29,7 @@ describe('Calendar', () => {
       expect(screen.getByText(weekday)).toBeInTheDocument();
     });
   });
+
   it('should initialize currentMonth and currentYear with the current date', () => {
     const today = new Date();
     const { getByTestId } = render(<Calendar eventData={eventData} />);
@@ -83,6 +84,7 @@ describe('Calendar', () => {
       fireEvent.click(prevButton);
     }
   });
+
   it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
     //testing previous month button
     render(
@@ -104,6 +106,7 @@ describe('Calendar', () => {
       fireEvent.click(button);
     });
   });
+
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
       <Router>
@@ -128,6 +131,7 @@ describe('Calendar', () => {
       fireEvent.click(nextButton);
     }
   });
+
   it('Should render eventlistcard of current day event', () => {
     const currentDayEventMock = [
       {
@@ -140,9 +144,6 @@ describe('Calendar', () => {
         startTime: '10:00',
         endTime: '12:00',
         allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -160,6 +161,7 @@ describe('Calendar', () => {
       </Router>,
     );
   });
+
   it('Test for superadmin case', () => {
     render(
       <Router>
@@ -172,6 +174,7 @@ describe('Calendar', () => {
       </Router>,
     );
   });
+
   it('Today Cell is having correct styles', () => {
     render(
       <Router>
@@ -187,6 +190,7 @@ describe('Calendar', () => {
     // const todayElement = screen.getByText(todayDate.toString());
     // expect(todayElement).toHaveClass(styles.day__today);
   });
+
   it('Today button should show today cell', () => {
     render(
       <Router>
@@ -208,6 +212,7 @@ describe('Calendar', () => {
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
   });
+
   it('Should handle window resize in day view', async () => {
     const date = new Date().toISOString().split('T')[0];
     const multipleEventData = [
@@ -221,9 +226,6 @@ describe('Calendar', () => {
         startTime: null,
         endTime: null,
         allDay: true,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -239,9 +241,6 @@ describe('Calendar', () => {
         startTime: null,
         endTime: null,
         allDay: true,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -257,9 +256,6 @@ describe('Calendar', () => {
         startTime: '14:00',
         endTime: '16:00',
         allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -275,9 +271,6 @@ describe('Calendar', () => {
         startTime: '14:00',
         endTime: '16:00',
         allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -293,9 +286,6 @@ describe('Calendar', () => {
         startTime: '17:00',
         endTime: '19:00',
         allDay: false,
-        recurring: false,
-        recurrenceRule: null,
-        isRecurringEventException: false,
         isPublic: true,
         isRegisterable: true,
         attendees: [],
@@ -315,7 +305,7 @@ describe('Calendar', () => {
     // Simulate window resize and check if components respond correctly
     await act(async () => {
       window.innerWidth = 500; // Set the window width to <= 700
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new globalThis.Event('resize'));
     });
 
     // Check for "View all" button if there are more than 2 events
@@ -340,9 +330,10 @@ describe('Calendar', () => {
     // Reset the window size to avoid side effects for other tests
     await act(async () => {
       window.innerWidth = 1024;
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new globalThis.Event('resize'));
     });
   });
+
   test('Handles window resize', () => {
     render(
       <Router>
@@ -356,9 +347,10 @@ describe('Calendar', () => {
     );
 
     act(() => {
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new globalThis.Event('resize'));
     });
   });
+
   it('renders year view', async () => {
     render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
 
@@ -370,6 +362,7 @@ describe('Calendar', () => {
       });
     });
   });
+
   it('render the hour view', async () => {
     render(<Calendar eventData={eventData} viewType={ViewType.DAY} />);
 

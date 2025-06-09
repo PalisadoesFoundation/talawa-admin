@@ -6,11 +6,11 @@
  * for localization and handles navigation based on the presence of an organization ID.
  *
  * @param props - The properties passed to the component.
- * @param props.title - The title of the event. Defaults to "Dogs Care" if not provided.
- * @param props.description - The description of the event.
- * @param props.date - The date of the event.
- * @param props.location - The location of the event.
- * @param props.refetchEvents - Optional callback function to refetch events.
+ * @param title - The title of the event. Defaults to "Dogs Care" if not provided.
+ * @param description - The description of the event.
+ * @param date - The date of the event.
+ * @param location - The location of the event.
+ * @param refetchEvents - Optional callback function to refetch events.
  *
  * @returns A JSX element representing the event card and its associated modal.
  *
@@ -30,19 +30,23 @@
  * ```
  *
  */
-import React, { useState } from 'react';
+import React, { useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
-
-interface InterfaceEventListCard extends InterfaceEvent {
+/**
+ * Props for the EventListCard component.
+ */
+interface IEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
-function eventListCard(props: InterfaceEventListCard): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+function eventListCard(props: IEventListCard): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);

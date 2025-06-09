@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`props`): `JSX.Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L46)
 
@@ -24,6 +24,6 @@ Component props containing the organization ID.
 
 ## Returns
 
-`JSX.Element`
+`Element`
 
 The rendered component.

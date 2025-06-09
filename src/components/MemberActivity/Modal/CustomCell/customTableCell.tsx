@@ -5,30 +5,23 @@
  * fetched from a GraphQL query. It handles loading, error, and empty
  * states gracefully and renders event information in a table row.
  *
- * @component
- * @param {Object} props - Component props.
- * @param {string} props.eventId - The unique identifier of the event to fetch details for.
+ * @param props - Component props.
+ * @param eventId - The unique identifier of the event to fetch details for.
  *
- * @returns {JSX.Element} A table row containing event details or appropriate
+ * @returns A table row containing event details or appropriate
  * fallback UI for loading, error, or missing event states.
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` hook to fetch event details.
  * - Displays a loading spinner while fetching data.
  * - Shows an error message if the query fails.
- * - Renders event details including title, start date, recurrence status,
+ * - Renders event details including title, start date,
  *   and the number of attendees.
  *
  * @example
  * ```tsx
  * <CustomTableCell eventId="12345" />
  * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL queries.
- * - `@mui/material` for UI components like `TableCell` and `CircularProgress`.
- * - `react-router-dom` for navigation links.
- * - `style/app-fixed.module.css` for custom styles.
  *
  */
 import { useQuery } from '@apollo/client';

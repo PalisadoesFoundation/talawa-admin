@@ -4,6 +4,128 @@
 
 # Variable: MOCKS
 
-> `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `undefined`; `count`: `undefined`; `description`: `undefined`; `description_contains`: `string`; `endDate`: `undefined`; `endTime`: `undefined`; `frequency`: `undefined`; `interval`: `undefined`; `isPublic`: `undefined`; `isRegisterable`: `undefined`; `location`: `undefined`; `location_contains`: `string`; `organization_id`: `any`; `organizationId`: `undefined`; `recurrenceEndDate`: `undefined`; `recurrenceStartDate`: `undefined`; `recurring`: `undefined`; `startDate`: `undefined`; `startTime`: `undefined`; `title`: `undefined`; `title_contains`: `string`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: `undefined`; `eventsByOrganizationConnection`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `undefined`; `count`: `undefined`; `description`: `undefined`; `description_contains`: `string`; `endDate`: `undefined`; `endTime`: `undefined`; `frequency`: `undefined`; `interval`: `undefined`; `isPublic`: `undefined`; `isRegisterable`: `undefined`; `location`: `undefined`; `location_contains`: `string`; `organization_id`: `any`; `organizationId`: `undefined`; `recurrenceEndDate`: `undefined`; `recurrenceStartDate`: `undefined`; `recurring`: `undefined`; `startDate`: `undefined`; `startTime`: `undefined`; `title`: `undefined`; `title_contains`: `string`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: `undefined`; `eventsByOrganizationConnection`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `undefined`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `undefined`; `frequency`: `undefined`; `interval`: `undefined`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `undefined`; `recurrenceStartDate`: `undefined`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `undefined`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `undefined`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `string`; `frequency`: `undefined`; `interval`: `undefined`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `undefined`; `recurrenceStartDate`: `undefined`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `string`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `undefined`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `string`; `frequency`: `string`; `interval`: `number`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `any`; `recurrenceStartDate`: `string`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `string`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `undefined`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `string`; `frequency`: `string`; `interval`: `number`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `any`; `recurrenceStartDate`: `string`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `string`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `string`[]; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `undefined`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `undefined`; `frequency`: `string`; `interval`: `number`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `string`; `recurrenceStartDate`: `string`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `undefined`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `number`; `weekDays`: `string`[]; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `allDay`: `boolean`; `count`: `number`; `description`: `string`; `description_contains`: `undefined`; `endDate`: `string`; `endTime`: `undefined`; `frequency`: `string`; `interval`: `number`; `isPublic`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `location_contains`: `undefined`; `organization_id`: `undefined`; `organizationId`: `any`; `recurrenceEndDate`: `any`; `recurrenceStartDate`: `string`; `recurring`: `boolean`; `startDate`: `string`; `startTime`: `undefined`; `title`: `string`; `title_contains`: `undefined`; `weekDayOccurenceInMonth`: `undefined`; `weekDays`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createEvent`: \{ `_id`: `string`; \}; `eventsByOrganizationConnection`: `undefined`; \}; \}; \})[]
+> `const` **MOCKS**: `object`[]
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEventsMocks.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEventsMocks.ts#L4)
+Defined in: [src/screens/OrganizationEvents/OrganizationEventsMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEventsMocks.ts#L3)
+
+## Type declaration
+
+### request
+
+> **request**: `object`
+
+#### request.query
+
+> **query**: `DocumentNode` = `CREATE_EVENT_MUTATION`
+
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.allDay
+
+> **allDay**: `boolean` = `true`
+
+#### request.variables.input.description
+
+> **description**: `string` = `'This is a dummy organization'`
+
+#### request.variables.input.endAt
+
+> **endAt**: `string` = `'2022-03-30T18:29:59.999Z'`
+
+#### request.variables.input.isPublic
+
+> **isPublic**: `boolean` = `false`
+
+#### request.variables.input.isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
+
+#### request.variables.input.location
+
+> **location**: `string` = `'New Delhi'`
+
+#### request.variables.input.name
+
+> **name**: `string` = `'Dummy Org'`
+
+#### request.variables.input.organizationId
+
+> **organizationId**: `any` = `undefined`
+
+#### request.variables.input.startAt
+
+> **startAt**: `string` = `'2022-03-27T18:30:00.000Z'`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.createEvent
+
+> **createEvent**: `object`
+
+#### result.data.createEvent.allDay
+
+> **allDay**: `boolean` = `true`
+
+#### result.data.createEvent.creator
+
+> **creator**: `object`
+
+#### result.data.createEvent.creator.id
+
+> **id**: `string` = `'1'`
+
+#### result.data.createEvent.creator.name
+
+> **name**: `string` = `'Admin User'`
+
+#### result.data.createEvent.description
+
+> **description**: `string` = `'This is a dummy organization'`
+
+#### result.data.createEvent.endAt
+
+> **endAt**: `string` = `'2022-03-30T18:29:59.999Z'`
+
+#### result.data.createEvent.id
+
+> **id**: `string` = `'1'`
+
+#### result.data.createEvent.isPublic
+
+> **isPublic**: `boolean` = `false`
+
+#### result.data.createEvent.isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
+
+#### result.data.createEvent.location
+
+> **location**: `string` = `'New Delhi'`
+
+#### result.data.createEvent.name
+
+> **name**: `string` = `'Dummy Org'`
+
+#### result.data.createEvent.organization
+
+> **organization**: `object`
+
+#### result.data.createEvent.organization.id
+
+> **id**: `string` = `'1'`
+
+#### result.data.createEvent.startAt
+
+> **startAt**: `string` = `'2022-03-27T18:30:00.000Z'`

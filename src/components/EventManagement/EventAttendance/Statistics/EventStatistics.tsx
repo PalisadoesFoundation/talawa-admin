@@ -12,11 +12,11 @@
  * - Highlights the current event in the trends chart.
  *
  * Props:
- * @param {boolean} show - Determines whether the modal is visible.
- * @param {() => void} handleClose - Callback to close the modal.
- * @param {object} statistics - Contains overall statistics for non-recurring events.
- * @param {Array} memberData - List of members with demographic details.
- * @param {Function} t - Translation function for localized strings.
+ * @param  show - Determines whether the modal is visible.
+ * @param  handleClose - Callback to close the modal.
+ * @param statistics - Contains overall statistics for non-recurring events.
+ * @param  memberData - List of members with demographic details.
+ * @param  t - Translation function for localized strings.
  *
  * Hooks:
  * - `useParams` to retrieve organization and event IDs from the URL.
@@ -66,7 +66,6 @@ import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
-  InterfaceRecurringEvent,
 } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 ChartJS.register(
@@ -82,7 +81,7 @@ ChartJS.register(
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData, t }): JSX.Element => {
+> = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
@@ -215,13 +214,6 @@ export const AttendanceStatisticsModal: React.FC<
           data: attendeeCounts,
           fill: true,
           borderColor: '#008000',
-          pointRadius: paginatedRecurringEvents.map(
-            (event: InterfaceRecurringEvent) => (event._id === eventId ? 8 : 3),
-          ),
-          pointBackgroundColor: paginatedRecurringEvents.map(
-            (event: InterfaceRecurringEvent) =>
-              event._id === eventId ? '#008000' : 'transparent',
-          ),
         },
         {
           label: 'Male Attendees',

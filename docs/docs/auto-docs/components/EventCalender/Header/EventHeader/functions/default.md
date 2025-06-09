@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/EventCalender/Header/EventHeader.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Header/EventHeader.tsx#L46)
 
@@ -12,8 +12,8 @@ Defined in: [src/components/EventCalender/Header/EventHeader.tsx:46](https://git
 
 ### \_\_namedParameters
 
-[`InterfaceEventHeaderProps`](../../../../../types/Event/interface/interfaces/InterfaceEventHeaderProps.md)
+[`IEventHeaderProps`](../../../../../types/Event/interface/interfaces/IEventHeaderProps.md)
 
 ## Returns
 
-`JSX.Element`
+`Element`

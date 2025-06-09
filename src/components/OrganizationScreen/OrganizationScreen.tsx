@@ -5,52 +5,22 @@
  * It includes a side drawer for navigation, a header with a title and profile dropdown,
  * and dynamically renders child routes using React Router's `Outlet`.
  *
- * @component
- *
  * @remarks
  * - The component uses Redux for state management and Apollo Client for GraphQL queries.
  * - It dynamically updates the page title and event name based on the current route.
  * - The side drawer visibility is responsive to screen resizing.
  *
- * @returns {JSX.Element} The rendered OrganizationScreen component.
+ * @returns  The rendered OrganizationScreen component.
  *
  * @example
  * ```tsx
  * <OrganizationScreen />
  * ```
  *
- * @dependencies
- * - `useLocation`, `useParams`, `useMatch`, `Navigate`, and `Outlet` from `react-router-dom`
- * - `useSelector` and `useAppDispatch` for Redux state management
- * - `useQuery` from `@apollo/client` for fetching organization events
- * - `useTranslation` from `react-i18next` for internationalization
- *
- * @state
- * - `hideDrawer` (`boolean | null`): Manages the visibility of the side drawer.
- * - `eventName` (`string | null`): Stores the name of the currently selected event.
- *
- * @redux
- * - `appRoutes.targets`: Contains the application routes for the organization.
- * - Dispatches `updateTargets` action to update targets based on the organization ID.
- *
- * @graphql
- * - Query: `ORGANIZATION_EVENT_LIST` to fetch events for the organization.
- *
- * @hooks
- * - `useEffect`: Handles side drawer visibility, updates targets, and sets the event name.
- * - `useQuery`: Fetches organization events data.
- *
- * @styles
- * - Uses CSS modules for styling (`app-fixed.module.css`).
- *
- * @translation
- * - Dynamically sets the page title using `useTranslation` and a mapping object.
- *
- * @events
- * - Listens to window resize events to toggle the side drawer visibility.
  */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
+import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import {
@@ -68,7 +38,7 @@ import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
-import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
 
 const OrganizationScreen = (): JSX.Element => {
@@ -104,7 +74,7 @@ const OrganizationScreen = (): JSX.Element => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
 
-  const { data: eventsData } = useQuery(ORGANIZATION_EVENT_LIST, {
+  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
   });
 
