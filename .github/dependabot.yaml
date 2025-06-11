@@ -8,8 +8,6 @@ updates:
     # Schedule automated updates to run weekly
     schedule:
       interval: "monthly"
-    # Ensures that both the manifest and lockfile are always in sync.
-    versioning-strategy: increase
     # Labels to apply to Dependabot PRs
     labels:
       - "dependencies"
