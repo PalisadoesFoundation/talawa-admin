@@ -1,6 +1,25 @@
 import gql from 'graphql-tag';
 
 /**
+ * GraphQL query to retrieve all plugins.
+ *
+ * @returns The list of plugins with details such as id, pluginId, isActivated, isInstalled, backup, createdAt, and updatedAt.
+ */
+export const GET_ALL_PLUGINS = gql`
+  query GetAllPlugins {
+    plugins(input: {}) {
+      id
+      pluginId
+      isActivated
+      isInstalled
+      backup
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
  * GraphQL query to retrieve a list of advertisements.
  *
  * @returns The list of advertisements with details such as ID, name, type, organization ID, link, start date, and end date.

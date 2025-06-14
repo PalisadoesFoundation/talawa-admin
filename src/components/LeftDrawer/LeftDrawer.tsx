@@ -5,12 +5,13 @@
  * - Uses `useTranslation` for i18n.
  * - Automatically hides on screen widths ≤ 820px after clicking a link.
  * - Conditionally renders the "Users" section based on SuperAdmin status.
+ * - Includes dynamic plugin drawer items for admin routes.
  *
  * @param props - Props including drawer visibility state and setter function.
  * @returns The rendered LeftDrawer component.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
@@ -20,6 +21,8 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { usePluginDrawerItems } from 'plugin';
+import type { IDrawerExtension } from 'plugin';
 
 export interface ILeftDrawerProps {
   hideDrawer: boolean | null;
@@ -34,19 +37,123 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') !== null;
+  const superAdmin = getItem('SuperAdmin') === 'true';
 
+  // Initialize drawer state only once
   useEffect(() => {
     if (hideDrawer === null) {
       setHideDrawer(false);
     }
-  }, []);
+  }, []); // Empty dependency array since we only want to run this once
 
-  const handleLinkClick = (): void => {
+  const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  };
+  }, [setHideDrawer]);
+
+  // Render a drawer item with icon
+  const renderDrawerItem = useCallback(
+    (to: string, icon: React.ReactNode, label: string, testId: string) => (
+      <NavLink key={to} to={to} onClick={handleLinkClick}>
+        {({ isActive }) => (
+          <button
+            className={`${
+              isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+            }`}
+            data-testid={testId}
+          >
+            <div className={styles.iconWrapper}>
+              {React.cloneElement(icon as React.ReactElement, {
+                fill: 'none',
+                fontSize: 25,
+                stroke: isActive
+                  ? 'var(--sidebar-icon-stroke-active)'
+                  : 'var(--sidebar-icon-stroke-inactive)',
+              })}
+            </div>
+            {label}
+          </button>
+        )}
+      </NavLink>
+    ),
+    [handleLinkClick],
+  );
+
+  // Render a plugin drawer item
+  const renderPluginDrawerItem = useCallback(
+    (item: IDrawerExtension) => {
+      const Icon = item.icon ? (
+        <img
+          src={item.icon}
+          alt={item.label}
+          style={{ width: 25, height: 25 }}
+        />
+      ) : (
+        <PluginLogo
+          fill="none"
+          fontSize={25}
+          stroke="var(--sidebar-icon-stroke-inactive)"
+        />
+      );
+
+      return renderDrawerItem(
+        item.path,
+        Icon,
+        item.label,
+        `plugin-${item.pluginId}-btn`,
+      );
+    },
+    [renderDrawerItem],
+  );
+
+  // Memoize the user permissions and admin status
+  const userPermissions = useMemo(() => [], []);
+  const isAdmin = useMemo(() => superAdmin, [superAdmin]);
+
+  // Get plugin drawer items for admin routes
+  const pluginDrawerItems = usePluginDrawerItems(userPermissions, true);
+
+  // Memoize the main content to prevent unnecessary re-renders
+  const drawerContent = useMemo(
+    () => (
+      <div className={styles.optionList}>
+        {renderDrawerItem(
+          '/orglist',
+          <OrganizationsIcon />,
+          t('my organizations'),
+          'organizationsBtn',
+        )}
+
+        {renderDrawerItem(
+          '/pluginstore',
+          <PluginLogo />,
+          t('plugin store'),
+          'pluginStoreBtn',
+        )}
+
+        {superAdmin &&
+          renderDrawerItem('/users', <RolesIcon />, t('users'), 'rolesBtn')}
+
+        {renderDrawerItem(
+          '/CommunityProfile',
+          <SettingsIcon />,
+          t('communityProfile'),
+          'communityProfileBtn',
+        )}
+
+        {/* Render plugin drawer items */}
+        {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+      </div>
+    ),
+    [
+      renderDrawerItem,
+      renderPluginDrawerItem,
+      pluginDrawerItems,
+      superAdmin,
+      t,
+    ],
+  );
 
   return (
     <div
@@ -67,104 +174,7 @@ const leftDrawer = ({
       <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
-        <div className={styles.optionList}>
-          <NavLink to={'/orglist'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="organizationsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
-                </div>
-                {t('my organizations')}
-              </button>
-            )}
-          </NavLink>
-
-          <NavLink to={'/pluginstore'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="pluginStoreBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <PluginLogo
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
-                </div>
-                {t('plugin store')}
-              </button>
-            )}
-          </NavLink>
-
-          {superAdmin && (
-            <NavLink to={'/users'} onClick={handleLinkClick}>
-              {({ isActive }) => (
-                <button
-                  className={`${
-                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                  }`}
-                  data-testid="rolesBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RolesIcon
-                      fill="none"
-                      stroke={
-                        isActive
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }
-                    />
-                  </div>
-                  {t('users')}
-                </button>
-              )}
-            </NavLink>
-          )}
-
-          <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="communityProfileBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <SettingsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
-                </div>
-                {t('communityProfile')}
-              </button>
-            )}
-          </NavLink>
-        </div>
+        {drawerContent}
       </div>
     </div>
   );

@@ -1476,6 +1476,24 @@
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
-    "searchPlaceholder": "Rechercher des plugins..."
+    "searchPlaceholder": "Rechercher des plugins...",
+    "allPlugins": "Tous les Plugins",
+    "installedPlugins": "Plugins Installés",
+    "view": "Voir",
+    "manage": "Gérer",
+    "install": "Installer",
+    "uninstall": "Désinstaller",
+    "activate": "Activer",
+    "deactivate": "Désactiver",
+    "installed": "Installé",
+    "notInstalled": "Non Installé",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "noPluginsFound": "Aucun plugin trouvé correspondant à votre recherche",
+    "noInstalledPlugins": "Aucun plugin installé pour le moment",
+    "noPluginsAvailable": "Aucun plugin disponible",
+    "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
+    "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
+    "noResultsFoundFor": "Aucun résultat trouvé pour"
   }
 }

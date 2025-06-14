@@ -6,67 +6,13 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
-interface IPluginMeta {
-  id: string;
-  name: string;
-  description: string;
-  author: string;
-  icon: string;
-}
-
-interface IPluginDetails extends IPluginMeta {
-  version: string;
-  cdnUrl: string;
-  readme: string;
-  screenshots: string[];
-  homepage?: string;
-  license?: string;
-  tags?: string[];
-  downloads?: number;
-  rating?: number;
-}
-
-interface IInstalledPlugin extends IPluginDetails {
-  status: 'active' | 'inactive';
-}
-
-interface IPluginModalProps {
-  show: boolean;
-  onHide: () => void;
-  pluginId: string | null;
-  meta: IPluginMeta | null;
-  loading: boolean;
-  isInstalled: (pluginName: string) => boolean;
-  getInstalledPlugin: (pluginName: string) => IInstalledPlugin | undefined;
-  installPlugin: (plugin: IPluginMeta) => void;
-  togglePluginStatus: (
-    plugin: IPluginMeta,
-    status: 'active' | 'inactive',
-  ) => void;
-  uninstallPlugin: (plugin: IPluginMeta) => void;
-}
-
-// Dummy details for all plugins (simulate CDN fetch)
-const dummyDetails: Record<string, IPluginDetails> = {
-  calendar: {
-    id: 'calendar',
-    name: 'Calendar',
-    description: 'A plugin to add calendar functionality to your community.',
-    author: 'Talawa Team',
-    icon: '/images/logo512.png',
-    version: '1.0.0',
-    cdnUrl: 'https://cdn.example.com/plugins/calendar.js',
-    readme:
-      'This plugin adds a calendar to your community portal.\n\nFeatures:\n- Add, edit, and delete events\n- View by month, week, or day',
-    screenshots: ['/images/logo512.png', '/images/logo512.png'],
-    homepage: 'https://talawa.io/calendar',
-    license: 'MIT',
-    tags: ['calendar', 'events', 'scheduling'],
-    downloads: 2572256,
-    rating: 4.8,
-  },
-};
+import { FaPowerOff, FaTrash, FaSpinner } from 'react-icons/fa';
+import type {
+  IPluginMeta,
+  IPluginDetails,
+  IInstalledPlugin,
+  IPluginModalProps,
+} from 'plugin';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -87,15 +33,30 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
 
-  // Lazy load details when modal opens
+  // Fetch plugin details when modal opens
   useEffect(() => {
     if (show && pluginId) {
       setFetching(true);
       setTab('Details');
-      setTimeout(() => {
-        setDetails(dummyDetails[pluginId] || null);
-        setFetching(false);
-      }, 600);
+
+      const fetchPluginDetails = async () => {
+        try {
+          const response = await fetch(
+            `https://dummy-cdn.talawa.io/plugins/${pluginId}`,
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setDetails(data);
+          }
+        } catch (error) {
+          // Silently handle any errors
+          setDetails(null);
+        } finally {
+          setFetching(false);
+        }
+      };
+
+      fetchPluginDetails();
     } else {
       setDetails(null);
       setFetching(false);
@@ -105,7 +66,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   // Use details if loaded, else fallback to meta
   const plugin = details || meta;
 
-  // Dummy features and changelog
+  // Extract features from readme if available
   const features = details?.readme
     ? details.readme
         .split('Features:')[1]
@@ -113,13 +74,9 @@ const PluginModal: React.FC<IPluginModalProps> = ({
         .filter((line) => line.trim().startsWith('-'))
         .map((line) => line.replace('-', '').trim())
     : [];
-  const changelog = [
-    {
-      version: details?.version || '1.0.0',
-      date: '2024-06-01',
-      changes: ['Initial release', 'Bug fixes', 'Performance improvements'],
-    },
-  ];
+
+  // Use changelog from details if available
+  const changelog = details?.changelog || [];
 
   return (
     <Modal show={show} onHide={onHide} centered dialogClassName="modal-xl">
@@ -218,10 +175,10 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                 <Button
                   variant={
                     getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? 'secondary'
-                      : 'success'
+                      ? 'light'
+                      : 'primary'
                   }
-                  className="w-100 mb-2"
+                  className="w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
                   onClick={() =>
                     togglePluginStatus(
                       meta,
@@ -231,17 +188,50 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )
                   }
                   disabled={loading}
+                  style={{
+                    height: '38px',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    boxShadow: 'none',
+                    border: '1px solid #dee2e6',
+                  }}
                 >
+                  {loading ? (
+                    <FaSpinner className="animate-spin" />
+                  ) : (
+                    <FaPowerOff
+                      style={{
+                        fontSize: '14px',
+                        color:
+                          getInstalledPlugin(plugin.name)?.status === 'active'
+                            ? '#6c757d'
+                            : '#fff',
+                      }}
+                    />
+                  )}
                   {getInstalledPlugin(plugin.name)?.status === 'active'
                     ? 'Deactivate'
                     : 'Activate'}
                 </Button>
                 <Button
-                  variant="danger"
-                  className="w-100"
+                  variant="light"
+                  className="w-100 d-flex align-items-center justify-content-center gap-2"
                   onClick={() => uninstallPlugin(meta)}
                   disabled={loading}
+                  style={{
+                    height: '38px',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    boxShadow: 'none',
+                    border: '1px solid #dee2e6',
+                    color: '#dc3545',
+                  }}
                 >
+                  {loading ? (
+                    <FaSpinner className="animate-spin" />
+                  ) : (
+                    <FaTrash style={{ fontSize: '14px' }} />
+                  )}
                   Uninstall
                 </Button>
               </>

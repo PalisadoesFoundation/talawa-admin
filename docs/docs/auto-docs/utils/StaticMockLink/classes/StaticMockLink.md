@@ -15,7 +15,7 @@ when it is used allowing it to be used in places like Storybook.
 
 ## Constructors
 
-### new StaticMockLink()
+### Constructor
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): `StaticMockLink`
 

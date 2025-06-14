@@ -6,7 +6,7 @@
 
 > `const` **CHAT\_BY\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L138)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L157)
 
 GraphQL query to retrieve a list of chats based on user ID.
 

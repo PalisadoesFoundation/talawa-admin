@@ -1476,6 +1476,24 @@
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
-    "searchPlaceholder": "प्लगइन खोजें..."
+    "searchPlaceholder": "प्लगइन खोजें...",
+    "allPlugins": "सभी प्लगइन",
+    "installedPlugins": "स्थापित प्लगइन",
+    "view": "देखें",
+    "manage": "प्रबंधित करें",
+    "install": "स्थापना करें",
+    "uninstall": "अस्थापना करें",
+    "activate": "सक्रिय करें",
+    "deactivate": "निष्क्रिय करें",
+    "installed": "स्थापित",
+    "notInstalled": "स्थापित नहीं",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "noPluginsFound": "आपकी खोज से मेल खाने वाले कोई प्लगइन नहीं मिले",
+    "noInstalledPlugins": "अभी तक कोई प्लगइन स्थापित नहीं है",
+    "noPluginsAvailable": "कोई प्लगइन उपलब्ध नहीं",
+    "installPluginsToSeeHere": "प्लगइन देखने के लिए उन्हें स्थापित करें",
+    "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
   }
 }

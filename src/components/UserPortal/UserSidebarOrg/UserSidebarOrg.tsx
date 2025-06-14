@@ -42,7 +42,7 @@
 // import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 // import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
@@ -51,10 +51,13 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 // import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 // import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
+import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
 // import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
+import { usePluginDrawerItems } from 'plugin';
+import type { IDrawerExtension } from 'plugin';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -65,54 +68,113 @@ export interface InterfaceUserSidebarOrgProps {
 
 const UserSidebarOrg = ({
   targets,
-  // orgId,
+  orgId,
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
-  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
   // State for managing dropdown visibility
   const [showDropdown, setShowDropdown] = React.useState(false);
 
-  // State for organization data
-  // const [organization, setOrganization] =
-  // useState<InterfaceQueryOrganizationsListObject>();
+  // Memoize the user permissions and admin status
+  const userPermissions = useMemo(() => [], []);
+  const isAdmin = useMemo(() => false, []);
 
-  // Query to fetch organization data
-  // const {
-  //   data,
-  //   loading,
-  // }: {
-  //   data:
-  //     | { organizations: InterfaceQueryOrganizationsListObject[] }
-  //     | undefined;
-  //   loading: boolean;
-  // } = useQuery(ORGANIZATIONS_LIST, {
-  //   variables: { id: orgId },
-  // });
+  // Get plugin drawer items for user routes
+  const pluginDrawerItems = usePluginDrawerItems(userPermissions, isAdmin);
 
-  // Set organization data once the query is complete
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   if (data && isMounted) {
-  //     setOrganization(data?.organizations[0]);
-  //   }
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  // }, [data]);
-
-  /**
-   * Handles click events on navigation links.
-   * Closes the sidebar if the viewport width is 820px or less.
-   */
-  const handleLinkClick = (): void => {
+  const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  };
+  }, [setHideDrawer]);
+
+  // Render a plugin drawer item
+  const renderPluginDrawerItem = useCallback(
+    (item: IDrawerExtension) => (
+      <NavLink
+        to={item.path.replace(':orgId', orgId)}
+        key={item.pluginId}
+        onClick={handleLinkClick}
+      >
+        {({ isActive }) => (
+          <Button
+            variant=""
+            className={isActive === true ? styles.activeItem : ''}
+          >
+            <div className={styles.iconWrapper}>
+              {item.icon ? (
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  style={{ width: 25, height: 25 }}
+                />
+              ) : (
+                <PluginLogo
+                  fill="none"
+                  fontSize={25}
+                  stroke="var(--sidebar-icon-stroke-inactive)"
+                />
+              )}
+            </div>
+            {item.label}
+          </Button>
+        )}
+      </NavLink>
+    ),
+    [orgId, handleLinkClick],
+  );
+
+  // Memoize the main content to prevent unnecessary re-renders
+  const drawerContent = useMemo(
+    () => (
+      <div className={styles.optionList}>
+        {targets.map(({ name, url }, index) => {
+          return url ? (
+            <NavLink to={url} key={name} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <Button
+                  key={name}
+                  variant=""
+                  className={isActive === true ? styles.activeItem : ''}
+                >
+                  <div className={styles.iconWrapper}>
+                    <IconComponent
+                      name={name}
+                      fill={
+                        isActive === true ? '#000000' : 'var(--bs-secondary)'
+                      }
+                    />
+                  </div>
+                  {tCommon(name)}
+                </Button>
+              )}
+            </NavLink>
+          ) : (
+            <CollapsibleDropdown
+              key={name}
+              target={targets[index]}
+              showDropdown={showDropdown}
+              setShowDropdown={setShowDropdown}
+            />
+          );
+        })}
+
+        {/* Render plugin drawer items */}
+        {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+      </div>
+    ),
+    [
+      targets,
+      handleLinkClick,
+      pluginDrawerItems,
+      renderPluginDrawerItem,
+      showDropdown,
+      tCommon,
+    ],
+  );
 
   return (
     <>
@@ -178,38 +240,7 @@ const UserSidebarOrg = ({
 
         {/* Options List */}
         <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
-        <div className={styles.optionList}>
-          {targets.map(({ name, url }, index) => {
-            return url ? (
-              <NavLink to={url} key={name} onClick={handleLinkClick}>
-                {({ isActive }) => (
-                  <Button
-                    key={name}
-                    variant=""
-                    className={isActive === true ? styles.activeItem : ''}
-                  >
-                    <div className={styles.iconWrapper}>
-                      <IconComponent
-                        name={name}
-                        fill={
-                          isActive === true ? '#000000' : 'var(--bs-secondary)'
-                        }
-                      />
-                    </div>
-                    {tCommon(name)}
-                  </Button>
-                )}
-              </NavLink>
-            ) : (
-              <CollapsibleDropdown
-                key={name}
-                target={targets[index]}
-                showDropdown={showDropdown}
-                setShowDropdown={setShowDropdown}
-              />
-            );
-          })}
-        </div>
+        {drawerContent}
         <div className={styles.userSidebarOrgFooter}>
           <ProfileCard />
           <SignOut />
