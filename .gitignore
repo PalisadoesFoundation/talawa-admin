@@ -44,3 +44,6 @@ debug.log
 .idea
 .vscode
 *.swp
+
+# Plugin related
+/src/plugin/available/

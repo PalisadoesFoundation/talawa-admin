@@ -142,8 +142,23 @@ const leftDrawer = ({
           'communityProfileBtn',
         )}
 
-        {/* Render plugin drawer items */}
-        {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+        {/* Plugin Routes Section */}
+        {pluginDrawerItems?.length > 0 && (
+          <>
+            <h4
+              className={styles.titleHeader}
+              style={{
+                fontSize: '1.1rem',
+                marginTop: '1.5rem',
+                marginBottom: '0.75rem',
+                color: 'var(--bs-secondary)',
+              }}
+            >
+              {tCommon('plugins')}
+            </h4>
+            {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+          </>
+        )}
       </div>
     ),
     [
