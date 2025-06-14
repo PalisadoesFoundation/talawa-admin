@@ -16,7 +16,7 @@ Defined in: [src/state/action-creators/index.ts:1](https://github.com/Palisadoes
 
 ## Returns
 
-> (`dispatch`): `void`
+`Function`
 
 ### Parameters
 
