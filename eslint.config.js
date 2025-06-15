@@ -163,12 +163,12 @@ export default [
         after: 'readonly',
         afterEach: 'readonly',
         expect: 'readonly',
-        
+
         // Browser globals
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
-        
+
         // Node.js globals for config files
         require: 'readonly',
         module: 'readonly',
@@ -185,7 +185,7 @@ export default [
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
       '@typescript-eslint/no-require-imports': 'off',
-      '@typescript-eslint/no-namespace': 'off', 
+      '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/naming-convention': 'off',
       'no-undef': 'error',
       'prettier/prettier': 'error',

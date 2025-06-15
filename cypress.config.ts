@@ -26,10 +26,7 @@ export default defineConfig({
     env: {
       // apiUrl: "http://localhost:8000/api",
     },
-
     setupNodeEvents(on, config) {
-      // require("cypress-localstorage-commands/plugin")(on, config); // eslint-disable-line
-
       // Task registration
       on('task', {
         log(message) {
@@ -87,16 +84,6 @@ export default defineConfig({
       return config;
     },
   },
-
-  // // Component testing configuration (if using)
-  // component: {
-  //   devServer: {
-  //     framework: 'react',
-  //     bundler: 'vite',
-  //   },
-  //   specPattern: 'src/**/*.cy.{js,jsx,ts,tsx}',
-  //   supportFile: 'cypress/support/component.ts',
-  // },
 
   includeShadowDom: true,
   experimentalStudio: true,
