@@ -46,4 +46,5 @@ debug.log
 *.swp
 
 # Plugin related
-/src/plugin/available/
+/src/plugin/available/*
+!/src/plugin/available/readme.md
