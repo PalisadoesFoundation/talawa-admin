@@ -1,11 +1,14 @@
+import { UserDashboardPage } from '../../pageObjects/UserPortal/UserDashboard';
+
 describe('User Dashboard', () => {
+  const dashboard = new UserDashboardPage();
+
   beforeEach(() => {
     cy.loginByApi('user');
-    cy.visit('/user/organizations');
+    dashboard.visit();
   });
 
   it('should display the user organizations and visit Organization Dashboard', () => {
-    cy.url().should('include', '/user/organizations');
-    cy.get('[data-cy="orgCard"]').should('be.visible');
+    dashboard.verifyOnDashboard().openFirstOrganization();
   });
 });

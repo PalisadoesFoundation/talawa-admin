@@ -16,4 +16,17 @@ describe('Admin Login Functionality', () => {
       });
     });
   });
+
+  rolesToTest.forEach((role) => {
+    it(`fails to log in as ${role} with invalid credentials`, () => {
+      cy.fixture('users').then((users) => {
+        const userData = users[role];
+        const loginPage = new LoginPage();
+
+        cy.visit('/admin');
+        loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
+        cy.assertToastError('Not found');
+      });
+    });
+  });
 });
