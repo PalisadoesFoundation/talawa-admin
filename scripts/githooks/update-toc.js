@@ -6,8 +6,8 @@ const markdownFiles = fs
   .filter((file) => file.endsWith('.md'));
 
 markdownFiles.forEach((file) => {
-  const command = `markdown-toc -i "${file}" --bullets "-"`;
+  const command = `doctoc "${file}" --title "## Table of Contents" --github`;
   execSync(command, { stdio: 'inherit' });
 });
 
-console.log('Table of contents updated successfully.');
+console.log('Table of contents updated using doctoc successfully.');
