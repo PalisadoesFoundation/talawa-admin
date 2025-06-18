@@ -171,7 +171,6 @@
     "vite": "^6.3.5",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.3",
-    "vitest-preview": "^0.0.1",
     "whatwg-fetch": "^3.6.20"
   },
   "resolutions": {

@@ -1,5 +1,6 @@
-import '@testing-library/dom';
+import '@testing-library/jest-dom';
 import { vi } from 'vitest';
+
 global.fetch = vi.fn();
 
 import { format } from 'util';
@@ -15,15 +16,14 @@ Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => ({}),
 });
 
-import vitestPreviewConfigure from 'vitest-preview';
-
-// Global CSS here
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'flag-icons/css/flag-icons.min.css';
-
-vitestPreviewConfigure.debug();
+window.matchMedia = window.matchMedia || function() {
+  return {
+    matches: false,
+    addListener: function() {},
+    removeListener: function() {}
+  };
+};
 
 vi.useFakeTimers();
+vi.advanceTimersByTime(18000);
 vi.advanceTimersByTime(18000);
