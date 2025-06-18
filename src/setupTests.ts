@@ -16,11 +16,11 @@ Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => ({}),
 });
 
-window.matchMedia = window.matchMedia || function() {
+window.matchMedia = window.matchMedia || function () {
   return {
     matches: false,
-    addListener: function() {},
-    removeListener: function() {}
+    addListener: function () { },
+    removeListener: function () { }
   };
 };
 
