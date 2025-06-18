@@ -16,13 +16,15 @@ Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => ({}),
 });
 
-window.matchMedia = window.matchMedia || function () {
-  return {
-    matches: false,
-    addListener: function () { },
-    removeListener: function () { }
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {},
+    };
   };
-};
 
 vi.useFakeTimers();
 vi.advanceTimersByTime(18000);
