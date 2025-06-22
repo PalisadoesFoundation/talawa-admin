@@ -699,7 +699,7 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  describe('OrgUpdate Loading and Error States', () => {
+  it('OrgUpdate Loading and Error States', () => {
     const mockOrgData = {
       organization: {
         id: '1',

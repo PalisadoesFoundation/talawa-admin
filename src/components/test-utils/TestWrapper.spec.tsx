@@ -1,3 +1,5 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';

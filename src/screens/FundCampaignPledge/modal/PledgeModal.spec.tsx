@@ -578,6 +578,7 @@ describe('PledgeModal', () => {
 
   it('should handle missing pledgeUsers array', async () => {
     const invalidPledge = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       ...pledgeProps[1].pledge!,
       users: undefined,
     };

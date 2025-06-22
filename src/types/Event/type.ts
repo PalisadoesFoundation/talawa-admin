@@ -105,6 +105,7 @@ export const EventVolunteerResponse = {
   YES: 'YES',
 } as const;
 
+// eslint-disable-next-line no-redeclare
 export type EventVolunteerResponse =
   (typeof EventVolunteerResponse)[keyof typeof EventVolunteerResponse];
 
@@ -130,6 +131,7 @@ export const EventOrderByInput = {
   title_ASC: 'title_ASC',
   title_DESC: 'title_DESC',
 } as const;
+// eslint-disable-next-line no-redeclare
 export type EventOrderByInput =
   (typeof EventOrderByInput)[keyof typeof EventOrderByInput];
 

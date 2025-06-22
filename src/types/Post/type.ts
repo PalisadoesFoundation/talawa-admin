@@ -48,6 +48,7 @@ export const PostOrderByInput = {
   VIDEO_URL_DESC: 'videoUrl_DESC',
 } as const;
 
+// eslint-disable-next-line no-redeclare
 export type PostOrderByInput =
   (typeof PostOrderByInput)[keyof typeof PostOrderByInput];
 

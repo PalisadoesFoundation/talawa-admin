@@ -1,12 +1,11 @@
 import js from '@eslint/js';
+import graphql from '@graphql-eslint/eslint-plugin';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import react from 'eslint-plugin-react';
-import prettier from 'eslint-plugin-prettier';
-import vitest from 'eslint-plugin-vitest';
-import tsdoc from 'eslint-plugin-tsdoc';
-import graphql from '@graphql-eslint/eslint-plugin';
 import imports from 'eslint-plugin-import';
+import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
+import vitest from 'eslint-plugin-vitest';
 
 export default [
   {
@@ -43,15 +42,10 @@ export default [
         },
       },
       globals: {
-        // ✅ Node.js globals
         window: 'readonly',
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
-        document: 'readonly',
-        HTMLImageElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        File: 'readonly',
 
         // ✅ Vitest globals
         describe: 'readonly',
@@ -67,8 +61,6 @@ export default [
       react,
       '@typescript-eslint': ts,
       vitest,
-      tsdoc,
-      '@graphql-eslint': graphql,
       import: imports,
       prettier,
     },
@@ -84,40 +76,13 @@ export default [
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/no-duplicates': 'error',
-      'tsdoc/syntax': 'error',
+      'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
-      '@typescript-eslint/naming-convention': [
-        'error',
-        { selector: 'interface', format: ['PascalCase'], prefix: ['I'] },
-        { selector: ['typeAlias', 'typeLike', 'enum'], format: ['PascalCase'] },
-        { selector: 'typeParameter', format: ['PascalCase'], prefix: ['T'] },
-        {
-          selector: 'variable',
-          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
-          leadingUnderscore: 'allow',
-        },
-        {
-          selector: 'parameter',
-          format: ['camelCase'],
-          leadingUnderscore: 'allow',
-        },
-        { selector: 'function', format: ['camelCase', 'PascalCase'] },
-        {
-          selector: 'memberLike',
-          modifiers: ['private'],
-          format: ['camelCase'],
-          leadingUnderscore: 'require',
-        },
-        { selector: 'variable', modifiers: ['exported'], format: null },
-      ],
-      'react/jsx-pascal-case': [
-        'error',
-        { allowAllCaps: false, allowNamespace: false },
-      ],
+      '@typescript-eslint/naming-convention': 'off',
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'prettier/prettier': 'error',

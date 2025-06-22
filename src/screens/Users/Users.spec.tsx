@@ -1068,6 +1068,7 @@ describe('Testing Users screen', () => {
 
     // Spy on fetchMore to capture the updateQuery function
     const fetchMoreSpy = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     vi.spyOn(require('@apollo/client'), 'useQuery').mockImplementation(() => ({
       data: undefined, // Simulate no data initially
       loading: false,

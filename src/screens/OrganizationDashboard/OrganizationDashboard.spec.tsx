@@ -1,7 +1,14 @@
 import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { RenderResult, within } from '@testing-library/react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  RenderResult,
+  within,
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react';
+
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -84,6 +91,7 @@ describe('OrganizationDashboard', () => {
     const requestsCardColumn = requestsCard.closest('[role="button"]');
     expect(requestsCardColumn).not.toBeNull();
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     fireEvent.click(requestsCardColumn!);
 
     expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');

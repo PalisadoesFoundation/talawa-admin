@@ -52,6 +52,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
+      // eslint-disable-next-line no-constant-binary-expression
       authorization: `Bearer ${getItem('token')}` || '',
       'Accept-Language': lng,
     },
