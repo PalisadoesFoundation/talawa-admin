@@ -4,7 +4,7 @@ describe('User Dashboard', () => {
   const dashboard = new UserDashboardPage();
 
   beforeEach(() => {
-    cy.loginByApi('user');
+    cy.session('user', () => cy.loginByApi('user'));
     dashboard.visit();
   });
 

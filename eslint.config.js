@@ -220,22 +220,4 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  {
-    files: ['*.graphql'],
-    languageOptions: {
-      parser: graphql.parser,
-    },
-    plugins: {
-      '@graphql-eslint': graphql,
-      prettier,
-    },
-    rules: {
-      '@typescript-eslint/consistent-type-imports': 'off',
-      '@typescript-eslint/naming-convention': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@graphql-eslint/known-type-names': 'error',
-      '@graphql-eslint/no-unreachable-types': 'off',
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
-    },
-  },
-];
+]

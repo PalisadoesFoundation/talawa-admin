@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import fs from 'fs';
 
 export default defineConfig({
   e2e: {
@@ -27,21 +28,16 @@ export default defineConfig({
       // apiUrl: "http://localhost:8000/api",
     },
     setupNodeEvents(on, config) {
-      // Task registration
+      // Custom task to log messages and read files
       on('task', {
-        log(message) {
+        log(message: string) {
           console.log(message);
           return null;
         },
-      });
-
-      // File handling tasks
-      on('task', {
-        readFileMaybe(filename) {
-          if (require('fs').existsSync(filename)) {
-            return require('fs').readFileSync(filename, 'utf8');
-          }
-          return null;
+        readFileMaybe(filename: string) {
+          return fs.existsSync(filename)
+            ? fs.readFileSync(filename, 'utf8')
+            : null;
         },
       });
 

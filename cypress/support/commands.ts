@@ -5,9 +5,11 @@ declare global {
     interface Chainable<Subject> {
       /**
        * @param role - The user role (e.g., 'superadmin', 'admin', 'user')
-       * @param expectedMessage The expected error text (string or RegExp)
        */
       loginByApi(role: string): Chainable<Subject>;
+      /**
+       * @param expectedMessage The expected error text (string or RegExp)
+       */
       assertToastError(expectedMessage: string | RegExp): Chainable<void>;
     }
   }
