@@ -262,6 +262,8 @@ export default function PluginStore() {
           variables: {
             input: {
               pluginId: plugin.id,
+              isInstalled: true,
+              isActivated: false,
             },
           },
         });

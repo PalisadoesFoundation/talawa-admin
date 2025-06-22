@@ -112,7 +112,7 @@ class PluginManager {
 
   private isPluginActivated(pluginId: string): boolean {
     const plugin = this.findPluginInIndex(pluginId);
-    return plugin ? plugin.isActivated : true; // Default to true if not found
+    return plugin ? plugin.isActivated : false; // Default to false if not found
   }
 
   public async loadPlugin(pluginId: string): Promise<boolean> {
