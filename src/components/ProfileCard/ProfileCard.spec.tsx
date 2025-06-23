@@ -60,6 +60,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
+  setItem('name', 'John Doe');
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
   setItem(

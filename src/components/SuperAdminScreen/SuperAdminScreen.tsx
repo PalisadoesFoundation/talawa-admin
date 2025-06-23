@@ -65,7 +65,7 @@ const superAdminScreen = (): JSX.Element => {
 
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={(): void => {
@@ -85,17 +85,21 @@ const superAdminScreen = (): JSX.Element => {
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
-      )}
+      )} */}
 
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.pageContainer} ${
+        className={`${
           hideDrawer === null
             ? ''
             : hideDrawer
               ? styles.expand
               : styles.contract
         } `}
+        style={{
+          marginLeft: hideDrawer ? '100px' : '0px',
+          paddingTop: '20px',
+        }}
         data-testid="mainpageright"
       >
         <div>

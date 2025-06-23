@@ -42,9 +42,7 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
-import { Button } from 'react-bootstrap';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 
@@ -83,7 +81,7 @@ const UserScreen = (): JSX.Element => {
   );
 
   const { targets } = userRoutes;
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
 
   /**
    * Retrieves the organization ID from the URL parameters.
@@ -106,7 +104,9 @@ const UserScreen = (): JSX.Element => {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
     }
   };
 
@@ -121,7 +121,7 @@ const UserScreen = (): JSX.Element => {
 
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={(): void => {
@@ -141,7 +141,7 @@ const UserScreen = (): JSX.Element => {
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
-      )}
+      )} */}
       <div className={styles.drawer}>
         <UserSidebarOrg
           orgId={orgId}
@@ -151,20 +151,21 @@ const UserScreen = (): JSX.Element => {
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
+        className={` ${
+          hideDrawer === null || undefined
             ? ''
             : hideDrawer
               ? styles.expand
               : styles.contract
         } `}
+        style={{ marginLeft: hideDrawer ? '100px' : '' }}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>
-          <ProfileDropdown />
+          {/* <ProfileDropdown /> */}
         </div>
         <Outlet />
       </div>

@@ -336,6 +336,49 @@ describe('UserSidebar Component Tests in User Portal', () => {
     act(() => orgsBtn.click());
     expect(props.setHideDrawer).toHaveBeenCalledWith(true);
   });
+  it('UserSidebar collps and expansion based on screen size', async () => {
+    await act(async () => {
+      resizeWindow(1000);
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    resizeWindow(800);
+  });
+  it('UserSidebar collps and expansion based on screen size2', async () => {
+    await act(async () => {
+      resizeWindow(1000);
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    const pButton = screen.getByTestId('ChevronRightIcon');
+    expect(pButton).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(pButton);
+    });
+    const LogoutIcon = screen.getByTestId('LogoutIconid');
+    expect(LogoutIcon).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(LogoutIcon);
+    });
+  });
 
   it('Active route button style changes correctly upon click', async () => {
     await act(async () => {
@@ -409,7 +452,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebar {...props} hideDrawer={null} />
+                  <UserSidebar {...props} hideDrawer={false} />
                 </I18nextProvider>
               </Provider>
             </BrowserRouter>
@@ -417,7 +460,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
         );
 
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.hideElemByDefault,
+          styles.expandedDrawer,
         );
 
         rerender(
@@ -432,7 +475,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
           </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.inactiveDrawer,
+          styles.collapsedDrawer,
         );
 
         rerender(
@@ -447,7 +490,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
           </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.activeDrawer,
+          styles.expandedDrawer,
         );
       });
     });

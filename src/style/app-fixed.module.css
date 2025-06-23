@@ -5235,7 +5235,8 @@ form {
   border: none;
   background-color: var(--signOut-container-bg);
   margin-top: 1rem;
-  margin-bottom: 4rem;
+  cursor: pointer;
+  /* margin-bottom: 4rem; */
 }
 
 .signOutButton {
@@ -5850,7 +5851,7 @@ form {
   display: flex;
   justify-content: space-between;
   height: 100vh;
-  padding-bottom: 48px;
+  /* padding-bottom: 48px; */
 }
 
 /* -- UserSidebarOrg.tsx -- */
@@ -5931,7 +5932,7 @@ form {
 }
 
 .leftDrawer .optionList {
-  height: 75%;
+  /* height: 75%; */
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
@@ -8711,10 +8712,9 @@ form {
 /* -- Settings.tsx -- */
 
 .containerHeight {
-  height: 100vh;
-  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
-  background-color: var(--containerHeight-bg) !important;
+  background-color: var(--profile-bg) !important;
   min-height: 100vh;
+  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
 }
 
 .expand {
@@ -9319,8 +9319,32 @@ form {
   background-color: #f8f9fa;
 }
 
-/* ----------------------------------------------------- */
-
 :global(.form-control:focus) {
   box-shadow: var(--form-control-focus-shadow);
 }
+
+.hamburgerIcon {
+  color: var(--sidebar-icon-stroke-inactive);
+  transition: transform 0.3s ease;
+}
+
+.collapsedDrawer {
+  width: 80px !important;
+}
+
+.activeDrawer {
+  width: 260px; /* Default full width */
+}
+
+.drawerHeader {
+  padding-right: 50px;
+}
+
+.sidebarText {
+  white-space: nowrap;
+  overflow: hidden;
+  color: #000;
+}
+.expandedDrawer {
+}
+/* ----------------------------------------------------- */

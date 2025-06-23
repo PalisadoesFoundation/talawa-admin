@@ -94,10 +94,10 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    const closeMenubtn = screen.getByTestId('closeMenu');
+    const closeMenubtn = screen.getByTestId('toggleBtn');
     expect(closeMenubtn).toBeInTheDocument();
     act(() => closeMenubtn.click());
-    const openMenuBtn = screen.getByTestId('openMenu');
+    const openMenuBtn = screen.getByTestId('toggleBtn');
     expect(openMenuBtn).toBeInTheDocument();
     act(() => openMenuBtn.click());
   });
@@ -120,7 +120,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    const openMenuBtn = screen.queryByTestId('openMenu');
+    const openMenuBtn = screen.queryByTestId('toggleBtn');
     console.log('Open Menu Button:', openMenuBtn);
     expect(openMenuBtn).toBeInTheDocument();
 
@@ -128,7 +128,7 @@ describe('Testing Settings Screen [User Portal]', () => {
       act(() => openMenuBtn.click());
     }
 
-    const closeMenuBtn = screen.queryByTestId('closeMenu');
+    const closeMenuBtn = screen.queryByTestId('toggleBtn');
     console.log('Close Menu Button:', closeMenuBtn);
     expect(closeMenuBtn).toBeInTheDocument();
 

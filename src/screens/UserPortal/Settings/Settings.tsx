@@ -50,7 +50,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { urlToFile } from 'utils/urlToFile';
-import SidebarToggle from './SideToggle/SideToggle';
 import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
@@ -60,7 +59,7 @@ export default function Settings(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const originalImageState = React.useRef<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -253,7 +252,7 @@ export default function Settings(): JSX.Element {
 
   return (
     <>
-      <SidebarToggle hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+      {/* <SidebarToggle hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} /> */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
@@ -263,6 +262,10 @@ export default function Settings(): JSX.Element {
               ? styles.expand
               : styles.contract
         }`}
+        style={{
+          marginLeft: hideDrawer ? '100px' : '20px',
+          paddingTop: '20px',
+        }}
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />

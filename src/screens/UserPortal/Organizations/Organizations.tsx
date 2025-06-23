@@ -126,14 +126,16 @@ export default function organizations(): JSX.Element {
     keyPrefix: 'userOrganizations',
   });
 
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
 
   /**
    * Handles window resize events to toggle drawer visibility.
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
     }
   };
 
@@ -321,7 +323,7 @@ export default function organizations(): JSX.Element {
 
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={() => setHideDrawer(!hideDrawer)}
@@ -337,16 +339,20 @@ export default function organizations(): JSX.Element {
         >
           <i className="fa fa-angle-double-left" />
         </Button>
-      )}
+      )} */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.containerHeight} ${
-          hideDrawer === null
+        className={` ${
+          hideDrawer === null || undefined
             ? ''
             : hideDrawer
-              ? styles.expandOrg
-              : styles.contractOrg
-        }`}
+              ? styles.expand
+              : styles.contract
+        } `}
+        style={{
+          marginLeft: hideDrawer ? '100px' : '20px',
+          paddingTop: '20px',
+        }}
         data-testid="organizations-container"
       >
         <div className={styles.mainContainerOrganization}>

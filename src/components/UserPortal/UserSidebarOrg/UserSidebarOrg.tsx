@@ -55,6 +55,7 @@ import styles from 'style/app-fixed.module.css';
 // import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
+import { FaBars } from 'react-icons/fa';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -115,23 +116,52 @@ const UserSidebarOrg = ({
   };
 
   return (
-    <>
-      <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
-        data-testid="leftDrawerContainer"
-      >
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        marginRight: hideDrawer ? '20px' : '200px',
+      }}
+      className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : ''}`}
+      data-testid="leftDrawerContainer"
+    >
+      <div>
         {/* Branding Section */}
-        <div className={styles.brandingContainer}>
-          <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
+        <div
+          className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+        >
+          <div
+            className={`d-flex align-items-center`}
+            data-testid="toggleBtn"
+            onClick={() => {
+              setHideDrawer(!hideDrawer);
+            }}
+          >
+            <FaBars
+              className={styles.hamburgerIcon}
+              aria-label="Toggle sidebar"
+              size={22}
+              style={{
+                cursor: 'pointer',
+                height: '38px',
+                marginLeft: hideDrawer ? '0px' : '10px',
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: hideDrawer ? 'none' : 'flex',
+              alignItems: 'center',
+              paddingRight: '40px',
+            }}
+          >
+            <TalawaLogo className={styles.talawaLogo} />
+            <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+              {t('talawaUserPortal')}
+            </div>
+          </div>
         </div>
-
         {/* Organization Section */}
         {/* <div className={styles.organizationContainer}>
           {loading ? (
@@ -175,9 +205,12 @@ const UserSidebarOrg = ({
             </button>
           )}
         </div> */}
-
         {/* Options List */}
-        <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
+        {!hideDrawer ? (
+          <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
+        ) : (
+          <div style={{ paddingBottom: '40px' }}></div>
+        )}{' '}
         <div className={styles.optionList}>
           {targets.map(({ name, url }, index) => {
             return url ? (
@@ -196,7 +229,11 @@ const UserSidebarOrg = ({
                         }
                       />
                     </div>
-                    {tCommon(name)}
+                    {!hideDrawer && (
+                      <div style={{ whiteSpace: 'nowrap' }}>
+                        {tCommon(name)}
+                      </div>
+                    )}
                   </Button>
                 )}
               </NavLink>
@@ -210,12 +247,12 @@ const UserSidebarOrg = ({
             );
           })}
         </div>
-        <div className={styles.userSidebarOrgFooter}>
-          <ProfileCard />
-          <SignOut />
-        </div>
       </div>
-    </>
+      <div className={styles.userSidebarOrgFooter}>
+        {!hideDrawer && <ProfileCard />}
+        <SignOut hideDrawer={hideDrawer} />
+      </div>
+    </div>
   );
 };
 

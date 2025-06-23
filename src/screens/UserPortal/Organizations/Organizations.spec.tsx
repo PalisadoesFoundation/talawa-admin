@@ -768,19 +768,19 @@ test('Testing Sidebar', async () => {
   );
 
   await waitFor(() => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
+    const closeMenuBtn = screen.getByTestId('toggleBtn');
     expect(closeMenuBtn).toBeInTheDocument();
   });
   await act(async () => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
+    const closeMenuBtn = screen.getByTestId('toggleBtn');
     closeMenuBtn.click();
   });
   await waitFor(() => {
-    const openMenuBtn = screen.getByTestId('openMenu');
+    const openMenuBtn = screen.getByTestId('toggleBtn');
     expect(openMenuBtn).toBeInTheDocument();
   });
   await act(async () => {
-    const openMenuBtn = screen.getByTestId('openMenu');
+    const openMenuBtn = screen.getByTestId('toggleBtn');
     openMenuBtn.click();
   });
 });

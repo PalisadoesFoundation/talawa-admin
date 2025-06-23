@@ -49,15 +49,12 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const ProfileCard = (): JSX.Element => {
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin');
+  const role = getItem('role');
   const adminFor: string | string[] = getItem('AdminFor') || [];
-  const userRole = superAdmin
-    ? 'SuperAdmin'
-    : adminFor?.length > 0
-      ? 'Admin'
-      : 'User';
-  const firstName = getItem('FirstName');
-  const lastName = getItem('LastName');
+  const userRole = role == 'regular' ? 'User' : 'Admin';
+  const name = getItem('name') as string;
+  const firstName = name?.split(' ')[0] || '';
+  const lastName = name?.split(' ')[1] || '';
   const userImage = getItem('UserImage') as string;
   const navigate = useNavigate();
   const { orgId } = useParams();
@@ -70,7 +67,7 @@ const ProfileCard = (): JSX.Element => {
       : fullName;
 
   return (
-    <Dropdown as={ButtonGroup} variant="none">
+    <Dropdown as={ButtonGroup} variant="none" style={{ width: '100%' }}>
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
@@ -94,7 +91,11 @@ const ProfileCard = (): JSX.Element => {
           )}
         </div>
         <div className={styles.profileTextUserSidebarOrg}>
-          <span className={styles.primaryText} data-testid="display-name">
+          <span
+            style={{ whiteSpace: 'nowrap' }}
+            className={styles.primaryText}
+            data-testid="display-name"
+          >
             {displayedName}
           </span>
           <span className={styles.secondaryText} data-testid="display-type">

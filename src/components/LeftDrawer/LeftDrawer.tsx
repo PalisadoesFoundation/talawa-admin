@@ -37,11 +37,13 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
+import IconComponent from 'components/IconComponent/IconComponent';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { FaBars } from 'react-icons/fa';
 
 export interface InterfaceLeftDrawerProps {
   hideDrawer: boolean | null;
@@ -72,21 +74,48 @@ const leftDrawer = ({
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
-      <div className={styles.talawaLogoContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <div
+          className={`d-flex align-items-center`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
-      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
+        {!hideDrawer && tCommon('menu')}
+      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
@@ -99,17 +128,9 @@ const leftDrawer = ({
                 data-testid="organizationsBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
+                  <OrganizationsIcon fontSize={25} stroke={'#000000'} />
                 </div>
-                {t('my organizations')}
+                {!hideDrawer && t('my organizations')}
               </button>
             )}
           </NavLink>
@@ -144,7 +165,7 @@ const leftDrawer = ({
               <button
                 className={`${
                   isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
+                } ${styles.sidebarText}`}
                 data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
@@ -158,7 +179,7 @@ const leftDrawer = ({
                     }
                   />
                 </div>
-                {t('communityProfile')}
+                {!hideDrawer && t('communityProfile')}
               </button>
             )}
           </NavLink>

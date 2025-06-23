@@ -123,13 +123,17 @@ const OrganizationScreen = (): JSX.Element => {
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${
+        className={`${
           hideDrawer === null
             ? ''
             : hideDrawer
               ? styles.expand
               : styles.contract
         } `}
+        style={{
+          marginLeft: hideDrawer ? '100px' : '0px',
+          paddingTop: '20px',
+        }}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">

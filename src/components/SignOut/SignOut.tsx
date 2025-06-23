@@ -40,7 +40,11 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
-const SignOut = (): JSX.Element => {
+interface ISignOutProps {
+  hideDrawer?: boolean | null; // Optional prop to conditionally render the button
+}
+
+const SignOut = ({ hideDrawer = false }: ISignOutProps): JSX.Element => {
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
@@ -76,13 +80,15 @@ const SignOut = (): JSX.Element => {
   };
   return (
     <div className={styles.signOutContainer}>
-      <LogoutIcon />
+      <div onClick={logout} data-testid="LogoutIconid">
+        <LogoutIcon />
+      </div>
       <button
-        className={styles.signOutButton}
         onClick={logout}
         aria-label="Sign out"
+        className={`${styles.signOutButton} ${styles.sidebarText}`}
       >
-        Sign Out
+        {hideDrawer ? '' : 'Sign Out'}
       </button>
     </div>
   );

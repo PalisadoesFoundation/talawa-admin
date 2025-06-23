@@ -41,6 +41,7 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from './../../style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
+import { FaBars } from 'react-icons/fa';
 
 export interface ILeftDrawerProps {
   orgId: string;
@@ -138,78 +139,103 @@ const leftDrawerOrg = ({
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
       {/* Branding Section */}
-      <div className={styles.brandingContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <span className={styles.talawaText}>
-          {tCommon('talawaAdminPortal')}
-        </span>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <div
+          className={`d-flex align-items-center`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
       {/* Organization Section */}
-      <div className={`${styles.organizationContainer} pe-3`}>
-        {loading ? (
-          <button
-            className={`${styles.profileContainer} shimmer`}
-            data-testid="orgBtn"
-          />
-        ) : !data?.organization ? (
-          !isProfilePage && (
+      {!hideDrawer && (
+        <div className={`${styles.organizationContainer} pe-3`}>
+          {loading ? (
             <button
-              className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
-              disabled
-            >
-              <div className="px-3">
-                <WarningAmberOutlined />
+              className={`${styles.profileContainer} shimmer`}
+              data-testid="orgBtn"
+            />
+          ) : !data?.organization ? (
+            !isProfilePage && (
+              <button
+                className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
+                disabled
+              >
+                <div className="px-3">
+                  <WarningAmberOutlined />
+                </div>
+                {tErrors('errorLoading', { entity: 'Organization' })}
+              </button>
+            )
+          ) : (
+            <button className={styles.profileContainer} data-testid="OrgBtn">
+              <div className={styles.imageContainer}>
+                {data.organization.avatarURL ? (
+                  <img
+                    src={data.organization.avatarURL}
+                    alt={`${data.organization.name} profile picture`}
+                  />
+                ) : (
+                  <Avatar
+                    name={data.organization.name}
+                    containerStyle={styles.avatarContainer}
+                    alt={`${data.organization.name} Picture`}
+                  />
+                )}
               </div>
-              {tErrors('errorLoading', { entity: 'Organization' })}
+              <div className={styles.ProfileRightConatiner}>
+                <div className={styles.profileText}>
+                  <span className={styles.primaryText}>
+                    {data.organization.name}
+                  </span>
+                  <span className={styles.secondaryText}>
+                    {data.organization.city || 'N/A'}
+                  </span>
+                </div>
+                <div className={styles.ArrowIcon}>
+                  <AngleRightIcon fill={'var(--bs-secondary)'} />
+                </div>
+              </div>
             </button>
-          )
-        ) : (
-          <button className={styles.profileContainer} data-testid="OrgBtn">
-            <div className={styles.imageContainer}>
-              {data.organization.avatarURL ? (
-                <img
-                  src={data.organization.avatarURL}
-                  alt={`${data.organization.name} profile picture`}
-                />
-              ) : (
-                <Avatar
-                  name={data.organization.name}
-                  containerStyle={styles.avatarContainer}
-                  alt={`${data.organization.name} Picture`}
-                />
-              )}
-            </div>
-            <div className={styles.ProfileRightConatiner}>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data.organization.name}
-                </span>
-                <span className={styles.secondaryText}>
-                  {data.organization.city || 'N/A'}
-                </span>
-              </div>
-              <div className={styles.ArrowIcon}>
-                <AngleRightIcon fill={'var(--bs-secondary)'} />
-              </div>
-            </div>
-          </button>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Options List */}
       <h5 className={`${styles.titleHeader} text-secondary`}>
-        {tCommon('menu')}
+        {!hideDrawer && tCommon('menu')}
       </h5>
       <div className={styles.optionList}>
         {targets.map(({ name, url }, index) =>
@@ -217,21 +243,29 @@ const leftDrawerOrg = ({
             <NavLink to={url} key={name} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <button
-                  className={
-                    isActive
-                      ? styles.leftDrawerActiveButton
-                      : styles.leftDrawerInactiveButton
-                  }
+                  style={{ height: '40px' }}
+                  className={`
+                    ${
+                      isActive
+                        ? styles.leftDrawerActiveButton
+                        : styles.leftDrawerInactiveButton
+                    }
+                      ${styles.talawaText} ${styles.sidebarText}
+                  `}
                 >
-                  <div className={styles.iconWrapper}>
-                    <IconComponent
-                      name={name === 'Membership Requests' ? 'Requests' : name}
-                      fill={
-                        isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
-                      }
-                    />
+                  <div style={{ display: 'flex', alignItems: 'left' }}>
+                    <div className={styles.iconWrapper}>
+                      <IconComponent
+                        name={
+                          name === 'Membership Requests' ? 'Requests' : name
+                        }
+                        fill={
+                          isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
+                        }
+                      />
+                    </div>
+                    {!hideDrawer && tCommon(name)}
                   </div>
-                  {tCommon(name)}
                 </button>
               )}
             </NavLink>

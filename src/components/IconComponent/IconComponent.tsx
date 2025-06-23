@@ -47,6 +47,7 @@ import PeopleIcon from 'assets/svgs/people.svg?react';
 import TagsIcon from 'assets/svgs/tags.svg?react';
 import TagIcon from 'assets/svgs/tag.svg?react';
 import PostsIcon from 'assets/svgs/posts.svg?react';
+import ChatIcon from 'assets/svgs/chat.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import VenueIcon from 'assets/svgs/venues.svg?react';
 import RequestsIcon from 'assets/svgs/requests.svg?react';
@@ -55,14 +56,14 @@ import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import React from 'react';
 
-export interface InterfaceIconComponent {
+export interface INterfaceIconComponent {
   name: string;
   fill?: string;
   height?: string;
   width?: string;
 }
 
-const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
+const iconComponent = (props: INterfaceIconComponent): JSX.Element => {
   switch (props.name) {
     case 'My Organizations':
       return (
@@ -81,6 +82,8 @@ const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
       return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
     case 'Tag':
       return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
+    case 'Chat':
+      return <ChatIcon {...props} data-testid="Icon-Component-ChatIcon" />;
     case 'Requests':
       return (
         <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
