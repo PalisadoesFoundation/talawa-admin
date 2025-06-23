@@ -5236,7 +5236,6 @@ form {
   background-color: var(--signOut-container-bg);
   margin-top: 1rem;
   cursor: pointer;
-  /* margin-bottom: 4rem; */
 }
 
 .signOutButton {
@@ -5851,7 +5850,6 @@ form {
   display: flex;
   justify-content: space-between;
   height: 100vh;
-  /* padding-bottom: 48px; */
 }
 
 /* -- UserSidebarOrg.tsx -- */
