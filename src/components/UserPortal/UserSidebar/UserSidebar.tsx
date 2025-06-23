@@ -73,6 +73,14 @@ const userSidebar = ({
           onClick={() => {
             setHideDrawer(!hideDrawer);
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           <FaBars
             className={styles.hamburgerIcon}

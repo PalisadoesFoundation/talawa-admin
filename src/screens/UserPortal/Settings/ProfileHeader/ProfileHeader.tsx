@@ -21,7 +21,6 @@
  *
  */
 import type { FC } from 'react';
-// import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import React from 'react';
 
 interface InterfaceProfileHeaderProps {
@@ -38,7 +37,6 @@ const ProfileHeader: FC<InterfaceProfileHeaderProps> = ({
     <div style={{ flex: 1 }}>
       <h1 data-testid="profile-header-title">{title}</h1>
     </div>
-    {/* <ProfileDropdown /> */}
   </div>
 );
 

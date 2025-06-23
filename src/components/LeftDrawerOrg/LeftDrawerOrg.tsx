@@ -153,6 +153,14 @@ const leftDrawerOrg = ({
           onClick={() => {
             setHideDrawer(!hideDrawer);
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           <FaBars
             className={styles.hamburgerIcon}
@@ -190,6 +198,7 @@ const leftDrawerOrg = ({
           ) : !data?.organization ? (
             !isProfilePage && (
               <button
+                type="button"
                 className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
                 disabled
               >
@@ -200,12 +209,16 @@ const leftDrawerOrg = ({
               </button>
             )
           ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
+            <button
+              type="button"
+              className={styles.profileContainer}
+              data-testid="OrgBtn"
+            >
               <div className={styles.imageContainer}>
                 {data.organization.avatarURL ? (
                   <img
                     src={data.organization.avatarURL}
-                    alt={`${data.organization.name} profile picture`}
+                    alt={`${data.organization.name}`}
                   />
                 ) : (
                   <Avatar
@@ -243,6 +256,7 @@ const leftDrawerOrg = ({
             <NavLink to={url} key={name} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <button
+                  type="button"
                   style={{ height: '40px' }}
                   className={`
                     ${

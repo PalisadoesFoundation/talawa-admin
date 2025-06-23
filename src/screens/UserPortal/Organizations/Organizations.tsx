@@ -342,13 +342,7 @@ export default function organizations(): JSX.Element {
       )} */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={` ${
-          hideDrawer === null || undefined
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
+        className={`${hideDrawer ? styles.expand : styles.contract}`}
         style={{
           marginLeft: hideDrawer ? '100px' : '20px',
           paddingTop: '20px',

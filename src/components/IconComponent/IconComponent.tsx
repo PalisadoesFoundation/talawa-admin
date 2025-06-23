@@ -55,15 +55,16 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import React from 'react';
+import type { JSX } from 'react';
 
-export interface INterfaceIconComponent {
+export interface InterfaceIconComponent {
   name: string;
   fill?: string;
   height?: string;
   width?: string;
 }
 
-const iconComponent = (props: INterfaceIconComponent): JSX.Element => {
+const iconComponent = (props: InterfaceIconComponent): JSX.Element => {
   switch (props.name) {
     case 'My Organizations':
       return (

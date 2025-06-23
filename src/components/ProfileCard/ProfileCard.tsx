@@ -53,8 +53,9 @@ const ProfileCard = (): JSX.Element => {
   const adminFor: string | string[] = getItem('AdminFor') || [];
   const userRole = role == 'regular' ? 'User' : 'Admin';
   const name = getItem('name') as string;
-  const firstName = name?.split(' ')[0] || '';
-  const lastName = name?.split(' ')[1] || '';
+  const nameParts = name?.split(' ') || [];
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
   const userImage = getItem('UserImage') as string;
   const navigate = useNavigate();
   const { orgId } = useParams();

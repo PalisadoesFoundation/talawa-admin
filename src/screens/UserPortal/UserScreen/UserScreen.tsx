@@ -151,13 +151,7 @@ const UserScreen = (): JSX.Element => {
         />
       </div>
       <div
-        className={` ${
-          hideDrawer === null || undefined
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
+        className={`${hideDrawer ? styles.expand : styles.contract}`}
         style={{ marginLeft: hideDrawer ? '100px' : '' }}
         data-testid="mainpageright"
       >

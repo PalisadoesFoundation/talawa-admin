@@ -87,6 +87,14 @@ const leftDrawer = ({
           onClick={() => {
             setHideDrawer(!hideDrawer);
           }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
         >
           <FaBars
             className={styles.hamburgerIcon}
@@ -145,14 +153,7 @@ const leftDrawer = ({
                   data-testid="rolesBtn"
                 >
                   <div className={styles.iconWrapper}>
-                    <RolesIcon
-                      fill="none"
-                      stroke={
-                        isActive
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }
-                    />
+                    <RolesIcon fill="none" />
                   </div>
                   {t('users')}
                 </button>
@@ -169,15 +170,7 @@ const leftDrawer = ({
                 data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <SettingsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
+                  <SettingsIcon fill="none" fontSize={25} />
                 </div>
                 {!hideDrawer && t('communityProfile')}
               </button>

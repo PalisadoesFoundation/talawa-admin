@@ -89,17 +89,7 @@ const superAdminScreen = (): JSX.Element => {
 
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
-        style={{
-          marginLeft: hideDrawer ? '100px' : '0px',
-          paddingTop: '20px',
-        }}
+        className={`${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="mainpageright"
       >
         <div>

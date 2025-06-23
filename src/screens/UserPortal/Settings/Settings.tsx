@@ -252,15 +252,10 @@ export default function Settings(): JSX.Element {
 
   return (
     <>
-      {/* <SidebarToggle hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} /> */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+          hideDrawer ? styles.expand : styles.contract
         }`}
         style={{
           marginLeft: hideDrawer ? '100px' : '20px',

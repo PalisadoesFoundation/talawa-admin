@@ -79,17 +79,20 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): JSX.Element => {
     }
   };
   return (
-    <div className={styles.signOutContainer}>
-      <div onClick={logout} data-testid="LogoutIconid">
+    <div
+      className={styles.signOutContainer}
+      onClick={logout}
+      onKeyDown={(e) => e.key === 'Enter' && logout()}
+    >
+      <div data-testid="LogoutIconid">
         <LogoutIcon />
       </div>
-      <button
-        onClick={logout}
+      <div
         aria-label="Sign out"
         className={`${styles.signOutButton} ${styles.sidebarText}`}
       >
         {hideDrawer ? '' : 'Sign Out'}
-      </button>
+      </div>
     </div>
   );
 };

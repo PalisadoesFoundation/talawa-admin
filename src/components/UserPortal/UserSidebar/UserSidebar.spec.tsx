@@ -336,7 +336,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     act(() => orgsBtn.click());
     expect(props.setHideDrawer).toHaveBeenCalledWith(true);
   });
-  it('UserSidebar collps and expansion based on screen size', async () => {
+  it('UserSidebar collaps and expansion based on screen size', async () => {
     await act(async () => {
       resizeWindow(1000);
       render(
@@ -352,8 +352,10 @@ describe('UserSidebar Component Tests in User Portal', () => {
       );
     });
     resizeWindow(800);
+    const sidebar = screen.getByTestId('leftDrawerContainer');
+    expect(sidebar).toHaveClass(styles.collapsedDrawer);
   });
-  it('UserSidebar collps and expansion based on screen size2', async () => {
+  it('clicks logout when sidebar is expanded', async () => {
     await act(async () => {
       resizeWindow(1000);
       render(
