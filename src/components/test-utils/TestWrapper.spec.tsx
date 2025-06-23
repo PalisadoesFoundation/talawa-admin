@@ -3,31 +3,59 @@ import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
 import { it, vi } from 'vitest';
-import { MockedCustomProvider } from './mocks/MockedCustomProvider';
-import { MockI18nextProvider } from './mocks/MockI18nextProvider';
-import { MockBrowserRouter } from './mocks/MockBrowserRouter';
-import { AsyncComponent } from './mocks/AsyncComponent';
 
 // Mock the imported modules
-vi.mock('@apollo/client/testing', async () => {
-  const actual = await vi.importActual('@apollo/client/testing');
-  return {
-    ...actual,
-    MockedProvider: MockedCustomProvider,
-  };
-});
+vi.mock('@apollo/client/testing', async () => ({
+  MockedProvider: vi.fn().mockImplementation(({ children, mocks = [] }) => (
+    <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
+      {children}
+    </div>
+  )),
+}));
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: MockI18nextProvider,
+  I18nextProvider: vi.fn().mockImplementation(({ children }) => (
+    <div data-testid="i18next-provider" data-i18n="provided">
+      {children}
+    </div>
+  )),
 }));
 
 vi.mock('react-router', () => ({
-  BrowserRouter: MockBrowserRouter,
+  BrowserRouter: vi
+    .fn()
+    .mockImplementation(({ children }) => (
+      <div data-testid="browser-router">{children}</div>
+    )),
 }));
 
 vi.mock('utils/i18n', () => ({
   default: 'mocked-i18n-instance',
 }));
+
+// Regular imports after all vi.mock declarations
+
+// Define constants after imports
+const TEST_QUERY = gql`
+  query TestQuery {
+    post(id: "123") {
+      _id
+    }
+  }
+`;
+
+// Add AsyncComponent mock before tests
+const AsyncComponent = (): JSX.Element => {
+  const [text, setText] = React.useState('Loading');
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setText('Loaded');
+    }, 0);
+  }, []);
+
+  return <div data-testid="async-component">{text}</div>;
+};
 
 describe('TestWrapper', () => {
   it('renders without crashing', () => {
@@ -77,14 +105,6 @@ describe('TestWrapper', () => {
   });
 
   it('passes provided mocks to MockedProvider', () => {
-    const TEST_QUERY = gql`
-      query TestQuery {
-        test {
-          id
-        }
-      }
-    `;
-
     const mocks = [
       {
         request: {
@@ -92,8 +112,8 @@ describe('TestWrapper', () => {
         },
         result: {
           data: {
-            test: {
-              id: '123',
+            post: {
+              _id: '123',
             },
           },
         },
@@ -113,9 +133,10 @@ describe('TestWrapper', () => {
 
     // Verify the mock was passed (structure will be different after serialization)
     expect(passedMocks).toHaveLength(1);
+    expect(passedMocks[0]).toHaveProperty('request');
     expect(passedMocks[0]).toHaveProperty('result');
-    expect(passedMocks[0].result).toHaveProperty('data');
-    expect(passedMocks[0].result.data).toHaveProperty('test');
+    expect(passedMocks[0].result.data).toHaveProperty('post');
+    expect(passedMocks[0].result.data.post).toHaveProperty('_id', '123');
   });
 
   it('works with multiple children', () => {

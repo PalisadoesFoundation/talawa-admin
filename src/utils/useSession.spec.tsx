@@ -58,7 +58,7 @@ describe('useSession Hook', () => {
     vi.clearAllMocks();
     vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
     vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
-    Object.defineProperty(global, 'localStorage', {
+    Object.defineProperty(globalThis, 'localStorage', {
       value: {
         clear: vi.fn(),
       },
@@ -90,7 +90,7 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(15 * 60 * 1000);
 
@@ -127,7 +127,7 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(15 * 60 * 1000);
 
@@ -199,7 +199,7 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(31 * 60 * 1000);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(globalThis.localStorage.clear).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledTimes(2);
       expect(toast.warning).toHaveBeenNthCalledWith(1, 'sessionWarning');
       expect(toast.warning).toHaveBeenNthCalledWith(2, 'sessionLogout', {
@@ -279,7 +279,7 @@ describe('useSession Hook', () => {
   });
 
   test('should set session timeout based on fetched data', async () => {
-    vi.spyOn(global, 'setTimeout');
+    vi.spyOn(globalThis, 'setTimeout');
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
@@ -291,7 +291,7 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    expect(global.setTimeout).toHaveBeenCalled();
+    expect(globalThis.setTimeout).toHaveBeenCalled();
   });
 
   test('should call errorHandler on query error', async () => {
@@ -357,7 +357,7 @@ describe('useSession Hook', () => {
 
   test('should call initialize timers when session is still active when the user returns to the tab', async () => {
     vi.useFakeTimers();
-    vi.spyOn(global, 'setTimeout').mockImplementation(vi.fn());
+    vi.spyOn(globalThis, 'setTimeout').mockImplementation(vi.fn());
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }) => (
@@ -382,7 +382,7 @@ describe('useSession Hook', () => {
       writable: true,
     });
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(5 * 60 * 1000);
 
@@ -391,11 +391,11 @@ describe('useSession Hook', () => {
       writable: true,
     });
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(1000);
 
-    expect(global.setTimeout).toHaveBeenCalled();
+    expect(globalThis.setTimeout).toHaveBeenCalled();
 
     vi.useRealTimers();
   });
@@ -426,7 +426,7 @@ describe('useSession Hook', () => {
       writable: true,
     });
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(32 * 60 * 1000);
 
@@ -435,12 +435,12 @@ describe('useSession Hook', () => {
       writable: true,
     });
 
-    document.dispatchEvent(new Event('visibilitychange'));
+    document.dispatchEvent(new globalThis.Event('visibilitychange'));
 
     vi.advanceTimersByTime(250);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(globalThis.localStorage.clear).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
         autoClose: false,
       });
@@ -464,7 +464,7 @@ describe('useSession Hook', () => {
     result.current.handleLogout();
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(globalThis.localStorage.clear).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
         autoClose: false,
       });
@@ -510,7 +510,7 @@ test('should extend session when called directly', async () => {
 
 test('should properly clean up on unmount', () => {
   // Mock window.removeEventListener
-  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
+  vi.spyOn(window, 'removeEventListener');
   const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
 
   const { result, unmount } = renderHook(() => useSession(), {
@@ -541,7 +541,7 @@ test('should properly clean up on unmount', () => {
 });
 test('should handle missing community data', async () => {
   vi.useFakeTimers();
-  const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+  const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
 
   const nullDataMocks = [
     {
@@ -598,9 +598,7 @@ test('should handle missing community data', async () => {
 });
 
 test('should handle event listener errors gracefully', async () => {
-  const consoleErrorSpy = vi
-    .spyOn(console, 'error')
-    .mockImplementation(() => {});
+  const consoleErrorSpy = vi.spyOn(globalThis, 'setTimeout');
   const mockError = new Error('Event listener error');
 
   // Mock addEventListener to throw an error
@@ -631,7 +629,7 @@ test('should handle event listener errors gracefully', async () => {
 
 test('should handle session timeout data updates', async () => {
   vi.useFakeTimers();
-  const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+  const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
 
   const customMocks = [
     {

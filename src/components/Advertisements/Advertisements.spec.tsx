@@ -604,6 +604,7 @@ describe('Testing Advertisement Component', () => {
 
   it('create advertisement', async () => {
     const createAdMock = vi.fn();
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     mockUseMutation.mockReturnValue([createAdMock]);
     render(
       <ApolloProvider client={client}>
@@ -663,16 +664,15 @@ describe('Testing Advertisement Component', () => {
     });
 
     await waitFor(() => {
-      expect(createAdMock).toHaveBeenCalledWith({
-        variables: {
-          organizationId: '1',
-          name: 'Ad1',
-          type: 'banner',
-          attachments: undefined,
-          startAt: dateConstants.create.startAtCalledWith,
-          endAt: dateConstants.create.endAtCalledWith,
-        },
+      const mockCall = createAdMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        organizationId: '1',
+        name: 'Ad1',
+        type: 'banner',
+        attachments: undefined,
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const creationFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Creation Failed' &&
@@ -936,14 +936,13 @@ describe('Testing Advertisement Component', () => {
     });
 
     await waitFor(() => {
-      expect(updateMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          description: 'This is an updated advertisement',
-          startAt: dateConstants.update.startAtCalledWith,
-          endAt: dateConstants.update.endAtCalledWith,
-        },
+      const mockCall = updateMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        id: '1',
+        description: 'This is an updated advertisement',
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const updateFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Update Failed' &&

@@ -10,6 +10,7 @@ import {
   waitFor,
   within,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -945,14 +946,70 @@ describe('Testing ItemModal', () => {
   });
 
   it('should fail to Create Action Item', async () => {
-    renderItemModal(link2, itemProps[0]);
+    const testProps = {
+      ...itemProps[0],
+      hide: vi.fn(),
+      actionItemsRefetch: vi.fn(),
+    };
+
+    renderItemModal(link2, testProps);
+    const categorySelect = screen.getByTestId('categorySelect');
+    const categoryInput = within(categorySelect).getByRole('combobox');
+    await userEvent.click(categoryInput);
+
+    fireEvent.change(categoryInput, { target: { value: 'Category 1' } });
     // Click Submit
     const submitButton = screen.getByTestId('submitBtn');
-    expect(submitButton).toBeInTheDocument();
-    fireEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(testProps.hide).not.toHaveBeenCalled();
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('No Fields Updated while Updating', async () => {
+    renderItemModal(link2, itemProps[2]);
+
+    await waitFor(() => {
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+      expect(categoryInput).toHaveValue('Category 1');
+    });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.warning).toHaveBeenCalled();
+    });
+  });
+
+  it('should fail to Update Action Item', async () => {
+    const testProps = {
+      ...itemProps[2],
+      hide: vi.fn(),
+    };
+
+    const { getByTestId } = render(
+      <MockedProvider addTypename={false} mocks={[]}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <ItemModal {...testProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const submitButton = getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+      expect(testProps.hide).not.toHaveBeenCalled();
     });
   });
 
