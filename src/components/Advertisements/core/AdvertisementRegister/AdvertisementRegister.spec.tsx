@@ -6,12 +6,10 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
-import i18n from 'utils/i18nForTest';
-import { wait } from 'components/Advertisements/AdvertisementsMocks';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-import { client } from 'components/Advertisements/AdvertisementsMocks';
+import { vi, it } from 'vitest';
+import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
@@ -34,7 +32,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+globalThis.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -62,11 +60,15 @@ vi.mock('utils/useLocalstorage', () => ({
 const translations = {
   ...JSON.parse(
     JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+      i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
     ),
   ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
+  ),
 };
 
 describe('Testing Advertisement Register Component', () => {
@@ -83,7 +85,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
                 nameEdit=""
@@ -108,7 +110,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
-    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
     const toastErrorSpy = vi.spyOn(toast, 'error');
 
     await act(async () => {
@@ -116,7 +118,7 @@ describe('Testing Advertisement Register Component', () => {
         <MockedProvider addTypename={false} mocks={[createAdFailMock]}>
           <Provider store={store}>
             <router.BrowserRouter>
-              <I18nextProvider i18n={i18n}>
+              <I18nextProvider i18n={i18nForTest}>
                 <AdvertisementRegister
                   endAtEdit={new Date()}
                   startAtEdit={new Date()}
@@ -158,12 +160,12 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error at creation when the end date is less than the start date', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
-    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
@@ -232,7 +234,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
                 startAtEdit={new Date()}
@@ -259,7 +261,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
                 startAtEdit={new Date()}
@@ -291,7 +293,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               {
                 <AdvertisementRegister
                   formStatus="edit"
@@ -358,7 +360,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
                 startAtEdit={new Date()}
@@ -821,7 +823,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
                 setAfterActive={vi.fn()}
@@ -855,7 +857,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18n}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
                 setAfterActive={vi.fn()}

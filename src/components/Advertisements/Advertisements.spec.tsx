@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, it } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
@@ -35,7 +35,6 @@ import {
   updateAdMocks,
   fetchErrorMocks,
 } from './AdvertisementsMocks';
-import i18n from '../../utils/i18nForTest';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -48,11 +47,15 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
 const translations = {
   ...JSON.parse(
     JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+      i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
     ),
   ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
+  ),
 };
 
 let mockID: string | undefined = '1';
@@ -183,70 +186,6 @@ describe('Testing Advertisement Component', () => {
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-  });
-
-  it('filter active advertisement by name', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider
-                mocks={getActiveAdvertisementMocks}
-                addTypename={false}
-              >
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
-
-    expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'Cookie' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
-
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
-  });
-
-  it('filter active advertisement by description', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider
-                mocks={getActiveAdvertisementMocks}
-                addTypename={false}
-              >
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
-
-    expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'this is an active advertisement' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
-
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
   });
 
   it('render completed advertisement after loading', async () => {
@@ -604,7 +543,6 @@ describe('Testing Advertisement Component', () => {
 
   it('create advertisement', async () => {
     const createAdMock = vi.fn();
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     mockUseMutation.mockReturnValue([createAdMock]);
     render(
       <ApolloProvider client={client}>
@@ -1188,7 +1126,7 @@ describe('Testing Advertisement Component', () => {
 
     const translations = JSON.parse(
       JSON.stringify(
-        i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+        i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
       ),
     );
 

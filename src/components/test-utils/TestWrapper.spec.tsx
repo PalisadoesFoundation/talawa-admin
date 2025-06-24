@@ -1,32 +1,28 @@
+import { vi, it, describe, expect } from 'vitest';
 import React, { act, ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
-import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
-import { it, vi } from 'vitest';
+import { MockedCustomProvider } from './mocks/MockedCustomProvider';
+import { MockI18nextProvider } from './mocks/MockI18nextProvider';
+import { MockBrowserRouter } from './mocks/MockBrowserRouter';
+import { AsyncComponent } from './mocks/AsyncComponent';
+import { TestWrapper } from './TestWrapper';
 
 // Mock the imported modules
-vi.mock('@apollo/client/testing', async () => ({
-  MockedProvider: vi.fn().mockImplementation(({ children, mocks = [] }) => (
-    <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
-      {children}
-    </div>
-  )),
-}));
+vi.mock('@apollo/client/testing', async () => {
+  const actual = await vi.importActual('@apollo/client/testing');
+  return {
+    ...actual,
+    MockedProvider: MockedCustomProvider,
+  };
+});
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: vi.fn().mockImplementation(({ children }) => (
-    <div data-testid="i18next-provider" data-i18n="provided">
-      {children}
-    </div>
-  )),
+  I18nextProvider: MockI18nextProvider,
 }));
 
 vi.mock('react-router', () => ({
-  BrowserRouter: vi
-    .fn()
-    .mockImplementation(({ children }) => (
-      <div data-testid="browser-router">{children}</div>
-    )),
+  BrowserRouter: MockBrowserRouter,
 }));
 
 vi.mock('utils/i18n', () => ({
@@ -43,19 +39,6 @@ const TEST_QUERY = gql`
     }
   }
 `;
-
-// Add AsyncComponent mock before tests
-const AsyncComponent = (): JSX.Element => {
-  const [text, setText] = React.useState('Loading');
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setText('Loaded');
-    }, 0);
-  }, []);
-
-  return <div data-testid="async-component">{text}</div>;
-};
 
 describe('TestWrapper', () => {
   it('renders without crashing', () => {

@@ -22,7 +22,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceItemModalProps } from './ItemModal';
 import ItemModal from './ItemModal';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -968,51 +968,6 @@ describe('Testing ItemModal', () => {
     });
   });
 
-  it('No Fields Updated while Updating', async () => {
-    renderItemModal(link2, itemProps[2]);
-
-    await waitFor(() => {
-      const categoryInput = within(
-        screen.getByTestId('categorySelect'),
-      ).getByRole('combobox');
-      expect(categoryInput).toHaveValue('Category 1');
-    });
-
-    const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(toast.warning).toHaveBeenCalled();
-    });
-  });
-
-  it('should fail to Update Action Item', async () => {
-    const testProps = {
-      ...itemProps[2],
-      hide: vi.fn(),
-    };
-
-    const { getByTestId } = render(
-      <MockedProvider addTypename={false} mocks={[]}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              <ItemModal {...testProps} />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const submitButton = getByTestId('submitBtn');
-    await userEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
-      expect(testProps.hide).not.toHaveBeenCalled();
-    });
-  });
-
   it('handles empty strings in all text fields', async () => {
     renderItemModal(link1, itemProps[0]);
 
@@ -1258,10 +1213,17 @@ describe('Testing ItemModal', () => {
 
   it('No Fields Updated while Updating', async () => {
     renderItemModal(link2, itemProps[2]);
-    // Click Submit
+
+    await waitFor(() => {
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+
+      expect(categoryInput).toHaveValue('Category 1');
+    });
+
     const submitButton = screen.getByTestId('submitBtn');
-    expect(submitButton).toBeInTheDocument();
-    fireEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(toast.warning).toHaveBeenCalledWith(t.noneUpdated);

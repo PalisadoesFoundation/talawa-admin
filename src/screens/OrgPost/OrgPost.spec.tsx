@@ -1792,10 +1792,10 @@ describe('OrgPost component - Post Creation Tests', () => {
   });
 
   it('successfully submits the form and shows success toast', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce({
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true }),
-    } as Response);
+    } as globalThis.Response);
 
     render(
       <MockedProvider mocks={[]} addTypename={false}>
