@@ -14,10 +14,8 @@ interface IProps {
 /**
  * A mock implementation of Apollo's MockedProvider for testing purposes.
  * This provider wraps children in a div and serializes any provided mocks as a data attribute.
- *
- * @param props - The provider props
- * @param props.children - React children to be rendered
- * @param props.mocks - Optional array of mock data
+ * * @param children - React children to be rendered within the provider
+ * @param mocks - Optional array of mock data for testing
  * @returns A div element containing the children and serialized mocks
  *
  * @example

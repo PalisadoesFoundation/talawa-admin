@@ -13,9 +13,7 @@ interface IProps {
  * A mock implementation of React Router's BrowserRouter for testing purposes.
  * This component provides a simple wrapper that simulates the router context
  * without actual routing functionality.
- *
- * @param props - The router props
- * @param props.children - React children to be rendered
+ * * @param children - React children to be rendered within the router
  * @returns A div element with router-related test attribute containing the children
  *
  * @example

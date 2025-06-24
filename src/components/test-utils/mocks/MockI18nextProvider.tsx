@@ -13,9 +13,7 @@ interface IProps {
  * A mock implementation of i18next's I18nextProvider for testing purposes.
  * This component simulates the i18next provider behavior in tests without
  * requiring the actual i18next setup.
- *
- * @param props - The provider props
- * @param props.children - React children to be rendered
+ * * @param children - React children to be rendered within the provider
  * @returns A div element with i18next-related test attributes containing the children
  *
  * @example
