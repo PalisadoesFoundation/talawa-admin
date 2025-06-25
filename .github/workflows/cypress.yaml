@@ -52,13 +52,15 @@ jobs:
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
       - name: Start Backend Server
-        run: docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server &'
+        run: |
+          docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
+          sleep 20 # Wait for the server to start
 
       - name: Wait for GraphQL endpoint to become available
         if: always()
         run: |
           echo "Waiting for the GraphQL endpoint to become available..."
-          for i in {1..60}; do
+          for i in {1..40}; do
             # Check if container exists first
             if ! docker ps | grep -q talawa-api-1; then
               echo "Container talawa-api-1 not found. Waiting..."
