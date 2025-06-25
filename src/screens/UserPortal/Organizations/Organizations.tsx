@@ -69,7 +69,7 @@ interface InterfaceOrganizationCardProps {
   image: string;
   description: string;
   admins: [];
-  members: [];
+  members: InterfaceMemberNode[];
   address: {
     city: string;
     countryCode: string;
@@ -93,14 +93,30 @@ interface InterfaceOrganizationCardProps {
 /**
  * Interface defining the structure of organization properties.
  */
+
+interface InterfaceMemberNode {
+  id: string;
+  // add other fields if needed
+}
+interface InterfaceMemberEdge {
+  node: InterfaceMemberNode;
+}
+interface InterfaceMembersConnection {
+  edges: InterfaceMemberEdge[];
+  pageInfo?: {
+    hasNextPage: boolean;
+  };
+}
 interface InterfaceOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  image: string;
+  image?: string;
+  avatarURL?: string; // <-- add this
+  addressLine1?: string; // <-- add this
   description: string;
   admins: [];
-  members: [];
+  members?: InterfaceMembersConnection; // <-- update this
   address: {
     city: string;
     countryCode: string;
@@ -164,7 +180,6 @@ export default function organizations(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-    error,
   } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
@@ -230,32 +245,37 @@ export default function organizations(): JSX.Element {
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: any) => {
-          // Check if current user is a member
-          const memberEdges = org.members?.edges || [];
-          const isMember = memberEdges.some(
-            (edge: any) => edge.node.id === userId,
-          );
+        const orgs = allOrganizationsData.organizations.map(
+          (org: InterfaceOrganization) => {
+            // Check if current user is a member
+            const memberEdges = org.members?.edges ?? [];
+            const isMember = memberEdges.some(
+              (edge: InterfaceMemberEdge) => edge.node.id === userId,
+            );
 
-          return {
-            id: org.id,
-            name: org.name,
-            image: org.avatarURL || null,
-            address: {
-              line1: org.addressLine1 || '',
-              city: '',
-              countryCode: '',
-              postalCode: '',
-              state: '',
-            },
-            admins: [],
-            members: org.members?.edges?.map((e: any) => e.node) || [],
-            membershipRequestStatus: isMember ? 'accepted' : '',
-            userRegistrationRequired: false,
-            membershipRequests: [],
-            isJoined: isMember, // Set based on membership check
-          };
-        });
+            return {
+              id: org.id,
+              name: org.name,
+              image: org.avatarURL || null,
+              avatarURL: org.avatarURL,
+              addressLine1: org.addressLine1,
+              address: {
+                line1: org.addressLine1 || '',
+                city: '',
+                countryCode: '',
+                postalCode: '',
+                state: '',
+              },
+              admins: [],
+              members: memberEdges.map((e: InterfaceMemberEdge) => e.node),
+              membershipRequestStatus: isMember ? 'accepted' : '',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: isMember, // Set based on membership check
+              description: org.description,
+            };
+          },
+        );
         setOrganizations(orgs);
       }
     } else if (mode === 1) {
@@ -303,7 +323,7 @@ export default function organizations(): JSX.Element {
    * pagination
    */
   const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
+    event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -434,11 +454,13 @@ export default function organizations(): JSX.Element {
                       ).map((organization: InterfaceOrganization, index) => {
                         const cardProps: InterfaceOrganizationCardProps = {
                           name: organization.name,
-                          image: organization.image,
+                          image: organization.image ?? '',
                           id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
-                          members: organization.members,
+                          members:
+                            organization.members?.edges?.map((e) => e.node) ??
+                            [],
                           address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,

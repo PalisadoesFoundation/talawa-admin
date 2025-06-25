@@ -9,12 +9,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
-import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
-import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import { errorMock, MOCKS1, MOCKS2 } from './SettingsMocks';
-import { urlToFile } from 'utils/urlToFile';
+import { MOCKS1, MOCKS2 } from './SettingsMocks';
 
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
@@ -175,7 +172,6 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   it('validates birth date correctly', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link1}>

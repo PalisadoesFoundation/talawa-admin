@@ -1,4 +1,3 @@
-import { promises } from 'dns';
 import type { MetricType } from 'web-vitals';
 
 const reportWebVitals = (onPerfEntry?: (metric: MetricType) => void): void => {

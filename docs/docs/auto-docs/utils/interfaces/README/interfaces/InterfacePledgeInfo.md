@@ -70,6 +70,6 @@ Defined in: [src/utils/interfaces.ts:1099](https://github.com/PalisadoesFoundati
 
 ### users
 
-> **users**: [`InterfaceUserInfo_PG`](utils\interfaces\README\interfaces\InterfaceUserInfo_PG.md)[]
+> **users**: [`InterfaceUserInfoPG`](utils\interfaces\README\interfaces\InterfaceUserInfoPG.md)[]
 
 Defined in: [src/utils/interfaces.ts:1100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1100)

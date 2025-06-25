@@ -1097,7 +1097,7 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfaceUserInfo_PG[];
+  users: InterfaceUserInfoPG[];
 }
 
 export interface InterfacePledgeInfoPG {
@@ -1107,10 +1107,10 @@ export interface InterfacePledgeInfoPG {
   currencyCode: string;
   endAt: string;
   startAt: string;
-  pledges: InterfaceUserInfo_PG[];
+  pledges: InterfaceUserInfoPG[];
 }
 
-export interface InterfaceUserInfo_PG {
+export interface InterfaceUserInfoPG {
   firstName: string;
   lastName: string;
   name: string;
@@ -1247,7 +1247,7 @@ export interface InterfacePostCard {
 }
 
 export interface InterfaceCreatePledge {
-  pledgeUsers: InterfaceUserInfo_PG[];
+  pledgeUsers: InterfaceUserInfoPG[];
   pledgeAmount: number;
   pledgeCurrency: string;
   pledgeStartDate: Date;

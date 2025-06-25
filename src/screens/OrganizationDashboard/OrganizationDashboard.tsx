@@ -95,12 +95,6 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch organization data.
    */
-  const { data, loading: loadingOrgData } = useQuery(
-    GET_ORGANIZATION_MEMBERS_PG,
-    {
-      variables: { id: orgId },
-    },
-  );
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
     useQuery(MEMBERSHIP_REQUEST, {
@@ -364,7 +358,8 @@ function OrganizationDashboard(): JSX.Element {
                 <DashBoardCard
                   count={
                     membershipRequestData?.organization?.membershipRequests?.filter(
-                      (request: any) => request.status === 'pending',
+                      (request: { status: string }) =>
+                        request.status === 'pending',
                     )?.length
                   }
                   title={tCommon('requests')}
@@ -494,7 +489,8 @@ function OrganizationDashboard(): JSX.Element {
                     <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
                 ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                    (request: any) => request.status === 'pending',
+                    (request: { status: string }) =>
+                      request.status === 'pending',
                   ).length === 0 ? (
                   <div
                     className={styles.emptyContainer}
@@ -504,15 +500,24 @@ function OrganizationDashboard(): JSX.Element {
                   </div>
                 ) : (
                   membershipRequestData?.organization?.membershipRequests
-                    .filter((request: any) => request.status === 'pending')
+                    .filter(
+                      (request: { status: string }) =>
+                        request.status === 'pending',
+                    )
                     .slice(0, 8)
-                    .map((request: any) => (
-                      <CardItem
-                        type="MembershipRequest"
-                        key={request.membershipRequestId}
-                        title={request.user.name}
-                      />
-                    ))
+                    .map(
+                      (request: {
+                        status: string;
+                        membershipRequestId: string;
+                        user: { name: string };
+                      }) => (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request.membershipRequestId}
+                          title={request.user.name}
+                        />
+                      ),
+                    )
                 )}
               </Card.Body>
             </Card>

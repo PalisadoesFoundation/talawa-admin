@@ -6,7 +6,7 @@
 
 > **PostNode** = `object`
 
-Defined in: [src/types/Post/type.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L106)
+Defined in: [src/types/Post/type.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L105)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:106](https://github.com/PalisadoesFoundation
 
 > **\_id**: `string`
 
-Defined in: [src/types/Post/type.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L126)
+Defined in: [src/types/Post/type.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L125)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:126](https://github.com/PalisadoesFoundation
 
 > **commentCount**: `number`
 
-Defined in: [src/types/Post/type.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L107)
+Defined in: [src/types/Post/type.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L106)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:107](https://github.com/PalisadoesFoundation
 
 > **comments**: [`PostComments`](types\Post\type\README\type-aliases\PostComments.md)
 
-Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L128)
+Defined in: [src/types/Post/type.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L127)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L108)
+Defined in: [src/types/Post/type.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L107)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation
 
 > **creator**: `object`
 
-Defined in: [src/types/Post/type.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L109)
+Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L108)
 
 #### \_id
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Post/type.ts:109](https://github.com/PalisadoesFoundation
 
 > **imageUrl**: `string` \| `null`
 
-Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L115)
+Defined in: [src/types/Post/type.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L114)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation
 
 > **likeCount**: `number`
 
-Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L116)
+Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L115)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation
 
 > **likedBy**: `object`[]
 
-Defined in: [src/types/Post/type.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L117)
+Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L116)
 
 #### \_id
 
@@ -106,7 +106,7 @@ Defined in: [src/types/Post/type.ts:117](https://github.com/PalisadoesFoundation
 
 > **likes**: [`PostLikes`](types\Post\type\README\type-aliases\PostLikes.md)
 
-Defined in: [src/types/Post/type.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L129)
+Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L128)
 
 ***
 
@@ -114,7 +114,7 @@ Defined in: [src/types/Post/type.ts:129](https://github.com/PalisadoesFoundation
 
 > **pinned**: `boolean`
 
-Defined in: [src/types/Post/type.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L122)
+Defined in: [src/types/Post/type.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L121)
 
 ***
 
@@ -122,7 +122,7 @@ Defined in: [src/types/Post/type.ts:122](https://github.com/PalisadoesFoundation
 
 > **text**: `string`
 
-Defined in: [src/types/Post/type.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L123)
+Defined in: [src/types/Post/type.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L122)
 
 ***
 
@@ -130,7 +130,7 @@ Defined in: [src/types/Post/type.ts:123](https://github.com/PalisadoesFoundation
 
 > **title**: `string`
 
-Defined in: [src/types/Post/type.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L124)
+Defined in: [src/types/Post/type.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L123)
 
 ***
 
@@ -138,4 +138,4 @@ Defined in: [src/types/Post/type.ts:124](https://github.com/PalisadoesFoundation
 
 > **videoUrl**: `string` \| `null`
 
-Defined in: [src/types/Post/type.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L125)
+Defined in: [src/types/Post/type.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L124)

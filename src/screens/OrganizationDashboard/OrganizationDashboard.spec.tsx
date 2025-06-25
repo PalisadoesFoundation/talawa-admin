@@ -21,7 +21,6 @@ import {
   MIXED_REQUESTS_MOCK,
 } from './OrganizationDashboardMocks';
 import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
-import { E } from 'graphql-ws/dist/common-DY-PBNYy';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -91,8 +90,11 @@ describe('OrganizationDashboard', () => {
     const requestsCardColumn = requestsCard.closest('[role="button"]');
     expect(requestsCardColumn).not.toBeNull();
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    fireEvent.click(requestsCardColumn!);
+    if (requestsCardColumn) {
+      fireEvent.click(requestsCardColumn);
+    } else {
+      throw new Error('Membership requests card column not found');
+    }
 
     expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
   });

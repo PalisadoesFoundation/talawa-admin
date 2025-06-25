@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: EventOrderByInput
+# Variable: EventOrderByInputEnum
 
-> `const` **EventOrderByInput**: `object`
+> `const` **EventOrderByInputEnum**: `object`
 
-Defined in: [src/types/Event/type.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L112)
+Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L111)
 
 ## Type declaration
 

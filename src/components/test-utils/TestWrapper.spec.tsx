@@ -8,6 +8,7 @@ import { gql } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
 import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
+import type { i18n as I18nType } from 'i18next';
 
 // Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
@@ -29,7 +30,13 @@ vi.mock('@apollo/client/testing', async () => {
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: ({ children, i18n }: { children: ReactNode; i18n: any }) => (
+  I18nextProvider: ({
+    children,
+    i18n,
+  }: {
+    children: ReactNode;
+    i18n: I18nType;
+  }) => (
     <div
       data-testid="i18next-provider"
       data-i18n={i18n ? 'provided' : 'missing'}
@@ -191,21 +198,21 @@ describe('TestWrapper', () => {
 
   it('allows error boundaries to catch errors from children', () => {
     // Define types for the error boundary
-    interface ErrorBoundaryProps {
+    interface TestInterfaceErrorBoundaryProps {
       children: ReactNode;
     }
 
-    interface ErrorBoundaryState {
+    interface TestInterfaceErrorBoundaryState {
       hasError: boolean;
       error: Error | null;
     }
 
     // Create a properly typed error boundary for testing
     class TestErrorBoundary extends React.Component<
-      ErrorBoundaryProps,
-      ErrorBoundaryState
+      TestInterfaceErrorBoundaryProps,
+      TestInterfaceErrorBoundaryState
     > {
-      constructor(props: ErrorBoundaryProps) {
+      constructor(props: TestInterfaceErrorBoundaryProps) {
         super(props);
         this.state = {
           hasError: false,
@@ -213,7 +220,9 @@ describe('TestWrapper', () => {
         };
       }
 
-      static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+      static getDerivedStateFromError(
+        error: Error,
+      ): TestInterfaceErrorBoundaryState {
         return {
           hasError: true,
           error,

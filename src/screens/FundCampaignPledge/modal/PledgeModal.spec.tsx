@@ -22,11 +22,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
-import React from 'react';
 import { vi } from 'vitest';
-import dayjs from 'dayjs';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { USER_DETAILS, MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
@@ -163,14 +161,6 @@ const mockLink = new StaticMockLink(
   false,
 );
 
-const UPDATE_ERROR_MOCK = {
-  request: {
-    query: UPDATE_PLEDGE,
-    variables: { id: '1', amount: 200 },
-  },
-  error: new Error('Update failed'),
-};
-
 const NO_CHANGE_MOCK = {
   request: {
     query: UPDATE_PLEDGE,
@@ -186,23 +176,6 @@ const NO_CHANGE_MOCK = {
     },
   },
 };
-
-const CREATE_ERROR_MOCK = {
-  request: {
-    query: CREATE_PLEDGE,
-    variables: {
-      campaignId: 'campaignId',
-      amount: 100,
-      pledgerId: '',
-    },
-  },
-  error: new Error('Failed to create pledge'),
-};
-
-const updateErrorLink = new StaticMockLink(
-  [...PLEDGE_MODAL_MOCKS, UPDATE_ERROR_MOCK],
-  false,
-);
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -578,14 +551,13 @@ describe('PledgeModal', () => {
 
   it('should handle missing pledgeUsers array', async () => {
     const invalidPledge = {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      ...pledgeProps[1].pledge!,
+      ...(pledgeProps[1].pledge ? pledgeProps[1].pledge : {}),
       users: undefined,
     };
 
     const props = {
       ...pledgeProps[1],
-      pledge: invalidPledge as any,
+      pledge: invalidPledge as unknown as InterfacePledgeModal['pledge'],
     };
 
     await act(async () => {

@@ -100,16 +100,15 @@ export type EventVolunteerInput = {
   userId: string;
 };
 
-export const EventVolunteerResponse = {
+export const EventVolunteerResponseEnum = {
   NO: 'NO',
   YES: 'YES',
 } as const;
 
-// eslint-disable-next-line no-redeclare
 export type EventVolunteerResponse =
-  (typeof EventVolunteerResponse)[keyof typeof EventVolunteerResponse];
+  (typeof EventVolunteerResponseEnum)[keyof typeof EventVolunteerResponseEnum];
 
-export const EventOrderByInput = {
+export const EventOrderByInputEnum = {
   allDay_ASC: 'allDay_ASC',
   allDay_DESC: 'allDay_DESC',
   description_ASC: 'description_ASC',
@@ -131,9 +130,8 @@ export const EventOrderByInput = {
   title_ASC: 'title_ASC',
   title_DESC: 'title_DESC',
 } as const;
-// eslint-disable-next-line no-redeclare
 export type EventOrderByInput =
-  (typeof EventOrderByInput)[keyof typeof EventOrderByInput];
+  (typeof EventOrderByInputEnum)[keyof typeof EventOrderByInputEnum];
 
 export type EventWhereInput = {
   description?: string; //Optional

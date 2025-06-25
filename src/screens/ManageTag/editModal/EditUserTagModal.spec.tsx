@@ -35,7 +35,7 @@ describe('EditUserTagModal Component', () => {
     hideEditUserTagModal: vi.fn(),
     newTagName: 'Test Tag',
     setNewTagName: vi.fn(),
-    handleEditUserTag: vi.fn().mockImplementation((e) => Promise.resolve()),
+    handleEditUserTag: vi.fn().mockImplementation(() => Promise.resolve()),
     t: mockT,
     tCommon: mockTCommon,
   };

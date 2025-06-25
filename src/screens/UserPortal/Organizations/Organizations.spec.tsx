@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { act } from 'react-dom/test-utils';
-import { describe, it, expect, type Mock, vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -23,7 +23,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { useQuery } from '@apollo/client';
 
 const { setItem, getItem } = useLocalStorage();
 

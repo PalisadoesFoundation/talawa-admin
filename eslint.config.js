@@ -47,7 +47,6 @@ export default [
         setTimeout: 'readonly',
         console: 'readonly',
 
-        // ✅ Vitest globals
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -78,11 +77,45 @@ export default [
       'import/no-duplicates': 'error',
       'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
-      '@typescript-eslint/naming-convention': 'off',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'interface',
+          format: ['PascalCase'],
+          custom: {
+            regex: '^(TestInterface|I|Interface)[A-Z]',
+            match: true,
+          },
+        },
+        { selector: ['typeAlias', 'typeLike', 'enum'], format: ['PascalCase'] },
+        { selector: 'typeParameter', format: ['PascalCase'], prefix: ['T'] },
+        {
+          selector: 'variable',
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+          leadingUnderscore: 'allow',
+        },
+        {
+          selector: 'parameter',
+          format: ['camelCase'],
+          leadingUnderscore: 'allow',
+        },
+        { selector: 'function', format: ['camelCase', 'PascalCase'] },
+        {
+          selector: 'memberLike',
+          modifiers: ['private'],
+          format: ['camelCase'],
+          leadingUnderscore: 'require',
+        },
+        { selector: 'variable', modifiers: ['exported'], format: null },
+      ],
+      'react/jsx-pascal-case': [
+        'error',
+        { allowAllCaps: false, allowNamespace: false },
+      ],
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'prettier/prettier': 'error',

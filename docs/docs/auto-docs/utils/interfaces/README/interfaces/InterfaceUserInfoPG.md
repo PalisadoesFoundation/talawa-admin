@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceUserInfo\_PG
+# Interface: InterfaceUserInfoPG
 
 Defined in: [src/utils/interfaces.ts:1113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1113)
 

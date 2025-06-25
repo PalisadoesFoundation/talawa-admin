@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1104](https://github.com/PalisadoesFoundati
 
 ### pledges
 
-> **pledges**: [`InterfaceUserInfo_PG`](utils\interfaces\README\interfaces\InterfaceUserInfo_PG.md)[]
+> **pledges**: [`InterfaceUserInfoPG`](utils\interfaces\README\interfaces\InterfaceUserInfoPG.md)[]
 
 Defined in: [src/utils/interfaces.ts:1110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1110)
 
