@@ -1,3 +1,13 @@
+/**
+ * A test utility React error boundary component.
+ *
+ * @remarks
+ * Catches errors in child components and displays the error message.
+ *
+ * @param children - The child nodes to render.
+ * @returns The error message if an error is caught, otherwise the children.
+ */
+
 import React, { ReactNode } from 'react';
 
 interface TestInterfaceErrorBoundaryProps {
