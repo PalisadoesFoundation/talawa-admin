@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
+import { I18nextProvider } from './I18nextProviderMock';
 
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
@@ -39,7 +40,6 @@ import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 import { TestErrorBoundary } from './TestErrorBoundary';
 import AsyncComponent from './AsyncComponent';
-import { I18nextProvider } from './I18nextProviderMock';
 import MockBrowserRouter from './MockBrowserRouter';
 
 // Mock the imported modules
