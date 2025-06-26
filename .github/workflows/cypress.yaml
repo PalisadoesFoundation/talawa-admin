@@ -22,7 +22,7 @@ jobs:
         run: |
           npm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
-          devcontainer up --workspace-folder .
+          devcontainer up --workspace-folder . --log-level debug --forward-ports 4000
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
@@ -30,7 +30,7 @@ jobs:
       - name: Start Backend Server
         run: |
           docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
-          sleep 20 # Wait for the server to start
+          sleep 15 
 
       - name: Wait for GraphQL endpoint to become available
         if: always()
@@ -75,7 +75,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
-          start: npm run serve
+          start: npx wait-on http://localhost:4000/graphql && npm run serve
           wait-on: 'http://localhost:4321'
           wait-on-timeout: 120
           config-file: cypress.config.ts
