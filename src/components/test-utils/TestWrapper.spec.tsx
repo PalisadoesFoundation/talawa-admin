@@ -1,3 +1,6 @@
+import type { ReactNode } from 'react';
+import type { MockedResponse } from '@apollo/client/testing';
+
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
@@ -29,11 +32,9 @@ vi.mock('utils/i18n', () => ({
 }));
 
 import React from 'react';
-import type { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
-import type { MockedResponse } from '@apollo/client/testing';
 import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 import { TestErrorBoundary } from './TestErrorBoundary';
