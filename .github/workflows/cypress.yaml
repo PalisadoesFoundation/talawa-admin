@@ -6,9 +6,11 @@ on:
 
 jobs:
 
-  Setup-Backend:
+  Setup-Run-Cypress-Testss:
     timeout-minutes: 25
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_TALAWA_URL: http://localhost:4000/graphql
     steps:
       - name: Checkout Backend
         uses: actions/checkout@v4
@@ -22,7 +24,7 @@ jobs:
           cp envFiles/.env.devcontainer .env
           devcontainer up --workspace-folder .
 
-      - name: Install Dependencies
+      - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
       - name: Start Backend Server
@@ -54,14 +56,7 @@ jobs:
           done
           echo "GraphQL endpoint did not become available within the expected time."
           exit 1
-
-  Run-Cypress-Tests:
-    timeout-minutes: 25
-    runs-on: ubuntu-latest
-    needs: Setup-Backend
-    env:
-      REACT_APP_TALAWA_URL: http://localhost:4000/graphql
-    steps:
+        
       - name: Checkout Frontend
         uses: actions/checkout@v4
       
@@ -70,7 +65,7 @@ jobs:
         with:
           node-version: '20.x'
       
-      - name: Install Dependencies
+      - name: Install Frontend Dependencies
         run: npm install
       
       - name: Run Cypress Tests with Dev Server
