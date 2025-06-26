@@ -158,7 +158,6 @@
     "graphql": "^16.10.0",
     "husky": "^9.1.6",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^27.5.1",
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
     "lint-staged": "^15.3.0",
@@ -197,5 +196,5 @@
     ],
     "**/*.{ts, tsx, json}": "eslint --fix"
   },
-  "packageManager": "npm@11.1.0+sha512.acf301ad9b9ddba948fcb72341e2f0fcae477f56a95cc2a092934d133a7461062633cefbf93d5934a3dc0768674e2edee9f04dcfcc4bb4c327ff0e3a7d552a1b"
+  "packageManager": "npm@11.1.0"
 }
