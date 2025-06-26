@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, suite } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -731,7 +731,7 @@ describe('OrgUpdate Component', () => {
       vi.clearAllMocks();
     });
 
-    it('handles empty response from update mutation', async () => {
+    suite('handles empty response from update mutation', async () => {
       const mocks = [
         {
           request: {

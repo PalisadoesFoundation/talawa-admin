@@ -1,17 +1,3 @@
-import React from 'react';
-import type { ReactNode } from 'react';
-import { render, screen } from '@testing-library/react';
-import { TestWrapper } from './TestWrapper';
-import { gql } from '@apollo/client';
-import type { MockedResponse } from '@apollo/client/testing';
-import { act } from 'react-dom/test-utils';
-import { vi } from 'vitest';
-import { TestErrorBoundary } from './TestErrorBoundary';
-import AsyncComponent from './AsyncComponent';
-import { I18nextProvider } from './I18nextProviderMock';
-import MockBrowserRouter from './MockBrowserRouter';
-
-// Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
@@ -42,6 +28,20 @@ vi.mock('utils/i18n', () => ({
   default: 'mocked-i18n-instance',
 }));
 
+import React from 'react';
+import type { ReactNode } from 'react';
+import { render, screen } from '@testing-library/react';
+import { TestWrapper } from './TestWrapper';
+import { gql } from '@apollo/client';
+import type { MockedResponse } from '@apollo/client/testing';
+import { act } from 'react-dom/test-utils';
+import { vi } from 'vitest';
+import { TestErrorBoundary } from './TestErrorBoundary';
+import AsyncComponent from './AsyncComponent';
+import { I18nextProvider } from './I18nextProviderMock';
+import MockBrowserRouter from './MockBrowserRouter';
+
+// Mock the imported modules
 describe('TestWrapper', () => {
   it('renders without crashing', () => {
     render(
