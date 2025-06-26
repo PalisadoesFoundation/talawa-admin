@@ -22,7 +22,7 @@ jobs:
         run: |
           npm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
-          devcontainer up --workspace-folder . --network host
+          devcontainer up --workspace-folder .
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
