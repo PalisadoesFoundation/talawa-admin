@@ -28,7 +28,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: build
+          path: |
+            build
+            cypress
+            cypress.config.ts
+            package.json
+            package-lock.json
           retention-days: 1
 
   Setup-Backend-Run-Tests:
@@ -85,15 +90,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
-          path: frontend-build
+          path: build
 
       - name: Serve Frontend & Run Tests
         uses: cypress-io/github-action@v6
         with:
-          working-directory: frontend-build
-          start: npx serve -s -l 4321 .
+          working-directory: build
+          start: npm run serve
           wait-on: 'http://localhost:4321'
           config-file: cypress.config.ts
+          install: false
         env:
           CYPRESS_BASE_URL: http://localhost:4321
           REACT_APP_TALAWA_URL: http://localhost:4000/graphql
