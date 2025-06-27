@@ -125,7 +125,7 @@ export default function home(): JSX.Element {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, { variables: { id: orgId, first: 10 } });
+  } = useQuery(ORGANIZATION_POST_LIST, { variables: {  input: { id: orgId }, first: 10 } });
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
@@ -141,9 +141,10 @@ export default function home(): JSX.Element {
 
   // Effect hook to update posts state when data changes
   useEffect(() => {
-    if (data) {
-      setPosts(data.organizations[0].posts.edges);
-    }
+    if (data && data.organization) {
+  setPosts(data.organization.posts.edges);
+}
+
   }, [data]);
 
   // Effect hook to update advertisements state when data changes
@@ -184,33 +185,37 @@ export default function home(): JSX.Element {
       commentCount,
       likedBy,
       comments,
+      createdAt
     } = node;
 
-    const allLikes: PostLikes = likedBy.map((value) => ({
-      firstName: value.firstName,
-      lastName: value.lastName,
-      id: value._id,
-    }));
+const allLikes: PostLikes = (likedBy ?? []).map((value) => ({
+  firstName: value.firstName,
+  lastName: value.lastName,
+  id: value._id,
+}));
 
-    const postComments: PostComments = comments?.map((value) => ({
-      id: value.id,
-      creator: {
-        firstName: value.creator?.firstName ?? '',
-        lastName: value.creator?.lastName ?? '',
-        id: value.creator?.id ?? '',
-        email: value.creator?.email ?? '',
-      },
-      likeCount: value.likeCount,
-      likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
-      text: value.text,
-    }));
 
-    const date = new Date(node.createdAt);
-    const formattedDate = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(date);
+const postComments: PostComments = (comments ?? []).map((value) => ({
+    id: value?.id ?? '',
+    creator: {
+      firstName: value?.creator?.firstName ?? '',
+      lastName: value?.creator?.lastName ?? '',
+      id: value?.creator?.id ?? '',
+      email: value?.creator?.email ?? '',
+    },
+    likeCount: value?.likeCount ?? 0,
+    likedBy: (value?.likedBy ?? []).map((like) => ({
+      id: like?.id ?? ''
+    })),
+    text: value?.text ?? '',
+  }));
+
+ const date = createdAt ? new Date(createdAt) : new Date();
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(date);
 
     const cardProps: InterfacePostCard = {
       id: _id,
@@ -221,7 +226,7 @@ export default function home(): JSX.Element {
         email: creator.email,
       },
       postedAt: formattedDate,
-      image: imageUrl,
+      image: imageUrl ?? '',
       video: videoUrl,
       title,
       text,
@@ -231,7 +236,6 @@ export default function home(): JSX.Element {
       likedBy: allLikes,
       fetchPosts: () => refetch(),
     };
-
     return cardProps;
   };
 
