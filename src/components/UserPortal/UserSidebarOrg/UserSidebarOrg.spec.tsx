@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
+import type { IUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
@@ -13,7 +13,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 /**
  * Unit tests for UserSidebarOrg component:
@@ -33,7 +33,7 @@ import { vi } from 'vitest';
  */
 const { setItem } = useLocalStorage();
 
-const props: InterfaceUserSidebarOrgProps = {
+const props: IUserSidebarOrgProps = {
   orgId: '123',
   targets: [
     {
@@ -246,7 +246,7 @@ async function wait(ms = 100): Promise<void> {
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 beforeEach(() => {
@@ -320,7 +320,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -328,7 +328,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     await userEvent.click(screen.getByText('People'));
-    expect(global.window.location.pathname).toContain('/user/people/123');
+    expect(window.location.pathname).toContain('/user/people/123');
   });
 
   it('Testing when screen size is less than 820px', async () => {
@@ -364,7 +364,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -405,7 +405,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

@@ -1,3 +1,4 @@
+/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -83,7 +84,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
@@ -166,7 +167,6 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     const toggleButton = screen.getByTestId('toggleBtn') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
 
     // Resize to small screen and check toggle state
     resizeWindow(800);

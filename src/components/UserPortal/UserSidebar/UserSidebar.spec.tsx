@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 /**
  * Unit tests for UserSidebar component:
@@ -40,7 +40,7 @@ const { setItem } = useLocalStorage();
 const resizeWindow = (width: number): void => {
   act(() => {
     window.innerWidth = width;
-    fireEvent(window, new Event('resize'));
+    fireEvent(window, new window.Event('resize'));
   });
 };
 
@@ -426,7 +426,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     it('Clicking a link closes the drawer when window width is 820px or less', () => {
       act(() => {
         window.innerWidth = 820;
-        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new window.Event('resize'));
       });
 
       render(

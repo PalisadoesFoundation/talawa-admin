@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+/* global HTMLElement */
+import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProfileHeader from './ProfileHeader';

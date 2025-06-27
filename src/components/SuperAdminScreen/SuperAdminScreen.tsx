@@ -6,13 +6,18 @@
  * on the current route, and a profile dropdown for user actions. The layout
  * adjusts responsively based on the window size.
  *
- * @component
- * @returns {JSX.Element} The rendered SuperAdminScreen component.
- *
  * @remarks
  * - The sidebar visibility is toggled based on the window width or user interaction.
  * - The page title is dynamically translated using the `react-i18next` library.
  * - The `map` object maps route segments to translation keys for page titles.
+ *
+ * @param props - The props for the UserSidebar component:
+ * - `hideDrawer`: State to control the visibility of the sidebar.
+ * - `setHideDrawer`: Function to update the `hideDrawer` state.
+ * - `map`: A mapping of route segments to translation keys for page titles.
+ * - `window:resize` : Adjusts the sidebar visibility on window resize.
+ *
+ * @returns The rendered SuperAdminScreen component.
  *
  * @example
  * ```tsx
@@ -26,21 +31,15 @@
  * @see {@link LeftDrawer} for the sidebar component.
  * @see {@link ProfileDropdown} for the profile dropdown component.
  *
- * @property {boolean | null} hideDrawer - State to control the visibility of the sidebar.
- * @property {Function} setHideDrawer - Function to update the `hideDrawer` state.
- * @property {Object} map - A mapping of route segments to translation keys for page titles.
- *
- * @listens window:resize - Adjusts the sidebar visibility on window resize.
  */
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
-const superAdminScreen = (): JSX.Element => {
+const superAdminScreen = (): React.JSX.Element => {
   const location = useLocation();
   const titleKey = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });

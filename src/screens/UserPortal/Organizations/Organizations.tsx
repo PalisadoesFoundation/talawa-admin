@@ -1,6 +1,8 @@
+/* global clearTimeout, HTMLButtonElement, HTMLTextAreaElement */
 /**
- * @file Organizations.tsx
- * @description This file contains the `organizations` component, which is responsible for displaying
+ * Organizations.tsx
+ *
+ * This file contains the `organizations` component, which is responsible for displaying
  * and managing the organizations associated with a user. It provides functionality to view all
  * organizations, joined organizations, and created organizations, along with search and pagination features.
  *
@@ -8,19 +10,20 @@
  * filtering, pagination, and UI responsiveness. It also includes a debounced search mechanism
  * to optimize performance when filtering organizations.
  *
- * @component
  * @remarks
  * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
  * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
  * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
  * - Pagination is implemented to handle large datasets efficiently.
  *
- * @dependencies
+ * ### Dependencies
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/icons-material` for icons.
  * - `react-bootstrap` for UI components.
  * - `react-i18next` for internationalization.
  * - Custom components like `PaginationList`, `OrganizationCard`, and `UserSidebar`.
+ *
+ * @returns The Organizations component.
  *
  * @example
  * ```tsx
@@ -41,7 +44,7 @@ import PaginationList from 'components/Pagination/PaginationList/PaginationList'
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
@@ -63,7 +66,7 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
   return debouncedFn;
 }
 
-interface InterfaceOrganizationCardProps {
+interface IOrganizationCardProps {
   id: string;
   name: string;
   image: string;
@@ -93,7 +96,7 @@ interface InterfaceOrganizationCardProps {
 /**
  * Interface defining the structure of organization properties.
  */
-interface InterfaceOrganization {
+interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
@@ -118,15 +121,35 @@ interface InterfaceOrganization {
   }[];
 }
 
+interface IOrgData {
+  addressLine1: string;
+  avatarURL: string | null;
+  id: string;
+  members: {
+    edges: [
+      {
+        node: {
+          id: string;
+          __typename: string;
+        };
+        __typename: string;
+      },
+    ];
+  };
+  description: string;
+  __typename: string;
+  name: string;
+}
+
 /**
  * Component for displaying and managing user organizations.
  */
-export default function organizations(): JSX.Element {
+export default function organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
 
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
    * Handles window resize events to toggle drawer visibility.
@@ -147,9 +170,7 @@ export default function organizations(): JSX.Element {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [organizations, setOrganizations] = React.useState<
-    InterfaceOrganization[]
-  >([]);
+  const [organizations, setOrganizations] = React.useState<IOrganization[]>([]);
   const [typedValue, setTypedValue] = React.useState('');
   const [filterName, setFilterName] = React.useState('');
   const [mode, setMode] = React.useState(0);
@@ -166,7 +187,6 @@ export default function organizations(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-    error,
   } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
@@ -232,11 +252,12 @@ export default function organizations(): JSX.Element {
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: any) => {
+        const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
           // Check if current user is a member
           const memberEdges = org.members?.edges || [];
           const isMember = memberEdges.some(
-            (edge: any) => edge.node.id === userId,
+            (edge: IOrgData['members']['edges'][number]) =>
+              edge.node.id === userId,
           );
 
           return {
@@ -251,7 +272,10 @@ export default function organizations(): JSX.Element {
               state: '',
             },
             admins: [],
-            members: org.members?.edges?.map((e: any) => e.node) || [],
+            members:
+              org.members?.edges?.map(
+                (e: IOrgData['members']['edges'][number]) => e.node,
+              ) || [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
@@ -265,7 +289,7 @@ export default function organizations(): JSX.Element {
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-            (edge: { node: InterfaceOrganization }) => {
+            (edge: { node: IOrganization }) => {
               const organization = edge.node;
               return {
                 ...organization,
@@ -282,7 +306,7 @@ export default function organizations(): JSX.Element {
       // Created
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
-          (org: InterfaceOrganization) => ({
+          (org: IOrganization) => ({
             ...org,
             membershipRequestStatus: 'created',
             isJoined: true,
@@ -431,8 +455,8 @@ export default function organizations(): JSX.Element {
                             page * rowsPerPage + rowsPerPage,
                           )
                         : organizations
-                      ).map((organization: InterfaceOrganization, index) => {
-                        const cardProps: InterfaceOrganizationCardProps = {
+                      ).map((organization: IOrganization, index) => {
+                        const cardProps: IOrganizationCardProps = {
                           name: organization.name,
                           image: organization.image,
                           id: organization.id,

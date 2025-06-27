@@ -5,23 +5,19 @@
  * navigation options and user-related functionalities. It includes branding,
  * menu options, and user profile actions.
  *
- * @component
- * @param {InterfaceUserSidebarOrgProps} props - The props for the component.
- * @param {string} props.orgId - The ID of the organization (currently unused).
- * @param {TargetsType[]} props.targets - Array of navigation targets, each containing
- *   a name and URL or nested dropdown options.
- * @param {boolean | null} props.hideDrawer - State to determine the visibility of the sidebar.
- *   `null` hides the sidebar by default, `true` hides it, and `false` shows it.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer - Function
- *   to update the `hideDrawer` state.
- *
- * @returns {JSX.Element} The rendered UserSidebarOrg component.
- *
  * @remarks
  * - The sidebar includes branding with the Talawa logo and text.
  * - Navigation links are dynamically generated based on the `targets` prop.
- * - The sidebar auto-hides on smaller screens (viewport width <= 820px) when a link is clicked.
+ * - The sidebar auto-hides on smaller screens (viewport width less than or equal to 820px) when a link is clicked.
  * - The organization section is currently commented out and not in use.
+ *
+ * @param props - The props for the UserSidebar component:
+ * - `orgId`: The ID of the organization (currently unused).
+ * - `targets`: Array of navigation targets, each containing a name and URL or nested dropdown options.
+ * - `hideDrawer`: State to determine the visibility of the sidebar. `null` hides the sidebar by default, `true` hides it, and `false` shows it.
+ * - `setHideDrawer`: Function to update the `hideDrawer` state.
+ *
+ * @returns The rendered UserSidebarOrg component.
  *
  * @example
  * ```tsx
@@ -57,11 +53,11 @@ import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
 import { FaBars } from 'react-icons/fa';
 
-export interface InterfaceUserSidebarOrgProps {
+export interface IUserSidebarOrgProps {
   orgId: string;
   targets: TargetsType[];
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserSidebarOrg = ({
@@ -69,7 +65,7 @@ const UserSidebarOrg = ({
   // orgId,
   hideDrawer,
   setHideDrawer,
-}: InterfaceUserSidebarOrgProps): JSX.Element => {
+}: IUserSidebarOrgProps): React.JSX.Element => {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');

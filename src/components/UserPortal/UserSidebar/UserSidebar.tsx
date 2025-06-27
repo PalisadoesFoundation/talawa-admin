@@ -12,15 +12,14 @@
  * - Internationalization is handled using the `react-i18next` library.
  * - The sidebar adapts its visibility based on the `hideDrawer` prop and viewport width.
  *
- * @param {InterfaceUserSidebarProps} props - The props for the UserSidebar component.
- * @param {boolean | null} props.hideDrawer - Determines the visibility of the sidebar.
- *   - `null`: Sidebar is hidden by default.
- *   - `true`: Sidebar is inactive (hidden).
- *   - `false`: Sidebar is active (visible).
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
- * Function to update the `hideDrawer` state.
+ * @param props - The props for the UserSidebar component:
+ * - `hideDrawer`: Determines the visibility of the sidebar.
+ * - `null`: Sidebar is hidden by default.
+ * - `true`: Sidebar is inactive (hidden).
+ * - `false`: Sidebar is active (visible).
+ * - `setHideDrawer`: Function to update the `hideDrawer` state.
  *
- * @returns {JSX.Element} The rendered UserSidebar component.
+ * @returns A JSX element representing the rendered UserSidebar component.
  *
  * @example
  * ```tsx
@@ -39,15 +38,15 @@ import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { FaBars } from 'react-icons/fa';
 
-export interface IInterfaceUserSidebarProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+export interface IUserSidebarProps {
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const userSidebar = ({
   hideDrawer,
   setHideDrawer,
-}: IInterfaceUserSidebarProps): JSX.Element => {
+}: IUserSidebarProps): React.JSX.Element => {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
