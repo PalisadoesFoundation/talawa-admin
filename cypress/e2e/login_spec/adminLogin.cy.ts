@@ -29,4 +29,9 @@ describe('Admin Login Functionality', () => {
       });
     });
   });
+
+  afterEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
 });

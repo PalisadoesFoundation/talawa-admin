@@ -68,7 +68,7 @@ function OrgListCard({
     <>
       {/* Container for the organization card */}
       <div className={styles.orgCard}>
-        <div className={styles.innerContainer}>
+        <div className={styles.innerContainer} data-cy="orgCardContainer">
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
             {avatarURL ? (
@@ -109,6 +109,7 @@ function OrgListCard({
             <Button
               onClick={handleClick}
               data-testid="manageBtn"
+              data-cy="manageBtn"
               className={styles.manageBtn}
             >
               {/* Show flask icon if the organization is a sample organization */}

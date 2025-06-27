@@ -7,15 +7,18 @@ export class UserDashboardPage {
     return this;
   }
 
-  verifyOnDashboard() {
-    cy.url().should('include', '/user/organizations');
-    cy.get(this._orgCard).should('be.visible');
+  verifyOnDashboard(timeout = 10000) {
+    cy.url({ timeout }).should('include', '/user/organizations');
+    cy.get(this._orgCard, { timeout }).should('be.visible');
     return this;
   }
 
-  openFirstOrganization() {
-    cy.get(this._manageButton).should('be.visible').first().click();
-    cy.url().should('match', /\/user\/organization\/[a-f0-9-]+/);
+  openFirstOrganization(timeout = 10000) {
+    cy.get(this._manageButton, { timeout })
+      .should('be.visible')
+      .first()
+      .click();
+    cy.url({ timeout }).should('match', /\/user\/organization\/[a-f0-9-]+/);
     return this;
   }
 }

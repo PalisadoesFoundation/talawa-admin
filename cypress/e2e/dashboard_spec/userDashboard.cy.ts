@@ -11,4 +11,9 @@ describe('User Dashboard', () => {
   it('should display the user organizations and visit Organization Dashboard', () => {
     dashboard.verifyOnDashboard().openFirstOrganization();
   });
+
+  afterEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
 });

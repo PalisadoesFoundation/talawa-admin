@@ -44,3 +44,7 @@ debug.log
 .idea
 .vscode
 *.swp
+
+# Cypress related
+cypress/videos
+cypress/screenshots

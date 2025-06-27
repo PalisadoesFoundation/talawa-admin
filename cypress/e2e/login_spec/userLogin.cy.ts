@@ -3,6 +3,8 @@ import { LoginPage } from '../../pageObjects/auth/LoginPage';
 describe('User Login Functionality', () => {
   beforeEach(() => {
     cy.visit('/');
+    cy.clearCookies();
+    cy.clearLocalStorage();
   });
 
   it('User Login', () => {
@@ -25,4 +27,9 @@ describe('User Login Functionality', () => {
       cy.assertToastError('Not found');
     });
   });
+
+  // afterEach(() => {
+  //   cy.clearCookies();
+  //   cy.clearLocalStorage();
+  // });
 });

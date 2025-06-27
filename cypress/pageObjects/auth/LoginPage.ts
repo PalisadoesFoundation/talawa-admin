@@ -3,17 +3,23 @@ export class LoginPage {
   private readonly _passwordInput: string = '[data-cy=loginPassword]';
   private readonly _loginButton: string = '[data-cy=loginBtn]';
 
-  verifyLoginPage() {
-    cy.get(this._emailInput).should('be.visible');
-    cy.get(this._passwordInput).should('be.visible');
-    cy.get(this._loginButton).should('be.visible');
+  verifyLoginPage(timeout = 10000) {
+    cy.get(this._emailInput, { timeout }).should('be.visible');
+    cy.get(this._passwordInput, { timeout }).should('be.visible');
+    cy.get(this._loginButton, { timeout }).should('be.visible');
     return this;
   }
 
-  login(email: string, password: string) {
-    cy.get(this._emailInput).type(email);
-    cy.get(this._passwordInput).type(password);
-    cy.get(this._loginButton).click();
+  login(email: string, password: string, timeout = 10000) {
+    cy.get(this._emailInput, { timeout })
+      .should('be.visible')
+      .clear()
+      .type(email);
+    cy.get(this._passwordInput, { timeout })
+      .should('be.visible')
+      .clear()
+      .type(password);
+    cy.get(this._loginButton, { timeout }).should('be.enabled').click();
     return this;
   }
 }
