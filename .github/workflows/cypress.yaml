@@ -82,6 +82,7 @@ jobs:
           install: false
         env:
           CYPRESS_BASE_URL: http://localhost:4321
+          CYPRESS_apiUrl: http://localhost:4000/graphql
           REACT_APP_TALAWA_URL: http://host.docker.internal:4000/graphql
           REACT_APP_BACKEND_WEBSOCKET_URL: ws://host.docker.internal:4000/graphql
 
