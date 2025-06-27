@@ -1,6 +1,6 @@
 import '@testing-library/dom';
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, MemoryRouter } from 'react-router';
@@ -11,11 +11,15 @@ import LeftDrawerOrg from './LeftDrawerOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_DATA_PG,
+} from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, describe, test, expect } from 'vitest';
+import { vi, describe, test, expect, it } from 'vitest';
+import styles from './../../style/app-fixed.module.css';
 
 const { setItem } = useLocalStorage();
 
@@ -59,6 +63,114 @@ const props: ILeftDrawerProps = {
   setHideDrawer: vi.fn(),
 };
 
+const MOCKS_ORGANIZATION_DATA = [
+  {
+    request: {
+      query: GET_ORGANIZATION_DATA_PG,
+      variables: { id: '123', first: 10, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '123',
+          name: 'Test Organization',
+          description: 'Testing this organization',
+          addressLine1: '123 Random Street',
+          addressLine2: 'Apartment 456',
+          city: 'Delhi',
+          state: 'Delhi',
+          postalCode: '110001',
+          countryCode: 'IN',
+          avatarURL: null,
+          createdAt: '2024-03-12',
+          updatedAt: '2024-03-12',
+          creator: {
+            id: 'john123',
+            name: 'John Doe',
+            emailAddress: 'JohnDoe@example.com',
+          },
+          updater: {
+            id: 'john123',
+            name: 'John Doe',
+            emailAddress: 'JohnDoe@example.com',
+          },
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'john123',
+                  name: 'John Doe',
+                  emailAddress: 'JohnDoe@example.com',
+                  role: 'ADMIN',
+                },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
+            },
+          },
+        },
+      },
+    },
+  },
+];
+
+const MOCKS_ORGANIZATION_DATA_WITH_AVATAR = [
+  {
+    request: {
+      query: GET_ORGANIZATION_DATA_PG,
+      variables: { id: '123', first: 10, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '123',
+          name: 'Test Organization',
+          description: 'Testing this organization',
+          addressLine1: '123 Random Street',
+          addressLine2: 'Apartment 456',
+          city: 'Delhi',
+          state: 'Delhi',
+          postalCode: '110001',
+          countryCode: 'IN',
+          avatarURL: 'https://example.com/avatar.png',
+          createdAt: '2024-03-12',
+          updatedAt: '2024-03-12',
+          creator: {
+            id: 'john123',
+            name: 'John Doe',
+            emailAddress: 'JohnDoe@example.com',
+          },
+          updater: {
+            id: 'john123',
+            name: 'John Doe',
+            emailAddress: 'JohnDoe@example.com',
+          },
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'john123',
+                  name: 'John Doe',
+                  emailAddress: 'JohnDoe@example.com',
+                  role: 'ADMIN',
+                },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
+            },
+          },
+        },
+      },
+    },
+  },
+];
+
 const MOCKS = [
   {
     request: {
@@ -88,6 +200,7 @@ const MOCKS = [
             },
             name: 'Test Organization',
             description: 'Testing this organization',
+            avatarURL: null,
             address: {
               city: 'Delhi',
               countryCode: 'IN',
@@ -152,6 +265,7 @@ const MOCKS_WITH_IMAGE = [
             },
             name: 'Test Organization',
             description: 'Testing this organization',
+            avatarURL: 'https://example.com/avatar.png',
             address: {
               city: 'Delhi',
               countryCode: 'IN',
@@ -293,7 +407,79 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     defaultScreens.map((screenName) => {
-      expect(screen.getByText(screenName)).toBeInTheDocument();
+      expect(screen.getByTestId(screenName)).toBeInTheDocument();
+    });
+  });
+
+  test('drawer toggles on click and Enter key', async () => {
+    let drawerState = false;
+
+    const setHideDrawer = (val: React.SetStateAction<boolean>) => {
+      drawerState = typeof val === 'function' ? val(drawerState) : val;
+      rerenderComponent();
+    };
+
+    const props = {
+      targets: [{ name: 'Dashboard', url: '/dashboard' }],
+      orgId: '123',
+      hideDrawer: drawerState,
+      setHideDrawer,
+    };
+
+    const renderComponent = () =>
+      render(
+        <MockedProvider addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LeftDrawerOrg {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+    const { rerender } = renderComponent();
+
+    const rerenderComponent = () => {
+      props.hideDrawer = drawerState;
+      rerender(
+        <MockedProvider addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LeftDrawerOrg {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    };
+
+    const toggleBtn = await screen.findByTestId('toggleBtn');
+
+    // Test click (should collapse)
+    fireEvent.click(toggleBtn);
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+        styles.collapsedDrawer,
+      );
+    });
+
+    // Test Enter key press (should expand)
+    fireEvent.keyDown(toggleBtn, { key: 'Enter' });
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).not.toHaveClass(
+        styles.collapsedDrawer,
+      );
+    });
+
+    // Test Space key press (should collapse again)
+    fireEvent.keyDown(toggleBtn, { key: ' ' });
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
+        styles.collapsedDrawer,
+      );
     });
   });
 
@@ -327,7 +513,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <MemoryRouter initialEntries={['/member/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} hideDrawer={null} />
+              <LeftDrawerOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
@@ -335,7 +521,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(
-      screen.queryByText(/Error occured while loading Organization data/i),
+      screen.queryByText('Error occured while loading Organization data'),
     ).not.toBeInTheDocument();
   });
 
@@ -349,14 +535,14 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} hideDrawer={null} />
+              <LeftDrawerOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
     await wait();
-    await userEvent.click(screen.getByText('Dashboard'));
+    await userEvent.click(screen.getByTestId('Dashboard'));
     expect(window.location.pathname).toContain('/orgdash/123');
   });
 
@@ -375,10 +561,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     resizeWindow(800);
-    expect(screen.getAllByText(/Dashboard/i)[0]).toBeInTheDocument();
-    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
+    expect(screen.getByTestId('Dashboard')).toBeInTheDocument();
+    expect(screen.getByTestId('People')).toBeInTheDocument();
 
-    const peopelBtn = screen.getByTestId(/People/i);
+    const peopelBtn = screen.getByTestId('People');
     await userEvent.click(peopelBtn);
     await wait();
     expect(window.location.pathname).toContain('/orgpeople/123');
@@ -394,7 +580,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} hideDrawer={null} />
+              <LeftDrawerOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -435,7 +621,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg {...props} hideDrawer={null} />
+              <LeftDrawerOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -461,28 +647,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
   });
 
-  test('Should set hideDrawer to false when initially null', async () => {
-    const mockSetHideDrawer = vi.fn();
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LeftDrawerOrg
-                {...props}
-                hideDrawer={null}
-                setHideDrawer={mockSetHideDrawer}
-              />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-    expect(mockSetHideDrawer).toHaveBeenCalledTimes(1);
-  });
-
   test('Should not call setHideDrawer when hideDrawer has a value', async () => {
     const mockSetHideDrawer = vi.fn();
     render(
@@ -502,5 +666,69 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  });
+});
+
+describe('Organization avatar rendering', () => {
+  beforeEach(() => {
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+    setItem('SuperAdmin', true);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('renders <img> when avatarURL is present', async () => {
+    render(
+      <MockedProvider
+        mocks={MOCKS_ORGANIZATION_DATA_WITH_AVATAR}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg
+                orgId="123"
+                hideDrawer={false}
+                setHideDrawer={() => {}}
+                targets={[]}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const avatarImg = await screen.findByAltText('Test Organization');
+    expect(avatarImg).toBeInTheDocument();
+    expect(avatarImg.tagName).toBe('IMG');
+    expect(avatarImg).toHaveAttribute('src', 'https://example.com/avatar.png');
+  });
+
+  it('renders <Avatar> when avatarURL is not present', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_ORGANIZATION_DATA} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LeftDrawerOrg
+                orgId="123"
+                hideDrawer={false}
+                setHideDrawer={() => {}}
+                targets={[]}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const fallbackAvatar = screen.getByText('Test Organization');
+    expect(fallbackAvatar).toBeInTheDocument();
   });
 });

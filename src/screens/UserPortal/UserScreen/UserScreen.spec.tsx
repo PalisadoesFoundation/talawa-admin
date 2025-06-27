@@ -1,3 +1,4 @@
+/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -83,7 +84,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
@@ -166,19 +167,18 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     const toggleButton = screen.getByTestId('toggleBtn') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
 
     // Resize to small screen and check toggle state
     resizeWindow(800);
-    expect(screen.queryByText('Talawa User Portal')).not.toBeInTheDocument();
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument();
     clickToggleMenuBtn(toggleButton);
-    expect(screen.queryByText('Talawa User Portal')).toBeInTheDocument();
+    expect(screen.queryByText('Menu')).toBeInTheDocument();
 
     // Resize to large screen and check toggle state
     resizeWindow(10000);
-    expect(screen.queryByText('Talawa User Portal')).toBeInTheDocument();
+    expect(screen.queryByText('Menu')).toBeInTheDocument();
     clickToggleMenuBtn(toggleButton);
-    expect(screen.queryByText('Talawa User Portal')).not.toBeInTheDocument();
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument();
   });
 
   it('redirects to root when orgId is undefined', () => {

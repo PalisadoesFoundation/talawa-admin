@@ -4,40 +4,39 @@
  * This component renders a user profile card with the user's avatar, name, and role.
  * It also provides navigation functionality based on the user's role.
  *
- * @component
- * @returns {JSX.Element} A dropdown containing the user's profile information.
- *
  * @remarks
- * - The component uses `useLocalStorage` to retrieve user details such as name, role, and profile image.
- * - The user's role is determined based on the presence of `SuperAdmin` or `AdminFor` in local storage.
+ * - The component uses useLocalStorage to retrieve user details such as name, role, and profile image.
+ * - The user's role is determined based on the presence of SuperAdmin or AdminFor in local storage.
  * - If the user's full name exceeds the maximum length, it is truncated and appended with ellipses.
  * - The profile image is displayed if available; otherwise, a default avatar is shown.
  * - Clicking the chevron button navigates the user to different routes based on their role.
  *
- * @example
- * ```tsx
- * <ProfileCard />
- * ```
- *
- * @dependencies
+ * ### Dependencies
  * - `Avatar`: A component used to display a default avatar when no profile image is available.
  * - `react-bootstrap`: Provides the `Dropdown` and `ButtonGroup` components for layout.
  * - `react-router-dom`: Used for navigation (`useNavigate`) and extracting route parameters (`useParams`).
  * - `@mui/icons-material`: Provides the `ChevronRightIcon` for the navigation button.
  *
- * @localStorage
+ * ### Local Storage Keys
  * - `SuperAdmin`: Boolean indicating if the user is a super admin.
  * - `AdminFor`: Array or string indicating the organizations the user is an admin for.
  * - `FirstName`: The user's first name.
  * - `LastName`: The user's last name.
  * - `UserImage`: URL of the user's profile image.
  *
- * @styles
+ * ### Styles
  * - `styles.profileContainer`: Styles the main container of the profile card.
  * - `styles.imageContainer`: Styles the container for the profile image or avatar.
  * - `styles.profileTextUserSidebarOrg`: Styles the text container for the user's name and role.
  * - `styles.chevronRightbtn`: Styles the chevron button for navigation.
  * - `styles.chevronIcon`: Styles the chevron icon inside the button.
+ *
+ * @returns A dropdown containing the user's profile information.
+ *
+ * @example
+ * ```tsx
+ * <ProfileCard />
+ * ```
  */
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
@@ -47,11 +46,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-const ProfileCard = (): JSX.Element => {
+const ProfileCard = (): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const role = getItem('role');
-  const adminFor: string | string[] = getItem('AdminFor') || [];
-  const userRole = role == 'regular' ? 'User' : 'Admin';
+  const userRole = role != 'regular' ? 'Admin' : 'User';
   const name = getItem('name') as string;
   const nameParts = name?.split(' ') || [];
   const firstName = nameParts[0] || '';

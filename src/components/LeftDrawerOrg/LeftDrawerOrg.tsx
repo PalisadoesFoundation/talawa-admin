@@ -46,8 +46,8 @@ import { FaBars } from 'react-icons/fa';
 export interface ILeftDrawerProps {
   orgId: string;
   targets: TargetsType[];
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /**
@@ -119,11 +119,6 @@ const leftDrawerOrg = ({
     [location.pathname],
   );
 
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, [hideDrawer, setHideDrawer]);
   // Check if the current page is admin profile page
 
   useEffect(() => {
@@ -258,6 +253,7 @@ const leftDrawerOrg = ({
                 <button
                   type="button"
                   style={{ height: '40px' }}
+                  data-testid={name}
                   className={`
                     ${
                       isActive

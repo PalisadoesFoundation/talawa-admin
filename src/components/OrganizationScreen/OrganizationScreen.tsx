@@ -48,7 +48,7 @@ const OrganizationScreen = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // State to manage visibility of the side drawer
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();

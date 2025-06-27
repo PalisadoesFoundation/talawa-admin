@@ -79,6 +79,7 @@ afterEach(() => {
 
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
+    setItem('role', 'regular');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -96,17 +97,6 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
-  test('renders Super admin', () => {
-    setItem('SuperAdmin', true);
-    render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <ProfileCard />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    expect(screen.getByText('SuperAdmin')).toBeInTheDocument();
-  });
   test('renders Admin', () => {
     setItem('AdminFor', ['123']);
     render(
@@ -124,7 +114,7 @@ describe('Member screen routing testing', () => {
   test('member screen', async () => {
     setItem('SuperAdmin', false);
     setItem('AdminFor', []);
-
+    setItem('role', 'regular');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -145,6 +135,7 @@ describe('Member screen routing testing', () => {
   test('navigates to /user/settings for a user', async () => {
     setItem('SuperAdmin', false);
     setItem('AdminFor', []);
+    setItem('role', 'regular');
 
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>

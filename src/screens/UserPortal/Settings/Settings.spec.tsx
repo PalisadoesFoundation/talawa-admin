@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, beforeAll, vi } from 'vitest';
+import { describe, expect, beforeAll, vi, it } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -9,12 +9,9 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
-import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
-import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import { errorMock, MOCKS1, MOCKS2 } from './SettingsMocks';
-import { urlToFile } from 'utils/urlToFile';
+import { MOCKS1, MOCKS2 } from './SettingsMocks';
 
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
@@ -30,7 +27,7 @@ const link2 = new StaticMockLink(MOCKS2, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 async function wait(ms = 100): Promise<void> {
@@ -121,7 +118,6 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
 
     const openMenuBtn = screen.queryByTestId('toggleBtn');
-    console.log('Open Menu Button:', openMenuBtn);
     expect(openMenuBtn).toBeInTheDocument();
 
     if (openMenuBtn) {
@@ -129,7 +125,6 @@ describe('Testing Settings Screen [User Portal]', () => {
     }
 
     const closeMenuBtn = screen.queryByTestId('toggleBtn');
-    console.log('Close Menu Button:', closeMenuBtn);
     expect(closeMenuBtn).toBeInTheDocument();
 
     if (closeMenuBtn) {
@@ -175,7 +170,6 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   it('validates birth date correctly', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
     await act(async () => {
       render(
         <MockedProvider addTypename={false} link={link1}>

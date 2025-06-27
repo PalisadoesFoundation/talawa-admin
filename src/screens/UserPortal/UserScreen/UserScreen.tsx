@@ -3,36 +3,37 @@
  * It manages the sidebar visibility, handles routing, and displays
  * the appropriate content based on the current route and organization ID.
  *
- * @component
- *
  * @remarks
  * - Redirects to the home page if `orgId` is not present in the URL.
  * - Dynamically updates the Redux store with targets based on the `orgId`.
  * - Adjusts the sidebar visibility based on the screen width.
  *
- * @returns {JSX.Element} The rendered UserScreen component.
+ *
+ * ### Internal Functions
+ * - `handleResize`: Toggles the sidebar visibility based on the screen width.
+ *
+ * ### Hooks
+ * - `useEffect`:
+ *   - Updates targets in the Redux store when `orgId` changes.
+ *   - Sets up and cleans up the window resize event listener.
+ *
+ * ### Dependencies
+ * - `react-router-dom` for routing and navigation.
+ * - `react-redux` for state management.
+ * - `react-bootstrap` for UI components.
+ * - `react-i18next` for internationalization.
+ *
+ * @param props - The props for the UserSidebar component:
+ * - `orgId`: The organization ID retrieved from the URL parameters.
+ * - `hideDrawer`: State to manage the visibility of the sidebar.
+ * - `targets`: List of user-specific routes fetched from the Redux store.
+ *
+ * @returns A JSX.Element representing the rendered UserScreen component.
  *
  * @example
  * ```tsx
  * <Route path="/user/:orgId/*" element={<UserScreen />} />
  * ```
- *
- * @property {string} orgId - The organization ID retrieved from the URL parameters.
- * @property {boolean | null} hideDrawer - State to manage the visibility of the sidebar.
- * @property {TargetsType[]} targets - List of user-specific routes fetched from the Redux store.
- *
- * @function handleResize
- * Toggles the sidebar visibility based on the screen width.
- *
- * @hook useEffect
- * - Updates targets in the Redux store when `orgId` changes.
- * - Sets up and cleans up the window resize event listener.
- *
- * @dependencies
- * - `react-router-dom` for routing and navigation.
- * - `react-redux` for state management.
- * - `react-bootstrap` for UI components.
- * - `react-i18next` for internationalization.
  */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -58,7 +59,7 @@ const map: InterfaceMapType = {
   leaveorg: 'leaveOrganization',
 };
 
-const UserScreen = (): JSX.Element => {
+const UserScreen = (): React.JSX.Element => {
   // Get the current location path for debugging or conditional rendering
   const location = useLocation();
 
@@ -81,7 +82,7 @@ const UserScreen = (): JSX.Element => {
   );
 
   const { targets } = userRoutes;
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
    * Retrieves the organization ID from the URL parameters.

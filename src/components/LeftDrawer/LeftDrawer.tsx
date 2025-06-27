@@ -6,19 +6,20 @@
  * organizations, users, and community profile. The drawer's visibility can be toggled
  * based on the screen size or user interaction.
  *
- * @component
- * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
- * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
- *                                            `null` indicates the initial state.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
- *                                            Function to update the visibility state of the drawer.
  *
- * @returns {JSX.Element} The rendered LeftDrawer component.
+ * @param props - The props for the LeftDrawer component.
+ * - `hideDrawer`: State to control the visibility of the sidebar.
+ * - `setHideDrawer`: Function to update the `hideDrawer` state.
+ *
+ * @returns The rendered LeftDrawer component.
  *
  * @remarks
  * - The component uses `useTranslation` for internationalization.
- * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
+ * - The drawer automatically hides on smaller screens (width less than or equal to 820px) when a link is clicked.
  * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
+ * - Uses SVG icons for visual representation of navigation options.
+ * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
  *
  * @example
  * ```tsx
@@ -28,16 +29,11 @@
  * />
  * ```
  *
- * @fileoverview
- * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
- * - Uses SVG icons for visual representation of navigation options.
- * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
  */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
-import IconComponent from 'components/IconComponent/IconComponent';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
@@ -45,32 +41,42 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { FaBars } from 'react-icons/fa';
 
-export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+export interface ILeftDrawerProps {
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
+}: ILeftDrawerProps): React.JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') !== null;
 
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, []);
-
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
     }
   };
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
+    }
+  };
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div
