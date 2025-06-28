@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreatePledge
 
-Defined in: [src/utils/interfaces.ts:1251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1251)
+Defined in: [src/utils/interfaces.ts:1208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1208)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1251](https://github.com/PalisadoesFoundati
 
 > **pledgeAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1253)
+Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1210)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1253](https://github.com/PalisadoesFoundati
 
 > **pledgeCurrency**: `string`
 
-Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1254)
+Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1211)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundati
 
 > **pledgeEndDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1256)
+Defined in: [src/utils/interfaces.ts:1213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1213)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1256](https://github.com/PalisadoesFoundati
 
 > **pledgeStartDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1255)
+Defined in: [src/utils/interfaces.ts:1212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1212)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/utils/interfaces.ts:1255](https://github.com/PalisadoesFoundati
 
 > **pledgeUsers**: [`InterfaceUserInfo_PG`](InterfaceUserInfo_PG.md)[]
 
-Defined in: [src/utils/interfaces.ts:1252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1252)
+Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1209)

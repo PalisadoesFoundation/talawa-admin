@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationFundsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:679](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L679)
+Defined in: [src/utils/interfaces.ts:636](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L636)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:679](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L680)
+Defined in: [src/utils/interfaces.ts:637](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L637)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:680](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceFundPg`](InterfaceFundPg.md)
 
-Defined in: [src/utils/interfaces.ts:681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L681)
+Defined in: [src/utils/interfaces.ts:638](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L638)

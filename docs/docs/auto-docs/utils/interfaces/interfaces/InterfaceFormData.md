@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:1295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1295)
+Defined in: [src/utils/interfaces.ts:1252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1252)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1295](https://github.com/PalisadoesFoundati
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1298)
+Defined in: [src/utils/interfaces.ts:1255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1255)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundati
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1296)
+Defined in: [src/utils/interfaces.ts:1253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1253)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1296](https://github.com/PalisadoesFoundati
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:1300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1300)
+Defined in: [src/utils/interfaces.ts:1257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1257)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1300](https://github.com/PalisadoesFoundati
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1297)
+Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1254)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/utils/interfaces.ts:1297](https://github.com/PalisadoesFoundati
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1299](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1299)
+Defined in: [src/utils/interfaces.ts:1256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1256)

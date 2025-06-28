@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
-Defined in: [src/utils/interfaces.ts:1123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1123)
+Defined in: [src/utils/interfaces.ts:1080](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1080)
 
 ## Extends
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:349](https://github.com/PalisadoesFoundatio
 
 > **isPublic**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1125)
+Defined in: [src/utils/interfaces.ts:1082](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1082)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1125](https://github.com/PalisadoesFoundati
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1126)
+Defined in: [src/utils/interfaces.ts:1083](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1083)
 
 ***
 

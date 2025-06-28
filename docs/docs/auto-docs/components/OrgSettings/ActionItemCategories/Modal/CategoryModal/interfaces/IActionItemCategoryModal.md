@@ -10,7 +10,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 ### category
 
-> **category**: [`IActionItemCategoryInfo`](../../../../../../utils/interfaces/interfaces/IActionItemCategoryInfo.md)
+> **category**: [`IActionItemCategoryInfo`](../../../../../../types/Actions/interface/interfaces/IActionItemCategoryInfo.md)
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L20)
 

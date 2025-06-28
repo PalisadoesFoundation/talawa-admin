@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgConnectionInfoTypePG
 
-Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L439)
+Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L396)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundatio
 
 > **organizations**: [`InterfaceOrgInfoTypePG`](InterfaceOrgInfoTypePG.md)[]
 
-Defined in: [src/utils/interfaces.ts:440](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L440)
+Defined in: [src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L397)

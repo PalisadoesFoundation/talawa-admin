@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L705)
+Defined in: [src/utils/interfaces.ts:662](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L662)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:705](https://github.com/PalisadoesFoundatio
 
 > **edges**: [`InterfaceOrganizationPinnedPostsConnectionEdgePg`](InterfaceOrganizationPinnedPostsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L706)
+Defined in: [src/utils/interfaces.ts:663](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L663)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:706](https://github.com/PalisadoesFoundatio
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:707](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L707)
+Defined in: [src/utils/interfaces.ts:664](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L664)

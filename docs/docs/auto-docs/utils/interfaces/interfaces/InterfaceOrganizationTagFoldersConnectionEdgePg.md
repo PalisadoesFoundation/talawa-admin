@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationTagFoldersConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:744](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L744)
+Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L701)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:744](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:745](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L745)
+Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L702)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:745](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceTagFolderPg`](InterfaceTagFolderPg.md)
 
-Defined in: [src/utils/interfaces.ts:746](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L746)
+Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L703)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:560](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L560)
+Defined in: [src/utils/interfaces.ts:517](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L517)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:560](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:561](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L561)
+Defined in: [src/utils/interfaces.ts:518](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L518)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/interfaces.ts:561](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceAdvertisementPg`](InterfaceAdvertisementPg.md)
 
-Defined in: [src/utils/interfaces.ts:562](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L562)
+Defined in: [src/utils/interfaces.ts:519](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L519)
