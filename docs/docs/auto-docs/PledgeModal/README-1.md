@@ -16,8 +16,8 @@ This file defines the `PledgeModal` component, which provides a modal interface 
 
 ## Interfaces
 
-- [InterfacePledgeModal](PledgeModal/README/interfaces/InterfacePledgeModal-1.md)
+- [InterfacePledgeModal](interfaces/InterfacePledgeModal-1.md)
 
 ## Variables
 
-- [default](PledgeModal/README/variables/default-1.md)
+- [default](variables/default-1.md)

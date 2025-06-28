@@ -1,9 +1,0 @@
-[Admin Docs](/)
-
-***
-
-# Type Alias: InterfaceAttendanceStatisticsModalProps
-
-> **InterfaceAttendanceStatisticsModalProps** = [`IAttendanceStatisticsModalProps`]/auto-docs/types/Event/interface/README/interfaces/IAttendanceStatisticsModalProps
-
-Defined in: [src/types/Event/interface.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L199)
