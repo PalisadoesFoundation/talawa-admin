@@ -1,49 +1,28 @@
 /**
- * Component: OrganizationActionItems
+ * OrganizationActionItems component for managing action items within an organization.
  *
- * This component renders a table of action items for a specific organization and event.
- * It provides functionality to search, filter, sort, and manage action items.
+ * This component provides functionality to:
+ * - Display action items in a data grid with filtering and sorting
+ * - Create, edit, view, and delete action items
+ * - Update action item status (complete/incomplete)
+ * - Filter by assignee, category, and completion status
+ * - Sort by assignment date
  *
- * Features:
- * - Fetches action items using GraphQL query based on filters and sorting.
- * - Displays action items in a data grid with columns for assignee, category, status, allotted hours, and due date.
- * - Allows users to create, edit, view, delete, and update the status of action items via modals.
- * - Includes search functionality with debounce for optimized performance.
- * - Provides sorting and filtering options for better data management.
+ * @returns  The rendered component
  *
- * Props:
- * - None (Relies on URL parameters for organization and event IDs).
- *
- * State:
- * - `actionItem`: Stores the currently selected action item for modal operations.
- * - `modalMode`: Determines whether the modal is in 'create' or 'edit' mode.
- * - `searchTerm`: Stores the search input value.
- * - `sortBy`: Stores the sorting criteria for due dates.
- * - `status`: Filters action items by their status (Pending, Completed, or Late).
- * - `searchBy`: Determines whether to search by 'assignee' or 'category'.
- * - `modalState`: Tracks the visibility of different modals (Create/Edit, View, Delete, Status Update).
- *
- * Dependencies:
- * - React, React Router, Apollo Client, Material-UI, Bootstrap, Day.js, and custom components.
- *
- * GraphQL:
- * - Query: `ACTION_ITEM_LIST` - Fetches action items based on organization ID, event ID, filters, and sorting.
- *
- * Modals:
- * - `ItemModal`: For creating or editing action items.
- * - `ItemViewModal`: For viewing action item details.
- * - `ItemDeleteModal`: For confirming and deleting action items.
- * - `ItemUpdateStatusModal`: For updating the status of an action item.
- *
- * Error Handling:
- * - Displays an error message if the GraphQL query fails.
- *
- * Loading State:
- * - Displays a loader while fetching data.
- *
- * @returns JSX.Element - The rendered OrganizationActionItems component.
+ * @example
+ * ```tsx
+ * // Component is typically used in a route with orgId parameter
+ * <Route path="/organization/:orgId/action-items" component={OrganizationActionItems} />
+ * ```
  */
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useState,
+  useEffect,
+  type JSX,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -54,10 +33,8 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type {
-  InterfaceActionItemInfo,
-  InterfaceActionItemList,
-} from 'utils/interfaces';
+import type { IActionItemInfo, IActionItemList } from 'types/Actions/interface';
+
 import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -74,12 +51,18 @@ import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
+/**
+ * Enumeration for action item status types
+ */
 enum ItemStatus {
   Pending = 'pending',
   Completed = 'completed',
   Late = 'late',
 }
 
+/**
+ * Enumeration for modal states used in the component
+ */
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
@@ -101,16 +84,30 @@ function organizationActionItems(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
-    null,
-  );
+  /** Currently selected action item for modal operations */
+  const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
+
+  /** Modal mode for create/edit operations */
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
+
+  /** Search term for filtering action items */
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
-    null,
-  );
+
+  /** Sort order for action items by assignment date */
+  const [sortBy, setSortBy] = useState<
+    'assignedAt_ASC' | 'assignedAt_DESC' | null
+  >(null);
+
+  /** Filter by completion status */
   const [status, setStatus] = useState<ItemStatus | null>(null);
+
+  /** Search field selector (assignee or category) */
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
+
+  /** Processed and filtered action items */
+  const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
+
+  /** Modal visibility state for different modal types */
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -120,14 +117,27 @@ function organizationActionItems(): JSX.Element {
     [ModalState.STATUS]: false,
   });
 
+  /**
+   * Opens a specific modal by setting its state to true
+   * @param modal - The modal type to open
+   */
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
+  /**
+   * Closes a specific modal by setting its state to false
+   * @param modal - The modal type to close
+   */
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
+  /**
+   * Handles modal opening with action item context
+   * @param actionItem - The action item to operate on (null for create operations)
+   * @param modal - The modal type to open
+   */
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: IActionItemInfo | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {
         setModalMode(actionItem ? 'edit' : 'create');
       }
@@ -138,7 +148,8 @@ function organizationActionItems(): JSX.Element {
   );
 
   /**
-   * Query to fetch action items for the organization based on filters and sorting.
+   * Query to fetch action items for the organization.
+   * Only accepts organizationId as input - all filtering/sorting done client-side
    */
   const {
     data: actionItemsData,
@@ -146,38 +157,75 @@ function organizationActionItems(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data: InterfaceActionItemList | undefined;
+    data: IActionItemList | undefined;
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(ACTION_ITEM_LIST, {
     variables: {
-      organizationId: orgId,
-      eventId: eventId,
-      orderBy: sortBy,
-      where: {
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
-        is_completed:
-          status === null ? undefined : status === ItemStatus.Completed,
+      input: {
+        organizationId: orgId,
       },
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByOrganization || [],
-    [actionItemsData],
-  );
-
+  /**
+   * Debounced search function to avoid excessive filtering during typing
+   */
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
 
-  // Trigger refetch on sortBy or status change
+  /**
+   * Apply client-side filtering and sorting like the category component
+   */
   useEffect(() => {
-    actionItemsRefetch();
-  }, [sortBy, status, actionItemsRefetch]);
+    if (actionItemsData && actionItemsData.actionItemsByOrganization) {
+      let filteredItems = actionItemsData.actionItemsByOrganization;
+
+      // Filter by completion status
+      if (status !== null) {
+        const isCompleted = status === ItemStatus.Completed;
+        filteredItems = filteredItems.filter(
+          (item) => item.isCompleted === isCompleted,
+        );
+      }
+
+      // Search filter
+      if (searchTerm) {
+        filteredItems = filteredItems.filter((item) => {
+          if (searchBy === 'assignee') {
+            const assigneeName = item.assignee?.name || '';
+            return assigneeName
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          } else {
+            const categoryName = item.category?.name || '';
+            return categoryName
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          }
+        });
+      }
+
+      // Date sorting
+      if (sortBy) {
+        filteredItems = [...filteredItems].sort((a, b) => {
+          const dateA = new Date(a.assignedAt);
+          const dateB = new Date(b.assignedAt);
+
+          if (sortBy === 'assignedAt_DESC') {
+            return dateB.getTime() - dateA.getTime();
+          } else {
+            return dateA.getTime() - dateB.getTime();
+          }
+        });
+      }
+
+      setActionItems(filteredItems);
+    }
+  }, [actionItemsData, eventId, status, searchTerm, searchBy, sortBy]);
 
   if (actionItemsLoading) {
     return <Loader size="xl" />;
@@ -194,6 +242,9 @@ function organizationActionItems(): JSX.Element {
     );
   }
 
+  /**
+   * Column definitions for the DataGrid component
+   */
   const columns: GridColDef[] = [
     {
       field: 'assignee',
@@ -205,58 +256,24 @@ function organizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } =
-          params.row.assigneeUser || params.row.assignee?.user || {};
+        const assignee = params.row.assignee;
+        const displayName = assignee?.name || 'No assignee';
 
         return (
-          <>
-            {params.row.assigneeType !== 'EventVolunteerGroup' ? (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt="Assignee"
-                      data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.TableImage}>
-                      <Avatar
-                        key={_id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={firstName + ' ' + lastName}
-                        alt={firstName + ' ' + lastName}
-                      />
-                    </div>
-                  )}
-                  {firstName + ' ' + lastName}
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  className="d-flex fw-bold align-items-center ms-2"
-                  data-testid="assigneeName"
-                >
-                  <div className={styles.avatarContainer}>
-                    <Avatar
-                      key={_id + '1'}
-                      containerStyle={styles.imageContainer}
-                      avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name as string}
-                      alt={'assigneeGroup_avatar'}
-                    />
-                  </div>
-                  {params.row.assigneeGroup?.name as string}
-                </div>
-              </>
-            )}
-          </>
+          <div
+            className="d-flex fw-bold align-items-center ms-2"
+            data-testid="assigneeName"
+            style={{ height: '100%' }}
+          >
+            <div className={styles.TableImage}>
+              <Avatar
+                key={assignee?.id || 'no-assignee'}
+                name={displayName}
+                alt={displayName}
+              />
+            </div>
+            <span className={!assignee ? 'text-muted' : ''}>{displayName}</span>
+          </div>
         );
       },
     },
@@ -275,7 +292,7 @@ function organizationActionItems(): JSX.Element {
             className="d-flex justify-content-center fw-bold"
             data-testid="categoryName"
           >
-            {params.row.actionItemCategory?.name}
+            {params.row.category?.name || 'No category'}
           </div>
         );
       },
@@ -301,8 +318,8 @@ function organizationActionItems(): JSX.Element {
       },
     },
     {
-      field: 'allottedHours',
-      headerName: 'Allotted Hours',
+      field: 'assignedDate',
+      headerName: 'Assigned Date',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -310,28 +327,13 @@ function organizationActionItems(): JSX.Element {
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allottedHours">
-            {params.row.allottedHours ?? '-'}
+          <div data-testid="assignedDate">
+            {dayjs(params.row.assignedAt).format('DD/MM/YYYY')}
           </div>
         );
       },
     },
-    {
-      field: 'dueDate',
-      headerName: 'Due Date',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
-    },
+
     {
       field: 'options',
       headerName: 'Options',
@@ -345,7 +347,6 @@ function organizationActionItems(): JSX.Element {
         return (
           <>
             <Button
-              // variant="success"
               size="sm"
               style={{ minWidth: '32px' }}
               className={styles.infoButton}
@@ -403,7 +404,7 @@ function organizationActionItems(): JSX.Element {
 
   return (
     <div>
-      {/* Header with search, filter  and Create Button */}
+      {/* Header with search, filter and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
@@ -428,23 +429,27 @@ function organizationActionItems(): JSX.Element {
             }
             dataTestIdPrefix="searchByToggle"
             buttonLabel={tCommon('searchBy', { item: '' })}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={tCommon('sort')}
             sortingOptions={[
-              { label: t('latestDueDate'), value: 'dueDate_DESC' },
-              { label: t('earliestDueDate'), value: 'dueDate_ASC' },
+              { label: t('latestAssigned'), value: 'assignedAt_DESC' },
+              { label: t('earliestAssigned'), value: 'assignedAt_ASC' },
             ]}
-            selectedOption={t(
-              sortBy === 'dueDate_DESC' ? 'latestDueDate' : 'earliestDueDate',
-            )}
+            selectedOption={
+              sortBy === 'assignedAt_DESC'
+                ? t('latestAssigned')
+                : sortBy === 'assignedAt_ASC'
+                  ? t('earliestAssigned')
+                  : tCommon('sort')
+            }
             onSortChange={(value) =>
-              setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
+              setSortBy(value as 'assignedAt_DESC' | 'assignedAt_ASC')
             }
             dataTestIdPrefix="sort"
             buttonLabel={tCommon('sort')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <SortingButton
             title={t('status')}
@@ -453,19 +458,19 @@ function organizationActionItems(): JSX.Element {
               { label: tCommon('pending'), value: ItemStatus.Pending },
               { label: tCommon('completed'), value: ItemStatus.Completed },
             ]}
-            selectedOption={t(
+            selectedOption={
               status === null
-                ? 'all'
+                ? tCommon('all')
                 : status === ItemStatus.Pending
-                  ? 'pending'
-                  : 'completed',
-            )}
+                  ? tCommon('pending')
+                  : tCommon('completed')
+            }
             onSortChange={(value) =>
               setStatus(value === 'all' ? null : (value as ItemStatus))
             }
             dataTestIdPrefix="filter"
             buttonLabel={t('status')}
-            className={styles.dropdown} // Pass a custom class name if needed
+            className={styles.dropdown}
           />
           <Button
             variant="success"
@@ -485,7 +490,7 @@ function organizationActionItems(): JSX.Element {
         disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         sx={{
           backgroundColor: 'white',
           borderRadius: '16px',
@@ -504,7 +509,7 @@ function organizationActionItems(): JSX.Element {
         autoHeight
         rowHeight={65}
         rows={actionItems.map((actionItem, index) => ({
-          id: index + 1,
+          index: index + 1,
           ...actionItem,
         }))}
         columns={columns}

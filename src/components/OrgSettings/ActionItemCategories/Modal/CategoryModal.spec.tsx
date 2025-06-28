@@ -11,10 +11,10 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
-import type { InterfaceActionItemCategoryModal } from './CategoryModal';
+import type { IActionItemCategoryModal } from './CategoryModal';
 import CategoryModal from './CategoryModal';
 import { toast } from 'react-toastify';
-import { vi } from 'vitest';
+import { it, vi } from 'vitest';
 /**
  * This file contains unit tests for the `CategoryModal` component.
  *
@@ -46,7 +46,7 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const categoryProps: InterfaceActionItemCategoryModal[] = [
+const categoryProps: IActionItemCategoryModal[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -54,11 +54,13 @@ const categoryProps: InterfaceActionItemCategoryModal[] = [
     orgId: 'orgId',
     mode: 'create',
     category: {
-      _id: 'categoryId',
+      id: 'categoryId',
       name: 'Category 1',
       isDisabled: false,
       createdAt: '2044-01-01',
-      creator: { _id: 'userId', firstName: 'John', lastName: 'Doe' },
+      updatedAt: '2044-01-01',
+      creatorId: 'userId',
+      organizationId: 'orgId',
     },
   },
   {
@@ -68,18 +70,20 @@ const categoryProps: InterfaceActionItemCategoryModal[] = [
     orgId: 'orgId',
     mode: 'edit',
     category: {
-      _id: 'categoryId',
+      id: 'categoryId',
       name: 'Category 1',
       isDisabled: false,
       createdAt: '2044-01-01',
-      creator: { _id: 'userId', firstName: 'John', lastName: 'Doe' },
+      updatedAt: '2044-01-01',
+      creatorId: 'userId',
+      organizationId: 'orgId',
     },
   },
 ];
 
 const renderCategoryModal = (
   link: ApolloLink,
-  props: InterfaceActionItemCategoryModal,
+  props: IActionItemCategoryModal,
 ): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link}>
@@ -140,7 +144,7 @@ describe('Testing Action Item Category Modal', () => {
 
   it('should edit category', async () => {
     renderCategoryModal(link1, categoryProps[1]);
-    await fillFormAndSubmit('Category 2', true);
+    await fillFormAndSubmit('Category 1', true);
 
     await waitFor(() => {
       expect(categoryProps[1].refetchCategories).toHaveBeenCalled();

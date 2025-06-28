@@ -6,8 +6,8 @@
  * posts, events, and upcoming events. It also provides navigation to
  * related sections like posts and events.
  *
- * @component
- * @returns {JSX.Element} The rendered OrganizationDashboard component.
+
+ * @returns  The rendered OrganizationDashboard component.
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
@@ -22,13 +22,10 @@
  * <OrganizationDashboard />
  * ```
  *
- * @todo
- * - Implement navigation for blocked users and membership requests.
- * - Add volunteer rankings functionality.
- *
+
  */
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -56,7 +53,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 // import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
 import type {
-  InterfaceEventPg,
+  IEvent,
   InterfaceOrganizationMembersConnectionEdgePg,
   InterfaceOrganizationPg,
   InterfaceOrganizationEventsConnectionEdgePg,
@@ -81,7 +78,7 @@ function OrganizationDashboard(): JSX.Element {
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
-  const [upcomingEvents, setUpcomingEvents] = useState<InterfaceEventPg[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
   // const currentDate = dayjs().toISOString();
 
@@ -91,16 +88,6 @@ function OrganizationDashboard(): JSX.Element {
   const eventsLink = `/orgevents/${orgId}`;
   // const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = `/requests/${orgId}`;
-
-  /**
-   * Query to fetch organization data.
-   */
-  const { data, loading: loadingOrgData } = useQuery(
-    GET_ORGANIZATION_MEMBERS_PG,
-    {
-      variables: { id: orgId },
-    },
-  );
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
     useQuery(MEMBERSHIP_REQUEST, {

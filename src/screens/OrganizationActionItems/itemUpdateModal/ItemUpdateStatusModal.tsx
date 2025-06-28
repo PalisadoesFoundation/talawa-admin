@@ -8,10 +8,10 @@
  * and displays success or error messages using `react-toastify`.
  *
  * @param props - The props for the `ItemUpdateStatusModal` component.
- * @param props.isOpen - A boolean indicating whether the modal is open.
- * @param props.hide - A function to close the modal.
- * @param props.actionItemsRefetch - A function to refetch the list of action items.
- * @param props.actionItem - The action item object containing details to be updated.
+ * @param props - A boolean indicating whether the modal is open.
+ * @param props - A function to close the modal.
+ * @param props - A function to refetch the list of action items.
+ * @param props - The action item object containing details to be updated.
  *
  * @returns A React component that renders the modal for updating an action item's status.
  *
@@ -25,11 +25,6 @@
  * />
  * ```
  *
- * @component
- * @category OrganizationActionItems
- * @requires `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * @requires `style/app-fixed.module.css`
- * @requires `GraphQl/Mutations/ActionItemMutations`
  */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
@@ -37,18 +32,25 @@ import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import styles from 'style/app-fixed.module.css';
 import { useMutation } from '@apollo/client';
-import { UPDATE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import {
+  UPDATE_ACTION_ITEM_MUTATION,
+  MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+} from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type {
+  IActionItemInfo,
+  IUpdateActionItemInput,
+  IMarkActionItemAsPendingInput,
+} from 'types/Actions/interface';
 
-export interface InterfaceItemUpdateStatusModalProps {
+export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItemsRefetch: () => void;
-  actionItem: InterfaceActionItemInfo;
+  actionItem: IActionItemInfo;
 }
 
-const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
+const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   hide,
   isOpen,
   actionItemsRefetch,
@@ -59,14 +61,7 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
 
-  const {
-    _id,
-    isCompleted,
-    assignee,
-    assigneeGroup,
-    assigneeUser,
-    assigneeType,
-  } = actionItem;
+  const { id, isCompleted } = actionItem;
 
   const [postCompletionNotes, setPostCompletionNotes] = useState<string>(
     actionItem.postCompletionNotes ?? '',
@@ -78,34 +73,52 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
 
   /**
+   * Mutation to mark an action item as pending.
+   */
+  const [markActionItemAsPending] = useMutation(
+    MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+  );
+
+  /**
    * Handles the form submission for updating an action item.
    *
-   * @param  e - The form submission event.
+   * @param e - The form submission event.
    */
-  const updateActionItemHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
+  const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
 
     try {
-      await updateActionItem({
-        variables: {
-          actionItemId: _id,
-          assigneeId:
-            assigneeType === 'EventVolunteer'
-              ? assignee?._id
-              : assigneeType === 'EventVolunteerGroup'
-                ? assigneeGroup?._id
-                : assigneeUser?._id,
-          assigneeType,
-          postCompletionNotes: isCompleted ? '' : postCompletionNotes,
-          isCompleted: !isCompleted,
-        },
-      });
+      if (isCompleted) {
+        // Mark as pending
+        const input: IMarkActionItemAsPendingInput = {
+          id: id,
+        };
+
+        await markActionItemAsPending({
+          variables: { input },
+        });
+      } else {
+        // Mark as completed
+        if (!postCompletionNotes.trim()) {
+          toast.error(t('postCompletionNotesRequired'));
+          return;
+        }
+
+        const input: IUpdateActionItemInput = {
+          id: id,
+          isCompleted: true,
+          postCompletionNotes: postCompletionNotes.trim(),
+        };
+
+        await updateActionItem({
+          variables: { input },
+        });
+
+        toast.success(t('isCompleted'));
+      }
 
       actionItemsRefetch();
       hide();
-      toast.success(t('successfulUpdation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -138,6 +151,9 @@ const ItemUpdateStatusModal: FC<InterfaceItemUpdateStatusModalProps> = ({
                 className={styles.noOutline}
                 value={postCompletionNotes}
                 onChange={(e) => setPostCompletionNotes(e.target.value)}
+                multiline
+                maxRows={4}
+                required
               />
             </FormControl>
           ) : (

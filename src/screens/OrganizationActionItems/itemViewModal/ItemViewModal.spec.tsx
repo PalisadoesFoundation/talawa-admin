@@ -3,22 +3,20 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
-import { MOCKS } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import ItemViewModal, { type InterfaceViewModalProps } from './ItemViewModal';
-import type {
-  InterfaceEventVolunteerInfo,
-  InterfaceUserInfo,
-  InterfaceVolunteerGroupInfo,
-} from 'utils/interfaces';
-import { vi } from 'vitest';
+import ItemViewModal, { type IViewModalProps } from './ItemViewModal';
+import type { IActionItemInfo } from 'types/Actions/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
+import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { vi, it } from 'vitest';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -27,183 +25,161 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
 const t = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
   ),
 );
 
-const createUser = (
-  id: string,
-  firstName: string,
-  lastName: string,
-  image?: string,
-): InterfaceUserInfo => ({
-  _id: id,
-  firstName,
-  lastName,
-  image,
-});
+const tCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
 
-const createAssignee = (
-  user: ReturnType<typeof createUser>,
-  hasAccepted = true,
-): InterfaceEventVolunteerInfo => ({
-  _id: `${user._id}-assignee`,
-  user,
-  assignments: [],
-  groups: [],
-  hasAccepted,
-  hoursVolunteered: 0,
-});
-
-const createAssigneeGroup = (
-  id: string,
-  name: string,
-  leader: ReturnType<typeof createUser>,
-): InterfaceVolunteerGroupInfo => ({
-  _id: id,
-  name,
-  description: `${name} description`,
-  event: { _id: 'eventId1' },
-  volunteers: [],
-  assignments: [],
-  volunteersRequired: 10,
-  leader,
-  creator: leader,
-  createdAt: '2024-08-27',
-});
-
-const userWithImage = createUser('userId', 'Wilt', 'Shepherd', 'wilt-image');
-const userWithoutImage = createUser('userId', 'Wilt', 'Shepherd');
-const assigneeWithImage = createUser('userId1', 'John', 'Doe', 'image-url');
-const assigneeWithoutImage = createUser('userId1', 'John', 'Doe');
-const actionItemCategory = {
-  _id: 'actionItemCategoryId2',
-  name: 'Category 2',
+// Mock data for GraphQL queries
+const mockCategory = {
+  id: 'categoryId1',
+  name: 'Test Category',
+  description: 'Test category description',
+  isDisabled: false,
+  organizationId: 'orgId1',
+  creatorId: 'userId1',
+  createdAt: '2024-01-01T00:00:00.000Z',
+  updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
 };
 
-const itemProps: InterfaceViewModalProps[] = [
+const mockMembers = [
   {
-    isOpen: true,
-    hide: vi.fn(),
-    item: {
-      _id: 'actionItemId1',
-      assignee: createAssignee(assigneeWithoutImage),
-      assigneeGroup: null,
-      assigneeType: 'EventVolunteer',
-      assigneeUser: null,
-      actionItemCategory,
-      preCompletionNotes: 'Notes 1',
-      postCompletionNotes: 'Cmp Notes 1',
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-08-30'),
-      completionDate: new Date('2044-09-03'),
-      isCompleted: true,
-      event: null,
-      allottedHours: 24,
-      assigner: userWithoutImage,
-      creator: userWithoutImage,
+    id: 'userId1',
+    name: 'John Doe',
+    email: 'john@example.com', // Changed from emailAddress to email
+    role: 'REGULAR',
+    avatarURL: 'https://example.com/avatar1.jpg',
+    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    firstName: 'John',
+    lastName: 'Doe',
+  },
+  {
+    id: 'userId2',
+    name: 'Jane Smith',
+    email: 'jane@example.com', // Changed from emailAddress to email
+    role: 'ADMIN',
+    avatarURL: null,
+    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    firstName: 'Jane',
+    lastName: 'Smith',
+  },
+  {
+    id: 'userId3',
+    name: '',
+    firstName: 'Bob',
+    lastName: 'Johnson',
+    email: 'bob@example.com', // Changed from emailAddress to email
+    role: 'REGULAR',
+    avatarURL: null,
+    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+  },
+];
+
+const mockEvent: InterfaceEvent = {
+  _id: 'eventId1',
+  name: 'Test Event',
+  description: 'Test event description',
+  startDate: '2024-01-01',
+  endDate: '2024-01-02',
+  startTime: '10:00',
+  endTime: '18:00',
+  location: 'Test Location',
+  allDay: false,
+  isPublic: true,
+  isRegisterable: true,
+  attendees: [],
+  creator: {},
+};
+
+// GraphQL mocks
+const MOCKS = [
+  {
+    request: {
+      query: GET_ACTION_ITEM_CATEGORY,
+      variables: {
+        input: { id: 'categoryId1' },
+      },
+    },
+    result: {
+      data: {
+        actionItemCategory: mockCategory,
+      },
     },
   },
   {
-    isOpen: true,
-    hide: vi.fn(),
-    item: {
-      _id: 'actionItemId2',
-      assignee: createAssignee(assigneeWithImage),
-      assigneeGroup: null,
-      assigneeType: 'EventVolunteer',
-      assigneeUser: null,
-      actionItemCategory,
-      preCompletionNotes: 'Notes 2',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-09-30'),
-      completionDate: new Date('2044-10-03'),
-      isCompleted: false,
-      event: null,
-      allottedHours: null,
-      assigner: userWithImage,
-      creator: userWithoutImage,
+    request: {
+      query: MEMBERS_LIST,
+      variables: { organizationId: 'orgId1' },
     },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    item: {
-      _id: 'actionItemId2',
-      assignee: null,
-      assigneeGroup: null,
-      assigneeType: 'User',
-      assigneeUser: assigneeWithImage,
-      actionItemCategory,
-      preCompletionNotes: 'Notes 2',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-09-30'),
-      completionDate: new Date('2044-10-03'),
-      isCompleted: false,
-      event: null,
-      allottedHours: null,
-      assigner: userWithImage,
-      creator: userWithoutImage,
-    },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    item: {
-      _id: 'actionItemId2',
-      assignee: null,
-      assigneeGroup: null,
-      assigneeType: 'User',
-      assigneeUser: createUser('userId1', 'Jane', 'Doe'),
-      actionItemCategory,
-      preCompletionNotes: 'Notes 2',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-09-30'),
-      completionDate: new Date('2044-10-03'),
-      isCompleted: false,
-      event: null,
-      allottedHours: null,
-      assigner: userWithoutImage,
-      creator: userWithoutImage,
-    },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    item: {
-      _id: 'actionItemId2',
-      assignee: null,
-      assigneeGroup: createAssigneeGroup(
-        'groupId1',
-        'Group 1',
-        assigneeWithoutImage,
-      ),
-      assigneeType: 'EventVolunteerGroup',
-      assigneeUser: null,
-      actionItemCategory,
-      preCompletionNotes: 'Notes 2',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-09-30'),
-      completionDate: new Date('2044-10-03'),
-      isCompleted: false,
-      event: null,
-      allottedHours: null,
-      assigner: userWithoutImage,
-      creator: userWithoutImage,
+    result: {
+      data: {
+        usersByOrganizationId: mockMembers,
+      },
     },
   },
 ];
 
+const link1 = new StaticMockLink(MOCKS);
+
+// Test data for different scenarios
+const createActionItem = (
+  overrides: Partial<IActionItemInfo> = {},
+): IActionItemInfo => ({
+  id: 'actionItemId1',
+  assigneeId: 'userId1',
+  categoryId: 'categoryId1',
+  eventId: 'eventId1',
+  organizationId: 'orgId1',
+  creatorId: 'userId2',
+  updaterId: null,
+  assignedAt: new Date('2024-01-01T10:00:00.000Z'),
+  completionAt: new Date('2024-01-10T15:30:00.000Z'),
+  createdAt: new Date('2024-01-01T10:00:00.000Z'),
+  updatedAt: null,
+  isCompleted: true,
+  preCompletionNotes: 'Pre-completion notes for testing',
+  postCompletionNotes: 'Post-completion notes for testing',
+  assignee: {
+    id: 'userId1',
+    name: 'John Doe',
+    email: 'john@example.com', // Changed from emailAddress
+    avatarURL: 'https://example.com/avatar1.jpg',
+    firstName: 'John',
+    lastName: 'Doe',
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  },
+  creator: {
+    id: 'userId2',
+    name: 'Jane Smith',
+    email: 'jane@example.com', // Changed from emailAddress
+    firstName: 'Jane',
+    lastName: 'Smith',
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  },
+  event: mockEvent,
+  category: {
+    id: 'categoryId1',
+    name: 'Test Category',
+    isDisabled: false,
+    organizationId: 'orgId1',
+    creatorId: 'userId1',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
+  },
+  ...overrides,
+});
+
 const renderItemViewModal = (
   link: ApolloLink,
-  props: InterfaceViewModalProps,
+  props: IViewModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link} addTypename={false}>
@@ -221,68 +197,461 @@ const renderItemViewModal = (
 };
 
 describe('Testing ItemViewModal', () => {
-  it('should render ItemViewModal with pending item & assignee with null image', () => {
-    renderItemViewModal(link1, itemProps[0]);
-    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+  const mockHide = vi.fn();
 
-    const assigneeInput = screen.getByTestId('assignee_input');
-    expect(assigneeInput).toBeInTheDocument();
-
-    const inputElement = within(assigneeInput).getByRole('textbox');
-    expect(inputElement).toHaveValue('John Doe');
-
-    expect(screen.getByTestId('assignee_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
-    expect(screen.getByLabelText(t.postCompletionNotes)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('24');
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('should render ItemViewModal with completed item & assignee with image', () => {
-    renderItemViewModal(link1, itemProps[1]);
-    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('assignee_image')).toBeInTheDocument();
-    expect(screen.getByTestId('assigner_image')).toBeInTheDocument();
-    expect(
-      screen.queryByLabelText(t.postCompletionNotes),
-    ).not.toBeInTheDocument();
-    expect(screen.getByLabelText(t.allottedHours)).toBeInTheDocument();
-    expect(screen.getByLabelText(t.allottedHours)).toHaveValue('-');
+  describe('Modal Rendering and Basic Functionality', () => {
+    it('should render modal when isOpen is true', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
+    });
+
+    it('should not render modal when isOpen is false', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: false,
+        hide: mockHide,
+        item,
+      });
+
+      expect(screen.queryByText(t.actionItemDetails)).not.toBeInTheDocument();
+    });
+
+    it('should call hide function when close button is clicked', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const closeButton = screen.getByTestId('modalCloseBtn');
+      fireEvent.click(closeButton);
+
+      expect(mockHide).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('should render ItemViewModal with assigneeUser with image', () => {
-    renderItemViewModal(link1, itemProps[2]);
-    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('assignee_image')).toBeInTheDocument();
-    expect(screen.getByTestId('assigner_image')).toBeInTheDocument();
-    const assigneeInput = screen.getByTestId('assignee_input');
-    expect(assigneeInput).toBeInTheDocument();
+  describe('Category Display', () => {
+    it('should display category name from GraphQL query', async () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
 
-    const inputElement = within(assigneeInput).getByRole('textbox');
-    expect(inputElement).toHaveValue('John Doe');
+      await waitFor(() => {
+        const categoryInput = screen.getByDisplayValue('Test Category');
+        expect(categoryInput).toBeInTheDocument();
+        expect(categoryInput).toBeDisabled();
+      });
+    });
+
+    it('should display fallback category name when no GraphQL data', () => {
+      const item = createActionItem({
+        categoryId: null,
+        category: {
+          id: 'categoryId1',
+          name: 'Fallback Category',
+          isDisabled: false,
+          organizationId: 'orgId1',
+          creatorId: 'userId1',
+          createdAt: '2024-01-01T00:00:00.000Z',
+          updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      expect(screen.getByDisplayValue('Fallback Category')).toBeInTheDocument();
+    });
+
+    it('should display "No category" when category is null', () => {
+      const item = createActionItem({
+        categoryId: null,
+        category: null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      expect(screen.getByDisplayValue('No category')).toBeInTheDocument();
+    });
   });
 
-  it('should render ItemViewModal with assigneeUser without image', () => {
-    renderItemViewModal(link1, itemProps[3]);
-    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('assignee_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
-    const assigneeInput = screen.getByTestId('assignee_input');
-    expect(assigneeInput).toBeInTheDocument();
+  describe('Assignee Display', () => {
+    it('should display assignee name from GraphQL query', async () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
 
-    const inputElement = within(assigneeInput).getByRole('textbox');
-    expect(inputElement).toHaveValue('Jane Doe');
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        expect(assigneeInput).toBeInTheDocument();
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('John Doe');
+        expect(inputElement).toBeDisabled();
+      });
+    });
+
+    it('should display fallback assignee name when no GraphQL data', () => {
+      const item = createActionItem({
+        assigneeId: null,
+        assignee: {
+          id: 'userId1',
+          name: 'Fallback Assignee',
+          email: 'fallback@example.com', // Changed from emailAddress
+          firstName: 'Fallback',
+          lastName: 'Assignee',
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const assigneeInput = screen.getByTestId('assignee_input');
+      const inputElement = assigneeInput.querySelector('input');
+      expect(inputElement).toHaveValue('Fallback Assignee');
+    });
+
+    it('should display name from firstName and lastName when name is not available', async () => {
+      const item = createActionItem({
+        assigneeId: 'userId3', // This user has firstName/lastName but no name
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('Bob Johnson');
+      });
+    });
+
+    it('should display "Unknown" when assignee is null', () => {
+      const item = createActionItem({
+        assigneeId: null,
+        assignee: null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const assigneeInput = screen.getByTestId('assignee_input');
+      const inputElement = assigneeInput.querySelector('input');
+      expect(inputElement).toHaveValue('Unknown');
+    });
   });
 
-  it('should render ItemViewModal with assigneeGroup', () => {
-    renderItemViewModal(link1, itemProps[4]);
-    expect(screen.getByText(t.actionItemDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('assigneeGroup_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('assigner_avatar')).toBeInTheDocument();
-    const assigneeInput = screen.getByTestId('assignee_input');
-    expect(assigneeInput).toBeInTheDocument();
+  describe('Creator Display', () => {
+    it('should display creator name from GraphQL query', async () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
 
-    const inputElement = within(assigneeInput).getByRole('textbox');
-    expect(inputElement).toHaveValue('Group 1');
+      await waitFor(() => {
+        const creatorInput = screen.getByLabelText(t.creator);
+        expect(creatorInput).toHaveValue('Jane Smith');
+        expect(creatorInput).toBeDisabled();
+      });
+    });
+
+    it('should display fallback creator name when no GraphQL data', () => {
+      const item = createActionItem({
+        creatorId: null,
+        creator: {
+          id: 'userId2',
+          name: 'Fallback Creator',
+          email: 'creator@example.com', // Changed from emailAddress
+          firstName: 'Fallback',
+          lastName: 'Creator',
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const creatorInput = screen.getByLabelText(t.creator);
+      expect(creatorInput).toHaveValue('Fallback Creator');
+    });
+  });
+
+  describe('Status Display', () => {
+    it('should display completed status with success icon', () => {
+      const item = createActionItem({ isCompleted: true });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const statusInput = screen.getByDisplayValue(tCommon.completed);
+      expect(statusInput).toBeInTheDocument();
+      expect(statusInput).toBeDisabled();
+
+      // Check for TaskAlt icon (success icon)
+      const successIcon = screen.getByTestId('TaskAltIcon');
+      expect(successIcon).toBeInTheDocument();
+    });
+
+    it('should display pending status with warning icon', () => {
+      const item = createActionItem({ isCompleted: false });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const statusInput = screen.getByDisplayValue(tCommon.pending);
+      expect(statusInput).toBeInTheDocument();
+      expect(statusInput).toBeDisabled();
+
+      // Check for HistoryToggleOff icon (warning icon)
+      const warningIcon = screen.getByTestId('HistoryToggleOffIcon');
+      expect(warningIcon).toBeInTheDocument();
+    });
+  });
+
+  describe('Event Display', () => {
+    it('should display event name when event exists', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('Test Event');
+      expect(eventInput).toBeInTheDocument();
+      expect(eventInput).toBeDisabled();
+    });
+
+    it('should display "No event" when event is null', () => {
+      const item = createActionItem({ event: null, eventId: null });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('No event');
+      expect(eventInput).toBeInTheDocument();
+    });
+  });
+
+  describe('Date Display', () => {
+    it('should display assignment date', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Assignment date should be displayed in DD/MM/YYYY format
+      const assignmentDateInput = screen.getByDisplayValue('01/01/2024');
+      expect(assignmentDateInput).toBeInTheDocument();
+      expect(assignmentDateInput).toBeDisabled();
+    });
+
+    it('should display completion date when item is completed', () => {
+      const item = createActionItem({
+        isCompleted: true,
+        completionAt: new Date('2024-01-10T15:30:00.000Z'),
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Completion date should be displayed in DD/MM/YYYY format
+      const completionDateInput = screen.getByDisplayValue('10/01/2024');
+      expect(completionDateInput).toBeInTheDocument();
+      expect(completionDateInput).toBeDisabled();
+    });
+
+    it('should not display completion date when item is not completed', () => {
+      const item = createActionItem({
+        isCompleted: false,
+        completionAt: null,
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Completion date should not be displayed
+      expect(screen.queryByDisplayValue('10/01/2024')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Notes Display', () => {
+    it('should display pre-completion notes', () => {
+      const item = createActionItem({
+        preCompletionNotes: 'Test pre-completion notes',
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const preNotesInput = screen.getByDisplayValue(
+        'Test pre-completion notes',
+      );
+      expect(preNotesInput).toBeInTheDocument();
+      expect(preNotesInput).toBeDisabled();
+    });
+
+    it('should display empty string when pre-completion notes is null', () => {
+      const item = createActionItem({
+        preCompletionNotes: null,
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const preNotesInput = screen.getByLabelText(t.preCompletionNotes);
+      expect(preNotesInput).toHaveValue('');
+    });
+
+    it('should display post-completion notes when item is completed', () => {
+      const item = createActionItem({
+        isCompleted: true,
+        postCompletionNotes: 'Test post-completion notes',
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const postNotesInput = screen.getByDisplayValue(
+        'Test post-completion notes',
+      );
+      expect(postNotesInput).toBeInTheDocument();
+      expect(postNotesInput).toBeDisabled();
+    });
+
+    it('should not display post-completion notes when item is not completed', () => {
+      const item = createActionItem({
+        isCompleted: false,
+        postCompletionNotes: null,
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      expect(
+        screen.queryByLabelText(t.postCompletionNotes),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should display empty string when post-completion notes is null', () => {
+      const item = createActionItem({
+        isCompleted: true,
+        postCompletionNotes: null,
+      });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const postNotesInput = screen.getByLabelText(t.postCompletionNotes);
+      expect(postNotesInput).toHaveValue('');
+    });
+  });
+
+  describe('GraphQL Query Integration', () => {
+    it('should skip category query when categoryId is null', () => {
+      const item = createActionItem({ categoryId: null });
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Should use fallback category data
+      expect(screen.getByDisplayValue('Test Category')).toBeInTheDocument();
+    });
+  });
+
+  describe('Form Field Accessibility', () => {
+    it('should have proper labels for all form fields', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      expect(screen.getByLabelText(t.category)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.assignee)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.status)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.event)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.assignmentDate)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
+    });
+
+    it('should have all form fields disabled', () => {
+      const item = createActionItem();
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const inputs = screen.getAllByRole('textbox');
+      inputs.forEach((input) => {
+        expect(input).toBeDisabled();
+      });
+    });
   });
 });

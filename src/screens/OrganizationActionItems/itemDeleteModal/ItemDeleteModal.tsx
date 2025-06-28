@@ -4,14 +4,13 @@
  * This component renders a modal for confirming the deletion of an action item.
  * It provides a user-friendly interface to confirm or cancel the deletion process.
  *
- * @component
- * @param {InterfaceItemDeleteModalProps} props - The props for the ItemDeleteModal component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to hide the modal.
- * @param {InterfaceActionItemInfo | null} props.actionItem - The action item to be deleted.
- * @param {() => void} props.actionItemsRefetch - Function to refetch the list of action items after deletion.
+ * @param  props - The props for the ItemDeleteModal component.
+ * @param props - Determines whether the modal is visible.
+ * @param  props - Function to hide the modal.
+ * @param props - The action item to be deleted.
+ * @param props - Function to refetch the list of action items after deletion.
  *
- * @returns {React.FC} A React functional component rendering the delete confirmation modal.
+ * @returns  A React functional component rendering the delete confirmation modal.
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and button components.
@@ -32,39 +31,44 @@
  */
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
 import { useMutation } from '@apollo/client';
-import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import type {
+  IActionItemInfo,
+  IDeleteActionItemInput,
+} from 'types/Actions/interface';
 
-export interface InterfaceItemDeleteModalProps {
+interface IItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
-  actionItem: InterfaceActionItemInfo | null;
+  actionItem: IActionItemInfo;
   actionItemsRefetch: () => void;
 }
 
-const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
+const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   isOpen,
   hide,
   actionItem,
   actionItemsRefetch,
 }) => {
+  const { t: tCommon } = useTranslation('translation');
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
-  const { t: tCommon } = useTranslation('common');
 
-  const [removeActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+  const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
 
-  /**
-   * Handles the action item deletion.
-   */
-  const deleteActionItemHandler = async (): Promise<void> => {
+  const handleDelete = async (): Promise<void> => {
     try {
-      await removeActionItem({ variables: { actionItemId: actionItem?._id } });
+      const input: IDeleteActionItemInput = {
+        id: actionItem.id,
+      };
+
+      await deleteActionItem({
+        variables: { input },
+      });
 
       actionItemsRefetch();
       hide();
@@ -73,38 +77,28 @@ const ItemDeleteModal: React.FC<InterfaceItemDeleteModalProps> = ({
       toast.error((error as Error).message);
     }
   };
+
   return (
-    <>
-      <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}> {t('deleteActionItem')}</p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.closeButton}
-            data-testid="modalCloseBtn"
-          >
-            {' '}
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <p> {t('deleteActionItemMsg')}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="danger"
-            onClick={deleteActionItemHandler}
-            data-testid="deleteyesbtn"
-          >
-            {tCommon('yes')}
-          </Button>
-          <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
-            {tCommon('no')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={isOpen} onHide={hide} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{t('deleteActionItem')}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p> {t('deleteActionItemMsg')}</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>
+          {tCommon('no')}
+        </Button>
+        <Button
+          variant="danger"
+          onClick={handleDelete}
+          data-testid="deleteyesbtn"
+        >
+          {tCommon('yes')}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

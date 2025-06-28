@@ -13,116 +13,40 @@ import gql from 'graphql-tag';
 
 export const ACTION_ITEM_LIST = gql`
   query ActionItemsByOrganization(
-    $organizationId: ID!
-    $eventId: ID
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
+    $input: QueryActionItemsByOrganizationInput!
   ) {
-    actionItemsByOrganization(
-      organizationId: $organizationId
-      eventId: $eventId
-      orderBy: $orderBy
-      where: $where
-    ) {
-      _id
+    actionItemsByOrganization(input: $input) {
+      id
       assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assigneeGroup {
-        _id
+        id
         name
       }
-      assigneeUser {
-        _id
-        firstName
-        lastName
-        image
-      }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
+      category {
+        id
         name
       }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
       event {
-        _id
-        title
+        id
+        name
+      }
+      organization {
+        id
+        name
       }
       creator {
-        _id
-        firstName
-        lastName
-      }
-      allottedHours
-    }
-  }
-`;
-
-export const ACTION_ITEMS_BY_USER = gql`
-  query ActionItemsByUser(
-    $userId: ID!
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
-  ) {
-    actionItemsByUser(userId: $userId, where: $where, orderBy: $orderBy) {
-      _id
-      assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assigneeGroup {
-        _id
+        id
         name
       }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
+      updater {
+        id
         name
       }
+      assignedAt
+      completionAt
+      createdAt
+      isCompleted
       preCompletionNotes
       postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
-      }
-      creator {
-        _id
-        firstName
-        lastName
-      }
-      allottedHours
     }
   }
 `;

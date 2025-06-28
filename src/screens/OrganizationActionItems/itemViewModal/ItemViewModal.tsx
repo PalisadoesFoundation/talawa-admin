@@ -1,74 +1,98 @@
 /**
  * ItemViewModal Component
- *
- * This component renders a modal to display detailed information about an action item.
- * It is designed to be used in the context of organization action items, providing
- * a read-only view of the item's properties such as category, assignee, assigner, status,
- * due date, completion date, and notes.
- *
- * @component
- * @param {InterfaceViewModalProps} props - The props for the ItemViewModal component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {InterfaceActionItemInfo} props.item - The action item data to display in the modal.
- *
- * @returns {JSX.Element} The rendered ItemViewModal component.
- *
- * @remarks
- * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
- * - The `DatePicker` component from `@mui/x-date-pickers` is used to display dates.
- * - Assignee and assigner details include avatars or images if available.
- * - The modal supports translations using the `react-i18next` library.
- *
- * @example
- * ```tsx
- * <ItemViewModal
- *   isOpen={true}
- *   hide={() => setShowModal(false)}
- *   item={actionItem}
- * />
- * ```
- *
- * @see {@link InterfaceActionItemInfo} for the structure of the `item` prop.
+ * Updated to work with new GraphQL schema structure and interfaces.
  */
 import { DatePicker } from '@mui/x-date-pickers';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type { IActionItemInfo } from 'types/Actions/interface';
+import type { InterfaceUser } from 'types/User/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
-import Avatar from 'components/Avatar/Avatar';
+import { useQuery } from '@apollo/client';
+import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-export interface InterfaceViewModalProps {
+export interface IViewModalProps {
   isOpen: boolean;
   hide: () => void;
-  item: InterfaceActionItemInfo;
+  item: IActionItemInfo;
 }
 
-const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
+const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
 
   const {
-    actionItemCategory,
-    assignee,
-    assigneeGroup,
-    assigneeUser,
-    assigneeType,
-    assigner,
-    completionDate,
-    dueDate,
+    categoryId,
+    assigneeId,
+    creatorId,
+    completionAt,
+    assignedAt,
     isCompleted,
     postCompletionNotes,
     preCompletionNotes,
-    allottedHours,
+    event,
+    organizationId,
   } = item;
+
+  // Query to get category details
+  const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
+    variables: {
+      input: { id: categoryId },
+    },
+    skip: !categoryId,
+  });
+
+  // Query to get organization members to resolve assignee and creator details
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
+    variables: { organizationId: organizationId },
+  });
+
+  const members = membersData?.usersByOrganizationId || [];
+
+  const assignee = assigneeId
+    ? members.find(
+        (member: InterfaceUser) =>
+          member.id === assigneeId || member.id === assigneeId,
+      )
+    : item.assignee;
+
+  const creator = creatorId
+    ? members.find(
+        (member: InterfaceUser) =>
+          member.id === creatorId || member.id === creatorId,
+      )
+    : item.creator;
+
+  const category = categoryData?.actionItemCategory || item.category;
+
+  // Helper function to get display name from user object
+  const getUserDisplayName = (
+    user: InterfaceUser | null | undefined,
+  ): string => {
+    if (!user) return 'Unknown';
+
+    if (user.name) {
+      return user.name;
+    }
+    return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
+  };
+
+  const getEventDisplayName = (
+    event: InterfaceEvent | null | undefined,
+  ): string => {
+    if (!event) return 'No event';
+
+    return event.name || 'No event';
+  };
 
   return (
     <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
@@ -91,11 +115,12 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('category')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={actionItemCategory?.name}
+                value={category?.name || 'No category'}
                 disabled
               />
             </FormControl>
           </Form.Group>
+
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>
               <TextField
@@ -103,86 +128,22 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
                 variant="outlined"
                 className={styles.noOutline}
                 data-testid="assignee_input"
-                value={
-                  assigneeType === 'EventVolunteer'
-                    ? `${assignee?.user?.firstName} ${assignee?.user?.lastName}`
-                    : assigneeType === 'EventVolunteerGroup'
-                      ? assigneeGroup?.name
-                      : `${assigneeUser?.firstName} ${assigneeUser?.lastName}`
-                }
+                value={getUserDisplayName(assignee)}
                 disabled
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {assignee?.user?.image || assigneeUser?.image ? (
-                        <img
-                          src={
-                            (assignee?.user?.image ||
-                              assigneeUser?.image) as string
-                          }
-                          alt="Assignee"
-                          data-testid={`assignee_image`}
-                          className={styles.TableImage}
-                        />
-                      ) : assignee || assigneeUser ? (
-                        <Avatar
-                          key={assignee?._id || assigneeUser?._id}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImage}
-                          dataTestId={`assignee_avatar`}
-                          name={`${assignee?.user.firstName || assigneeUser?.firstName} ${assignee?.user.lastName || assigneeUser?.lastName}`}
-                          alt={`assignee_avatar`}
-                        />
-                      ) : (
-                        <Avatar
-                          key={assigneeGroup?._id}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImage}
-                          dataTestId={`assigneeGroup_avatar`}
-                          name={assigneeGroup?.name as string}
-                          alt={`assigneeGroup_avatar`}
-                        />
-                      )}
-                    </>
-                  ),
-                }}
               />
             </FormControl>
+
             <FormControl fullWidth>
               <TextField
-                label={t('assigner')}
+                label={t('creator')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={assigner?.firstName + ' ' + assigner?.lastName}
+                value={getUserDisplayName(creator)}
                 disabled
-                InputProps={{
-                  startAdornment: (
-                    <>
-                      {assigner.image ? (
-                        <img
-                          src={assigner.image}
-                          alt="Assigner"
-                          data-testid={`assigner_image`}
-                          className={styles.TableImage}
-                        />
-                      ) : (
-                        <div className={styles.TableImage}>
-                          <Avatar
-                            key={assigner._id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImage}
-                            dataTestId={`assigner_avatar`}
-                            name={assigner.firstName + ' ' + assigner.lastName}
-                            alt={`assigner_avatar`}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ),
-                }}
               />
             </FormControl>
           </Form.Group>
+
           <Form.Group className="d-flex gap-3 mx-auto mb-3">
             {/* Status of Action Item */}
             <TextField
@@ -209,54 +170,58 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
 
+            {/* Event Information */}
             <TextField
-              label={t('allottedHours')}
+              label={t('event')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={allottedHours ?? '-'}
+              value={getEventDisplayName(event)}
               disabled
             />
           </Form.Group>
+
           <Form.Group className={`d-flex gap-3 mb-3`}>
-            {/* Date Calendar Component to display due date of Action Item */}
+            {/* Date Calendar Component to display assigned date of Action Item */}
             <DatePicker
               format="DD/MM/YYYY"
-              label={t('dueDate')}
+              label={t('assignmentDate')}
               className={`${styles.noOutline} w-100`}
-              value={dayjs(dueDate)}
+              value={dayjs(assignedAt)}
               disabled
             />
 
             {/* Date Calendar Component to display completion Date of Action Item */}
-            {isCompleted && (
+            {isCompleted && completionAt && (
               <DatePicker
                 format="DD/MM/YYYY"
                 label={t('completionDate')}
                 className={`${styles.noOutline} w-100`}
-                value={dayjs(completionDate)}
+                value={dayjs(completionAt)}
                 disabled
               />
             )}
           </Form.Group>
+
           <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
             <FormControl fullWidth>
               <TextField
                 label={t('preCompletionNotes')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={preCompletionNotes}
+                value={preCompletionNotes || ''}
                 multiline
                 maxRows={3}
                 disabled
               />
             </FormControl>
           </Form.Group>
+
           {isCompleted && (
             <FormControl fullWidth>
               <TextField
                 label={t('postCompletionNotes')}
                 className={styles.noOutline}
-                value={postCompletionNotes}
+                value={postCompletionNotes || ''}
                 multiline
                 maxRows={3}
                 disabled
@@ -268,4 +233,5 @@ const ItemViewModal: FC<InterfaceViewModalProps> = ({ isOpen, hide, item }) => {
     </Modal>
   );
 };
+
 export default ItemViewModal;

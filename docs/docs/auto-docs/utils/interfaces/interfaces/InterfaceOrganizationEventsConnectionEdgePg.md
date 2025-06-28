@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationEventsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:646](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L646)
+Defined in: [src/utils/interfaces.ts:648](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L648)
 
 ## Properties
 
@@ -12,12 +12,12 @@ Defined in: [src/utils/interfaces.ts:646](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:647](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L647)
+Defined in: [src/utils/interfaces.ts:649](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L649)
 
-***
+---
 
 ### node
 
-> **node**: [`InterfaceEventPg`](InterfaceEventPg.md)
+> **node**: [`IEvent`](IEvent.md)
 
-Defined in: [src/utils/interfaces.ts:648](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L648)
+Defined in: [src/utils/interfaces.ts:650](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L650)

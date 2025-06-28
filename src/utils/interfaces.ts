@@ -351,47 +351,6 @@ export interface InterfaceBaseEvent {
   recurring: boolean;
 }
 
-export interface InterfaceActionItemCategoryInfo {
-  _id: string;
-  name: string;
-  isDisabled: boolean;
-  createdAt: string;
-  creator: { _id: string; firstName: string; lastName: string };
-}
-
-export interface InterfaceActionItemCategoryList {
-  actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
-}
-
-export interface InterfaceActionItemInfo {
-  _id: string;
-  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
-  assignee: InterfaceEventVolunteerInfo | null;
-  assigneeGroup: InterfaceVolunteerGroupInfo | null;
-  assigneeUser: InterfaceUserInfo | null;
-  assigner: InterfaceUserInfo;
-  actionItemCategory: {
-    _id: string;
-    name: string;
-  };
-  preCompletionNotes: string;
-  postCompletionNotes: string | null;
-  assignmentDate: Date;
-  dueDate: Date;
-  completionDate: Date | null;
-  isCompleted: boolean;
-  event: {
-    _id: string;
-    title: string;
-  } | null;
-  creator: InterfaceUserInfo;
-  allottedHours: number | null;
-}
-
-export interface InterfaceActionItemList {
-  actionItemsByOrganization: InterfaceActionItemInfo[];
-}
-
 export interface InterfaceMembersList {
   organizations: {
     _id: string;
@@ -645,10 +604,10 @@ export interface InterfaceOrganizationEventsConnectionPg {
 
 export interface InterfaceOrganizationEventsConnectionEdgePg {
   cursor: string;
-  node: InterfaceEventPg;
+  node: IEvent;
 }
 
-export interface InterfaceEventPg {
+export interface IEvent {
   event: {
     id: ID;
     name: string;

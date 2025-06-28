@@ -12,12 +12,7 @@ GraphQL mutation to update an action item category.
 
 ## Param
 
-The id of the ActionItemCategory to be updated.
-
-## Param
-
-Updated name of the ActionItemCategory.
-
-## Param
-
-Updated  disabled status of the ActionItemCategory.
+MutationUpdateActionItemCategoryInput containing:
+  - id: ID! - ID of the action item category to update
+  - name: String - New name of the action item category (optional)
+  - isDisabled: Boolean - Whether the category should be disabled (optional)

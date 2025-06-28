@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Interface: InterfaceEventPg
+# Interface: IEvent
 
-Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L651)
+Defined in: [src/utils/interfaces.ts:653](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L653)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundatio
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L652)
+Defined in: [src/utils/interfaces.ts:654](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L654)
 
 #### attachments
 

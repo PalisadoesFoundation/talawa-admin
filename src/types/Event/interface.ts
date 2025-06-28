@@ -47,7 +47,7 @@ export interface IEvent {
   key?: string;
   _id: string;
   location: string;
-  title: string;
+  name: string;
   description: string;
   startDate: string;
   endDate: string;

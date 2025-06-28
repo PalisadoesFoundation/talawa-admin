@@ -3,30 +3,48 @@ directive @auth on FIELD_DEFINITION
 directive @role(requires: UserType) on FIELD_DEFINITION
 
 type ActionItem {
-  _id: ID!
-  actionItemCategory: ActionItemCategory
-  assignee: User
-  assigner: User
-  assignmentDate: Date!
-  completionDate: Date!
-  createdAt: Date!
-  creator: User
-  dueDate: Date!
+  assignedAt: DateTime
+  assignee: UserPg
+  category: ActionItemCategory
+  completionAt: DateTime
+  createdAt: DateTime
+  creator: UserPg
   event: Event
-  isCompleted: Boolean!
+  id: ID
+  isCompleted: Boolean
+  organization: Organization
   postCompletionNotes: String
   preCompletionNotes: String
-  updatedAt: Date!
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type ActionItemCategoryActionItemsConnection {
+  edges: [ActionItemCategoryActionItemsConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type ActionItemCategoryActionItemsConnectionEdge {
+  cursor: String!
+  node: ActionItem
 }
 
 type ActionItemCategory {
-  _id: ID!
-  createdAt: Date!
-  creator: User
-  isDisabled: Boolean!
-  name: String!
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ActionItemCategoryActionItemsConnection
+  createdAt: DateTime
+  creator: UserPg
+  description: String
+  id: ID
+  isDisabled: Boolean
+  name: String
   organization: Organization
-  updatedAt: Date!
+  updatedAt: DateTime
+  updater: UserPg
 }
 
 type Address {
@@ -192,9 +210,11 @@ type ConnectionPageInfo {
 scalar CountryCode
 
 input CreateActionItemInput {
+  assignedAt: String
   assigneeId: ID!
-  dueDate: Date
+  categoryId: ID!
   eventId: ID
+  organizationId: ID!
   preCompletionNotes: String
 }
 
@@ -759,14 +779,10 @@ type Mutation {
   blockUser(organizationId: ID!, userId: ID!): User!
   cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   checkIn(data: CheckInInput!): CheckIn!
-  createActionItem(
-    actionItemCategoryId: ID!
-    data: CreateActionItemInput!
-  ): ActionItem!
+  createActionItem(input: CreateActionItemInput!): ActionItem
+
   createActionItemCategory(
-    isDisabled: Boolean!
-    name: String!
-    organizationId: ID!
+    input: MutationCreateActionItemCategoryInput!
   ): ActionItemCategory!
   createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
@@ -792,6 +808,9 @@ type Mutation {
   createUserTag(input: CreateUserTagInput!): UserTag
   createVenue(data: VenueInput!): Venue
   deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
+  deleteActionItemCategory(
+    input: MutationDeleteActionItemCategoryInput!
+  ): ActionItemCategory
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
   deleteVenue(id: ID!): Venue
@@ -802,12 +821,13 @@ type Mutation {
   likeComment(id: ID!): Comment
   likePost(id: ID!): Post
   logout: Boolean!
+  markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
   otp(data: OTPInput!): OtpData!
   recaptcha(data: RecaptchaVerification!): Boolean!
   refreshToken(refreshToken: String!): ExtendSession!
   registerForEvent(id: ID!): Event!
   rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  removeActionItem(id: ID!): ActionItem!
+  deleteActionItem(input: MutationDeleteActionItemInput!): ActionItem
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
@@ -848,10 +868,9 @@ type Mutation {
   unlikeComment(id: ID!): Comment
   unlikePost(id: ID!): Post
   unregisterForEventByUser(id: ID!): Event!
-  updateActionItem(data: UpdateActionItemInput!, id: ID!): ActionItem
+  updateActionItem(input: MutationUpdateActionItemInput!): ActionItem
   updateActionItemCategory(
-    data: UpdateActionItemCategoryInput!
-    id: ID!
+    input: MutationUpdateActionItemCategoryInput!
   ): ActionItemCategory
   updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
   updateAgendaCategory(
@@ -1832,11 +1851,13 @@ input OueryAllUsersWhereInput {
 
 type Query {
   signIn(input: LoginInput!): AuthenticationPayload
-  actionItem(id: ID!): ActionItem
-  actionItemCategoriesByOrganization(organizationId: ID!): [ActionItemCategory]
-  actionItemCategory(id: ID!): ActionItemCategory
-  actionItemsByEvent(eventId: ID!): [ActionItem]
-  actionItemsByOrganization(organizationId: ID!): [ActionItem]
+  actionItemCategory(input: QueryActionItemCategoryInput!): ActionItemCategory
+  actionCategoriesByOrganization(
+    input: QueryActionCategoriesByOrganizationInput!
+  ): [ActionItemCategory!]
+  actionItemsByOrganization(
+    input: QueryActionItemsByOrganizationInput!
+  ): [ActionItem!]
   agendaCategory(id: ID!): AgendaCategory!
   currentUser: UserPg!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
@@ -1896,6 +1917,7 @@ type Query {
   registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
   registrantsByEvent(id: ID!): [User]
   user(input: QueryUserInput!): UserPg!
+  usersByOrganizationId(organizationId: ID!): UserPg!
   userLanguage(userId: ID!): String
   users(
     first: Int
@@ -2073,6 +2095,52 @@ enum Gender {
   OTHER
 }
 
+input QueryActionItemsByOrganizationInput {
+  organizationId: String!
+}
+
+input MarkActionItemAsPendingInput {
+  id: ID!
+}
+
+input MutationDeleteActionItemInput {
+  id: ID!
+}
+
+input MutationUpdateActionItemInput {
+  assigneeId: ID
+  categoryId: ID
+  id: ID!
+  isCompleted: Boolean!
+  postCompletionNotes: String
+  preCompletionNotes: String
+}
+
+input QueryActionCategoriesByOrganizationInput {
+  organizationId: String!
+}
+
+input QueryActionItemCategoryInput {
+  id: ID!
+}
+
+input MutationCreateActionItemCategoryInput {
+  name: String!
+  description: String
+  organizationId: ID!
+  isDisabled: Boolean
+}
+
+input MutationUpdateActionItemCategoryInput {
+  id: ID!
+  name: String
+  description: String
+  isDisabled: Boolean
+}
+
+input MutationDeleteActionItemCategoryInput {
+  id: ID!
+}
 input MutationCreateEventInput {
   allDay: Boolean!
   attachments: [Upload!]
