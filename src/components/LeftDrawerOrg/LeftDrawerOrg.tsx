@@ -211,7 +211,7 @@ const leftDrawerOrg = ({
       <h5 className={`${styles.titleHeader} text-secondary`}>
         {tCommon('menu')}
       </h5>
-      <div className={styles.optionList}>
+      <div className={styles.optionList} data-cy="leftDrawerOptionList">
         {targets.map(({ name, url }, index) =>
           url ? (
             <NavLink to={url} key={name} onClick={handleLinkClick}>
@@ -222,6 +222,7 @@ const leftDrawerOrg = ({
                       ? styles.leftDrawerActiveButton
                       : styles.leftDrawerInactiveButton
                   }
+                  data-cy={`leftDrawerButton-${name}`}
                 >
                   <div className={styles.iconWrapper}>
                     <IconComponent
