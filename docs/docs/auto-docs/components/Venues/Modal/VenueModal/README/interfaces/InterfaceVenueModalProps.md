@@ -58,6 +58,6 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:50](https://github.com/P
 
 ### venueData?
 
-> `optional` **venueData**: [`InterfaceQueryVenueListItem`](utils\interfaces\README\interfaces\InterfaceQueryVenueListItem.md)
+> `optional` **venueData**: [`InterfaceQueryVenueListItem`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryVenueListItem
 
 Defined in: [src/components/Venues/Modal/VenueModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/Modal/VenueModal.tsx#L54)

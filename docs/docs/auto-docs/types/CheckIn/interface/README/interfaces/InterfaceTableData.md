@@ -10,7 +10,7 @@ Defined in: [src/types/CheckIn/interface.ts:40](https://github.com/PalisadoesFou
 
 ### checkInData
 
-> **checkInData**: [`InterfaceTableCheckIn`](types\CheckIn\interface\README\interfaces\InterfaceTableCheckIn.md)
+> **checkInData**: [`InterfaceTableCheckIn`]/auto-docs/types/CheckIn/interface/README/interfaces/InterfaceTableCheckIn
 
 Defined in: [src/types/CheckIn/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L43)
 

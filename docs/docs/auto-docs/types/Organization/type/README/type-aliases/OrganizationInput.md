@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/type.ts:54](https://github.com/PalisadoesFou
 
 ### address
 
-> **address**: [`AddressInput`](types\address\README\type-aliases\AddressInput.md)
+> **address**: [`AddressInput`](types/address/README/type-aliases/AddressInput.md)
 
 Defined in: [src/types/Organization/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L55)
 

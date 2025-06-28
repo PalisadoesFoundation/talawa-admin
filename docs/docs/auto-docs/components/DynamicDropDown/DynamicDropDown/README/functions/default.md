@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**\<`T`\>(`__namedParameters`): `Element`
+> **default**/<`T`/>(`__namedParameters`): `Element`
 
 Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L55)
 
@@ -12,13 +12,13 @@ Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://gith
 
 ### T
 
-`T` *extends* `Record`\<`string`, `unknown`\>
+`T` *extends* `Record`/<`string`, `unknown`/>
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-`InterfaceChangeDropDownProps`\<`T`\>
+`InterfaceChangeDropDownProps`/<`T`/>
 
 ## Returns
 

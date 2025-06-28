@@ -10,9 +10,9 @@ Defined in: [src/types/User/type.ts:43](https://github.com/PalisadoesFoundation/
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/User/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L44)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/User/type.ts:44](https://github.com/PalisadoesFoundation/
 
 ### adminFor
 
-> **adminFor**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)[]
+> **adminFor**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization[]
 
 Defined in: [src/types/User/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L45)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/User/type.ts:47](https://github.com/PalisadoesFoundation/
 
 ### createdOrganizations
 
-> **createdOrganizations**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)[]
+> **createdOrganizations**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization[]
 
 Defined in: [src/types/User/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L48)
 
@@ -68,6 +68,6 @@ Defined in: [src/types/User/type.ts:50](https://github.com/PalisadoesFoundation/
 
 ### userId
 
-> **userId**: [`User`](types\User\type\README\type-aliases\User.md)
+> **userId**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/User/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L51)

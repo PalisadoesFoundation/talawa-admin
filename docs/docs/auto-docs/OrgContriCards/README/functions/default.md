@@ -12,7 +12,7 @@ Defined in: [src/components/OrgContriCards/OrgContriCards.tsx:40](https://github
 
 ### props
 
-[`InterfaceOrgContriCardsProps`](types\Contribution\interface\README\interfaces\InterfaceOrgContriCardsProps.md)
+[`InterfaceOrgContriCardsProps`]/auto-docs/types/Contribution/interface/README/interfaces/InterfaceOrgContriCardsProps
 
 ## Returns
 

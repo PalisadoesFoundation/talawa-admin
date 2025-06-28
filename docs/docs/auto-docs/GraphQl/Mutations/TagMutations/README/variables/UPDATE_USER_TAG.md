@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: UPDATE\_USER\_TAG
+# Variable: UPDATE/_USER/_TAG
 
-> `const` **UPDATE\_USER\_TAG**: `DocumentNode`
+> `const` **UPDATE/_USER/_TAG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L54)
 

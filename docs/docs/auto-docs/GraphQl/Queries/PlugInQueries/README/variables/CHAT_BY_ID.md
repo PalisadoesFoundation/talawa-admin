@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: CHAT\_BY\_ID
+# Variable: CHAT/_BY/_ID
 
-> `const` **CHAT\_BY\_ID**: `DocumentNode`
+> `const` **CHAT/_BY/_ID**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L138)
 

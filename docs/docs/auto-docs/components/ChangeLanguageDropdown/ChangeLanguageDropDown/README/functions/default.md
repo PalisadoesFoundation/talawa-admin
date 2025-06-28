@@ -12,7 +12,7 @@ Defined in: [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:46
 
 ### props
 
-[`InterfaceDropDownProps`](types\DropDown\interface\README\interfaces\InterfaceDropDownProps.md)
+[`InterfaceDropDownProps`]/auto-docs/types/DropDown/interface/README/interfaces/InterfaceDropDownProps
 
 ## Returns
 

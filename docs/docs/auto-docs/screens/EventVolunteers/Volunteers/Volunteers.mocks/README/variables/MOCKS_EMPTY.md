@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS/_EMPTY
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS/_EMPTY**: `object`[]
 
 Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L288)
 
@@ -34,9 +34,9 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](htt
 
 > **eventId**: `string` = `'eventId'`
 
-#### request.variables.where.name\_contains
+#### request.variables.where.name/_contains
 
-> **name\_contains**: `string` = `''`
+> **name/_contains**: `string` = `''`
 
 ### result
 

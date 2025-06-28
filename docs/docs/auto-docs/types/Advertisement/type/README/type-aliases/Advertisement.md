@@ -12,7 +12,7 @@ Defined in: [src/types/Advertisement/type.ts:12](https://github.com/PalisadoesFo
 
 ### attachments?
 
-> `optional` **attachments**: [`AdvertisementAttachment`](types\Advertisement\type\README\type-aliases\AdvertisementAttachment.md)[]
+> `optional` **attachments**: [`AdvertisementAttachment`]/auto-docs/types/Advertisement/type/README/type-aliases/AdvertisementAttachment[]
 
 Defined in: [src/types/Advertisement/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L26)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/PalisadoesFo
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Advertisement/type.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L16)
 
@@ -96,7 +96,7 @@ Defined in: [src/types/Advertisement/type.ts:23](https://github.com/PalisadoesFo
 
 ### type
 
-> **type**: [`AdvertisementType`](types\Advertisement\type\README\enumerations\AdvertisementType.md)
+> **type**: [`AdvertisementType`]/auto-docs/types/Advertisement/type/README/enumerations/AdvertisementType
 
 Defined in: [src/types/Advertisement/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L24)
 

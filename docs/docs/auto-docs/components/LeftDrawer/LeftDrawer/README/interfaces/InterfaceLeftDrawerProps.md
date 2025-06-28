@@ -18,6 +18,6 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:47](https://github.com/Pal
 
 ### setHideDrawer
 
-> **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+> **setHideDrawer**: `Dispatch`/<`SetStateAction`/<`boolean`/>/>
 
 Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L48)

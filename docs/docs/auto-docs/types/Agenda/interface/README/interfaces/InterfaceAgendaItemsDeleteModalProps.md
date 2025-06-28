@@ -18,13 +18,13 @@ Defined in: [src/types/Agenda/interface.ts:69](https://github.com/PalisadoesFoun
 
 ### deleteAgendaItemHandler()
 
-> **deleteAgendaItemHandler**: () => `Promise`\<`void`\>
+> **deleteAgendaItemHandler**: () => `Promise`/<`void`/>
 
 Defined in: [src/types/Agenda/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L71)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 

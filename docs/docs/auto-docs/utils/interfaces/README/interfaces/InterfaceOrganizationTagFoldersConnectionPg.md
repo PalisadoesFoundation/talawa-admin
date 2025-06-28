@@ -4,20 +4,30 @@
 
 # Interface: InterfaceOrganizationTagFoldersConnectionPg
 
-Defined in: [src/utils/interfaces.ts:737](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L737)
+Defined in: [src/utils/interfaces.ts:1236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1236)
+
+InterfaceOrganizationTagFoldersConnectionPg
+
+## Description
+
+Defines the structure for a connection of organization tag folders with PostgreSQL-specific fields.
 
 ## Properties
 
 ### edges
 
-> **edges**: [`InterfaceOrganizationTagFoldersConnectionEdgePg`](utils\interfaces\README\interfaces\InterfaceOrganizationTagFoldersConnectionEdgePg.md)[]
+> **edges**: [`InterfaceOrganizationTagFoldersConnectionEdgePg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationTagFoldersConnectionEdgePg[]
 
-Defined in: [src/utils/interfaces.ts:738](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L738)
+Defined in: [src/utils/interfaces.ts:1237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1237)
+
+An array of edges, where each edge contains a cursor and a tag folder node.
 
 ***
 
 ### pageInfo
 
-> **pageInfo**: [`InterfacePageInfoPg`](utils\interfaces\README\interfaces\InterfacePageInfoPg.md)
+> **pageInfo**: [`InterfacePageInfoPg`]/auto-docs/utils/interfaces/README/interfaces/InterfacePageInfoPg
 
-Defined in: [src/utils/interfaces.ts:739](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L739)
+Defined in: [src/utils/interfaces.ts:1238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1238)
+
+Pagination information.

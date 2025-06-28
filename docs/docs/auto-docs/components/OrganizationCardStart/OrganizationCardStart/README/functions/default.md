@@ -12,7 +12,7 @@ Defined in: [src/components/OrganizationCardStart/OrganizationCardStart.tsx:32](
 
 ### props
 
-[`InterfaceOrganizationCardStartProps`](types\Organization\interface\README\interfaces\InterfaceOrganizationCardStartProps.md)
+[`InterfaceOrganizationCardStartProps`]/auto-docs/types/Organization/interface/README/interfaces/InterfaceOrganizationCardStartProps
 
 ## Returns
 

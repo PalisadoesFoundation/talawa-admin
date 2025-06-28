@@ -10,4 +10,4 @@ Defined in: [src/utils/currency.ts:166](https://github.com/PalisadoesFoundation/
 
 ## Index Signature
 
-\[`key`: `string`\]: `string`
+/[`key`: `string`/]: `string`

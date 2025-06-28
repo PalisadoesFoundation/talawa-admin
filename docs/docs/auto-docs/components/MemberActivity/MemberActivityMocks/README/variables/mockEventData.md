@@ -14,9 +14,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **event**: `object`
 
-#### event.\_id
+#### event./_id
 
-> **\_id**: `string` = `'event123'`
+> **/_id**: `string` = `'event123'`
 
 #### event.allDay
 
@@ -30,9 +30,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **baseRecurringEvent**: `object`
 
-#### event.baseRecurringEvent.\_id
+#### event.baseRecurringEvent./_id
 
-> **\_id**: `string` = `'base123'`
+> **/_id**: `string` = `'base123'`
 
 #### event.description
 
@@ -54,9 +54,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **organization**: `object`
 
-#### event.organization.\_id
+#### event.organization./_id
 
-> **\_id**: `string` = `'org123'`
+> **/_id**: `string` = `'org123'`
 
 #### event.organization.members
 

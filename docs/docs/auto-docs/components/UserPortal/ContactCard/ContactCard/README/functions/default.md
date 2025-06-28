@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:43](https://g
 
 ### props
 
-[`InterfaceContactCardProps`](types\Chat\interface\README\interfaces\InterfaceContactCardProps.md)
+[`InterfaceContactCardProps`]/auto-docs/types/Chat/interface/README/interfaces/InterfaceContactCardProps
 
 ## Returns
 

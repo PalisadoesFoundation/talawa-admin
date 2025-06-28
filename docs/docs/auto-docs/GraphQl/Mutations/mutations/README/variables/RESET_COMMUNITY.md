@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: RESET\_COMMUNITY
+# Variable: RESET/_COMMUNITY
 
-> `const` **RESET\_COMMUNITY**: `DocumentNode`
+> `const` **RESET/_COMMUNITY**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:566](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L566)

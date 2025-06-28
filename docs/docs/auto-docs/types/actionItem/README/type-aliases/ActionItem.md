@@ -10,9 +10,9 @@ Defined in: [src/types/actionItem.ts:5](https://github.com/PalisadoesFoundation/
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/actionItem.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L6)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/actionItem.ts:6](https://github.com/PalisadoesFoundation/
 
 ### actionItemCategory?
 
-> `optional` **actionItemCategory**: [`ActionItemCategory`](types\actionItem\README\type-aliases\ActionItemCategory.md)
+> `optional` **actionItemCategory**: [`ActionItemCategory`](types/actionItem/README/type-aliases/ActionItemCategory.md)
 
 Defined in: [src/types/actionItem.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L7)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/actionItem.ts:7](https://github.com/PalisadoesFoundation/
 
 ### assignee?
 
-> `optional` **assignee**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **assignee**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/actionItem.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L8)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/actionItem.ts:8](https://github.com/PalisadoesFoundation/
 
 ### assigner?
 
-> `optional` **assigner**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **assigner**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/actionItem.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L9)
 
@@ -68,7 +68,7 @@ Defined in: [src/types/actionItem.ts:12](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/actionItem.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L13)
 

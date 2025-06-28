@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: CREATE\_USER\_TAG
+# Variable: CREATE/_USER/_TAG
 
-> `const` **CREATE\_USER\_TAG**: `DocumentNode`
+> `const` **CREATE/_USER/_TAG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L12)
 

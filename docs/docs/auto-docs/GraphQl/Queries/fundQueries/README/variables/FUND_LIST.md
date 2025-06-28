@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: FUND\_LIST
+# Variable: FUND/_LIST
 
-> `const` **FUND\_LIST**: `DocumentNode`
+> `const` **FUND/_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/fundQueries.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L13)
 

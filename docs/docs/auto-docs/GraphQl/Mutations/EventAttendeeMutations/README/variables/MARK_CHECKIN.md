@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MARK\_CHECKIN
+# Variable: MARK/_CHECKIN
 
-> `const` **MARK\_CHECKIN**: `DocumentNode`
+> `const` **MARK/_CHECKIN**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L43)
 

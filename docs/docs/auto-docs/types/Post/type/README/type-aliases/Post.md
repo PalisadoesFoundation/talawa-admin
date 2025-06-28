@@ -10,9 +10,9 @@ Defined in: [src/types/Post/type.ts:5](https://github.com/PalisadoesFoundation/t
 
 ## Properties
 
-### \_id?
+### /_id?
 
-> `optional` **\_id**: `string`
+> `optional` **/_id**: `string`
 
 Defined in: [src/types/Post/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L6)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/type.ts:7](https://github.com/PalisadoesFoundation/t
 
 ### comments?
 
-> `optional` **comments**: [`Comment`](types\Comment\type\README\type-aliases\Comment.md)[]
+> `optional` **comments**: [`Comment`]/auto-docs/types/Comment/type/README/type-aliases/Comment[]
 
 Defined in: [src/types/Post/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L8)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/type.ts:9](https://github.com/PalisadoesFoundation/t
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Post/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L10)
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Post/type.ts:12](https://github.com/PalisadoesFoundation/
 
 ### likedBy?
 
-> `optional` **likedBy**: [`User`](types\User\type\README\type-aliases\User.md)[]
+> `optional` **likedBy**: [`User`]/auto-docs/types/User/type/README/type-aliases/User[]
 
 Defined in: [src/types/Post/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L13)
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Post/type.ts:13](https://github.com/PalisadoesFoundation/
 
 ### organization
 
-> **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
+> **organization**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization
 
 Defined in: [src/types/Post/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L14)
 

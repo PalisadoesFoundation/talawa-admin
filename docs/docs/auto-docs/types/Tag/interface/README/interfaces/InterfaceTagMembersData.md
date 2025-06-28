@@ -18,9 +18,9 @@ Defined in: [src/types/Tag/interface.ts:11](https://github.com/PalisadoesFoundat
 
 > **node**: `object`
 
-##### node.\_id
+##### node./_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 ##### node.firstName
 

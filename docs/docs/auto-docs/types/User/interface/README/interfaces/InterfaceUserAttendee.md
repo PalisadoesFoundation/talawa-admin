@@ -8,17 +8,17 @@ Defined in: [src/types/User/interface.ts:17](https://github.com/PalisadoesFounda
 
 ## Properties
 
-### \_\_typename
+### /_/_typename
 
-> **\_\_typename**: `string`
+> **/_/_typename**: `string`
 
 Defined in: [src/types/User/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L21)
 
 ***
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/User/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L18)
 

@@ -29,7 +29,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 ### campaign
 
-> **campaign**: [`InterfaceCampaignInfo`](utils\interfaces\README\interfaces\InterfaceCampaignInfo.md)
+> **campaign**: [`InterfaceCampaignInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceCampaignInfo
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L49)
 
@@ -65,7 +65,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:45](ht
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L51)
 

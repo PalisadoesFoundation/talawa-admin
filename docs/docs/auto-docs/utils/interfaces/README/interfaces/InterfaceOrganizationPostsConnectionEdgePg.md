@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationPostsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:732](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L732)
+Defined in: [src/utils/interfaces.ts:1225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1225)
+
+InterfaceOrganizationPostsConnectionEdgePg
+
+## Description
+
+Defines the structure for an edge in the organization posts connection with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,12 +18,16 @@ Defined in: [src/utils/interfaces.ts:732](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:733](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L733)
+Defined in: [src/utils/interfaces.ts:1226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1226)
+
+The cursor for this edge.
 
 ***
 
 ### node
 
-> **node**: [`InterfacePostPg`](utils\interfaces\README\interfaces\InterfacePostPg.md)
+> **node**: [`InterfacePostPg`]/auto-docs/utils/interfaces/README/interfaces/InterfacePostPg
 
-Defined in: [src/utils/interfaces.ts:734](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L734)
+Defined in: [src/utils/interfaces.ts:1227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1227)
+
+The post node.

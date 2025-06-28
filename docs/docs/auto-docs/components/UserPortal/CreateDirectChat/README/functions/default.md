@@ -10,7 +10,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:147
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceCreateDirectChatProps`
 

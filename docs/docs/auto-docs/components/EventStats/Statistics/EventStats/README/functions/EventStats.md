@@ -10,7 +10,7 @@ Defined in: [src/components/EventStats/Statistics/EventStats.tsx:50](https://git
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `ModalPropType`
 

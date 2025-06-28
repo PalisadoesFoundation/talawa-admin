@@ -10,9 +10,9 @@ Defined in: [src/components/ContriStats/ContriStats.tsx:34](https://github.com/P
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceContriStatsProps`](types\Contribution\interface\README\interfaces\InterfaceContriStatsProps.md)
+[`InterfaceContriStatsProps`]/auto-docs/types/Contribution/interface/README/interfaces/InterfaceContriStatsProps
 
 ## Returns
 

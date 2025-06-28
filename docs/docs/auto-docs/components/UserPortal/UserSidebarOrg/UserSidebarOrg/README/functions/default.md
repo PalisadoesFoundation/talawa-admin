@@ -10,9 +10,9 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:66](htt
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceUserSidebarOrgProps`](components\UserPortal\UserSidebarOrg\UserSidebarOrg\README\interfaces\InterfaceUserSidebarOrgProps.md)
+[`InterfaceUserSidebarOrgProps`](components/UserPortal/UserSidebarOrg/UserSidebarOrg/README/interfaces/InterfaceUserSidebarOrgProps.md)
 
 ## Returns
 

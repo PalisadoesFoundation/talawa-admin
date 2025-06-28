@@ -10,7 +10,7 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:51](https
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### agendaCategoryConnection
 
@@ -18,7 +18,7 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:51](https
 
 #### agendaCategoryData
 
-[`InterfaceAgendaItemCategoryInfo`](utils\interfaces\README\interfaces\InterfaceAgendaItemCategoryInfo.md)[]
+[`InterfaceAgendaItemCategoryInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceAgendaItemCategoryInfo[]
 
 #### agendaCategoryRefetch
 

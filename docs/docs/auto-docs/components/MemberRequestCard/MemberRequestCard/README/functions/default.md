@@ -10,9 +10,9 @@ Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceMemberRequestCardProps`](types\Member\interface\README\interfaces\InterfaceMemberRequestCardProps.md)
+[`InterfaceMemberRequestCardProps`]/auto-docs/types/Member/interface/README/interfaces/InterfaceMemberRequestCardProps
 
 ## Returns
 

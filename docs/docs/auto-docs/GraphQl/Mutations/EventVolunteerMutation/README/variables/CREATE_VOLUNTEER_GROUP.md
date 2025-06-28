@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: CREATE\_VOLUNTEER\_GROUP
+# Variable: CREATE/_VOLUNTEER/_GROUP
 
-> `const` **CREATE\_VOLUNTEER\_GROUP**: `DocumentNode`
+> `const` **CREATE/_VOLUNTEER/_GROUP**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L48)
 

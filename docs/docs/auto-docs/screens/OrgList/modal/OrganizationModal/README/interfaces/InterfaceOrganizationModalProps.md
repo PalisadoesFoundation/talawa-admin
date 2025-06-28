@@ -12,7 +12,7 @@ Represents the properties of the OrganizationModal component.
 
 ### createOrg()
 
-> **createOrg**: (`e`) => `Promise`\<`void`\>
+> **createOrg**: (`e`) => `Promise`/<`void`/>
 
 Defined in: [src/screens/OrgList/modal/OrganizationModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/modal/OrganizationModal.tsx#L70)
 
@@ -20,11 +20,11 @@ Defined in: [src/screens/OrgList/modal/OrganizationModal.tsx:70](https://github.
 
 ##### e
 
-`ChangeEvent`\<`HTMLFormElement`\>
+`ChangeEvent`/<`HTMLFormElement`/>
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/OrgList/modal/OrganizationModal.tsx:69](https://github.
 
 ##### state
 
-`SetStateAction`\<`InterfaceFormStateType`\>
+`SetStateAction`/<`InterfaceFormStateType`/>
 
 #### Returns
 
@@ -112,6 +112,6 @@ Defined in: [src/screens/OrgList/modal/OrganizationModal.tsx:67](https://github.
 
 ### userData
 
-> **userData**: [`InterfaceCurrentUserTypePG`](utils\interfaces\README\interfaces\InterfaceCurrentUserTypePG.md)
+> **userData**: [`InterfaceCurrentUserTypePG`]/auto-docs/utils/interfaces/README/interfaces/InterfaceCurrentUserTypePG
 
 Defined in: [src/screens/OrgList/modal/OrganizationModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/modal/OrganizationModal.tsx#L73)

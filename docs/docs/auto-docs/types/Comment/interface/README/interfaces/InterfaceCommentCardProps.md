@@ -10,7 +10,7 @@ Defined in: [src/types/Comment/interface.ts:3](https://github.com/PalisadoesFoun
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](types\User\type\README\type-aliases\User.md)\>
+> **creator**: `Partial`/<[`User`]/auto-docs/types/User/type/README/type-aliases/User/>
 
 Defined in: [src/types/Comment/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L5)
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Comment/interface.ts:6](https://github.com/PalisadoesFoun
 
 ### likedBy
 
-> **likedBy**: `Partial`\<[`User`](types\User\type\README\type-aliases\User.md)\>[]
+> **likedBy**: `Partial`/<[`User`]/auto-docs/types/User/type/README/type-aliases/User/>[]
 
 Defined in: [src/types/Comment/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L7)
 

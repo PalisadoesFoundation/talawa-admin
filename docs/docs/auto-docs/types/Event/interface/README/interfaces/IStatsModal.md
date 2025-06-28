@@ -18,9 +18,9 @@ Defined in: [src/types/Event/interface.ts:86](https://github.com/PalisadoesFound
 
 > **event**: `object`
 
-##### event.\_id
+##### event./_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 ##### event.averageFeedbackScore
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Event/interface.ts:86](https://github.com/PalisadoesFound
 
 ##### event.feedback
 
-> **feedback**: [`Feedback`](types\Event\type\README\type-aliases\Feedback.md)[]
+> **feedback**: [`Feedback`]/auto-docs/types/Event/type/README/type-aliases/Feedback[]

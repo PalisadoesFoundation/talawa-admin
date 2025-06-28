@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS/_EMPTY
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS/_EMPTY**: `object`[]
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L236)
 
@@ -34,9 +34,9 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCatego
 
 > **where**: `object`
 
-#### request.variables.where.name\_contains
+#### request.variables.where.name/_contains
 
-> **name\_contains**: `string` = `''`
+> **name/_contains**: `string` = `''`
 
 ### result
 

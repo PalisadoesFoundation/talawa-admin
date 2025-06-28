@@ -10,7 +10,7 @@ Defined in: [src/components/EventRegistrantsModal/EventRegistrantsWrapper.tsx:37
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `PropType`
 

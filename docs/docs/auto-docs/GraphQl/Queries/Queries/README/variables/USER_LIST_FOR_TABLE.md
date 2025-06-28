@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: USER\_LIST\_FOR\_TABLE
+# Variable: USER/_LIST/_FOR/_TABLE
 
-> `const` **USER\_LIST\_FOR\_TABLE**: `DocumentNode`
+> `const` **USER/_LIST/_FOR/_TABLE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L206)

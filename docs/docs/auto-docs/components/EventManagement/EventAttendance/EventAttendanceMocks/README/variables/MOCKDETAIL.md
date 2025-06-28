@@ -38,9 +38,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **event**: `object` = `MOCKEVENT`
 
-#### result.data.event.\_id
+#### result.data.event./_id
 
-> **\_id**: `string` = `'event123'`
+> **/_id**: `string` = `'event123'`
 
 #### result.data.event.allDay
 
@@ -54,9 +54,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **baseRecurringEvent**: `object`
 
-#### result.data.event.baseRecurringEvent.\_id
+#### result.data.event.baseRecurringEvent./_id
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **/_id**: `string` = `'recurringEvent123'`
 
 #### result.data.event.description
 
@@ -78,9 +78,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **organization**: `object`
 
-#### result.data.event.organization.\_id
+#### result.data.event.organization./_id
 
-> **\_id**: `string` = `'org456'`
+> **/_id**: `string` = `'org456'`
 
 #### result.data.event.organization.members
 

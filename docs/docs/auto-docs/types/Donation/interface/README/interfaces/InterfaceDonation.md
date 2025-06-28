@@ -8,9 +8,9 @@ Defined in: [src/types/Donation/interface.ts:1](https://github.com/PalisadoesFou
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Donation/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L2)
 

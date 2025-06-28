@@ -10,13 +10,13 @@ Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoun
 
 ### deleteEventHandler()
 
-> **deleteEventHandler**: () => `Promise`\<`void`\>
+> **deleteEventHandler**: () => `Promise`/<`void`/>
 
 Defined in: [src/types/Event/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L120)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 

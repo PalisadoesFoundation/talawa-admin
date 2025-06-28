@@ -10,7 +10,7 @@ Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:110](
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceCreateGroupChatProps`
 

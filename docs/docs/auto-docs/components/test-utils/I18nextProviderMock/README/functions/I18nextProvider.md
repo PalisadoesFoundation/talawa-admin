@@ -10,7 +10,7 @@ Defined in: [src/components/test-utils/I18nextProviderMock.tsx:14](https://githu
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### children
 

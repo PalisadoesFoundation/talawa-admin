@@ -12,7 +12,7 @@ Props for the `ItemModal` component.
 
 ### actionItem
 
-> **actionItem**: [`InterfaceActionItemInfo`](utils\interfaces\README\interfaces\InterfaceActionItemInfo.md)
+> **actionItem**: [`InterfaceActionItemInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceActionItemInfo
 
 Defined in: [src/screens/OrganizationActionItems/itemModal/ItemModal.tsx:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemModal/ItemModal.tsx#L96)
 

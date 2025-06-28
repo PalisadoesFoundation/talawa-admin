@@ -12,7 +12,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:50](http
 
 ### props
 
-[`InterfaceCardItem`](components\OrganizationDashCards\CardItem\CardItem\README\interfaces\InterfaceCardItem.md)
+[`InterfaceCardItem`](components/OrganizationDashCards/CardItem/CardItem/README/interfaces/InterfaceCardItem.md)
 
 ## Returns
 

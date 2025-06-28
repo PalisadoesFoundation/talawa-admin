@@ -8,9 +8,9 @@ Defined in: [src/types/Agenda/interface.ts:3](https://github.com/PalisadoesFound
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Agenda/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L4)
 
@@ -22,9 +22,9 @@ Defined in: [src/types/Agenda/interface.ts:4](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Agenda/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L7)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 #### firstName
 

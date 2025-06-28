@@ -50,7 +50,7 @@ Defined in: [src/types/Chat/interface.ts:21](https://github.com/PalisadoesFounda
 
 ### setSelectedContact
 
-> **setSelectedContact**: `Dispatch`\<`SetStateAction`\<`string`\>\>
+> **setSelectedContact**: `Dispatch`/<`SetStateAction`/<`string`/>/>
 
 Defined in: [src/types/Chat/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L22)
 

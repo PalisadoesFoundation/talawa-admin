@@ -10,7 +10,7 @@ Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:52](http
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `IEventListCardModalProps`
 

@@ -60,6 +60,6 @@ Defined in: [src/types/Advertisement/type.ts:51](https://github.com/PalisadoesFo
 
 ### type
 
-> **type**: [`AdvertisementType`](types\Advertisement\type\README\enumerations\AdvertisementType.md)
+> **type**: [`AdvertisementType`]/auto-docs/types/Advertisement/type/README/enumerations/AdvertisementType
 
 Defined in: [src/types/Advertisement/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L49)

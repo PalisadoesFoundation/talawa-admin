@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: UPDATE\_ACTION\_ITEM\_MUTATION
+# Variable: UPDATE/_ACTION/_ITEM/_MUTATION
 
-> `const` **UPDATE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
+> `const` **UPDATE/_ACTION/_ITEM/_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L52)
 

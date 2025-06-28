@@ -74,10 +74,10 @@ Defined in: [src/types/Event/interface.ts:164](https://github.com/PalisadoesFoun
 
 ### updateEventHandler()
 
-> **updateEventHandler**: () => `Promise`\<`void`\>
+> **updateEventHandler**: () => `Promise`/<`void`/>
 
 Defined in: [src/types/Event/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L167)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>

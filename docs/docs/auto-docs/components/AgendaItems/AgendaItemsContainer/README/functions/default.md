@@ -10,11 +10,11 @@ Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:62](https://git
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### agendaItemCategories
 
-[`InterfaceAgendaItemCategoryInfo`](utils\interfaces\README\interfaces\InterfaceAgendaItemCategoryInfo.md)[]
+[`InterfaceAgendaItemCategoryInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceAgendaItemCategoryInfo[]
 
 #### agendaItemConnection
 
@@ -22,7 +22,7 @@ Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:62](https://git
 
 #### agendaItemData
 
-[`InterfaceAgendaItemInfo`](utils\interfaces\README\interfaces\InterfaceAgendaItemInfo.md)[]
+[`InterfaceAgendaItemInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceAgendaItemInfo[]
 
 #### agendaItemRefetch
 

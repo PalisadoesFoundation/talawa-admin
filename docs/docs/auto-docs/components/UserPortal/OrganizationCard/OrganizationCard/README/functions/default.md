@@ -10,9 +10,9 @@ Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:65]
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceOrganizationCardProps`](types\Organization\interface\README\interfaces\InterfaceOrganizationCardProps.md)
+[`InterfaceOrganizationCardProps`]/auto-docs/types/Organization/interface/README/interfaces/InterfaceOrganizationCardProps
 
 ## Returns
 

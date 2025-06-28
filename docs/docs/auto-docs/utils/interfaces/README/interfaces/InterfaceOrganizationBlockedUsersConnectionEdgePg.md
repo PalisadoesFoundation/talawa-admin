@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:563](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L563)
+Defined in: [src/utils/interfaces.ts:858](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L858)
+
+InterfaceOrganizationBlockedUsersConnectionEdgePg
+
+## Description
+
+Defines the structure for an edge in the organization blocked users connection with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,12 +18,16 @@ Defined in: [src/utils/interfaces.ts:563](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:564](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L564)
+Defined in: [src/utils/interfaces.ts:859](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L859)
+
+The cursor for this edge.
 
 ***
 
 ### node
 
-> **node**: [`InterfaceUserPg`](utils\interfaces\README\interfaces\InterfaceUserPg.md)
+> **node**: [`InterfaceUserPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceUserPg
 
-Defined in: [src/utils/interfaces.ts:565](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L565)
+Defined in: [src/utils/interfaces.ts:860](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L860)
+
+The user node.

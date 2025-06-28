@@ -8,9 +8,9 @@ Defined in: [src/types/CheckIn/interface.ts:7](https://github.com/PalisadoesFoun
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/CheckIn/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L8)
 
@@ -22,9 +22,9 @@ Defined in: [src/types/CheckIn/interface.ts:8](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/CheckIn/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L10)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 #### time
 
@@ -34,6 +34,6 @@ Defined in: [src/types/CheckIn/interface.ts:10](https://github.com/PalisadoesFou
 
 ### user
 
-> **user**: [`InterfaceUser`](types\CheckIn\interface\README\interfaces\InterfaceUser.md)
+> **user**: [`InterfaceUser`]/auto-docs/types/CheckIn/interface/README/interfaces/InterfaceUser
 
 Defined in: [src/types/CheckIn/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L9)

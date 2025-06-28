@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCK\_USERS2
+# Variable: MOCK/_USERS2
 
-> `const` **MOCK\_USERS2**: `object`[]
+> `const` **MOCK/_USERS2**: `object`[]
 
 Defined in: [src/screens/Users/Organization.mocks.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L284)
 
@@ -14,9 +14,9 @@ Defined in: [src/screens/Users/Organization.mocks.ts:284](https://github.com/Pal
 
 > **appUserProfile**: `object`
 
-#### appUserProfile.\_id
+#### appUserProfile./_id
 
-> **\_id**: `string` = `'user3'`
+> **/_id**: `string` = `'user3'`
 
 #### appUserProfile.adminFor
 
@@ -42,9 +42,9 @@ Defined in: [src/screens/Users/Organization.mocks.ts:284](https://github.com/Pal
 
 > **user**: `object`
 
-#### user.\_id
+#### user./_id
 
-> **\_id**: `string` = `'user3'`
+> **/_id**: `string` = `'user3'`
 
 #### user.createdAt
 

@@ -30,6 +30,6 @@ Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal
 
 ### volunteer
 
-> **volunteer**: [`InterfaceEventVolunteerInfo`](utils\interfaces\README\interfaces\InterfaceEventVolunteerInfo.md)
+> **volunteer**: [`InterfaceEventVolunteerInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceEventVolunteerInfo
 
 Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L67)

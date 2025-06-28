@@ -4,7 +4,7 @@
 
 # Function: validatePort()
 
-> **validatePort**(`input`): `string` \| `boolean`
+> **validatePort**(`input`): `string` /| `boolean`
 
 Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askForCustomPort/askForCustomPort.ts#L6)
 
@@ -16,4 +16,4 @@ Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:6](https://github.co
 
 ## Returns
 
-`string` \| `boolean`
+`string` /| `boolean`

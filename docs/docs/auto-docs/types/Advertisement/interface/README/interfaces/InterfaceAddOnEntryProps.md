@@ -10,7 +10,7 @@ Defined in: [src/types/Advertisement/interface.ts:32](https://github.com/Palisad
 
 ### attachments?
 
-> `optional` **attachments**: [`AdvertisementAttachment`](types\Advertisement\type\README\type-aliases\AdvertisementAttachment.md)[]
+> `optional` **attachments**: [`AdvertisementAttachment`]/auto-docs/types/Advertisement/type/README/type-aliases/AdvertisementAttachment[]
 
 Defined in: [src/types/Advertisement/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L40)
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Advertisement/interface.ts:37](https://github.com/Palisad
 
 ### setAfter
 
-> **setAfter**: `Dispatch`\<`SetStateAction`\<`string`\>\>
+> **setAfter**: `Dispatch`/<`SetStateAction`/<`string`/>/>
 
 Defined in: [src/types/Advertisement/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L41)
 

@@ -10,9 +10,9 @@ Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/Palisado
 
 ## Properties
 
-### comp\_id
+### comp/_id
 
-> **comp\_id**: `string` \| `null`
+> **comp/_id**: `string` /| `null`
 
 Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L36)
 
@@ -20,7 +20,7 @@ Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/Palisado
 
 ### component
 
-> **component**: `string` \| `null`
+> **component**: `string` /| `null`
 
 Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L37)
 
@@ -40,9 +40,9 @@ Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/Palisado
 
 Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L38)
 
-#### comp\_id
+#### comp/_id
 
-> **comp\_id**: `string`
+> **comp/_id**: `string`
 
 #### component
 

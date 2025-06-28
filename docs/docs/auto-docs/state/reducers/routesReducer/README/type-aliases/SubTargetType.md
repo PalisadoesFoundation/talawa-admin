@@ -10,9 +10,9 @@ Defined in: [src/state/reducers/routesReducer.ts:9](https://github.com/Palisadoe
 
 ## Properties
 
-### comp\_id?
+### comp/_id?
 
-> `optional` **comp\_id**: `string`
+> `optional` **comp/_id**: `string`
 
 Defined in: [src/state/reducers/routesReducer.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L13)
 

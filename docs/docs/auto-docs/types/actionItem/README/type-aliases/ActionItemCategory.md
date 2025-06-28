@@ -10,9 +10,9 @@ Defined in: [src/types/actionItem.ts:22](https://github.com/PalisadoesFoundation
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/actionItem.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L23)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/actionItem.ts:24](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/actionItem.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L25)
 
@@ -52,7 +52,7 @@ Defined in: [src/types/actionItem.ts:27](https://github.com/PalisadoesFoundation
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
+> `optional` **organization**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization
 
 Defined in: [src/types/actionItem.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L28)
 

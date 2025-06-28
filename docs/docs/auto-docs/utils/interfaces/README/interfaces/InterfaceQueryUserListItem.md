@@ -4,7 +4,13 @@
 
 # Interface: InterfaceQueryUserListItem
 
-Defined in: [src/utils/interfaces.ts:1137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1137)
+Defined in: [src/utils/interfaces.ts:2074](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2074)
+
+InterfaceQueryUserListItem
+
+## Description
+
+Defines the structure for a user list item returned from a query.
 
 ## Properties
 
@@ -12,11 +18,13 @@ Defined in: [src/utils/interfaces.ts:1137](https://github.com/PalisadoesFoundati
 
 > **appUserProfile**: `object`
 
-Defined in: [src/utils/interfaces.ts:1176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1176)
+Defined in: [src/utils/interfaces.ts:2113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2113)
 
-#### \_id
+The application user profile.
 
-> **\_id**: `string`
+#### /_id
+
+> **/_id**: `string`
 
 #### adminFor
 
@@ -44,11 +52,13 @@ Defined in: [src/utils/interfaces.ts:1176](https://github.com/PalisadoesFoundati
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:1138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1138)
+Defined in: [src/utils/interfaces.ts:2075](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2075)
 
-#### \_id
+The user object.
 
-> **\_id**: `string`
+#### /_id
+
+> **/_id**: `string`
 
 #### createdAt
 

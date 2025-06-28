@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceEventsAttendedMemberModalProps`](types\Event\interface\README\type-aliases\InterfaceEventsAttendedMemberModalProps.md)\>
+> `const` **default**: `React.FC`/<[`InterfaceEventsAttendedMemberModalProps`]/auto-docs/types/Event/interface/README/type-aliases/InterfaceEventsAttendedMemberModalProps/>
 
 Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L54)

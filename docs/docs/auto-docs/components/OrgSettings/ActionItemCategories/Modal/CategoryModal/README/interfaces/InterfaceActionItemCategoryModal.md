@@ -10,7 +10,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 ### category
 
-> **category**: [`InterfaceActionItemCategoryInfo`](utils\interfaces\README\interfaces\InterfaceActionItemCategoryInfo.md)
+> **category**: [`InterfaceActionItemCategoryInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceActionItemCategoryInfo
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L55)
 
@@ -38,7 +38,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/CategoryModal.tsx#L56)
 

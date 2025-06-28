@@ -4,7 +4,7 @@
 
 # Function: reservedPortWarning()
 
-> **reservedPortWarning**(`port`): `Promise`\<`boolean`\>
+> **reservedPortWarning**(`port`): `Promise`/<`boolean`/>
 
 Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askForCustomPort/askForCustomPort.ts#L19)
 
@@ -16,4 +16,4 @@ Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:19](https://github.c
 
 ## Returns
 
-`Promise`\<`boolean`\>
+`Promise`/<`boolean`/>

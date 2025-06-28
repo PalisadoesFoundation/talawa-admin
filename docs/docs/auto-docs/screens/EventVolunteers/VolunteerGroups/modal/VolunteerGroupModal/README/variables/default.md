@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceVolunteerGroupModal`](screens\EventVolunteers\VolunteerGroups\modal\VolunteerGroupModal\README\interfaces\InterfaceVolunteerGroupModal.md)\>
+> `const` **default**: `React.FC`/<[`InterfaceVolunteerGroupModal`](screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal/README/interfaces/InterfaceVolunteerGroupModal.md)/>
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L102)
 

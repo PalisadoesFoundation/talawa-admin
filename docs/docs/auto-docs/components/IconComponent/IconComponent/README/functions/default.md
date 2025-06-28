@@ -12,7 +12,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:65](https://github.c
 
 ### props
 
-[`InterfaceIconComponent`](components\IconComponent\IconComponent\README\interfaces\InterfaceIconComponent.md)
+[`InterfaceIconComponent`](components/IconComponent/IconComponent/README/interfaces/InterfaceIconComponent.md)
 
 ## Returns
 

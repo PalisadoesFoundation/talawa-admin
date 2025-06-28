@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: UNLIKE\_COMMENT
+# Variable: UNLIKE/_COMMENT
 
-> `const` **UNLIKE\_COMMENT**: `DocumentNode`
+> `const` **UNLIKE/_COMMENT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CommentMutations.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L52)
 

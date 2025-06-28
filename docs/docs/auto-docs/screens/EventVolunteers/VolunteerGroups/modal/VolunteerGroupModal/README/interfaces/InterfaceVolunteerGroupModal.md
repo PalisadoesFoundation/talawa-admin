@@ -18,7 +18,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 ### group
 
-> **group**: [`InterfaceVolunteerGroupInfo`](utils\interfaces\README\interfaces\InterfaceVolunteerGroupInfo.md)
+> **group**: [`InterfaceVolunteerGroupInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceVolunteerGroupInfo
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L65)
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L67)
 

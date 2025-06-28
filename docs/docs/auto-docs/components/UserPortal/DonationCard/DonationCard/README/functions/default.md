@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/DonationCard/DonationCard.tsx:34](https:/
 
 ### props
 
-[`InterfaceDonationCardProps`](types\Donation\interface\README\interfaces\InterfaceDonationCardProps.md)
+[`InterfaceDonationCardProps`]/auto-docs/types/Donation/interface/README/interfaces/InterfaceDonationCardProps
 
 ## Returns
 

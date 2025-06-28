@@ -20,7 +20,7 @@ Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/Palisadoe
 
 ### subTargets?
 
-> `optional` **subTargets**: [`SubTargetType`](state\reducers\routesReducer\README\type-aliases\SubTargetType.md)[]
+> `optional` **subTargets**: [`SubTargetType`](state/reducers/routesReducer/README/type-aliases/SubTargetType.md)[]
 
 Defined in: [src/state/reducers/routesReducer.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L6)
 

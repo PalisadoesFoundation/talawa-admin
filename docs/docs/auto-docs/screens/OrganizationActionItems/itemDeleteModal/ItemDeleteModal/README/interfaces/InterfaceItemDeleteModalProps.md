@@ -10,7 +10,7 @@ Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal
 
 ### actionItem
 
-> **actionItem**: [`InterfaceActionItemInfo`](utils\interfaces\README\interfaces\InterfaceActionItemInfo.md)
+> **actionItem**: [`InterfaceActionItemInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceActionItemInfo
 
 Defined in: [src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemDeleteModal/ItemDeleteModal.tsx#L45)
 

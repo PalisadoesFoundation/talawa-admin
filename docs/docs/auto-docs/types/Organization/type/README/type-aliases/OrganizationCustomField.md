@@ -10,9 +10,9 @@ Defined in: [src/types/Organization/type.ts:47](https://github.com/PalisadoesFou
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Organization/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L48)
 

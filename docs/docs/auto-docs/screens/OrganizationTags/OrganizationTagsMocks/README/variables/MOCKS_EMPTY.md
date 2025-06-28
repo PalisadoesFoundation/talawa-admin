@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS/_EMPTY
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS/_EMPTY**: `object`[]
 
 Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L344)
 
@@ -50,9 +50,9 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:344](https://
 
 > **name**: `object`
 
-#### request.variables.where.name.starts\_with
+#### request.variables.where.name.starts/_with
 
-> **starts\_with**: `string` = `''`
+> **starts/_with**: `string` = `''`
 
 ### result
 

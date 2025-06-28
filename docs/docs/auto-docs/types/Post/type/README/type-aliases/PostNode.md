@@ -10,9 +10,9 @@ Defined in: [src/types/Post/type.ts:105](https://github.com/PalisadoesFoundation
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Post/type.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L125)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/type.ts:106](https://github.com/PalisadoesFoundation
 
 ### comments
 
-> **comments**: [`PostComments`](types\Post\type\README\type-aliases\PostComments.md)
+> **comments**: [`PostComments`]/auto-docs/types/Post/type/README/type-aliases/PostComments
 
 Defined in: [src/types/Post/type.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L127)
 
@@ -48,9 +48,9 @@ Defined in: [src/types/Post/type.ts:107](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L108)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 #### email
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation
 
 ### imageUrl
 
-> **imageUrl**: `string` \| `null`
+> **imageUrl**: `string` /| `null`
 
 Defined in: [src/types/Post/type.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L114)
 
@@ -88,9 +88,9 @@ Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L116)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 #### firstName
 
@@ -104,7 +104,7 @@ Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation
 
 ### likes
 
-> **likes**: [`PostLikes`](types\Post\type\README\type-aliases\PostLikes.md)
+> **likes**: [`PostLikes`]/auto-docs/types/Post/type/README/type-aliases/PostLikes
 
 Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L128)
 
@@ -136,6 +136,6 @@ Defined in: [src/types/Post/type.ts:123](https://github.com/PalisadoesFoundation
 
 ### videoUrl
 
-> **videoUrl**: `string` \| `null`
+> **videoUrl**: `string` /| `null`
 
 Defined in: [src/types/Post/type.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L124)

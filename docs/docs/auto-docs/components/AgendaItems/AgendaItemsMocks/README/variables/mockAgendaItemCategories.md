@@ -10,17 +10,17 @@ Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:258](https://github.
 
 ## Type declaration
 
-### \_id
+### /_id
 
-> **\_id**: `string` = `'1'`
+> **/_id**: `string` = `'1'`
 
 ### createdBy
 
 > **createdBy**: `object`
 
-#### createdBy.\_id
+#### createdBy./_id
 
-> **\_id**: `string` = `'1'`
+> **/_id**: `string` = `'1'`
 
 #### createdBy.firstName
 

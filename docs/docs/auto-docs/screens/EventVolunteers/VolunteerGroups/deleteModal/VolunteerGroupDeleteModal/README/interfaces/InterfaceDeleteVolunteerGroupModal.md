@@ -10,7 +10,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGr
 
 ### group
 
-> **group**: [`InterfaceVolunteerGroupInfo`](utils\interfaces\README\interfaces\InterfaceVolunteerGroupInfo.md)
+> **group**: [`InterfaceVolunteerGroupInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceVolunteerGroupInfo
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx#L46)
 

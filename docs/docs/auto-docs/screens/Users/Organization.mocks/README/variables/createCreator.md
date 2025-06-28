@@ -10,9 +10,9 @@ Defined in: [src/screens/Users/Organization.mocks.ts:68](https://github.com/Pali
 
 ## Type declaration
 
-### \_id
+### /_id
 
-> **\_id**: `string` = `'123'`
+> **/_id**: `string` = `'123'`
 
 ### createdAt
 

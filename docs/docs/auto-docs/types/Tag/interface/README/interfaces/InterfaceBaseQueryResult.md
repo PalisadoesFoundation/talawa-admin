@@ -8,7 +8,7 @@ Defined in: [src/types/Tag/interface.ts:39](https://github.com/PalisadoesFoundat
 
 ## Extended by
 
-- [`InterfaceTagUsersToAssignToQuery`](types\Tag\interface\README\interfaces\InterfaceTagUsersToAssignToQuery.md)
+- [`InterfaceTagUsersToAssignToQuery`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceTagUsersToAssignToQuery
 
 ## Properties
 

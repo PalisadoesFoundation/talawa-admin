@@ -26,7 +26,7 @@ Defined in: [src/types/Post/interface.ts:32](https://github.com/PalisadoesFounda
 
 ### creator?
 
-> `optional` **creator**: [`InterfacePostCreator`](types\Post\interface\README\interfaces\InterfacePostCreator.md)
+> `optional` **creator**: [`InterfacePostCreator`]/auto-docs/types/Post/interface/README/interfaces/InterfacePostCreator
 
 Defined in: [src/types/Post/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L30)
 

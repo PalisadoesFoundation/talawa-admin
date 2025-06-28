@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceCampaignModal`](screens\OrganizationFundCampaign\modal\CampaignModal\README\interfaces\InterfaceCampaignModal.md)\>
+> `const` **default**: `React.FC`/<[`InterfaceCampaignModal`](screens/OrganizationFundCampaign/modal/CampaignModal/README/interfaces/InterfaceCampaignModal.md)/>
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L60)
 

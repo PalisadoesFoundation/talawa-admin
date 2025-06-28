@@ -38,9 +38,9 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.co
 
 > **currentUser**: `object`
 
-#### result.data.currentUser.\_\_typename
+#### result.data.currentUser./_/_typename
 
-> **\_\_typename**: `string` = `'User'`
+> **/_/_typename**: `string` = `'User'`
 
 #### result.data.currentUser.addressLine1
 

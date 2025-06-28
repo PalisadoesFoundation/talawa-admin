@@ -18,6 +18,6 @@ Defined in: [src/types/Post/interface.ts:37](https://github.com/PalisadoesFounda
 
 ### node
 
-> **node**: [`InterfacePost`](types\Post\interface\README\interfaces\InterfacePost.md)
+> **node**: [`InterfacePost`]/auto-docs/types/Post/interface/README/interfaces/InterfacePost
 
 Defined in: [src/types/Post/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L36)

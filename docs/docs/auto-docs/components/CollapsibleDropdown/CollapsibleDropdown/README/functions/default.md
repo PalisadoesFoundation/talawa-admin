@@ -10,9 +10,9 @@ Defined in: [src/components/CollapsibleDropdown/CollapsibleDropdown.tsx:48](http
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceCollapsibleDropdown`](types\DropDown\interface\README\interfaces\InterfaceCollapsibleDropdown.md)
+[`InterfaceCollapsibleDropdown`]/auto-docs/types/DropDown/interface/README/interfaces/InterfaceCollapsibleDropdown
 
 ## Returns
 

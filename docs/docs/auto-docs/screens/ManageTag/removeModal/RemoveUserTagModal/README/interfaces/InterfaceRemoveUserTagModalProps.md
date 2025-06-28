@@ -10,13 +10,13 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:38](https:
 
 ### handleRemoveUserTag()
 
-> **handleRemoveUserTag**: () => `Promise`\<`void`\>
+> **handleRemoveUserTag**: () => `Promise`/<`void`/>
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L41)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:39](https:
 
 ### t
 
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
+> **t**: `TFunction`/<`"translation"`, `"manageTag"`/>
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L42)
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:42](https:
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
+> **tCommon**: `TFunction`/<`"common"`, `undefined`/>
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L43)
 

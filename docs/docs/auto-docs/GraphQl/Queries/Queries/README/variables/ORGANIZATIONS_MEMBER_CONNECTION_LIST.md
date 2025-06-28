@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: ORGANIZATIONS\_MEMBER\_CONNECTION\_LIST
+# Variable: ORGANIZATIONS/_MEMBER/_CONNECTION/_LIST
 
-> `const` **ORGANIZATIONS\_MEMBER\_CONNECTION\_LIST**: `DocumentNode`
+> `const` **ORGANIZATIONS/_MEMBER/_CONNECTION/_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:683](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L683)

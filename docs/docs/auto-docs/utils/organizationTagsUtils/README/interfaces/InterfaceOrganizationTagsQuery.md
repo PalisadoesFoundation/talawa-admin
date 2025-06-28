@@ -20,7 +20,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:79](https://github.com/Palisadoe
 
 #### organizations
 
-> **organizations**: [`InterfaceQueryOrganizationUserTags`](utils\interfaces\README\interfaces\InterfaceQueryOrganizationUserTags.md)[]
+> **organizations**: [`InterfaceQueryOrganizationUserTags`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryOrganizationUserTags[]
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:82](https://github.com/Palisadoe
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `organizations`: [`InterfaceQueryOrganizationUserTags`](utils\interfaces\README\interfaces\InterfaceQueryOrganizationUserTags.md)[]; \}\>
+`InterfaceBaseFetchMoreOptions`/</{ `organizations`: [`InterfaceQueryOrganizationUserTags`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryOrganizationUserTags[]; /}/>
 
 #### Returns
 

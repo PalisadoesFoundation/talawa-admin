@@ -14,9 +14,9 @@ Defined in: [src/screens/OrganizationActionItems/testObject.mocks.ts:21](https:/
 
 > **assigner**: `object`
 
-#### assigner.\_id
+#### assigner./_id
 
-> **\_id**: `string` = `'userId'`
+> **/_id**: `string` = `'userId'`
 
 #### assigner.firstName
 
@@ -34,13 +34,13 @@ Defined in: [src/screens/OrganizationActionItems/testObject.mocks.ts:21](https:/
 
 > **creator**: `object`
 
-#### creator.\_\_typename
+#### creator./_/_typename
 
-> **\_\_typename**: `string` = `'User'`
+> **/_/_typename**: `string` = `'User'`
 
-#### creator.\_id
+#### creator./_id
 
-> **\_id**: `string` = `'userId'`
+> **/_id**: `string` = `'userId'`
 
 #### creator.firstName
 

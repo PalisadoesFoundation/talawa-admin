@@ -10,9 +10,9 @@ Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:85](https://gi
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceGroupChatDetailsProps`](types\Chat\interface\README\interfaces\InterfaceGroupChatDetailsProps.md)
+[`InterfaceGroupChatDetailsProps`]/auto-docs/types/Chat/interface/README/interfaces/InterfaceGroupChatDetailsProps
 
 ## Returns
 

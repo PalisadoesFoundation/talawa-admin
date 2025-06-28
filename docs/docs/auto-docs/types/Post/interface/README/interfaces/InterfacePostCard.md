@@ -8,9 +8,9 @@ Defined in: [src/types/Post/interface.ts:3](https://github.com/PalisadoesFoundat
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Post/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L4)
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Post/interface.ts:12](https://github.com/PalisadoesFounda
 
 ### comments
 
-> **comments**: [`Comment`](types\Comment\type\README\type-aliases\Comment.md)[]
+> **comments**: [`Comment`]/auto-docs/types/Comment/type/README/type-aliases/Comment[]
 
 Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L13)
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFounda
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](types\User\type\README\type-aliases\User.md)\>
+> **creator**: `Partial`/<[`User`]/auto-docs/types/User/type/README/type-aliases/User/>
 
 Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L5)
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFounda
 
 ### likedBy
 
-> **likedBy**: `Partial`\<[`User`](types\User\type\README\type-aliases\User.md)\>[]
+> **likedBy**: `Partial`/<[`User`]/auto-docs/types/User/type/README/type-aliases/User/>[]
 
 Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 

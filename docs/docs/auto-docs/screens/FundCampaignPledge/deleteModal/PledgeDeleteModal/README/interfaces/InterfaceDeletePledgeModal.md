@@ -30,7 +30,7 @@ Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:42
 
 ### pledge
 
-> **pledge**: [`InterfacePledgeInfo`](utils\interfaces\README\interfaces\InterfacePledgeInfo.md)
+> **pledge**: [`InterfacePledgeInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfacePledgeInfo
 
 Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L44)
 

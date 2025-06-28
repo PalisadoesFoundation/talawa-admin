@@ -10,7 +10,7 @@ Defined in: [src/components/LoginPortalToggle/LoginPortalToggle.tsx:37](https://
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceLoginPortalToggleProps`
 

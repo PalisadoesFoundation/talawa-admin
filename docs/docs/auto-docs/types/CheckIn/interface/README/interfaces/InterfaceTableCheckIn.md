@@ -14,9 +14,9 @@ Defined in: [src/types/CheckIn/interface.ts:29](https://github.com/PalisadoesFou
 
 Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L33)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 #### time
 

@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfaceSearchBarProps`\>
+> `const` **default**: `React.FC`/<`InterfaceSearchBarProps`/>
 
 Defined in: [src/subComponents/SearchBar.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchBar.tsx#L27)
 

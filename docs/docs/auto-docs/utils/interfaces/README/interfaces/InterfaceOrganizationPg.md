@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationPg
 
-Defined in: [src/utils/interfaces.ts:804](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L804)
+Defined in: [src/utils/interfaces.ts:1405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1405)
+
+InterfaceOrganizationPg
+
+## Description
+
+Defines the structure for an organization with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:804](https://github.com/PalisadoesFoundatio
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L805)
+Defined in: [src/utils/interfaces.ts:1406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1406)
+
+The organization object.
 
 #### addressLine1
 
@@ -24,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### advertisements
 
-> **advertisements**: [`InterfaceOrganizationAdvertisementsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationAdvertisementsConnectionPg.md)
+> **advertisements**: [`InterfaceOrganizationAdvertisementsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationAdvertisementsConnectionPg
 
 #### avatarMimeType
 
@@ -36,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### blockedUsers
 
-> **blockedUsers**: [`InterfaceOrganizationBlockedUsersConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationBlockedUsersConnectionPg.md)
+> **blockedUsers**: [`InterfaceOrganizationBlockedUsersConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationBlockedUsersConnectionPg
 
 #### chats
 
@@ -48,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### countryCode
 
-> **countryCode**: [`Iso3166Alpha2CountryCode`](utils\interfaces\README\enumerations\Iso3166Alpha2CountryCode.md)
+> **countryCode**: [`Iso3166Alpha2CountryCode`]/auto-docs/utils/interfaces/README/enumerations/Iso3166Alpha2CountryCode
 
 #### createdAt
 
@@ -56,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### creator
 
-> **creator**: [`InterfaceUserPg`](utils\interfaces\README\interfaces\InterfaceUserPg.md)
+> **creator**: [`InterfaceUserPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceUserPg
 
 #### description
 
@@ -64,11 +72,11 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### events
 
-> **events**: [`InterfaceOrganizationEventsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationEventsConnectionPg.md)
+> **events**: [`InterfaceOrganizationEventsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationEventsConnectionPg
 
 #### funds
 
-> **funds**: [`InterfaceOrganizationFundsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationFundsConnectionPg.md)
+> **funds**: [`InterfaceOrganizationFundsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationFundsConnectionPg
 
 #### id
 
@@ -76,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### members
 
-> **members**: [`InterfaceOrganizationMembersConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationMembersConnectionPg.md)
+> **members**: [`InterfaceOrganizationMembersConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationMembersConnectionPg
 
 #### name
 
@@ -84,35 +92,27 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### pinnedPosts
 
-> **pinnedPosts**: [`InterfaceOrganizationPinnedPostsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationPinnedPostsConnectionPg.md)
+> **pinnedPosts**: [`InterfaceOrganizationPinnedPostsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationPinnedPostsConnectionPg
 
 #### pinnedPostsCount
 
 > **pinnedPostsCount**: `number`
 
-#### postalCode
-
-> **postalCode**: `string`
-
 #### posts
 
-> **posts**: [`InterfaceOrganizationPostsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationPostsConnectionPg.md)
+> **posts**: [`InterfaceOrganizationPostsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationPostsConnectionPg
 
 #### postsCount
 
 > **postsCount**: `number`
 
-#### state
-
-> **state**: `string`
-
 #### tagFolders
 
-> **tagFolders**: [`InterfaceOrganizationTagFoldersConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationTagFoldersConnectionPg.md)
+> **tagFolders**: [`InterfaceOrganizationTagFoldersConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationTagFoldersConnectionPg
 
 #### tags
 
-> **tags**: [`InterfaceOrganizationTagsConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationTagsConnectionPg.md)
+> **tags**: [`InterfaceOrganizationTagsConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationTagsConnectionPg
 
 #### updatedAt
 
@@ -120,8 +120,8 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 #### updater
 
-> **updater**: [`InterfaceUserPg`](utils\interfaces\README\interfaces\InterfaceUserPg.md)
+> **updater**: [`InterfaceUserPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceUserPg
 
 #### venues
 
-> **venues**: [`InterfaceOrganizationVenuesConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationVenuesConnectionPg.md)
+> **venues**: [`InterfaceOrganizationVenuesConnectionPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationVenuesConnectionPg

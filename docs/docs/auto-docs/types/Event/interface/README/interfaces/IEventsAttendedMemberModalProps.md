@@ -10,7 +10,7 @@ Defined in: [src/types/Event/interface.ts:182](https://github.com/PalisadoesFoun
 
 ### eventsAttended
 
-> **eventsAttended**: `Partial`\<[`IEvent`](types\Event\interface\README\interfaces\IEvent.md)\>[]
+> **eventsAttended**: `Partial`/<[`IEvent`]/auto-docs/types/Event/interface/README/interfaces/IEvent/>[]
 
 Defined in: [src/types/Event/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L183)
 

@@ -10,19 +10,19 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:36](ht
 
 ### handleUnassignUserTag()
 
-> **handleUnassignUserTag**: () => `Promise`\<`void`\>
+> **handleUnassignUserTag**: () => `Promise`/<`void`/>
 
 Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L39)
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 
 ### t
 
-> **t**: `TFunction`\<`"translation"`, `"manageTag"` \| `"memberDetail"`\>
+> **t**: `TFunction`/<`"translation"`, `"manageTag"` /| `"memberDetail"`/>
 
 Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L40)
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](ht
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
+> **tCommon**: `TFunction`/<`"common"`, `undefined`/>
 
 Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L41)
 

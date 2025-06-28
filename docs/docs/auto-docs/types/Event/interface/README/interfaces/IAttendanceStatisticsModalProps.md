@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:172](https://github.com/PalisadoesFoun
 
 ### memberData
 
-> **memberData**: [`IMember`](types\Event\interface\README\interfaces\IMember.md)[]
+> **memberData**: [`IMember`]/auto-docs/types/Event/interface/README/interfaces/IMember[]
 
 Defined in: [src/types/Event/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L178)
 

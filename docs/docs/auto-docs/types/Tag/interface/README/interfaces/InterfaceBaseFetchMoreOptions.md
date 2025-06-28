@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceBaseFetchMoreOptions\<T\>
+# Interface: InterfaceBaseFetchMoreOptions/<T/>
 
 Defined in: [src/types/Tag/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L45)
 
@@ -40,6 +40,6 @@ Defined in: [src/types/Tag/interface.ts:47](https://github.com/PalisadoesFoundat
 
 ### variables
 
-> **variables**: [`InterfacePaginationVariables`](types\Tag\interface\README\interfaces\InterfacePaginationVariables.md)
+> **variables**: [`InterfacePaginationVariables`]/auto-docs/types/Tag/interface/README/interfaces/InterfacePaginationVariables
 
 Defined in: [src/types/Tag/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L46)

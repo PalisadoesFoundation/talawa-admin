@@ -10,7 +10,7 @@ Defined in: [src/components/UserPortal/StartPostModal/StartPostModal.tsx:52](htt
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceStartPostModalProps`
 

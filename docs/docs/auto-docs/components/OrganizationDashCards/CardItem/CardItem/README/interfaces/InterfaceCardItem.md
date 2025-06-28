@@ -16,7 +16,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:46](http
 
 #### id
 
-> **id**: `string` \| `number`
+> **id**: `string` /| `number`
 
 #### name
 
@@ -66,6 +66,6 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:42](http
 
 ### type
 
-> **type**: `"Event"` \| `"Post"` \| `"MembershipRequest"`
+> **type**: `"Event"` /| `"Post"` /| `"MembershipRequest"`
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L41)

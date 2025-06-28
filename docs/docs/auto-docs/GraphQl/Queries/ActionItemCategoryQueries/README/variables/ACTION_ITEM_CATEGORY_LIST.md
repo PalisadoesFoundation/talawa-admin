@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: ACTION\_ITEM\_CATEGORY\_LIST
+# Variable: ACTION/_ITEM/_CATEGORY/_LIST
 
-> `const` **ACTION\_ITEM\_CATEGORY\_LIST**: `DocumentNode`
+> `const` **ACTION/_ITEM/_CATEGORY/_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/ActionItemCategoryQueries.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemCategoryQueries.ts#L10)
 

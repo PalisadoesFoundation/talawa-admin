@@ -10,9 +10,9 @@ Defined in: [src/types/Donation/types.ts:1](https://github.com/PalisadoesFoundat
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Donation/types.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/types.ts#L2)
 

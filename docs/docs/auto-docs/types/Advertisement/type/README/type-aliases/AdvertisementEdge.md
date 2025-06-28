@@ -20,6 +20,6 @@ Defined in: [src/types/Advertisement/type.ts:36](https://github.com/PalisadoesFo
 
 ### node?
 
-> `optional` **node**: [`Advertisement`](types\Advertisement\type\README\type-aliases\Advertisement.md)
+> `optional` **node**: [`Advertisement`]/auto-docs/types/Advertisement/type/README/type-aliases/Advertisement
 
 Defined in: [src/types/Advertisement/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L37)

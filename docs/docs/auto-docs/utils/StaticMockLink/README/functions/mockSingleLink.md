@@ -4,7 +4,7 @@
 
 # Function: mockSingleLink()
 
-> **mockSingleLink**(...`mockedResponses`): [`InterfaceMockApolloLink`](utils\StaticMockLink\README\interfaces\InterfaceMockApolloLink.md)
+> **mockSingleLink**(...`mockedResponses`): [`InterfaceMockApolloLink`]/auto-docs/utils/StaticMockLink/README/interfaces/InterfaceMockApolloLink
 
 Defined in: [src/utils/StaticMockLink.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L169)
 
@@ -12,8 +12,8 @@ Defined in: [src/utils/StaticMockLink.ts:169](https://github.com/PalisadoesFound
 
 ### mockedResponses
 
-...(`boolean` \| `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>)[]
+...(`boolean` /| `MockedResponse`/<`Record`/<`string`, `any`/>, `Record`/<`string`, `any`/>/>)[]
 
 ## Returns
 
-[`InterfaceMockApolloLink`](utils\StaticMockLink\README\interfaces\InterfaceMockApolloLink.md)
+[`InterfaceMockApolloLink`]/auto-docs/utils/StaticMockLink/README/interfaces/InterfaceMockApolloLink

@@ -10,9 +10,9 @@ Defined in: [src/components/OrgListCard/OrgListCard.tsx:54](https://github.com/P
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceOrgListCardPropsPG`](components\OrgListCard\OrgListCard\README\interfaces\InterfaceOrgListCardPropsPG.md)
+[`InterfaceOrgListCardPropsPG`](components/OrgListCard/OrgListCard/README/interfaces/InterfaceOrgListCardPropsPG.md)
 
 ## Returns
 

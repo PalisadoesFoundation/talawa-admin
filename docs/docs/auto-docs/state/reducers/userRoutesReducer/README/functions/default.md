@@ -14,15 +14,15 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:16](https://github.com/Pali
 
 #### components
 
-[`ComponentType`](state\reducers\userRoutesReducer\README\type-aliases\ComponentType.md)[]
+[`ComponentType`](state/reducers/userRoutesReducer/README/type-aliases/ComponentType.md)[]
 
 #### targets
 
-[`TargetsType`](state\reducers\userRoutesReducer\README\type-aliases\TargetsType.md)[] = `...`
+[`TargetsType`](state/reducers/userRoutesReducer/README/type-aliases/TargetsType.md)[] = `...`
 
 ### action
 
-[`InterfaceAction`](state\helpers\Action\README\interfaces\InterfaceAction.md)
+[`InterfaceAction`](state/helpers/Action/README/interfaces/InterfaceAction.md)
 
 ## Returns
 
@@ -30,8 +30,8 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:16](https://github.com/Pali
 
 ### components
 
-> **components**: [`ComponentType`](state\reducers\userRoutesReducer\README\type-aliases\ComponentType.md)[]
+> **components**: [`ComponentType`](state/reducers/userRoutesReducer/README/type-aliases/ComponentType.md)[]
 
 ### targets
 
-> **targets**: [`TargetsType`](state\reducers\userRoutesReducer\README\type-aliases\TargetsType.md)[]
+> **targets**: [`TargetsType`](state/reducers/userRoutesReducer/README/type-aliases/TargetsType.md)[]

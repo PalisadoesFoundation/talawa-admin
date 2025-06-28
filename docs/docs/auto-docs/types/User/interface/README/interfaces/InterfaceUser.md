@@ -8,9 +8,9 @@ Defined in: [src/types/User/interface.ts:3](https://github.com/PalisadoesFoundat
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/User/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L4)
 
@@ -18,7 +18,7 @@ Defined in: [src/types/User/interface.ts:4](https://github.com/PalisadoesFoundat
 
 ### address?
 
-> `optional` **address**: [`Address`](types\User\type\README\type-aliases\Address.md)
+> `optional` **address**: [`Address`]/auto-docs/types/User/type/README/type-aliases/Address
 
 Defined in: [src/types/User/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L5)
 

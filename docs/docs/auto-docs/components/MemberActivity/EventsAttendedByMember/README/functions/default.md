@@ -10,7 +10,7 @@ Defined in: [src/components/MemberActivity/EventsAttendedByMember.tsx:35](https:
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceEventsAttendedByMember`
 

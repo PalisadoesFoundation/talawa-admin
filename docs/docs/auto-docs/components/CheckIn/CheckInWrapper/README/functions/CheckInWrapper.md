@@ -10,7 +10,7 @@ Defined in: [src/components/CheckIn/CheckInWrapper.tsx:34](https://github.com/Pa
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `PropType`
 

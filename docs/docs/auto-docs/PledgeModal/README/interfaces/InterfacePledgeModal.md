@@ -46,7 +46,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:79](https://gi
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L86)
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:82](https://gi
 
 ### pledge
 
-> **pledge**: [`InterfacePledgeInfo`](utils\interfaces\README\interfaces\InterfacePledgeInfo.md)
+> **pledge**: [`InterfacePledgeInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfacePledgeInfo
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L83)
 

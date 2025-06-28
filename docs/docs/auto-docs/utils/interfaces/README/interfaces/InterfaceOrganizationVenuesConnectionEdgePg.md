@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationVenuesConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:782](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L782)
+Defined in: [src/utils/interfaces.ts:1333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1333)
+
+InterfaceOrganizationVenuesConnectionEdgePg
+
+## Description
+
+Defines the structure for an edge in the organization venues connection with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,12 +18,16 @@ Defined in: [src/utils/interfaces.ts:782](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:783](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L783)
+Defined in: [src/utils/interfaces.ts:1334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1334)
+
+The cursor for this edge.
 
 ***
 
 ### node
 
-> **node**: [`InterfaceVenuePg`](utils\interfaces\README\interfaces\InterfaceVenuePg.md)
+> **node**: [`InterfaceVenuePg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceVenuePg
 
-Defined in: [src/utils/interfaces.ts:784](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L784)
+Defined in: [src/utils/interfaces.ts:1335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1335)
+
+The venue node.

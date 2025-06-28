@@ -4,7 +4,13 @@
 
 # Interface: InterfaceFundInfo
 
-Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1058)
+Defined in: [src/utils/interfaces.ts:1880](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1880)
+
+InterfaceFundInfo
+
+## Description
+
+Defines the structure for fund information.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundati
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1065)
+Defined in: [src/utils/interfaces.ts:1887](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1887)
+
+The creation date of the fund record.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundati
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1067)
+Defined in: [src/utils/interfaces.ts:1889](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1889)
+
+The creator of the fund.
 
 #### name
 
@@ -32,7 +42,9 @@ Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`
 
-Defined in: [src/utils/interfaces.ts:1072](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1072)
+Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1894)
+
+The edges connection object.
 
 #### node
 
@@ -72,7 +84,9 @@ Defined in: [src/utils/interfaces.ts:1072](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1059](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1059)
+Defined in: [src/utils/interfaces.ts:1881](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1881)
+
+The unique identifier of the fund.
 
 ***
 
@@ -80,7 +94,9 @@ Defined in: [src/utils/interfaces.ts:1059](https://github.com/PalisadoesFoundati
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1063](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1063)
+Defined in: [src/utils/interfaces.ts:1885](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1885)
+
+Indicates if the fund is archived.
 
 ***
 
@@ -88,7 +104,9 @@ Defined in: [src/utils/interfaces.ts:1063](https://github.com/PalisadoesFoundati
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1064](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1064)
+Defined in: [src/utils/interfaces.ts:1886](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1886)
+
+Indicates if the fund is the default fund.
 
 ***
 
@@ -96,7 +114,9 @@ Defined in: [src/utils/interfaces.ts:1064](https://github.com/PalisadoesFoundati
 
 > **isTaxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1062](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1062)
+Defined in: [src/utils/interfaces.ts:1884](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1884)
+
+Indicates if the fund is tax deductible.
 
 ***
 
@@ -104,7 +124,9 @@ Defined in: [src/utils/interfaces.ts:1062](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1060](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1060)
+Defined in: [src/utils/interfaces.ts:1882](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1882)
+
+The name of the fund.
 
 ***
 
@@ -112,7 +134,9 @@ Defined in: [src/utils/interfaces.ts:1060](https://github.com/PalisadoesFoundati
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:1068](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1068)
+Defined in: [src/utils/interfaces.ts:1890](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1890)
+
+The organization associated with the fund.
 
 #### name
 
@@ -124,7 +148,9 @@ Defined in: [src/utils/interfaces.ts:1068](https://github.com/PalisadoesFoundati
 
 > **organizationId**: `string`
 
-Defined in: [src/utils/interfaces.ts:1066](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1066)
+Defined in: [src/utils/interfaces.ts:1888](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1888)
+
+The unique identifier of the associated organization.
 
 ***
 
@@ -132,7 +158,9 @@ Defined in: [src/utils/interfaces.ts:1066](https://github.com/PalisadoesFoundati
 
 > **refrenceNumber**: `string`
 
-Defined in: [src/utils/interfaces.ts:1061](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1061)
+Defined in: [src/utils/interfaces.ts:1883](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1883)
+
+The reference number of the fund.
 
 ***
 
@@ -140,7 +168,9 @@ Defined in: [src/utils/interfaces.ts:1061](https://github.com/PalisadoesFoundati
 
 > **updater**: `object`
 
-Defined in: [src/utils/interfaces.ts:1069](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1069)
+Defined in: [src/utils/interfaces.ts:1891](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1891)
+
+The updater of the fund.
 
 #### name
 

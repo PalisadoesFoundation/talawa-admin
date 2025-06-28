@@ -10,7 +10,7 @@ Defined in: [src/types/Post/interface.ts:80](https://github.com/PalisadoesFounda
 
 ### attachments?
 
-> `optional` **attachments**: [`InterfaceAttachment`](types\Post\interface\README\interfaces\InterfaceAttachment.md)[]
+> `optional` **attachments**: [`InterfaceAttachment`]/auto-docs/types/Post/interface/README/interfaces/InterfaceAttachment[]
 
 Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L87)
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFounda
 
 ### creator?
 
-> `optional` **creator**: [`InterfaceCreator`](types\Post\interface\README\interfaces\InterfaceCreator.md)
+> `optional` **creator**: [`InterfaceCreator`]/auto-docs/types/Post/interface/README/interfaces/InterfaceCreator
 
 Defined in: [src/types/Post/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L86)
 

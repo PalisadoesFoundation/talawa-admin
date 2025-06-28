@@ -10,11 +10,11 @@ Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:47](https://github.co
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### data
 
-[`InterfaceTableCheckIn`](types\CheckIn\interface\README\interfaces\InterfaceTableCheckIn.md)
+[`InterfaceTableCheckIn`]/auto-docs/types/CheckIn/interface/README/interfaces/InterfaceTableCheckIn
 
 #### refetch
 

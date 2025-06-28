@@ -2,17 +2,17 @@
 
 ***
 
-# Variable: MOCK\_VENUE\_ITEM
+# Variable: MOCK/_VENUE/_ITEM
 
-> `const` **MOCK\_VENUE\_ITEM**: `object`
+> `const` **MOCK/_VENUE/_ITEM**: `object`
 
 Defined in: [src/components/Venues/VenueCardMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L3)
 
 ## Type declaration
 
-### \_id
+### /_id
 
-> **\_id**: `string` = `'1'`
+> **/_id**: `string` = `'1'`
 
 ### capacity
 

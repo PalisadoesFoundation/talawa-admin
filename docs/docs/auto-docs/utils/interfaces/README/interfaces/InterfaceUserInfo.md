@@ -4,15 +4,23 @@
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L333)
+Defined in: [src/utils/interfaces.ts:400](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L400)
+
+InterfaceUserInfo
+
+## Description
+
+Defines the basic information for a user.
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L336)
+Defined in: [src/utils/interfaces.ts:403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L403)
+
+The unique identifier of the user.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:336](https://github.com/PalisadoesFoundatio
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L334)
+Defined in: [src/utils/interfaces.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L401)
+
+The first name of the user.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundatio
 
 > `optional` **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L337)
+Defined in: [src/utils/interfaces.ts:404](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L404)
+
+The URL of the user's image, or null if not available.
 
 ***
 
@@ -36,4 +48,6 @@ Defined in: [src/utils/interfaces.ts:337](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L335)
+Defined in: [src/utils/interfaces.ts:402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L402)
+
+The last name of the user.

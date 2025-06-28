@@ -38,9 +38,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:30](https://gi
 
 > **event**: `object`
 
-#### result.data.event.\_id
+#### result.data.event./_id
 
-> **\_id**: `string` = `'event123'`
+> **/_id**: `string` = `'event123'`
 
 #### result.data.event.allDay
 
@@ -54,9 +54,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:30](https://gi
 
 > **baseRecurringEvent**: `object`
 
-#### result.data.event.baseRecurringEvent.\_id
+#### result.data.event.baseRecurringEvent./_id
 
-> **\_id**: `string` = `'base123'`
+> **/_id**: `string` = `'base123'`
 
 #### result.data.event.description
 
@@ -78,9 +78,9 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:30](https://gi
 
 > **organization**: `object`
 
-#### result.data.event.organization.\_id
+#### result.data.event.organization./_id
 
-> **\_id**: `string` = `'org123'`
+> **/_id**: `string` = `'org123'`
 
 #### result.data.event.organization.members
 

@@ -20,7 +20,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:91](https://github.com/Palisadoe
 
 #### getChildTags
 
-> **getChildTags**: [`InterfaceQueryUserTagChildTags`](utils\interfaces\README\interfaces\InterfaceQueryUserTagChildTags.md)
+> **getChildTags**: [`InterfaceQueryUserTagChildTags`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryUserTagChildTags
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:94](https://github.com/Palisadoe
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `getChildTags`: [`InterfaceQueryUserTagChildTags`](utils\interfaces\README\interfaces\InterfaceQueryUserTagChildTags.md); \}\>
+`InterfaceBaseFetchMoreOptions`/</{ `getChildTags`: [`InterfaceQueryUserTagChildTags`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryUserTagChildTags; /}/>
 
 #### Returns
 

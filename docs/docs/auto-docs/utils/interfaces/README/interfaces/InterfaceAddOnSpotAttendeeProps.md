@@ -4,7 +4,13 @@
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
-Defined in: [src/utils/interfaces.ts:1287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1287)
+Defined in: [src/utils/interfaces.ts:2332](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2332)
+
+InterfaceAddOnSpotAttendeeProps
+
+## Description
+
+Defines the props for the AddOnSpotAttendee component.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:1287](https://github.com/PalisadoesFoundati
 
 > **handleClose**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:1289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1289)
+Defined in: [src/utils/interfaces.ts:2334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2334)
+
+Callback function to close the modal.
 
 #### Returns
 
@@ -24,7 +32,9 @@ Defined in: [src/utils/interfaces.ts:1289](https://github.com/PalisadoesFoundati
 
 > **reloadMembers**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:1290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1290)
+Defined in: [src/utils/interfaces.ts:2335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2335)
+
+Callback function to reload members.
 
 #### Returns
 
@@ -36,4 +46,6 @@ Defined in: [src/utils/interfaces.ts:1290](https://github.com/PalisadoesFoundati
 
 > **show**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1288)
+Defined in: [src/utils/interfaces.ts:2333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2333)
+
+Indicates if the modal should be shown.

@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfaceSearchingButtonProps`\>
+> `const` **default**: `React.FC`/<`InterfaceSearchingButtonProps`/>
 
 Defined in: [src/subComponents/SearchingButton.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchingButton.tsx#L29)
 

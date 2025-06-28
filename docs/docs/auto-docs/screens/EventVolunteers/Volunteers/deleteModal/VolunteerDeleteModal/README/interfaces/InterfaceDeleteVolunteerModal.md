@@ -42,6 +42,6 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 ### volunteer
 
-> **volunteer**: [`InterfaceEventVolunteerInfo`](utils\interfaces\README\interfaces\InterfaceEventVolunteerInfo.md)
+> **volunteer**: [`InterfaceEventVolunteerInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceEventVolunteerInfo
 
 Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L48)

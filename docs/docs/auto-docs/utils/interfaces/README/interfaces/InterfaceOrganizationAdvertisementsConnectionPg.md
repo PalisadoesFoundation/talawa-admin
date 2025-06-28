@@ -4,20 +4,30 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:553](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L553)
+Defined in: [src/utils/interfaces.ts:836](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L836)
+
+InterfaceOrganizationAdvertisementsConnectionPg
+
+## Description
+
+Defines the structure for a connection of organization advertisements with PostgreSQL-specific fields.
 
 ## Properties
 
 ### edges
 
-> **edges**: [`InterfaceOrganizationAdvertisementsConnectionEdgePg`](utils\interfaces\README\interfaces\InterfaceOrganizationAdvertisementsConnectionEdgePg.md)[]
+> **edges**: [`InterfaceOrganizationAdvertisementsConnectionEdgePg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationAdvertisementsConnectionEdgePg[]
 
-Defined in: [src/utils/interfaces.ts:554](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L554)
+Defined in: [src/utils/interfaces.ts:837](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L837)
+
+An array of edges, where each edge contains a cursor and an advertisement node.
 
 ***
 
 ### pageInfo
 
-> **pageInfo**: [`InterfacePageInfoPg`](utils\interfaces\README\interfaces\InterfacePageInfoPg.md)
+> **pageInfo**: [`InterfacePageInfoPg`]/auto-docs/utils/interfaces/README/interfaces/InterfacePageInfoPg
 
-Defined in: [src/utils/interfaces.ts:555](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L555)
+Defined in: [src/utils/interfaces.ts:838](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L838)
+
+Pagination information.

@@ -10,9 +10,9 @@ Defined in: [src/types/User/type.ts:4](https://github.com/PalisadoesFoundation/t
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/User/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L5)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/User/type.ts:5](https://github.com/PalisadoesFoundation/t
 
 ### address?
 
-> `optional` **address**: [`Address`](types\User\type\README\type-aliases\Address.md)
+> `optional` **address**: [`Address`]/auto-docs/types/User/type/README/type-aliases/Address
 
 Defined in: [src/types/User/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L6)
 

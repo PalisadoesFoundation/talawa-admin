@@ -10,19 +10,19 @@ Defined in: [src/components/Advertisements/core/AdvertisementEntry/Advertisement
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### advertisement
 
-[`Advertisement`](types\Advertisement\type\README\type-aliases\Advertisement.md)
+[`Advertisement`]/auto-docs/types/Advertisement/type/README/type-aliases/Advertisement
 
 #### setAfterActive
 
-`Dispatch`\<`SetStateAction`\<`string`\>\>
+`Dispatch`/<`SetStateAction`/<`string`/>/>
 
 #### setAfterCompleted
 
-`Dispatch`\<`SetStateAction`\<`string`\>\>
+`Dispatch`/<`SetStateAction`/<`string`/>/>
 
 ## Returns
 

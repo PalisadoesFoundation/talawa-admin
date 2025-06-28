@@ -20,7 +20,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:115](https://github.com/Palisado
 
 #### getUsersToAssignTo
 
-> **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`](utils\interfaces\README\interfaces\InterfaceQueryUserTagsMembersToAssignTo.md)
+> **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryUserTagsMembersToAssignTo
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:118](https://github.com/Palisado
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `getUsersToAssignTo`: [`InterfaceQueryUserTagsMembersToAssignTo`](utils\interfaces\README\interfaces\InterfaceQueryUserTagsMembersToAssignTo.md); \}\>
+`InterfaceBaseFetchMoreOptions`/</{ `getUsersToAssignTo`: [`InterfaceQueryUserTagsMembersToAssignTo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryUserTagsMembersToAssignTo; /}/>
 
 #### Returns
 

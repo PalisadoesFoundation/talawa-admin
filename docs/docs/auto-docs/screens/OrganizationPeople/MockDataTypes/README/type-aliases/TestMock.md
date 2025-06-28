@@ -20,13 +20,13 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:121](https://github
 
 ### newData()?
 
-> `optional` **newData**: () => `FetchResult`\<`Record`\<`string`, `unknown`\>\>
+> `optional` **newData**: () => `FetchResult`/<`Record`/<`string`, `unknown`/>/>
 
 Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L122)
 
 #### Returns
 
-`FetchResult`\<`Record`\<`string`, `unknown`\>\>
+`FetchResult`/<`Record`/<`string`, `unknown`/>/>
 
 ***
 
@@ -46,11 +46,11 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:37](https://github.
 
 ##### variables.after?
 
-> `optional` **after**: `string` \| `null`
+> `optional` **after**: `string` /| `null`
 
 ##### variables.before?
 
-> `optional` **before**: `string` \| `null`
+> `optional` **before**: `string` /| `null`
 
 ##### variables.email?
 
@@ -58,15 +58,15 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:37](https://github.
 
 ##### variables.first?
 
-> `optional` **first**: `number` \| `null`
+> `optional` **first**: `number` /| `null`
 
 ##### variables.firstName?
 
 > `optional` **firstName**: `string`
 
-##### variables.firstName\_contains?
+##### variables.firstName/_contains?
 
-> `optional` **firstName\_contains**: `string`
+> `optional` **firstName/_contains**: `string`
 
 ##### variables.firstNameContains?
 
@@ -76,21 +76,21 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:37](https://github.
 
 > `optional` **id**: `string`
 
-##### variables.id\_not\_in?
+##### variables.id/_not/_in?
 
-> `optional` **id\_not\_in**: `string`[]
+> `optional` **id/_not/_in**: `string`[]
 
 ##### variables.last?
 
-> `optional` **last**: `number` \| `null`
+> `optional` **last**: `number` /| `null`
 
 ##### variables.lastName?
 
 > `optional` **lastName**: `string`
 
-##### variables.lastName\_contains?
+##### variables.lastName/_contains?
 
-> `optional` **lastName\_contains**: `string`
+> `optional` **lastName/_contains**: `string`
 
 ##### variables.lastNameContains?
 
@@ -206,7 +206,7 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:60](https://github.
 
 ##### data.organizations?
 
-> `optional` **organizations**: [`InterfaceQueryOrganizationsListObject`](utils\interfaces\README\interfaces\InterfaceQueryOrganizationsListObject.md)[]
+> `optional` **organizations**: [`InterfaceQueryOrganizationsListObject`]/auto-docs/utils/interfaces/README/interfaces/InterfaceQueryOrganizationsListObject[]
 
 ##### data.organizationsMemberConnection?
 

@@ -24,11 +24,11 @@ Defined in: [src/types/Post/interface.ts:53](https://github.com/PalisadoesFounda
 
 #### edges
 
-> **edges**: [`InterfacePostEdge`](types\Post\interface\README\interfaces\InterfacePostEdge.md)[]
+> **edges**: [`InterfacePostEdge`]/auto-docs/types/Post/interface/README/interfaces/InterfacePostEdge[]
 
 #### pageInfo
 
-> **pageInfo**: [`InterfacePageInfo`](types\Post\interface\README\interfaces\InterfacePageInfo.md)
+> **pageInfo**: [`InterfacePageInfo`]/auto-docs/types/Post/interface/README/interfaces/InterfacePageInfo
 
 #### totalCount
 

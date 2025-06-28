@@ -25,7 +25,7 @@ Defined in: [src/utils/StaticMockLink.ts:40](https://github.com/PalisadoesFounda
 
 ##### mockedResponses
 
-readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
+readonly `MockedResponse`/<`Record`/<`string`, `any`/>, `Record`/<`string`, `any`/>/>[]
 
 ##### addTypename
 
@@ -77,7 +77,7 @@ Defined in: [src/utils/StaticMockLink.ts:50](https://github.com/PalisadoesFounda
 
 ### request()
 
-> **request**(`operation`): `Observable`\<`FetchResult`\>
+> **request**(`operation`): `Observable`/<`FetchResult`/>
 
 Defined in: [src/utils/StaticMockLink.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L65)
 
@@ -89,7 +89,7 @@ Defined in: [src/utils/StaticMockLink.ts:65](https://github.com/PalisadoesFounda
 
 #### Returns
 
-`Observable`\<`FetchResult`\>
+`Observable`/<`FetchResult`/>
 
 #### Overrides
 

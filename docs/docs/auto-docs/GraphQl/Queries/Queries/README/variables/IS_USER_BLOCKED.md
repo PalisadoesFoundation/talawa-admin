@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: IS\_USER\_BLOCKED
+# Variable: IS/_USER/_BLOCKED
 
-> `const` **IS\_USER\_BLOCKED**: `DocumentNode`
+> `const` **IS/_USER/_BLOCKED**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:474](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L474)

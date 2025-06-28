@@ -10,7 +10,7 @@ Defined in: [src/components/Pagination/PaginationList/PaginationList.tsx:50](htt
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfacePropsInterface`
 

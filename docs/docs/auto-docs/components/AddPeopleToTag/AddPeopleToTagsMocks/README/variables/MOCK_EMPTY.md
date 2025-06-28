@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCK\_EMPTY
+# Variable: MOCK/_EMPTY
 
-> `const` **MOCK\_EMPTY**: `object`[]
+> `const` **MOCK/_EMPTY**: `object`[]
 
 Defined in: [src/components/AddPeopleToTag/AddPeopleToTagsMocks.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTagsMocks.ts#L294)
 
@@ -38,17 +38,17 @@ Defined in: [src/components/AddPeopleToTag/AddPeopleToTagsMocks.ts:294](https://
 
 > **firstName**: `object`
 
-#### request.variables.where.firstName.starts\_with
+#### request.variables.where.firstName.starts/_with
 
-> **starts\_with**: `string` = `''`
+> **starts/_with**: `string` = `''`
 
 #### request.variables.where.lastName
 
 > **lastName**: `object`
 
-#### request.variables.where.lastName.starts\_with
+#### request.variables.where.lastName.starts/_with
 
-> **starts\_with**: `string` = `''`
+> **starts/_with**: `string` = `''`
 
 ### result
 

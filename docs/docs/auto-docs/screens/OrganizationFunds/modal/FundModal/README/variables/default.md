@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceFundModal`](screens\OrganizationFunds\modal\FundModal\README\interfaces\InterfaceFundModal.md)\>
+> `const` **default**: `React.FC`/<[`InterfaceFundModal`](screens/OrganizationFunds/modal/FundModal/README/interfaces/InterfaceFundModal.md)/>
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L69)
 

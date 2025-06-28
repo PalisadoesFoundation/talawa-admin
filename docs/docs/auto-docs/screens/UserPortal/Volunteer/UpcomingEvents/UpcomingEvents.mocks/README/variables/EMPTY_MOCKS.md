@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: EMPTY\_MOCKS
+# Variable: EMPTY/_MOCKS
 
-> `const` **EMPTY\_MOCKS**: `object`[]
+> `const` **EMPTY/_MOCKS**: `object`[]
 
 Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L210)
 
@@ -26,21 +26,21 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **first**: `any` = `null`
 
-#### request.variables.location\_contains
+#### request.variables.location/_contains
 
-> **location\_contains**: `string` = `''`
+> **location/_contains**: `string` = `''`
 
-#### request.variables.organization\_id
+#### request.variables.organization/_id
 
-> **organization\_id**: `string` = `'orgId'`
+> **organization/_id**: `string` = `'orgId'`
 
 #### request.variables.skip
 
 > **skip**: `any` = `null`
 
-#### request.variables.title\_contains
+#### request.variables.title/_contains
 
-> **title\_contains**: `string` = `''`
+> **title/_contains**: `string` = `''`
 
 #### request.variables.upcomingOnly
 

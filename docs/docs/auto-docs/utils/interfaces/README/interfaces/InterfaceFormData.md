@@ -4,7 +4,13 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:1293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1293)
+Defined in: [src/utils/interfaces.ts:2347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2347)
+
+InterfaceFormData
+
+## Description
+
+Defines the structure for form data.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:1293](https://github.com/PalisadoesFoundati
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:1296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1296)
+Defined in: [src/utils/interfaces.ts:2350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2350)
+
+The email address.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:1296](https://github.com/PalisadoesFoundati
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1294)
+Defined in: [src/utils/interfaces.ts:2348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2348)
+
+The first name.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:1294](https://github.com/PalisadoesFoundati
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1298)
+Defined in: [src/utils/interfaces.ts:2352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2352)
+
+The gender.
 
 ***
 
@@ -36,7 +48,9 @@ Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundati
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1295)
+Defined in: [src/utils/interfaces.ts:2349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2349)
+
+The last name.
 
 ***
 
@@ -44,4 +58,6 @@ Defined in: [src/utils/interfaces.ts:1295](https://github.com/PalisadoesFoundati
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1297)
+Defined in: [src/utils/interfaces.ts:2351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2351)
+
+The phone number.

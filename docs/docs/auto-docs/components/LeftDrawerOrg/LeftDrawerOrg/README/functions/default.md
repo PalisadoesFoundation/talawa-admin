@@ -12,9 +12,9 @@ LeftDrawerOrg component for displaying organization details and options.
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`ILeftDrawerProps`](components\LeftDrawerOrg\LeftDrawerOrg\README\interfaces\ILeftDrawerProps.md)
+[`ILeftDrawerProps`](components/LeftDrawerOrg/LeftDrawerOrg/README/interfaces/ILeftDrawerProps.md)
 
 ## Returns
 

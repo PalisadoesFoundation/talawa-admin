@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:77](https://github.
 
 ### props
 
-[`InterfacePostCard`](utils\interfaces\README\interfaces\InterfacePostCard.md)
+[`InterfacePostCard`]/auto-docs/utils/interfaces/README/interfaces/InterfacePostCard
 
 ## Returns
 

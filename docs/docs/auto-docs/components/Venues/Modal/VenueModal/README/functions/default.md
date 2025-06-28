@@ -10,9 +10,9 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:58](https://github.com/P
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceVenueModalProps`](components\Venues\Modal\VenueModal\README\interfaces\InterfaceVenueModalProps.md)
+[`InterfaceVenueModalProps`](components/Venues/Modal/VenueModal/README/interfaces/InterfaceVenueModalProps.md)
 
 ## Returns
 

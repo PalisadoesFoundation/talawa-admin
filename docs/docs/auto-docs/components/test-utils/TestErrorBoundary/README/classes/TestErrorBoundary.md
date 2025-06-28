@@ -8,7 +8,7 @@ Defined in: [src/components/test-utils/TestErrorBoundary.tsx:22](https://github.
 
 ## Extends
 
-- `Component`\<`TestInterfaceErrorBoundaryProps`, `TestInterfaceErrorBoundaryState`\>
+- `Component`/<`TestInterfaceErrorBoundaryProps`, `TestInterfaceErrorBoundaryState`/>
 
 ## Constructors
 

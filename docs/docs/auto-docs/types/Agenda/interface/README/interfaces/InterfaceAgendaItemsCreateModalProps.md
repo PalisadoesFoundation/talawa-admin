@@ -10,7 +10,7 @@ Defined in: [src/types/Agenda/interface.ts:37](https://github.com/PalisadoesFoun
 
 ### agendaItemCategories
 
-> **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`](types\Agenda\interface\README\interfaces\InterfaceAgendaItemCategoryInfo.md)[]
+> **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceAgendaItemCategoryInfo[]
 
 Defined in: [src/types/Agenda/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L46)
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Agenda/interface.ts:38](https://github.com/PalisadoesFoun
 
 ### createAgendaItemHandler()
 
-> **createAgendaItemHandler**: (`e`) => `Promise`\<`void`\>
+> **createAgendaItemHandler**: (`e`) => `Promise`/<`void`/>
 
 Defined in: [src/types/Agenda/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L44)
 
@@ -34,17 +34,17 @@ Defined in: [src/types/Agenda/interface.ts:44](https://github.com/PalisadoesFoun
 
 ##### e
 
-`ChangeEvent`\<`HTMLFormElement`\>
+`ChangeEvent`/<`HTMLFormElement`/>
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>
 
 ***
 
 ### formState
 
-> **formState**: [`InterfaceCreateFormStateType`](types\Agenda\interface\README\interfaces\InterfaceCreateFormStateType.md)
+> **formState**: [`InterfaceCreateFormStateType`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceCreateFormStateType
 
 Defined in: [src/types/Agenda/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L40)
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Agenda/interface.ts:41](https://github.com/PalisadoesFoun
 
 ##### state
 
-`SetStateAction`\<[`InterfaceCreateFormStateType`](types\Agenda\interface\README\interfaces\InterfaceCreateFormStateType.md)\>
+`SetStateAction`/<[`InterfaceCreateFormStateType`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceCreateFormStateType/>
 
 #### Returns
 

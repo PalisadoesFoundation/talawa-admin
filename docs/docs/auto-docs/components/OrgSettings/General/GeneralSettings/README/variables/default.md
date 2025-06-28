@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `FC`\<`InterfaceGeneralSettingsProps`\>
+> `const` **default**: `FC`/<`InterfaceGeneralSettingsProps`/>
 
 Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
 

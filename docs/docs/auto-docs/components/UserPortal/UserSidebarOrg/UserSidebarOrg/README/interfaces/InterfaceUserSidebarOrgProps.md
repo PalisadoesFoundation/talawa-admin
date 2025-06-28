@@ -26,7 +26,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:60](htt
 
 ### setHideDrawer
 
-> **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+> **setHideDrawer**: `Dispatch`/<`SetStateAction`/<`boolean`/>/>
 
 Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L63)
 
@@ -34,6 +34,6 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:63](htt
 
 ### targets
 
-> **targets**: [`TargetsType`](state\reducers\routesReducer\README\type-aliases\TargetsType.md)[]
+> **targets**: [`TargetsType`](state/reducers/routesReducer/README/type-aliases/TargetsType.md)[]
 
 Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L61)

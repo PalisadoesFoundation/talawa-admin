@@ -10,9 +10,9 @@ Defined in: [src/types/Event/type.ts:48](https://github.com/PalisadoesFoundation
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Event/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L49)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/type.ts:50](https://github.com/PalisadoesFoundation
 
 ### event?
 
-> `optional` **event**: [`Event`](types\Event\type\README\type-aliases\Event.md)
+> `optional` **event**: [`Event`]/auto-docs/types/Event/type/README/type-aliases/Event
 
 Defined in: [src/types/Event/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L51)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/type.ts:52](https://github.com/PalisadoesFoundation
 
 ### review
 
-> **review**: `string` \| `null`
+> **review**: `string` /| `null`
 
 Defined in: [src/types/Event/type.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L53)
 

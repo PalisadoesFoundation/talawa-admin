@@ -10,9 +10,9 @@ Defined in: [src/components/Advertisements/core/AdvertisementRegister/Advertisem
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceAddOnRegisterProps`](types\Advertisement\interface\README\interfaces\InterfaceAddOnRegisterProps.md)
+[`InterfaceAddOnRegisterProps`]/auto-docs/types/Advertisement/interface/README/interfaces/InterfaceAddOnRegisterProps
 
 ## Returns
 

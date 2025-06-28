@@ -4,7 +4,7 @@
 
 # Function: getItem()
 
-> **getItem**\<`T`\>(`prefix`, `key`): `T`
+> **getItem**/<`T`/>(`prefix`, `key`): `T`
 
 Defined in: [src/utils/useLocalstorage.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L29)
 

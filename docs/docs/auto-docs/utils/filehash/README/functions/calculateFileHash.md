@@ -4,7 +4,7 @@
 
 # Function: calculateFileHash()
 
-> **calculateFileHash**(`file`): `Promise`\<`string`\>
+> **calculateFileHash**(`file`): `Promise`/<`string`/>
 
 Defined in: [src/utils/filehash.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/filehash.ts#L1)
 
@@ -16,4 +16,4 @@ Defined in: [src/utils/filehash.ts:1](https://github.com/PalisadoesFoundation/ta
 
 ## Returns
 
-`Promise`\<`string`\>
+`Promise`/<`string`/>

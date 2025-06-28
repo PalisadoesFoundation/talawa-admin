@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: ERROR\_MOCKS
+# Variable: ERROR/_MOCKS
 
-> `const` **ERROR\_MOCKS**: `object`[]
+> `const` **ERROR/_MOCKS**: `object`[]
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:407](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts#L407)
 
@@ -38,9 +38,9 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:407](https:
 
 > **leaderName**: `any` = `null`
 
-#### request.variables.where.name\_contains
+#### request.variables.where.name/_contains
 
-> **name\_contains**: `string` = `''`
+> **name/_contains**: `string` = `''`
 
 #### request.variables.where.orgId
 

@@ -10,9 +10,9 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Agenda/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L5)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation
 
 ### createdBy
 
-> **createdBy**: [`User`](types\User\type\README\type-aliases\User.md)
+> **createdBy**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L7)
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation
 
 ### organization
 
-> **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
+> **organization**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization
 
 Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L10)
 
@@ -68,6 +68,6 @@ Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundatio
 
 ### updatedBy?
 
-> `optional` **updatedBy**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **updatedBy**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Agenda/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L12)

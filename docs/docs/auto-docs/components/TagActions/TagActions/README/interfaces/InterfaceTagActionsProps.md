@@ -22,7 +22,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:67](https://github.com/Pal
 
 ### t
 
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
+> **t**: `TFunction`/<`"translation"`, `"manageTag"`/>
 
 Defined in: [src/components/TagActions/TagActions.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L69)
 
@@ -38,7 +38,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:66](https://github.com/Pal
 
 ### tagActionType
 
-> **tagActionType**: [`TagActionType`](utils\organizationTagsUtils\README\type-aliases\TagActionType.md)
+> **tagActionType**: [`TagActionType`]/auto-docs/utils/organizationTagsUtils/README/type-aliases/TagActionType
 
 Defined in: [src/components/TagActions/TagActions.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L68)
 
@@ -46,6 +46,6 @@ Defined in: [src/components/TagActions/TagActions.tsx:68](https://github.com/Pal
 
 ### tCommon
 
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
+> **tCommon**: `TFunction`/<`"common"`, `undefined`/>
 
 Defined in: [src/components/TagActions/TagActions.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L70)

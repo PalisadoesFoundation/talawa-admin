@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: DELETE\_VOLUNTEER
+# Variable: DELETE/_VOLUNTEER
 
-> `const` **DELETE\_VOLUNTEER**: `DocumentNode`
+> `const` **DELETE/_VOLUNTEER**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L26)
 

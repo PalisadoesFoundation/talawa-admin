@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: ADVERTISEMENTS\_GET
+# Variable: ADVERTISEMENTS/_GET
 
-> `const` **ADVERTISEMENTS\_GET**: `DocumentNode`
+> `const` **ADVERTISEMENTS/_GET**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L9)
 

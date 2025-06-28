@@ -10,9 +10,9 @@ Defined in: [src/screens/OrganizationActionItems/testObject.mocks.ts:11](https:/
 
 ## Type declaration
 
-### \_id
+### /_id
 
-> **\_id**: `string` = `'actionItemCategoryId1'`
+> **/_id**: `string` = `'actionItemCategoryId1'`
 
 ### name
 

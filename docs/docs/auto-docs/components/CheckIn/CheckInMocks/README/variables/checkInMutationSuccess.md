@@ -42,6 +42,6 @@ Defined in: [src/components/CheckIn/CheckInMocks.ts:46](https://github.com/Palis
 
 > **checkIn**: `object`
 
-#### result.data.checkIn.\_id
+#### result.data.checkIn./_id
 
-> **\_id**: `string` = `'123'`
+> **/_id**: `string` = `'123'`

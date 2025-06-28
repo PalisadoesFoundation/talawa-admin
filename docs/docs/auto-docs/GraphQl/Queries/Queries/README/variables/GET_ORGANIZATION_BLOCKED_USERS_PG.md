@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: GET\_ORGANIZATION\_BLOCKED\_USERS\_PG
+# Variable: GET/_ORGANIZATION/_BLOCKED/_USERS/_PG
 
-> `const` **GET\_ORGANIZATION\_BLOCKED\_USERS\_PG**: `DocumentNode`
+> `const` **GET/_ORGANIZATION/_BLOCKED/_USERS/_PG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:452](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L452)

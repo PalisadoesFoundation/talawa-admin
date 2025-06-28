@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCKS\_WITH\_TIME
+# Variable: MOCKS/_WITH/_TIME
 
-> `const` **MOCKS\_WITH\_TIME**: `object`[]
+> `const` **MOCKS/_WITH/_TIME**: `object`[]
 
 Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L3)
 
@@ -38,9 +38,9 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:3]
 
 > **event**: `object`
 
-#### result.data.event.\_id
+#### result.data.event./_id
 
-> **\_id**: `string` = `'event123'`
+> **/_id**: `string` = `'event123'`
 
 #### result.data.event.allDay
 
@@ -54,9 +54,9 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:3]
 
 > **creator**: `object`
 
-#### result.data.event.creator.\_id
+#### result.data.event.creator./_id
 
-> **\_id**: `string` = `'creator1'`
+> **/_id**: `string` = `'creator1'`
 
 #### result.data.event.creator.firstName
 

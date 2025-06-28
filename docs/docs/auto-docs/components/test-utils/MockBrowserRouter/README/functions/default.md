@@ -10,7 +10,7 @@ Defined in: [src/components/test-utils/MockBrowserRouter.tsx:12](https://github.
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### children
 

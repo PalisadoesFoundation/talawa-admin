@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: CREATE\_FUND\_MUTATION
+# Variable: CREATE/_FUND/_MUTATION
 
-> `const` **CREATE\_FUND\_MUTATION**: `DocumentNode`
+> `const` **CREATE/_FUND/_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/FundMutation.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L11)
 

@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: VENUE\_LIST
+# Variable: VENUE/_LIST
 
-> `const` **VENUE\_LIST**: `DocumentNode`
+> `const` **VENUE/_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L323)
 

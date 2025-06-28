@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: ORGANIZATION\_POST\_LIST
+# Variable: ORGANIZATION/_POST/_LIST
 
-> `const` **ORGANIZATION\_POST\_LIST**: `DocumentNode`
+> `const` **ORGANIZATION/_POST/_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L16)
 

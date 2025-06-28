@@ -10,82 +10,82 @@ Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundatio
 
 ## Type declaration
 
-### allDay\_ASC
+### allDay/_ASC
 
-> `readonly` **allDay\_ASC**: `"allDay_ASC"` = `'allDay_ASC'`
+> `readonly` **allDay/_ASC**: `"allDay_ASC"` = `'allDay_ASC'`
 
-### allDay\_DESC
+### allDay/_DESC
 
-> `readonly` **allDay\_DESC**: `"allDay_DESC"` = `'allDay_DESC'`
+> `readonly` **allDay/_DESC**: `"allDay_DESC"` = `'allDay_DESC'`
 
-### description\_ASC
+### description/_ASC
 
-> `readonly` **description\_ASC**: `"description_ASC"` = `'description_ASC'`
+> `readonly` **description/_ASC**: `"description_ASC"` = `'description_ASC'`
 
-### description\_DESC
+### description/_DESC
 
-> `readonly` **description\_DESC**: `"description_DESC"` = `'description_DESC'`
+> `readonly` **description/_DESC**: `"description_DESC"` = `'description_DESC'`
 
-### endDate\_ASC
+### endDate/_ASC
 
-> `readonly` **endDate\_ASC**: `"endDate_ASC"` = `'endDate_ASC'`
+> `readonly` **endDate/_ASC**: `"endDate_ASC"` = `'endDate_ASC'`
 
-### endDate\_DESC
+### endDate/_DESC
 
-> `readonly` **endDate\_DESC**: `"endDate_DESC"` = `'endDate_DESC'`
+> `readonly` **endDate/_DESC**: `"endDate_DESC"` = `'endDate_DESC'`
 
-### endTime\_ASC
+### endTime/_ASC
 
-> `readonly` **endTime\_ASC**: `"endTime_ASC"` = `'endTime_ASC'`
+> `readonly` **endTime/_ASC**: `"endTime_ASC"` = `'endTime_ASC'`
 
-### endTime\_DESC
+### endTime/_DESC
 
-> `readonly` **endTime\_DESC**: `"endTime_DESC"` = `'endTime_DESC'`
+> `readonly` **endTime/_DESC**: `"endTime_DESC"` = `'endTime_DESC'`
 
-### id\_ASC
+### id/_ASC
 
-> `readonly` **id\_ASC**: `"id_ASC"` = `'id_ASC'`
+> `readonly` **id/_ASC**: `"id_ASC"` = `'id_ASC'`
 
-### id\_DESC
+### id/_DESC
 
-> `readonly` **id\_DESC**: `"id_DESC"` = `'id_DESC'`
+> `readonly` **id/_DESC**: `"id_DESC"` = `'id_DESC'`
 
-### location\_ASC
+### location/_ASC
 
-> `readonly` **location\_ASC**: `"location_ASC"` = `'location_ASC'`
+> `readonly` **location/_ASC**: `"location_ASC"` = `'location_ASC'`
 
-### location\_DESC
+### location/_DESC
 
-> `readonly` **location\_DESC**: `"location_DESC"` = `'location_DESC'`
+> `readonly` **location/_DESC**: `"location_DESC"` = `'location_DESC'`
 
-### recurrance\_ASC
+### recurrance/_ASC
 
-> `readonly` **recurrance\_ASC**: `"recurrance_ASC"` = `'recurrance_ASC'`
+> `readonly` **recurrance/_ASC**: `"recurrance_ASC"` = `'recurrance_ASC'`
 
-### recurrance\_DESC
+### recurrance/_DESC
 
-> `readonly` **recurrance\_DESC**: `"recurrance_DESC"` = `'recurrance_DESC'`
+> `readonly` **recurrance/_DESC**: `"recurrance_DESC"` = `'recurrance_DESC'`
 
-### startDate\_ASC
+### startDate/_ASC
 
-> `readonly` **startDate\_ASC**: `"startDate_ASC"` = `'startDate_ASC'`
+> `readonly` **startDate/_ASC**: `"startDate_ASC"` = `'startDate_ASC'`
 
-### startDate\_DESC
+### startDate/_DESC
 
-> `readonly` **startDate\_DESC**: `"startDate_DESC"` = `'startDate_DESC'`
+> `readonly` **startDate/_DESC**: `"startDate_DESC"` = `'startDate_DESC'`
 
-### startTime\_ASC
+### startTime/_ASC
 
-> `readonly` **startTime\_ASC**: `"startTime_ASC"` = `'startTime_ASC'`
+> `readonly` **startTime/_ASC**: `"startTime_ASC"` = `'startTime_ASC'`
 
-### startTime\_DESC
+### startTime/_DESC
 
-> `readonly` **startTime\_DESC**: `"startTime_DESC"` = `'startTime_DESC'`
+> `readonly` **startTime/_DESC**: `"startTime_DESC"` = `'startTime_DESC'`
 
-### title\_ASC
+### title/_ASC
 
-> `readonly` **title\_ASC**: `"title_ASC"` = `'title_ASC'`
+> `readonly` **title/_ASC**: `"title_ASC"` = `'title_ASC'`
 
-### title\_DESC
+### title/_DESC
 
-> `readonly` **title\_DESC**: `"title_DESC"` = `'title_DESC'`
+> `readonly` **title/_DESC**: `"title_DESC"` = `'title_DESC'`

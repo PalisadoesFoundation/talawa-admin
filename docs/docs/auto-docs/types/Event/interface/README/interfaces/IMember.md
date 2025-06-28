@@ -8,17 +8,17 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFound
 
 ## Properties
 
-### \_\_typename
+### /_/_typename
 
-> **\_\_typename**: `string`
+> **/_/_typename**: `string`
 
 Defined in: [src/types/Event/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L33)
 
 ***
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Event/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L34)
 
@@ -54,9 +54,9 @@ Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L29)
 
-#### \_id
+#### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 ***
 

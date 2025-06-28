@@ -18,9 +18,9 @@ Defined in: [src/components/EventStats/EventStatsMocks.ts:29](https://github.com
 
 > **event**: `object`
 
-#### data.event.\_id
+#### data.event./_id
 
-> **\_id**: `string` = `'123'`
+> **/_id**: `string` = `'123'`
 
 #### data.event.averageFeedbackScore
 

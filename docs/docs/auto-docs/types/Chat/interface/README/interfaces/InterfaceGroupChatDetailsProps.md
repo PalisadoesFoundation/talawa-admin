@@ -10,7 +10,7 @@ Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundat
 
 ### chat
 
-> **chat**: [`GroupChat`](types\Chat\type\README\type-aliases\GroupChat.md)
+> **chat**: [`GroupChat`]/auto-docs/types/Chat/type/README/type-aliases/GroupChat
 
 Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L7)
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundat
 
 ### chatRefetch()
 
-> **chatRefetch**: (`variables`?) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`GroupChat`](types\Chat\type\README\type-aliases\GroupChat.md); \}\>\>
+> **chatRefetch**: (`variables`?) => `Promise`/<`ApolloQueryResult`/</{ `chat`: [`GroupChat`]/auto-docs/types/Chat/type/README/type-aliases/GroupChat; /}/>/>
 
 Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L8)
 
@@ -26,11 +26,11 @@ Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundat
 
 ##### variables?
 
-`Partial`\<\{ `id`: `string`; \}\>
+`Partial`/</{ `id`: `string`; /}/>
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`GroupChat`](types\Chat\type\README\type-aliases\GroupChat.md); \}\>\>
+`Promise`/<`ApolloQueryResult`/</{ `chat`: [`GroupChat`]/auto-docs/types/Chat/type/README/type-aliases/GroupChat; /}/>/>
 
 ***
 

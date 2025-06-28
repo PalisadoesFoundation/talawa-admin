@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**\<`T`\>(`callback`, `delay`): `object`
+> **default**/<`T`/>(`callback`, `delay`): `object`
 
 Defined in: [src/components/OrgListCard/useDebounce.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/useDebounce.tsx#L31)
 
@@ -44,7 +44,7 @@ Defined in: [src/components/OrgListCard/useDebounce.tsx:31](https://github.com/P
 
 ##### args
 
-...`Parameters`\<`T`\>
+...`Parameters`/<`T`/>
 
 #### Returns
 

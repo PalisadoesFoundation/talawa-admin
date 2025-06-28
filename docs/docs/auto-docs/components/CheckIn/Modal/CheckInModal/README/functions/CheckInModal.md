@@ -10,9 +10,9 @@ Defined in: [src/components/CheckIn/Modal/CheckInModal.tsx:53](https://github.co
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceModalProp`](types\CheckIn\interface\README\interfaces\InterfaceModalProp.md)
+[`InterfaceModalProp`]/auto-docs/types/CheckIn/interface/README/interfaces/InterfaceModalProp
 
 ## Returns
 

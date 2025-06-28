@@ -14,9 +14,9 @@ Defined in: [src/utils/languages.ts:3](https://github.com/PalisadoesFoundation/t
 
 > **code**: `string` = `'en'`
 
-### country\_code
+### country/_code
 
-> **country\_code**: `string` = `'gb'`
+> **country/_code**: `string` = `'gb'`
 
 ### name
 

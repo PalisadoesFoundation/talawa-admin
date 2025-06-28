@@ -18,6 +18,6 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:42](https://g
 
 ### setHideDrawer
 
-> **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+> **setHideDrawer**: `Dispatch`/<`SetStateAction`/<`boolean`/>/>
 
 Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L43)

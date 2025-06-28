@@ -46,7 +46,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:69](https://github
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L76)
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:76](https://github
 
 ### pledge
 
-> **pledge**: [`InterfacePledgeInfo`](utils\interfaces\README\interfaces\InterfacePledgeInfo.md)
+> **pledge**: [`InterfacePledgeInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfacePledgeInfo
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L73)
 

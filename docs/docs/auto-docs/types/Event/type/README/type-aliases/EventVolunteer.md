@@ -10,9 +10,9 @@ Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Event/type.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L87)
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\Event\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/Event/type/README/type-aliases/User
 
 Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L89)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation
 
 ### event?
 
-> `optional` **event**: [`Event`](types\Event\type\README\type-aliases\Event.md)
+> `optional` **event**: [`Event`]/auto-docs/types/Event/type/README/type-aliases/Event
 
 Defined in: [src/types/Event/type.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L90)
 
@@ -76,6 +76,6 @@ Defined in: [src/types/Event/type.ts:94](https://github.com/PalisadoesFoundation
 
 ### user
 
-> **user**: [`User`](types\Event\type\README\type-aliases\User.md)
+> **user**: [`User`]/auto-docs/types/Event/type/README/type-aliases/User
 
 Defined in: [src/types/Event/type.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L95)

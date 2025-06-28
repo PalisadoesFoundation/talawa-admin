@@ -10,7 +10,7 @@ Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 #### _id
 

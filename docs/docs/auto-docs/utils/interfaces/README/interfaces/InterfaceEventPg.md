@@ -4,7 +4,13 @@
 
 # Interface: InterfaceEventPg
 
-Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L651)
+Defined in: [src/utils/interfaces.ts:1057](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1057)
+
+InterfaceEventPg
+
+## Description
+
+Defines the structure for an event with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,11 +18,13 @@ Defined in: [src/utils/interfaces.ts:651](https://github.com/PalisadoesFoundatio
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L652)
+Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1058)
+
+The event object.
 
 #### attachments
 
-> **attachments**: [`InterfaceEventAttachmentPg`](utils\interfaces\README\interfaces\InterfaceEventAttachmentPg.md)[]
+> **attachments**: [`InterfaceEventAttachmentPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceEventAttachmentPg[]
 
 #### createdAt
 
@@ -24,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundatio
 
 #### creator
 
-> **creator**: [`InterfaceUserPg`](utils\interfaces\README\interfaces\InterfaceUserPg.md)
+> **creator**: [`InterfaceUserPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceUserPg
 
 #### description
 
@@ -44,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundatio
 
 #### organization
 
-> **organization**: [`InterfaceOrganizationPg`](utils\interfaces\README\interfaces\InterfaceOrganizationPg.md)
+> **organization**: [`InterfaceOrganizationPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceOrganizationPg
 
 #### startAt
 
@@ -56,4 +64,4 @@ Defined in: [src/utils/interfaces.ts:652](https://github.com/PalisadoesFoundatio
 
 #### updater
 
-> **updater**: [`InterfaceUserPg`](utils\interfaces\README\interfaces\InterfaceUserPg.md)
+> **updater**: [`InterfaceUserPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceUserPg

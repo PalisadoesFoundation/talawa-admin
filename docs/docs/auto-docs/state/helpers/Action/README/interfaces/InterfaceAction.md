@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceAction\<T\>
+# Interface: InterfaceAction/<T/>
 
 Defined in: [src/state/helpers/Action.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/helpers/Action.ts#L1)
 

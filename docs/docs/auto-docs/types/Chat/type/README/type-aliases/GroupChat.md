@@ -10,9 +10,9 @@ Defined in: [src/types/Chat/type.ts:18](https://github.com/PalisadoesFoundation/
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Chat/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L19)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/type.ts:19](https://github.com/PalisadoesFoundation/
 
 ### admins
 
-> **admins**: [`User`](types\User\type\README\type-aliases\User.md)[]
+> **admins**: [`User`]/auto-docs/types/User/type/README/type-aliases/User[]
 
 Defined in: [src/types/Chat/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L24)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/type.ts:28](https://github.com/PalisadoesFoundation/
 
 ### creator?
 
-> `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **creator**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Chat/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L29)
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Chat/type.ts:32](https://github.com/PalisadoesFoundation/
 
 ### messages
 
-> **messages**: [`DirectMessage`](types\Chat\type\README\type-aliases\DirectMessage.md)[]
+> **messages**: [`DirectMessage`]/auto-docs/types/Chat/type/README/type-aliases/DirectMessage[]
 
 Defined in: [src/types/Chat/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L23)
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Chat/type.ts:21](https://github.com/PalisadoesFoundation/
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
+> `optional` **organization**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization
 
 Defined in: [src/types/Chat/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L30)
 
@@ -116,6 +116,6 @@ Defined in: [src/types/Chat/type.ts:31](https://github.com/PalisadoesFoundation/
 
 ### users
 
-> **users**: [`User`](types\User\type\README\type-aliases\User.md)[]
+> **users**: [`User`]/auto-docs/types/User/type/README/type-aliases/User[]
 
 Defined in: [src/types/Chat/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L25)

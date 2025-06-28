@@ -12,6 +12,6 @@ Defined in: [src/types/Advertisement/type.ts:56](https://github.com/PalisadoesFo
 
 ### advertisement?
 
-> `optional` **advertisement**: [`Advertisement`](types\Advertisement\type\README\type-aliases\Advertisement.md)
+> `optional` **advertisement**: [`Advertisement`]/auto-docs/types/Advertisement/type/README/type-aliases/Advertisement
 
 Defined in: [src/types/Advertisement/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L57)

@@ -10,7 +10,7 @@ Defined in: [src/components/test-utils/TestWrapper.tsx:51](https://github.com/Pa
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceTestWrapperProps`
 

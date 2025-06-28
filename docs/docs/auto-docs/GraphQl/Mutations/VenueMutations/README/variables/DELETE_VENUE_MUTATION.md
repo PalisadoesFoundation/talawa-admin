@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: DELETE\_VENUE\_MUTATION
+# Variable: DELETE/_VENUE/_MUTATION
 
-> `const` **DELETE\_VENUE\_MUTATION**: `DocumentNode`
+> `const` **DELETE/_VENUE/_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/VenueMutations.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/VenueMutations.ts#L73)
 

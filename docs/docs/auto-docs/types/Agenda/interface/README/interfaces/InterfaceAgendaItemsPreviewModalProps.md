@@ -18,7 +18,7 @@ Defined in: [src/types/Agenda/interface.ts:50](https://github.com/PalisadoesFoun
 
 ### formState
 
-> **formState**: [`InterfaceFormStateType`](types\Agenda\interface\README\interfaces\InterfaceFormStateType.md)
+> **formState**: [`InterfaceFormStateType`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceFormStateType
 
 Defined in: [src/types/Agenda/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L54)
 

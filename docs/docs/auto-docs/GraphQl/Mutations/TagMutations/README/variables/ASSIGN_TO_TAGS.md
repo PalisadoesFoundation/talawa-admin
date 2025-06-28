@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: ASSIGN\_TO\_TAGS
+# Variable: ASSIGN/_TO/_TAGS
 
-> `const` **ASSIGN\_TO\_TAGS**: `DocumentNode`
+> `const` **ASSIGN/_TO/_TAGS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L98)
 

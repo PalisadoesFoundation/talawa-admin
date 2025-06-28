@@ -10,9 +10,9 @@ Defined in: [src/types/membership.ts:4](https://github.com/PalisadoesFoundation/
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/membership.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/membership.ts#L5)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/membership.ts:5](https://github.com/PalisadoesFoundation/
 
 ### organization
 
-> **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
+> **organization**: [`Organization`]/auto-docs/types/Organization/type/README/type-aliases/Organization
 
 Defined in: [src/types/membership.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/membership.ts#L6)
 
@@ -28,6 +28,6 @@ Defined in: [src/types/membership.ts:6](https://github.com/PalisadoesFoundation/
 
 ### user
 
-> **user**: [`User`](types\User\type\README\type-aliases\User.md)
+> **user**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/membership.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/membership.ts#L7)

@@ -10,7 +10,7 @@ Defined in: [src/types/Event/interface.ts:95](https://github.com/PalisadoesFound
 
 ### eventData
 
-> **eventData**: [`IEvent`](types\Event\interface\README\interfaces\IEvent.md)[]
+> **eventData**: [`IEvent`]/auto-docs/types/Event/interface/README/interfaces/IEvent[]
 
 Defined in: [src/types/Event/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L96)
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Event/interface.ts:96](https://github.com/PalisadoesFound
 
 ### orgData?
 
-> `optional` **orgData**: [`IOrgList`](types\Event\interface\README\interfaces\IOrgList.md)
+> `optional` **orgData**: [`IOrgList`]/auto-docs/types/Event/interface/README/interfaces/IOrgList
 
 Defined in: [src/types/Event/interface.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L98)
 
@@ -54,6 +54,6 @@ Defined in: [src/types/Event/interface.ts:99](https://github.com/PalisadoesFound
 
 ### viewType?
 
-> `optional` **viewType**: [`ViewType`](screens\OrganizationEvents\OrganizationEvents\README\enumerations\ViewType.md)
+> `optional` **viewType**: [`ViewType`](screens/OrganizationEvents/OrganizationEvents/README/enumerations/ViewType.md)
 
 Defined in: [src/types/Event/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L101)

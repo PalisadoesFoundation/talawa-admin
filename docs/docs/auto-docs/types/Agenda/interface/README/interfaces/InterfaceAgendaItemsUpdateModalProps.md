@@ -10,7 +10,7 @@ Defined in: [src/types/Agenda/interface.ts:58](https://github.com/PalisadoesFoun
 
 ### agendaItemCategories
 
-> **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`](types\Agenda\interface\README\interfaces\InterfaceAgendaItemCategoryInfo.md)[]
+> **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceAgendaItemCategoryInfo[]
 
 Defined in: [src/types/Agenda/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L65)
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Agenda/interface.ts:59](https://github.com/PalisadoesFoun
 
 ### formState
 
-> **formState**: [`InterfaceFormStateType`](types\Agenda\interface\README\interfaces\InterfaceFormStateType.md)
+> **formState**: [`InterfaceFormStateType`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceFormStateType
 
 Defined in: [src/types/Agenda/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L61)
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Agenda/interface.ts:62](https://github.com/PalisadoesFoun
 
 ##### state
 
-`SetStateAction`\<[`InterfaceFormStateType`](types\Agenda\interface\README\interfaces\InterfaceFormStateType.md)\>
+`SetStateAction`/<[`InterfaceFormStateType`]/auto-docs/types/Agenda/interface/README/interfaces/InterfaceFormStateType/>
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Agenda/interface.ts:64](https://github.com/PalisadoesFoun
 
 ### updateAgendaItemHandler()
 
-> **updateAgendaItemHandler**: (`e`) => `Promise`\<`void`\>
+> **updateAgendaItemHandler**: (`e`) => `Promise`/<`void`/>
 
 Defined in: [src/types/Agenda/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L63)
 
@@ -90,8 +90,8 @@ Defined in: [src/types/Agenda/interface.ts:63](https://github.com/PalisadoesFoun
 
 ##### e
 
-`ChangeEvent`\<`HTMLFormElement`\>
+`ChangeEvent`/<`HTMLFormElement`/>
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`/<`void`/>

@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: IS\_SAMPLE\_ORGANIZATION\_QUERY
+# Variable: IS/_SAMPLE/_ORGANIZATION/_QUERY
 
-> `const` **IS\_SAMPLE\_ORGANIZATION\_QUERY**: `DocumentNode`
+> `const` **IS/_SAMPLE/_ORGANIZATION/_QUERY**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L349)
 

@@ -10,9 +10,9 @@ Defined in: [src/types/CheckIn/type.ts:4](https://github.com/PalisadoesFoundatio
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/CheckIn/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L5)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/CheckIn/type.ts:8](https://github.com/PalisadoesFoundatio
 
 ### event
 
-> **event**: [`Event`](types\Event\type\README\type-aliases\Event.md)
+> **event**: [`Event`]/auto-docs/types/Event/type/README/type-aliases/Event
 
 Defined in: [src/types/CheckIn/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L9)
 
@@ -76,6 +76,6 @@ Defined in: [src/types/CheckIn/type.ts:12](https://github.com/PalisadoesFoundati
 
 ### user
 
-> **user**: [`User`](types\User\type\README\type-aliases\User.md)
+> **user**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/CheckIn/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L13)

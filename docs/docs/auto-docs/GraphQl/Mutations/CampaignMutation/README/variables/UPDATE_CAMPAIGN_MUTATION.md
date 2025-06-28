@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: UPDATE\_CAMPAIGN\_MUTATION
+# Variable: UPDATE/_CAMPAIGN/_MUTATION
 
-> `const` **UPDATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
+> `const` **UPDATE/_CAMPAIGN/_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L51)
 

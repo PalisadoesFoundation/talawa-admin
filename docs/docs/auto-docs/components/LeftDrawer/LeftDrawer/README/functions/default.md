@@ -10,9 +10,9 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:51](https://github.com/Pal
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceLeftDrawerProps`](components\LeftDrawer\LeftDrawer\README\interfaces\InterfaceLeftDrawerProps.md)
+[`InterfaceLeftDrawerProps`](components/LeftDrawer/LeftDrawer/README/interfaces/InterfaceLeftDrawerProps.md)
 
 ## Returns
 

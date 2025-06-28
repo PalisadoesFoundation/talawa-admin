@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:59](https://githu
 
 ### props
 
-[`IEvent`](types\Event\interface\README\interfaces\IEvent.md)
+[`IEvent`]/auto-docs/types/Event/interface/README/interfaces/IEvent
 
 ## Returns
 

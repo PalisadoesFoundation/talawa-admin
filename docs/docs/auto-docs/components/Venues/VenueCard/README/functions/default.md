@@ -10,7 +10,7 @@ Defined in: [src/components/Venues/VenueCard.tsx:47](https://github.com/Palisado
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceVenueCardProps`
 

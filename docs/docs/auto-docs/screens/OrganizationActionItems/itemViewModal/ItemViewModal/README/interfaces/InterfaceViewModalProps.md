@@ -30,6 +30,6 @@ Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx
 
 ### item
 
-> **item**: [`InterfaceActionItemInfo`](utils\interfaces\README\interfaces\InterfaceActionItemInfo.md)
+> **item**: [`InterfaceActionItemInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceActionItemInfo
 
 Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L49)

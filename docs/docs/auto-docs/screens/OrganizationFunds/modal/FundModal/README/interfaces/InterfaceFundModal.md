@@ -10,7 +10,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:15](https://githu
 
 ### fund
 
-> **fund**: [`InterfaceFundInfo`](utils\interfaces\README\interfaces\InterfaceFundInfo.md)
+> **fund**: [`InterfaceFundInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceFundInfo
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L19)
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:16](https://githu
 
 ### mode
 
-> **mode**: `"create"` \| `"edit"`
+> **mode**: `"create"` /| `"edit"`
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L21)
 

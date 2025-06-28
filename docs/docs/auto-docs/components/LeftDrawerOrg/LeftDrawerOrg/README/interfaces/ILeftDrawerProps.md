@@ -26,7 +26,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:46](https://github.c
 
 ### setHideDrawer
 
-> **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+> **setHideDrawer**: `Dispatch`/<`SetStateAction`/<`boolean`/>/>
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L49)
 
@@ -34,6 +34,6 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:49](https://github.c
 
 ### targets
 
-> **targets**: [`TargetsType`](state\reducers\routesReducer\README\type-aliases\TargetsType.md)[]
+> **targets**: [`TargetsType`](state/reducers/routesReducer/README/type-aliases/TargetsType.md)[]
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L47)

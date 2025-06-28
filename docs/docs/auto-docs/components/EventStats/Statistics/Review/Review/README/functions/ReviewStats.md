@@ -10,9 +10,9 @@ Defined in: [src/components/EventStats/Statistics/Review/Review.tsx:40](https://
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`IStatsModal`](types\Event\interface\README\interfaces\IStatsModal.md)
+[`IStatsModal`]/auto-docs/types/Event/interface/README/interfaces/IStatsModal
 
 ## Returns
 

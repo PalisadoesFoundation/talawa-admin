@@ -10,9 +10,9 @@ Defined in: [src/components/EventCalender/Header/EventHeader.tsx:46](https://git
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`IEventHeaderProps`](types\Event\interface\README\interfaces\IEventHeaderProps.md)
+[`IEventHeaderProps`]/auto-docs/types/Event/interface/README/interfaces/IEventHeaderProps
 
 ## Returns
 

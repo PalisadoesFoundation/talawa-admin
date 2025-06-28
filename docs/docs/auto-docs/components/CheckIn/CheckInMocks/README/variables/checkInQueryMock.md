@@ -32,4 +32,4 @@ Defined in: [src/components/CheckIn/CheckInMocks.ts:34](https://github.com/Palis
 
 #### result.data
 
-> **data**: [`InterfaceAttendeeQueryResponse`](types\CheckIn\interface\README\interfaces\InterfaceAttendeeQueryResponse.md) = `checkInQueryData`
+> **data**: [`InterfaceAttendeeQueryResponse`]/auto-docs/types/CheckIn/interface/README/interfaces/InterfaceAttendeeQueryResponse = `checkInQueryData`

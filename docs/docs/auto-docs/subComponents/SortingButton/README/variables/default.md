@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfaceSortingButtonProps`\>
+> `const` **default**: `React.FC`/<`InterfaceSortingButtonProps`/>
 
 Defined in: [src/subComponents/SortingButton.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SortingButton.tsx#L43)
 

@@ -10,9 +10,9 @@ Defined in: [src/types/Chat/type.ts:4](https://github.com/PalisadoesFoundation/t
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Chat/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L5)
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/type.ts:5](https://github.com/PalisadoesFoundation/t
 
 ### chatMessageBelongsTo?
 
-> `optional` **chatMessageBelongsTo**: [`GroupChat`](types\Chat\type\README\type-aliases\GroupChat.md)
+> `optional` **chatMessageBelongsTo**: [`GroupChat`]/auto-docs/types/Chat/type/README/type-aliases/GroupChat
 
 Defined in: [src/types/Chat/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L11)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/type.ts:6](https://github.com/PalisadoesFoundation/t
 
 ### deletedBy?
 
-> `optional` **deletedBy**: [`User`](types\User\type\README\type-aliases\User.md)[]
+> `optional` **deletedBy**: [`User`]/auto-docs/types/User/type/README/type-aliases/User[]
 
 Defined in: [src/types/Chat/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L14)
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Chat/type.ts:10](https://github.com/PalisadoesFoundation/
 
 ### receiver?
 
-> `optional` **receiver**: [`User`](types\User\type\README\type-aliases\User.md)
+> `optional` **receiver**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Chat/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L8)
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Chat/type.ts:9](https://github.com/PalisadoesFoundation/t
 
 ### sender
 
-> **sender**: [`User`](types\User\type\README\type-aliases\User.md)
+> **sender**: [`User`]/auto-docs/types/User/type/README/type-aliases/User
 
 Defined in: [src/types/Chat/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L7)
 

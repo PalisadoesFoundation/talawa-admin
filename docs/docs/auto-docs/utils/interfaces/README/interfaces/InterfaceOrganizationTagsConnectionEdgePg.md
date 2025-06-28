@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationTagsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:762](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L762)
+Defined in: [src/utils/interfaces.ts:1290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1290)
+
+InterfaceOrganizationTagsConnectionEdgePg
+
+## Description
+
+Defines the structure for an edge in the organization tags connection with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,12 +18,16 @@ Defined in: [src/utils/interfaces.ts:762](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:763](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L763)
+Defined in: [src/utils/interfaces.ts:1291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1291)
+
+The cursor for this edge.
 
 ***
 
 ### node
 
-> **node**: [`InterfaceTagPg`](utils\interfaces\README\interfaces\InterfaceTagPg.md)
+> **node**: [`InterfaceTagPg`]/auto-docs/utils/interfaces/README/interfaces/InterfaceTagPg
 
-Defined in: [src/utils/interfaces.ts:764](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L764)
+Defined in: [src/utils/interfaces.ts:1292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1292)
+
+The tag node.

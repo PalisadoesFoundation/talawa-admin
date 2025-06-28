@@ -20,4 +20,4 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainerMocks.ts:9](ht
 
 ### agendaCategoryRefetch
 
-> **agendaCategoryRefetch**: `Mock`\<`Procedure`\>
+> **agendaCategoryRefetch**: `Mock`/<`Procedure`/>

@@ -10,9 +10,9 @@ Defined in: [src/types/Post/type.ts:22](https://github.com/PalisadoesFoundation/
 
 ## Properties
 
-### \_id?
+### /_id?
 
-> `optional` **\_id**: `string`
+> `optional` **/_id**: `string`
 
 Defined in: [src/types/Post/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L23)
 

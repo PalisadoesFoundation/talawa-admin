@@ -12,7 +12,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:42](https://github.com/P
 
 ### props
 
-[`InterfaceTableLoader`](components\TableLoader\TableLoader\README\interfaces\InterfaceTableLoader.md)
+[`InterfaceTableLoader`](components/TableLoader/TableLoader/README/interfaces/InterfaceTableLoader.md)
 
 ## Returns
 

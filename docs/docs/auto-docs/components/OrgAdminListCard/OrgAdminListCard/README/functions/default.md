@@ -12,7 +12,7 @@ Defined in: [src/components/OrgAdminListCard/OrgAdminListCard.tsx:47](https://gi
 
 ### props
 
-[`InterfaceOrgPeopleListCardProps`](types\Organization\interface\README\interfaces\InterfaceOrgPeopleListCardProps.md)
+[`InterfaceOrgPeopleListCardProps`]/auto-docs/types/Organization/interface/README/interfaces/InterfaceOrgPeopleListCardProps
 
 ## Returns
 

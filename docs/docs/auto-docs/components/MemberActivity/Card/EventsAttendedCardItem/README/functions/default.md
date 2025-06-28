@@ -12,7 +12,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:52](h
 
 ### props
 
-[`InterfaceCardItem`](components\MemberActivity\Card\EventsAttendedCardItem\README\interfaces\InterfaceCardItem.md)
+[`InterfaceCardItem`](components/MemberActivity/Card/EventsAttendedCardItem/README/interfaces/InterfaceCardItem.md)
 
 ## Returns
 

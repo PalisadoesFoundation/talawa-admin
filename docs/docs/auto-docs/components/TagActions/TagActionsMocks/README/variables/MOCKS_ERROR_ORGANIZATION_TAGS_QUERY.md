@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: MOCKS\_ERROR\_ORGANIZATION\_TAGS\_QUERY
+# Variable: MOCKS/_ERROR/_ORGANIZATION/_TAGS/_QUERY
 
-> `const` **MOCKS\_ERROR\_ORGANIZATION\_TAGS\_QUERY**: `object`[]
+> `const` **MOCKS/_ERROR/_ORGANIZATION/_TAGS/_QUERY**: `object`[]
 
 Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActionsMocks.ts#L279)
 
@@ -42,6 +42,6 @@ Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.co
 
 > **name**: `object`
 
-#### request.variables.where.name.starts\_with
+#### request.variables.where.name.starts/_with
 
-> **starts\_with**: `string` = `''`
+> **starts/_with**: `string` = `''`

@@ -90,7 +90,7 @@
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
-    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
+    "postgenerate-docs": "node scripts/delete-readmes.js && node fix-repo-url.js",
     "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"
   },
   "eslintConfig": {
@@ -131,7 +131,6 @@
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.9.0",
     "@types/node-fetch": "^2.6.10",
-    "@types/prop-types": "^15.7.15",
     "@types/react": "^18.3.12",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-bootstrap": "^0.32.37",
@@ -161,7 +160,6 @@
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
     "jest-preview": "^0.3.1",
-    "jiti": "^2.4.2",
     "lint-staged": "^15.3.0",
     "postcss-modules": "^6.0.1",
     "prettier": "^3.5.3",

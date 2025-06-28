@@ -8,9 +8,9 @@ Defined in: [src/types/Event/interface.ts:45](https://github.com/PalisadoesFound
 
 ## Properties
 
-### \_id
+### /_id
 
-> **\_id**: `string`
+> **/_id**: `string`
 
 Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L48)
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Event/interface.ts:56](https://github.com/PalisadoesFound
 
 ### attendees
 
-> **attendees**: `Partial`\<[`User`](types\Event\type\README\type-aliases\User.md)\>[]
+> **attendees**: `Partial`/<[`User`]/auto-docs/types/Event/type/README/type-aliases/User/>[]
 
 Defined in: [src/types/Event/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L60)
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Event/interface.ts:62](https://github.com/PalisadoesFound
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](types\Event\type\README\type-aliases\User.md)\>
+> **creator**: `Partial`/<[`User`]/auto-docs/types/Event/type/README/type-aliases/User/>
 
 Defined in: [src/types/Event/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L61)
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Event/interface.ts:55](https://github.com/PalisadoesFound
 
 ### feedback?
 
-> `optional` **feedback**: [`Feedback`](types\Event\type\README\type-aliases\Feedback.md)[]
+> `optional` **feedback**: [`Feedback`]/auto-docs/types/Event/type/README/type-aliases/Feedback[]
 
 Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L63)
 

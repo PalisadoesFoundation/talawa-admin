@@ -8,7 +8,7 @@ Defined in: [src/types/Tag/interface.ts:55](https://github.com/PalisadoesFoundat
 
 ## Extends
 
-- [`InterfaceBaseQueryResult`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md)
+- [`InterfaceBaseQueryResult`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceBaseQueryResult
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Tag/interface.ts:57](https://github.com/PalisadoesFoundat
 
 #### getUsersToAssignTo
 
-> **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`](types\Tag\interface\README\interfaces\InterfaceQueryUserTagsMembersToAssignTo.md)
+> **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceQueryUserTagsMembersToAssignTo
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundat
 
 #### Inherited from
 
-[`InterfaceBaseQueryResult`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md).[`error`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md#error)
+[`InterfaceBaseQueryResult`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.[`error`](types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.md#error)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Tag/interface.ts:60](https://github.com/PalisadoesFoundat
 
 ##### options
 
-[`InterfaceBaseFetchMoreOptions`](types\Tag\interface\README\interfaces\InterfaceBaseFetchMoreOptions.md)\<\{ `getUsersToAssignTo`: [`InterfaceQueryUserTagsMembersToAssignTo`](types\Tag\interface\README\interfaces\InterfaceQueryUserTagsMembersToAssignTo.md); \}\>
+[`InterfaceBaseFetchMoreOptions`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceBaseFetchMoreOptions/</{ `getUsersToAssignTo`: [`InterfaceQueryUserTagsMembersToAssignTo`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceQueryUserTagsMembersToAssignTo; /}/>
 
 #### Returns
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundat
 
 #### Inherited from
 
-[`InterfaceBaseQueryResult`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md).[`loading`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md#loading)
+[`InterfaceBaseQueryResult`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.[`loading`](types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.md#loading)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/types/Tag/interface.ts:42](https://github.com/PalisadoesFoundat
 
 #### Inherited from
 
-[`InterfaceBaseQueryResult`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md).[`refetch`](types\Tag\interface\README\interfaces\InterfaceBaseQueryResult.md#refetch)
+[`InterfaceBaseQueryResult`]/auto-docs/types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.[`refetch`](types/Tag/interface/README/interfaces/InterfaceBaseQueryResult.md#refetch)

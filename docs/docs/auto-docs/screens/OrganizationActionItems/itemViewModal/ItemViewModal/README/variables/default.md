@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `FC`\<[`InterfaceViewModalProps`](screens\OrganizationActionItems\itemViewModal\ItemViewModal\README\interfaces\InterfaceViewModalProps.md)\>
+> `const` **default**: `FC`/<[`InterfaceViewModalProps`](screens/OrganizationActionItems/itemViewModal/ItemViewModal/README/interfaces/InterfaceViewModalProps.md)/>
 
 Defined in: [src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/itemViewModal/ItemViewModal.tsx#L52)

@@ -20,7 +20,7 @@ Defined in: [src/types/Comment/type.ts:6](https://github.com/PalisadoesFoundatio
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](types\User\type\README\type-aliases\User.md)\>
+> **creator**: `Partial`/<[`User`]/auto-docs/types/User/type/README/type-aliases/User/>
 
 Defined in: [src/types/Comment/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L7)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundatio
 
 ### likedBy?
 
-> `optional` **likedBy**: [`User`](types\User\type\README\type-aliases\User.md)[]
+> `optional` **likedBy**: [`User`]/auto-docs/types/User/type/README/type-aliases/User[]
 
 Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundatio
 
 ### post
 
-> **post**: [`Post`](types\Post\type\README\type-aliases\Post.md)
+> **post**: [`Post`]/auto-docs/types/Post/type/README/type-aliases/Post
 
 Defined in: [src/types/Comment/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L10)
 

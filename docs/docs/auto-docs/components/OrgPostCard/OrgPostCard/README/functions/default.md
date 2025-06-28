@@ -10,7 +10,7 @@ Defined in: [src/components/OrgPostCard/OrgPostCard.tsx:91](https://github.com/P
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
 `InterfaceOrgPostCardProps`
 

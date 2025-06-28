@@ -10,9 +10,9 @@ Defined in: [src/components/Avatar/Avatar.tsx:41](https://github.com/PalisadoesF
 
 ## Parameters
 
-### \_\_namedParameters
+### /_/_namedParameters
 
-[`InterfaceAvatarProps`](types\Avatar\interface\README\interfaces\InterfaceAvatarProps.md)
+[`InterfaceAvatarProps`]/auto-docs/types/Avatar/interface/README/interfaces/InterfaceAvatarProps
 
 ## Returns
 

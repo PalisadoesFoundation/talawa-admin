@@ -18,7 +18,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:65](https://
 
 ### group
 
-> **group**: [`InterfaceVolunteerGroupInfo`](utils\interfaces\README\interfaces\InterfaceVolunteerGroupInfo.md)
+> **group**: [`InterfaceVolunteerGroupInfo`]/auto-docs/utils/interfaces/README/interfaces/InterfaceVolunteerGroupInfo
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L66)
 

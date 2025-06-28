@@ -10,9 +10,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 ## Type declaration
 
-### \_id
+### /_id
 
-> **\_id**: `string` = `'event123'`
+> **/_id**: `string` = `'event123'`
 
 ### allDay
 
@@ -26,9 +26,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **baseRecurringEvent**: `object`
 
-#### baseRecurringEvent.\_id
+#### baseRecurringEvent./_id
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **/_id**: `string` = `'recurringEvent123'`
 
 ### description
 
@@ -50,9 +50,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **organization**: `object`
 
-#### organization.\_id
+#### organization./_id
 
-> **\_id**: `string` = `'org456'`
+> **/_id**: `string` = `'org456'`
 
 #### organization.members
 

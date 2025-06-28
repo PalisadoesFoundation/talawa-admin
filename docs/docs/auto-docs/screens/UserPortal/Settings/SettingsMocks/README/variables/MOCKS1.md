@@ -30,9 +30,9 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 > **currentUser**: `object`
 
-#### result.data.currentUser.\_\_typename
+#### result.data.currentUser./_/_typename
 
-> **\_\_typename**: `string` = `'User'`
+> **/_/_typename**: `string` = `'User'`
 
 #### result.data.currentUser.addressLine1
 
