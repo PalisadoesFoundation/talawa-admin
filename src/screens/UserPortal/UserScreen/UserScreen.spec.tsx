@@ -1,3 +1,4 @@
+/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -83,7 +84,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
@@ -165,22 +166,19 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
       </MockedProvider>,
     );
 
-    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
+    const toggleButton = screen.getByTestId('toggleBtn') as HTMLElement;
 
     // Resize to small screen and check toggle state
     resizeWindow(800);
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument();
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    expect(screen.queryByText('Menu')).toBeInTheDocument();
 
     // Resize to large screen and check toggle state
-    resizeWindow(1000);
+    resizeWindow(10000);
+    expect(screen.queryByText('Menu')).toBeInTheDocument();
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
-
-    // Check state on re-click
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    expect(screen.queryByText('Menu')).not.toBeInTheDocument();
   });
 
   it('redirects to root when orgId is undefined', () => {
