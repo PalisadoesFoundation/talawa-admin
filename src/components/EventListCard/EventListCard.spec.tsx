@@ -86,7 +86,7 @@ const renderEventListCard = (props: InterfaceEvent): RenderResult => {
 
 describe('Testing Event List Card', () => {
   const updateData = {
-    title: 'Updated title',
+    name: 'Updated name',
     description: 'This is a new update',
     isPublic: true,
     isRegisterable: true,
@@ -134,7 +134,7 @@ describe('Testing Event List Card', () => {
             <EventListCard
               key="123"
               _id="1"
-              title=""
+              name=""
               location=""
               description=""
               startDate="19/03/2022"
@@ -170,7 +170,7 @@ describe('Testing Event List Card', () => {
   it('should render props and text elements test for the screen', async () => {
     renderEventListCard(props[1]);
 
-    expect(screen.getByText(props[1].title)).toBeInTheDocument();
+    expect(screen.getByText(props[1].name)).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -194,15 +194,15 @@ describe('Testing Event List Card', () => {
 
   it('Should render truncated event name when length is more than 100', async () => {
     const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], title: longEventName });
+    renderEventListCard({ ...props[1], name: longEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+      expect(screen.getByTestId('updateName')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('updateTitle')).toHaveValue(
+    expect(screen.getByTestId('updateName')).toHaveValue(
       `${longEventName.substring(0, 100)}...`,
     );
 
@@ -217,15 +217,15 @@ describe('Testing Event List Card', () => {
 
   it('Should render full event name when length is less than or equal to 100', async () => {
     const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], title: shortEventName });
+    renderEventListCard({ ...props[1], name: shortEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+      expect(screen.getByTestId('updateName')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('updateTitle')).toHaveValue(shortEventName);
+    expect(screen.getByTestId('updateName')).toHaveValue(shortEventName);
 
     await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
@@ -328,9 +328,9 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
 
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
+    const eventName = screen.getByTestId('updateName');
+    fireEvent.change(eventName, { target: { value: '' } });
+    await userEvent.type(eventName, updateData.name);
 
     const description = screen.getByTestId('updateDescription');
     fireEvent.change(description, { target: { value: '' } });
@@ -371,9 +371,9 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
 
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
+    const eventName = screen.getByTestId('updateName');
+    fireEvent.change(eventName, { target: { value: '' } });
+    await userEvent.type(eventName, updateData.name);
 
     const description = screen.getByTestId('updateDescription');
     fireEvent.change(description, { target: { value: '' } });
@@ -530,7 +530,7 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        `Successfully registered for ${props[2].title}`,
+        `Successfully registered for ${props[2].name}`,
       );
     });
 

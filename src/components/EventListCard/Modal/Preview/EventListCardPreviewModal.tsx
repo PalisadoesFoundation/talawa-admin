@@ -3,7 +3,7 @@
  *
  * This component renders a modal for previewing and editing event details.
  * It provides functionality to view, update, and manage event properties such as
- * title, description, location, date, time, and visibility settings.
+ * name, description, location, date, time, and visibility settings.
  *
  * @param  props - The props for the PreviewModal component.
  * @param eventModalIsOpen - Determines if the modal is open.
@@ -90,21 +90,21 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <p className={styles.previewEventListCardModals}>{t('eventTitle')}</p>
+          <p className={styles.previewEventListCardModals}>{t('eventName')}</p>
           <Form.Control
-            type="title"
-            id="eventitle"
+            type="name"
+            id="eventname"
             className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
-            data-testid="updateTitle"
+            data-testid="updateName"
             required
             value={
-              formState.title.length > 100
-                ? formState.title.substring(0, 100) + '...'
-                : formState.title
+              formState.name.length > 100
+                ? formState.name.substring(0, 100) + '...'
+                : formState.name
             }
             onChange={(e): void => {
-              setFormState({ ...formState, title: e.target.value });
+              setFormState({ ...formState, name: e.target.value });
             }}
             disabled={!canEditEvent}
           />
