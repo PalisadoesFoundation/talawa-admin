@@ -182,6 +182,29 @@ const leftDrawer = ({
               </button>
             )}
           </NavLink>
+
+          {/* <NavLink to={'/notification'} onClick={handleLinkClick}>
+            {({ isActive }) => (
+              <button
+                className={`${
+                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                }`}
+                data-testid="notificationBtn"
+              >
+                <div className={styles.iconWrapper}>
+                  <RolesIcon
+                    fill="none"
+                    stroke={
+                      isActive
+                        ? 'var(--sidebar-icon-stroke-active)'
+                        : 'var(--sidebar-icon-stroke-inactive)'
+                    }
+                  />
+                </div>
+                {t('notifications')}
+              </button>
+            )}
+          </NavLink> */}
         </div>
       </div>
     </div>

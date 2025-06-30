@@ -87,6 +87,7 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
+const Notification = lazy(() => import('screens/Notification/Notification'));
 
 const { setItem } = useLocalStorage();
 
@@ -130,6 +131,7 @@ function app(): JSX.Element {
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
+              <Route path="/notification" element={<Notification />} />
               <Route path="/member" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
