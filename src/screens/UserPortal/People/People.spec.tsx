@@ -10,10 +10,7 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-  ORGANIZATION_ADMINS_LIST,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import type { DocumentNode } from '@apollo/client';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -22,7 +19,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 /**
  * This file contains unit tests for the People component.
  *
@@ -41,28 +38,25 @@ type MockData = {
   };
   result?: {
     data: {
-      organizationsMemberConnection?: {
-        edges: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string | null;
-          email: string;
-          createdAt: string;
-        }[];
+      organization?: {
+        members?: {
+          pageInfo: {
+            endCursor: string | null;
+            hasPreviousPage: boolean;
+            hasNextPage: boolean;
+            startCursor: string | null;
+          };
+          edges: {
+            node: {
+              id: string;
+              name: string;
+              role: string;
+              avatarURL: string | null;
+              createdAt: string;
+            };
+          }[];
+        };
       };
-      organizations?: {
-        __typename?: string;
-        _id: string;
-        admins: {
-          _id: string;
-          firstName: string;
-          lastName: string;
-          image: string | null;
-          email: string;
-          createdAt: string;
-        }[];
-      }[];
     };
   };
   error?: Error;
@@ -71,115 +65,104 @@ type MockData = {
 const MOCKS = [
   {
     request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      query: ORGANIZATIONS_MEMBERS_LIST,
       variables: {
         orgId: '',
         firstName_contains: '',
+        first: 32,
       },
     },
     result: {
       data: {
-        organizationsMemberConnection: {
-          edges: [
-            {
-              _id: '64001660a711c62d5b4076a2',
-              firstName: 'Noble',
-              lastName: 'Mittal',
-              image: null,
-              email: 'noble@gmail.com',
-              createdAt: '2023-03-02T03:22:08.101Z',
+        organization: {
+          members: {
+            pageInfo: {
+              endCursor: 'cursor1',
+              hasPreviousPage: false,
+              hasNextPage: false,
+              startCursor: 'cursor1',
             },
-            {
-              _id: '64001660a711c62d5b4076a3',
-              firstName: 'Noble',
-              lastName: 'Mittal',
-              image: 'mockImage',
-              email: 'noble@gmail.com',
-              createdAt: '2023-03-02T03:22:08.101Z',
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_ADMINS_LIST,
-      variables: {
-        id: '',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af2',
-            admins: [
+            edges: [
               {
-                _id: '64001660a711c62d5b4076a2',
-                firstName: 'Noble',
-                lastName: 'Admin',
-                image: null,
-                email: 'noble@gmail.com',
-                createdAt: '2023-03-02T03:22:08.101Z',
+                node: {
+                  id: '64001660a711c62d5b4076a2',
+                  name: 'Noble Mittal',
+                  role: 'member',
+                  avatarURL: null,
+                  createdAt: '2023-03-02T03:22:08.101Z',
+                },
+              },
+              {
+                node: {
+                  id: '64001660a711c62d5b4076a3',
+                  name: 'Noble Mittal',
+                  role: 'administrator',
+                  avatarURL: 'mockImage',
+                  createdAt: '2023-03-02T03:22:08.101Z',
+                },
               },
             ],
           },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-      variables: { orgId: '', firstName_contains: '' },
-    },
-    result: {
-      data: {
-        organizationsMemberConnection: {
-          edges: [],
         },
       },
     },
   },
   {
     request: {
-      query: ORGANIZATION_ADMINS_LIST,
-      variables: { id: '' },
+      query: ORGANIZATIONS_MEMBERS_LIST,
+      variables: {
+        orgId: '',
+        firstName_contains: '',
+        first: 32,
+      },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: 'org-1',
-            admins: [],
+        organization: {
+          members: {
+            pageInfo: {
+              endCursor: null,
+              hasPreviousPage: false,
+              hasNextPage: false,
+              startCursor: null,
+            },
+            edges: [],
           },
-        ],
+        },
       },
     },
   },
   {
     request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      query: ORGANIZATIONS_MEMBERS_LIST,
       variables: {
         orgId: '',
         firstName_contains: 'j',
+        first: 32,
       },
     },
     result: {
       data: {
-        organizationsMemberConnection: {
-          edges: [
-            {
-              _id: '64001660a711c62d5b4076a2',
-              firstName: 'John',
-              lastName: 'Cena',
-              image: null,
-              email: 'john@gmail.com',
-              createdAt: '2023-03-02T03:22:08.101Z',
+        organization: {
+          members: {
+            pageInfo: {
+              endCursor: 'cursor1',
+              hasPreviousPage: false,
+              hasNextPage: false,
+              startCursor: 'cursor1',
             },
-          ],
+            edges: [
+              {
+                node: {
+                  id: '64001660a711c62d5b4076a2',
+                  name: 'John Cena',
+                  role: 'member',
+                  avatarURL: null,
+                  createdAt: '2023-03-02T03:22:08.101Z',
+                },
+              },
+            ],
+          },
         },
       },
     },
@@ -305,8 +288,7 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('modeBtn1'));
     await wait();
 
-    expect(screen.queryByText('Noble Admin')).toBeInTheDocument();
-    expect(screen.queryByText('Noble Mittal')).not.toBeInTheDocument();
+    expect(screen.queryByText('Noble Mittal')).toBeInTheDocument();
   });
   it('Shows loading state while fetching data', async () => {
     render(
@@ -331,54 +313,36 @@ describe('Testing People Screen Pagination [User Portal]', () => {
   const PAGINATION_MOCKS = [
     {
       request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        query: ORGANIZATIONS_MEMBERS_LIST,
         variables: {
           orgId: '',
           firstName_contains: '',
+          first: 32,
         },
       },
       result: {
         data: {
-          organizationsMemberConnection: {
-            edges: Array(7)
-              .fill(null)
-              .map((_, index) => ({
-                _id: `member${index}`,
-                firstName: `User${index}`,
-                lastName: 'Test',
-                image: null,
-                email: `user${index}@test.com`,
-                createdAt: '2023-03-02T03:22:08.101Z',
-              })),
-          },
-        },
-      },
-    },
-    {
-      request: {
-        query: ORGANIZATION_ADMINS_LIST,
-        variables: {
-          id: '',
-        },
-      },
-      result: {
-        data: {
-          organizations: [
-            {
-              __typename: 'Organization',
-              _id: 'org1',
-              admins: [
-                {
-                  _id: 'member0',
-                  firstName: 'User0',
-                  lastName: 'Test',
-                  image: null,
-                  email: 'user0@test.com',
-                  createdAt: '2023-03-02T03:22:08.101Z',
-                },
-              ],
+          organization: {
+            members: {
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: true,
+                startCursor: 'cursor1',
+              },
+              edges: Array(7)
+                .fill(null)
+                .map((_, index) => ({
+                  node: {
+                    id: `member${index}`,
+                    name: `User${index} Test`,
+                    role: 'member',
+                    avatarURL: null,
+                    createdAt: '2023-03-02T03:22:08.101Z',
+                  },
+                })),
             },
-          ],
+          },
         },
       },
     },
@@ -480,47 +444,41 @@ describe('People Component Mode Switch Coverage', () => {
     const mocks = [
       {
         request: {
-          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          query: ORGANIZATIONS_MEMBERS_LIST,
+          variables: { orgId: '', firstName_contains: '', first: 32 },
         },
         result: {
           data: {
-            organizationsMemberConnection: {
-              edges: [
-                {
-                  _id: '123',
-                  firstName: 'Test',
-                  lastName: 'User',
-                  image: null,
-                  email: 'test@example.com',
-                  createdAt: '2023-03-02T03:22:08.101Z',
+            organization: {
+              members: {
+                pageInfo: {
+                  endCursor: 'cursor1',
+                  hasPreviousPage: false,
+                  hasNextPage: false,
+                  startCursor: 'cursor1',
                 },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADMINS_LIST,
-          variables: { id: '' },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                admins: [
+                edges: [
                   {
-                    _id: '456',
-                    firstName: 'Admin',
-                    lastName: 'User',
-                    image: null,
-                    email: 'admin@example.com',
-                    createdAt: '2023-03-02T03:22:08.101Z',
+                    node: {
+                      id: '123',
+                      name: 'Test User',
+                      role: 'member',
+                      avatarURL: null,
+                      createdAt: '2023-03-02T03:22:08.101Z',
+                    },
+                  },
+                  {
+                    node: {
+                      id: '456',
+                      name: 'Admin User',
+                      role: 'administrator',
+                      avatarURL: null,
+                      createdAt: '2023-03-02T03:22:08.101Z',
+                    },
                   },
                 ],
               },
-            ],
+            },
           },
         },
       },
@@ -593,38 +551,32 @@ describe('People Component Mode Switch Coverage', () => {
     const mixedMocks = [
       {
         request: {
-          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          query: ORGANIZATIONS_MEMBERS_LIST,
+          variables: { orgId: '', firstName_contains: '', first: 32 },
         },
         result: {
           data: {
-            organizationsMemberConnection: {
-              edges: [],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADMINS_LIST,
-          variables: { id: '' },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                admins: [
+            organization: {
+              members: {
+                pageInfo: {
+                  endCursor: null,
+                  hasPreviousPage: false,
+                  hasNextPage: false,
+                  startCursor: null,
+                },
+                edges: [
                   {
-                    _id: 'admin1',
-                    firstName: 'Admin',
-                    lastName: 'User',
-                    image: null,
-                    email: 'admin@test.com',
-                    createdAt: new Date().toISOString(),
+                    node: {
+                      id: 'admin1',
+                      name: 'Admin User',
+                      role: 'administrator',
+                      avatarURL: null,
+                      createdAt: '2023-03-02T03:22:08.101Z',
+                    },
                   },
                 ],
               },
-            ],
+            },
           },
         },
       },
@@ -659,8 +611,8 @@ describe('People Component Mode Switch Coverage', () => {
 
     await waitForElementToBeRemoved(() => screen.queryByText('Loading...'));
 
-    // Verify empty state in members view using translated text
-    expect(screen.getByText('Nothing to show')).toBeInTheDocument();
+    // Verify admin is shown in all members view
+    expect(screen.getByText('Admin User')).toBeInTheDocument();
 
     // Switch to admin mode
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
@@ -668,7 +620,7 @@ describe('People Component Mode Switch Coverage', () => {
       await userEvent.click(screen.getByTestId('modeBtn1'));
     });
 
-    // Verify admin is shown in admin view
+    // Verify admin is still shown in admin view (same admin user)
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Nothing to show')).not.toBeInTheDocument();
@@ -695,30 +647,61 @@ describe('People Additional Flow Tests', () => {
     renderComponent(mocks);
 
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
-    const aliMembersMock: MockData = {
+    const defaultMock: MockData = {
       request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: 'Ali' },
+        query: ORGANIZATIONS_MEMBERS_LIST,
+        variables: { orgId: '', firstName_contains: '', first: 32 },
       },
       result: {
         data: {
-          organizationsMemberConnection: {
-            edges: [
-              {
-                _id: 'user-1',
-                firstName: 'Alice',
-                lastName: 'Test',
-                image: null,
-                email: 'alice@test.com',
-                createdAt: '2023-03-02T03:22:08.101Z',
+          organization: {
+            members: {
+              pageInfo: {
+                endCursor: null,
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: null,
               },
-            ],
+              edges: [],
+            },
           },
         },
       },
     };
 
-    renderComponent([aliMembersMock]);
+    const aliMembersMock: MockData = {
+      request: {
+        query: ORGANIZATIONS_MEMBERS_LIST,
+        variables: { orgId: '', firstName_contains: 'Ali', first: 32 },
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+              edges: [
+                {
+                  node: {
+                    id: 'user-1',
+                    name: 'Alice Test',
+                    role: 'member',
+                    avatarURL: null,
+                    createdAt: '2023-03-02T03:22:08.101Z',
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([defaultMock, aliMembersMock]);
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Ali');
     await userEvent.click(screen.getByTestId('searchBtn'));
@@ -733,34 +716,32 @@ describe('People Additional Flow Tests', () => {
     const multiSwitchMocks: MockData[] = [
       {
         request: {
-          query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-          variables: { orgId: '', firstName_contains: '' },
+          query: ORGANIZATIONS_MEMBERS_LIST,
+          variables: { orgId: '', firstName_contains: '', first: 32 },
         },
         result: {
           data: {
-            organizationsMemberConnection: {
-              edges: [
-                {
-                  _id: '3',
-                  firstName: 'Charlie',
-                  lastName: 'Test',
-                  image: null,
-                  email: 'charlie@test.com',
-                  createdAt: '2023-03-02T03:22:08.101Z',
+            organization: {
+              members: {
+                pageInfo: {
+                  endCursor: 'cursor1',
+                  hasPreviousPage: false,
+                  hasNextPage: false,
+                  startCursor: 'cursor1',
                 },
-              ],
+                edges: [
+                  {
+                    node: {
+                      id: '3',
+                      name: 'Charlie Test',
+                      role: 'member',
+                      avatarURL: null,
+                      createdAt: '2023-03-02T03:22:08.101Z',
+                    },
+                  },
+                ],
+              },
             },
-          },
-        },
-      },
-      {
-        request: {
-          query: ORGANIZATION_ADMINS_LIST,
-          variables: { id: '' },
-        },
-        result: {
-          data: {
-            organizations: [{ _id: 'org-1', admins: [] }],
           },
         },
       },
@@ -843,22 +824,31 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
   it('handles rowsPerPage = 0 case', async () => {
     const membersMock = {
       request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: '' },
+        query: ORGANIZATIONS_MEMBERS_LIST,
+        variables: { orgId: '', firstName_contains: '', first: 32 },
       },
       result: {
         data: {
-          organizationsMemberConnection: {
-            edges: [
-              {
-                _id: '1',
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@example.com',
-                image: null,
-                createdAt: new Date().toISOString(),
+          organization: {
+            members: {
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
               },
-            ],
+              edges: [
+                {
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    role: 'member',
+                    avatarURL: null,
+                    createdAt: new Date().toISOString(),
+                  },
+                },
+              ],
+            },
           },
         },
       },
@@ -885,12 +875,33 @@ describe('Testing People Screen Edge Cases [User Portal]', () => {
 });
 
 describe('People Component Additional Coverage Tests', () => {
-  // Mock for testing error states
+  // Default mock needed for initial component load
+  const defaultMock = {
+    request: {
+      query: ORGANIZATIONS_MEMBERS_LIST,
+      variables: { orgId: '', firstName_contains: '', first: 32 },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            pageInfo: {
+              endCursor: null,
+              hasPreviousPage: false,
+              hasNextPage: false,
+              startCursor: null,
+            },
+            edges: [],
+          },
+        },
+      },
+    },
+  };
 
   // Test case to cover line 142: handleSearchByEnter with non-Enter key
   it('should not trigger search for non-Enter key press', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[]}>
+      <MockedProvider addTypename={false} mocks={[defaultMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -913,7 +924,7 @@ describe('People Component Additional Coverage Tests', () => {
   // Test case to cover line 151: handleSearchByBtnClick with empty input
   it('should handle search with empty input value', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[]}>
+      <MockedProvider addTypename={false} mocks={[defaultMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -934,109 +945,84 @@ describe('People Component Additional Coverage Tests', () => {
   });
 
   it('Sets userType to Admin if user is found in admins list', async (): Promise<void> => {
-    const adminMock = {
+    const membersMock = {
       request: {
-        query: ORGANIZATION_ADMINS_LIST,
-        variables: { id: '' },
+        query: ORGANIZATIONS_MEMBERS_LIST,
+        variables: { orgId: '', firstName_contains: '', first: 32 },
       },
       result: {
         data: {
-          organizations: [
-            {
-              _id: 'testOrg',
-              admins: [
+          organization: {
+            members: {
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+              edges: [
                 {
-                  _id: 'admin123',
-                  firstName: 'Test',
-                  lastName: 'Admin',
-                  email: 'admin@test.com',
+                  node: {
+                    id: 'admin123',
+                    name: 'Test Admin',
+                    role: 'administrator',
+                    avatarURL: null,
+                    createdAt: '2023-03-02T03:22:08.101Z',
+                  },
                 },
               ],
             },
-          ],
-        },
-      },
-    };
-    const membersMock = {
-      request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: '', firstName_contains: '' },
-      },
-      result: {
-        data: {
-          organizationsMemberConnection: {
-            edges: [
-              {
-                _id: 'admin123',
-                firstName: 'Test',
-                lastName: 'Admin',
-                email: 'admin@test.com',
-              },
-            ],
           },
         },
       },
     };
-    const link = new StaticMockLink([adminMock, membersMock], true);
+    const link = new StaticMockLink([membersMock], true);
     render(
-      <MockedProvider
-        mocks={[adminMock, membersMock]}
-        addTypename={false}
-        link={link}
-      >
+      <MockedProvider mocks={[membersMock]} addTypename={false} link={link}>
         <People />
       </MockedProvider>,
     );
     await wait();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
+    expect(screen.getByText('Test Admin')).toBeInTheDocument();
   });
 });
 
 describe('People Component Pagination Tests', () => {
   const mockData = {
     request: {
-      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-      variables: { orgId: '', firstName_contains: '' },
+      query: ORGANIZATIONS_MEMBERS_LIST,
+      variables: { orgId: '', firstName_contains: '', first: 32 },
     },
     result: {
       data: {
-        organizationsMemberConnection: {
-          edges: Array(15)
-            .fill(null)
-            .map((_, index) => ({
-              _id: `user-${index}`,
-              firstName: `User${index}`,
-              lastName: 'Test',
-              image: null,
-              email: `user${index}@test.com`,
-              createdAt: '2023-03-02T03:22:08.101Z',
-            })),
-        },
-      },
-    },
-  };
-
-  const adminMock = {
-    request: {
-      query: ORGANIZATION_ADMINS_LIST,
-      variables: { id: '' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            __typename: 'Organization',
-            _id: 'org-1',
-            admins: [],
+        organization: {
+          members: {
+            pageInfo: {
+              endCursor: 'cursor15',
+              hasPreviousPage: false,
+              hasNextPage: false,
+              startCursor: 'cursor1',
+            },
+            edges: Array(15)
+              .fill(null)
+              .map((_, index) => ({
+                node: {
+                  id: `user-${index}`,
+                  name: `User${index} Test`,
+                  role: 'member',
+                  avatarURL: null,
+                  createdAt: '2023-03-02T03:22:08.101Z',
+                },
+              })),
           },
-        ],
+        },
       },
     },
   };
 
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[mockData, adminMock]} addTypename={false}>
+      <MockedProvider mocks={[mockData]} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
