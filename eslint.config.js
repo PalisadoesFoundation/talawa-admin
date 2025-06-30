@@ -6,6 +6,7 @@ import imports from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import vitest from 'eslint-plugin-vitest';
+import tsdoc from 'eslint-plugin-tsdoc';
 
 export default [
   {
@@ -62,6 +63,7 @@ export default [
       vitest,
       import: imports,
       prettier,
+      tsdoc,
     },
     settings: {
       react: {
@@ -133,6 +135,7 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
+      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -141,6 +144,7 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
+       'tsdoc/syntax': 'error',
     },
   },
 ];
