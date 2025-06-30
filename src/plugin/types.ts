@@ -7,6 +7,7 @@ import React from 'react';
 // Plugin Manifest Types
 export interface IPluginManifest {
   name: string;
+  pluginId: string;
   version: string;
   description: string;
   author: string;

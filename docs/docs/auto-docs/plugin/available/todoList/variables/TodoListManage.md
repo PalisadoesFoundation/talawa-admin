@@ -6,4 +6,4 @@
 
 > `const` **TodoListManage**: `React.FC`
 
-Defined in: src/plugin/available/todo-list/pages/TodoListManage.tsx:20
+Defined in: src/plugin/available/todoList/pages/TodoListManage.tsx:20

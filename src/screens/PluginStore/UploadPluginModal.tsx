@@ -542,7 +542,7 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
                   >
                     {`{
   "name": "Plugin Name",
-  "pluginId": "plugin-id",
+  "pluginId": "pluginName",
   "version": "1.0.0",
   "description": "Plugin description",
   "author": "Author Name",
@@ -550,7 +550,7 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
   "extensionPoints": {
     "routes": [
       {
-        "pluginId": "plugin-id",
+        "pluginId": "pluginName",
         "path": "/plugin-path",
         "component": "ComponentName",
         "exact": true

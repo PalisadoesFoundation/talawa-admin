@@ -7,18 +7,57 @@ import { IPluginManifest, IDrawerExtension } from './types';
 export function validatePluginManifest(
   manifest: any,
 ): manifest is IPluginManifest {
-  return (
+  const hasBasicFields =
     typeof manifest === 'object' &&
     typeof manifest.name === 'string' &&
+    typeof manifest.pluginId === 'string' &&
     typeof manifest.version === 'string' &&
     typeof manifest.description === 'string' &&
     typeof manifest.author === 'string' &&
-    typeof manifest.main === 'string'
-  );
+    typeof manifest.main === 'string';
+
+  if (!hasBasicFields) {
+    return false;
+  }
+
+  // Validate extension points if they exist
+  if (manifest.extensionPoints) {
+    const { routes, drawer } = manifest.extensionPoints;
+
+    // Validate routes if they exist
+    if (routes && !Array.isArray(routes)) {
+      return false;
+    }
+
+    // Validate drawer items if they exist
+    if (drawer && !Array.isArray(drawer)) {
+      return false;
+    }
+
+    // Validate each route extension
+    if (routes) {
+      for (const route of routes) {
+        if (!route.pluginId || !route.path || !route.component) {
+          return false;
+        }
+      }
+    }
+
+    // Validate each drawer extension
+    if (drawer) {
+      for (const item of drawer) {
+        if (!item.pluginId || !item.label || !item.path) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 export function generatePluginId(manifest: IPluginManifest): string {
-  return manifest.name.toLowerCase().replace(/\s+/g, '-');
+  return manifest.name.toLowerCase().replace(/\s+/g, '_');
 }
 
 export function sortDrawerItems(items: IDrawerExtension[]): IDrawerExtension[] {

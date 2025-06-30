@@ -22,6 +22,8 @@ export interface IPlugin {
 
 export interface CreatePluginInput {
   pluginId: string;
+  isInstalled?: boolean;
+  isActivated?: boolean;
 }
 
 export interface UpdatePluginInput {

@@ -189,6 +189,7 @@ class PluginManager {
       id: pluginId,
       manifest: {
         name: pluginId,
+        pluginId: pluginId,
         version: '0.0.0',
         description: '',
         author: '',
