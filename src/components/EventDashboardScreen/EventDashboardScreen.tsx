@@ -29,7 +29,7 @@
  * - Redux for state management.
  * - `useTranslation` for internationalization.
  *
- * @returns {JSX.Element} The rendered EventDashboardScreen component.
+ * @returns The rendered EventDashboardScreen component.
  */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
@@ -45,14 +45,14 @@ import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
 
-const EventDashboardScreen = (): JSX.Element => {
+const EventDashboardScreen = (): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
   const { orgId } = useParams();
 
   // Redirect to home if orgId is not present or if user is not logged in

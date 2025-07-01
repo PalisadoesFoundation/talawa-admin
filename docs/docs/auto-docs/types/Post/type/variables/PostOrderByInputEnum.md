@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: PostOrderByInput
+# Variable: PostOrderByInputEnum
 
-> `const` **PostOrderByInput**: `object`
+> `const` **PostOrderByInputEnum**: `object`
 
 Defined in: [src/types/Post/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L32)
 

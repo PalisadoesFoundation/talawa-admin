@@ -4,7 +4,13 @@
 
 # Interface: InterfaceActionItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L354)
+Defined in: [src/utils/interfaces.ts:446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L446)
+
+InterfaceActionItemCategoryInfo
+
+## Description
+
+Defines the structure for action item category information.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:354](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:355](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L355)
+Defined in: [src/utils/interfaces.ts:447](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L447)
+
+The unique identifier of the action item category.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:355](https://github.com/PalisadoesFoundatio
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L358)
+Defined in: [src/utils/interfaces.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L450)
+
+The creation date of the action item category.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:358](https://github.com/PalisadoesFoundatio
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L359)
+Defined in: [src/utils/interfaces.ts:451](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L451)
+
+The creator of the action item category.
 
 #### \_id
 
@@ -48,7 +60,9 @@ Defined in: [src/utils/interfaces.ts:359](https://github.com/PalisadoesFoundatio
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L357)
+Defined in: [src/utils/interfaces.ts:449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L449)
+
+Indicates if the action item category is disabled.
 
 ***
 
@@ -56,4 +70,6 @@ Defined in: [src/utils/interfaces.ts:357](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:356](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L356)
+Defined in: [src/utils/interfaces.ts:448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L448)
+
+The name of the action item category.

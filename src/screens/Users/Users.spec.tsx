@@ -1,12 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -27,6 +21,8 @@ import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
+import * as ApolloClient from '@apollo/client';
+import type { OperationVariables } from '@apollo/client';
 
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
@@ -257,7 +253,7 @@ describe('Testing Users screen', () => {
     };
 
     // The update query function from the component
-    interface UserData {
+    interface IUserData {
       user: {
         _id: string;
         firstName: string;
@@ -271,8 +267,8 @@ describe('Testing Users screen', () => {
     }
 
     const updateQuery = (
-      prev: { users: UserData[] } | undefined,
-      { fetchMoreResult }: { fetchMoreResult?: { users: UserData[] } },
+      prev: { users: IUserData[] } | undefined,
+      { fetchMoreResult }: { fetchMoreResult?: { users: IUserData[] } },
     ) => {
       if (!fetchMoreResult) return prev || { users: [] };
 
@@ -280,7 +276,7 @@ describe('Testing Users screen', () => {
 
       const uniqueUsers = Array.from(
         new Map(
-          mergedUsers.map((user: UserData) => [user.user._id, user]),
+          mergedUsers.map((user: IUserData) => [user.user._id, user]),
         ).values(),
       );
 
@@ -1068,12 +1064,25 @@ describe('Testing Users screen', () => {
 
     // Spy on fetchMore to capture the updateQuery function
     const fetchMoreSpy = vi.fn();
-    vi.spyOn(require('@apollo/client'), 'useQuery').mockImplementation(() => ({
-      data: undefined, // Simulate no data initially
-      loading: false,
-      fetchMore: fetchMoreSpy,
-      refetch: vi.fn(),
-    }));
+    vi.spyOn(ApolloClient, 'useQuery').mockImplementation(
+      () =>
+        ({
+          data: undefined,
+          loading: false,
+          fetchMore: fetchMoreSpy,
+          refetch: vi.fn(),
+          client: {}, // minimal mock
+          observable: {},
+          networkStatus: 7,
+          called: true,
+          error: undefined,
+          variables: {},
+          startPolling: vi.fn(),
+          stopPolling: vi.fn(),
+          subscribeToMore: vi.fn(),
+          updateQuery: vi.fn(),
+        }) as unknown as ApolloClient.QueryResult<unknown, OperationVariables>,
+    );
 
     render(
       <MockedProvider mocks={mockData} addTypename={false} link={link}>

@@ -1,4 +1,4 @@
-export async function checkConnection(url: string): Promise<any> {
+export async function checkConnection(url: string): Promise<boolean> {
   console.log('\nChecking Talawa-API connection....');
   let isConnected = false;
   await fetch(url)

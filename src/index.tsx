@@ -52,7 +52,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: `Bearer ${getItem('token')}` || '',
+      authorization: getItem('token') ? `Bearer ${getItem('token')}` : '',
       'Accept-Language': lng,
     },
   };
