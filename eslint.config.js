@@ -144,7 +144,7 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-       'tsdoc/syntax': 'error',
+      'tsdoc/syntax': 'error',
     },
   },
   // Cypress-specific configuration
