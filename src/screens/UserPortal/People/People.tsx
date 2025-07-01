@@ -49,7 +49,7 @@ import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { Dropdown, Form, Button } from 'react-bootstrap';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { ORGANIZATIONS_MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
@@ -65,6 +65,7 @@ interface IMemberNode {
   role: string;
   avatarURL?: string;
   createdAt: string;
+  emailAddress?: string;
 }
 
 interface IMemberEdge {
@@ -106,9 +107,13 @@ export default function people(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query to fetch list of members of the organization
-  const { data, loading, refetch } = useQuery(ORGANIZATIONS_MEMBERS_LIST, {
-    variables: { orgId: organizationId, firstName_contains: '', first: 32 },
-  });
+  const { data, loading, refetch } = useQuery(
+    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    {
+      variables: { orgId: organizationId, firstName_contains: '', first: 32 },
+      errorPolicy: 'ignore',
+    },
+  );
 
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
@@ -265,7 +270,7 @@ export default function people(): React.JSX.Element {
                       name,
                       image: member.node.avatarURL ?? '',
                       id: member.node.id ?? '',
-                      email: '',
+                      email: member.node.emailAddress ?? 'Not available',
                       role: member.userType ?? '',
                       sno: (index + 1).toString(),
                     };

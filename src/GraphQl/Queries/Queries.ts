@@ -719,43 +719,6 @@ export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   }
 `;
 
-export const ORGANIZATIONS_MEMBERS_LIST = gql`
-  query Organizations(
-    $orgId: String!
-    $first: Int
-    $after: String
-    $last: Int
-    $before: String
-    $where: MembersWhereInput
-  ) {
-    organization(input: { id: $orgId }) {
-      members(
-        first: $first
-        after: $after
-        last: $last
-        before: $before
-        where: $where
-      ) {
-        pageInfo {
-          endCursor
-          hasPreviousPage
-          hasNextPage
-          startCursor
-        }
-        edges {
-          node {
-            id
-            name
-            role
-            avatarURL
-            createdAt
-          }
-        }
-      }
-    }
-  }
-`;
-
 // To take the list of the oranization joined by a user
 export const USER_ORGANIZATION_LIST = gql`
   query User($userId: ID!) {
