@@ -1,4 +1,4 @@
-import { AdvertisementManagementPage } from '../../pageObjects/AdminPortal/AdvertisementManagementPage';
+import { AdvertisementPage } from '../../pageObjects/AdminPortal/AdvertisementPage';
 
 interface InterfaceAdvertisementData {
   ad1: {
@@ -13,7 +13,7 @@ interface InterfaceAdvertisementData {
 }
 
 describe('Testing Admin Advertisement Management', () => {
-  const adPage = new AdvertisementManagementPage();
+  const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
 
   before(() => {

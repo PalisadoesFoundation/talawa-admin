@@ -1,4 +1,4 @@
-export class AdvertisementManagementPage {
+export class AdvertisementPage {
   private readonly _createAdBtn = '[data-testid="createAdvertisement"]';
   private readonly _adNameInput = '[data-cy="advertisementNameInput"]';
   private readonly _adDescriptionInput =
@@ -30,8 +30,9 @@ export class AdvertisementManagementPage {
     description: string,
     mediaPath: string,
     type: string,
+    timeout = 10000,
   ) {
-    cy.get(this._createAdBtn).should('be.visible').click();
+    cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
     cy.get(this._adNameInput).should('be.visible').type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
     cy.get(this._adMediaInput)

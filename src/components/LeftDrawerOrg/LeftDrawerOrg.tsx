@@ -262,7 +262,7 @@ const leftDrawerOrg = ({
                     }
                       ${styles.talawaText} ${styles.sidebarText}
                   `}
-                  data-cy={`leftDrawerButton-${name}`}                
+                  data-cy={`leftDrawerButton-${name}`}
                 >
                   <div style={{ display: 'flex', alignItems: 'left' }}>
                     <div className={styles.iconWrapper}>
