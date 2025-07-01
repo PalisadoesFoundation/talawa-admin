@@ -44,29 +44,24 @@ const mockCategory = {
   organizationId: 'orgId1',
   creatorId: 'userId1',
   createdAt: '2024-01-01T00:00:00.000Z',
-  updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
+  updatedAt: '2024-01-01T00:00:00.000Z',
 };
 
 const mockMembers = [
   {
     id: 'userId1',
     name: 'John Doe',
-    email: 'john@example.com', // Changed from emailAddress to email
-    role: 'REGULAR',
+    emailAddress: 'john@example.com', // Fixed: changed from emailAddress to emailAddress
     avatarURL: 'https://example.com/avatar1.jpg',
-    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
-    firstName: 'John',
-    lastName: 'Doe',
   },
   {
     id: 'userId2',
     name: 'Jane Smith',
-    email: 'jane@example.com', // Changed from emailAddress to email
+    emailAddress: 'jane@example.com',
     role: 'ADMIN',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
     firstName: 'Jane',
     lastName: 'Smith',
   },
@@ -75,11 +70,11 @@ const mockMembers = [
     name: '',
     firstName: 'Bob',
     lastName: 'Johnson',
-    email: 'bob@example.com', // Changed from emailAddress to email
+    emailAddress: 'bob@example.com',
     role: 'REGULAR',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'), // Changed to Date object
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
   },
 ];
 
@@ -150,29 +145,25 @@ const createActionItem = (
   assignee: {
     id: 'userId1',
     name: 'John Doe',
-    email: 'john@example.com', // Changed from emailAddress
+    emailAddress: 'john@example.com',
     avatarURL: 'https://example.com/avatar1.jpg',
-    firstName: 'John',
-    lastName: 'Doe',
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
   },
   creator: {
     id: 'userId2',
     name: 'Jane Smith',
-    email: 'jane@example.com', // Changed from emailAddress
-    firstName: 'Jane',
-    lastName: 'Smith',
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    emailAddress: 'jane@example.com',
+    avatarURL: 'https://example.com/avatar1.jpg',
   },
   event: mockEvent,
   category: {
     id: 'categoryId1',
     name: 'Test Category',
+    description: null, // Added missing field from interface
     isDisabled: false,
     organizationId: 'orgId1',
     creatorId: 'userId1',
     createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
+    updatedAt: '2024-01-01T00:00:00.000Z',
   },
   ...overrides,
 });
@@ -264,11 +255,12 @@ describe('Testing ItemViewModal', () => {
         category: {
           id: 'categoryId1',
           name: 'Fallback Category',
+          description: null, // Added missing field from interface
           isDisabled: false,
           organizationId: 'orgId1',
           creatorId: 'userId1',
           createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z', // Changed from null to string
+          updatedAt: '2024-01-01T00:00:00.000Z',
         },
       });
 
@@ -321,10 +313,8 @@ describe('Testing ItemViewModal', () => {
         assignee: {
           id: 'userId1',
           name: 'Fallback Assignee',
-          email: 'fallback@example.com', // Changed from emailAddress
-          firstName: 'Fallback',
-          lastName: 'Assignee',
-          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          emailAddress: 'fallback@example.com',
+          avatarURL: 'https://example.com/fallback-avatar.jpg',
         },
       });
 
@@ -397,10 +387,8 @@ describe('Testing ItemViewModal', () => {
         creator: {
           id: 'userId2',
           name: 'Fallback Creator',
-          email: 'creator@example.com', // Changed from emailAddress
-          firstName: 'Fallback',
-          lastName: 'Creator',
-          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          emailAddress: 'creator@example.com', // Fixed: changed from emailAddress to emailAddress
+          avatarURL: 'https://example.com/fallback-creator-avatar.jpg',
         },
       });
 

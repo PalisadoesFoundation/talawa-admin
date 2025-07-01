@@ -44,6 +44,7 @@ export const MOCKS = [
       variables: {
         input: {
           name: 'Category 2',
+          description: 'This is a test category',
           isDisabled: true,
           organizationId: 'orgId',
         },
@@ -54,11 +55,16 @@ export const MOCKS = [
         createActionItemCategory: {
           id: 'categoryId3',
           name: 'Category 2',
+          description: 'This is a test category',
           isDisabled: true,
-          organizationId: 'orgId',
-          creatorId: 'userId',
           createdAt: '2044-01-01',
-          updatedAt: '2044-01-01',
+          creator: {
+            id: 'userId',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -165,6 +171,7 @@ export const MOCKS_ERROR = [
       variables: {
         input: {
           name: 'Category 2',
+          description: 'This is a test category',
           isDisabled: true,
           organizationId: 'orgId',
         },

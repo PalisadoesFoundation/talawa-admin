@@ -56,6 +56,7 @@ const categoryProps: IActionItemCategoryModal[] = [
     category: {
       id: 'categoryId',
       name: 'Category 1',
+      description: 'This is a test category',
       isDisabled: false,
       createdAt: '2044-01-01',
       updatedAt: '2044-01-01',
@@ -72,6 +73,7 @@ const categoryProps: IActionItemCategoryModal[] = [
     category: {
       id: 'categoryId',
       name: 'Category 1',
+      description: 'This is a test category',
       isDisabled: false,
       createdAt: '2044-01-01',
       updatedAt: '2044-01-01',

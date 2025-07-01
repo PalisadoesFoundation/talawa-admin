@@ -1,10 +1,9 @@
-import { InterfaceUser } from '../User/interface';
 import { InterfaceEvent } from 'types/Event/interface';
 
 export interface IActionItemCategoryInfo {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
   isDisabled: boolean;
   createdAt: string;
   updatedAt?: string;
@@ -14,6 +13,13 @@ export interface IActionItemCategoryInfo {
 
 export interface IActionItemCategoryList {
   actionItemCategoriesByOrganization: IActionItemCategoryInfo[];
+}
+
+interface IActionUserInfo {
+  id: string;
+  name: string;
+  avatarURL: string;
+  emailAddress: string;
 }
 
 export interface IActionItemInfo {
@@ -33,8 +39,8 @@ export interface IActionItemInfo {
   postCompletionNotes: string | null;
 
   // Related entities (populated via GraphQL)
-  assignee: InterfaceUser | null;
-  creator: InterfaceUser | null;
+  assignee: IActionUserInfo | null;
+  creator: IActionUserInfo | null;
   event: InterfaceEvent | null;
   category: IActionItemCategoryInfo | null;
 }

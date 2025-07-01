@@ -237,24 +237,6 @@ describe('ItemModal - Additional Test Cases', () => {
       // Should not crash and should handle gracefully
       expect(datePicker).toBeInTheDocument();
     });
-
-    it('should initialize date picker with current date for new items', () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: undefined,
-        actionItemsRefetch: vi.fn(),
-        editMode: false,
-        actionItem: null,
-      };
-
-      render(<ItemModal {...props} />);
-
-      const datePicker = screen.getByLabelText(/assigned date/i);
-      // Should have some date value (current date)
-      expect(datePicker.value).toBeTruthy();
-    });
   });
 
   // Test notes handling

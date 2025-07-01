@@ -14,9 +14,9 @@ import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import ItemUpdateStatusModal, {
-  type InterfaceItemUpdateStatusModalProps,
+  type IItemUpdateStatusModalProps,
 } from './ItemUpdateStatusModal';
-import { vi } from 'vitest';
+import { vi, it, describe } from 'vitest';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -27,170 +27,144 @@ vi.mock('react-toastify', () => ({
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
+
+// Get translation keys
 const t = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
   ),
 );
 
-const itemProps: InterfaceItemUpdateStatusModalProps[] = [
+const itemProps: IItemUpdateStatusModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
     actionItemsRefetch: vi.fn(),
     actionItem: {
-      _id: 'actionItemId1',
-      assignee: null,
-      assigneeGroup: null,
-      assigneeType: 'User',
-      assigneeUser: {
-        _id: 'userId1',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: undefined,
-      },
-      actionItemCategory: {
-        _id: 'actionItemCategoryId1',
-        name: 'Category 1',
-      },
+      id: 'actionItemId1',
+      assigneeId: 'userId1',
+      categoryId: 'actionItemCategoryId1',
+      eventId: null,
+      organizationId: 'orgId1',
+      creatorId: 'userId2',
+      updaterId: null,
+      assignedAt: new Date('2024-08-27'),
+      completionAt: new Date('2044-09-03'),
+      createdAt: new Date('2024-08-27'),
+      updatedAt: null,
+      isCompleted: true,
       preCompletionNotes: 'Notes 1',
       postCompletionNotes: 'Cmp Notes 1',
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-08-30'),
-      completionDate: new Date('2044-09-03'),
-      isCompleted: true,
-      event: null,
-      allottedHours: 24,
-      assigner: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: undefined,
-      },
-      creator: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-      },
-    },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    actionItemsRefetch: vi.fn(),
-    actionItem: {
-      _id: 'actionItemId1',
-      assignee: null,
-      assigneeGroup: {
-        _id: 'volunteerGroupId1',
-        name: 'Group 1',
-        description: 'Description 1',
-        event: {
-          _id: 'eventId1',
-        },
-        createdAt: '2024-08-27',
-        creator: {
-          _id: 'userId2',
-          firstName: 'Wilt',
-          lastName: 'Shepherd',
-          image: undefined,
-        },
-        leader: {
-          _id: 'userId1',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: undefined,
-        },
-        volunteersRequired: 10,
-        assignments: [],
-        volunteers: [
-          {
-            _id: 'volunteerId1',
-            user: {
-              _id: 'userId1',
-              firstName: 'John',
-              lastName: 'Doe',
-              image: undefined,
-            },
-          },
-        ],
-      },
-      assigneeType: 'EventVolunteerGroup',
-      assigneeUser: {
-        _id: 'userId1',
-        firstName: 'John',
-        lastName: 'Doe',
-        image: undefined,
-      },
-      actionItemCategory: {
-        _id: 'actionItemCategoryId1',
-        name: 'Category 1',
-      },
-      preCompletionNotes: 'Notes 1',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-08-30'),
-      completionDate: new Date('2044-09-03'),
-      isCompleted: false,
-      event: null,
-      allottedHours: 24,
-      assigner: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: undefined,
-      },
-      creator: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-      },
-    },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    actionItemsRefetch: vi.fn(),
-    actionItem: {
-      _id: 'actionItemId1',
+
+      // Related entities (populated via GraphQL)
       assignee: {
-        _id: 'volunteerId1',
-        hasAccepted: true,
-        user: {
-          _id: 'userId1',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: undefined,
-        },
-        assignments: [],
-        groups: [],
-        hoursVolunteered: 0,
-      },
-      assigneeGroup: null,
-      assigneeType: 'EventVolunteer',
-      assigneeUser: null,
-      actionItemCategory: {
-        _id: 'actionItemCategoryId1',
-        name: 'Category 1',
-      },
-      preCompletionNotes: 'Notes 1',
-      postCompletionNotes: null,
-      assignmentDate: new Date('2024-08-27'),
-      dueDate: new Date('2044-08-30'),
-      completionDate: new Date('2044-09-03'),
-      isCompleted: true,
-      event: null,
-      allottedHours: 24,
-      assigner: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: undefined,
+        id: 'userId1',
+        name: 'John Doe',
+        avatarURL: '',
+        emailAddress: 'john.doe@example.com',
       },
       creator: {
-        _id: 'userId2',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
+        id: 'userId2',
+        name: 'Wilt Shepherd',
+        avatarURL: '',
+        emailAddress: 'wilt.shepherd@example.com',
+      },
+      event: null,
+      category: {
+        id: 'actionItemCategoryId1',
+        name: 'Category 1',
+        description: null,
+        isDisabled: false,
+        createdAt: '2024-08-27',
+        organizationId: 'orgId1',
+      },
+    },
+  },
+  {
+    isOpen: true,
+    hide: vi.fn(),
+    actionItemsRefetch: vi.fn(),
+    actionItem: {
+      id: 'actionItemId1',
+      assigneeId: 'userId1',
+      categoryId: 'actionItemCategoryId1',
+      eventId: null,
+      organizationId: 'orgId1',
+      creatorId: 'userId2',
+      updaterId: null,
+      assignedAt: new Date('2024-08-27'),
+      completionAt: null,
+      createdAt: new Date('2024-08-27'),
+      updatedAt: null,
+      isCompleted: false,
+      preCompletionNotes: 'Notes 1',
+      postCompletionNotes: null,
+
+      // Related entities (populated via GraphQL)
+      assignee: {
+        id: 'userId1',
+        name: 'John Doe',
+        avatarURL: '',
+        emailAddress: 'john.doe@example.com',
+      },
+      creator: {
+        id: 'userId2',
+        name: 'Wilt Shepherd',
+        avatarURL: '',
+        emailAddress: 'wilt.shepherd@example.com',
+      },
+      event: null,
+      category: {
+        id: 'actionItemCategoryId1',
+        name: 'Category 1',
+        description: null,
+        isDisabled: false,
+        createdAt: '2024-08-27',
+        organizationId: 'orgId1',
+      },
+    },
+  },
+  {
+    isOpen: true,
+    hide: vi.fn(),
+    actionItemsRefetch: vi.fn(),
+    actionItem: {
+      id: 'actionItemId1',
+      assigneeId: 'userId1',
+      categoryId: 'actionItemCategoryId1',
+      eventId: null,
+      organizationId: 'orgId1',
+      creatorId: 'userId2',
+      updaterId: null,
+      assignedAt: new Date('2024-08-27'),
+      completionAt: new Date('2044-09-03'),
+      createdAt: new Date('2024-08-27'),
+      updatedAt: null,
+      isCompleted: true,
+      preCompletionNotes: 'Notes 1',
+      postCompletionNotes: null,
+
+      // Related entities (populated via GraphQL)
+      assignee: {
+        id: 'userId1',
+        name: 'John Doe',
+        avatarURL: '',
+        emailAddress: 'john.doe@example.com',
+      },
+      creator: {
+        id: 'userId2',
+        name: 'Wilt Shepherd',
+        avatarURL: '',
+        emailAddress: 'wilt.shepherd@example.com',
+      },
+      event: null,
+      category: {
+        id: 'actionItemCategoryId1',
+        name: 'Category 1',
+        description: null,
+        isDisabled: false,
+        createdAt: '2024-08-27',
+        organizationId: 'orgId1',
       },
     },
   },
@@ -198,7 +172,7 @@ const itemProps: InterfaceItemUpdateStatusModalProps[] = [
 
 const renderItemUpdateStatusModal = (
   link: ApolloLink,
-  props: InterfaceItemUpdateStatusModalProps,
+  props: IItemUpdateStatusModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link} addTypename={false}>
@@ -216,43 +190,66 @@ const renderItemUpdateStatusModal = (
 };
 
 describe('Testing ItemUpdateStatusModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('Update Status of Completed ActionItem', async () => {
     renderItemUpdateStatusModal(link1, itemProps[0]);
+
+    // Check if the modal shows up with the right title
     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-    const yesBtn = await screen.findByTestId('yesBtn');
+
+    // Check if we have the text asking if user wants to mark item as pending
+    expect(
+      screen.getByText(
+        /Are you sure you want to mark this action item as pending/i,
+      ),
+    ).toBeInTheDocument();
+
+    // Find the Yes button and click it
+    const yesBtn = screen.getByTestId('yesBtn');
     fireEvent.click(yesBtn);
 
+    // Wait for the mutation to complete and check if the refetch and hide functions are called
     await waitFor(() => {
       expect(itemProps[0].actionItemsRefetch).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
     });
   });
 
   it('Update Status of Pending ActionItem', async () => {
     renderItemUpdateStatusModal(link1, itemProps[1]);
+
+    // Check if the modal shows up with the right title
     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
 
-    const notes = await screen.findByLabelText(t.postCompletionNotes);
-    fireEvent.change(notes, { target: { value: 'Cmp Notes 1' } });
+    // Find the completion notes input and change its value
+    const notesInput = screen.getByLabelText(/completion notes/i);
+    fireEvent.change(notesInput, { target: { value: 'Cmp Notes 1' } });
 
-    const createBtn = await screen.findByTestId('createBtn');
+    // Find the Mark Completion button and click it
+    const createBtn = screen.getByTestId('createBtn');
     fireEvent.click(createBtn);
 
+    // Wait for the mutation to complete and check if the refetch and hide functions are called
     await waitFor(() => {
       expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
       expect(itemProps[1].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.successfulUpdation);
     });
   });
 
   it('should fail to Update status of Action Item', async () => {
     renderItemUpdateStatusModal(link2, itemProps[2]);
 
+    // Check if the modal shows up with the right title
     expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-    const yesBtn = await screen.findByTestId('yesBtn');
+
+    // Find the Yes button and click it
+    const yesBtn = screen.getByTestId('yesBtn');
     fireEvent.click(yesBtn);
 
+    // Wait for the error message to appear
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });

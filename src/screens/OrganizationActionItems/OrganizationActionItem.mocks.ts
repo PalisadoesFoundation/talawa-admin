@@ -1,5 +1,9 @@
 import { ACTION_ITEM_LIST, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import {
+  UPDATE_ACTION_ITEM_MUTATION,
+  MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+} from 'GraphQl/Mutations/ActionItemMutations';
 
 export const actionItemCategory1 = {
   id: 'actionItemCategoryId1',
@@ -219,11 +223,70 @@ export const actionItemListQueryLoading = {
   },
 };
 
+// Add mutation mocks for ItemUpdateStatusModal tests
+export const updateActionItemMutation = {
+  request: {
+    query: UPDATE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: 'actionItemId1',
+        isCompleted: true,
+        postCompletionNotes: 'Cmp Notes 1',
+      },
+    },
+  },
+  result: {
+    data: {
+      updateActionItem: {
+        id: 'actionItemId1',
+        isCompleted: true,
+        postCompletionNotes: 'Cmp Notes 1',
+        updatedAt: '2025-07-01T07:49:24Z',
+      },
+    },
+  },
+};
+
+export const markActionItemAsPendingMutation = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+    variables: {
+      input: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+  result: {
+    data: {
+      markActionItemAsPending: {
+        id: 'actionItemId1',
+        isCompleted: false,
+        postCompletionNotes: null,
+        updatedAt: '2025-07-01T07:49:24Z',
+      },
+    },
+  },
+};
+
+export const markActionItemAsPendingMutationError = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+    variables: {
+      input: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+  error: new Error('Mock Graphql Error'),
+};
+
 // Combined mock arrays for different scenarios
 export const MOCKS = [
   actionItemListQuery,
   memberListQuery,
   actionItemCategoryListQuery,
+  updateActionItemMutation,
+  markActionItemAsPendingMutation,
 ];
 
 export const MOCKS_EMPTY = [
@@ -233,9 +296,10 @@ export const MOCKS_EMPTY = [
 ];
 
 export const MOCKS_ERROR = [
-  actionItemListQueryError,
+  actionItemListQuery,
   memberListQuery,
   actionItemCategoryListQuery,
+  markActionItemAsPendingMutationError,
 ];
 
 export const MOCKS_LOADING = [

@@ -1,7 +1,7 @@
 /**
  * EventCard Component
  *
- * This component renders a card displaying details of an event, including its title, description,
+ * This component renders a card displaying details of an event, including its name, description,
  * location, start and end times, and the creator's name. It also provides functionality for users
  * to register for the event.
  *
@@ -19,7 +19,7 @@
  * ```tsx
  * <EventCard
  *   _id="event123"
- *   title="Community Meetup"
+ *   name="Community Meetup"
  *   description="A meetup for community members."
  *   location="Community Hall"
  *   startDate="2023-10-01"
@@ -94,7 +94,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         });
         if (data) {
           setIsRegistered(true);
-          toast.success(`Successfully registered for ${props.title}`);
+          toast.success(`Successfully registered for ${props.name}`);
         }
       } catch (error) {
         toast.error(`Failed to register for the event`);
@@ -107,7 +107,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
     <div className={styles.mainContainer}>
       <div className="d-flex flex-row justify-content-between align-items-center">
         <div className={styles.orgName}>
-          <b>{props.title}</b>
+          <b>{props.name}</b>
         </div>
         <div>
           <CalendarMonthIcon />
