@@ -6,7 +6,7 @@
 
 > `const` **updateActionItemMutation**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L227)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L228)
 
 ## Type declaration
 

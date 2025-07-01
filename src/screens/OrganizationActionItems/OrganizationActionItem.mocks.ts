@@ -3,6 +3,7 @@ import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQue
 import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+  DELETE_ACTION_ITEM_MUTATION,
 } from 'GraphQl/Mutations/ActionItemMutations';
 
 export const actionItemCategory1 = {
@@ -280,6 +281,37 @@ export const markActionItemAsPendingMutationError = {
   error: new Error('Mock Graphql Error'),
 };
 
+// Add delete action item mutation mocks
+export const deleteActionItemMutation = {
+  request: {
+    query: DELETE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+  result: {
+    data: {
+      deleteActionItem: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+};
+
+export const deleteActionItemMutationError = {
+  request: {
+    query: DELETE_ACTION_ITEM_MUTATION,
+    variables: {
+      input: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+  error: new Error('Mock Graphql Error'),
+};
+
 // Combined mock arrays for different scenarios
 export const MOCKS = [
   actionItemListQuery,
@@ -287,6 +319,7 @@ export const MOCKS = [
   actionItemCategoryListQuery,
   updateActionItemMutation,
   markActionItemAsPendingMutation,
+  deleteActionItemMutation,
 ];
 
 export const MOCKS_EMPTY = [
@@ -296,10 +329,11 @@ export const MOCKS_EMPTY = [
 ];
 
 export const MOCKS_ERROR = [
-  actionItemListQuery,
+  actionItemListQueryError,
   memberListQuery,
   actionItemCategoryListQuery,
   markActionItemAsPendingMutationError,
+  deleteActionItemMutationError,
 ];
 
 export const MOCKS_LOADING = [

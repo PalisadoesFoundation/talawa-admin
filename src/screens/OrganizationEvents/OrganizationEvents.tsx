@@ -315,6 +315,7 @@ function organizationEvents(): JSX.Element {
               type="title"
               id="eventitle"
               placeholder={t('enterName')}
+              data-testid="eventTitleInput"
               autoComplete="off"
               required
               value={formState.name}
@@ -328,6 +329,7 @@ function organizationEvents(): JSX.Element {
               type="eventdescrip"
               id="eventdescrip"
               placeholder={t('enterDescrip')}
+              data-testid="eventDescriptionInput"
               autoComplete="off"
               required
               value={formState.eventdescrip}
@@ -341,6 +343,7 @@ function organizationEvents(): JSX.Element {
               type="text"
               id="eventLocation"
               placeholder={tCommon('enterLocation')}
+              data-testid="eventLocationInput"
               autoComplete="off"
               required
               value={formState.location}

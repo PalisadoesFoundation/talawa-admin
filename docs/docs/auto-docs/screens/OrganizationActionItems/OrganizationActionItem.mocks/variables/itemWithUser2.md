@@ -6,7 +6,7 @@
 
 > `const` **itemWithUser2**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L69)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L70)
 
 ## Type declaration
 
