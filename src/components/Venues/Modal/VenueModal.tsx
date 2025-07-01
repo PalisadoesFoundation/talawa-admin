@@ -214,7 +214,7 @@ const VenueModal = ({
           window.location.origin,
         ).toString();
         setImagePreviewUrl(previewUrl);
-      } catch (error) {
+      } catch {
         toast.error('Error creating preview URL');
         setImagePreviewUrl(null);
       }
@@ -316,7 +316,7 @@ const VenueModal = ({
                   setFormState({ ...formState, objectName });
                   const previewUrl = URL.createObjectURL(file);
                   setImagePreviewUrl(previewUrl);
-                } catch (error) {
+                } catch {
                   toast.error('Failed to upload image');
                 }
               }

@@ -29,7 +29,7 @@ export type PostInput = {
   videoUrl?: string; // Optional
 };
 
-export const PostOrderByInput = {
+export const PostOrderByInputEnum = {
   COMMENT_COUNT_ASC: 'commentCount_ASC',
   COMMENT_COUNT_DESC: 'commentCount_DESC',
   CREATED_AT_ASC: 'createdAt_ASC',
@@ -49,7 +49,7 @@ export const PostOrderByInput = {
 } as const;
 
 export type PostOrderByInput =
-  (typeof PostOrderByInput)[keyof typeof PostOrderByInput];
+  (typeof PostOrderByInputEnum)[keyof typeof PostOrderByInputEnum];
 
 export type PostUpdateInput = {
   imageUrl?: string; //Optional

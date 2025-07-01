@@ -4,7 +4,13 @@
 
 # Interface: InterfaceMapType
 
-Defined in: [src/utils/interfaces.ts:1337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1337)
+Defined in: [src/utils/interfaces.ts:2429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2429)
+
+InterfaceMapType
+
+## Description
+
+Defines a generic map type where keys and values are strings.
 
 ## Indexable
 

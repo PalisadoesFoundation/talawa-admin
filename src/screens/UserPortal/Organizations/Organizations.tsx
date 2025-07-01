@@ -72,7 +72,7 @@ interface IOrganizationCardProps {
   image: string;
   description: string;
   admins: [];
-  members: [];
+  members: InterfaceMemberNode[];
   address: {
     city: string;
     countryCode: string;
@@ -96,14 +96,30 @@ interface IOrganizationCardProps {
 /**
  * Interface defining the structure of organization properties.
  */
+
+interface InterfaceMemberNode {
+  id: string;
+  // add other fields if needed
+}
+interface InterfaceMemberEdge {
+  node: InterfaceMemberNode;
+}
+interface InterfaceMembersConnection {
+  edges: InterfaceMemberEdge[];
+  pageInfo?: {
+    hasNextPage: boolean;
+  };
+}
 interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  image: string;
+  image?: string;
+  avatarURL?: string; // <-- add this
+  addressLine1?: string; // <-- add this
   description: string;
   admins: [];
-  members: [];
+  members?: InterfaceMembersConnection; // <-- update this
   address: {
     city: string;
     countryCode: string;
@@ -329,7 +345,7 @@ export default function organizations(): React.JSX.Element {
    * pagination
    */
   const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
+    event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -458,11 +474,13 @@ export default function organizations(): React.JSX.Element {
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {
                           name: organization.name,
-                          image: organization.image,
+                          image: organization.image ?? '',
                           id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
-                          members: organization.members,
+                          members:
+                            organization.members?.edges?.map((e) => e.node) ??
+                            [],
                           address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,

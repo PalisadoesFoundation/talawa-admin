@@ -96,7 +96,6 @@ const BlockUser = (): JSX.Element => {
     data: blockedUsersData,
     loading: loadingBlockedUsers,
     error: errorBlockedUsers,
-    refetch: blockedUserRefetch,
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_PG, {
     variables: { id: currentUrl, first: 32, after: null },
     notifyOnNetworkStatusChange: true,
@@ -122,7 +121,6 @@ const BlockUser = (): JSX.Element => {
     data: memberData,
     loading: loadingMembers,
     error: errorMembers,
-    refetch: memberRefetch,
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
     variables: { id: currentUrl, first: 32, after: null },
     notifyOnNetworkStatusChange: true,

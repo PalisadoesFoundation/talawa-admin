@@ -4,7 +4,13 @@
 
 # Interface: InterfaceActionItemInfo
 
-Defined in: [src/utils/interfaces.ts:366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L366)
+Defined in: [src/utils/interfaces.ts:487](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L487)
+
+InterfaceActionItemInfo
+
+## Description
+
+Defines the structure for action item information.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:366](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L367)
+Defined in: [src/utils/interfaces.ts:488](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L488)
+
+The unique identifier of the action item.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:367](https://github.com/PalisadoesFoundatio
 
 > **actionItemCategory**: `object`
 
-Defined in: [src/utils/interfaces.ts:373](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L373)
+Defined in: [src/utils/interfaces.ts:494](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L494)
+
+The category of the action item.
 
 #### \_id
 
@@ -36,7 +46,9 @@ Defined in: [src/utils/interfaces.ts:373](https://github.com/PalisadoesFoundatio
 
 > **allottedHours**: `number`
 
-Defined in: [src/utils/interfaces.ts:388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L388)
+Defined in: [src/utils/interfaces.ts:509](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L509)
+
+The allotted hours for the action item, or null.
 
 ***
 
@@ -44,7 +56,9 @@ Defined in: [src/utils/interfaces.ts:388](https://github.com/PalisadoesFoundatio
 
 > **assignee**: [`InterfaceEventVolunteerInfo`](InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/utils/interfaces.ts:369](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L369)
+Defined in: [src/utils/interfaces.ts:490](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L490)
+
+The event volunteer assignee, or null.
 
 ***
 
@@ -52,7 +66,9 @@ Defined in: [src/utils/interfaces.ts:369](https://github.com/PalisadoesFoundatio
 
 > **assigneeGroup**: [`InterfaceVolunteerGroupInfo`](InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/utils/interfaces.ts:370](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L370)
+Defined in: [src/utils/interfaces.ts:491](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L491)
+
+The volunteer group assignee, or null.
 
 ***
 
@@ -60,7 +76,9 @@ Defined in: [src/utils/interfaces.ts:370](https://github.com/PalisadoesFoundatio
 
 > **assigneeType**: `"User"` \| `"EventVolunteerGroup"` \| `"EventVolunteer"`
 
-Defined in: [src/utils/interfaces.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L368)
+Defined in: [src/utils/interfaces.ts:489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L489)
+
+The type of assignee for the action item.
 
 ***
 
@@ -68,7 +86,9 @@ Defined in: [src/utils/interfaces.ts:368](https://github.com/PalisadoesFoundatio
 
 > **assigneeUser**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L371)
+Defined in: [src/utils/interfaces.ts:492](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L492)
+
+The user assignee, or null.
 
 ***
 
@@ -76,7 +96,9 @@ Defined in: [src/utils/interfaces.ts:371](https://github.com/PalisadoesFoundatio
 
 > **assigner**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L372)
+Defined in: [src/utils/interfaces.ts:493](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L493)
+
+The assigner of the action item.
 
 ***
 
@@ -84,7 +106,9 @@ Defined in: [src/utils/interfaces.ts:372](https://github.com/PalisadoesFoundatio
 
 > **assignmentDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L379)
+Defined in: [src/utils/interfaces.ts:500](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L500)
+
+The date the action item was assigned.
 
 ***
 
@@ -92,7 +116,9 @@ Defined in: [src/utils/interfaces.ts:379](https://github.com/PalisadoesFoundatio
 
 > **completionDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:381](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L381)
+Defined in: [src/utils/interfaces.ts:502](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L502)
+
+The completion date of the action item, or null if not completed.
 
 ***
 
@@ -100,7 +126,9 @@ Defined in: [src/utils/interfaces.ts:381](https://github.com/PalisadoesFoundatio
 
 > **creator**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L387)
+Defined in: [src/utils/interfaces.ts:508](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L508)
+
+The creator of the action item.
 
 ***
 
@@ -108,7 +136,9 @@ Defined in: [src/utils/interfaces.ts:387](https://github.com/PalisadoesFoundatio
 
 > **dueDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L380)
+Defined in: [src/utils/interfaces.ts:501](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L501)
+
+The due date of the action item.
 
 ***
 
@@ -116,7 +146,9 @@ Defined in: [src/utils/interfaces.ts:380](https://github.com/PalisadoesFoundatio
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L383)
+Defined in: [src/utils/interfaces.ts:504](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L504)
+
+The related event, or null.
 
 #### \_id
 
@@ -132,7 +164,9 @@ Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundatio
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L382)
+Defined in: [src/utils/interfaces.ts:503](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L503)
+
+Indicates if the action item is completed.
 
 ***
 
@@ -140,7 +174,9 @@ Defined in: [src/utils/interfaces.ts:382](https://github.com/PalisadoesFoundatio
 
 > **postCompletionNotes**: `string`
 
-Defined in: [src/utils/interfaces.ts:378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L378)
+Defined in: [src/utils/interfaces.ts:499](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L499)
+
+Notes after completion of the action item, or null.
 
 ***
 
@@ -148,4 +184,6 @@ Defined in: [src/utils/interfaces.ts:378](https://github.com/PalisadoesFoundatio
 
 > **preCompletionNotes**: `string`
 
-Defined in: [src/utils/interfaces.ts:377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L377)
+Defined in: [src/utils/interfaces.ts:498](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L498)
+
+Notes before completion of the action item.

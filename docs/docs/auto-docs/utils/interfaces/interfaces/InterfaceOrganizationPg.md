@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationPg
 
-Defined in: [src/utils/interfaces.ts:804](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L804)
+Defined in: [src/utils/interfaces.ts:1405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1405)
+
+InterfaceOrganizationPg
+
+## Description
+
+Defines the structure for an organization with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:804](https://github.com/PalisadoesFoundatio
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L805)
+Defined in: [src/utils/interfaces.ts:1406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1406)
+
+The organization object.
 
 #### addressLine1
 
@@ -90,10 +98,6 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 
 > **pinnedPostsCount**: `number`
 
-#### postalCode
-
-> **postalCode**: `string`
-
 #### posts
 
 > **posts**: [`InterfaceOrganizationPostsConnectionPg`](InterfaceOrganizationPostsConnectionPg.md)
@@ -101,10 +105,6 @@ Defined in: [src/utils/interfaces.ts:805](https://github.com/PalisadoesFoundatio
 #### postsCount
 
 > **postsCount**: `number`
-
-#### state
-
-> **state**: `string`
 
 #### tagFolders
 

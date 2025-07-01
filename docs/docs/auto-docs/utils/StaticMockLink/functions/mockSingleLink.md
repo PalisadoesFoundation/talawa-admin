@@ -6,13 +6,13 @@
 
 > **mockSingleLink**(...`mockedResponses`): [`InterfaceMockApolloLink`](../interfaces/InterfaceMockApolloLink.md)
 
-Defined in: [src/utils/StaticMockLink.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L164)
+Defined in: [src/utils/StaticMockLink.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L169)
 
 ## Parameters
 
 ### mockedResponses
 
-...`any`[]
+...(`boolean` \| `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>)[]
 
 ## Returns
 
