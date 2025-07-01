@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
+import type { IUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
@@ -13,7 +13,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 /**
  * Unit tests for UserSidebarOrg component:
@@ -33,7 +33,7 @@ import { vi } from 'vitest';
  */
 const { setItem } = useLocalStorage();
 
-const props: InterfaceUserSidebarOrgProps = {
+const props: IUserSidebarOrgProps = {
   orgId: '123',
   targets: [
     {
@@ -246,7 +246,7 @@ async function wait(ms = 100): Promise<void> {
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 beforeEach(() => {
@@ -320,7 +320,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -328,7 +328,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
     await userEvent.click(screen.getByText('People'));
-    expect(global.window.location.pathname).toContain('/user/people/123');
+    expect(window.location.pathname).toContain('/user/people/123');
   });
 
   it('Testing when screen size is less than 820px', async () => {
@@ -364,7 +364,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -405,7 +405,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <UserSidebarOrg {...props} hideDrawer={null} />
+              <UserSidebarOrg {...props} hideDrawer={false} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -429,5 +429,212 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+  });
+
+  it('Testing toggle button click functionality', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    expect(toggleButton).toBeInTheDocument();
+    expect(toggleButton).toHaveAttribute('role', 'button');
+    expect(toggleButton).toHaveAttribute('tabIndex', '0');
+
+    await userEvent.click(toggleButton);
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation with Enter key', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard('{Enter}');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation with Space key', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard(' ');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation ignores other keys', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard('{Escape}');
+    await userEvent.keyboard('{Tab}');
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  });
+
+  it('Testing conditional rendering with URL - renders NavLink', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    const propsWithUrl = {
+      ...props,
+      targets: [
+        {
+          name: 'Posts',
+          url: '/user/organization/123',
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...propsWithUrl} hideDrawer={false} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should render as NavLink when URL is provided
+    const navLink = screen.getByRole('link', { name: /Posts/i });
+    expect(navLink).toBeInTheDocument();
+    expect(navLink).toHaveAttribute('href', '/user/organization/123');
+  });
+
+  it('Testing conditional rendering without URL - renders CollapsibleDropdown', async () => {
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    const propsWithoutUrl = {
+      ...props,
+      targets: [
+        {
+          name: 'Dropdown Menu',
+          subTargets: [
+            {
+              name: 'Submenu 1',
+              url: '/submenu1',
+            },
+            {
+              name: 'Submenu 2',
+              url: '/submenu2',
+            },
+          ],
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...propsWithoutUrl} hideDrawer={false} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should render CollapsibleDropdown when URL is not provided
+    const dropdownButton = screen.getByRole('button', {
+      name: /Dropdown Menu/i,
+    });
+    expect(dropdownButton).toBeInTheDocument();
+
+    // Verify it's a dropdown and not a NavLink
+    const navLink = screen.queryByRole('link', { name: /Dropdown Menu/i });
+    expect(navLink).not.toBeInTheDocument();
   });
 });

@@ -1,17 +1,29 @@
 /**
  * SignOut Component
- * @description This component provides a user interface for signing out of the application.
+ *
+ * This component provides a user interface for signing out of the application.
  * It handles the revocation of the user's refresh token and clears the session data.
  * If the token revocation fails, it provides an option to retry or proceed with a local logout.
  *
- * @component
- * @returns {JSX.Element} A React component that renders a sign-out button with an icon.
+ * @remarks
+ * - Uses the `useSession` hook to manage the user's session.
+ * - Calls the `REVOKE_REFRESH_TOKEN` mutation via Apollo Client's `useMutation`.
+ * - Redirects to the homepage using `useNavigate` from React Router.
+ * - Handles token revocation errors with a retry mechanism.
  *
- * @description
- * - This component uses the `useSession` hook to manage the user's session.
- * - It uses the `useMutation` hook from Apollo Client to call the `REVOKE_REFRESH_TOKEN` mutation.
- * - The `useNavigate` hook from React Router is used to redirect the user to the home page after logout.
- * - Handles errors during token revocation and provides a retry mechanism.
+ * ### Dependencies
+ * - `@mui/icons-material/Logout`: Logout icon.
+ * - `utils/useSession`: Custom session hook.
+ * - `GraphQl/Mutations/mutations`: Contains the mutation.
+ * - `@apollo/client`: Handles GraphQL.
+ * - `react-router-dom`: Navigation.
+ *
+ * ### CSS Modules
+ * - `style/app-fixed.module.css`: Styles for the component.
+ * ### Props
+ * - `hideDrawer`: State to determine the visibility of the sidebar. `true` hides it, and `false` shows it.
+ *
+ * @returns A React component that renders a sign-out button with an icon.
  *
  * @example
  * ```tsx
@@ -21,16 +33,6 @@
  *   return <SignOut />;
  * }
  * ```
- *
- * @dependencies
- * - `@mui/icons-material/Logout`: For rendering the logout icon.
- * - `utils/useSession`: Custom hook for session management.
- * - `GraphQl/Mutations/mutations`: Contains the `REVOKE_REFRESH_TOKEN` mutation.
- * - `@apollo/client`: For GraphQL mutation handling.
- * - `react-router-dom`: For navigation after logout.
- *
- * @cssModule
- * - `style/app-fixed.module.css`: Contains styles for the sign-out button and container.
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
@@ -40,7 +42,11 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
-const SignOut = (): JSX.Element => {
+interface ISignOutProps {
+  hideDrawer?: boolean; // Optional prop to conditionally render the button
+}
+
+const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
@@ -75,15 +81,26 @@ const SignOut = (): JSX.Element => {
     }
   };
   return (
-    <div className={styles.signOutContainer}>
-      <LogoutIcon />
-      <button
-        className={styles.signOutButton}
-        onClick={logout}
-        aria-label="Sign out"
-      >
-        Sign Out
-      </button>
+    <div
+      className={styles.signOutContainer}
+      onClick={logout}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          logout();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Sign out"
+      data-testid="signOutBtn"
+    >
+      <div data-testid="LogoutIconid">
+        <LogoutIcon />
+      </div>
+      <div className={`${styles.signOutButton} ${styles.sidebarText}`}>
+        {hideDrawer ? '' : 'Sign Out'}
+      </div>
     </div>
   );
 };

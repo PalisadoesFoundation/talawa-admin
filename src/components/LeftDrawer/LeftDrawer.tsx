@@ -6,19 +6,20 @@
  * organizations, users, and community profile. The drawer's visibility can be toggled
  * based on the screen size or user interaction.
  *
- * @component
- * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
- * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
- *                                            `null` indicates the initial state.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
- *                                            Function to update the visibility state of the drawer.
  *
- * @returns {JSX.Element} The rendered LeftDrawer component.
+ * @param props - The props for the LeftDrawer component.
+ * - `hideDrawer`: State to control the visibility of the sidebar.
+ * - `setHideDrawer`: Function to update the `hideDrawer` state.
+ *
+ * @returns The rendered LeftDrawer component.
  *
  * @remarks
  * - The component uses `useTranslation` for internationalization.
- * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
+ * - The drawer automatically hides on smaller screens (width less than or equal to 820px) when a link is clicked.
  * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
+ * - Uses SVG icons for visual representation of navigation options.
+ * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
  *
  * @example
  * ```tsx
@@ -28,10 +29,6 @@
  * />
  * ```
  *
- * @fileoverview
- * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
- * - Uses SVG icons for visual representation of navigation options.
- * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
  */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,51 +39,97 @@ import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { FaBars } from 'react-icons/fa';
 
-export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+export interface ILeftDrawerProps {
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
+}: ILeftDrawerProps): React.JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') !== null;
 
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, []);
-
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
     }
   };
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820) {
+      setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
+    }
+  };
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
-      <div className={styles.talawaLogoContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <div
+          className={`d-flex align-items-center`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
-      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
+        {!hideDrawer && tCommon('menu')}
+      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>
@@ -99,17 +142,9 @@ const leftDrawer = ({
                 data-testid="organizationsBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
+                  <OrganizationsIcon fontSize={25} stroke={'#000000'} />
                 </div>
-                {t('my organizations')}
+                {!hideDrawer && t('my organizations')}
               </button>
             )}
           </NavLink>
@@ -124,14 +159,7 @@ const leftDrawer = ({
                   data-testid="rolesBtn"
                 >
                   <div className={styles.iconWrapper}>
-                    <RolesIcon
-                      fill="none"
-                      stroke={
-                        isActive
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }
-                    />
+                    <RolesIcon fill="none" />
                   </div>
                   {t('users')}
                 </button>
@@ -144,21 +172,13 @@ const leftDrawer = ({
               <button
                 className={`${
                   isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
+                } ${styles.sidebarText}`}
                 data-testid="communityProfileBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <SettingsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
+                  <SettingsIcon fill="none" fontSize={25} />
                 </div>
-                {t('communityProfile')}
+                {!hideDrawer && t('communityProfile')}
               </button>
             )}
           </NavLink>
