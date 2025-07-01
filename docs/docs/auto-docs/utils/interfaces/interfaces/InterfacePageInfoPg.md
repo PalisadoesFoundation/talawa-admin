@@ -4,7 +4,13 @@
 
 # Interface: InterfacePageInfoPg
 
-Defined in: [src/utils/interfaces.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L457)
+Defined in: [src/utils/interfaces.ts:636](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L636)
+
+InterfacePageInfoPg
+
+## Description
+
+Defines the structure for pagination information in PostgreSQL-backed connections.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:457](https://github.com/PalisadoesFoundatio
 
 > **endCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L458)
+Defined in: [src/utils/interfaces.ts:637](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L637)
+
+The cursor for the last item in the current page.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:458](https://github.com/PalisadoesFoundatio
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L459)
+Defined in: [src/utils/interfaces.ts:638](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L638)
+
+Indicates if there is a next page.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:459](https://github.com/PalisadoesFoundatio
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L460)
+Defined in: [src/utils/interfaces.ts:639](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L639)
+
+Indicates if there is a previous page.
 
 ***
 
@@ -36,4 +48,6 @@ Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundatio
 
 > **startCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:461](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L461)
+Defined in: [src/utils/interfaces.ts:640](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L640)
+
+The cursor for the first item in the current page.

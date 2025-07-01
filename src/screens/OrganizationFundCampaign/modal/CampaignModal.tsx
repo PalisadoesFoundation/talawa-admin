@@ -61,7 +61,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
   fundId,
-  orgId,
   refetchCampaign,
   mode,
   campaign,

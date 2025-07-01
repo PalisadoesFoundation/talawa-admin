@@ -40,7 +40,7 @@ import type {
   IDeleteActionItemInput,
 } from 'types/Actions/interface';
 
-interface IItemDeleteModalProps {
+export interface IItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItem: IActionItemInfo;

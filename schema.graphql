@@ -1858,6 +1858,7 @@ type Query {
   actionItemsByOrganization(
     input: QueryActionItemsByOrganizationInput!
   ): [ActionItem!]
+  actionItemsByUser(input: QueryActionItemsByUserInput!): [ActionItem!]
   agendaCategory(id: ID!): AgendaCategory!
   currentUser: UserPg!
   customDataByOrganization(organizationId: ID!): [UserCustomData!]!
@@ -2097,6 +2098,11 @@ enum Gender {
 
 input QueryActionItemsByOrganizationInput {
   organizationId: String!
+}
+
+input QueryActionItemsByUserInput {
+  userId: String!
+  organizationId: String
 }
 
 input MarkActionItemAsPendingInput {

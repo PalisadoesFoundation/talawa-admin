@@ -50,3 +50,44 @@ export const ACTION_ITEM_LIST = gql`
     }
   }
 `;
+
+export const ACTION_ITEMS_BY_USER = gql`
+  query ActionItemsByUser($input: QueryActionItemsByUserInput!) {
+    actionItemsByUser(input: $input) {
+      id
+      isCompleted
+      assignedAt
+      completionAt
+      preCompletionNotes
+      postCompletionNotes
+      createdAt
+      assignee {
+        id
+        name
+      }
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
+      }
+      category {
+        id
+        name
+        description
+      }
+      event {
+        id
+
+        description
+      }
+      organization {
+        id
+        name
+        description
+      }
+    }
+  }
+`;

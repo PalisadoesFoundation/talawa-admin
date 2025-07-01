@@ -4,7 +4,7 @@
 
 # Interface: IEvent
 
-Defined in: [src/utils/interfaces.ts:610](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L610)
+Defined in: [src/utils/interfaces.ts:954](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L954)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:610](https://github.com/PalisadoesFoundatio
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:611](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L611)
+Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L955)
 
 #### attachments
 

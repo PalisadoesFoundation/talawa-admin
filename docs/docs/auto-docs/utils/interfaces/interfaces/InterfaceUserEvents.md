@@ -4,7 +4,13 @@
 
 # Interface: InterfaceUserEvents
 
-Defined in: [src/utils/interfaces.ts:1358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1358)
+Defined in: [src/utils/interfaces.ts:2459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2459)
+
+InterfaceUserEvents
+
+## Description
+
+Extends `InterfaceBaseEvent` with additional properties for user-related events.
 
 ## Extends
 
@@ -16,7 +22,9 @@ Defined in: [src/utils/interfaces.ts:1358](https://github.com/PalisadoesFoundati
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L342)
+Defined in: [src/utils/interfaces.ts:422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L422)
+
+The unique identifier of the event.
 
 #### Inherited from
 
@@ -28,7 +36,9 @@ Defined in: [src/utils/interfaces.ts:342](https://github.com/PalisadoesFoundatio
 
 > **allDay**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L350)
+Defined in: [src/utils/interfaces.ts:430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L430)
+
+Indicates if the event is an all-day event.
 
 #### Inherited from
 
@@ -40,7 +50,9 @@ Defined in: [src/utils/interfaces.ts:350](https://github.com/PalisadoesFoundatio
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L344)
+Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L424)
+
+The description of the event.
 
 #### Inherited from
 
@@ -52,7 +64,9 @@ Defined in: [src/utils/interfaces.ts:344](https://github.com/PalisadoesFoundatio
 
 > **endDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L346)
+Defined in: [src/utils/interfaces.ts:426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L426)
+
+The end date of the event.
 
 #### Inherited from
 
@@ -64,7 +78,9 @@ Defined in: [src/utils/interfaces.ts:346](https://github.com/PalisadoesFoundatio
 
 > **endTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L349)
+Defined in: [src/utils/interfaces.ts:429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L429)
+
+The end time of the event.
 
 #### Inherited from
 
@@ -76,7 +92,9 @@ Defined in: [src/utils/interfaces.ts:349](https://github.com/PalisadoesFoundatio
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L347)
+Defined in: [src/utils/interfaces.ts:427](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L427)
+
+The location of the event.
 
 #### Inherited from
 
@@ -88,7 +106,9 @@ Defined in: [src/utils/interfaces.ts:347](https://github.com/PalisadoesFoundatio
 
 > **recurring**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L351)
+Defined in: [src/utils/interfaces.ts:431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L431)
+
+Indicates if the event is a recurring event.
 
 #### Inherited from
 
@@ -100,7 +120,9 @@ Defined in: [src/utils/interfaces.ts:351](https://github.com/PalisadoesFoundatio
 
 > **startDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L345)
+Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
+
+The start date of the event.
 
 #### Inherited from
 
@@ -112,7 +134,9 @@ Defined in: [src/utils/interfaces.ts:345](https://github.com/PalisadoesFoundatio
 
 > **startTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L348)
+Defined in: [src/utils/interfaces.ts:428](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L428)
+
+The start time of the event.
 
 #### Inherited from
 
@@ -124,7 +148,9 @@ Defined in: [src/utils/interfaces.ts:348](https://github.com/PalisadoesFoundatio
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:343](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L343)
+Defined in: [src/utils/interfaces.ts:423](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L423)
+
+The title of the event.
 
 #### Inherited from
 
@@ -136,7 +162,9 @@ Defined in: [src/utils/interfaces.ts:343](https://github.com/PalisadoesFoundatio
 
 > **volunteerGroups**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1359)
+Defined in: [src/utils/interfaces.ts:2460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2460)
+
+An array of volunteer groups associated with the event.
 
 #### \_id
 
@@ -164,7 +192,9 @@ Defined in: [src/utils/interfaces.ts:1359](https://github.com/PalisadoesFoundati
 
 > **volunteers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1366)
+Defined in: [src/utils/interfaces.ts:2467](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2467)
+
+An array of volunteers associated with the event.
 
 #### \_id
 

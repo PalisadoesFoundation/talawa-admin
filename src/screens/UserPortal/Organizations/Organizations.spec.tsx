@@ -1,3 +1,4 @@
+/* global HTMLSelectElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import {
@@ -12,7 +13,7 @@ import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { act } from 'react-dom/test-utils';
-import { describe, it, expect, type Mock, vi } from 'vitest';
+import { expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -23,7 +24,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { useQuery } from '@apollo/client';
 
 const { setItem, getItem } = useLocalStorage();
 
@@ -514,7 +514,7 @@ const MOCKS = [
 ];
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const TEST_USER_NAME = 'Noble Mittal';
@@ -768,19 +768,19 @@ test('Testing Sidebar', async () => {
   );
 
   await waitFor(() => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
+    const closeMenuBtn = screen.getByTestId('toggleBtn');
     expect(closeMenuBtn).toBeInTheDocument();
   });
   await act(async () => {
-    const closeMenuBtn = screen.getByTestId('closeMenu');
+    const closeMenuBtn = screen.getByTestId('toggleBtn');
     closeMenuBtn.click();
   });
   await waitFor(() => {
-    const openMenuBtn = screen.getByTestId('openMenu');
+    const openMenuBtn = screen.getByTestId('toggleBtn');
     expect(openMenuBtn).toBeInTheDocument();
   });
   await act(async () => {
-    const openMenuBtn = screen.getByTestId('openMenu');
+    const openMenuBtn = screen.getByTestId('toggleBtn');
     openMenuBtn.click();
   });
 });
@@ -984,7 +984,7 @@ test('setPage updates page state correctly when pagination controls are used', a
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -1001,7 +1001,7 @@ test('setPage updates page state correctly when pagination controls are used', a
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -1698,4 +1698,101 @@ test('doSearch function should call appropriate refetch based on mode', async ()
   await wait(300);
 
   expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+});
+
+test('should display loading spinner when data is loading', async () => {
+  const loadingMock = {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    delay: 1000, // Simulate slow loading
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  };
+
+  render(
+    <MockedProvider mocks={[loadingMock]} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  // Check that loading spinner is displayed initially
+  expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+});
+
+test('should display "no organizations" message when organizations list is empty', async () => {
+  const emptyMock = {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  };
+
+  const joinedOrgsMock = {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_PG,
+      variables: { id: getItem('userId'), first: 5, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            edges: [],
+            pageInfo: { hasNextPage: false },
+          },
+        },
+      },
+    },
+  };
+
+  const createdOrgsMock = {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: getItem('userId'), filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [],
+        },
+      },
+    },
+  };
+
+  render(
+    <MockedProvider
+      mocks={[emptyMock, joinedOrgsMock, createdOrgsMock]}
+      addTypename={false}
+    >
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  // Check that a "no organizations found" message is displayed
+  expect(screen.getByText('Nothing to show here.')).toBeInTheDocument();
 });

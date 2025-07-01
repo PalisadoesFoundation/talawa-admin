@@ -4,7 +4,13 @@
 
 # Interface: InterfacePaginationArgs
 
-Defined in: [src/utils/interfaces.ts:756](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L756)
+Defined in: [src/utils/interfaces.ts:1264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1264)
+
+InterfacePaginationArgs
+
+## Description
+
+Defines the arguments for pagination.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:756](https://github.com/PalisadoesFoundatio
 
 > **after**: `string`
 
-Defined in: [src/utils/interfaces.ts:757](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L757)
+Defined in: [src/utils/interfaces.ts:1265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1265)
+
+The cursor to paginate after.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:757](https://github.com/PalisadoesFoundatio
 
 > **before**: `string`
 
-Defined in: [src/utils/interfaces.ts:758](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L758)
+Defined in: [src/utils/interfaces.ts:1266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1266)
+
+The cursor to paginate before.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:758](https://github.com/PalisadoesFoundatio
 
 > **first**: `number`
 
-Defined in: [src/utils/interfaces.ts:759](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L759)
+Defined in: [src/utils/interfaces.ts:1267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1267)
+
+The maximum number of items to return from the beginning.
 
 ***
 
@@ -36,4 +48,6 @@ Defined in: [src/utils/interfaces.ts:759](https://github.com/PalisadoesFoundatio
 
 > **last**: `number`
 
-Defined in: [src/utils/interfaces.ts:760](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L760)
+Defined in: [src/utils/interfaces.ts:1268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1268)
+
+The maximum number of items to return from the end.

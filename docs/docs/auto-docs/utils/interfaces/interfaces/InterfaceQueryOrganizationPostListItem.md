@@ -4,7 +4,13 @@
 
 # Interface: InterfaceQueryOrganizationPostListItem
 
-Defined in: [src/utils/interfaces.ts:832](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L832)
+Defined in: [src/utils/interfaces.ts:1413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1413)
+
+InterfaceQueryOrganizationPostListItem
+
+## Description
+
+Defines the structure for an organization post list item returned from a query.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:832](https://github.com/PalisadoesFoundatio
 
 > **posts**: `object`
 
-Defined in: [src/utils/interfaces.ts:833](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L833)
+Defined in: [src/utils/interfaces.ts:1414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1414)
+
+The posts connection object.
 
 #### edges
 

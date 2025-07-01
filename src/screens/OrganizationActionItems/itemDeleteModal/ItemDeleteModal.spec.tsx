@@ -19,9 +19,7 @@ import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import ItemDeleteModal, {
-  type InterfaceItemDeleteModalProps,
-} from './ItemDeleteModal';
+import ItemDeleteModal, { type IItemDeleteModalProps } from './ItemDeleteModal';
 import { vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({
@@ -39,50 +37,50 @@ const t = JSON.parse(
   ),
 );
 
-const itemProps: InterfaceItemDeleteModalProps = {
+// Updated itemProps to match the new interface
+const itemProps: IItemDeleteModalProps = {
   isOpen: true,
   hide: vi.fn(),
   actionItemsRefetch: vi.fn(),
   actionItem: {
-    _id: 'actionItemId1',
-    assignee: null,
-    assigneeGroup: null,
-    assigneeType: 'User',
-    assigneeUser: {
-      _id: 'userId1',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: undefined,
-    },
-    actionItemCategory: {
-      _id: 'actionItemCategoryId1',
-      name: 'Category 1',
-    },
+    id: 'actionItemId1',
+    assigneeId: null,
+    categoryId: 'categoryId1',
+    eventId: null,
+    organizationId: 'orgId1',
+    creatorId: 'userId2',
+    updaterId: null,
+    assignedAt: new Date('2024-08-27'),
+    completionAt: new Date('2044-09-03'),
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: null,
+    isCompleted: true,
     preCompletionNotes: 'Notes 1',
     postCompletionNotes: 'Cmp Notes 1',
-    assignmentDate: new Date('2024-08-27'),
-    dueDate: new Date('2044-08-30'),
-    completionDate: new Date('2044-09-03'),
-    isCompleted: true,
-    event: null,
-    allottedHours: 24,
-    assigner: {
-      _id: 'userId2',
-      firstName: 'Wilt',
-      lastName: 'Shepherd',
-      image: undefined,
-    },
+
+    // Related entities updated according to the new interfaces
+    assignee: null,
     creator: {
-      _id: 'userId2',
-      firstName: 'Wilt',
-      lastName: 'Shepherd',
+      id: 'userId2',
+      name: 'Wilt Shepherd',
+      emailAddress: '',
+      avatarURL: '',
+    },
+    event: null,
+    category: {
+      id: 'categoryId1',
+      name: 'Category 1',
+      description: null, // Added required field
+      isDisabled: false, // Added required field
+      createdAt: '2024-01-01T00:00:00.000Z', // Added required field
+      organizationId: 'orgId1', // Added required field
     },
   },
 };
 
 const renderItemDeleteModal = (
   link: ApolloLink,
-  props: InterfaceItemDeleteModalProps,
+  props: IItemDeleteModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link} addTypename={false}>

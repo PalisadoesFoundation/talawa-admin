@@ -38,7 +38,7 @@ import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 
-import type { InterfaceActionItemInfo } from 'utils/interfaces';
+import type { IActionItemInfo } from 'types/Actions/interface';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -89,9 +89,7 @@ function actions(): JSX.Element {
     return <Navigate to={'/'} replace />;
   }
 
-  const [actionItem, setActionItem] = useState<InterfaceActionItemInfo | null>(
-    null,
-  );
+  const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'dueDate_ASC' | 'dueDate_DESC' | null>(
     null,
@@ -113,7 +111,7 @@ function actions(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   const handleModalClick = useCallback(
-    (actionItem: InterfaceActionItemInfo | null, modal: ModalState): void => {
+    (actionItem: IActionItemInfo | null, modal: ModalState): void => {
       setActionItem(actionItem);
       openModal(modal);
     },
@@ -129,7 +127,7 @@ function actions(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data?: { actionItemsByUser: InterfaceActionItemInfo[] };
+    data?: { actionItemsByUser: IActionItemInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;

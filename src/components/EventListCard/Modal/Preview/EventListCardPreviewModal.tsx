@@ -99,9 +99,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-testid="updateName"
             required
             value={
-              formState.name.length > 100
+              formState.name?.length > 100
                 ? formState.name.substring(0, 100) + '...'
-                : formState.name
+                : formState.name || ''
             }
             onChange={(e): void => {
               setFormState({ ...formState, name: e.target.value });
@@ -119,9 +119,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-testid="updateDescription"
             required
             value={
-              formState.eventdescrip.length > 256
+              formState.eventdescrip?.length > 256
                 ? formState.eventdescrip.substring(0, 256) + '...'
-                : formState.eventdescrip
+                : formState.eventdescrip || ''
             }
             onChange={(e): void => {
               setFormState({ ...formState, eventdescrip: e.target.value });
@@ -138,7 +138,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             autoComplete="off"
             data-testid="updateLocation"
             required
-            value={formState.location}
+            value={formState.location || ''}
             onChange={(e): void => {
               setFormState({ ...formState, location: e.target.value });
             }}

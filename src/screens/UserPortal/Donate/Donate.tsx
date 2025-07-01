@@ -104,7 +104,7 @@ export default function donate(): JSX.Element {
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
   const handleChangePage = (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
+    event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ): void => {
     setPage(newPage);

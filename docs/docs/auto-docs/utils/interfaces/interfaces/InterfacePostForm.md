@@ -4,7 +4,13 @@
 
 # Interface: InterfacePostForm
 
-Defined in: [src/utils/interfaces.ts:825](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L825)
+Defined in: [src/utils/interfaces.ts:1387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1387)
+
+InterfacePostForm
+
+## Description
+
+Defines the structure for a post form.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:825](https://github.com/PalisadoesFoundatio
 
 > **pinned**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:830](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L830)
+Defined in: [src/utils/interfaces.ts:1392](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1392)
+
+Indicates if the post is pinned.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:830](https://github.com/PalisadoesFoundatio
 
 > **postinfo**: `string`
 
-Defined in: [src/utils/interfaces.ts:827](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L827)
+Defined in: [src/utils/interfaces.ts:1389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1389)
+
+The information/content of the post.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:827](https://github.com/PalisadoesFoundatio
 
 > **postphoto**: `string`
 
-Defined in: [src/utils/interfaces.ts:828](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L828)
+Defined in: [src/utils/interfaces.ts:1390](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1390)
+
+The URL of the post's photo, or null.
 
 ***
 
@@ -36,7 +48,9 @@ Defined in: [src/utils/interfaces.ts:828](https://github.com/PalisadoesFoundatio
 
 > **posttitle**: `string`
 
-Defined in: [src/utils/interfaces.ts:826](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L826)
+Defined in: [src/utils/interfaces.ts:1388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1388)
+
+The title of the post.
 
 ***
 
@@ -44,4 +58,6 @@ Defined in: [src/utils/interfaces.ts:826](https://github.com/PalisadoesFoundatio
 
 > **postvideo**: `string`
 
-Defined in: [src/utils/interfaces.ts:829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L829)
+Defined in: [src/utils/interfaces.ts:1391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1391)
+
+The URL of the post's video, or null.

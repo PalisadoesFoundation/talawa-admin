@@ -16,7 +16,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts:232](http
 
 #### request.query
 
-> **query**: `any` = `ACTION_ITEMS_BY_USER`
+> **query**: `DocumentNode` = `ACTION_ITEMS_BY_USER`
 
 #### request.variables
 

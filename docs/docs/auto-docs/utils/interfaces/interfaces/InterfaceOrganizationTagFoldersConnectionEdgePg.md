@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationTagFoldersConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L701)
+Defined in: [src/utils/interfaces.ts:1144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1144)
+
+InterfaceOrganizationTagFoldersConnectionEdgePg
+
+## Description
+
+Defines the structure for an edge in the organization tag folders connection with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundatio
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L702)
+Defined in: [src/utils/interfaces.ts:1145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1145)
+
+The cursor for this edge.
 
 ***
 
@@ -20,4 +28,6 @@ Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceTagFolderPg`](InterfaceTagFolderPg.md)
 
-Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L703)
+Defined in: [src/utils/interfaces.ts:1146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1146)
+
+The tag folder node.
