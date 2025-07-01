@@ -6,7 +6,7 @@
 
 > `const` **actionItemListQueryLoading**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L205)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L209)
 
 ## Type declaration
 

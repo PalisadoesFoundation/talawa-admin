@@ -4,7 +4,7 @@
 
 # Interface: IMarkActionItemAsPendingInput
 
-Defined in: [src/types/Actions/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L68)
+Defined in: [src/types/Actions/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L74)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/Actions/interface.ts:68](https://github.com/PalisadoesFou
 
 > **id**: `string`
 
-Defined in: [src/types/Actions/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L69)
+Defined in: [src/types/Actions/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L75)
