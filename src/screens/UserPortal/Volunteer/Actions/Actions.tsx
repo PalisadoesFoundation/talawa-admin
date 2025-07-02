@@ -47,9 +47,9 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/itemViewModal/ItemViewModal';
+import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/itemUpdateModal/ItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';

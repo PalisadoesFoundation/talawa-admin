@@ -43,11 +43,11 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from './itemViewModal/ItemViewModal';
-import ItemModal from './itemModal/ItemModal';
-import ItemDeleteModal from './itemDeleteModal/ItemDeleteModal';
+import ItemViewModal from './ActionItemViewModal/ActionItemViewModal';
+import ItemModal from './ActionItemModal/ActionItemModal';
+import ItemDeleteModal from './ActionItemDeleteModal/ActionItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './itemUpdateModal/ItemUpdateStatusModal';
+import ItemUpdateStatusModal from './ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
