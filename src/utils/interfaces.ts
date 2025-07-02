@@ -432,93 +432,6 @@ export interface InterfaceBaseEvent {
 }
 
 /**
- * @interface InterfaceActionItemCategoryInfo
- * @description Defines the structure for action item category information.
- * @property {string} _id - The unique identifier of the action item category.
- * @property {string} name - The name of the action item category.
- * @property {boolean} isDisabled - Indicates if the action item category is disabled.
- * @property {string} createdAt - The creation date of the action item category.
- * @property {object} creator - The creator of the action item category.
- * @property {string} creator._id - The unique identifier of the creator.
- * @property {string} creator.firstName - The first name of the creator.
- * @property {string} creator.lastName - The last name of the creator.
- */
-export interface InterfaceActionItemCategoryInfo {
-  _id: string;
-  name: string;
-  isDisabled: boolean;
-  createdAt: string;
-  creator: { _id: string; firstName: string; lastName: string };
-}
-
-/**
- * @interface InterfaceActionItemCategoryList
- * @description Defines the structure for a list of action item categories by organization.
- * @property {InterfaceActionItemCategoryInfo[]} actionItemCategoriesByOrganization - An array of action item category information.
- */
-export interface InterfaceActionItemCategoryList {
-  actionItemCategoriesByOrganization: InterfaceActionItemCategoryInfo[];
-}
-
-/**
- * @interface InterfaceActionItemInfo
- * @description Defines the structure for action item information.
- * @property {string} _id - The unique identifier of the action item.
- * @property {'EventVolunteer' | 'EventVolunteerGroup' | 'User'} assigneeType - The type of assignee for the action item.
- * @property {InterfaceEventVolunteerInfo | null} assignee - The event volunteer assignee, or null.
- * @property {InterfaceVolunteerGroupInfo | null} assigneeGroup - The volunteer group assignee, or null.
- * @property {InterfaceUserInfo | null} assigneeUser - The user assignee, or null.
- * @property {InterfaceUserInfo} assigner - The assigner of the action item.
- * @property {object} actionItemCategory - The category of the action item.
- * @property {string} actionItemCategory._id - The unique identifier of the action item category.
- * @property {string} actionItemCategory.name - The name of the action item category.
- * @property {string} preCompletionNotes - Notes before completion of the action item.
- * @property {string | null} postCompletionNotes - Notes after completion of the action item, or null.
- * @property {Date} assignmentDate - The date the action item was assigned.
- * @property {Date} dueDate - The due date of the action item.
- * @property {Date | null} completionDate - The completion date of the action item, or null if not completed.
- * @property {boolean} isCompleted - Indicates if the action item is completed.
- * @property {object | null} event - The related event, or null.
- * @property {string} event._id - The unique identifier of the event.
- * @property {string} event.title - The title of the event.
- * @property {InterfaceUserInfo} creator - The creator of the action item.
- * @property {number | null} allottedHours - The allotted hours for the action item, or null.
- */
-export interface InterfaceActionItemInfo {
-  _id: string;
-  assigneeType: 'EventVolunteer' | 'EventVolunteerGroup' | 'User';
-  assignee: InterfaceEventVolunteerInfo | null;
-  assigneeGroup: InterfaceVolunteerGroupInfo | null;
-  assigneeUser: InterfaceUserInfo | null;
-  assigner: InterfaceUserInfo;
-  actionItemCategory: {
-    _id: string;
-    name: string;
-  };
-  preCompletionNotes: string;
-  postCompletionNotes: string | null;
-  assignmentDate: Date;
-  dueDate: Date;
-  completionDate: Date | null;
-  isCompleted: boolean;
-  event: {
-    _id: string;
-    title: string;
-  } | null;
-  creator: InterfaceUserInfo;
-  allottedHours: number | null;
-}
-
-/**
- * @interface InterfaceActionItemList
- * @description Defines the structure for a list of action items by organization.
- * @property {InterfaceActionItemInfo[]} actionItemsByOrganization - An array of action item information.
- */
-export interface InterfaceActionItemList {
-  actionItemsByOrganization: InterfaceActionItemInfo[];
-}
-
-/**
  * @interface InterfaceMembersList
  * @description Defines the structure for a list of organizations with their members.
  * @property {object[]} organizations - An array of organization objects.
@@ -1035,26 +948,10 @@ export interface InterfaceOrganizationEventsConnectionPg {
  */
 export interface InterfaceOrganizationEventsConnectionEdgePg {
   cursor: string;
-  node: InterfaceEventPg;
+  node: IEvent;
 }
 
-/**
- * @interface InterfaceEventPg
- * @description Defines the structure for an event with PostgreSQL-specific fields.
- * @property {object} event - The event object.
- * @property {ID} event.id - The unique identifier of the event.
- * @property {string} event.name - The name of the event.
- * @property {string} event.description - The description of the event.
- * @property {string} event.startAt - The start date and time of the event.
- * @property {string} event.endAt - The end date and time of the event.
- * @property {string} event.createdAt - The creation date of the event record.
- * @property {string} event.updatedAt - The last update date of the event record.
- * @property {InterfaceUserPg} event.creator - The user who created this event.
- * @property {InterfaceUserPg} event.updater - The user who last updated this event.
- * @property {InterfaceOrganizationPg} event.organization - The organization associated with this event.
- * @property {InterfaceEventAttachmentPg[]} event.attachments - An array of attachments for the event.
- */
-export interface InterfaceEventPg {
+export interface IEvent {
   event: {
     id: ID;
     name: string;

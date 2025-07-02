@@ -140,7 +140,7 @@ export default function people(): JSX.Element {
       const membersList = data.organizationsMemberConnection.edges.map(
         (memberData: Partial<InterfaceUser>) => ({
           ...memberData,
-          userType: admins?.some((admin) => admin._id === memberData._id)
+          userType: admins?.some((admin) => admin.id === memberData.id)
             ? 'Admin'
             : 'Member',
         }),
@@ -239,7 +239,7 @@ export default function people(): JSX.Element {
                     const cardProps: InterfaceOrganizationCardProps = {
                       name,
                       image: member.image ?? '',
-                      id: member._id ?? '',
+                      id: member.id ?? '',
                       email: member.email ?? '',
                       role: member.userType ?? '',
                       sno: (index + 1).toString(),

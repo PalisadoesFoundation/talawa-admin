@@ -80,7 +80,7 @@ function EventListCardModals({
   );
 
   const [formState, setFormState] = useState({
-    title: eventListCardProps.title,
+    name: eventListCardProps.name,
     eventdescrip: eventListCardProps.description,
     location: eventListCardProps.location,
     startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
@@ -95,7 +95,7 @@ function EventListCardModals({
         variables: {
           input: {
             id: eventListCardProps._id,
-            name: formState.title,
+            name: formState.name,
             description: formState.eventdescrip,
             isPublic: publicchecked,
             isRegisterable: registrablechecked,
@@ -177,7 +177,7 @@ function EventListCardModals({
 
         if (data) {
           toast.success(
-            `Successfully registered for ${eventListCardProps.title}`,
+            `Successfully registered for ${eventListCardProps.name}`,
           );
           setIsRegistered(true);
           hideViewModal();

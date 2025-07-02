@@ -112,6 +112,14 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFound
 
 ***
 
+### name
+
+> **name**: `string`
+
+Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L50)
+
+***
+
 ### startDate
 
 > **startDate**: `string`
@@ -125,14 +133,6 @@ Defined in: [src/types/Event/interface.ts:52](https://github.com/PalisadoesFound
 > **startTime**: `string`
 
 Defined in: [src/types/Event/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L54)
-
-***
-
-### title
-
-> **title**: `string`
-
-Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L50)
 
 ***
 
