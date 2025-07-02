@@ -149,6 +149,10 @@ const mockActionItem = {
     createdAt: '2024-01-01',
     organizationId: 'org1',
   },
+  organization: {
+    id: 'org1',
+    name: 'Test Organization',
+  },
 };
 
 // Additional test cases for ItemModal component
@@ -539,7 +543,10 @@ describe('ItemModal - Specific Test Coverage', () => {
     });
 
     it('should handle missing ID in UPDATE_ACTION_ITEM_MUTATION', async () => {
-      const actionItemWithoutId = { ...mockActionItem, id: undefined };
+      const actionItemWithoutId = {
+        ...mockActionItem,
+        id: undefined,
+      };
 
       const props: IItemModalProps = {
         isOpen: true,
@@ -1210,7 +1217,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
   });
 
   describe('updateActionItem mutation', () => {
-    it('should successfully call UPDATE_ACTION_ITEM_MUTATION with changed fields', async () => {
+    it('should successfully call UPDATE_ACTION_ITEM_MUTATION with all fields', async () => {
       const mockRefetch = vi.fn();
       const mockHide = vi.fn();
 
@@ -1221,7 +1228,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             input: {
               id: '1',
               isCompleted: false,
+              categoryId: 'cat1',
+              assigneeId: 'user1',
               preCompletionNotes: 'Updated test notes',
+              postCompletionNotes: undefined,
             },
           },
         },
@@ -1300,7 +1310,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       });
     });
 
-    it('should handle UPDATE_ACTION_ITEM_MUTATION with multiple field changes', async () => {
+    it('should handle UPDATE_ACTION_ITEM_MUTATION with all fields', async () => {
       const updateMultipleFieldsMock = {
         request: {
           query: UPDATE_ACTION_ITEM_MUTATION,
@@ -1308,7 +1318,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             input: {
               id: '1',
               isCompleted: false,
+              categoryId: 'cat1',
+              assigneeId: 'user1',
               preCompletionNotes: 'Multiple updates',
+              postCompletionNotes: undefined,
             },
           },
         },
@@ -1321,14 +1334,14 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
               completionAt: null,
               preCompletionNotes: 'Multiple updates',
               postCompletionNotes: null,
-              assignee: { id: 'user2', name: 'Jane Smith' },
+              assignee: { id: 'user1', name: 'John Doe' },
               creator: { id: 'creator1', name: 'Creator' },
               updater: { id: 'updater1', name: 'Updater' },
               createdAt: '2024-01-01T00:00:00.000Z',
               category: {
-                id: 'cat2',
-                name: 'Category 2',
-                description: 'Test category 2',
+                id: 'cat1',
+                name: 'Category 1',
+                description: 'Test category 1',
                 isDisabled: false,
               },
               organization: { id: 'orgId', name: 'Organization' },
@@ -1384,7 +1397,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             input: {
               id: '1',
               isCompleted: false,
+              categoryId: 'cat1',
+              assigneeId: 'user1',
               preCompletionNotes: 'Error update',
+              postCompletionNotes: undefined,
             },
           },
         },
@@ -1432,7 +1448,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
     });
 
     it('should handle missing action item ID error', async () => {
-      const actionItemWithoutId = { ...mockActionItem, id: undefined };
+      const actionItemWithoutId = {
+        ...mockActionItem,
+        id: undefined,
+      };
 
       const props: IItemModalProps = {
         isOpen: true,

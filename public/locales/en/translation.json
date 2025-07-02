@@ -1272,7 +1272,7 @@
     "updateActionItemCategory": "Update",
     "actionItemCategoryName": "Name",
     "actionItemCategoryDescription": "Description",
-    "categoryDetails": "Category Details",
+    "categoryDetails": "Action Item Category Details",
     "enterName": "Enter Full Name",
     "successfulCreation": "Action Item Category created successfully",
     "successfulUpdation": "Action Item Category updated successfully",

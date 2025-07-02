@@ -11,8 +11,8 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
-import type { IActionItemCategoryModal } from './CategoryModal';
-import CategoryModal from './CategoryModal';
+import type { IActionItemCategoryModal } from './ActionItemCategoryModal';
+import CategoryModal from './ActionItemCategoryModal';
 import { toast } from 'react-toastify';
 import { it, vi } from 'vitest';
 /**
@@ -222,5 +222,81 @@ describe('Testing Action Item Category Modal', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(translations.sameNameConflict);
     });
+  });
+
+  it('should delete category successfully', async () => {
+    renderCategoryModal(link1, categoryProps[1]);
+    const deleteBtn = screen.getByTestId('deleteCategoryButton');
+    await userEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+      expect(categoryProps[1].hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(translations.categoryDeleted);
+    });
+  });
+
+  it('should handle error when deleting category', async () => {
+    renderCategoryModal(link3, categoryProps[1]);
+    const deleteBtn = screen.getByTestId('deleteCategoryButton');
+    await userEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
+
+  it('should return early when category is null', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+    const propsWithNullCategory = {
+      ...categoryProps[1],
+      category: null,
+      refetchCategories: mockRefetch,
+      hide: mockHide,
+    };
+    renderCategoryModal(link1, propsWithNullCategory);
+
+    // Delete button should be visible in edit mode even with null category
+    const deleteBtn = screen.getByTestId('deleteCategoryButton');
+    await userEvent.click(deleteBtn);
+
+    // Should not call any functions since category is null
+    expect(mockRefetch).not.toHaveBeenCalled();
+    expect(mockHide).not.toHaveBeenCalled();
+  });
+
+  it('should return early when category id is empty', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+    const propsWithEmptyId = {
+      ...categoryProps[1],
+      category: {
+        id: '',
+        name: 'Category 1',
+        description: 'This is a test category',
+        isDisabled: false,
+        createdAt: '2044-01-01',
+        updatedAt: '2044-01-01',
+        creatorId: 'userId',
+        organizationId: 'orgId',
+      },
+      refetchCategories: mockRefetch,
+      hide: mockHide,
+    };
+    renderCategoryModal(link1, propsWithEmptyId);
+    const deleteBtn = screen.getByTestId('deleteCategoryButton');
+    await userEvent.click(deleteBtn);
+
+    // Should not call any functions since id is empty
+    expect(mockRefetch).not.toHaveBeenCalled();
+    expect(mockHide).not.toHaveBeenCalled();
+  });
+
+  it('should not show delete button in create mode', () => {
+    renderCategoryModal(link1, categoryProps[0]);
+    expect(
+      screen.queryByTestId('deleteCategoryButton'),
+    ).not.toBeInTheDocument();
   });
 });

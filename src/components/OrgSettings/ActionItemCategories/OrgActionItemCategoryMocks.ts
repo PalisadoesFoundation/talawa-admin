@@ -1,6 +1,7 @@
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+  DELETE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
 
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
@@ -133,6 +134,24 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: DELETE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteActionItemCategory: {
+          id: 'categoryId',
+          name: 'Category 1',
+        },
+      },
+    },
+  },
 ];
 
 export const MOCKS_EMPTY = [
@@ -187,6 +206,17 @@ export const MOCKS_ERROR = [
           id: 'categoryId',
           name: 'Category 2',
           isDisabled: true,
+        },
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: DELETE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
         },
       },
     },

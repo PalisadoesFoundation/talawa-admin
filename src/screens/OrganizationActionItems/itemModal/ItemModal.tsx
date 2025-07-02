@@ -106,9 +106,9 @@ const initializeFormState = (
   assignedAt: actionItem?.assignedAt
     ? new Date(actionItem.assignedAt)
     : new Date(),
-  categoryId: actionItem?.category?.id || actionItem?.categoryId || '',
-  assigneeId: actionItem?.assignee?.id || actionItem?.assigneeId || '',
-  eventId: actionItem?.event?._id || actionItem?.eventId || undefined,
+  categoryId: actionItem?.category?.id || '',
+  assigneeId: actionItem?.assignee?.id || '',
+  eventId: actionItem?.event?._id || undefined,
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
   isCompleted: actionItem?.isCompleted || false,
@@ -259,30 +259,11 @@ const ItemModal: FC<IItemModalProps> = ({
       const input: IUpdateActionItemInput = {
         id: actionItem.id,
         isCompleted: isCompleted,
+        categoryId: categoryId,
+        assigneeId: assigneeId,
+        preCompletionNotes: preCompletionNotes,
+        postCompletionNotes: postCompletionNotes || undefined,
       };
-
-      // Extract original IDs for comparison
-      const originalCategoryId =
-        actionItem?.category?.id || actionItem?.categoryId;
-      const originalAssigneeId =
-        actionItem?.assignee?.id || actionItem?.assigneeId;
-
-      // Only include changed fields
-      if (categoryId !== originalCategoryId) {
-        input.categoryId = categoryId;
-      }
-
-      if (assigneeId !== originalAssigneeId) {
-        input.assigneeId = assigneeId;
-      }
-
-      if (preCompletionNotes !== actionItem.preCompletionNotes) {
-        input.preCompletionNotes = preCompletionNotes;
-      }
-
-      if (postCompletionNotes !== actionItem.postCompletionNotes) {
-        input.postCompletionNotes = postCompletionNotes || undefined;
-      }
 
       await updateActionItem({
         variables: { input },
@@ -304,30 +285,24 @@ const ItemModal: FC<IItemModalProps> = ({
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
 
-    // Set category - check both nested object and direct ID
-    if (actionItem?.category || actionItem?.categoryId) {
-      const categoryToFind = actionItem?.category || {
-        id: actionItem?.categoryId,
-      };
+    // Set category based on nested object
+    if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
           (category: IActionItemCategoryInfo) =>
-            category.id === categoryToFind.id,
-        ) || actionItem?.category;
+            category.id === actionItem.category?.id,
+        );
       setActionItemCategory(foundCategory || null);
     } else {
       setActionItemCategory(null);
     }
 
-    // Set assignee user - check both nested object and direct ID
-    if (actionItem?.assignee || actionItem?.assigneeId) {
-      const assigneeToFind = actionItem?.assignee || {
-        id: actionItem?.assigneeId,
-      };
-      const foundUser: InterfaceUser | undefined =
-        members.find(
-          (member: InterfaceUser): boolean => member.id === assigneeToFind.id,
-        ) || actionItem?.assignee;
+    // Set assignee user based on nested object
+    if (actionItem?.assignee?.id) {
+      const foundUser: InterfaceUser | undefined = members.find(
+        (member: InterfaceUser): boolean =>
+          member.id === actionItem.assignee?.id,
+      );
       setAssigneeUser(foundUser || null);
     } else {
       setAssigneeUser(null);
@@ -394,12 +369,7 @@ const ItemModal: FC<IItemModalProps> = ({
                   }
                   filterSelectedOptions={true}
                   getOptionLabel={(member: InterfaceUser): string => {
-                    // Use the name field from your new query structure
-                    return (
-                      member.name ||
-                      `${member.firstName || ''} ${member.lastName || ''}`.trim() ||
-                      'Unknown User'
-                    );
+                    return member.name || 'Unknown User';
                   }}
                   onChange={(_, newAssignee): void => {
                     const userId = newAssignee?.id;
@@ -419,8 +389,11 @@ const ItemModal: FC<IItemModalProps> = ({
                   label={t('assignmentDate')}
                   className={styles.noOutline}
                   value={dayjs(assignedAt)}
+                  disabled={editMode}
                   onChange={(date: Dayjs | null): void => {
-                    if (date) handleFormChange('assignedAt', date.toDate());
+                    if (date && !editMode) {
+                      handleFormChange('assignedAt', date.toDate());
+                    }
                   }}
                 />
               </Form.Group>
