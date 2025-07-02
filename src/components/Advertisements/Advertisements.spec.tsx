@@ -17,23 +17,23 @@ import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
 import {
-  wait,
   client,
-  getCompletedAdvertisementMocks,
-  getActiveAdvertisementMocks,
+  createAdvertisement,
+  createAdvertisementError,
+  createAdvertisementWithEndDateBeforeStart,
+  createAdvertisementWithoutName,
+  dateConstants,
   deleteAdvertisementMocks,
   emptyMocks,
-  initialArchivedData,
-  initialActiveData,
+  fetchErrorMocks,
   filterActiveAdvertisementData,
   filterCompletedAdvertisementData,
-  dateConstants,
-  createAdvertisement,
-  createAdvertisementWithoutName,
-  createAdvertisementWithEndDateBeforeStart,
-  createAdvertisementError,
+  getActiveAdvertisementMocks,
+  getCompletedAdvertisementMocks,
+  initialActiveData,
+  initialArchivedData,
   updateAdMocks,
-  fetchErrorMocks,
+  wait,
 } from './AdvertisementsMocks';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
@@ -356,7 +356,7 @@ describe('Testing Advertisement Component', () => {
     );
   });
 
-  it('filter active advertisement by name', async () => {
+  it('filters active advertisement by name (unique)', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -394,7 +394,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
   });
 
-  it('filter active advertisement by description', async () => {
+  it('filters active advertisement by description (unique)', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>

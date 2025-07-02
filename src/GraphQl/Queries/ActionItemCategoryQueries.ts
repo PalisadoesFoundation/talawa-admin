@@ -2,31 +2,37 @@ import gql from 'graphql-tag';
 
 /**
  * GraphQL query to retrieve action item categories by organization.
- *
- * @param organizationId - The ID of the organization for which action item categories are being retrieved.
- * @returns The list of action item categories associated with the organization.
+ * * @returns The list of action item categories associated with the organization.
  */
-
 export const ACTION_ITEM_CATEGORY_LIST = gql`
-  query ActionItemCategoriesByOrganization(
-    $organizationId: ID!
-    $where: ActionItemCategoryWhereInput
-    $orderBy: ActionItemsOrderByInput
+  query GetActionItemCategory(
+    $input: QueryActionCategoriesByOrganizationInput!
   ) {
-    actionItemCategoriesByOrganization(
-      organizationId: $organizationId
-      where: $where
-      orderBy: $orderBy
-    ) {
-      _id
+    actionCategoriesByOrganization(input: $input) {
+      id
       name
+      description
       isDisabled
-      createdAt
       creator {
-        _id
-        firstName
-        lastName
+        id
       }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * Query to fetch a single action item category
+ * Using direct id parameter
+ */
+export const GET_ACTION_ITEM_CATEGORY = gql`
+  query GetActionItemCategory($input: QueryActionItemCategoryInput!) {
+    actionItemCategory(input: $input) {
+      id
+      name
+      createdAt
+      updatedAt
     }
   }
 `;

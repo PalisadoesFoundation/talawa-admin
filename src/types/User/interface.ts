@@ -1,7 +1,7 @@
 import type { Address } from './type';
 
 export interface InterfaceUser {
-  _id: string;
+  id: string;
   address?: Address;
   birthDate?: Date;
   createdAt: Date;
@@ -12,6 +12,8 @@ export interface InterfaceUser {
   image?: string;
   updatedAt?: Date;
   userType?: string;
+  name?: string;
+  avatarURL?: string;
 }
 
 export interface InterfaceUserAttendee {

@@ -7,7 +7,7 @@ const convertToBase64 = async (file: File): Promise<string> => {
       reader.onerror = (error): void => reject(error);
     });
     return `${res}`;
-  } catch (error) {
+  } catch {
     return '';
   }
 };

@@ -47,7 +47,7 @@ export interface IEvent {
   key?: string;
   _id: string;
   location: string;
-  title: string;
+  name: string;
   description: string;
   startDate: string;
   endDate: string;
@@ -140,14 +140,14 @@ export interface IPreviewEventModalProps {
   registrablechecked: boolean;
   setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
-    title: string;
+    name: string;
     eventdescrip: string;
     location: string;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
-    title: string;
+    name: string;
     eventdescrip: string;
     location: string;
     startTime: string;

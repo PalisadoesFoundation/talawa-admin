@@ -61,7 +61,14 @@ const translations = {
   ...JSON.parse(
     JSON.stringify(
       i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
+      i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
     ),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
   ),
   ...JSON.parse(
     JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
@@ -85,6 +92,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
@@ -118,6 +126,7 @@ describe('Testing Advertisement Register Component', () => {
         <MockedProvider addTypename={false} mocks={[createAdFailMock]}>
           <Provider store={store}>
             <router.BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
               <I18nextProvider i18n={i18nForTest}>
                 <AdvertisementRegister
                   endAtEdit={new Date()}
@@ -165,6 +174,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 setAfterActive={vi.fn()}
@@ -235,6 +245,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
                 startAtEdit={new Date()}
@@ -261,6 +272,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
@@ -293,6 +305,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               {
                 <AdvertisementRegister
@@ -360,6 +373,7 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
@@ -824,6 +838,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
+            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
                 setAfterActive={vi.fn()}
@@ -857,6 +872,7 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"

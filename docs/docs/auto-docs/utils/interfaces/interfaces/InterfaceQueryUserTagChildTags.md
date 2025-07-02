@@ -4,7 +4,13 @@
 
 # Interface: InterfaceQueryUserTagChildTags
 
-Defined in: [src/utils/interfaces.ts:947](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L947)
+Defined in: [src/utils/interfaces.ts:1544](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1544)
+
+InterfaceQueryUserTagChildTags
+
+## Description
+
+Defines the structure for a query result containing user tag child tags.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:947](https://github.com/PalisadoesFoundatio
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:950](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L950)
+Defined in: [src/utils/interfaces.ts:1547](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1547)
+
+An array of ancestor tags.
 
 #### \_id
 
@@ -28,7 +36,9 @@ Defined in: [src/utils/interfaces.ts:950](https://github.com/PalisadoesFoundatio
 
 > **childTags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:949](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L949)
+Defined in: [src/utils/interfaces.ts:1546](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1546)
+
+The child tags data.
 
 ***
 
@@ -36,4 +46,6 @@ Defined in: [src/utils/interfaces.ts:949](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:948](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L948)
+Defined in: [src/utils/interfaces.ts:1545](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1545)
+
+The name of the user tag.

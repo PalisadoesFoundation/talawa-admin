@@ -18,7 +18,7 @@ import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
-  InterfaceUserInfo_PG,
+  InterfaceUserInfoPG,
   InterfaceQueryFundCampaignsPledges,
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
@@ -67,7 +67,7 @@ const fundCampaignPledge = (): JSX.Element => {
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
@@ -102,8 +102,6 @@ const fundCampaignPledge = (): JSX.Element => {
       input: { id: fundCampaignId },
     },
   });
-
-  const endDate = dayjs(pledgeData?.fundCampaign?.endAt, 'YYYY-MM-DD').toDate();
 
   const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
     let totalPledged = 0;
@@ -209,7 +207,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo_PG[],
+    users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -258,7 +256,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {mainUsers.map((user: InterfaceUserInfo_PG, index: number) => (
+            {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
               <div
                 className={styles.pledgerContainer}
                 key={`${params.row.id}-main-${index}`}
@@ -598,7 +596,7 @@ const fundCampaignPledge = (): JSX.Element => {
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
         data-testid="extra-users-popup"
       >
-        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={user.id}

@@ -136,7 +136,7 @@ describe('Calendar', () => {
     const currentDayEventMock = [
       {
         _id: '0',
-        title: 'demo',
+        name: 'demo',
         description: 'agrsg',
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
@@ -218,7 +218,7 @@ describe('Calendar', () => {
     const multipleEventData = [
       {
         _id: '1',
-        title: 'Event 1',
+        name: 'Event 1',
         description: 'This is event 1',
         startDate: date,
         endDate: date,
@@ -233,7 +233,7 @@ describe('Calendar', () => {
       },
       {
         _id: '2',
-        title: 'Event 2',
+        name: 'Event 2',
         description: 'This is event 2',
         startDate: date,
         endDate: date,
@@ -248,7 +248,7 @@ describe('Calendar', () => {
       },
       {
         _id: '3',
-        title: 'Event 3',
+        name: 'Event 3',
         description: 'This is event 3',
         startDate: date,
         endDate: date,
@@ -263,7 +263,7 @@ describe('Calendar', () => {
       },
       {
         _id: '4',
-        title: 'Event 4',
+        name: 'Event 4',
         description: 'This is event 4',
         startDate: date,
         endDate: date,
@@ -278,7 +278,7 @@ describe('Calendar', () => {
       },
       {
         _id: '5',
-        title: 'Event 5',
+        name: 'Event 5',
         description: 'This is event 5',
         startDate: date,
         endDate: date,

@@ -85,7 +85,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': { border: 0 },
 }));
 
-interface Edge {
+interface IEdge {
   cursor: string;
   node: {
     id: string;
@@ -96,8 +96,14 @@ interface Edge {
     createdAt?: string;
   };
 }
+interface IUserDetails {
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL?: string;
+}
 
-interface QueryVariable {
+interface IQueryVariable {
   orgId?: string | undefined;
   first?: number | null;
   after?: string | null;
@@ -165,7 +171,7 @@ function AddMember(): JSX.Element {
 
   const createMember = async (userId: string): Promise<void> => {
     try {
-      const result = await addMember({
+      await addMember({
         variables: {
           memberId: userId,
           organizationId: currentUrl,
@@ -319,7 +325,7 @@ function AddMember(): JSX.Element {
   // Process data when it arrives
   useEffect(() => {
     if (userData?.allUsers) {
-      const { edges, pageInfo } = userData.allUsers;
+      const { pageInfo } = userData.allUsers;
 
       // Store cursors for navigation
       if (pageInfo.startCursor) {
@@ -349,7 +355,7 @@ function AddMember(): JSX.Element {
       return; // Prevent navigation if there's no previous page
     }
 
-    const variables: QueryVariable = {};
+    const variables: IQueryVariable = {};
 
     if (isForwardNavigation) {
       variables.first = PAGE_SIZE;
@@ -372,7 +378,7 @@ function AddMember(): JSX.Element {
 
   // Extract user data from the query result
   const allUsersData =
-    userData?.allUsers?.edges?.map((edge: Edge) => edge.node) || [];
+    userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
 
   return (
     <>
@@ -463,53 +469,58 @@ function AddMember(): JSX.Element {
                         </StyledTableCell>
                       </StyledTableRow>
                     ) : (
-                      allUsersData.map((userDetails: any, index: number) => (
-                        <StyledTableRow data-testid="user" key={userDetails.id}>
-                          <StyledTableCell component="th" scope="row">
-                            {page * PAGE_SIZE + index + 1}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            data-testid="profileImage"
+                      allUsersData.map(
+                        (userDetails: IUserDetails, index: number) => (
+                          <StyledTableRow
+                            data-testid="user"
+                            key={userDetails.id}
                           >
-                            {userDetails.avatarURL ? (
-                              <img
-                                src={userDetails.avatarURL}
-                                alt="avatar"
-                                className={styles.TableImage}
-                              />
-                            ) : (
-                              <Avatar
-                                avatarStyle={styles.TableImage}
-                                name={`${userDetails.name}`}
-                                data-testid="avatarImage"
-                              />
-                            )}
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Link
-                              className={`${styles.membername} ${styles.subtleBlueGrey}`}
-                              to={{ pathname: `/member/${currentUrl}` }}
+                            <StyledTableCell component="th" scope="row">
+                              {page * PAGE_SIZE + index + 1}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align="center"
+                              data-testid="profileImage"
                             >
-                              {userDetails.name}
-                              <br />
-                              {userDetails.emailAddress}
-                            </Link>
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <Button
-                              onClick={() => {
-                                createMember(userDetails.id);
-                              }}
-                              data-testid="addBtn"
-                              className={styles.addButton}
-                            >
-                              <i className={'fa fa-plus me-2'} />
-                              Add
-                            </Button>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))
+                              {userDetails.avatarURL ? (
+                                <img
+                                  src={userDetails.avatarURL}
+                                  alt="avatar"
+                                  className={styles.TableImage}
+                                />
+                              ) : (
+                                <Avatar
+                                  avatarStyle={styles.TableImage}
+                                  name={`${userDetails.name}`}
+                                  data-testid="avatarImage"
+                                />
+                              )}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              <Link
+                                className={`${styles.membername} ${styles.subtleBlueGrey}`}
+                                to={{ pathname: `/member/${currentUrl}` }}
+                              >
+                                {userDetails.name}
+                                <br />
+                                {userDetails.emailAddress}
+                              </Link>
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              <Button
+                                onClick={() => {
+                                  createMember(userDetails.id);
+                                }}
+                                data-testid="addBtn"
+                                className={styles.addButton}
+                              >
+                                <i className={'fa fa-plus me-2'} />
+                                Add
+                              </Button>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ),
+                      )
                     )}
                   </TableBody>
                 </Table>

@@ -57,7 +57,40 @@ const setupLocationMock = () => {
 };
 
 // Helper function to create mock Apollo responses
-const createMemberConnectionMock = (variables: any, overrides: any = {}) => {
+type MemberConnectionVariables = {
+  orgId: string;
+  first?: number | null;
+  after?: string | null;
+  last?: number | null;
+  before?: string | null;
+  where?: { role?: { equal: string } };
+};
+
+type MemberEdge = {
+  node: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    avatarURL: string | null;
+    createdAt: string;
+  };
+  cursor: string;
+};
+
+type MemberConnectionOverrides = {
+  edges?: MemberEdge[];
+  pageInfo?: {
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    startCursor?: string;
+    endCursor?: string;
+  };
+};
+
+const createMemberConnectionMock = (
+  variables: MemberConnectionVariables,
+  overrides: MemberConnectionOverrides = {},
+) => {
   const defaultData = {
     organization: {
       members: {
@@ -82,7 +115,7 @@ const createMemberConnectionMock = (variables: any, overrides: any = {}) => {
             },
             cursor: 'cursor2',
           },
-        ],
+        ] as MemberEdge[],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
@@ -115,7 +148,39 @@ const createMemberConnectionMock = (variables: any, overrides: any = {}) => {
   };
 };
 
-const createUserListMock = (variables: any, overrides: any = {}) => {
+type UserListVariables = {
+  orgId: string;
+  first?: number | null;
+  after?: string | null;
+  last?: number | null;
+  before?: string | null;
+};
+
+type UserEdge = {
+  node: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    avatarURL: string | null;
+    createdAt: string;
+  };
+  cursor: string;
+};
+
+type UserListOverrides = {
+  edges?: UserEdge[];
+  pageInfo?: {
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
+    startCursor?: string;
+    endCursor?: string;
+  };
+};
+
+const createUserListMock = (
+  variables: UserListVariables,
+  overrides: UserListOverrides = {},
+) => {
   const defaultData = {
     allUsers: {
       edges: [
@@ -124,7 +189,7 @@ const createUserListMock = (variables: any, overrides: any = {}) => {
             id: 'user1',
             name: 'User One',
             emailAddress: 'user1@example.com',
-            avatarURL: 'https://example.com/avatar1.jpg',
+            avatarURL: 'https://example.com/avatar1.jpg' as string | null,
             createdAt: '2023-01-01T00:00:00Z',
           },
           cursor: 'userCursor1',
@@ -134,7 +199,7 @@ const createUserListMock = (variables: any, overrides: any = {}) => {
             id: 'user2',
             name: 'User Two',
             emailAddress: 'user2@example.com',
-            avatarURL: null,
+            avatarURL: null as string | null,
             createdAt: '2023-01-02T00:00:00Z',
           },
           cursor: 'userCursor2',
@@ -172,8 +237,6 @@ const createUserListMock = (variables: any, overrides: any = {}) => {
 };
 
 // Helper for waiting
-const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
-
 describe('OrganizationPeople', () => {
   beforeEach(() => {
     setupLocationMock();

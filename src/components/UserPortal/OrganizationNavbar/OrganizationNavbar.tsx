@@ -77,7 +77,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     cookies.get('i18next') || 'en',
   );
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem } = useLocalStorage();
 
   /**
    * Handles user logout by clearing local storage and redirecting to the home page.

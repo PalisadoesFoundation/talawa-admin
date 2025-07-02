@@ -30,7 +30,7 @@ export const MOCKS = [
       variables: {
         input: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           isPublic: true,
           isRegisterable: true,
@@ -45,7 +45,7 @@ export const MOCKS = [
       data: {
         updateEvent: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           startAt: dayjs('2022-03-18').startOf('day').toISOString(),
           endAt: dayjs('2022-03-20').endOf('day').toISOString(),
@@ -79,7 +79,7 @@ export const MOCKS = [
       variables: {
         input: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           isPublic: false, // props[4].isPublic is true, clicking toggle makes it false
           isRegisterable: true, // props[4].isRegisterable is false, clicking toggle makes it true
@@ -102,7 +102,7 @@ export const MOCKS = [
       data: {
         updateEvent: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           startAt: dayjs('2022-03-18')
             .hour(9)
@@ -139,7 +139,7 @@ export const MOCKS = [
       variables: {
         input: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           isPublic: false, // Note: this might be different based on initial state
           isRegisterable: true,
@@ -154,7 +154,7 @@ export const MOCKS = [
       data: {
         updateEvent: {
           id: '1',
-          name: 'Updated title',
+          name: 'Updated name',
           description: 'This is a new update',
           startAt: dayjs('2022-03-18').startOf('day').toISOString(),
           endAt: dayjs('2022-03-20').endOf('day').toISOString(),

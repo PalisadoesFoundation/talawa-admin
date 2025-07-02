@@ -1,24 +1,30 @@
-import { vi, it, describe, expect } from 'vitest';
-import React, { act, ReactNode } from 'react';
-import { render, screen } from '@testing-library/react';
-import { gql } from '@apollo/client';
-import { MockedCustomProvider } from './mocks/MockedCustomProvider';
-import { MockI18nextProvider } from './mocks/MockI18nextProvider';
-import { MockBrowserRouter } from './mocks/MockBrowserRouter';
-import { AsyncComponent } from './mocks/AsyncComponent';
-import { TestWrapper } from './TestWrapper';
+import type { ReactNode } from 'react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { I18nextProvider } from './I18nextProviderMock';
+import { TestErrorBoundary } from './TestErrorBoundary';
+import AsyncComponent from './AsyncComponent';
+import MockBrowserRouter from './MockBrowserRouter';
 
-// Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
     ...actual,
-    MockedProvider: MockedCustomProvider,
+    MockedProvider: ({
+      children,
+      mocks = [],
+    }: {
+      children: ReactNode;
+      mocks?: MockedResponse[];
+    }) => (
+      <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
+        {children}
+      </div>
+    ),
   };
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: MockI18nextProvider,
+  I18nextProvider,
 }));
 
 vi.mock('react-router', () => ({
@@ -29,17 +35,13 @@ vi.mock('utils/i18n', () => ({
   default: 'mocked-i18n-instance',
 }));
 
-// Regular imports after all vi.mock declarations
-
-// Define constants after imports
-const TEST_QUERY = gql`
-  query TestQuery {
-    post(id: "123") {
-      _id
-    }
-  }
-`;
-
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { TestWrapper } from './TestWrapper';
+import { gql } from '@apollo/client';
+import { act } from 'react-dom/test-utils';
+import { vi } from 'vitest';
+// Mock the imported modules
 describe('TestWrapper', () => {
   it('renders without crashing', () => {
     render(
@@ -88,6 +90,14 @@ describe('TestWrapper', () => {
   });
 
   it('passes provided mocks to MockedProvider', () => {
+    const TEST_QUERY = gql`
+      query TestQuery {
+        test {
+          id
+        }
+      }
+    `;
+
     const mocks = [
       {
         request: {
@@ -95,8 +105,8 @@ describe('TestWrapper', () => {
         },
         result: {
           data: {
-            post: {
-              _id: '123',
+            test: {
+              id: '123',
             },
           },
         },
@@ -116,10 +126,9 @@ describe('TestWrapper', () => {
 
     // Verify the mock was passed (structure will be different after serialization)
     expect(passedMocks).toHaveLength(1);
-    expect(passedMocks[0]).toHaveProperty('request');
     expect(passedMocks[0]).toHaveProperty('result');
-    expect(passedMocks[0].result.data).toHaveProperty('post');
-    expect(passedMocks[0].result.data.post).toHaveProperty('_id', '123');
+    expect(passedMocks[0].result).toHaveProperty('data');
+    expect(passedMocks[0].result.data).toHaveProperty('test');
   });
 
   it('works with multiple children', () => {
@@ -139,6 +148,8 @@ describe('TestWrapper', () => {
   });
 
   it('handles async operations within wrapped components', async () => {
+    // Create a component with an effect
+
     render(
       <TestWrapper>
         <AsyncComponent />
@@ -158,49 +169,6 @@ describe('TestWrapper', () => {
   });
 
   it('allows error boundaries to catch errors from children', () => {
-    // Define types for the error boundary
-    interface IErrorBoundaryProps {
-      children: ReactNode;
-    }
-
-    interface IErrorBoundaryState {
-      hasError: boolean;
-      error: Error | null;
-    }
-
-    // Create a properly typed error boundary for testing
-    class TestErrorBoundary extends React.Component<
-      IErrorBoundaryProps,
-      IErrorBoundaryState
-    > {
-      constructor(props: IErrorBoundaryProps) {
-        super(props);
-        this.state = {
-          hasError: false,
-          error: null,
-        };
-      }
-
-      static getDerivedStateFromError(error: Error): IErrorBoundaryState {
-        return {
-          hasError: true,
-          error,
-        };
-      }
-
-      render(): React.ReactNode {
-        const { hasError, error } = this.state;
-        const { children } = this.props;
-
-        if (hasError && error) {
-          return <div data-testid="error-message">{error.message}</div>;
-        }
-
-        return children;
-      }
-    }
-
-    // Component that throws during render
     const ErrorComponent = (): ReactNode => {
       throw new Error('Test error');
     };

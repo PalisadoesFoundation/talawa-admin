@@ -101,8 +101,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, fundRef, isDefault, isTaxDeductible, isArchived } =
-      formState;
+    const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
     try {
       await createFund({
         variables: {

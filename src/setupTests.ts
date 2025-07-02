@@ -11,6 +11,9 @@ window.console.error = function (...args): void {
 window.console.warn = function (...args): void {
   throw new Error(format(...args));
 };
+Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
+  set: () => {},
+});
 
 window.matchMedia =
   window.matchMedia ||

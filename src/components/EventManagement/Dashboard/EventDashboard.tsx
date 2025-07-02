@@ -97,7 +97,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     key: eventData.event.id,
     _id: eventData.event.id,
     location: eventData.event.location || '',
-    title: eventData.event.name,
+    name: eventData.event.name,
     description: eventData.event.description || '',
     startDate: eventData.event.startAt,
     endDate: eventData.event.endAt,
@@ -169,7 +169,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               >
                 <Edit fontSize="medium" />
               </button>
-              <h3 className={styles.titlename} data-testid="event-title">
+              <h3 className={styles.titlename} data-testid="event-name">
                 {eventData.event.name}
               </h3>
               <p className={styles.description} data-testid="event-description">

@@ -7,7 +7,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 export const eventData = [
   {
     _id: '1',
-    title: 'Event 1',
+    name: 'Event 1',
     description: 'This is event 1',
     startDate: '2022-05-01',
     endDate: '2022-05-01',
@@ -23,7 +23,7 @@ export const eventData = [
   },
   {
     _id: '2',
-    title: 'Event 2',
+    name: 'Event 2',
     description: 'This is event 2',
     startDate: '2022-05-03',
     endDate: '2022-05-03',
@@ -57,7 +57,7 @@ export const MOCKS = [
       query: UPDATE_EVENT_MUTATION,
       variable: {
         id: '123',
-        title: 'Updated title',
+        name: 'Updated name',
         description: 'This is a new update',
         isPublic: true,
         isRegisterable: true,
