@@ -88,6 +88,65 @@ export const itemWithUser2 = {
   ...baseActionItem,
 };
 
+// Additional test items for edge cases
+export const itemWithoutAssignee = {
+  id: '3',
+  assigneeId: null,
+  categoryId: 'actionItemCategoryId1',
+  eventId: null,
+  assignedAt: new Date('2024-08-29'),
+  completionAt: null,
+  preCompletionNotes: 'Notes 3',
+  postCompletionNotes: null,
+  isCompleted: false,
+  assignee: null,
+  category: actionItemCategory1,
+  event: null,
+  ...baseActionItem,
+};
+
+export const itemWithoutCategory = {
+  id: '4',
+  assigneeId: 'userId1',
+  categoryId: null,
+  eventId: null,
+  assignedAt: new Date('2024-08-30'),
+  completionAt: null,
+  preCompletionNotes: 'Notes 4',
+  postCompletionNotes: null,
+  isCompleted: false,
+  assignee: {
+    id: 'userId1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
+    avatarURL: 'user-image',
+  },
+  category: null,
+  event: null,
+  ...baseActionItem,
+};
+
+export const itemWithEmptyAssigneeName = {
+  id: '5',
+  assigneeId: 'userId3',
+  categoryId: 'actionItemCategoryId2',
+  eventId: null,
+  assignedAt: new Date('2024-08-31'),
+  completionAt: null,
+  preCompletionNotes: 'Notes 5',
+  postCompletionNotes: null,
+  isCompleted: false,
+  assignee: {
+    id: 'userId3',
+    name: '',
+    emailAddress: 'empty@example.com',
+    avatarURL: null,
+  },
+  category: actionItemCategory2,
+  event: null,
+  ...baseActionItem,
+};
+
 export const memberListQuery = {
   request: {
     query: MEMBERS_LIST,
@@ -174,7 +233,13 @@ export const actionItemListQuery = {
   },
   result: {
     data: {
-      actionItemsByOrganization: [itemWithUser1, itemWithUser2],
+      actionItemsByOrganization: [
+        itemWithUser1,
+        itemWithUser2,
+        itemWithoutAssignee,
+        itemWithoutCategory,
+        itemWithEmptyAssigneeName,
+      ],
     },
   },
 };

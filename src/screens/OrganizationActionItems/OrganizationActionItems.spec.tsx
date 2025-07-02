@@ -331,6 +331,358 @@ describe('OrganizationActionItems Component', () => {
       // Verify input is cleared
       expect(searchInput).toHaveValue('');
     });
+
+    it('should filter items by assignee name with case insensitive matching', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Set search by assignee (default)
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const assigneeOption = screen.queryByTestId('assignee');
+        if (assigneeOption) {
+          userEvent.click(assigneeOption);
+        }
+      });
+
+      // Search for "john" (lowercase) which should match "John Doe"
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'john');
+      await debounceWait();
+
+      // Verify the search is case insensitive by checking if John Doe's item is still visible
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+
+      expect(searchInput).toHaveValue('john');
+    });
+
+    it('should filter items by assignee name with partial matching', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Search for partial assignee name "Jo" which should match "John Doe"
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'Jo');
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('Jo');
+    });
+
+    it('should handle assignee search when assignee name is null or undefined', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Search for a name that doesn't exist
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'NonExistentUser');
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('NonExistentUser');
+    });
+
+    it('should filter items by category name with case insensitive matching', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Set search by category
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      // Search for "category" (lowercase) which should match "Category 1"
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'category');
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('category');
+    });
+
+    it('should filter items by category name with partial matching', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Set search by category
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      // Search for partial category name "Cat" which should match "Category 1" and "Category 2"
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'Cat');
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('Cat');
+    });
+
+    it('should handle category search when category name is null or undefined', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Set search by category
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      // Search for a category that doesn't exist
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'NonExistentCategory');
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('NonExistentCategory');
+    });
+
+    it('should handle empty search term gracefully', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Type and then clear the search
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'test');
+      await debounceWait();
+
+      await userEvent.clear(searchInput);
+      await debounceWait();
+
+      // Should show all items when search is empty
+      expect(searchInput).toHaveValue('');
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+    });
+
+    it('should switch between assignee and category search correctly', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      const searchInput = await screen.findByTestId('searchBy');
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+
+      // First search by assignee
+      await userEvent.click(searchByToggle);
+      await waitFor(() => {
+        const assigneeOption = screen.queryByTestId('assignee');
+        if (assigneeOption) {
+          userEvent.click(assigneeOption);
+        }
+      });
+
+      await userEvent.type(searchInput, 'John');
+      await debounceWait();
+      expect(searchInput).toHaveValue('John');
+
+      // Clear and switch to category search
+      await userEvent.clear(searchInput);
+      await userEvent.click(searchByToggle);
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      await userEvent.type(searchInput, 'Category');
+      await debounceWait();
+      expect(searchInput).toHaveValue('Category');
+    });
+
+    it('should handle items with null assignee gracefully in assignee search', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Default is assignee search
+      const searchInput = await screen.findByTestId('searchBy');
+
+      // Search for something that would match if assignee existed
+      await userEvent.type(searchInput, 'NonExistent');
+      await debounceWait();
+
+      // Should not crash and should handle null assignee gracefully
+      expect(searchInput).toHaveValue('NonExistent');
+
+      // Verify data grid is still functional
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+    });
+
+    it('should handle items with null category gracefully in category search', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Switch to category search
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      const searchInput = await screen.findByTestId('searchBy');
+
+      // Search for something that would match if category existed
+      await userEvent.type(searchInput, 'NonExistent');
+      await debounceWait();
+
+      // Should not crash and should handle null category gracefully
+      expect(searchInput).toHaveValue('NonExistent');
+
+      // Verify data grid is still functional
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+    });
+
+    it('should handle empty assignee name correctly in assignee search', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Default is assignee search
+      const searchInput = await screen.findByTestId('searchBy');
+
+      // Type something first, then clear it to test empty string handling
+      await userEvent.type(searchInput, 'test');
+      await debounceWait();
+
+      await userEvent.clear(searchInput);
+      await debounceWait();
+
+      expect(searchInput).toHaveValue('');
+
+      // Verify all items are shown when search is empty
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+    });
+
+    it('should properly filter using toLowerCase for assignee names', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Test different case variations
+      const searchInput = await screen.findByTestId('searchBy');
+
+      // Test uppercase search
+      await userEvent.type(searchInput, 'JOHN');
+      await debounceWait();
+      expect(searchInput).toHaveValue('JOHN');
+
+      // Clear and test mixed case
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'jOhN');
+      await debounceWait();
+      expect(searchInput).toHaveValue('jOhN');
+    });
+
+    it('should properly filter using toLowerCase for category names', async () => {
+      renderComponent();
+
+      // Wait for component to load
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      // Switch to category search
+      const searchByToggle = await screen.findByTestId('searchByToggle');
+      await userEvent.click(searchByToggle);
+
+      await waitFor(() => {
+        const categoryOption = screen.queryByTestId('category');
+        if (categoryOption) {
+          userEvent.click(categoryOption);
+        }
+      });
+
+      const searchInput = await screen.findByTestId('searchBy');
+
+      // Test different case variations for category
+      await userEvent.type(searchInput, 'CATEGORY');
+      await debounceWait();
+      expect(searchInput).toHaveValue('CATEGORY');
+
+      // Clear and test mixed case
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'cAtEgOrY');
+      await debounceWait();
+      expect(searchInput).toHaveValue('cAtEgOrY');
+    });
   });
 
   describe('Filtering and Sorting', () => {

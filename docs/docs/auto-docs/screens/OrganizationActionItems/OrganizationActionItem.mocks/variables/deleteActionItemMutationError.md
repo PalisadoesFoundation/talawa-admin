@@ -6,7 +6,7 @@
 
 > `const` **deleteActionItemMutationError**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L303)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L368)
 
 ## Type declaration
 
