@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFundPg
 
-Defined in: [src/utils/interfaces.ts:1124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1124)
+Defined in: [src/utils/interfaces.ts:1021](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1021)
 
 InterfaceFundPg
 
@@ -18,7 +18,7 @@ Defines the structure for a fund with PostgreSQL-specific fields.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1128)
+Defined in: [src/utils/interfaces.ts:1025](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1025)
 
 The creation date of the fund record.
 
@@ -28,7 +28,7 @@ The creation date of the fund record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1130)
+Defined in: [src/utils/interfaces.ts:1027](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1027)
 
 The user who created this fund.
 
@@ -38,7 +38,7 @@ The user who created this fund.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:1125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1125)
+Defined in: [src/utils/interfaces.ts:1022](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1022)
 
 The unique identifier of the fund.
 
@@ -48,7 +48,7 @@ The unique identifier of the fund.
 
 > **isTaxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1132)
+Defined in: [src/utils/interfaces.ts:1029](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1029)
 
 Indicates if the fund is tax deductible.
 
@@ -58,7 +58,7 @@ Indicates if the fund is tax deductible.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1126)
+Defined in: [src/utils/interfaces.ts:1023](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1023)
 
 The name of the fund.
 
@@ -68,7 +68,7 @@ The name of the fund.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:1127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1127)
+Defined in: [src/utils/interfaces.ts:1024](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1024)
 
 The organization associated with this fund.
 
@@ -78,7 +78,7 @@ The organization associated with this fund.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1129)
+Defined in: [src/utils/interfaces.ts:1026](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1026)
 
 The last update date of the fund record.
 
@@ -88,6 +88,6 @@ The last update date of the fund record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1131)
+Defined in: [src/utils/interfaces.ts:1028](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1028)
 
 The user who last updated this fund.

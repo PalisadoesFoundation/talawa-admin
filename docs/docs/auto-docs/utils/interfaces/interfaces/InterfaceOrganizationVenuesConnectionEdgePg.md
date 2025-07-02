@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationVenuesConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:1333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1333)
+Defined in: [src/utils/interfaces.ts:1230](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1230)
 
 InterfaceOrganizationVenuesConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization venues connection with Pos
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:1334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1334)
+Defined in: [src/utils/interfaces.ts:1231](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1231)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`InterfaceVenuePg`](InterfaceVenuePg.md)
 
-Defined in: [src/utils/interfaces.ts:1335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1335)
+Defined in: [src/utils/interfaces.ts:1232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1232)
 
 The venue node.

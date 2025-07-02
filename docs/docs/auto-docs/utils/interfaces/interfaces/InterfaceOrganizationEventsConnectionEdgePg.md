@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationEventsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:1036](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1036)
+Defined in: [src/utils/interfaces.ts:949](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L949)
 
 InterfaceOrganizationEventsConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization events connection with Pos
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:1037](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1037)
+Defined in: [src/utils/interfaces.ts:950](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L950)
 
 The cursor for this edge.
 
@@ -26,8 +26,8 @@ The cursor for this edge.
 
 ### node
 
-> **node**: [`InterfaceEventPg`](InterfaceEventPg.md)
+> **node**: [`IEvent`](IEvent.md)
 
-Defined in: [src/utils/interfaces.ts:1038](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1038)
+Defined in: [src/utils/interfaces.ts:951](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L951)
 
 The event node.

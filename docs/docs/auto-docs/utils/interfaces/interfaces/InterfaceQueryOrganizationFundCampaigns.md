@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:1744](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1744)
+Defined in: [src/utils/interfaces.ts:1641](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1641)
 
 InterfaceQueryOrganizationFundCampaigns
 
@@ -18,7 +18,7 @@ Defines the structure for a query result containing organization fund campaigns.
 
 > **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:1748](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1748)
+Defined in: [src/utils/interfaces.ts:1645](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1645)
 
 The campaigns connection object.
 
@@ -32,7 +32,7 @@ The campaigns connection object.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1745](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1745)
+Defined in: [src/utils/interfaces.ts:1642](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1642)
 
 The unique identifier of the fund.
 
@@ -42,7 +42,7 @@ The unique identifier of the fund.
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1747](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1747)
+Defined in: [src/utils/interfaces.ts:1644](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1644)
 
 Indicates if the fund is archived.
 
@@ -52,6 +52,6 @@ Indicates if the fund is archived.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1746](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1746)
+Defined in: [src/utils/interfaces.ts:1643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1643)
 
 The name of the fund.
