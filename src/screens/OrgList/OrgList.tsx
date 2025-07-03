@@ -69,6 +69,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -368,14 +369,17 @@ function orgList(): JSX.Element {
         </div>
         <div className={styles.btnsBlock}>
           {role === 'administrator' && (
-            <Button
-              className={`${styles.dropdown} ${styles.createorgdropdown}`}
-              onClick={toggleModal}
-              data-testid="createOrganizationBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createOrganization')}
-            </Button>
+            <>
+              <NotificationIcon />
+              <Button
+                className={`${styles.dropdown} ${styles.createorgdropdown}`}
+                onClick={toggleModal}
+                data-testid="createOrganizationBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createOrganization')}
+              </Button>
+            </>
           )}
         </div>
       </div>

@@ -3,6 +3,8 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
+import { ListGroup, Button } from 'react-bootstrap';
+import styles from './Notification.module.css';
 
 interface InterfaceNotification {
   id: string;
@@ -20,12 +22,23 @@ const Notification: React.FC = () => {
     variables: {
       userId: userId,
       input: {
-        first: 10,
+        first: 100, // Fetching more notifications
         skip: 0,
       },
     },
     skip: !userId,
   });
+
+  // const [markAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
+
+  // const handleMarkAsRead = async (notificationId: string) => {
+  //   try {
+  //     await markAsRead({ variables: { notificationId } });
+  //     refetch();
+  //   } catch (error) {
+  //     console.error('Error marking notification as read:', error);
+  //   }
+  // };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -33,36 +46,41 @@ const Notification: React.FC = () => {
   const notifications = data?.user?.notifications || [];
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Notifications</h1>
-      <div className="flex flex-col gap-4">
+    <div className={styles.container}>
+      <h1 className={styles.title}>Notifications</h1>
+      <ListGroup variant="flush">
         {notifications.length > 0 ? (
           notifications.map((notification: InterfaceNotification) => (
-            <Link
-              to={notification.navigation || '#'}
+            <ListGroup.Item
               key={notification.id}
-              className="no-underline"
+              className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''}`}
             >
-              <div
-                className={`bg-white shadow-md rounded-lg p-4 border-l-4 ${
-                  !notification.isRead ? 'border-blue-500' : 'border-gray-300'
-                }`}
+              <Link
+                to={notification.navigation || '#'}
+                className={styles.notificationLink}
               >
-                <h2
-                  className={`text-lg ${!notification.isRead ? 'font-bold' : ''}`}
-                >
-                  {notification.title}
-                </h2>
-                <p className="text-gray-700">{notification.body}</p>
-              </div>
-            </Link>
+                <div>
+                  <div className={styles.notificationTitle}>
+                    {notification.title}
+                  </div>
+                  <div className={styles.notificationBody}>
+                    {notification.body}
+                  </div>
+                </div>
+              </Link>
+              {!notification.isRead && (
+                <Button variant="primary" size="sm">
+                  Mark as Read
+                </Button>
+              )}
+            </ListGroup.Item>
           ))
         ) : (
-          <div className="bg-white shadow-md rounded-lg p-4 text-center">
-            <p>No notifications found.</p>
-          </div>
+          <ListGroup.Item className={styles.noNotifications}>
+            No notifications found.
+          </ListGroup.Item>
         )}
-      </div>
+      </ListGroup>
     </div>
   );
 };

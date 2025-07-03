@@ -1,0 +1,39 @@
+
+.container {
+    padding: 20px;
+}
+
+.title {
+    margin-bottom: 20px;
+}
+
+.notificationItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.unread {
+    background-color: #f0f8ff;
+}
+
+.notificationLink {
+    text-decoration: none;
+    color: inherit;
+}
+
+.notificationTitle {
+    font-weight: bold;
+}
+
+.notificationBody {
+    color: #555;
+}
+
+.noNotifications {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
