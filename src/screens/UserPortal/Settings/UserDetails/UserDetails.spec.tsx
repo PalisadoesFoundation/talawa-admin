@@ -288,7 +288,7 @@ describe('UserDetailsForm', () => {
       const datePickerOnChange = screen
         .getByLabelText(mockT('birthDate'))
         .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new globalThis.Event('change'));
+        ?.dispatchEvent(new Event('change'));
       if (datePickerOnChange) {
         if (typeof datePickerOnChange === 'function') {
           (datePickerOnChange as (date: dayjs.Dayjs) => void)(
@@ -312,7 +312,7 @@ describe('UserDetailsForm', () => {
       const datePickerOnChange = screen
         .getByLabelText(mockT('birthDate'))
         .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new globalThis.Event('change'));
+        ?.dispatchEvent(new Event('change'));
       if (datePickerOnChange) {
         if (typeof datePickerOnChange === 'function') {
           (datePickerOnChange as (date: dayjs.Dayjs | null) => void)(null);

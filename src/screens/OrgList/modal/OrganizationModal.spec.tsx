@@ -288,7 +288,7 @@ describe('OrganizationModal Component', () => {
     setup();
     const countrySelect = screen.getByTestId(
       'modalOrganizationCountryCode',
-    ) as globalThis.HTMLSelectElement;
+    ) as HTMLSelectElement;
     fireEvent.change(countrySelect, { target: { value: 'us' } });
 
     expect(mockSetFormState).toHaveBeenCalledWith(
@@ -300,7 +300,7 @@ describe('OrganizationModal Component', () => {
     setup();
     const countrySelect = screen.getByTestId(
       'modalOrganizationCountryCode',
-    ) as globalThis.HTMLSelectElement;
+    ) as HTMLSelectElement;
     const firstOption = countrySelect.options[0];
     expect(firstOption.disabled).toBe(true);
   });

@@ -32,7 +32,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-globalThis.URL.createObjectURL = vi.fn(() => 'mocked-url');
+global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -61,14 +61,7 @@ const translations = {
   ...JSON.parse(
     JSON.stringify(
       i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
-      i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
     ),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
-  ),
-  ...JSON.parse(
-    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
   ),
   ...JSON.parse(
     JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
@@ -92,7 +85,6 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
@@ -118,7 +110,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
-    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const toastErrorSpy = vi.spyOn(toast, 'error');
 
     await act(async () => {
@@ -126,7 +118,6 @@ describe('Testing Advertisement Register Component', () => {
         <MockedProvider addTypename={false} mocks={[createAdFailMock]}>
           <Provider store={store}>
             <router.BrowserRouter>
-              <I18nextProvider i18n={i18nForTest}>
               <I18nextProvider i18n={i18nForTest}>
                 <AdvertisementRegister
                   endAtEdit={new Date()}
@@ -168,13 +159,11 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Throws error at creation when the end date is less than the start date', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
-    const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
+    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 setAfterActive={vi.fn()}
@@ -232,7 +221,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
     });
-    expect(toastErrorSpy).toHaveBeenCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
@@ -244,7 +233,6 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
@@ -272,7 +260,6 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
@@ -305,7 +292,6 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false} mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               {
                 <AdvertisementRegister
@@ -373,7 +359,6 @@ describe('Testing Advertisement Register Component', () => {
       <MockedProvider addTypename={false}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 endAtEdit={new Date()}
@@ -712,6 +697,7 @@ describe('Testing Advertisement Register Component', () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId('addonupdate'));
     });
+
     await waitFor(() => {
       const mockCall = updateMock.mock.calls[0][0];
       expect(mockCall.variables).toMatchObject({
@@ -838,7 +824,6 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-            <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
                 setAfterActive={vi.fn()}
@@ -872,7 +857,6 @@ describe('Testing Advertisement Register Component', () => {
       <ApolloProvider client={client}>
         <Provider store={store}>
           <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"

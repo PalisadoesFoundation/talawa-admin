@@ -29,15 +29,14 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Open the modal
-    fireEvent.click(queryByText('View Event Statistics') as globalThis.Element);
+    fireEvent.click(queryByText('View Event Statistics') as Element);
 
     await waitFor(() =>
       expect(queryByText('Event Statistics')).toBeInTheDocument(),
     );
+
     // Close the modal
-    fireEvent.click(
-      queryByRole('button', { name: /close/i }) as globalThis.Element,
-    );
+    fireEvent.click(queryByRole('button', { name: /close/i }) as Element);
     await waitFor(() =>
       expect(queryByText('Event Statistics')).not.toBeInTheDocument(),
     );
