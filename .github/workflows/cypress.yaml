@@ -27,6 +27,20 @@ jobs:
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
+      - name: Setup Database
+        run: |
+          docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data' 
+          sleep 10
+          curl -X POST -H "Content-Type: application/json" -k http://127.0.0.1:4000/graphql -d '{
+            "query": "query signIn($input: QuerySignInInput!) { signIn(input: $input) { authenticationToken user { emailAddress id name } } }",
+            "variables": {
+              "input": {
+                "emailAddress": "administrator@email.com",
+                "password": "password"
+              }
+            }
+          }'
+           
       - name: Start Backend Server
         run: |
           docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
