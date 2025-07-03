@@ -120,6 +120,9 @@ function app(): JSX.Element {
     }
   }, [data, loading, setItem]);
 
+  console.log(process.env.REACT_APP_TALAWA_URL);
+  console.log(process.env.REACT_APP_BACKEND_WEBSOCKET_URL);
+
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>

@@ -74,6 +74,7 @@ jobs:
       - name: Setup .env
         run: |
           pwd && cp frontend/.env.example frontend/.env
+          echo $REACT_APP_TALAWA_URL
           curl -s -X POST http://127.0.0.1:4000/graphql -H "Content-Type: application/json" -d '{"query":"{__typename}"}' 2>/dev/null 
       
       - name: Run Cypress Tests with Dev Server
