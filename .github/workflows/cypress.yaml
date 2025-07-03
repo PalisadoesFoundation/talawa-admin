@@ -71,6 +71,10 @@ jobs:
         working-directory: frontend
         run: npm install
       
+      - name: Setup .env
+        run: |
+          cp .env.example frontend/.env    
+      
       - name: Run Cypress Tests with Dev Server
         uses: cypress-io/github-action@v6
         with:
