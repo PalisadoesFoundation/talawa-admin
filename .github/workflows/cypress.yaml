@@ -73,7 +73,8 @@ jobs:
       
       - name: Setup .env
         run: |
-          pwd && cp frontend/.env.example frontend/.env    
+          pwd && cp frontend/.env.example frontend/.env
+          curl -s -X POST http://127.0.0.1:4000/graphql -H "Content-Type: application/json" -d '{"query":"{__typename}"}' 2>/dev/null 
       
       - name: Run Cypress Tests with Dev Server
         uses: cypress-io/github-action@v6
