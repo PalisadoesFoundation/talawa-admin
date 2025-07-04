@@ -202,29 +202,7 @@ export default function PluginStore() {
 
   // Get installed plugin info (adapter for PluginModal interface)
   const getInstalledPlugin = (pluginName: string): any => {
-    // First check loaded plugins
-    const loadedPlugin = loadedPlugins.find(
-      (p) => p.manifest.name === pluginName,
-    );
-    if (loadedPlugin) {
-      return {
-        id: loadedPlugin.id,
-        name: loadedPlugin.manifest.name,
-        description: loadedPlugin.manifest.description,
-        author: loadedPlugin.manifest.author,
-        icon: loadedPlugin.manifest.icon || '/images/logo512.png',
-        version: loadedPlugin.manifest.version,
-        cdnUrl: '',
-        readme: '',
-        screenshots: [],
-        homepage: loadedPlugin.manifest.homepage,
-        license: loadedPlugin.manifest.license,
-        tags: loadedPlugin.manifest.tags,
-        status: loadedPlugin.status,
-      };
-    }
-
-    // Then check GraphQL data
+    // First check GraphQL data (source of truth for status)
     const graphqlPlugin = pluginData?.plugins?.find(
       (p) => p.pluginId === pluginName,
     );
@@ -243,6 +221,28 @@ export default function PluginStore() {
         license: '',
         tags: [],
         status: graphqlPlugin.isActivated ? 'active' : 'inactive',
+      };
+    }
+
+    // Then check loaded plugins (fallback)
+    const loadedPlugin = loadedPlugins.find(
+      (p) => p.manifest.name === pluginName,
+    );
+    if (loadedPlugin) {
+      return {
+        id: loadedPlugin.id,
+        name: loadedPlugin.manifest.name,
+        description: loadedPlugin.manifest.description,
+        author: loadedPlugin.manifest.author,
+        icon: loadedPlugin.manifest.icon || '/images/logo512.png',
+        version: loadedPlugin.manifest.version,
+        cdnUrl: '',
+        readme: '',
+        screenshots: [],
+        homepage: loadedPlugin.manifest.homepage,
+        license: loadedPlugin.manifest.license,
+        tags: loadedPlugin.manifest.tags,
+        status: loadedPlugin.status,
       };
     }
 
