@@ -160,6 +160,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -221,7 +222,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
     });
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(toastErrorSpy).toHaveBeenCalledWith(
       'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
