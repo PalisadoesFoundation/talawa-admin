@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:553](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L553)
+Defined in: [src/utils/interfaces.ts:749](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L749)
+
+InterfaceOrganizationAdvertisementsConnectionPg
+
+## Description
+
+Defines the structure for a connection of organization advertisements with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:553](https://github.com/PalisadoesFoundatio
 
 > **edges**: [`InterfaceOrganizationAdvertisementsConnectionEdgePg`](InterfaceOrganizationAdvertisementsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:554](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L554)
+Defined in: [src/utils/interfaces.ts:750](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L750)
+
+An array of edges, where each edge contains a cursor and an advertisement node.
 
 ***
 
@@ -20,4 +28,6 @@ Defined in: [src/utils/interfaces.ts:554](https://github.com/PalisadoesFoundatio
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:555](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L555)
+Defined in: [src/utils/interfaces.ts:751](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L751)
+
+Pagination information.

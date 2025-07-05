@@ -226,20 +226,17 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Title/i),
-      formData.title,
-    );
+    await userEvent.type(screen.getByTestId('eventTitleInput'), formData.title);
 
     await userEvent.type(
-      screen.getByPlaceholderText(/Enter Description/i),
+      screen.getByTestId('eventDescriptionInput'),
       formData.description,
     );
     await userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
+      screen.getByTestId('eventLocationInput'),
       formData.location,
     );
 
@@ -258,10 +255,8 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
-    expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(
-      formData.title,
-    );
-    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(
+    expect(screen.getByTestId('eventTitleInput')).toHaveValue(formData.title);
+    expect(screen.getByTestId('eventDescriptionInput')).toHaveValue(
       formData.description,
     );
 
@@ -328,23 +323,19 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
     await userEvent.type(
-      screen.getByPlaceholderText(/Enter Title/i),
+      screen.getByTestId('eventTitleInput'),
       invalidFormData.title,
     );
     await userEvent.type(
-      screen.getByPlaceholderText(/Enter Description/i),
+      screen.getByTestId('eventDescriptionInput'),
       invalidFormData.description,
     );
     await userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
-      invalidFormData.location,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
+      screen.getByTestId('eventLocationInput'),
       invalidFormData.location,
     );
 
@@ -364,8 +355,8 @@ describe('Organisation Events Page', () => {
 
     await wait();
 
-    expect(screen.getByPlaceholderText(/Enter Title/i)).toHaveValue(' ');
-    expect(screen.getByPlaceholderText(/Enter Description/i)).toHaveValue(' ');
+    expect(screen.getByTestId('eventTitleInput')).toHaveValue(' ');
+    expect(screen.getByTestId('eventDescriptionInput')).toHaveValue(' ');
 
     expect(endDatePicker).toHaveValue(invalidFormData.endDate);
     expect(startDatePicker).toHaveValue(invalidFormData.startDate);
@@ -374,7 +365,7 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('registrableCheck')).toBeChecked();
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
-    expect(toast.warning).toHaveBeenCalledWith('Title can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
     expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
 
@@ -413,21 +404,18 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText(/Enter Title/i)).toBeInTheDocument();
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Title/i),
-      formData.title,
-    );
+    await userEvent.type(screen.getByTestId('eventTitleInput'), formData.title);
 
     await userEvent.type(
-      screen.getByPlaceholderText(/Enter Description/i),
+      screen.getByTestId('eventDescriptionInput'),
       formData.description,
     );
 
     await userEvent.type(
-      screen.getByPlaceholderText(/Location/i),
+      screen.getByTestId('eventLocationInput'),
       formData.location,
     );
 

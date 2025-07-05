@@ -4,6 +4,6 @@
 
 # Type Alias: PostOrderByInput
 
-> **PostOrderByInput** = *typeof* [`PostOrderByInput`](../variables/PostOrderByInput.md)\[keyof *typeof* [`PostOrderByInput`](../variables/PostOrderByInput.md)\]
+> **PostOrderByInput** = *typeof* [`PostOrderByInputEnum`](../variables/PostOrderByInputEnum.md)\[keyof *typeof* [`PostOrderByInputEnum`](../variables/PostOrderByInputEnum.md)\]
 
-Defined in: [src/types/Post/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L32)
+Defined in: [src/types/Post/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L51)

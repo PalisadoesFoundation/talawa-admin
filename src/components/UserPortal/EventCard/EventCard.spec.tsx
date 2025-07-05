@@ -12,7 +12,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -43,7 +43,7 @@ afterEach(() => {
 describe('Testing Event Card In User portal', () => {
   const props = {
     _id: '123',
-    title: 'Test Event',
+    name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
     startDate: '2023-04-13',
@@ -187,7 +187,7 @@ describe('Testing Event Card In User portal', () => {
 describe('Event card when start and end time are not given', () => {
   const props = {
     _id: '123',
-    title: 'Test Event',
+    name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
     startDate: '2023-04-13',

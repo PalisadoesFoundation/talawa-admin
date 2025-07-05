@@ -1,5 +1,3 @@
-import React from 'react';
-import { describe, test, expect, vi } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
@@ -13,29 +11,29 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { toast } from 'react-toastify';
+import { describe, expect, test, vi } from 'vitest';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
 import {
-  wait,
   client,
-  getCompletedAdvertisementMocks,
-  getActiveAdvertisementMocks,
+  createAdvertisement,
+  createAdvertisementError,
+  createAdvertisementWithEndDateBeforeStart,
+  createAdvertisementWithoutName,
+  dateConstants,
   deleteAdvertisementMocks,
   emptyMocks,
-  initialArchivedData,
-  initialActiveData,
+  fetchErrorMocks,
   filterActiveAdvertisementData,
   filterCompletedAdvertisementData,
-  dateConstants,
-  createAdvertisement,
-  createAdvertisementWithoutName,
-  createAdvertisementWithEndDateBeforeStart,
-  createAdvertisementError,
+  getActiveAdvertisementMocks,
+  getCompletedAdvertisementMocks,
+  initialActiveData,
+  initialArchivedData,
   updateAdMocks,
-  fetchErrorMocks,
+  wait,
 } from './AdvertisementsMocks';
-import i18n from '../../utils/i18nForTest';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
   __esModule: true,
@@ -48,11 +46,15 @@ vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
 const translations = {
   ...JSON.parse(
     JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+      i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
     ),
   ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.common ?? {}),
+  ),
+  ...JSON.parse(
+    JSON.stringify(i18nForTest.getDataByLanguage('en')?.errors ?? {}),
+  ),
 };
 
 let mockID: string | undefined = '1';
@@ -417,7 +419,7 @@ describe('Testing Advertisement Component', () => {
     );
   });
 
-  it('filter active advertisement by name', async () => {
+  it('filters active advertisement by name (unique)', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -455,7 +457,7 @@ describe('Testing Advertisement Component', () => {
     expect(screen.queryByText('Cookie shop 1')).not.toBeInTheDocument();
   });
 
-  it('filter active advertisement by description', async () => {
+  it('filters active advertisement by description (unique)', async () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -1189,7 +1191,7 @@ describe('Testing Advertisement Component', () => {
 
     const translations = JSON.parse(
       JSON.stringify(
-        i18n.getDataByLanguage('en')?.translation.advertisement ?? {},
+        i18nForTest.getDataByLanguage('en')?.translation.advertisement ?? {},
       ),
     );
 

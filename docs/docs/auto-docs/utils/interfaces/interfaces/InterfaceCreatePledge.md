@@ -4,7 +4,13 @@
 
 # Interface: InterfaceCreatePledge
 
-Defined in: [src/utils/interfaces.ts:1249](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1249)
+Defined in: [src/utils/interfaces.ts:2155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2155)
+
+InterfaceCreatePledge
+
+## Description
+
+Defines the structure for creating a pledge.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:1249](https://github.com/PalisadoesFoundati
 
 > **pledgeAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1251)
+Defined in: [src/utils/interfaces.ts:2157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2157)
+
+The amount of the pledge.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:1251](https://github.com/PalisadoesFoundati
 
 > **pledgeCurrency**: `string`
 
-Defined in: [src/utils/interfaces.ts:1252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1252)
+Defined in: [src/utils/interfaces.ts:2158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2158)
+
+The currency of the pledge.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:1252](https://github.com/PalisadoesFoundati
 
 > **pledgeEndDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1254)
+Defined in: [src/utils/interfaces.ts:2160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2160)
+
+The end date of the pledge.
 
 ***
 
@@ -36,12 +48,16 @@ Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundati
 
 > **pledgeStartDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1253)
+Defined in: [src/utils/interfaces.ts:2159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2159)
+
+The start date of the pledge.
 
 ***
 
 ### pledgeUsers
 
-> **pledgeUsers**: [`InterfaceUserInfo_PG`](InterfaceUserInfo_PG.md)[]
+> **pledgeUsers**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
 
-Defined in: [src/utils/interfaces.ts:1250](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1250)
+Defined in: [src/utils/interfaces.ts:2156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2156)
+
+An array of user information for the pledgers.

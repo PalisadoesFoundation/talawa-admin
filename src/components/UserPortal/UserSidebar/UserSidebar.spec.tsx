@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import styles from '../../../style/app-fixed.module.css';
@@ -15,7 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import UserSidebar from './UserSidebar';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 /**
  * Unit tests for UserSidebar component:
@@ -40,7 +41,7 @@ const { setItem } = useLocalStorage();
 const resizeWindow = (width: number): void => {
   act(() => {
     window.innerWidth = width;
-    fireEvent(window, new Event('resize'));
+    fireEvent(window, new window.Event('resize'));
   });
 };
 
@@ -336,6 +337,51 @@ describe('UserSidebar Component Tests in User Portal', () => {
     act(() => orgsBtn.click());
     expect(props.setHideDrawer).toHaveBeenCalledWith(true);
   });
+  it('UserSidebar collapse and expansion based on screen size', async () => {
+    await act(async () => {
+      resizeWindow(1000);
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    resizeWindow(800);
+    const sidebar = screen.getByTestId('leftDrawerContainer');
+    expect(sidebar).toHaveClass(styles.collapsedDrawer);
+  });
+  it('handles user interactions when sidebar is expanded', async () => {
+    await act(async () => {
+      resizeWindow(1000);
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...props} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    const pButton = screen.getByTestId('ChevronRightIcon');
+    expect(pButton).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(pButton);
+    });
+    const LogoutIcon = screen.getByTestId('LogoutIconid');
+    expect(LogoutIcon).toBeInTheDocument();
+    act(() => {
+      fireEvent.click(LogoutIcon);
+    });
+  });
 
   it('Active route button style changes correctly upon click', async () => {
     await act(async () => {
@@ -381,7 +427,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
     it('Clicking a link closes the drawer when window width is 820px or less', () => {
       act(() => {
         window.innerWidth = 820;
-        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new window.Event('resize'));
       });
 
       render(
@@ -409,7 +455,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebar {...props} hideDrawer={null} />
+                  <UserSidebar {...props} hideDrawer={false} />
                 </I18nextProvider>
               </Provider>
             </BrowserRouter>
@@ -417,7 +463,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
         );
 
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.hideElemByDefault,
+          styles.expandedDrawer,
         );
 
         rerender(
@@ -432,7 +478,7 @@ describe('UserSidebar Component Tests in User Portal', () => {
           </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.inactiveDrawer,
+          styles.collapsedDrawer,
         );
 
         rerender(
@@ -447,9 +493,110 @@ describe('UserSidebar Component Tests in User Portal', () => {
           </MockedProvider>,
         );
         expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.activeDrawer,
+          styles.expandedDrawer,
         );
       });
+    });
+  });
+
+  describe('Keyboard Accessibility Tests', () => {
+    it('Testing toggle button click functionality', async () => {
+      await act(async () => {
+        renderUserSidebar('properId', link);
+        await wait();
+      });
+
+      const toggleButton = screen.getByTestId('toggleBtn');
+      expect(toggleButton).toBeInTheDocument();
+      expect(toggleButton).toHaveAttribute('role', 'button');
+      expect(toggleButton).toHaveAttribute('tabIndex', '0');
+
+      await userEvent.click(toggleButton);
+      expect(props.setHideDrawer).toHaveBeenCalled();
+    });
+
+    it('Testing toggle button keyboard navigation with Enter key', async () => {
+      const mockSetHideDrawer = vi.fn();
+      const customProps = {
+        hideDrawer: false,
+        setHideDrawer: mockSetHideDrawer,
+      };
+
+      setItem('userId', 'properId');
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...customProps} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const toggleButton = screen.getByTestId('toggleBtn');
+      toggleButton.focus();
+
+      await userEvent.keyboard('{Enter}');
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('Testing toggle button keyboard navigation with Space key', async () => {
+      const mockSetHideDrawer = vi.fn();
+      const customProps = {
+        hideDrawer: false,
+        setHideDrawer: mockSetHideDrawer,
+      };
+
+      setItem('userId', 'properId');
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...customProps} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const toggleButton = screen.getByTestId('toggleBtn');
+      toggleButton.focus();
+
+      await userEvent.keyboard(' ');
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('Testing toggle button keyboard navigation ignores other keys', async () => {
+      const mockSetHideDrawer = vi.fn();
+      const customProps = {
+        hideDrawer: false,
+        setHideDrawer: mockSetHideDrawer,
+      };
+
+      setItem('userId', 'properId');
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <UserSidebar {...customProps} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const toggleButton = screen.getByTestId('toggleBtn');
+      toggleButton.focus();
+
+      await userEvent.keyboard('{Escape}');
+      await userEvent.keyboard('{Tab}');
+      await userEvent.keyboard('{ArrowDown}');
+
+      expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
   });
 });
