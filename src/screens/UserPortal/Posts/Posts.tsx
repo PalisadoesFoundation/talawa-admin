@@ -3,17 +3,17 @@
  * advertisements, and pinned posts within an organization. It also provides
  * functionality for creating new posts and interacting with existing ones.
  *
- * @returns {JSX.Element} The rendered home component.
+ * @returns JSX.Element The rendered home component.
  *
  * @remarks
  * - This component uses GraphQL queries to fetch posts, advertisements, and user details.
  * - It includes a post creation modal and a carousel for pinned posts.
  * - The component redirects to the user page if the organization ID is not available.
  *
- * @component
- * @category Screens
+ * Component
+ * **Category:** Screens
  *
- * @dependencies
+ * **Dependencies:**
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/icons-material` for icons.
  * - `react-bootstrap` for UI components.
@@ -62,7 +62,7 @@ import type {
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, JSX } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -125,7 +125,9 @@ export default function home(): JSX.Element {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, { variables: {  input: { id: orgId }, first: 10 } });
+  } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: { input: { id: orgId }, first: 10 },
+  });
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
@@ -142,9 +144,8 @@ export default function home(): JSX.Element {
   // Effect hook to update posts state when data changes
   useEffect(() => {
     if (data && data.organization) {
-  setPosts(data.organization.posts.edges);
-}
-
+      setPosts(data.organization.posts.edges);
+    }
   }, [data]);
 
   // Effect hook to update advertisements state when data changes
@@ -185,37 +186,36 @@ export default function home(): JSX.Element {
       commentCount,
       likedBy,
       comments,
-      createdAt
+      createdAt,
     } = node;
 
-const allLikes: PostLikes = (likedBy ?? []).map((value) => ({
-  firstName: value.firstName,
-  lastName: value.lastName,
-  id: value._id,
-}));
+    const allLikes: PostLikes = (likedBy ?? []).map((value) => ({
+      firstName: value.firstName,
+      lastName: value.lastName,
+      id: value._id,
+    }));
 
+    const postComments: PostComments = (comments ?? []).map((value) => ({
+      id: value?.id ?? '',
+      creator: {
+        firstName: value?.creator?.firstName ?? '',
+        lastName: value?.creator?.lastName ?? '',
+        id: value?.creator?.id ?? '',
+        email: value?.creator?.email ?? '',
+      },
+      likeCount: value?.likeCount ?? 0,
+      likedBy: (value?.likedBy ?? []).map((like) => ({
+        id: like?.id ?? '',
+      })),
+      text: value?.text ?? '',
+    }));
 
-const postComments: PostComments = (comments ?? []).map((value) => ({
-    id: value?.id ?? '',
-    creator: {
-      firstName: value?.creator?.firstName ?? '',
-      lastName: value?.creator?.lastName ?? '',
-      id: value?.creator?.id ?? '',
-      email: value?.creator?.email ?? '',
-    },
-    likeCount: value?.likeCount ?? 0,
-    likedBy: (value?.likedBy ?? []).map((like) => ({
-      id: like?.id ?? ''
-    })),
-    text: value?.text ?? '',
-  }));
-
- const date = createdAt ? new Date(createdAt) : new Date();
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date);
+    const date = createdAt ? new Date(createdAt) : new Date();
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
 
     const cardProps: InterfacePostCard = {
       id: _id,
