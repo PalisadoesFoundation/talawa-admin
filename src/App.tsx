@@ -9,6 +9,8 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import pluginManager from 'plugin/manager';
+import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
+import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -75,9 +77,6 @@ const Organizations = lazy(
 const People = lazy(() => import('screens/UserPortal/People/People'));
 const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
-const UserScreen = lazy(
-  () => import('screens/UserPortal/UserScreen/UserScreen'),
-);
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
 );
@@ -129,8 +128,10 @@ function App(): React.ReactElement {
   const isSuperAdmin = data?.currentUser?.userType === 'SUPERADMIN';
 
   // Get plugin routes
-  const adminPluginRoutes = usePluginRoutes(userPermissions, true);
-  const userPluginRoutes = usePluginRoutes(userPermissions, false);
+  const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
+  const adminOrgPluginRoutes = usePluginRoutes(userPermissions, true, true);
+  const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
+  const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
 
   console.log('=== APP.TSX ROUTE DEBUG ===');
   console.log('Current user data:', {
@@ -142,16 +143,16 @@ function App(): React.ReactElement {
   });
   console.log('Plugin routes loaded:', {
     admin: {
-      count: adminPluginRoutes.length,
-      routes: adminPluginRoutes.map((r) => ({
+      count: adminOrgPluginRoutes.length,
+      routes: adminOrgPluginRoutes.map((r) => ({
         path: r.path,
         isAdmin: r.isAdmin,
         component: r.component,
       })),
     },
     user: {
-      count: userPluginRoutes.length,
-      routes: userPluginRoutes.map((r) => ({
+      count: userOrgPluginRoutes.length,
+      routes: userOrgPluginRoutes.map((r) => ({
         path: r.path,
         isAdmin: r.isAdmin,
         component: r.component,
@@ -210,8 +211,8 @@ function App(): React.ReactElement {
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
               <Route path="/pluginstore" element={<PluginStore />} />
-              {/* Dynamic Admin Plugin Routes */}
-              {adminPluginRoutes.map((route) => (
+              {/* Admin global plugin routes (e.g., settings) */}
+              {adminGlobalPluginRoutes.map((route) => (
                 <Route
                   key={`${route.pluginId}-${route.path}`}
                   path={route.path}
@@ -275,6 +276,19 @@ function App(): React.ReactElement {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              {/* Admin org plugin routes */}
+              {adminOrgPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading admin plugin...</div>}
+                    />
+                  }
+                />
+              ))}
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
@@ -282,6 +296,21 @@ function App(): React.ReactElement {
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
             <Route path="/user/settings" element={<Settings />} />
+            {/* User global plugin routes (no orgId required) */}
+            <Route element={<UserGlobalScreen />}>
+              {userGlobalPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading user plugin...</div>}
+                    />
+                  }
+                />
+              ))}
+            </Route>
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
@@ -299,8 +328,8 @@ function App(): React.ReactElement {
                 path="/user/volunteer/:orgId"
                 element={<VolunteerManagement />}
               />
-              {/* Move plugin routes inside UserScreen */}
-              {userPluginRoutes.map((route) => (
+              {/* User org plugin routes */}
+              {userOrgPluginRoutes.map((route) => (
                 <Route
                   key={`${route.pluginId}-${route.path}`}
                   path={route.path}

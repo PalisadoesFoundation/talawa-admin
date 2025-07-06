@@ -175,6 +175,7 @@ class PluginManager {
         this.pluginIndex = plugins;
       } catch (error) {
         console.warn('Failed to sync plugin with GraphQL:', error);
+        // Don't throw the error, just log it and continue
       }
     }
   }
@@ -232,16 +233,26 @@ class PluginManager {
   ): Promise<Record<string, React.ComponentType>> {
     try {
       const mainFile = this.normalizeMainFile(manifest.main);
-      const pluginModule = await import(
-        /* @vite-ignore */ `/src/plugin/available/${pluginId}/${mainFile}`
-      );
+      const importPath = `/src/plugin/available/${pluginId}/${mainFile}`;
 
-      return pluginModule.default
+      console.log(`Attempting to import plugin from: ${importPath}`);
+
+      const pluginModule = await import(/* @vite-ignore */ importPath);
+
+      console.log(`Plugin module imported:`, Object.keys(pluginModule));
+
+      const result = pluginModule.default
         ? { [pluginId]: pluginModule.default, ...pluginModule }
         : pluginModule;
+
+      console.log(`Final components:`, Object.keys(result));
+      return result;
     } catch (error) {
       console.error(`Failed to load components for plugin ${pluginId}:`, error);
-      throw new Error(`Component loading failed for plugin ${pluginId}`);
+      console.error(`Error details:`, error);
+      throw new Error(
+        `Component loading failed for plugin ${pluginId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 
@@ -269,11 +280,13 @@ class PluginManager {
       });
     }
 
-    if (manifest.extensionPoints?.drawer) {
-      this.extensionRegistry.drawer = this.extensionRegistry.drawer.filter(
-        (item) => item.pluginId !== pluginId,
-      );
+    // Clear existing drawer items for this plugin first
+    this.extensionRegistry.drawer = this.extensionRegistry.drawer.filter(
+      (item) => item.pluginId !== pluginId,
+    );
 
+    // Handle drawer items
+    if (manifest.extensionPoints?.drawer) {
       manifest.extensionPoints.drawer.forEach((item) => {
         this.extensionRegistry.drawer.push({
           ...item,
@@ -465,11 +478,13 @@ class PluginManager {
     type: T,
     userPermissions: string[] = [],
     isAdmin: boolean = false,
+    isOrg?: boolean,
   ): IExtensionRegistry[T] {
     if (type === ExtensionPointType.ROUTES) {
       return this.getFilteredRoutes(
         userPermissions,
         isAdmin,
+        isOrg,
       ) as IExtensionRegistry[T];
     }
 
@@ -477,13 +492,18 @@ class PluginManager {
       return this.getFilteredDrawerItems(
         userPermissions,
         isAdmin,
+        isOrg,
       ) as IExtensionRegistry[T];
     }
 
     return this.extensionRegistry[type];
   }
 
-  private getFilteredRoutes(userPermissions: string[], isAdmin: boolean) {
+  private getFilteredRoutes(
+    userPermissions: string[],
+    isAdmin: boolean,
+    isOrg?: boolean,
+  ) {
     const routes = this.extensionRegistry.routes
       .map((route) => {
         // Determine if this is a user route based on the path
@@ -511,6 +531,11 @@ class PluginManager {
           return false;
         }
 
+        // Filter by isOrg if specified
+        if (typeof isOrg === 'boolean' && route.isOrg !== isOrg) {
+          return false;
+        }
+
         // If no permissions required, allow access
         if (!route.permissions || route.permissions.length === 0) {
           return true;
@@ -527,26 +552,60 @@ class PluginManager {
     return routes;
   }
 
-  private getFilteredDrawerItems(userPermissions: string[], isAdmin: boolean) {
+  private getFilteredDrawerItems(
+    userPermissions: string[],
+    isAdmin: boolean,
+    isOrg?: boolean,
+  ) {
+    console.log('=== FILTERING DRAWER ITEMS ===');
+    console.log('userPermissions:', userPermissions);
+    console.log('isAdmin:', isAdmin);
+    console.log('isOrg:', isOrg);
+    console.log('Total drawer items:', this.extensionRegistry.drawer.length);
+
     const items = this.extensionRegistry.drawer.filter((item) => {
+      console.log(
+        'Checking item:',
+        item.label,
+        'isAdmin:',
+        item.isAdmin,
+        'isOrg:',
+        item.isOrg,
+      );
+
       // Admin users should only see admin items
       if (isAdmin && !item.isAdmin) {
+        console.log('Filtered out (admin mismatch):', item.label);
         return false;
       }
 
       // Non-admin users should only see non-admin items
       if (!isAdmin && item.isAdmin) {
+        console.log('Filtered out (admin mismatch):', item.label);
+        return false;
+      }
+
+      // Filter by isOrg if specified
+      if (typeof isOrg === 'boolean' && item.isOrg !== isOrg) {
+        console.log('Filtered out (org mismatch):', item.label);
         return false;
       }
 
       if (!item.permissions || item.permissions.length === 0) {
+        console.log('Included (no permissions):', item.label);
         return true;
       }
 
-      return item.permissions.some((permission) =>
+      const hasPermission = item.permissions.some((permission) =>
         userPermissions.includes(permission),
       );
+
+      console.log('Permission check for', item.label, ':', hasPermission);
+      return hasPermission;
     });
+
+    console.log('Final filtered items:', items.length);
+    console.log('=== END FILTERING DRAWER ITEMS ===');
 
     return sortDrawerItems(items);
   }

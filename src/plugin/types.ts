@@ -31,6 +31,7 @@ export interface IRouteExtension {
   component: string;
   exact?: boolean;
   isAdmin?: boolean;
+  isOrg?: boolean;
   permissions?: string[];
 }
 
@@ -40,6 +41,7 @@ export interface IDrawerExtension {
   icon: string;
   path: string;
   isAdmin?: boolean;
+  isOrg?: boolean;
   permissions?: string[];
   order?: number;
 }

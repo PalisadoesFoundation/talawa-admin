@@ -32,6 +32,14 @@ Defined in: [src/plugin/types.ts:33](https://github.com/PalisadoesFoundation/tal
 
 ***
 
+### isOrg?
+
+> `optional` **isOrg**: `boolean`
+
+Defined in: [src/plugin/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L34)
+
+***
+
 ### path
 
 > **path**: `string`
@@ -44,7 +52,7 @@ Defined in: [src/plugin/types.ts:30](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **permissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L34)
+Defined in: [src/plugin/types.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L35)
 
 ***
 

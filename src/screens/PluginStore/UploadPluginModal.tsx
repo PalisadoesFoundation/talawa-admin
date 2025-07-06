@@ -166,6 +166,13 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
         },
       });
 
+      // Ensure plugin manager is initialized
+      if (!pluginManager.isSystemInitialized()) {
+        console.warn('Plugin manager not initialized, waiting...');
+        // Wait a bit for initialization
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
       // Load the plugin through plugin manager
       const success = await pluginManager.loadPlugin(manifest.pluginId);
       if (!success) {

@@ -111,8 +111,17 @@ const leftDrawer = ({
   const userPermissions = useMemo(() => [], []);
   const isAdmin = useMemo(() => superAdmin, [superAdmin]);
 
-  // Get plugin drawer items for admin routes
-  const pluginDrawerItems = usePluginDrawerItems(userPermissions, true);
+  // Get all plugin drawer items for admin global (settings only)
+  const allPluginDrawerItems = usePluginDrawerItems(
+    userPermissions,
+    true,
+    false,
+  );
+  // Only show global drawer items (isOrg: false)
+  const pluginDrawerItems = allPluginDrawerItems.filter((item) => {
+    // Only show global items (isOrg: false) in super admin drawer
+    return !item.isOrg;
+  });
 
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(
@@ -142,7 +151,7 @@ const leftDrawer = ({
           'communityProfileBtn',
         )}
 
-        {/* Plugin Routes Section */}
+        {/* Plugin Settings Section */}
         {pluginDrawerItems?.length > 0 && (
           <>
             <h4
@@ -154,7 +163,7 @@ const leftDrawer = ({
                 color: 'var(--bs-secondary)',
               }}
             >
-              {tCommon('plugins')}
+              Plugin Settings
             </h4>
             {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
           </>
@@ -167,6 +176,7 @@ const leftDrawer = ({
       pluginDrawerItems,
       superAdmin,
       t,
+      tCommon,
     ],
   );
 

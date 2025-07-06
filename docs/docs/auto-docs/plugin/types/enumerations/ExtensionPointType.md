@@ -4,7 +4,7 @@
 
 # Enumeration: ExtensionPointType
 
-Defined in: [src/plugin/types.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L98)
+Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L100)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:98](https://github.com/PalisadoesFoundation/tal
 
 > **DRAWER**: `"drawer"`
 
-Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L100)
+Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L102)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/ta
 
 > **ROUTES**: `"routes"`
 
-Defined in: [src/plugin/types.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L99)
+Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L101)

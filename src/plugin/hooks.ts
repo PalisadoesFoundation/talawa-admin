@@ -9,6 +9,7 @@ import { ExtensionPointType, IDrawerExtension, IRouteExtension } from './types';
 export function usePluginDrawerItems(
   userPermissions: string[] = [],
   isAdmin: boolean = false,
+  isOrg?: boolean,
 ): IDrawerExtension[] {
   const [drawerItems, setDrawerItems] = useState<IDrawerExtension[]>([]);
 
@@ -22,6 +23,7 @@ export function usePluginDrawerItems(
         ExtensionPointType.DRAWER,
         userPermissions,
         isAdmin,
+        isOrg,
       );
       setDrawerItems(items);
     };
@@ -45,7 +47,7 @@ export function usePluginDrawerItems(
       pluginManager.off('plugin:status-changed', handlePluginChange);
       pluginManager.off('plugins:initialized', updateDrawerItems);
     };
-  }, [userPermissions, isAdmin]);
+  }, [userPermissions, isAdmin, isOrg]);
 
   return drawerItems;
 }
@@ -56,6 +58,7 @@ export function usePluginDrawerItems(
 export function usePluginRoutes(
   userPermissions: string[] = [],
   isAdmin: boolean = false,
+  isOrg?: boolean,
 ): IRouteExtension[] {
   const [routes, setRoutes] = useState<IRouteExtension[]>([]);
 
@@ -65,6 +68,7 @@ export function usePluginRoutes(
         ExtensionPointType.ROUTES,
         userPermissions,
         isAdmin,
+        isOrg,
       );
 
       setRoutes(routeExtensions);
@@ -87,7 +91,7 @@ export function usePluginRoutes(
       pluginManager.off('plugin:unloaded', handlePluginChange);
       pluginManager.off('plugin:status-changed', handlePluginChange);
     };
-  }, [userPermissions, isAdmin]);
+  }, [userPermissions, isAdmin, isOrg]);
 
   return routes;
 }

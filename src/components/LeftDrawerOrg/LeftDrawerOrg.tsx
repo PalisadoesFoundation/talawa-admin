@@ -32,15 +32,18 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
-import React, { useEffect, useMemo, useState, JSX } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
+import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from './../../style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
+import { usePluginDrawerItems } from 'plugin';
+import type { IDrawerExtension } from 'plugin';
 
 export interface ILeftDrawerProps {
   orgId: string;
@@ -101,6 +104,17 @@ const leftDrawerOrg = ({
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  // Memoize the user permissions and admin status
+  const userPermissions = useMemo(() => [], []);
+  const isAdmin = useMemo(() => true, []); // Organization admins are always admin
+
+  // Get plugin drawer items for org admin (org-specific only)
+  const pluginDrawerItems = usePluginDrawerItems(
+    userPermissions,
+    isAdmin,
+    true,
+  );
+
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
   }>(GET_ORGANIZATION_DATA_PG, {
@@ -135,6 +149,45 @@ const leftDrawerOrg = ({
       setHideDrawer(true);
     }
   };
+
+  // Render a plugin drawer item
+  const renderPluginDrawerItem = useCallback(
+    (item: IDrawerExtension) => (
+      <NavLink
+        to={item.path.replace(':orgId', orgId)}
+        key={item.pluginId}
+        onClick={handleLinkClick}
+      >
+        {({ isActive }) => (
+          <button
+            className={
+              isActive
+                ? styles.leftDrawerActiveButton
+                : styles.leftDrawerInactiveButton
+            }
+          >
+            <div className={styles.iconWrapper}>
+              {item.icon ? (
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  style={{ width: 25, height: 25 }}
+                />
+              ) : (
+                <PluginLogo
+                  fill="none"
+                  fontSize={25}
+                  stroke="var(--sidebar-icon-stroke-inactive)"
+                />
+              )}
+            </div>
+            {item.label}
+          </button>
+        )}
+      </NavLink>
+    ),
+    [orgId, handleLinkClick],
+  );
 
   return (
     <div
@@ -243,6 +296,24 @@ const leftDrawerOrg = ({
               setShowDropdown={setShowDropdown}
             />
           ),
+        )}
+
+        {/* Plugin Routes Section */}
+        {pluginDrawerItems?.length > 0 && (
+          <>
+            <h4
+              className={styles.titleHeader}
+              style={{
+                fontSize: '1.1rem',
+                marginTop: '1.5rem',
+                marginBottom: '0.75rem',
+                color: 'var(--bs-secondary)',
+              }}
+            >
+              {tCommon('plugins')}
+            </h4>
+            {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+          </>
         )}
       </div>
     </div>

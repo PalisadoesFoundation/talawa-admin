@@ -35,8 +35,11 @@ import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
+import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import { usePluginDrawerItems } from 'plugin';
+import type { IDrawerExtension } from 'plugin';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean | null;
@@ -51,11 +54,60 @@ const userSidebar = ({
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
+  // Memoize the parameters to prevent infinite re-renders
+  const userPermissions = React.useMemo(() => [], []);
+  const isAdmin = React.useMemo(() => false, []);
+  const isOrg = React.useMemo(() => false, []);
+
+  // Get plugin drawer items for user global (no orgId required)
+  const pluginDrawerItems = usePluginDrawerItems(
+    userPermissions,
+    isAdmin,
+    isOrg,
+  );
+
   const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
   };
+
+  // Render a plugin drawer item
+  const renderPluginDrawerItem = (item: IDrawerExtension) => (
+    <NavLink to={item.path} key={item.pluginId} onClick={handleLinkClick}>
+      {({ isActive }) => (
+        <Button
+          variant={isActive ? 'success' : ''}
+          style={{
+            backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
+            fontWeight: isActive ? 'bold' : 'normal',
+            color: isActive
+              ? 'var(--sidebar-option-text-active)'
+              : 'var(--sidebar-option-text-inactive)',
+          }}
+        >
+          <div className={styles.iconWrapper}>
+            {item.icon ? (
+              <img
+                src={item.icon}
+                alt={item.label}
+                style={{ width: 25, height: 25 }}
+              />
+            ) : (
+              <PluginLogo
+                stroke={`${
+                  isActive === true
+                    ? 'var(--sidebar-icon-stroke-active)'
+                    : 'var(--sidebar-icon-stroke-inactive)'
+                }`}
+              />
+            )}
+          </div>
+          {item.label}
+        </Button>
+      )}
+    </NavLink>
+  );
 
   return (
     <>
@@ -135,6 +187,24 @@ const userSidebar = ({
                 </Button>
               )}
             </NavLink>
+
+            {/* Plugin Global Features Section */}
+            {pluginDrawerItems?.length > 0 && (
+              <>
+                <h4
+                  className={styles.titleHeader}
+                  style={{
+                    fontSize: '1.1rem',
+                    marginTop: '1.5rem',
+                    marginBottom: '0.75rem',
+                    color: 'var(--bs-secondary)',
+                  }}
+                >
+                  Plugin Settings
+                </h4>
+                {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+              </>
+            )}
           </div>
           <div className="mt-auto">
             <ProfileDropdown />

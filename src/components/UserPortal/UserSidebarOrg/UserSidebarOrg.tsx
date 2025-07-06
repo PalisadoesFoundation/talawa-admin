@@ -82,8 +82,12 @@ const UserSidebarOrg = ({
   const userPermissions = useMemo(() => [], []);
   const isAdmin = useMemo(() => false, []);
 
-  // Get plugin drawer items for user routes
-  const pluginDrawerItems = usePluginDrawerItems(userPermissions, isAdmin);
+  // Get plugin drawer items for user org (org-specific only)
+  const pluginDrawerItems = usePluginDrawerItems(
+    userPermissions,
+    isAdmin,
+    true,
+  );
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {

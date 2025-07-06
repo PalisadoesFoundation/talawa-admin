@@ -136,16 +136,22 @@ async function getPluginManifest(
 function extractComponentNames(manifest: IPluginManifest): Set<string> {
   const componentNames = new Set<string>();
 
+  console.log('=== EXTRACTING COMPONENT NAMES ===');
+  console.log('Plugin manifest:', manifest.pluginId);
+
   if (manifest.extensionPoints?.routes) {
+    console.log('Routes found:', manifest.extensionPoints.routes.length);
     manifest.extensionPoints.routes.forEach((route: IRouteExtension) => {
+      console.log('Route:', route.path, 'Component:', route.component);
       if (route.component) {
         componentNames.add(route.component);
       }
     });
   }
 
-  // Drawer items don't have components, they use the path to determine the component
+  // Handle drawer items
   if (manifest.extensionPoints?.drawer) {
+    console.log('Drawer items found:', manifest.extensionPoints.drawer.length);
     manifest.extensionPoints.drawer.forEach((item: IDrawerExtension) => {
       // Extract component name from path (e.g., /user/plugin-name -> plugin-name)
       const pathParts = item.path.split('/').filter(Boolean);
@@ -155,6 +161,9 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
       }
     });
   }
+
+  console.log('Final component names:', Array.from(componentNames));
+  console.log('=== END EXTRACTING COMPONENT NAMES ===');
 
   return componentNames;
 }
@@ -166,17 +175,22 @@ export async function registerPluginDynamically(
   pluginId: string,
 ): Promise<void> {
   try {
+    console.log(`=== REGISTERING PLUGIN: ${pluginId} ===`);
+
     if (pluginRegistry[pluginId]) {
+      console.log(`Plugin ${pluginId} already registered, skipping`);
       return;
     }
 
     const loadedPlugin = pluginManager.getLoadedPlugin(pluginId);
     if (!loadedPlugin) {
-      console.warn(`Plugin ${pluginId} is not loaded in plugin manager`);
+      console.warn(`Plugin ${pluginId} not found in plugin manager`);
       return;
     }
 
+    console.log(`Plugin status: ${loadedPlugin.status}`);
     if (loadedPlugin.status !== 'active') {
+      console.log(`Plugin ${pluginId} is not active, skipping`);
       return;
     }
 
@@ -189,6 +203,7 @@ export async function registerPluginDynamically(
     const componentNames = extractComponentNames(manifest);
     const components: Record<string, React.ComponentType> = {};
 
+    console.log(`Creating components for: ${Array.from(componentNames)}`);
     componentNames.forEach((componentName) => {
       components[componentName] = createLazyPluginComponent(
         pluginId,
@@ -197,6 +212,11 @@ export async function registerPluginDynamically(
     });
 
     pluginRegistry[pluginId] = components;
+    console.log(
+      `Plugin ${pluginId} registered successfully with components:`,
+      Object.keys(components),
+    );
+    console.log(`=== END REGISTERING PLUGIN: ${pluginId} ===`);
   } catch (error) {
     console.error(`Failed to register plugin '${pluginId}':`, error);
   }
