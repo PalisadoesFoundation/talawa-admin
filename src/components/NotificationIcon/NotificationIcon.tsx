@@ -5,6 +5,8 @@ import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate } from 'react-router-dom';
 import styles from './NotificationIcon.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
+
 interface InterfaceNotification {
   id: string;
   title: string;
@@ -14,14 +16,25 @@ interface InterfaceNotification {
 }
 
 const NotificationIcon = () => {
-  const [notifications, setNotifications] = useState([]);
-  const { data, loading, error } = useQuery(GET_USER_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<InterfaceNotification[]>(
+    [],
+  );
+  const { getItem } = useLocalStorage();
+  const userId = getItem('id');
+  const { loading, error, data } = useQuery(GET_USER_NOTIFICATIONS, {
+    variables: {
+      userId: userId,
+      input: {
+        first: 5,
+        skip: 0,
+      },
+    },
+    skip: !userId,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (data) {
-      setNotifications(data.notifications.slice(0, 5));
-    }
+    setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);
 
   return (
@@ -29,18 +42,34 @@ const NotificationIcon = () => {
       <Dropdown.Toggle
         variant="white"
         id="dropdown-basic"
-        className={styles.colorWhite}
+        className={styles.iconButton}
       >
-        <NotificationsIcon />
+        <NotificationsIcon style={{ color: '#3b3b3b' }} />
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu className={styles.glassMenu}>
         {loading && <Dropdown.Item>Loading...</Dropdown.Item>}
         {error && <Dropdown.Item>Error fetching notifications</Dropdown.Item>}
         {notifications.length > 0 ? (
-          notifications.map((notification: InterfaceNotification) => (
-            <Dropdown.Item key={notification.id}>
-              {notification.body}
+          notifications.map((notification) => (
+            <Dropdown.Item
+              key={notification.id}
+              className={styles.notificationItem}
+              onClick={() =>
+                notification.navigation && navigate(notification.navigation)
+              }
+              style={{
+                cursor: notification.navigation ? 'pointer' : 'default',
+              }}
+            >
+              {!notification.isRead && (
+                <span className={styles.notificationDot} title="Unread" />
+              )}
+              <span className={styles.notificationText}>
+                {notification.body.length > 48
+                  ? notification.body.slice(0, 48) + '...'
+                  : notification.body}
+              </span>
             </Dropdown.Item>
           ))
         ) : (

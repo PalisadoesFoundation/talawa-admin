@@ -8,11 +8,14 @@
 }
 
 .notificationItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-bottom: 2px solid #ddd;
+  margin: 8px 0;
+  padding: 12px 16px;
+  max-width: 900px; /* Limit width */
+  max-height: 64px;
 }
 
 .unread {
@@ -25,7 +28,11 @@
 }
 
 .notificationTitle {
-    font-weight: bold;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350px;
 }
 
 .notificationBody {
@@ -36,4 +43,47 @@
     text-align: center;
     padding: 20px;
     color: #777;
+}
+
+/* Update notificationItem styles */
+.notificationItem {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-bottom: 2px solid #ddd;
+  margin: 8px 0;
+  padding: 12px 16px;
+  max-width: 500px; /* Limit width */
+  min-height: 64px;
+}
+
+/* Add profile placeholder and vertical divider */
+.profileSection {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 16px;
+  background: #e0e7ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1.5px solid #b0b8c1;
+}
+
+.notificationTitle {
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350px;
+}
+
+.notificationBody {
+  color: #555;
+  font-size: 0.95em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 350px;
 }
