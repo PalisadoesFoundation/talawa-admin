@@ -38,7 +38,7 @@ export interface DeletePluginInput {
 }
 
 export const useGetAllPlugins = () => {
-  return useQuery<{ plugins: IPlugin[] }>(GET_ALL_PLUGINS);
+  return useQuery<{ getPlugins: IPlugin[] }>(GET_ALL_PLUGINS);
 };
 
 export const useCreatePlugin = () => {
@@ -73,7 +73,7 @@ export class PluginGraphQLService {
         query: GET_ALL_PLUGINS,
         fetchPolicy: 'cache-first',
       });
-      return result.data?.plugins || [];
+      return result.data?.getPlugins || [];
     } catch (error) {
       console.error('Failed to fetch plugins:', error);
       return [];
