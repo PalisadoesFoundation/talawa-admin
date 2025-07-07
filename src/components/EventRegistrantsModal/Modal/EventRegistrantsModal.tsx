@@ -98,7 +98,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     }
     toast.warn('Adding the attendee...');
     addRegistrantMutation({
-      variables: { userId: member._id, eventId: eventId },
+      variables: { userId: member.id, eventId: eventId },
     })
       .then(() => {
         toast.success(
@@ -163,8 +163,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 }
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
-                key={attendee._id}
-                onDelete={(): void => deleteRegistrant(attendee._id)}
+                key={attendee.id}
+                onDelete={(): void => deleteRegistrant(attendee.id)}
               />
             ))}
           </Stack>

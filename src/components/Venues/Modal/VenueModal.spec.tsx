@@ -20,7 +20,6 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
-import { useMinioUpload } from 'utils/MinioUpload';
 
 // Mock Setup
 const MOCKS = [
@@ -357,7 +356,7 @@ describe('VenueModal', () => {
 
     test('tests undefined description fallback to empty string', async () => {
       // Create a spy to capture the mutation variables
-      const mutationSpy = vi.fn().mockImplementation((operation) => {
+      const mutationSpy = vi.fn().mockImplementation(() => {
         return {
           data: { createVenue: { _id: 'newVenue' } },
         };
@@ -659,7 +658,6 @@ describe('VenueModal', () => {
     });
 
     test('shows error toast when creating preview URL fails', async () => {
-      const originalURL = global.URL;
       const urlConstructorSpy = vi
         .spyOn(global, 'URL')
         .mockImplementation(() => {

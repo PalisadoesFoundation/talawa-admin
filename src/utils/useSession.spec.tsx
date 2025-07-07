@@ -510,7 +510,6 @@ test('should extend session when called directly', async () => {
 
 test('should properly clean up on unmount', () => {
   // Mock window.removeEventListener
-  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
   const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
 
   const { result, unmount } = renderHook(() => useSession(), {

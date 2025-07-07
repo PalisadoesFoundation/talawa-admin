@@ -21,7 +21,6 @@ import type { ApolloLink } from '@apollo/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { vi } from 'vitest';
-import dayjs from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {

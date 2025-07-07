@@ -41,7 +41,7 @@ const TestComponent = ({
       const result = await uploadFileToMinio(file, 'test-org-id');
       setStatus('success');
       onUploadComplete(result);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setStatus('error');
       console.error('Error in file upload process:', error);
     }
@@ -57,7 +57,7 @@ const TestComponent = ({
 
 describe('Minio Upload Integration', (): void => {
   beforeEach(() => {
-    (calculateFileHash as any).mockResolvedValue('mocked-file-hash');
+    (calculateFileHash as jest.Mock).mockResolvedValue('mocked-file-hash');
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,

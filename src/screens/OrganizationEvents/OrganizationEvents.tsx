@@ -119,7 +119,7 @@ function organizationEvents(): JSX.Element {
   const [registrablechecked, setRegistrableChecked] = useState(false);
 
   const [formState, setFormState] = useState({
-    title: '',
+    name: '',
     eventdescrip: '',
     location: '',
     startTime: '08:00:00',
@@ -174,7 +174,7 @@ function organizationEvents(): JSX.Element {
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => ({
     _id: edge.node.id,
-    title: edge.node.name,
+    name: edge.node.name,
     description: edge.node.description || '',
     startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
     endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
@@ -198,7 +198,7 @@ function organizationEvents(): JSX.Element {
   const createEvent = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (
-      formState.title.trim().length > 0 &&
+      formState.name.trim().length > 0 &&
       formState.eventdescrip.trim().length > 0 &&
       formState.location.trim().length > 0
     ) {
@@ -207,7 +207,7 @@ function organizationEvents(): JSX.Element {
         const endTimeParts = formState.endTime.split(':');
 
         const input = {
-          name: formState.title,
+          name: formState.name,
           description: formState.eventdescrip,
           startAt: alldaychecked
             ? dayjs(startDate).startOf('day').toISOString()
@@ -239,7 +239,7 @@ function organizationEvents(): JSX.Element {
           refetchEvents();
           hideCreateEventModal();
           setFormState({
-            title: '',
+            name: '',
             eventdescrip: '',
             location: '',
             startTime: '08:00:00',
@@ -258,8 +258,8 @@ function organizationEvents(): JSX.Element {
         }
       }
     } else {
-      if (formState.title.trim().length === 0)
-        toast.warning('Title can not be blank!');
+      if (formState.name.trim().length === 0)
+        toast.warning('Name can not be blank!');
       if (formState.eventdescrip.trim().length === 0)
         toast.warning('Description can not be blank!');
       if (formState.location.trim().length === 0)
@@ -310,17 +310,18 @@ function organizationEvents(): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={createEvent}>
-            <label htmlFor="eventtitle">{t('eventTitle')}</label>
+            <label htmlFor="eventName">{t('eventName')}</label>
             <Form.Control
               type="title"
               id="eventitle"
-              placeholder={t('enterTitle')}
+              placeholder={t('enterName')}
+              data-testid="eventTitleInput"
               autoComplete="off"
               required
-              value={formState.title}
+              value={formState.name}
               className={styles.inputField}
               onChange={(e): void => {
-                setFormState({ ...formState, title: e.target.value });
+                setFormState({ ...formState, name: e.target.value });
               }}
             />
             <label htmlFor="eventdescrip">{tCommon('description')}</label>
@@ -328,6 +329,7 @@ function organizationEvents(): JSX.Element {
               type="eventdescrip"
               id="eventdescrip"
               placeholder={t('enterDescrip')}
+              data-testid="eventDescriptionInput"
               autoComplete="off"
               required
               value={formState.eventdescrip}
@@ -341,6 +343,7 @@ function organizationEvents(): JSX.Element {
               type="text"
               id="eventLocation"
               placeholder={tCommon('enterLocation')}
+              data-testid="eventLocationInput"
               autoComplete="off"
               required
               value={formState.location}

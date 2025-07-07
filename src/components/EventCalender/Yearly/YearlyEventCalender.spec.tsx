@@ -57,7 +57,7 @@ describe('Calendar Component', () => {
     {
       _id: '1',
       location: 'Test Location',
-      title: 'Test Event',
+      name: 'Test Event',
       description: 'Test Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
@@ -76,7 +76,7 @@ describe('Calendar Component', () => {
     {
       _id: '2',
       location: 'Private Location',
-      title: 'Private Event',
+      name: 'Private Event',
       description: 'Private Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
@@ -288,7 +288,7 @@ describe('Calendar Component', () => {
   it('updates events when props change', async () => {
     const mockEvent = {
       ...mockEventData[0],
-      title: 'Test Event',
+      name: 'Test Event',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
     };
@@ -304,7 +304,7 @@ describe('Calendar Component', () => {
       {
         ...mockEvent,
         _id: '2',
-        title: 'New Test Event',
+        name: 'New Test Event',
       },
     ];
 

@@ -4,8 +4,9 @@ import type { Observer } from '@apollo/client';
 import type { MockedResponse } from '@apollo/react-testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
-import type { FetchResult } from '@apollo/client/link/core';
+import type { FetchResult, Operation } from '@apollo/client/link/core';
 import { equal } from '@wry/equality';
+
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
     handler: (error: unknown, observer?: Observer<FetchResult>) => false | void,
@@ -38,7 +39,56 @@ const sampleQuery = gql`
     }
   }
 `;
+const operation: Operation = {
+  query: sampleQuery,
+  variables: { id: '2' },
+  operationName: 'SampleQuery',
+  extensions: {},
+  setContext: () => {},
+  getContext: () => ({}),
+};
+const oper: Operation = {
+  query: sampleQuery,
+  variables: { id: '1' },
+  operationName: 'SampleQuery',
+  extensions: {},
+  setContext: () => {},
+  getContext: () => ({}),
+};
 
+function createOperation(
+  query: import('graphql').DocumentNode,
+  variables: Record<string, unknown> = {},
+): Operation {
+  return {
+    query,
+    variables,
+    operationName: '', // or extract from query if needed
+    extensions: {},
+    setContext: () => {},
+    getContext: () => ({}),
+  };
+}
+const operation2: Operation = {
+  query: gql`
+    query TestQuery {
+      field
+    }
+  `,
+  variables: {},
+  operationName: 'TestQuery', // Use the actual operation name
+  extensions: {},
+  setContext: () => {},
+  getContext: () => ({}),
+};
+const operation3 = {
+  query: TEST_QUERY,
+  variables: { id: '1' },
+  operationName: 'TestQuery', // or the actual operation name from your query
+  extensions: {},
+  setContext: () => {},
+  getContext: () => ({}),
+};
 const sampleResponse = {
   data: {
     user: {
@@ -93,10 +143,9 @@ describe('StaticMockLink', () => {
     mockLink.addMockedResponse(mockedResponse);
     // This is Mocked Response
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: sampleVariables,
-      });
+      const observable = mockLink.request(
+        createOperation(sampleQuery, sampleVariables),
+      );
 
       observable?.subscribe({
         next: (response) => {
@@ -126,10 +175,9 @@ describe('StaticMockLink', () => {
     let completed = false;
 
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: sampleVariables,
-      });
+      const observable = mockLink.request(
+        createOperation(sampleQuery, sampleVariables),
+      );
 
       observable?.subscribe({
         next: (response) => {
@@ -163,10 +211,9 @@ describe('StaticMockLink', () => {
     mockLink.addMockedResponse(errorResponse);
 
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: sampleVariables,
-      });
+      const observable = mockLink.request(
+        createOperation(sampleQuery, sampleVariables),
+      );
 
       observable?.subscribe({
         error: (error) => {
@@ -198,10 +245,7 @@ describe('StaticMockLink', () => {
     mockLink.addMockedResponse(dynamicResponse);
 
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: { id: '2' }, // Matches the request variables in mocked response
-      });
+      const observable = mockLink.request(operation);
 
       observable?.subscribe({
         next: (response) => {
@@ -228,10 +272,9 @@ describe('StaticMockLink', () => {
   });
   test('should error when no matching response is found', () => {
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: sampleVariables,
-      });
+      const observable = mockLink.request(
+        createOperation(sampleQuery, sampleVariables),
+      );
 
       observable?.subscribe({
         error: (error) => {
@@ -293,11 +336,7 @@ describe('mockSingleLink', () => {
     mockLink.addMockedResponse(mockedResponse);
 
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: { id: '2' }, // Different variables
-      });
-
+      const observable = mockLink.request(operation);
       observable?.subscribe({
         error: (error) => {
           expect(error.message).toContain('No more mocked responses');
@@ -320,10 +359,7 @@ describe('mockSingleLink', () => {
     mockLink.addMockedResponse(mockedResponse);
 
     return new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: sampleQuery,
-        variables: { id: '1' }, // Missing extra field
-      });
+      const observable = mockLink.request(oper);
 
       observable?.subscribe({
         error: (error) => {
@@ -341,14 +377,7 @@ describe('mockSingleLink', () => {
     mockLink.setErrorHandler(handlerSpy);
 
     await new Promise<void>((resolve) => {
-      const observable = mockLink.request({
-        query: gql`
-          query TestQuery {
-            field
-          }
-        `,
-        variables: {},
-      });
+      const observable = mockLink.request(operation2);
 
       observable?.subscribe({
         next: () => {
@@ -376,12 +405,16 @@ describe('mockSingleLink', () => {
 
     const link = new StaticMockLink(mockedResponses);
 
-    const operation = {
+    const operation4 = {
       query: mockQuery,
       variables: {},
+      operationName: '',
+      extensions: {},
+      setContext: () => {},
+      getContext: () => ({}),
     };
 
-    const observable = link.request(operation);
+    const observable = link.request(operation4);
 
     expect(observable).toBeInstanceOf(Observable);
 
@@ -492,15 +525,9 @@ describe('mockSingleLink', () => {
     const mockLink = new StaticMockLink(mockResponses, true);
 
     // Verify responses were added via constructor
-    const observable1 = mockLink.request({
-      query: sampleQuery,
-      variables: { id: '1' },
-    });
+    const observable1 = mockLink.request(oper);
 
-    const observable2 = mockLink.request({
-      query: sampleQuery,
-      variables: { id: '2' },
-    });
+    const observable2 = mockLink.request(operation);
 
     return Promise.all([
       new Promise<void>((resolve) => {
@@ -543,7 +570,11 @@ describe('mockSingleLink', () => {
 
     const observable = mockLink.request({
       query: sampleQuery,
-      // Intentionally omitting variables
+      variables: {},
+      operationName: '',
+      extensions: {},
+      setContext: () => {},
+      getContext: () => ({}),
     });
 
     return new Promise<void>((resolve) => {
@@ -576,10 +607,7 @@ describe('mockSingleLink', () => {
     const link = new StaticMockLink([mockResponse]);
 
     return new Promise<void>((resolve, reject) => {
-      const observable = link.request({
-        query: TEST_QUERY,
-        variables: { id: '1' },
-      });
+      const observable = link.request(operation3);
 
       if (!observable) {
         reject(new Error('Observable is null'));
@@ -616,10 +644,7 @@ describe('mockSingleLink', () => {
     const link = new StaticMockLink([mockResponse]);
 
     return new Promise<void>((resolve, reject) => {
-      const observable = link.request({
-        query: TEST_QUERY,
-        variables: { id: '1' },
-      });
+      const observable = link.request(operation3);
 
       if (!observable) {
         reject(new Error('Observable is null'));
@@ -657,10 +682,7 @@ describe('mockSingleLink', () => {
     const link = new StaticMockLink([mockResponse]);
 
     return new Promise<void>((resolve, reject) => {
-      const observable = link.request({
-        query: TEST_QUERY,
-        variables: { id: '1' },
-      });
+      const observable = link.request(operation3);
 
       if (!observable) {
         reject(new Error('Observable is null'));
@@ -701,10 +723,7 @@ describe('mockSingleLink', () => {
     const startTime = Date.now();
 
     return new Promise<void>((resolve, reject) => {
-      const observable = link.request({
-        query: TEST_QUERY,
-        variables: { id: '1' },
-      });
+      const observable = link.request(operation3);
 
       if (!observable) {
         reject(new Error('Observable is null'));
