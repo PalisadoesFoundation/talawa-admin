@@ -12,6 +12,7 @@ import type {
   IPluginManifest,
   IRouteExtension,
   IDrawerExtension,
+  IInjectorExtension,
 } from './types';
 
 /**
@@ -87,9 +88,19 @@ function createLazyPluginComponent(
 ): React.ComponentType {
   return lazy(async () => {
     try {
-      const componentPath = `./available/${pluginId}/pages/${componentName}`;
-      const module = await import(componentPath);
-      return { default: module.default || module[componentName] };
+      // Use the plugin manager to get the component
+      const component = pluginManager.getPluginComponent(
+        pluginId,
+        componentName,
+      );
+
+      if (component) {
+        return { default: component };
+      } else {
+        throw new Error(
+          `Component ${componentName} not found in plugin ${pluginId}`,
+        );
+      }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -139,32 +150,82 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
   console.log('=== EXTRACTING COMPONENT NAMES ===');
   console.log('Plugin manifest:', manifest.pluginId);
 
-  if (manifest.extensionPoints?.routes) {
-    console.log('Routes found:', manifest.extensionPoints.routes.length);
-    manifest.extensionPoints.routes.forEach((route: IRouteExtension) => {
-      console.log('Route:', route.path, 'Component:', route.component);
-      if (route.component) {
-        componentNames.add(route.component);
-      }
-    });
-  }
+  // Handle all route types
+  const routeArrays = [
+    manifest.extensionPoints?.routes,
+    manifest.extensionPoints?.RA1,
+    manifest.extensionPoints?.RA2,
+    manifest.extensionPoints?.RU1,
+    manifest.extensionPoints?.RU2,
+  ];
 
-  // Handle drawer items
-  if (manifest.extensionPoints?.drawer) {
-    console.log('Drawer items found:', manifest.extensionPoints.drawer.length);
-    manifest.extensionPoints.drawer.forEach((item: IDrawerExtension) => {
-      // Extract component name from path (e.g., /user/plugin-name -> plugin-name)
-      const pathParts = item.path.split('/').filter(Boolean);
-      if (pathParts.length > 0) {
-        const componentName = pathParts[pathParts.length - 1];
-        componentNames.add(componentName);
-      }
-    });
-  }
+  routeArrays.forEach((routes, index) => {
+    if (routes) {
+      const routeType = [
+        'routes',
+        'RA1',
+        'RA2',
+        'RU1',
+        'RU2',
+      ][index];
+      console.log(`${routeType} found:`, routes.length);
+      routes.forEach((route: IRouteExtension) => {
+        console.log('Route:', route.path, 'Component:', route.component);
+        if (route.component) {
+          componentNames.add(route.component);
+        }
+      });
+    }
+  });
 
-  console.log('Final component names:', Array.from(componentNames));
-  console.log('=== END EXTRACTING COMPONENT NAMES ===');
+  // Handle all drawer types
+  const drawerArrays = [
+    manifest.extensionPoints?.drawer,
+    manifest.extensionPoints?.DA1,
+    manifest.extensionPoints?.DA2,
+    manifest.extensionPoints?.DU1,
+    manifest.extensionPoints?.DU2,
+  ];
 
+  drawerArrays.forEach((drawer, index) => {
+    if (drawer) {
+      const drawerType = [
+        'drawer',
+        'DA1',
+        'DA2',
+        'DU1',
+        'DU2',
+      ][index];
+      console.log(`${drawerType} found:`, drawer.length);
+    }
+  });
+
+  // Handle all injector types
+  const injectorArrays = [
+    manifest.extensionPoints?.G1,
+    manifest.extensionPoints?.G2,
+    manifest.extensionPoints?.G3,
+  ];
+
+  injectorArrays.forEach((injectors, index) => {
+    if (injectors) {
+      const injectorType = [
+        'G1',
+        'G2',
+        'G3',
+      ][index];
+      console.log(`${injectorType} found:`, injectors.length);
+      injectors.forEach((injector: IInjectorExtension) => {
+        console.log('Injector:', injector.injector, 'Description:', injector.description);
+        if (injector.injector) {
+          componentNames.add(injector.injector);
+        }
+      });
+    }
+  });
+
+  console.log('=== COMPONENT NAMES EXTRACTED ===');
+  console.log('Component names:', Array.from(componentNames));
   return componentNames;
 }
 
@@ -194,28 +255,21 @@ export async function registerPluginDynamically(
       return;
     }
 
-    const manifest = await getPluginManifest(pluginId);
-    if (!manifest) {
-      console.warn(`No manifest found for plugin: ${pluginId}`);
-      return;
-    }
-
-    const componentNames = extractComponentNames(manifest);
-    const components: Record<string, React.ComponentType> = {};
-
-    console.log(`Creating components for: ${Array.from(componentNames)}`);
-    componentNames.forEach((componentName) => {
-      components[componentName] = createLazyPluginComponent(
-        pluginId,
-        componentName,
+    // Use the components that are already loaded by the plugin manager
+    const components = loadedPlugin.components;
+    
+    console.log(`Components from plugin manager:`, Object.keys(components || {}));
+    
+    if (components && Object.keys(components).length > 0) {
+      pluginRegistry[pluginId] = components;
+      console.log(
+        `Plugin ${pluginId} registered successfully with components:`,
+        Object.keys(components),
       );
-    });
-
-    pluginRegistry[pluginId] = components;
-    console.log(
-      `Plugin ${pluginId} registered successfully with components:`,
-      Object.keys(components),
-    );
+    } else {
+      console.warn(`No components found for plugin ${pluginId}`);
+    }
+    
     console.log(`=== END REGISTERING PLUGIN: ${pluginId} ===`);
   } catch (error) {
     console.error(`Failed to register plugin '${pluginId}':`, error);
@@ -269,7 +323,14 @@ export function getPluginComponent(
   pluginId: string,
   componentName: string,
 ): React.ComponentType | null {
-  return pluginRegistry[pluginId]?.[componentName] || null;
+  // First try the registry
+  const registryComponent = pluginRegistry[pluginId]?.[componentName];
+  if (registryComponent) {
+    return registryComponent;
+  }
+
+  // Fallback to plugin manager
+  return pluginManager.getPluginComponent(pluginId, componentName) || null;
 }
 
 /**

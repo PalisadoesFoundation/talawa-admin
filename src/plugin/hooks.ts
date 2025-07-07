@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import pluginManager from './manager';
-import { ExtensionPointType, IDrawerExtension, IRouteExtension } from './types';
+import { IDrawerExtension, IRouteExtension } from './types';
 
 export function usePluginDrawerItems(
   userPermissions: string[] = [],
@@ -19,12 +19,42 @@ export function usePluginDrawerItems(
     }
 
     const updateDrawerItems = () => {
-      const items = pluginManager.getExtensionPoints(
-        ExtensionPointType.DRAWER,
-        userPermissions,
-        isAdmin,
-        isOrg,
-      );
+      let items: IDrawerExtension[] = [];
+
+      if (isAdmin && !isOrg) {
+        // Admin global
+        items = pluginManager.getExtensionPoints(
+          'DA1',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (isAdmin && isOrg) {
+        // Admin org
+        items = pluginManager.getExtensionPoints(
+          'DA2',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (!isAdmin && isOrg) {
+        // User org
+        items = pluginManager.getExtensionPoints(
+          'DU1',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (!isAdmin && !isOrg) {
+        // User global
+        items = pluginManager.getExtensionPoints(
+          'DU2',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      }
+
       setDrawerItems(items);
     };
 
@@ -64,12 +94,41 @@ export function usePluginRoutes(
 
   useEffect(() => {
     const updateRoutes = () => {
-      const routeExtensions = pluginManager.getExtensionPoints(
-        ExtensionPointType.ROUTES,
-        userPermissions,
-        isAdmin,
-        isOrg,
-      );
+      let routeExtensions: IRouteExtension[] = [];
+
+      if (isAdmin && !isOrg) {
+        // Admin global
+        routeExtensions = pluginManager.getExtensionPoints(
+          'RA1',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (isAdmin && isOrg) {
+        // Admin org
+        routeExtensions = pluginManager.getExtensionPoints(
+          'RA2',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (!isAdmin && isOrg) {
+        // User org
+        routeExtensions = pluginManager.getExtensionPoints(
+          'RU1',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      } else if (!isAdmin && !isOrg) {
+        // User global
+        routeExtensions = pluginManager.getExtensionPoints(
+          'RU2',
+          userPermissions,
+          isAdmin,
+          isOrg,
+        );
+      }
 
       setRoutes(routeExtensions);
     };
@@ -120,4 +179,46 @@ export function useLoadedPlugins() {
   }, []);
 
   return plugins;
+}
+
+/**
+ * Hook to get plugin injector extensions
+ */
+export function usePluginInjectors(
+  injectorType: 'G1' | 'G2' | 'G3' = 'G1',
+): any[] {
+  const [injectors, setInjectors] = useState<any[]>([]);
+
+  useEffect(() => {
+    const updateInjectors = () => {
+      const injectorExtensions = pluginManager.getExtensionPoints(
+        injectorType,
+        [],
+        false,
+        false,
+      );
+
+      setInjectors(injectorExtensions);
+    };
+
+    // Initial load
+    updateInjectors();
+
+    // Listen for plugin changes
+    const handlePluginChange = () => {
+      updateInjectors();
+    };
+
+    pluginManager.on('plugin:loaded', handlePluginChange);
+    pluginManager.on('plugin:unloaded', handlePluginChange);
+    pluginManager.on('plugin:status-changed', handlePluginChange);
+
+    return () => {
+      pluginManager.off('plugin:loaded', handlePluginChange);
+      pluginManager.off('plugin:unloaded', handlePluginChange);
+      pluginManager.off('plugin:status-changed', handlePluginChange);
+    };
+  }, [injectorType]);
+
+  return injectors;
 }

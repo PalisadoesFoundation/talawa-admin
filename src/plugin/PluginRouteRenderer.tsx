@@ -21,6 +21,11 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
   route,
   fallback = <div>Loading plugin...</div>,
 }) => {
+  console.log(`=== PLUGIN ROUTE RENDERER ===`);
+  console.log(`Route:`, route);
+  console.log(`Plugin ID:`, route.pluginId);
+  console.log(`Component:`, route.component);
+
   // Check if plugin is registered
   if (!isPluginRegistered(route.pluginId)) {
     console.error(`Plugin '${route.pluginId}' not found in plugin registry`);
@@ -52,6 +57,9 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
   // Get the plugin components
   const pluginComponents = getPluginComponents(route.pluginId);
 
+  console.log(`Plugin components:`, pluginComponents);
+  console.log(`Available components:`, Object.keys(pluginComponents || {}));
+
   if (!pluginComponents) {
     console.error(`No components found for plugin '${route.pluginId}'`);
     return (
@@ -77,6 +85,8 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
 
   // Get the specific component for this route
   const PluginComponent = pluginComponents[route.component];
+
+  console.log(`Found component:`, PluginComponent);
 
   if (!PluginComponent) {
     console.error(
@@ -108,6 +118,8 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
       </div>
     );
   }
+
+  console.log(`=== END PLUGIN ROUTE RENDERER ===`);
 
   return (
     <Suspense fallback={fallback}>

@@ -49,3 +49,6 @@ export {
   registerPluginDynamically,
   discoverAndRegisterAllPlugins,
 } from './registry';
+
+export { default as PluginInjector } from './components/PluginInjector';
+export { usePluginInjectors } from './hooks';

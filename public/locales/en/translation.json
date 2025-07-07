@@ -106,6 +106,7 @@
   "leftDrawer": {
     "my organizations": "Organizations",
     "plugin store": "Plugin Store",
+    "pluginSettings": "Plugin Settings",
     "requests": "Membership Requests",
     "communityProfile": "Community Profile",
     "talawaAdminPortal": "talawaAdminPortal",
@@ -133,6 +134,7 @@
     "menu": "menu",
     "talawa_portal": "talawa_portal",
     "settings": "settings",
+    "plugins": "Plugins",
     "logout": "logout",
     "close": "close"
   },

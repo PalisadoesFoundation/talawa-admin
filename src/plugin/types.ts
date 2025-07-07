@@ -23,27 +23,45 @@ export interface IPluginManifest {
 export interface IExtensionPoints {
   routes?: IRouteExtension[];
   drawer?: IDrawerExtension[];
+  // Route extensions with descriptive IDs and descriptions
+  RA1?: IRouteExtension[]; // Route Admin Global - Routes accessible to global admins
+  RA2?: IRouteExtension[]; // Route Admin Org - Routes accessible to organization admins
+  RU1?: IRouteExtension[]; // Route User Org - Routes accessible to organization users
+  RU2?: IRouteExtension[]; // Route User Global - Routes accessible to global users
+  // Drawer extensions with descriptive IDs and descriptions
+  DA1?: IDrawerExtension[]; // Drawer Admin Global - Drawer items for global admins
+  DA2?: IDrawerExtension[]; // Drawer Admin Org - Drawer items for organization admins
+  DU1?: IDrawerExtension[]; // Drawer User Org - Drawer items for organization users
+  DU2?: IDrawerExtension[]; // Drawer User Global - Drawer items for global users
+  // Injector extensions with descriptive IDs and descriptions
+  G1?: IInjectorExtension[]; // General Injector 1 - Code injection for general components
+  G2?: IInjectorExtension[]; // General Injector 2 - Code injection for general components
+  G3?: IInjectorExtension[]; // General Injector 3 - Code injection for general components
 }
 
 export interface IRouteExtension {
-  pluginId: string;
+  pluginId?: string; // Optional in manifest, injected by plugin manager
   path: string;
   component: string;
   exact?: boolean;
-  isAdmin?: boolean;
-  isOrg?: boolean;
   permissions?: string[];
 }
 
 export interface IDrawerExtension {
-  pluginId: string;
+  pluginId?: string; // Optional in manifest, injected by plugin manager
   label: string;
   icon: string;
   path: string;
-  isAdmin?: boolean;
-  isOrg?: boolean;
   permissions?: string[];
   order?: number;
+}
+
+export interface IInjectorExtension {
+  pluginId?: string; // Optional in manifest, injected by plugin manager
+  injector: string; // Component name to inject
+  description?: string; // Description of what this injector does
+  target?: string; // Optional target identifier for specific injection points
+  order?: number; // Optional display order
 }
 
 // Plugin Store Types
@@ -88,6 +106,20 @@ export interface ILoadedPlugin {
 export interface IExtensionRegistry {
   routes: IRouteExtension[];
   drawer: IDrawerExtension[];
+  // Route extensions with descriptive IDs
+  RA1: IRouteExtension[]; // Route Admin Global
+  RA2: IRouteExtension[]; // Route Admin Org
+  RU1: IRouteExtension[]; // Route User Org
+  RU2: IRouteExtension[]; // Route User Global
+  // Drawer extensions with descriptive IDs
+  DA1: IDrawerExtension[]; // Drawer Admin Global
+  DA2: IDrawerExtension[]; // Drawer Admin Org
+  DU1: IDrawerExtension[]; // Drawer User Org
+  DU2: IDrawerExtension[]; // Drawer User Global
+  // Injector extensions with descriptive IDs
+  G1: IInjectorExtension[]; // General Injector 1
+  G2: IInjectorExtension[]; // General Injector 2
+  G3: IInjectorExtension[]; // General Injector 3
 }
 
 // Enums
