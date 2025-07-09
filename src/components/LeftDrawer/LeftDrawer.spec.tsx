@@ -114,13 +114,13 @@ describe('LeftDrawer Component', () => {
   it('applies correct styles when drawer is hidden', () => {
     renderComponent({ ...defaultProps, hideDrawer: true });
     const element = screen.getByTestId('leftDrawerContainer');
-    expect(element.className).toContain('collapsedDrawer');
+    expect(element.className).toContain('inactiveDrawer');
   });
 
   it('applies correct styles when drawer is visible', () => {
     renderComponent({ ...defaultProps, hideDrawer: false });
     const element = screen.getByTestId('leftDrawerContainer');
-    expect(element.className).toContain('expandedDrawer');
+    expect(element.className).toContain('activeDrawer');
   });
 
   it('handles mobile view navigation button clicks', () => {
@@ -171,7 +171,7 @@ describe('LeftDrawer Component', () => {
     fireEvent.click(organizationsButton);
     const leftDrawerContainer = screen.getByTestId('leftDrawerContainer');
 
-    expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
+    expect(leftDrawerContainer).toHaveClass(styles.activeDrawer);
   });
 
   it('hides drawer on mobile view for all navigation buttons', () => {
@@ -248,134 +248,7 @@ describe('LeftDrawer Component', () => {
     expect(profileButton.textContent).toContain('communityProfile');
   });
 
-  it('toggles drawer when Enter key is pressed on toggle button', () => {
-    const setHideDrawer = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-    fireEvent.keyDown(toggleButton, { key: 'Enter' });
-
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
-  });
-
-  it('toggles drawer when Space key is pressed on toggle button', () => {
-    const setHideDrawer = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-    fireEvent.keyDown(toggleButton, { key: ' ' });
-
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
-  });
-  it('does not toggle drawer when other keys are pressed on toggle button', () => {
-    const setHideDrawer = vi.fn();
-
-    Object.defineProperty(window, 'innerWidth', {
-      writable: true,
-      configurable: true,
-      value: 1024,
-    });
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    // Clear any calls that might have happened during render/useEffect
-    setHideDrawer.mockClear();
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-
-    // Test various keys that should NOT trigger the toggle
-    fireEvent.keyDown(toggleButton, { key: 'Escape' });
-    fireEvent.keyDown(toggleButton, { key: 'Tab' });
-    fireEvent.keyDown(toggleButton, { key: 'ArrowDown' });
-    fireEvent.keyDown(toggleButton, { key: 'a' });
-
-    expect(setHideDrawer).not.toHaveBeenCalled();
-  });
-  it('handles keyboard accessibility correctly', () => {
-    const setHideDrawer = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-
-    // Verify the button has proper attributes
-    expect(toggleButton).toHaveAttribute('role', 'button');
-    expect(toggleButton).toHaveAttribute('tabIndex', '0');
-
-    // Test that Enter and Space both work for keyboard interaction
-    fireEvent.keyDown(toggleButton, { key: 'Enter' });
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
-
-    setHideDrawer.mockClear();
-
-    fireEvent.keyDown(toggleButton, { key: ' ' });
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
-  });
-
-  it('toggles drawer state correctly with keyboard interactions', () => {
-    const setHideDrawer = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={true} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-
-    // When hideDrawer is true, pressing Enter should call setHideDrawer(false)
-    fireEvent.keyDown(toggleButton, { key: 'Enter' });
-    expect(setHideDrawer).toHaveBeenCalledWith(false);
-
-    setHideDrawer.mockClear();
-
-    // Test with Space key
-    fireEvent.keyDown(toggleButton, { key: ' ' });
-    expect(setHideDrawer).toHaveBeenCalledWith(false);
-  });
-
-  it('toggles drawer with click interaction', () => {
-    const setHideDrawer = vi.fn();
-
-    render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-
-    const toggleButton = screen.getByTestId('toggleBtn');
-    fireEvent.click(toggleButton);
-
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
-  });
+  // Note: Toggle button functionality has been moved to separate components
+  // (e.g., SidebarToggle) and is no longer part of the drawer components
+  // due to plugin system modifications
 });

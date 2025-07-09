@@ -4,7 +4,7 @@
 
 # Class: ExtensionRegistryManager
 
-Defined in: src/plugin/managers/extension-registry.ts:12
+Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L12)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: src/plugin/managers/extension-registry.ts:12
 
 > **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
-Defined in: src/plugin/managers/extension-registry.ts:232
+Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L232)
 
 #### Type Parameters
 
@@ -58,7 +58,7 @@ Defined in: src/plugin/managers/extension-registry.ts:232
 
 > **getExtensionRegistry**(): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
 
-Defined in: src/plugin/managers/extension-registry.ts:29
+Defined in: [src/plugin/managers/extension-registry.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L29)
 
 #### Returns
 
@@ -70,7 +70,7 @@ Defined in: src/plugin/managers/extension-registry.ts:29
 
 > **registerExtensionPoints**(`pluginId`, `manifest`): `void`
 
-Defined in: src/plugin/managers/extension-registry.ts:33
+Defined in: [src/plugin/managers/extension-registry.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L33)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: src/plugin/managers/extension-registry.ts:33
 
 > **unregisterExtensionPoints**(`pluginId`): `void`
 
-Defined in: src/plugin/managers/extension-registry.ts:226
+Defined in: [src/plugin/managers/extension-registry.ts:226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L226)
 
 #### Parameters
 
