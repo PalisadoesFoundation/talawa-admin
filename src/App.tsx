@@ -8,7 +8,7 @@ import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/Organiza
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
-import pluginManager from 'plugin/manager';
+import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 
@@ -166,10 +166,10 @@ function App(): React.ReactElement {
     const initializePlugins = async () => {
       try {
         // Set Apollo client for plugin manager
-        pluginManager.setApolloClient(apolloClient);
+        getPluginManager().setApolloClient(apolloClient);
 
         // Initialize plugin manager
-        await pluginManager.initializePluginSystem();
+        await getPluginManager().initializePluginSystem();
 
         // Import and initialize plugin registry
         const { discoverAndRegisterAllPlugins } = await import(

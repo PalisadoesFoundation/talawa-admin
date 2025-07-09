@@ -7,7 +7,7 @@
  */
 
 import React, { lazy } from 'react';
-import pluginManager from './manager';
+import { getPluginManager } from './manager';
 import type {
   IPluginManifest,
   IRouteExtension,
@@ -89,7 +89,7 @@ function createLazyPluginComponent(
   return lazy(async () => {
     try {
       // Use the plugin manager to get the component
-      const component = pluginManager.getPluginComponent(
+      const component = getPluginManager().getPluginComponent(
         pluginId,
         componentName,
       );
@@ -232,7 +232,7 @@ export async function registerPluginDynamically(
       return;
     }
 
-    const loadedPlugin = pluginManager.getLoadedPlugin(pluginId);
+    const loadedPlugin = getPluginManager().getLoadedPlugin(pluginId);
     if (!loadedPlugin) {
       console.warn(`Plugin ${pluginId} not found in plugin manager`);
       return;
@@ -273,7 +273,7 @@ export async function registerPluginDynamically(
  */
 export async function discoverAndRegisterAllPlugins(): Promise<void> {
   try {
-    const loadedPlugins = pluginManager.getLoadedPlugins();
+    const loadedPlugins = getPluginManager().getLoadedPlugins();
 
     if (!loadedPlugins?.length) {
       console.warn('No plugins loaded in plugin manager');
@@ -322,7 +322,7 @@ export function getPluginComponent(
   }
 
   // Fallback to plugin manager
-  return pluginManager.getPluginComponent(pluginId, componentName) || null;
+  return getPluginManager().getPluginComponent(pluginId, componentName) || null;
 }
 
 /**

@@ -9,7 +9,7 @@ import { FaUpload, FaExclamationTriangle } from 'react-icons/fa';
 import JSZip from 'jszip';
 import { useCreatePlugin } from '../../plugin/graphql-service';
 import { toast } from 'react-toastify';
-import pluginManager from '../../plugin/manager';
+import { getPluginManager } from '../../plugin/manager';
 
 interface UploadPluginModalProps {
   show: boolean;
@@ -167,14 +167,14 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
       });
 
       // Ensure plugin manager is initialized
-      if (!pluginManager.isSystemInitialized()) {
+      if (!getPluginManager().isSystemInitialized()) {
         console.warn('Plugin manager not initialized, waiting...');
         // Wait a bit for initialization
         await new Promise((resolve) => setTimeout(resolve, 1000));
       }
 
       // Load the plugin through plugin manager
-      const success = await pluginManager.loadPlugin(manifest.pluginId);
+      const success = await getPluginManager().loadPlugin(manifest.pluginId);
       if (!success) {
         throw new Error('Failed to load plugin');
       }

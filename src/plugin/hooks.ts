@@ -3,7 +3,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import pluginManager from './manager';
+import { getPluginManager } from './manager';
 import { IDrawerExtension, IRouteExtension } from './types';
 
 export function usePluginDrawerItems(
@@ -14,7 +14,7 @@ export function usePluginDrawerItems(
   const [drawerItems, setDrawerItems] = useState<IDrawerExtension[]>([]);
 
   useEffect(() => {
-    if (!pluginManager.isSystemInitialized()) {
+    if (!getPluginManager().isSystemInitialized()) {
       return;
     }
 
@@ -23,7 +23,7 @@ export function usePluginDrawerItems(
 
       if (isAdmin && !isOrg) {
         // Admin global
-        items = pluginManager.getExtensionPoints(
+        items = getPluginManager().getExtensionPoints(
           'DA1',
           userPermissions,
           isAdmin,
@@ -31,7 +31,7 @@ export function usePluginDrawerItems(
         );
       } else if (isAdmin && isOrg) {
         // Admin org
-        items = pluginManager.getExtensionPoints(
+        items = getPluginManager().getExtensionPoints(
           'DA2',
           userPermissions,
           isAdmin,
@@ -39,7 +39,7 @@ export function usePluginDrawerItems(
         );
       } else if (!isAdmin && isOrg) {
         // User org
-        items = pluginManager.getExtensionPoints(
+        items = getPluginManager().getExtensionPoints(
           'DU1',
           userPermissions,
           isAdmin,
@@ -47,7 +47,7 @@ export function usePluginDrawerItems(
         );
       } else if (!isAdmin && !isOrg) {
         // User global
-        items = pluginManager.getExtensionPoints(
+        items = getPluginManager().getExtensionPoints(
           'DU2',
           userPermissions,
           isAdmin,
@@ -66,16 +66,16 @@ export function usePluginDrawerItems(
       updateDrawerItems();
     };
 
-    pluginManager.on('plugin:loaded', handlePluginChange);
-    pluginManager.on('plugin:unloaded', handlePluginChange);
-    pluginManager.on('plugin:status-changed', handlePluginChange);
-    pluginManager.on('plugins:initialized', updateDrawerItems);
+    getPluginManager().on('plugin:loaded', handlePluginChange);
+    getPluginManager().on('plugin:unloaded', handlePluginChange);
+    getPluginManager().on('plugin:status-changed', handlePluginChange);
+    getPluginManager().on('plugins:initialized', updateDrawerItems);
 
     return () => {
-      pluginManager.off('plugin:loaded', handlePluginChange);
-      pluginManager.off('plugin:unloaded', handlePluginChange);
-      pluginManager.off('plugin:status-changed', handlePluginChange);
-      pluginManager.off('plugins:initialized', updateDrawerItems);
+      getPluginManager().off('plugin:loaded', handlePluginChange);
+      getPluginManager().off('plugin:unloaded', handlePluginChange);
+      getPluginManager().off('plugin:status-changed', handlePluginChange);
+      getPluginManager().off('plugins:initialized', updateDrawerItems);
     };
   }, [userPermissions, isAdmin, isOrg]);
 
@@ -98,7 +98,7 @@ export function usePluginRoutes(
 
       if (isAdmin && !isOrg) {
         // Admin global
-        routeExtensions = pluginManager.getExtensionPoints(
+        routeExtensions = getPluginManager().getExtensionPoints(
           'RA1',
           userPermissions,
           isAdmin,
@@ -106,7 +106,7 @@ export function usePluginRoutes(
         );
       } else if (isAdmin && isOrg) {
         // Admin org
-        routeExtensions = pluginManager.getExtensionPoints(
+        routeExtensions = getPluginManager().getExtensionPoints(
           'RA2',
           userPermissions,
           isAdmin,
@@ -114,7 +114,7 @@ export function usePluginRoutes(
         );
       } else if (!isAdmin && isOrg) {
         // User org
-        routeExtensions = pluginManager.getExtensionPoints(
+        routeExtensions = getPluginManager().getExtensionPoints(
           'RU1',
           userPermissions,
           isAdmin,
@@ -122,7 +122,7 @@ export function usePluginRoutes(
         );
       } else if (!isAdmin && !isOrg) {
         // User global
-        routeExtensions = pluginManager.getExtensionPoints(
+        routeExtensions = getPluginManager().getExtensionPoints(
           'RU2',
           userPermissions,
           isAdmin,
@@ -141,14 +141,14 @@ export function usePluginRoutes(
       updateRoutes();
     };
 
-    pluginManager.on('plugin:loaded', handlePluginChange);
-    pluginManager.on('plugin:unloaded', handlePluginChange);
-    pluginManager.on('plugin:status-changed', handlePluginChange);
+    getPluginManager().on('plugin:loaded', handlePluginChange);
+    getPluginManager().on('plugin:unloaded', handlePluginChange);
+    getPluginManager().on('plugin:status-changed', handlePluginChange);
 
     return () => {
-      pluginManager.off('plugin:loaded', handlePluginChange);
-      pluginManager.off('plugin:unloaded', handlePluginChange);
-      pluginManager.off('plugin:status-changed', handlePluginChange);
+      getPluginManager().off('plugin:loaded', handlePluginChange);
+      getPluginManager().off('plugin:unloaded', handlePluginChange);
+      getPluginManager().off('plugin:status-changed', handlePluginChange);
     };
   }, [userPermissions, isAdmin, isOrg]);
 
@@ -159,22 +159,22 @@ export function usePluginRoutes(
  * Hook to get all loaded plugins with their status
  */
 export function useLoadedPlugins() {
-  const [plugins, setPlugins] = useState(pluginManager.getLoadedPlugins());
+  const [plugins, setPlugins] = useState(getPluginManager().getLoadedPlugins());
 
   useEffect(() => {
     const updatePlugins = () => {
-      setPlugins(pluginManager.getLoadedPlugins());
+      setPlugins(getPluginManager().getLoadedPlugins());
     };
 
     // Listen for plugin changes
-    pluginManager.on('plugin:loaded', updatePlugins);
-    pluginManager.on('plugin:unloaded', updatePlugins);
-    pluginManager.on('plugin:status-changed', updatePlugins);
+    getPluginManager().on('plugin:loaded', updatePlugins);
+    getPluginManager().on('plugin:unloaded', updatePlugins);
+    getPluginManager().on('plugin:status-changed', updatePlugins);
 
     return () => {
-      pluginManager.off('plugin:loaded', updatePlugins);
-      pluginManager.off('plugin:unloaded', updatePlugins);
-      pluginManager.off('plugin:status-changed', updatePlugins);
+      getPluginManager().off('plugin:loaded', updatePlugins);
+      getPluginManager().off('plugin:unloaded', updatePlugins);
+      getPluginManager().off('plugin:status-changed', updatePlugins);
     };
   }, []);
 
@@ -191,7 +191,7 @@ export function usePluginInjectors(
 
   useEffect(() => {
     const updateInjectors = () => {
-      const injectorExtensions = pluginManager.getExtensionPoints(
+      const injectorExtensions = getPluginManager().getExtensionPoints(
         injectorType,
         [],
         false,
@@ -209,14 +209,14 @@ export function usePluginInjectors(
       updateInjectors();
     };
 
-    pluginManager.on('plugin:loaded', handlePluginChange);
-    pluginManager.on('plugin:unloaded', handlePluginChange);
-    pluginManager.on('plugin:status-changed', handlePluginChange);
+    getPluginManager().on('plugin:loaded', handlePluginChange);
+    getPluginManager().on('plugin:unloaded', handlePluginChange);
+    getPluginManager().on('plugin:status-changed', handlePluginChange);
 
     return () => {
-      pluginManager.off('plugin:loaded', handlePluginChange);
-      pluginManager.off('plugin:unloaded', handlePluginChange);
-      pluginManager.off('plugin:status-changed', handlePluginChange);
+      getPluginManager().off('plugin:loaded', handlePluginChange);
+      getPluginManager().off('plugin:unloaded', handlePluginChange);
+      getPluginManager().off('plugin:status-changed', handlePluginChange);
     };
   }, [injectorType]);
 

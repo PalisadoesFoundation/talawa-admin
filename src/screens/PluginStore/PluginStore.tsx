@@ -20,7 +20,7 @@ import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
 import SortingButton from 'subComponents/SortingButton';
 import { useLoadedPlugins } from 'plugin/hooks';
-import pluginManager from 'plugin/manager';
+import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
 import {
   useGetAllPlugins,
@@ -280,7 +280,7 @@ export default function PluginStore() {
       }
 
       // Use plugin manager to load the plugin
-      const success = await pluginManager.loadPlugin(plugin.id);
+      const success = await getPluginManager().loadPlugin(plugin.id);
       if (!success) {
         throw new Error('Failed to load plugin');
       }
@@ -317,7 +317,10 @@ export default function PluginStore() {
       }
 
       // Update plugin manager status
-      const success = await pluginManager.togglePluginStatus(plugin.id, status);
+      const success = await getPluginManager().togglePluginStatus(
+        plugin.id,
+        status,
+      );
       if (!success) {
         throw new Error('Failed to toggle plugin status');
       }
@@ -371,7 +374,9 @@ export default function PluginStore() {
       }
 
       // Unload from plugin manager
-      const success = await pluginManager.unloadPlugin(pluginToUninstall.id);
+      const success = await getPluginManager().unloadPlugin(
+        pluginToUninstall.id,
+      );
       if (!success) {
         throw new Error('Failed to uninstall plugin');
       }
