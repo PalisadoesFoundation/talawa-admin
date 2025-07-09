@@ -4,9 +4,8 @@
 
 import { IPluginManifest, IDrawerExtension } from './types';
 
-export function validatePluginManifest(
-  manifest: any,
-): manifest is IPluginManifest {
+export function validatePluginManifest(manifest: any): boolean {
+  if (!manifest || typeof manifest !== 'object') return false;
   const hasBasicFields =
     typeof manifest === 'object' &&
     typeof manifest.name === 'string' &&

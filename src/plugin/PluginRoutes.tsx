@@ -25,6 +25,7 @@ const PluginRoutes: React.FC<PluginRoutesProps> = ({
   fallback = <div>Loading plugin...</div>,
 }) => {
   const routes = usePluginRoutes(userPermissions, isAdmin);
+  const safeRoutes = Array.isArray(routes) ? routes : [];
 
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
@@ -89,7 +90,7 @@ const PluginRoutes: React.FC<PluginRoutesProps> = ({
     );
   };
 
-  return <>{routes.map(renderPluginRoute)}</>;
+  return <>{safeRoutes.map(renderPluginRoute)}</>;
 };
 
 export default PluginRoutes;
