@@ -119,5 +119,5 @@ export type TestMock = {
     };
   };
   error?: Error;
-  newData?: () => FetchResult<Record<string, any>>;
+  newData?: () => FetchResult<Record<string, unknown>>;
 };

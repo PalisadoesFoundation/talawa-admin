@@ -4,38 +4,31 @@
  * details, and other settings. It also includes responsive behavior for different
  * screen sizes.
  *
- * @component
- *
  * @remarks
  * - Utilizes Apollo Client for GraphQL queries and mutations.
  * - Includes form validation for fields like password strength and file upload restrictions.
  * - Provides a responsive layout with a collapsible sidebar.
  * - Displays toast notifications for success and error messages.
  *
- * @requires
+ * ### Requirements
  * - `react`, `react-i18next` for translations.
  * - `react-bootstrap` for UI components.
  * - `@apollo/client` for GraphQL integration.
  * - `react-toastify` for toast notifications.
  * - Custom utilities like `useLocalStorage`, `urlToFile`, and `validatePassword`.
  *
+ * ### Internal Details
+ * - Handles window resize events to toggle the sidebar visibility.
+ * - Fetches current user data using the `CURRENT_USER` query.
+ * - Updates user details using the `UPDATE_CURRENT_USER_MUTATION` mutation.
+ * - TODO: Integrate `EventsAttendedByUser` component once event queries are functional.
+ *
+ * @returns A JSX.Element representing the rendered settings page.
+ *
  * @example
  * ```tsx
  * <Settings />
  * ```
- *
- * @returns {JSX.Element} The rendered settings page.
- *
- * @function
- * @name Settings
- *
- * @internal
- * - Handles window resize events to toggle the sidebar visibility.
- * - Fetches current user data using the `CURRENT_USER` query.
- * - Updates user details using the `UPDATE_CURRENT_USER_MUTATION` mutation.
- *
- * @todo
- * - Integrate `EventsAttendedByUser` component once event queries are functional.
  */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,17 +43,16 @@ import useLocalStorage from 'utils/useLocalstorage';
 import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { urlToFile } from 'utils/urlToFile';
-import SidebarToggle from './SideToggle/SideToggle';
 import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
 
-export default function Settings(): JSX.Element {
+export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const originalImageState = React.useRef<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -253,16 +245,15 @@ export default function Settings(): JSX.Element {
 
   return (
     <>
-      <SidebarToggle hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+          hideDrawer ? styles.expand : styles.contract
         }`}
+        style={{
+          marginLeft: hideDrawer ? '100px' : '20px',
+          paddingTop: '20px',
+        }}
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />

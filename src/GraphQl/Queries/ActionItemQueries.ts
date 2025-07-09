@@ -13,116 +13,81 @@ import gql from 'graphql-tag';
 
 export const ACTION_ITEM_LIST = gql`
   query ActionItemsByOrganization(
-    $organizationId: ID!
-    $eventId: ID
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
+    $input: QueryActionItemsByOrganizationInput!
   ) {
-    actionItemsByOrganization(
-      organizationId: $organizationId
-      eventId: $eventId
-      orderBy: $orderBy
-      where: $where
-    ) {
-      _id
+    actionItemsByOrganization(input: $input) {
+      id
       assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assigneeGroup {
-        _id
+        id
         name
       }
-      assigneeUser {
-        _id
-        firstName
-        lastName
-        image
-      }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
+      category {
+        id
         name
       }
-      preCompletionNotes
-      postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
       event {
-        _id
-        title
+        id
+        name
+      }
+      organization {
+        id
+        name
       }
       creator {
-        _id
-        firstName
-        lastName
+        id
+        name
       }
-      allottedHours
+      updater {
+        id
+        name
+      }
+      assignedAt
+      completionAt
+      createdAt
+      isCompleted
+      preCompletionNotes
+      postCompletionNotes
     }
   }
 `;
 
 export const ACTION_ITEMS_BY_USER = gql`
-  query ActionItemsByUser(
-    $userId: ID!
-    $where: ActionItemWhereInput
-    $orderBy: ActionItemsOrderByInput
-  ) {
-    actionItemsByUser(userId: $userId, where: $where, orderBy: $orderBy) {
-      _id
-      assignee {
-        _id
-        user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assigneeGroup {
-        _id
-        name
-      }
-      assigneeType
-      assigner {
-        _id
-        firstName
-        lastName
-        image
-      }
-      actionItemCategory {
-        _id
-        name
-      }
+  query ActionItemsByUser($input: QueryActionItemsByUserInput!) {
+    actionItemsByUser(input: $input) {
+      id
+      isCompleted
+      assignedAt
+      completionAt
       preCompletionNotes
       postCompletionNotes
-      assignmentDate
-      dueDate
-      completionDate
-      isCompleted
-      event {
-        _id
-        title
+      createdAt
+      assignee {
+        id
+        name
       }
       creator {
-        _id
-        firstName
-        lastName
+        id
+        name
       }
-      allottedHours
+      updater {
+        id
+        name
+      }
+      category {
+        id
+        name
+        description
+      }
+      event {
+        id
+
+        description
+      }
+      organization {
+        id
+        name
+        description
+      }
     }
   }
 `;

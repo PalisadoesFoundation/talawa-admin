@@ -66,13 +66,13 @@ Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoun
 
 > **location**: `string`
 
+#### name
+
+> **name**: `string`
+
 #### startTime
 
 > **startTime**: `string`
-
-#### title
-
-> **title**: `string`
 
 ***
 
@@ -194,11 +194,11 @@ Defined in: [src/types/Event/interface.ts:149](https://github.com/PalisadoesFoun
 
 `string`
 
-###### startTime
+###### name
 
 `string`
 
-###### title
+###### startTime
 
 `string`
 

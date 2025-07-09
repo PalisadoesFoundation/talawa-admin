@@ -4,6 +4,6 @@
 
 # Type Alias: EventOrderByInput
 
-> **EventOrderByInput** = *typeof* [`EventOrderByInput`](../variables/EventOrderByInput.md)\[keyof *typeof* [`EventOrderByInput`](../variables/EventOrderByInput.md)\]
+> **EventOrderByInput** = *typeof* [`EventOrderByInputEnum`](../variables/EventOrderByInputEnum.md)\[keyof *typeof* [`EventOrderByInputEnum`](../variables/EventOrderByInputEnum.md)\]
 
-Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L111)
+Defined in: [src/types/Event/type.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L133)

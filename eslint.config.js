@@ -1,12 +1,12 @@
 import js from '@eslint/js';
+import graphql from '@graphql-eslint/eslint-plugin';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import react from 'eslint-plugin-react';
+import imports from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
 import vitest from 'eslint-plugin-vitest';
 import tsdoc from 'eslint-plugin-tsdoc';
-import graphql from '@graphql-eslint/eslint-plugin';
-import imports from 'eslint-plugin-import';
 
 export default [
   {
@@ -43,17 +43,11 @@ export default [
         },
       },
       globals: {
-        // ✅ Node.js globals
         window: 'readonly',
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
-        document: 'readonly',
-        HTMLImageElement: 'readonly',
-        HTMLInputElement: 'readonly',
-        File: 'readonly',
 
-        // ✅ Vitest globals
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -67,10 +61,9 @@ export default [
       react,
       '@typescript-eslint': ts,
       vitest,
-      tsdoc,
-      '@graphql-eslint': graphql,
       import: imports,
       prettier,
+      tsdoc,
     },
     settings: {
       react: {
@@ -84,7 +77,7 @@ export default [
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/no-duplicates': 'error',
-      'tsdoc/syntax': 'error',
+      'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
@@ -92,7 +85,14 @@ export default [
       '@typescript-eslint/consistent-type-assertions': 'error',
       '@typescript-eslint/naming-convention': [
         'error',
-        { selector: 'interface', format: ['PascalCase'], prefix: ['I'] },
+        {
+          selector: 'interface',
+          format: ['PascalCase'],
+          custom: {
+            regex: '^(TestInterface|I|Interface)[A-Z]',
+            match: true,
+          },
+        },
         { selector: ['typeAlias', 'typeLike', 'enum'], format: ['PascalCase'] },
         { selector: 'typeParameter', format: ['PascalCase'], prefix: ['T'] },
         {
@@ -135,6 +135,7 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
+      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -143,6 +144,7 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
+       'tsdoc/syntax': 'error',
     },
   },
 ];

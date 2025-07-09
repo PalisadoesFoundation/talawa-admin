@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import type { Mock } from 'vitest';
@@ -307,5 +308,154 @@ describe('SignOut Component', () => {
     });
 
     consoleErrorMock.mockRestore();
+  });
+
+  describe('Keyboard Accessibility Tests', () => {
+    test('sign out button is accessible and has proper attributes', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      expect(signOutButton).toBeInTheDocument();
+      expect(signOutButton).toHaveAttribute('role', 'button');
+      expect(signOutButton).toHaveAttribute('tabIndex', '0');
+      expect(signOutButton).toHaveAttribute('aria-label', 'Sign out');
+    });
+
+    test('sign out button responds to Enter key press', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockEndSession).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/');
+      });
+    });
+
+    test('sign out button responds to Space key press', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
+      await userEvent.keyboard(' ');
+
+      await waitFor(() => {
+        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockEndSession).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/');
+      });
+    });
+
+    test('sign out button ignores other key presses', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
+      await userEvent.keyboard('{Escape}');
+      await userEvent.keyboard('{Tab}');
+      await userEvent.keyboard('{ArrowDown}');
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(mockLocalStorage.clear).not.toHaveBeenCalled();
+      expect(mockEndSession).not.toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
+
+    test('sign out button keyboard navigation with Enter key handles errors', async () => {
+      vi.spyOn(window, 'confirm').mockReturnValue(false);
+
+      const consoleErrorMock = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      const mocks = [
+        {
+          request: {
+            query: REVOKE_REFRESH_TOKEN,
+          },
+          error: new Error('Failed to revoke refresh token'),
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(window.confirm).toHaveBeenCalledWith(
+          'Failed to revoke session. Retry?',
+        );
+        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockEndSession).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/');
+      });
+
+      consoleErrorMock.mockRestore();
+    });
   });
 });

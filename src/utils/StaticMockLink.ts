@@ -15,7 +15,12 @@ import {
 
 import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
-function requestToKey(request: any, addTypename: boolean): string {
+function requestToKey(
+  request:
+    | Operation
+    | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
+  addTypename: boolean,
+): string {
   const queryString =
     request.query &&
     print(addTypename ? addTypenameToDocument(request.query) : request.query);
@@ -57,7 +62,7 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public request(operation: any): Observable<FetchResult> | null {
+  public request(operation: Operation): Observable<FetchResult> | null {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
@@ -162,7 +167,7 @@ export interface InterfaceMockApolloLink extends ApolloLink {
 // making multiple queries to the server.
 // NOTE: The last arg can optionally be an `addTypename` arg.
 export function mockSingleLink(
-  ...mockedResponses: any[]
+  ...mockedResponses: (MockedResponse | boolean)[]
 ): InterfaceMockApolloLink {
   // To pull off the potential typename. If this isn't a boolean, we'll just
   // set it true later.
@@ -174,5 +179,9 @@ export function mockSingleLink(
     maybeTypename = true;
   }
 
-  return new StaticMockLink(mocks, maybeTypename);
+  // Ensure mocks is of type MockedResponse[]
+  return new StaticMockLink(
+    mocks as MockedResponse[],
+    maybeTypename as boolean,
+  );
 }
