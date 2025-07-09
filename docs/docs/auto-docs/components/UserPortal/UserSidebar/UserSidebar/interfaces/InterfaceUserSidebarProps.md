@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: IUserSidebarProps
+# Interface: InterfaceUserSidebarProps
 
 Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L44)
 

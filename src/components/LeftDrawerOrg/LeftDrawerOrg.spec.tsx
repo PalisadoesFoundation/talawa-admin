@@ -412,14 +412,19 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   test('drawer toggles on click and Enter key', async () => {
-    let drawerState = false;
+    let drawerState: boolean | null = false;
 
-    const setHideDrawer = (val: React.SetStateAction<boolean>) => {
+    const setHideDrawer = (val: React.SetStateAction<boolean | null>) => {
       drawerState = typeof val === 'function' ? val(drawerState) : val;
       rerenderComponent();
     };
 
-    const props = {
+    const props: {
+      targets: { name: string; url: string }[];
+      orgId: string;
+      hideDrawer: boolean | null;
+      setHideDrawer: (val: React.SetStateAction<boolean | null>) => void;
+    } = {
       targets: [{ name: 'Dashboard', url: '/dashboard' }],
       orgId: '123',
       hideDrawer: drawerState,

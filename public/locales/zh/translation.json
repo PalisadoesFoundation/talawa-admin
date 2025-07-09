@@ -831,7 +831,7 @@
     "delete": "删除",
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
-    "longDelOrgMsg": "通过单击"删除组织"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
+    "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消"
   },
@@ -1105,7 +1105,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击"删除用户"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
+    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
     "deleteUser": "删除用户",
     "otherSettings": "其他设置",

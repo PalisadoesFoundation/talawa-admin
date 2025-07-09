@@ -26,6 +26,33 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
   console.log(`Plugin ID:`, route.pluginId);
   console.log(`Component:`, route.component);
 
+  // Check if pluginId is provided
+  if (!route.pluginId) {
+    console.error(`Plugin ID is missing from route`);
+    return (
+      <div
+        style={{
+          padding: '40px',
+          textAlign: 'center',
+          backgroundColor: '#f8f9fa',
+          border: '1px solid #dee2e6',
+          borderRadius: '8px',
+          margin: '20px',
+        }}
+      >
+        <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+          Plugin ID Missing
+        </h3>
+        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+          Component: <strong>{route.component}</strong>
+        </p>
+        <p style={{ color: '#6c757d', fontSize: '14px' }}>
+          This route does not have a valid plugin ID
+        </p>
+      </div>
+    );
+  }
+
   // Check if plugin is registered
   if (!isPluginRegistered(route.pluginId)) {
     console.error(`Plugin '${route.pluginId}' not found in plugin registry`);

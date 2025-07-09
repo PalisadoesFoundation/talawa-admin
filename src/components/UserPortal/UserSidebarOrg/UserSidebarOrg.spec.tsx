@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import type { IUserSidebarOrgProps } from './UserSidebarOrg';
+import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
@@ -33,7 +33,7 @@ import { vi, it } from 'vitest';
  */
 const { setItem } = useLocalStorage();
 
-const props: IUserSidebarOrgProps = {
+const props: InterfaceUserSidebarOrgProps = {
   orgId: '123',
   targets: [
     {

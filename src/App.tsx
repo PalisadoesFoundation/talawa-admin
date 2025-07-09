@@ -146,16 +146,16 @@ function App(): React.ReactElement {
       count: adminOrgPluginRoutes.length,
       routes: adminOrgPluginRoutes.map((r) => ({
         path: r.path,
-        isAdmin: r.isAdmin,
         component: r.component,
+        pluginId: r.pluginId,
       })),
     },
     user: {
       count: userOrgPluginRoutes.length,
       routes: userOrgPluginRoutes.map((r) => ({
         path: r.path,
-        isAdmin: r.isAdmin,
         component: r.component,
+        pluginId: r.pluginId,
       })),
     },
   });

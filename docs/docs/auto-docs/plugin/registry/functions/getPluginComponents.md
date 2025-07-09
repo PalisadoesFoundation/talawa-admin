@@ -6,7 +6,7 @@
 
 > **getPluginComponents**(`pluginId`): `Record`\<`string`, `ComponentType`\<\{\}\>\>
 
-Defined in: [src/plugin/registry.ts:256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.ts#L256)
+Defined in: [src/plugin/registry.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.ts#L305)
 
 Get all components for a plugin
 

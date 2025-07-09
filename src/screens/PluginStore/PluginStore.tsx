@@ -94,7 +94,7 @@ export default function PluginStore() {
 
   useEffect(() => {
     // Combine GraphQL plugins and loaded plugins
-    const graphqlPlugins = pluginData?.plugins || [];
+    const graphqlPlugins = pluginData?.getPlugins || [];
 
     const allPluginsForDisplay = [
       ...loadedPlugins.map((plugin) => ({
@@ -107,12 +107,12 @@ export default function PluginStore() {
       // Add GraphQL plugins that aren't already loaded
       ...graphqlPlugins
         .filter(
-          (gqlPlugin) =>
+          (gqlPlugin: any) =>
             !loadedPlugins.some(
               (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
             ),
         )
-        .map((gqlPlugin) => ({
+        .map((gqlPlugin: any) => ({
           id: gqlPlugin.pluginId,
           name: gqlPlugin.pluginId,
           description: `Plugin ${gqlPlugin.pluginId}`,
@@ -194,8 +194,8 @@ export default function PluginStore() {
     if (isLoaded) return true;
 
     // Check in GraphQL data
-    const graphqlPlugin = pluginData?.plugins?.find(
-      (p) => p.pluginId === pluginName,
+    const graphqlPlugin = pluginData?.getPlugins?.find(
+      (p: any) => p.pluginId === pluginName,
     );
     return graphqlPlugin?.isInstalled || false;
   };
@@ -203,8 +203,8 @@ export default function PluginStore() {
   // Get installed plugin info (adapter for PluginModal interface)
   const getInstalledPlugin = (pluginName: string): any => {
     // First check GraphQL data (source of truth for status)
-    const graphqlPlugin = pluginData?.plugins?.find(
-      (p) => p.pluginId === pluginName,
+    const graphqlPlugin = pluginData?.getPlugins?.find(
+      (p: any) => p.pluginId === pluginName,
     );
     if (graphqlPlugin) {
       return {
@@ -254,8 +254,8 @@ export default function PluginStore() {
     setLoading(true);
     try {
       // Create plugin in GraphQL first
-      const existingPlugin = pluginData?.plugins?.find(
-        (p) => p.pluginId === plugin.id,
+      const existingPlugin = pluginData?.getPlugins?.find(
+        (p: any) => p.pluginId === plugin.id,
       );
       if (!existingPlugin) {
         await createPlugin({
@@ -302,8 +302,8 @@ export default function PluginStore() {
     setLoading(true);
     try {
       // Update plugin status in GraphQL
-      const existingPlugin = pluginData?.plugins?.find(
-        (p) => p.pluginId === plugin.id,
+      const existingPlugin = pluginData?.getPlugins?.find(
+        (p: any) => p.pluginId === plugin.id,
       );
       if (existingPlugin) {
         await updatePlugin({
@@ -342,8 +342,8 @@ export default function PluginStore() {
 
     setLoading(true);
     try {
-      const existingPlugin = pluginData?.plugins?.find(
-        (p) => p.pluginId === pluginToUninstall.id,
+      const existingPlugin = pluginData?.getPlugins?.find(
+        (p: any) => p.pluginId === pluginToUninstall.id,
       );
       if (existingPlugin) {
         if (keepData) {

@@ -4,7 +4,7 @@
 
 # Enumeration: PluginStatus
 
-Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L94)
+Defined in: [src/plugin/types.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L126)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/tal
 
 > **ACTIVE**: `"active"`
 
-Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L95)
+Defined in: [src/plugin/types.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L127)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/tal
 
 > **ERROR**: `"error"`
 
-Defined in: [src/plugin/types.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L97)
+Defined in: [src/plugin/types.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L129)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/plugin/types.ts:97](https://github.com/PalisadoesFoundation/tal
 
 > **INACTIVE**: `"inactive"`
 
-Defined in: [src/plugin/types.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L96)
+Defined in: [src/plugin/types.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L128)

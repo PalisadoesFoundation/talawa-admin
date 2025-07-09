@@ -161,13 +161,7 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
 
   routeArrays.forEach((routes, index) => {
     if (routes) {
-      const routeType = [
-        'routes',
-        'RA1',
-        'RA2',
-        'RU1',
-        'RU2',
-      ][index];
+      const routeType = ['routes', 'RA1', 'RA2', 'RU1', 'RU2'][index];
       console.log(`${routeType} found:`, routes.length);
       routes.forEach((route: IRouteExtension) => {
         console.log('Route:', route.path, 'Component:', route.component);
@@ -189,13 +183,7 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
 
   drawerArrays.forEach((drawer, index) => {
     if (drawer) {
-      const drawerType = [
-        'drawer',
-        'DA1',
-        'DA2',
-        'DU1',
-        'DU2',
-      ][index];
+      const drawerType = ['drawer', 'DA1', 'DA2', 'DU1', 'DU2'][index];
       console.log(`${drawerType} found:`, drawer.length);
     }
   });
@@ -209,14 +197,15 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
 
   injectorArrays.forEach((injectors, index) => {
     if (injectors) {
-      const injectorType = [
-        'G1',
-        'G2',
-        'G3',
-      ][index];
+      const injectorType = ['G1', 'G2', 'G3'][index];
       console.log(`${injectorType} found:`, injectors.length);
       injectors.forEach((injector: IInjectorExtension) => {
-        console.log('Injector:', injector.injector, 'Description:', injector.description);
+        console.log(
+          'Injector:',
+          injector.injector,
+          'Description:',
+          injector.description,
+        );
         if (injector.injector) {
           componentNames.add(injector.injector);
         }
@@ -257,9 +246,12 @@ export async function registerPluginDynamically(
 
     // Use the components that are already loaded by the plugin manager
     const components = loadedPlugin.components;
-    
-    console.log(`Components from plugin manager:`, Object.keys(components || {}));
-    
+
+    console.log(
+      `Components from plugin manager:`,
+      Object.keys(components || {}),
+    );
+
     if (components && Object.keys(components).length > 0) {
       pluginRegistry[pluginId] = components;
       console.log(
@@ -269,7 +261,7 @@ export async function registerPluginDynamically(
     } else {
       console.warn(`No components found for plugin ${pluginId}`);
     }
-    
+
     console.log(`=== END REGISTERING PLUGIN: ${pluginId} ===`);
   } catch (error) {
     console.error(`Failed to register plugin '${pluginId}':`, error);

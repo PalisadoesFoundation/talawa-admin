@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:49](https://g
 
 ### \_\_namedParameters
 
-[`IUserSidebarProps`](../interfaces/IUserSidebarProps.md)
+[`InterfaceUserSidebarProps`](../interfaces/InterfaceUserSidebarProps.md)
 
 ## Returns
 

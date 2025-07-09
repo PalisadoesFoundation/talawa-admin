@@ -169,3 +169,12 @@ export interface IPluginRouterProps {
   userPermissions?: string[];
   isAdmin?: boolean;
 }
+
+// Plugin Lifecycle Types
+export interface IPluginLifecycle {
+  onActivate?: () => Promise<void>;
+  onDeactivate?: () => Promise<void>;
+  onInstall?: () => Promise<void>;
+  onUninstall?: () => Promise<void>;
+  onUpdate?: (fromVersion: string, toVersion: string) => Promise<void>;
+}

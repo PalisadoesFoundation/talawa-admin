@@ -4,7 +4,7 @@
 
 # Interface: IInstalledPlugin
 
-Defined in: [src/plugin/types.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L75)
+Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L93)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/plugin/types.ts:75](https://github.com/PalisadoesFoundation/tal
 
 > **author**: `string`
 
-Defined in: [src/plugin/types.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L54)
+Defined in: [src/plugin/types.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L72)
 
 #### Inherited from
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:54](https://github.com/PalisadoesFoundation/tal
 
 > **cdnUrl**: `string`
 
-Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L60)
+Defined in: [src/plugin/types.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L78)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/tal
 
 > **changelog**: `object`[]
 
-Defined in: [src/plugin/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L68)
+Defined in: [src/plugin/types.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L86)
 
 #### changes
 
@@ -64,7 +64,7 @@ Defined in: [src/plugin/types.ts:68](https://github.com/PalisadoesFoundation/tal
 
 > **description**: `string`
 
-Defined in: [src/plugin/types.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L53)
+Defined in: [src/plugin/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L71)
 
 #### Inherited from
 
@@ -76,7 +76,7 @@ Defined in: [src/plugin/types.ts:53](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **downloads**: `number`
 
-Defined in: [src/plugin/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L66)
+Defined in: [src/plugin/types.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L84)
 
 #### Inherited from
 
@@ -88,7 +88,7 @@ Defined in: [src/plugin/types.ts:66](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **homepage**: `string`
 
-Defined in: [src/plugin/types.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L63)
+Defined in: [src/plugin/types.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L81)
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ Defined in: [src/plugin/types.ts:63](https://github.com/PalisadoesFoundation/tal
 
 > **icon**: `string`
 
-Defined in: [src/plugin/types.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L55)
+Defined in: [src/plugin/types.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L73)
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ Defined in: [src/plugin/types.ts:55](https://github.com/PalisadoesFoundation/tal
 
 > **id**: `string`
 
-Defined in: [src/plugin/types.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L51)
+Defined in: [src/plugin/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L69)
 
 #### Inherited from
 
@@ -124,7 +124,7 @@ Defined in: [src/plugin/types.ts:51](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **license**: `string`
 
-Defined in: [src/plugin/types.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L64)
+Defined in: [src/plugin/types.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L82)
 
 #### Inherited from
 
@@ -136,7 +136,7 @@ Defined in: [src/plugin/types.ts:64](https://github.com/PalisadoesFoundation/tal
 
 > **name**: `string`
 
-Defined in: [src/plugin/types.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L52)
+Defined in: [src/plugin/types.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L70)
 
 #### Inherited from
 
@@ -148,7 +148,7 @@ Defined in: [src/plugin/types.ts:52](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **rating**: `number`
 
-Defined in: [src/plugin/types.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L67)
+Defined in: [src/plugin/types.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L85)
 
 #### Inherited from
 
@@ -160,7 +160,7 @@ Defined in: [src/plugin/types.ts:67](https://github.com/PalisadoesFoundation/tal
 
 > **readme**: `string`
 
-Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L61)
+Defined in: [src/plugin/types.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L79)
 
 #### Inherited from
 
@@ -172,7 +172,7 @@ Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/tal
 
 > **screenshots**: `string`[]
 
-Defined in: [src/plugin/types.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L62)
+Defined in: [src/plugin/types.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L80)
 
 #### Inherited from
 
@@ -184,7 +184,7 @@ Defined in: [src/plugin/types.ts:62](https://github.com/PalisadoesFoundation/tal
 
 > **status**: `"active"` \| `"inactive"`
 
-Defined in: [src/plugin/types.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L76)
+Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L94)
 
 ***
 
@@ -192,7 +192,7 @@ Defined in: [src/plugin/types.ts:76](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **tags**: `string`[]
 
-Defined in: [src/plugin/types.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L65)
+Defined in: [src/plugin/types.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L83)
 
 #### Inherited from
 
@@ -204,7 +204,7 @@ Defined in: [src/plugin/types.ts:65](https://github.com/PalisadoesFoundation/tal
 
 > **version**: `string`
 
-Defined in: [src/plugin/types.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L59)
+Defined in: [src/plugin/types.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L77)
 
 #### Inherited from
 
