@@ -293,13 +293,46 @@ jobs:
         run: |
           npx tsc --noEmit
 
-      - name: Run Vitest Tests
+      - name: Run Vitest Tests (Shard 1/4)
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
-          NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: "--max-old-space-size=8192"
+          NODE_V8_COVERAGE: './coverage/vitest-1'
+          NODE_OPTIONS: "--max-old-space-size=4096"
         run: |
-          npm run test:coverage
+          npm run test:coverage -- --shard=1/4
+
+      - name: Run Vitest Tests (Shard 2/4)
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          NODE_V8_COVERAGE: './coverage/vitest-2'
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: |
+          npm run test:coverage -- --shard=2/4
+
+      - name: Run Vitest Tests (Shard 3/4)
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          NODE_V8_COVERAGE: './coverage/vitest-3'
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: |
+          npm run test:coverage -- --shard=3/4
+
+      - name: Run Vitest Tests (Shard 4/4)
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          NODE_V8_COVERAGE: './coverage/vitest-4'
+          NODE_OPTIONS: "--max-old-space-size=4096"
+        run: |
+          npm run test:coverage -- --shard=4/4
+
+      - name: Merge Coverage Reports
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          mkdir -p ./coverage/vitest
+          # Find and merge all lcov.info files from shards
+          find ./coverage -name "lcov.info" -path "*/vitest-*/*" -exec cat {} \; > ./coverage/vitest/lcov.info
+          # Generate additional coverage formats
+          npx c8 report --reporter=html --reporter=text-summary --reports-dir=./coverage/vitest || echo "c8 report failed, using existing coverage"
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v4
