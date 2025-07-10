@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 
-// Basic cleanup after each test
+// Comprehensive cleanup after each test
 afterEach(() => {
   cleanup();
 });
