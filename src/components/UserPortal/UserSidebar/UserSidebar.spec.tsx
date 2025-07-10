@@ -1,482 +1,531 @@
-import React, { act } from 'react';
-import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider } from 'react-i18next';
-import styles from '../../../style/app-fixed.module.css';
-import {
-  USER_DETAILS,
-  USER_JOINED_ORGANIZATIONS_PG,
-} from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import UserSidebar from './UserSidebar';
-import useLocalStorage from 'utils/useLocalstorage';
-import { vi, it } from 'vitest';
+import type { InterfaceUserSidebarProps } from './UserSidebar';
 
-/**
- * Unit tests for UserSidebar component:
- *
- * 1. **Rendering with user data**: Verifies correct rendering when user data is fetched.
- * 2. **Logo and title**: Ensures logo, title, and left drawer are visible.
- * 3. **Empty organizations list**: Tests rendering when the user has no joined organizations.
- * 4. **Organization image rendering**: Verifies rendering when organizations have an image.
- * 5. **User profile and links**: Ensures user details and links like 'My Organizations' and 'Settings' are visible.
- * 6. **Responsive rendering**: Tests correct rendering and drawer toggle on smaller screens.
- * 7. **Active button style**: Verifies button style changes when clicked.
- * 8. **Translation display**: Ensures translated text is shown.
- * 9. **Sidebar closure on mobile**: Verifies sidebar closes when a link is clicked on mobile view.
- * 10. **Drawer visibility on small screens**: Tests drawer visibility toggle based on `hideDrawer` prop.
- * 11. **Drawer state change**: Verifies drawer visibility changes when `hideDrawer` prop changes.
- *
- * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
- */
+// Mock the dependencies
+const mockT = vi.fn((key: string) => {
+  const translations: Record<string, string> = {
+    talawaUserPortal: 'Talawa User Portal',
+    'my organizations': 'My Organizations',
+    menu: 'Menu',
+    settings: 'Settings',
+  };
+  return translations[key] || key;
+});
 
-const { setItem } = useLocalStorage();
+vi.mock('react-i18next', () => ({
+  useTranslation: vi.fn(() => ({
+    t: mockT,
+  })),
+}));
 
-const resizeWindow = (width: number): void => {
-  act(() => {
-    window.innerWidth = width;
-    fireEvent(window, new window.Event('resize'));
-  });
-};
+vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">ProfileDropdown</div>
+  )),
+}));
 
-const props = { hideDrawer: true, setHideDrawer: vi.fn() };
+const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
+  mockUsePluginDrawerItems: vi.fn(
+    (): import('plugin/types').IDrawerExtension[] => [],
+  ),
+}));
 
-const MOCKS = [
-  {
-    request: { query: USER_DETAILS, variables: { id: 'properId' } },
-    result: {
-      data: {
-        user: {
-          user: {
-            _id: 'properId',
-            image: null,
-            firstName: 'Noble',
-            lastName: 'Mittal',
-            email: 'noble@mittal.com',
-            createdAt: '2023-02-18T09:22:27.969Z',
-            joinedOrganizations: [],
-            membershipRequests: [],
-            registeredEvents: [],
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: { line1: '', countryCode: '', city: '', state: '' },
-            phone: { mobile: '' },
-          },
-          appUserProfile: {
-            _id: 'properId',
-            adminFor: [],
-            createdOrganizations: [],
-            createdEvents: [],
-            eventAdmin: [],
-            isSuperAdmin: true,
-            appLanguageCode: 'en',
-          },
-        },
-      },
-    },
+vi.mock('plugin', () => ({
+  usePluginDrawerItems: mockUsePluginDrawerItems,
+}));
+
+// Mock SVG imports
+vi.mock('assets/svgs/organizations.svg?react', () => ({
+  default: vi.fn(({ stroke }) => (
+    <div data-testid="organizations-icon" data-stroke={stroke}>
+      OrganizationsIcon
+    </div>
+  )),
+}));
+
+vi.mock('assets/svgs/settings.svg?react', () => ({
+  default: vi.fn(({ stroke }) => (
+    <div data-testid="settings-icon" data-stroke={stroke}>
+      SettingsIcon
+    </div>
+  )),
+}));
+
+vi.mock('assets/svgs/talawa.svg?react', () => ({
+  default: vi.fn(() => <div data-testid="talawa-logo">TalawaLogo</div>),
+}));
+
+vi.mock('assets/svgs/plugins.svg?react', () => ({
+  default: vi.fn(({ stroke }) => (
+    <div data-testid="plugin-icon" data-stroke={stroke}>
+      PluginLogo
+    </div>
+  )),
+}));
+
+// Mock CSS modules
+vi.mock('../../../style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    inactiveDrawer: 'inactiveDrawer',
+    activeDrawer: 'activeDrawer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    titleHeader: 'titleHeader',
+    leftbarcompheight: 'leftbarcompheight',
+    optionList: 'optionList',
+    iconWrapper: 'iconWrapper',
   },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: 'properId', first: 10 },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            pageInfo: { hasNextPage: false },
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  addressLine1: 'asdfg',
-                  description: 'New Desc',
-                  avatarURL: '',
-                  members: {
-                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  {
-    request: { query: USER_DETAILS, variables: { id: 'imagePresent' } },
-    result: {
-      data: {
-        user: {
-          user: {
-            _id: '2',
-            image: 'adssda',
-            firstName: 'Noble',
-            lastName: 'Mittal',
-            email: 'noble@mittal.com',
-            createdAt: '2023-02-18T09:22:27.969Z',
-            joinedOrganizations: [],
-            membershipRequests: [],
-            registeredEvents: [],
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: { line1: '', countryCode: '', city: '', state: '' },
-            phone: { mobile: '' },
-          },
-          appUserProfile: {
-            _id: '2',
-            adminFor: [],
-            createdOrganizations: [],
-            createdEvents: [],
-            eventAdmin: [],
-            isSuperAdmin: true,
-            appLanguageCode: 'en',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: 'imagePresent', first: 10 },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [
-              {
-                node: {
-                  id: '6401ff65ce8e8406b8f07af2',
-                  name: 'Any Organization',
-                  addressLine1: 'asdfg',
-                  description: 'New Desc',
-                  avatarURL: 'dadsa',
-                  members: {
-                    edges: [{ node: { id: '45ydeg2yet721rtgdu32ry' } }],
-                  },
-                },
-                cursor: 'cursor-1', // Optional but recommended for pagination mocks
-              },
-            ],
-            pageInfo: { hasNextPage: false },
-          },
-        },
-      },
-    },
-  },
-  {
-    request: { query: USER_DETAILS, variables: { id: 'orgEmpty' } },
-    result: {
-      data: {
-        user: {
-          user: {
-            _id: 'orgEmpty',
-            image: null,
-            name: 'Noble Mittal',
-            email: 'noble@mittal.com',
-            createdAt: '2023-02-18T09:22:27.969Z',
-            joinedOrganizations: [],
-            membershipRequests: [],
-            registeredEvents: [],
-            gender: '',
-            birthDate: '2024-03-14',
-            educationGrade: '',
-            employmentStatus: '',
-            maritalStatus: '',
-            address: { line1: '', countryCode: '', city: '', state: '' },
-            phone: { mobile: '' },
-          },
-          appUserProfile: {
-            _id: 'orgEmpty',
-            adminFor: [],
-            createdOrganizations: [],
-            createdEvents: [],
-            eventAdmin: [],
-            isSuperAdmin: true,
-            appLanguageCode: 'en',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_PG,
-      variables: { id: 'orgEmpty', first: 10 },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [],
-            pageInfo: { hasNextPage: false },
-          },
-        },
-      },
-    },
-  },
-];
-const link = new StaticMockLink(MOCKS, true);
+}));
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+describe('UserSidebar', () => {
+  const originalInnerWidth = window.innerWidth;
+  const mockSetHideDrawer = vi.fn();
 
-const renderUserSidebar = (
-  userId: string,
-  link: StaticMockLink,
-): RenderResult => {
-  setItem('userId', userId);
-  return render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <UserSidebar {...props} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
+  const defaultProps: InterfaceUserSidebarProps = {
+    hideDrawer: false,
+    setHideDrawer: mockSetHideDrawer,
+  };
 
-describe('UserSidebar Component Tests in User Portal', () => {
   beforeEach(() => {
-    setItem('name', 'Noble Mittal');
     vi.clearAllMocks();
-  });
-
-  it('UserSidebar component renders correctly with user data present', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
-    });
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-  });
-
-  it('Displays the logo and title text of the User Portal', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
-    });
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    expect(screen.getByTestId('leftDrawerContainer')).toBeVisible();
-  });
-
-  it('UserSidebar renders correctly when joinedOrganizations list is empty', async () => {
-    await act(async () => {
-      renderUserSidebar('orgEmpty', link);
-      await wait();
-    });
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-  });
-
-  it('Renders UserSidebar component with organization image when present', async () => {
-    await act(async () => {
-      renderUserSidebar('imagePresent', link);
-      await wait();
-    });
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-  });
-
-  it('User profile data renders with all expected navigation links visible', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
-    });
-
-    const expectedLinks = ['My Organizations', 'Settings'];
-    expectedLinks.forEach((link) => {
-      expect(screen.getByText(link)).toBeInTheDocument();
+    mockT.mockClear();
+    mockUsePluginDrawerItems.mockReturnValue([]);
+    // Reset window.innerWidth to a default value
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024,
     });
   });
 
-  it('displays the user name from localStorage correctly', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
+  afterEach(() => {
+    vi.restoreAllMocks();
+    // Restore original window.innerWidth
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: originalInnerWidth,
     });
-    expect(screen.getByText('Noble Mittal')).toBeInTheDocument();
   });
 
-  it('UserSidebar renders correctly on smaller screens and toggles drawer visibility', async () => {
-    await act(async () => {
-      resizeWindow(800);
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebar {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    const orgsBtn = screen.getByTestId('orgsBtn');
-    act(() => orgsBtn.click());
-    expect(props.setHideDrawer).toHaveBeenCalledWith(true);
-  });
-  it('UserSidebar collapse and expansion based on screen size', async () => {
-    await act(async () => {
-      resizeWindow(1000);
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebar {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    resizeWindow(800);
-    const sidebar = screen.getByTestId('leftDrawerContainer');
-    expect(sidebar).toHaveClass(styles.inactiveDrawer);
-  });
-  // Note: ChevronRightIcon and LogoutIcon functionality has been moved to separate components
-  // (e.g., ProfileDropdown) and is no longer part of the sidebar components
-  // due to plugin system modifications
+  const renderComponent = (props: Partial<InterfaceUserSidebarProps> = {}) => {
+    return render(
+      <MemoryRouter>
+        <UserSidebar {...defaultProps} {...props} />
+      </MemoryRouter>,
+    );
+  };
 
-  it('Active route button style changes correctly upon click', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
+  describe('Component Rendering', () => {
+    it('should render all required elements', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+      expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
+      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
     });
 
-    const orgsBtn = screen.getByTestId('orgsBtn');
-    const settingsBtn = screen.getByTestId('settingsBtn');
+    it('should render navigation links with correct text', () => {
+      renderComponent();
 
-    fireEvent.click(orgsBtn);
-    expect(orgsBtn).toHaveClass('btn btn-success');
-    fireEvent.click(settingsBtn);
-    expect(settingsBtn).toHaveClass('btn btn-success');
+      expect(screen.getByText('My Organizations')).toBeInTheDocument();
+      expect(screen.getByText('Settings')).toBeInTheDocument();
+    });
+
+    it('should render icons for navigation items', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('organizations-icon')).toBeInTheDocument();
+      expect(screen.getByTestId('settings-icon')).toBeInTheDocument();
+    });
   });
 
-  it('Translation hook displays expected text in UserSidebar', async () => {
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
+  describe('Drawer State Management', () => {
+    it('should apply correct CSS classes when hideDrawer is null', () => {
+      renderComponent({ hideDrawer: null });
+
+      const container = screen.getByTestId('leftDrawerContainer');
+      expect(container).toHaveClass('leftDrawer', 'hideElemByDefault');
     });
-    expect(
-      screen.getByText(i18nForTest.t('common:settings')),
-    ).toBeInTheDocument();
+
+    it('should apply correct CSS classes when hideDrawer is true', () => {
+      renderComponent({ hideDrawer: true });
+
+      const container = screen.getByTestId('leftDrawerContainer');
+      expect(container).toHaveClass('leftDrawer', 'inactiveDrawer');
+    });
+
+    it('should apply correct CSS classes when hideDrawer is false', () => {
+      renderComponent({ hideDrawer: false });
+
+      const container = screen.getByTestId('leftDrawerContainer');
+      expect(container).toHaveClass('leftDrawer', 'activeDrawer');
+    });
   });
 
-  it('handleLinkClick function closes the sidebar on mobile view when a link is clicked', async () => {
-    resizeWindow(800);
-    await act(async () => {
-      renderUserSidebar('properId', link);
-      await wait();
-    });
-    const settingsBtn = screen.getByTestId('settingsBtn');
-    fireEvent.click(settingsBtn);
-    expect(props.setHideDrawer).toHaveBeenCalledWith(true);
-  });
-
-  describe('UserSidebar Drawer Visibility Tests on Smaller Screens', () => {
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
-
-    it('Clicking a link closes the drawer when window width is 820px or less', () => {
-      act(() => {
-        window.innerWidth = 820;
-        window.dispatchEvent(new window.Event('resize'));
+  describe('Responsive Behavior', () => {
+    it('should hide drawer on mobile when organization link is clicked', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800, // Mobile width
       });
 
-      render(
-        <MockedProvider addTypename={false}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebar {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderComponent();
 
-      const linkElement = screen.getByText('My Organizations'); // Adjust text if different
-      fireEvent.click(linkElement);
+      const orgsButton = screen.getByTestId('orgsBtn');
+      fireEvent.click(orgsButton);
 
-      expect(props.setHideDrawer).toHaveBeenCalledWith(true);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    describe('UserSidebar Drawer State Tests', () => {
-      it('Drawer visibility changes based on hideDrawer prop', () => {
-        const { rerender } = render(
-          <MockedProvider addTypename={false}>
-            <BrowserRouter>
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebar {...props} hideDrawer={false} />
-                </I18nextProvider>
-              </Provider>
-            </BrowserRouter>
-          </MockedProvider>,
-        );
-
-        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.activeDrawer,
-        );
-
-        rerender(
-          <MockedProvider addTypename={false}>
-            <BrowserRouter>
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebar {...props} hideDrawer={true} />
-                </I18nextProvider>
-              </Provider>
-            </BrowserRouter>
-          </MockedProvider>,
-        );
-        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.inactiveDrawer,
-        );
-
-        rerender(
-          <MockedProvider addTypename={false}>
-            <BrowserRouter>
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebar {...props} hideDrawer={false} />
-                </I18nextProvider>
-              </Provider>
-            </BrowserRouter>
-          </MockedProvider>,
-        );
-        expect(screen.getByTestId('leftDrawerContainer')).toHaveClass(
-          styles.activeDrawer,
-        );
+    it('should hide drawer on mobile when settings link is clicked', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 600, // Mobile width
       });
+
+      renderComponent();
+
+      const settingsButton = screen.getByTestId('settingsBtn');
+      fireEvent.click(settingsButton);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('should not hide drawer on desktop when links are clicked', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200, // Desktop width
+      });
+
+      renderComponent();
+
+      const orgsButton = screen.getByTestId('orgsBtn');
+      fireEvent.click(orgsButton);
+
+      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+    });
+
+    it('should check mobile breakpoint at exactly 820px', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 820, // Exact breakpoint - should trigger mobile behavior (<=820)
+      });
+
+      renderComponent();
+
+      const orgsButton = screen.getByTestId('orgsBtn');
+      fireEvent.click(orgsButton);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('should trigger mobile behavior at 819px', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 819, // Just below breakpoint
+      });
+
+      renderComponent();
+
+      const settingsButton = screen.getByTestId('settingsBtn');
+      fireEvent.click(settingsButton);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('should not trigger mobile behavior at 821px', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 821, // Just above breakpoint
+      });
+
+      renderComponent();
+
+      const orgsButton = screen.getByTestId('orgsBtn');
+      fireEvent.click(orgsButton);
+
+      expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
   });
 
-  // Note: Toggle button functionality has been moved to separate components
-  // (e.g., SidebarToggle) and is no longer part of the drawer components
-  // due to plugin system modifications
+  describe('Navigation Links', () => {
+    it('should have correct href for organizations link', () => {
+      renderComponent();
+
+      const orgsLink = screen.getByTestId('orgsBtn').closest('a');
+      expect(orgsLink).toHaveAttribute('href', '/user/organizations');
+    });
+
+    it('should have correct href for settings link', () => {
+      renderComponent();
+
+      const settingsLink = screen.getByTestId('settingsBtn').closest('a');
+      expect(settingsLink).toHaveAttribute('href', '/user/settings');
+    });
+  });
+
+  describe('Plugin Integration', () => {
+    it('should not show plugin section when no plugin items', () => {
+      mockUsePluginDrawerItems.mockReturnValue([]);
+
+      renderComponent();
+
+      expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
+    });
+
+    it('should show plugin section when plugin items exist', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: 'test-icon.png',
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      expect(screen.getByText('Test Plugin')).toBeInTheDocument();
+    });
+
+    it('should render plugin item with custom icon', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: 'custom-icon.png',
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      const customIcon = screen.getByAltText('Test Plugin');
+      expect(customIcon).toBeInTheDocument();
+      expect(customIcon).toHaveAttribute('src', 'custom-icon.png');
+    });
+
+    it('should render plugin item with default plugin icon when no custom icon', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: '',
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      expect(screen.getByTestId('plugin-icon')).toBeInTheDocument();
+    });
+
+    it('should hide drawer on mobile when plugin link is clicked', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      });
+
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: 'test-icon.png',
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      const pluginButton = screen.getByText('Test Plugin');
+      fireEvent.click(pluginButton);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+
+    it('should call usePluginDrawerItems with correct parameters', () => {
+      renderComponent();
+
+      expect(mockUsePluginDrawerItems).toHaveBeenCalledWith(
+        [], // userPermissions
+        false, // isAdmin
+        false, // isOrg
+      );
+    });
+
+    it('should render multiple plugin items', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'plugin-1',
+          path: '/user/plugin/1',
+          label: 'Plugin One',
+          icon: 'icon1.png',
+        },
+        {
+          pluginId: 'plugin-2',
+          path: '/user/plugin/2',
+          label: 'Plugin Two',
+          icon: '',
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      expect(screen.getByText('Plugin One')).toBeInTheDocument();
+      expect(screen.getByText('Plugin Two')).toBeInTheDocument();
+      expect(screen.getByAltText('Plugin One')).toBeInTheDocument();
+      expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
+    });
+  });
+
+  describe('Internationalization', () => {
+    it('should use correct translation keys', () => {
+      renderComponent();
+
+      expect(mockT).toHaveBeenCalledWith('talawaUserPortal');
+      expect(mockT).toHaveBeenCalledWith('my organizations');
+      expect(mockT).toHaveBeenCalledWith('menu');
+      expect(mockT).toHaveBeenCalledWith('settings');
+    });
+  });
+
+  describe('Component Structure', () => {
+    it('should have ProfileDropdown in the bottom section', () => {
+      renderComponent();
+
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      const parentElement = profileDropdown.closest('.mt-auto');
+      expect(parentElement).toBeInTheDocument();
+    });
+
+    it('should apply correct structure classes', () => {
+      renderComponent();
+
+      const container = screen.getByTestId('leftDrawerContainer');
+      expect(container).toHaveClass('leftDrawer');
+
+      // Check for the main content structure
+      const mainContent = container.querySelector('.leftbarcompheight');
+      expect(mainContent).toBeInTheDocument();
+      expect(mainContent).toHaveClass('d-flex', 'align-items', 'flex-column');
+    });
+  });
+
+  describe('Active State Styling', () => {
+    it('should apply active styles when on organizations route', () => {
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <UserSidebar {...defaultProps} />
+        </MemoryRouter>,
+      );
+
+      const orgsButton = screen.getByTestId('orgsBtn');
+      expect(orgsButton).toHaveClass('btn-success');
+    });
+
+    it('should apply active styles when on settings route', () => {
+      render(
+        <MemoryRouter initialEntries={['/user/settings']}>
+          <UserSidebar {...defaultProps} />
+        </MemoryRouter>,
+      );
+
+      const settingsButton = screen.getByTestId('settingsBtn');
+      expect(settingsButton).toHaveClass('btn-success');
+    });
+
+    it('should apply active stroke color to icons when route is active', () => {
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <UserSidebar {...defaultProps} />
+        </MemoryRouter>,
+      );
+
+      const orgIcon = screen.getByTestId('organizations-icon');
+      expect(orgIcon).toHaveAttribute(
+        'data-stroke',
+        'var(--sidebar-icon-stroke-active)',
+      );
+    });
+
+    it('should apply inactive stroke color to icons when route is not active', () => {
+      render(
+        <MemoryRouter initialEntries={['/user/other']}>
+          <UserSidebar {...defaultProps} />
+        </MemoryRouter>,
+      );
+
+      const orgIcon = screen.getByTestId('organizations-icon');
+      expect(orgIcon).toHaveAttribute(
+        'data-stroke',
+        'var(--sidebar-icon-stroke-inactive)',
+      );
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle undefined plugin items gracefully', () => {
+      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
+
+      expect(() => renderComponent()).not.toThrow();
+      expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
+    });
+
+    it('should handle null setHideDrawer prop', () => {
+      const propsWithNullSetter = {
+        hideDrawer: false,
+        setHideDrawer: null as any,
+      };
+
+      expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
+    });
+
+    it('should handle window resize during interaction', () => {
+      renderComponent();
+
+      // Start on desktop
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200,
+      });
+
+      const orgsButton = screen.getByTestId('orgsBtn');
+      fireEvent.click(orgsButton);
+      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+
+      // Change to mobile during next interaction
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      });
+
+      fireEvent.click(orgsButton);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+  });
 });
