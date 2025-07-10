@@ -6,7 +6,7 @@ import {
 } from '../manager';
 import { PluginStatus } from '../types';
 
-// Mock the manager dependencies
+// Mock the manager dependencies with controlled behavior
 vi.mock('../managers/discovery', () => ({
   DiscoveryManager: vi.fn().mockImplementation(() => ({
     loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
@@ -91,12 +91,22 @@ describe('PluginManager', () => {
   let pluginManager: PluginManager;
 
   beforeEach(() => {
+    // Clear all mocks before each test
     vi.clearAllMocks();
+
+    // Reset plugin manager to ensure clean state
     resetPluginManager();
+
+    // Clear any timers that might be running
+    vi.clearAllTimers();
   });
 
   afterEach(() => {
+    // Ensure plugin manager is reset after each test
     resetPluginManager();
+
+    // Clean up any remaining timers
+    vi.clearAllTimers();
   });
 
   describe('Constructor and Initialization', () => {
@@ -117,22 +127,23 @@ describe('PluginManager', () => {
   });
 
   describe('setApolloClient', () => {
-    it('should set Apollo client successfully', () => {
+    beforeEach(() => {
       pluginManager = new PluginManager();
+    });
+
+    it('should set Apollo client successfully', () => {
       expect(() =>
         pluginManager.setApolloClient(mockApolloClient),
       ).not.toThrow();
     });
 
     it('should throw error when Apollo client is null', () => {
-      pluginManager = new PluginManager();
       expect(() => pluginManager.setApolloClient(null as any)).toThrow(
         'Apollo client cannot be null or undefined',
       );
     });
 
     it('should throw error when Apollo client is undefined', () => {
-      pluginManager = new PluginManager();
       expect(() => pluginManager.setApolloClient(undefined as any)).toThrow(
         'Apollo client cannot be null or undefined',
       );
@@ -281,7 +292,13 @@ describe('PluginManager', () => {
 });
 
 describe('getPluginManager', () => {
+  beforeEach(() => {
+    // Ensure clean state before each test
+    resetPluginManager();
+  });
+
   afterEach(() => {
+    // Clean up after each test
     resetPluginManager();
   });
 
@@ -304,5 +321,19 @@ describe('resetPluginManager', () => {
     resetPluginManager();
     const manager2 = getPluginManager();
     expect(manager1).not.toBe(manager2);
+  });
+
+  it('should properly clean up state when reset', () => {
+    // Create an instance and verify it exists
+    const manager1 = getPluginManager();
+    expect(manager1).toBeDefined();
+
+    // Reset and create new instance
+    resetPluginManager();
+    const manager2 = getPluginManager();
+
+    // Should be different instances
+    expect(manager1).not.toBe(manager2);
+    expect(manager2).toBeDefined();
   });
 });

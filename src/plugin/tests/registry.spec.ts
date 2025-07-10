@@ -8,45 +8,63 @@ import {
   discoverAndRegisterAllPlugins,
 } from '../registry';
 
-// Mock the manager
+// Mock the manager with controlled behavior
 vi.mock('../manager', () => ({
   getPluginManager: vi.fn(),
   resetPluginManager: vi.fn(),
 }));
 
-// Mock fetch
+// Mock fetch with proper cleanup
 global.fetch = vi.fn();
 
-// Helper to reset pluginRegistry between tests
+// Helper to reset pluginRegistry between tests - with proper error handling
 import * as registryModule from '../registry';
 
 function clearPluginRegistry() {
-  Object.keys((registryModule as any).pluginRegistry || {}).forEach((key) => {
-    delete (registryModule as any).pluginRegistry[key];
-  });
+  try {
+    const registry = (registryModule as any).pluginRegistry;
+    if (registry && typeof registry === 'object') {
+      Object.keys(registry).forEach((key) => {
+        delete registry[key];
+      });
+    }
+  } catch (error) {
+    // Registry might not exist or be accessible, which is fine
+    console.debug('Could not clear plugin registry:', error);
+  }
 }
 
 describe('Plugin Registry', () => {
   let mockPluginManager: any;
 
   beforeEach(() => {
+    // Clear all mocks and timers
     vi.clearAllMocks();
+    vi.clearAllTimers();
     (global.fetch as any).mockClear();
+
+    // Clear the plugin registry state
     clearPluginRegistry();
 
-    // Set up the mock plugin manager
+    // Set up the mock plugin manager with controlled behavior
     mockPluginManager = {
       getPluginComponent: vi.fn(),
       getLoadedPlugin: vi.fn(),
       getLoadedPlugins: vi.fn(),
       isSystemInitialized: vi.fn(() => true),
+      _testMode: true, // Flag to prevent real operations in tests
     };
+
+    // Ensure mock returns controlled data
     vi.mocked(getPluginManager).mockReturnValue(mockPluginManager);
   });
 
   afterEach(() => {
+    // Clean up after each test
     resetPluginManager();
     clearPluginRegistry();
+    vi.clearAllTimers();
+    vi.clearAllMocks();
   });
 
   describe('getPluginComponent', () => {
@@ -190,10 +208,18 @@ describe('Plugin Registry', () => {
       // Set up the plugin manager to return undefined
       vi.mocked(mockPluginManager.getLoadedPlugin).mockReturnValue(undefined);
 
-      // Try to register the plugin
-      await expect(
-        registerPluginDynamically('non-existent-plugin'),
-      ).resolves.not.toThrow();
+      // Try to register the plugin with timeout protection
+      const registrationPromise = registerPluginDynamically(
+        'non-existent-plugin',
+      );
+
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 5000);
+      });
+
+      const result = await Promise.race([registrationPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
 
       // Check that it's not registered
       expect(isPluginRegistered('non-existent-plugin')).toBe(false);
@@ -265,8 +291,14 @@ describe('Plugin Registry', () => {
         },
       );
 
-      // Discover and register all plugins
-      await discoverAndRegisterAllPlugins();
+      // Discover and register all plugins with timeout protection
+      const discoveryPromise = discoverAndRegisterAllPlugins();
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 10000);
+      });
+
+      const result = await Promise.race([discoveryPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
 
       // Check that only active plugins are registered
       expect(isPluginRegistered('plugin-1')).toBe(true);
@@ -278,8 +310,14 @@ describe('Plugin Registry', () => {
       // Set up the plugin manager to return no plugins
       vi.mocked(mockPluginManager.getLoadedPlugins).mockReturnValue([]);
 
-      // Discover and register all plugins
-      await expect(discoverAndRegisterAllPlugins()).resolves.not.toThrow();
+      // Discover and register all plugins with timeout protection
+      const discoveryPromise = discoverAndRegisterAllPlugins();
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 5000);
+      });
+
+      const result = await Promise.race([discoveryPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
     });
 
     it('should handle discovery errors gracefully', async () => {
@@ -288,8 +326,14 @@ describe('Plugin Registry', () => {
         throw new Error('Discovery error');
       });
 
-      // Discover and register all plugins
-      await expect(discoverAndRegisterAllPlugins()).resolves.not.toThrow();
+      // Discover and register all plugins with timeout protection
+      const discoveryPromise = discoverAndRegisterAllPlugins();
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 5000);
+      });
+
+      const result = await Promise.race([discoveryPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
     });
   });
 
@@ -311,14 +355,19 @@ describe('Plugin Registry', () => {
     it('should handle manifest loading errors', async () => {
       (global.fetch as any).mockRejectedValue(new Error('Network error'));
 
-      await expect(
-        registerPluginDynamically('error-plugin'),
-      ).resolves.not.toThrow();
+      // Add timeout protection for manifest loading
+      const registrationPromise = registerPluginDynamically('error-plugin');
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 5000);
+      });
+
+      const result = await Promise.race([registrationPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
     });
   });
 
   describe('Component Name Extraction', () => {
-    it('should extract component names from manifest', () => {
+    it('should extract component names from manifest', async () => {
       const mockManifest = {
         name: 'Test Plugin',
         pluginId: 'test-plugin',
@@ -341,7 +390,14 @@ describe('Plugin Registry', () => {
         json: vi.fn().mockResolvedValue(mockManifest),
       });
 
-      expect(registerPluginDynamically('test-plugin')).resolves.not.toThrow();
+      // Add timeout protection
+      const registrationPromise = registerPluginDynamically('test-plugin');
+      const timeoutPromise = new Promise((resolve) => {
+        setTimeout(() => resolve('timeout'), 5000);
+      });
+
+      const result = await Promise.race([registrationPromise, timeoutPromise]);
+      expect(result).not.toBe('timeout');
     });
   });
 });
