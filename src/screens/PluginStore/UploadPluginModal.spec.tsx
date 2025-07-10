@@ -33,16 +33,8 @@ vi.mock('../../plugin/manager', () => ({
   getPluginManager: () => mockPluginManager,
 }));
 
-// Mock file input
-Object.defineProperty(HTMLInputElement.prototype, 'files', {
-  get() {
-    return this.files;
-  },
-  set(files) {
-    this.files = files;
-  },
-  configurable: true,
-});
+// Note: We don't need to mock the files property on the prototype
+// since we're setting it directly on individual input elements in the tests
 
 // Create mock File objects
 const createMockFile = (name: string, content: string) => {
