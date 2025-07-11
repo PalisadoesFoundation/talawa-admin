@@ -187,8 +187,8 @@ export const createAdvertisement = [
       name: 'Ad1',
       description: 'this is a banner',
       type: 'banner',
-      startAt: dateConstants.create.startISOReceived,
-      endAt: dateConstants.create.endISOReceived,
+      startAt: dateConstants.create.startAtCalledWith,
+      endAt: dateConstants.create.endAtCalledWith,
     },
     {
       createAdvertisement: {
