@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import fs from 'fs';
+import fs from 'node:fs';
 
 export default defineConfig({
   e2e: {
