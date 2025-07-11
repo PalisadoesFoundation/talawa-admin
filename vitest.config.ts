@@ -11,13 +11,6 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        maxThreads: 1,
-        minThreads: 1,
-      },
-    },
     coverage: {
       enabled: true,
       provider: 'istanbul',
