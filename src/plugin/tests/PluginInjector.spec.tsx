@@ -20,12 +20,10 @@ const MockFallback = () => <div>Mock Fallback</div>;
 describe('PluginInjector', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.clearAllTimers();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.clearAllTimers();
   });
 
   it('should render plugin injectors', () => {

@@ -8,34 +8,14 @@ import {
 } from '../hooks';
 import { getPluginManager, resetPluginManager } from '../manager';
 
-// Create a singleton mockPluginManager with controlled event emission
+// Create a singleton mockPluginManager
 const mockPluginManager = {
   getExtensionPoints: vi.fn().mockReturnValue([]),
   getLoadedPlugins: vi.fn().mockReturnValue([]),
   isSystemInitialized: vi.fn().mockReturnValue(true),
   on: vi.fn(),
   off: vi.fn(),
-  _eventListeners: new Map<string, Function[]>(),
-  _preventEventLoops: true, // Flag to prevent test event loops
 };
-
-// Add controlled event emission to prevent infinite loops
-mockPluginManager.on = vi.fn((event: string, callback: Function) => {
-  if (!mockPluginManager._eventListeners.has(event)) {
-    mockPluginManager._eventListeners.set(event, []);
-  }
-  mockPluginManager._eventListeners.get(event)!.push(callback);
-});
-
-mockPluginManager.off = vi.fn((event: string, callback: Function) => {
-  if (mockPluginManager._eventListeners.has(event)) {
-    const listeners = mockPluginManager._eventListeners.get(event)!;
-    const index = listeners.indexOf(callback);
-    if (index > -1) {
-      listeners.splice(index, 1);
-    }
-  }
-});
 
 // Mock the manager to always return the singleton
 vi.mock('../manager', () => ({
@@ -46,9 +26,6 @@ vi.mock('../manager', () => ({
 describe('Plugin Hooks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Clear all event listeners to prevent cross-test pollution
-    mockPluginManager._eventListeners.clear();
-
     // Reset mock return values to ensure clean state
     mockPluginManager.getExtensionPoints.mockReturnValue([]);
     mockPluginManager.getLoadedPlugins.mockReturnValue([]);
@@ -56,8 +33,6 @@ describe('Plugin Hooks', () => {
   });
 
   afterEach(() => {
-    // Force cleanup of all event listeners
-    mockPluginManager._eventListeners.clear();
     resetPluginManager();
   });
 
@@ -156,9 +131,7 @@ describe('Plugin Hooks', () => {
     });
 
     it('should register event listeners', () => {
-      const { unmount } = renderHook(() => usePluginDrawerItems());
-
-      // Verify that event listeners were registered
+      renderHook(() => usePluginDrawerItems());
       expect(mockPluginManager.on).toHaveBeenCalledWith(
         'plugin:loaded',
         expect.any(Function),
@@ -175,31 +148,26 @@ describe('Plugin Hooks', () => {
         'plugins:initialized',
         expect.any(Function),
       );
-
-      // Clean up to prevent memory leaks
-      unmount();
     });
 
     it('should not update if system is not initialized', () => {
       vi.mocked(mockPluginManager.isSystemInitialized).mockReturnValue(false);
-      const { result, unmount } = renderHook(() => usePluginDrawerItems());
+      const { result } = renderHook(() => usePluginDrawerItems());
       expect(result.current).toEqual([]);
-      unmount();
     });
   });
 
   describe('usePluginRoutes', () => {
     it('should return empty array initially', () => {
-      const { result, unmount } = renderHook(() => usePluginRoutes());
+      const { result } = renderHook(() => usePluginRoutes());
       expect(result.current).toEqual([]);
-      unmount();
     });
 
     it('should return routes for admin global', () => {
       const mockRoutes = [{ path: '/admin', component: 'AdminComponent' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
+      const { result } = renderHook(() =>
         usePluginRoutes(['ADMIN'], true, false),
       );
       expect(result.current).toEqual(mockRoutes);
@@ -209,7 +177,6 @@ describe('Plugin Hooks', () => {
         true,
         false,
       );
-      unmount();
     });
 
     it('should return routes for admin org', () => {
@@ -218,7 +185,7 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
+      const { result } = renderHook(() =>
         usePluginRoutes(['ADMIN'], true, true),
       );
       expect(result.current).toEqual(mockRoutes);
@@ -228,14 +195,13 @@ describe('Plugin Hooks', () => {
         true,
         true,
       );
-      unmount();
     });
 
     it('should return routes for user org', () => {
       const mockRoutes = [{ path: '/user-org', component: 'UserOrgComponent' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
+      const { result } = renderHook(() =>
         usePluginRoutes(['USER'], false, true),
       );
       expect(result.current).toEqual(mockRoutes);
@@ -245,7 +211,6 @@ describe('Plugin Hooks', () => {
         false,
         true,
       );
-      unmount();
     });
 
     it('should return routes for user global', () => {
@@ -254,7 +219,7 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
+      const { result } = renderHook(() =>
         usePluginRoutes(['USER'], false, false),
       );
       expect(result.current).toEqual(mockRoutes);
@@ -264,7 +229,6 @@ describe('Plugin Hooks', () => {
         false,
         false,
       );
-      unmount();
     });
 
     it('should handle empty permissions', () => {
@@ -273,11 +237,8 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
-        usePluginRoutes([], false, false),
-      );
+      const { result } = renderHook(() => usePluginRoutes([], false, false));
       expect(result.current).toEqual(mockRoutes);
-      unmount();
     });
 
     it('should handle undefined permissions', () => {
@@ -289,15 +250,14 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result, unmount } = renderHook(() =>
+      const { result } = renderHook(() =>
         usePluginRoutes(undefined as any, false, false),
       );
       expect(result.current).toEqual(mockRoutes);
-      unmount();
     });
 
     it('should register event listeners', () => {
-      const { unmount } = renderHook(() => usePluginRoutes());
+      renderHook(() => usePluginRoutes());
       expect(mockPluginManager.on).toHaveBeenCalledWith(
         'plugin:loaded',
         expect.any(Function),
@@ -310,7 +270,6 @@ describe('Plugin Hooks', () => {
         'plugin:status-changed',
         expect.any(Function),
       );
-      unmount();
     });
   });
 
@@ -322,29 +281,26 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getLoadedPlugins.mockReturnValue(mockPlugins);
 
-      const { result, unmount } = renderHook(() => useLoadedPlugins());
+      const { result } = renderHook(() => useLoadedPlugins());
       expect(result.current).toEqual(mockPlugins);
-      unmount();
     });
 
     it('should handle empty plugins list', () => {
       mockPluginManager.getLoadedPlugins.mockReturnValue([]);
 
-      const { result, unmount } = renderHook(() => useLoadedPlugins());
+      const { result } = renderHook(() => useLoadedPlugins());
       expect(result.current).toEqual([]);
-      unmount();
     });
 
     it('should handle undefined plugins list', () => {
       mockPluginManager.getLoadedPlugins.mockReturnValue(undefined);
 
-      const { result, unmount } = renderHook(() => useLoadedPlugins());
+      const { result } = renderHook(() => useLoadedPlugins());
       expect(result.current).toBeUndefined();
-      unmount();
     });
 
     it('should register event listeners', () => {
-      const { unmount } = renderHook(() => useLoadedPlugins());
+      renderHook(() => useLoadedPlugins());
       expect(mockPluginManager.on).toHaveBeenCalledWith(
         'plugin:loaded',
         expect.any(Function),
@@ -357,7 +313,6 @@ describe('Plugin Hooks', () => {
         'plugin:status-changed',
         expect.any(Function),
       );
-      unmount();
     });
   });
 
@@ -366,7 +321,7 @@ describe('Plugin Hooks', () => {
       const mockInjectors = [{ type: 'G1', component: 'G1Component' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors('G1'));
+      const { result } = renderHook(() => usePluginInjectors('G1'));
       expect(result.current).toEqual(mockInjectors);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalledWith(
         'G1',
@@ -374,14 +329,13 @@ describe('Plugin Hooks', () => {
         false,
         false,
       );
-      unmount();
     });
 
     it('should return injectors for G2 type', () => {
       const mockInjectors = [{ type: 'G2', component: 'G2Component' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors('G2'));
+      const { result } = renderHook(() => usePluginInjectors('G2'));
       expect(result.current).toEqual(mockInjectors);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalledWith(
         'G2',
@@ -389,14 +343,13 @@ describe('Plugin Hooks', () => {
         false,
         false,
       );
-      unmount();
     });
 
     it('should return injectors for G3 type', () => {
       const mockInjectors = [{ type: 'G3', component: 'G3Component' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors('G3'));
+      const { result } = renderHook(() => usePluginInjectors('G3'));
       expect(result.current).toEqual(mockInjectors);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalledWith(
         'G3',
@@ -404,14 +357,13 @@ describe('Plugin Hooks', () => {
         false,
         false,
       );
-      unmount();
     });
 
     it('should use default G1 type when no type specified', () => {
       const mockInjectors = [{ type: 'G1', component: 'DefaultComponent' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors());
+      const { result } = renderHook(() => usePluginInjectors());
       expect(result.current).toEqual(mockInjectors);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalledWith(
         'G1',
@@ -419,27 +371,24 @@ describe('Plugin Hooks', () => {
         false,
         false,
       );
-      unmount();
     });
 
     it('should handle empty injectors list', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue([]);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors('G1'));
+      const { result } = renderHook(() => usePluginInjectors('G1'));
       expect(result.current).toEqual([]);
-      unmount();
     });
 
     it('should handle undefined injectors list', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(undefined);
 
-      const { result, unmount } = renderHook(() => usePluginInjectors('G1'));
+      const { result } = renderHook(() => usePluginInjectors('G1'));
       expect(result.current).toBeUndefined();
-      unmount();
     });
 
     it('should register event listeners', () => {
-      const { unmount } = renderHook(() => usePluginInjectors());
+      renderHook(() => usePluginInjectors());
       expect(mockPluginManager.on).toHaveBeenCalledWith(
         'plugin:loaded',
         expect.any(Function),
@@ -452,7 +401,6 @@ describe('Plugin Hooks', () => {
         'plugin:status-changed',
         expect.any(Function),
       );
-      unmount();
     });
   });
 
