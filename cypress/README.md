@@ -64,7 +64,7 @@ For running specific tests in headless mode, first manually start your applicati
 npm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
 
 # Run a specific test file
-npm run cypress:run --spec "cypress/e2e/login_spec/login.cy.js"
+npm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
 ```
 
 ## Writing Tests

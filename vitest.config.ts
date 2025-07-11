@@ -25,6 +25,7 @@ export default defineConfig({
         'src/test/**',
         'vitest.config.ts',
         'vitest.setup.ts', // Exclude from coverage if necessary
+        'cypress/**',
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },

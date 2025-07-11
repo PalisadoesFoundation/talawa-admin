@@ -189,7 +189,7 @@ export default [
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/naming-convention': 'off',
-      'no-undef': 'error',
+      'no-undef': 'off',
       'prettier/prettier': 'error',
     },
   },
