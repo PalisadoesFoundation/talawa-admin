@@ -58,25 +58,18 @@ function createErrorComponent(
     },
   };
 
-  return () =>
-    React.createElement(
-      'div',
-      { style: errorStyles.container },
-      React.createElement('h3', { style: errorStyles.heading }, 'Plugin Error'),
-      React.createElement(
-        'p',
-        { style: errorStyles.text },
-        'Failed to load component: ',
-        React.createElement('strong', null, componentName),
-      ),
-      React.createElement(
-        'p',
-        { style: errorStyles.text },
-        'Plugin: ',
-        React.createElement('strong', null, pluginId),
-      ),
-      React.createElement('p', { style: errorStyles.smallText }, error),
-    );
+  return () => (
+    <div style={errorStyles.container}>
+      <h3 style={errorStyles.heading}>Plugin Error</h3>
+      <p style={errorStyles.text}>
+        Failed to load component: <strong>{componentName}</strong>
+      </p>
+      <p style={errorStyles.text}>
+        Plugin: <strong>{pluginId}</strong>
+      </p>
+      <p style={errorStyles.smallText}>{error}</p>
+    </div>
+  );
 }
 
 /**
@@ -331,3 +324,12 @@ export function getPluginComponent(
 export async function initializePluginSystem(): Promise<void> {
   await discoverAndRegisterAllPlugins();
 }
+
+// Export internal functions for testing
+export {
+  createErrorComponent,
+  createLazyPluginComponent,
+  getPluginManifest,
+  extractComponentNames,
+  manifestCache,
+};
