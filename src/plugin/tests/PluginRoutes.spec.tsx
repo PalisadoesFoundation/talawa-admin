@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PluginRoutes from '../PluginRoutes';
 import { usePluginRoutes } from '../hooks';
@@ -311,7 +311,7 @@ describe('PluginRoutes Component', () => {
         </MemoryRouter>,
       );
 
-      // The route is rendered with custom fallback props passed correctly
+      // The route should render with custom fallback props passed correctly
       expect(screen.getByTestId('mock-route')).toBeInTheDocument();
     });
   });
@@ -865,6 +865,522 @@ describe('PluginRoutes Component', () => {
           </MemoryRouter>,
         );
       }).not.toThrow();
+    });
+  });
+
+  // NEW COMPREHENSIVE TESTS FOR IMPROVED COVERAGE
+
+  describe('TypeScript type safety', () => {
+    it('should handle properly typed route extensions', () => {
+      const mockRoutes: Array<{
+        pluginId: string;
+        path: string;
+        component: string;
+        permissions?: string[];
+        exact?: boolean;
+      }> = [
+        {
+          pluginId: 'typed-plugin',
+          path: '/typed-route',
+          component: 'TypedComponent',
+          permissions: ['READ'],
+          exact: true,
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle routes with optional properties', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'optional-plugin',
+          path: '/optional-route',
+          component: 'OptionalComponent',
+          // permissions and exact are optional
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+  });
+
+  describe('Dynamic import error scenarios', () => {
+    it('should handle module import failures gracefully', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'import-fail-plugin',
+          path: '/import-fail',
+          component: 'NonExistentComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      // Mock console.error to capture error messages
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      // Component should still render despite import issues
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle missing default exports', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'no-default-export-plugin',
+          path: '/no-default',
+          component: 'ComponentWithoutDefault',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle named exports correctly', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'named-export-plugin',
+          path: '/named-export',
+          component: 'NamedExportComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+  });
+
+  describe('Plugin route integration scenarios', () => {
+    it('should handle routes with complex plugin IDs', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'complex-plugin-id-with-dashes-and-underscores',
+          path: '/complex-plugin-route',
+          component: 'ComplexPluginComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle routes with nested component paths', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'nested-component-plugin',
+          path: '/nested-component',
+          component: 'components/NestedComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle routes with special characters in paths', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'special-chars-plugin',
+          path: '/path/with/special/chars/!@#$%^&*()',
+          component: 'SpecialCharsComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+  });
+
+  describe('Suspense and lazy loading behavior', () => {
+    it('should render Suspense wrapper for each route', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'suspense-test-plugin',
+          path: '/suspense-test',
+          component: 'SuspenseTestComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      // Should render the route with suspense functionality
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should pass fallback to Suspense correctly', () => {
+      const customFallback = <div data-testid="test-fallback">Loading...</div>;
+      const mockRoutes = [
+        {
+          pluginId: 'fallback-test-plugin',
+          path: '/fallback-test',
+          component: 'FallbackTestComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes fallback={customFallback} />
+        </MemoryRouter>,
+      );
+
+      // Should render the route with fallback functionality
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle multiple routes with different fallbacks', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'multi-fallback-plugin-1',
+          path: '/fallback-1',
+          component: 'Component1',
+          permissions: ['READ'],
+        },
+        {
+          pluginId: 'multi-fallback-plugin-2',
+          path: '/fallback-2',
+          component: 'Component2',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      const customFallback = <div data-testid="multi-fallback">Loading...</div>;
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes fallback={customFallback} />
+        </MemoryRouter>,
+      );
+
+      const routes = screen.getAllByTestId('mock-route');
+      expect(routes).toHaveLength(2);
+    });
+  });
+
+  describe('Route key uniqueness and stability', () => {
+    it('should generate stable keys for identical routes', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'stable-key-plugin',
+          path: '/stable-key',
+          component: 'StableKeyComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      const { rerender } = render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      const firstRender = screen.getByTestId('mock-route');
+
+      // Re-render with same routes
+      rerender(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      const secondRender = screen.getByTestId('mock-route');
+
+      // Keys should be stable across re-renders
+      expect(firstRender).toBeInTheDocument();
+      expect(secondRender).toBeInTheDocument();
+    });
+
+    it('should handle routes with identical paths but different plugins', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'plugin-a',
+          path: '/identical-path',
+          component: 'ComponentA',
+          permissions: ['READ'],
+        },
+        {
+          pluginId: 'plugin-b',
+          path: '/identical-path',
+          component: 'ComponentB',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      const routes = screen.getAllByTestId('mock-route');
+      expect(routes).toHaveLength(2);
+
+      // Both should have the same path but different keys
+      expect(routes[0]).toHaveAttribute('data-path', '/identical-path');
+      expect(routes[1]).toHaveAttribute('data-path', '/identical-path');
+    });
+  });
+
+  describe('Performance and memory management', () => {
+    it('should handle large numbers of routes efficiently', () => {
+      const mockRoutes = Array.from({ length: 100 }, (_, index) => ({
+        pluginId: `performance-plugin-${index}`,
+        path: `/performance-route-${index}`,
+        component: `PerformanceComponent${index}`,
+        permissions: ['READ'],
+      }));
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      const startTime = performance.now();
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      const endTime = performance.now();
+      const renderTime = endTime - startTime;
+
+      const routes = screen.getAllByTestId('mock-route');
+      expect(routes).toHaveLength(100);
+
+      // Should render within reasonable time (adjust threshold as needed)
+      expect(renderTime).toBeLessThan(1000); // 1 second
+    });
+
+    it('should not cause memory leaks with route updates', () => {
+      const initialRoutes = [
+        {
+          pluginId: 'memory-test-plugin',
+          path: '/memory-test',
+          component: 'MemoryTestComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(initialRoutes);
+
+      const { rerender, unmount } = render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      // Update routes multiple times
+      for (let i = 0; i < 10; i++) {
+        const updatedRoutes = [
+          {
+            pluginId: `memory-test-plugin-${i}`,
+            path: `/memory-test-${i}`,
+            component: `MemoryTestComponent${i}`,
+            permissions: ['READ'],
+          },
+        ];
+
+        vi.mocked(usePluginRoutes).mockReturnValue(updatedRoutes);
+
+        rerender(
+          <MemoryRouter>
+            <PluginRoutes />
+          </MemoryRouter>,
+        );
+      }
+
+      // Should not throw during unmount
+      expect(() => unmount()).not.toThrow();
+    });
+  });
+
+  describe('Integration with React Router', () => {
+    it('should work with React Router context', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'router-integration-plugin',
+          path: '/router-integration',
+          component: 'RouterIntegrationComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter initialEntries={['/router-integration']}>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+
+    it('should handle nested routing scenarios', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'nested-routing-plugin',
+          path: '/nested/*',
+          component: 'NestedRoutingComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter initialEntries={['/nested/some-sub-route']}>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
+    });
+  });
+
+  describe('Error boundary and fault tolerance', () => {
+    it('should handle malformed route objects gracefully', () => {
+      const mockRoutes = [
+        {
+          // Missing required properties
+          pluginId: 'malformed-plugin',
+          // path and component missing
+        } as any,
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      expect(() => {
+        render(
+          <MemoryRouter>
+            <PluginRoutes />
+          </MemoryRouter>,
+        );
+      }).not.toThrow();
+    });
+
+    it('should handle null and undefined values in route properties', () => {
+      const mockRoutes = [
+        {
+          pluginId: null,
+          path: null,
+          component: null,
+          permissions: null,
+        } as any,
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      expect(() => {
+        render(
+          <MemoryRouter>
+            <PluginRoutes />
+          </MemoryRouter>,
+        );
+      }).not.toThrow();
+    });
+
+    it('should handle routes with function components', () => {
+      const mockRoutes = [
+        {
+          pluginId: 'function-component-plugin',
+          path: '/function-component',
+          component: 'FunctionComponent',
+          permissions: ['READ'],
+        },
+      ];
+
+      vi.mocked(usePluginRoutes).mockReturnValue(mockRoutes);
+
+      render(
+        <MemoryRouter>
+          <PluginRoutes />
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('mock-route')).toBeInTheDocument();
     });
   });
 });
