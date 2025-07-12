@@ -3,14 +3,14 @@
 }
 
 .glassMenu {
-  background: rgba(255, 255, 255, 0.25) !important;
+  background: rgb(255, 255, 255) !important;
   backdrop-filter: blur(8px);
-  border-radius: 14px;
-  min-width: 260px !important;
-  max-width: 320px;
+  border-radius: 5px;
+  min-width: 250px !important;
+  max-width: 270px;
   padding: 8px 0;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.18);
 }
 
 .notificationItem {
@@ -29,13 +29,13 @@
 }
 
 .notificationItem:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(154, 151, 151, 0.15);
 }
 
 .notificationDot {
   width: 10px;
   height: 10px;
-  background: #ff5252;
+  background: #0a0a0a;
   border-radius: 50%;
   margin-right: 8px;
   flex-shrink: 0;
@@ -52,11 +52,21 @@
 .iconButton {
   width: 36px !important;
   height: 36px !important;
+  margin-right: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.18);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 0;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+}
+.iconButton:focus,
+.iconButton:active {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
