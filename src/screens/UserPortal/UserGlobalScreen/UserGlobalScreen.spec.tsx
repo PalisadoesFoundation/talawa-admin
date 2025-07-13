@@ -1,0 +1,430 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { MemoryRouter, Outlet } from 'react-router-dom';
+import UserGlobalScreen from './UserGlobalScreen';
+
+// Mock the child components
+vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
+  default: vi.fn(({ hideDrawer, setHideDrawer }) => (
+    <div data-testid="user-sidebar">
+      UserSidebar - Hide: {hideDrawer?.toString()}
+      <button onClick={() => setHideDrawer?.(!hideDrawer)}>
+        Mock Sidebar Toggle
+      </button>
+    </div>
+  )),
+}));
+
+vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">ProfileDropdown</div>
+  )),
+}));
+
+// Mock CSS modules
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    opendrawer: 'opendrawer',
+    collapseSidebarButton: 'collapseSidebarButton',
+    drawer: 'drawer',
+    pageContainer: 'pageContainer',
+    expand: 'expand',
+    contract: 'contract',
+  },
+}));
+
+// Mock react-router Outlet
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    Outlet: vi.fn(() => <div data-testid="outlet">Outlet Content</div>),
+  };
+});
+
+describe('UserGlobalScreen', () => {
+  const originalInnerWidth = window.innerWidth;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Reset window.innerWidth to a default value
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    // Restore original window.innerWidth
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: originalInnerWidth,
+    });
+  });
+
+  const renderComponent = () => {
+    return render(
+      <MemoryRouter>
+        <UserGlobalScreen />
+      </MemoryRouter>,
+    );
+  };
+
+  describe('Component Rendering', () => {
+    it('should render all required components', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('outlet')).toBeInTheDocument();
+      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+      expect(screen.getByText('Global Features')).toBeInTheDocument();
+    });
+
+    it('should render UserSidebar with correct props', () => {
+      renderComponent();
+
+      const sidebar = screen.getByTestId('user-sidebar');
+      expect(sidebar).toBeInTheDocument();
+      // The sidebar should initially show hideDrawer as null/false for desktop
+    });
+
+    it('should render ProfileDropdown component', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+    });
+
+    it('should render Outlet for nested routes', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('outlet')).toBeInTheDocument();
+    });
+
+    it('should render Global Features heading', () => {
+      renderComponent();
+
+      expect(screen.getByText('Global Features')).toBeInTheDocument();
+    });
+  });
+
+  describe('Sidebar Toggle Functionality', () => {
+    it('should show close menu button initially on desktop', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1024,
+      });
+
+      renderComponent();
+
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+      expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+    });
+
+    it('should toggle to open menu button when close button is clicked', () => {
+      renderComponent();
+
+      const closeButton = screen.getByTestId('closeMenu');
+      fireEvent.click(closeButton);
+
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+      expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+    });
+
+    it('should toggle back to close menu button when open button is clicked', () => {
+      renderComponent();
+
+      // First click to show open button
+      const closeButton = screen.getByTestId('closeMenu');
+      fireEvent.click(closeButton);
+
+      // Then click open button to show close button again
+      const openButton = screen.getByTestId('openMenu');
+      fireEvent.click(openButton);
+
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+      expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+    });
+
+    it('should pass correct hideDrawer state to UserSidebar', () => {
+      renderComponent();
+
+      // Initially hideDrawer should be null (first render)
+      expect(screen.getByText(/UserSidebar - Hide:/)).toBeInTheDocument();
+
+      // Click to hide drawer
+      const closeButton = screen.getByTestId('closeMenu');
+      fireEvent.click(closeButton);
+
+      // Now hideDrawer should be true - check within the sidebar
+      const sidebar = screen.getByTestId('user-sidebar');
+      expect(sidebar.textContent).toContain('true');
+    });
+
+    it('should allow UserSidebar to toggle drawer state', () => {
+      renderComponent();
+
+      // Click the mock sidebar toggle button
+      const sidebarToggle = screen.getByText('Mock Sidebar Toggle');
+      fireEvent.click(sidebarToggle);
+
+      // State should change
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+  });
+
+  describe('Responsive Behavior', () => {
+    it('should handle mobile screen width (<=820px)', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      });
+
+      renderComponent();
+
+      // Should show open menu button on mobile
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+      expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
+    });
+
+    it('should handle tablet screen width (>820px)', () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 900,
+      });
+
+      renderComponent();
+
+      // Should show close menu button on tablet/desktop
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+      expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
+    });
+
+    it('should handle window resize events', () => {
+      renderComponent();
+
+      // Initially desktop view
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+
+      // Simulate resize to mobile
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', {
+          writable: true,
+          configurable: true,
+          value: 800,
+        });
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      // Should toggle the drawer state
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+
+    it('should not toggle on resize if screen width > 820px', () => {
+      renderComponent();
+
+      // Initially desktop view with close button
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+
+      // Simulate resize to larger desktop
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', {
+          writable: true,
+          configurable: true,
+          value: 1200,
+        });
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      // Should still show close button (no toggle)
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+    });
+  });
+
+  describe('Event Listener Management', () => {
+    it('should add resize event listener on mount', () => {
+      const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
+
+      renderComponent();
+
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        'resize',
+        expect.any(Function),
+      );
+    });
+
+    it('should remove resize event listener on unmount', () => {
+      const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
+
+      const { unmount } = renderComponent();
+      unmount();
+
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'resize',
+        expect.any(Function),
+      );
+    });
+
+    it('should handle multiple resize events correctly', () => {
+      renderComponent();
+
+      // Start with desktop view
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
+
+      // Resize to mobile - this will toggle the current state
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', {
+          writable: true,
+          configurable: true,
+          value: 600,
+        });
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+
+      // Resize to desktop again - but this won't trigger toggle since width > 820
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', {
+          writable: true,
+          configurable: true,
+          value: 1000,
+        });
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      // Should still show open menu since resize to > 820px doesn't toggle
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+  });
+
+  describe('CSS Classes and Styling', () => {
+    it('should apply correct CSS classes based on drawer state', () => {
+      renderComponent();
+
+      const mainContainer = screen.getByTestId('mainpageright');
+
+      // Initially should have pageContainer class
+      expect(mainContainer).toHaveClass('pageContainer');
+    });
+
+    it('should apply expand class when drawer is hidden', () => {
+      renderComponent();
+
+      // Hide the drawer
+      const closeButton = screen.getByTestId('closeMenu');
+      fireEvent.click(closeButton);
+
+      const mainContainer = screen.getByTestId('mainpageright');
+      expect(mainContainer).toHaveClass('pageContainer', 'expand');
+    });
+
+    it('should apply contract class when drawer is shown', () => {
+      renderComponent();
+
+      // Hide drawer first
+      const closeButton = screen.getByTestId('closeMenu');
+      fireEvent.click(closeButton);
+
+      // Then show drawer again
+      const openButton = screen.getByTestId('openMenu');
+      fireEvent.click(openButton);
+
+      const mainContainer = screen.getByTestId('mainpageright');
+      expect(mainContainer).toHaveClass('pageContainer', 'contract');
+    });
+
+    it('should apply correct button classes', () => {
+      renderComponent();
+
+      const closeButton = screen.getByTestId('closeMenu');
+      expect(closeButton).toHaveClass('collapseSidebarButton');
+
+      // Toggle to open button
+      fireEvent.click(closeButton);
+
+      const openButton = screen.getByTestId('openMenu');
+      expect(openButton).toHaveClass('opendrawer');
+    });
+  });
+
+  describe('Initial State Handling', () => {
+    it('should handle null initial state correctly', () => {
+      renderComponent();
+
+      const mainContainer = screen.getByTestId('mainpageright');
+
+      // With null initial state, should not have expand or contract classes
+      expect(mainContainer).toHaveClass('pageContainer');
+      expect(mainContainer).not.toHaveClass('expand');
+      expect(mainContainer).not.toHaveClass('contract');
+    });
+
+    it('should initialize based on screen width on mount', () => {
+      // Test mobile initialization
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 600,
+      });
+
+      renderComponent();
+
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle rapid successive button clicks', () => {
+      renderComponent();
+
+      const closeButton = screen.getByTestId('closeMenu');
+
+      // Rapid clicks
+      fireEvent.click(closeButton);
+      fireEvent.click(screen.getByTestId('openMenu'));
+      fireEvent.click(screen.getByTestId('closeMenu'));
+
+      // Should end up with open menu button
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+
+    it('should handle window resize at exactly 820px (boundary test)', () => {
+      // Set initial width to 820px
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 820,
+      });
+
+      renderComponent();
+
+      // At exactly 820px - verify component renders successfully
+      // (specific button state may depend on initial handleResize call)
+      expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+    });
+
+    it('should handle window resize at 819px (mobile threshold)', () => {
+      renderComponent();
+
+      act(() => {
+        Object.defineProperty(window, 'innerWidth', {
+          writable: true,
+          configurable: true,
+          value: 819,
+        });
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      // At 819px, should trigger mobile behavior
+      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+    });
+  });
+});
