@@ -38,13 +38,15 @@ export const CURRENT_USER = gql`
 
 // Query to take the Organization list
 export const ORGANIZATION_LIST = gql`
-  query {
-    organizations {
+  query Organizations($filter: String) {
+    organizations(filter: $filter) {
       id
       name
       addressLine1
       description
       avatarURL
+      membersCount
+      adminsCount
       members(first: 32) {
         edges {
           node {
@@ -60,9 +62,9 @@ export const ORGANIZATION_LIST = gql`
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int!) {
+  query UserJoinedOrganizations($id: String!, $first: Int!, $filter: String) {
     user(input: { id: $id }) {
-      organizationsWhereMember(first: $first) {
+      organizationsWhereMember(first: $first, filter: $filter) {
         pageInfo {
           hasNextPage
         }
@@ -73,6 +75,8 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
             addressLine1
             description
             avatarURL
+            membersCount
+            adminsCount
             members(first: 32) {
               edges {
                 node {

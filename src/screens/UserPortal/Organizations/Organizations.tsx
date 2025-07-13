@@ -36,10 +36,10 @@ import { useQuery } from '@apollo/client';
 import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
-  USER_CREATED_ORGANIZATIONS,
   USER_JOINED_ORGANIZATIONS_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
@@ -48,6 +48,7 @@ import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
+import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 const { getItem } = useLocalStorage();
 
@@ -66,95 +67,92 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
   return debouncedFn;
 }
 
-interface IOrganizationCardProps {
+/**
+ * Interface for member node structure from GraphQL
+ */
+interface InterfaceMemberNode {
   id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: [];
-  members: InterfaceMemberNode[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
-  isJoined: boolean;
-  membersCount: number; // Add this
-  adminsCount: number; // Add this
 }
 
 /**
- * Interface defining the structure of organization properties.
+ * Interface for member edge structure from GraphQL
  */
-
-interface InterfaceMemberNode {
-  id: string;
-  // add other fields if needed
-}
 interface InterfaceMemberEdge {
   node: InterfaceMemberNode;
 }
+
+/**
+ * Interface for members connection from GraphQL
+ */
 interface InterfaceMembersConnection {
   edges: InterfaceMemberEdge[];
   pageInfo?: {
     hasNextPage: boolean;
   };
 }
+
+/**
+ * Interface for organization data from GraphQL queries
+ */
 interface IOrganization {
-  isJoined: boolean;
   id: string;
   name: string;
   image?: string;
-  avatarURL?: string; // <-- add this
-  addressLine1?: string; // <-- add this
+  avatarURL?: string;
+  addressLine1?: string;
   description: string;
-  admins: [];
-  members?: InterfaceMembersConnection; // <-- update this
-  address: {
+  membersCount?: number;
+  adminsCount?: number;
+  members?: InterfaceMemberNode[]; // Processed members list
+  address?: {
     city: string;
     countryCode: string;
     line1: string;
     postalCode: string;
     state: string;
   };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
+  membershipRequestStatus?: string;
+  userRegistrationRequired?: boolean;
+  membershipRequests?: {
     id: string;
     user: {
       id: string;
     };
   }[];
+  isJoined?: boolean;
+  isMember?: boolean;
 }
 
-interface IOrgData {
-  addressLine1: string;
-  avatarURL: string | null;
+/**
+ * Interface for raw organization data from GraphQL (before processing)
+ */
+interface IOrganizationRaw {
   id: string;
-  members: {
-    edges: [
-      {
-        node: {
-          id: string;
-          __typename: string;
-        };
-        __typename: string;
-      },
-    ];
-  };
-  description: string;
-  __typename: string;
   name: string;
+  image?: string;
+  avatarURL?: string;
+  addressLine1?: string;
+  description: string;
+  membersCount?: number;
+  adminsCount?: number;
+  members?: InterfaceMembersConnection; // Raw GraphQL connection
+  address?: {
+    city: string;
+    countryCode: string;
+    line1: string;
+    postalCode: string;
+    state: string;
+  };
+  membershipRequestStatus?: string;
+  userRegistrationRequired?: boolean;
+  membershipRequests?: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
+  isJoined?: boolean;
+  isMember?: boolean;
 }
 
 /**
@@ -218,6 +216,8 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchJoined,
   } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
+    skip: mode !== 1,
+    notifyOnNetworkStatusChange: true,
   });
 
   const {
@@ -226,6 +226,8 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchCreated,
   } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
+    skip: mode !== 2,
+    notifyOnNetworkStatusChange: true,
   });
   /**
    * 2) doSearch sets the filterName (triggering refetch)
@@ -266,20 +268,21 @@ export default function organizations(): React.JSX.Element {
    * React to changes in mode or relevant query data
    */
   useEffect(() => {
-    if (mode === 0) {
-      if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
+    if (mode === 0 && allOrganizationsData?.organizations) {
+      // All Organizations
+      const orgs = allOrganizationsData.organizations.map(
+        (org: IOrganizationRaw) => {
           // Check if current user is a member
           const memberEdges = org.members?.edges || [];
           const isMember = memberEdges.some(
-            (edge: IOrgData['members']['edges'][number]) =>
-              edge.node.id === userId,
+            (edge: InterfaceMemberEdge) => edge.node.id === userId,
           );
 
           return {
             id: org.id,
             name: org.name,
-            image: org.avatarURL || null,
+            image: org.avatarURL || org.image || '',
+            description: org.description || '',
             address: {
               line1: org.addressLine1 || '',
               city: '',
@@ -287,51 +290,83 @@ export default function organizations(): React.JSX.Element {
               postalCode: '',
               state: '',
             },
-            admins: [],
-            members:
-              org.members?.edges?.map(
-                (e: IOrgData['members']['edges'][number]) => e.node,
-              ) || [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            isJoined: isMember, // Set based on membership check
+            isJoined: isMember,
+            membersCount: org.membersCount || 0,
+            adminsCount: org.adminsCount || 0,
+            members:
+              org.members?.edges?.map((e: InterfaceMemberEdge) => e.node) || [],
           };
-        });
-        setOrganizations(orgs);
-      }
-    } else if (mode === 1) {
-      // Joined
-      if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
-        const orgs =
-          joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-            (edge: { node: IOrganization }) => {
-              const organization = edge.node;
-              return {
-                ...organization,
-                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
-                isJoined: true,
-              };
-            },
-          );
-        setOrganizations(orgs);
-      } else {
-        setOrganizations([]);
-      }
-    } else if (mode === 2) {
-      // Created
-      if (createdOrganizationsData?.user?.createdOrganizations) {
-        const orgs = createdOrganizationsData.user.createdOrganizations.map(
-          (org: IOrganization) => ({
-            ...org,
-            membershipRequestStatus: 'created',
-            isJoined: true,
-          }),
+        },
+      );
+      setOrganizations(orgs);
+    } else if (
+      mode === 1 &&
+      joinedOrganizationsData?.user?.organizationsWhereMember?.edges
+    ) {
+      // Joined Organizations
+      const orgs =
+        joinedOrganizationsData.user.organizationsWhereMember.edges.map(
+          (edge: { node: IOrganizationRaw }) => {
+            const organization = edge.node;
+            return {
+              id: organization.id,
+              name: organization.name,
+              image: organization.avatarURL || organization.image || '',
+              description: organization.description || '',
+              address: {
+                line1: organization.addressLine1 || '',
+                city: '',
+                countryCode: '',
+                postalCode: '',
+                state: '',
+              },
+              membershipRequestStatus: 'accepted',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: true,
+              membersCount: organization.membersCount || 0,
+              adminsCount: organization.adminsCount || 0,
+              members:
+                organization.members?.edges?.map(
+                  (e: InterfaceMemberEdge) => e.node,
+                ) || [],
+            };
+          },
         );
-        setOrganizations(orgs);
-      } else {
-        setOrganizations([]);
-      }
+      setOrganizations(orgs);
+    } else if (
+      mode === 2 &&
+      createdOrganizationsData?.user?.createdOrganizations
+    ) {
+      // Created Organizations
+      const orgs = createdOrganizationsData.user.createdOrganizations.map(
+        (org: IOrganizationRaw) => ({
+          id: org.id,
+          name: org.name,
+          image: org.avatarURL || org.image || '',
+          description: org.description || '',
+          address: {
+            line1: org.addressLine1 || '',
+            city: '',
+            countryCode: '',
+            postalCode: '',
+            state: '',
+          },
+          membershipRequestStatus: 'created',
+          userRegistrationRequired: false,
+          membershipRequests: [],
+          isJoined: true,
+          membersCount: org.membersCount || 0,
+          adminsCount: org.adminsCount || 0,
+          members: [],
+        }),
+      );
+      setOrganizations(orgs);
+    } else {
+      setOrganizations([]);
     }
   }, [
     mode,
@@ -472,28 +507,29 @@ export default function organizations(): React.JSX.Element {
                           )
                         : organizations
                       ).map((organization: IOrganization, index) => {
-                        const cardProps: IOrganizationCardProps = {
-                          name: organization.name,
-                          image: organization.image ?? '',
+                        const cardProps: InterfaceOrganizationCardProps = {
                           id: organization.id,
-                          description: organization.description,
-                          admins: organization.admins,
-                          members:
-                            organization.members?.edges?.map((e) => e.node) ??
-                            [],
-                          address: organization.address,
+                          name: organization.name,
+                          image: organization.image || '',
+                          description: organization.description || '',
+                          address: organization.address || {
+                            city: '',
+                            countryCode: '',
+                            line1: organization.addressLine1 || '',
+                            postalCode: '',
+                            state: '',
+                          },
                           membershipRequestStatus:
-                            organization.membershipRequestStatus,
+                            organization.membershipRequestStatus || '',
                           userRegistrationRequired:
-                            organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
-                          isJoined: organization.isJoined,
-                          membersCount: Array.isArray(organization.members)
-                            ? organization.members.length
-                            : 0,
-                          adminsCount: Array.isArray(organization.admins)
-                            ? organization.admins.length
-                            : 0,
+                            organization.userRegistrationRequired || false,
+                          membershipRequests:
+                            organization.membershipRequests || [],
+                          isJoined: organization.isJoined || false,
+                          // Use server-provided counts instead of calculating locally
+                          membersCount: organization.membersCount || 0,
+                          adminsCount: organization.adminsCount || 0,
+                          members: organization.members || [],
                         };
                         return (
                           <div

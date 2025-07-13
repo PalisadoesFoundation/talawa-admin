@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Organizations/Organizations.tsx:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Organizations/Organizations.tsx#L163)
+Defined in: [src/screens/UserPortal/Organizations/Organizations.tsx:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Organizations/Organizations.tsx#L161)
 
 Component for displaying and managing user organizations.
 
