@@ -6,4 +6,4 @@
 
 > `const` **default**: [`IPluginLifecycle`](../../../types/interfaces/IPluginLifecycle.md)
 
-Defined in: src/plugin/available/event\_rsvp\_tracker/index.tsx:22
+Defined in: src/plugin/available/Plugin\_Map/index.tsx:22

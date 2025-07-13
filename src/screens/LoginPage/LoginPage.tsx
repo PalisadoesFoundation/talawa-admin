@@ -96,7 +96,7 @@ const loginPage = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const { getItem, setItem, removeItem } = useLocalStorage();
+  const { getItem, setItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -362,10 +362,8 @@ const loginPage = (): JSX.Element => {
         // setItem('UserImage', user.avatarURL);
         if (isAdmin) {
           setItem('id', loggedInUserId);
-          removeItem('userId'); // Clear userId for admin users
         } else {
           setItem('userId', loggedInUserId);
-          removeItem('id'); // Clear id for regular users
         }
 
         navigate(isAdmin ? '/orglist' : '/user/organizations');

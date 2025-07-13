@@ -6,4 +6,4 @@
 
 > `const` **AttendanceQRScanner**: `React.FC`\<`AttendanceQRScannerProps`\>
 
-Defined in: src/plugin/available/event\_rsvp\_tracker/injector/AttendanceQRScanner.tsx:14
+Defined in: src/plugin/available/Plugin\_Map/injector/AttendanceQRScanner.tsx:14

@@ -6,4 +6,4 @@
 
 > `const` **EventTrackerGlobal**: `React.FC`
 
-Defined in: src/plugin/available/event\_rsvp\_tracker/pages/EventTrackerGlobal.tsx:19
+Defined in: src/plugin/available/Plugin\_Map/pages/EventTrackerGlobal.tsx:19
