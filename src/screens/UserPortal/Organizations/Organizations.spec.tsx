@@ -35,65 +35,26 @@ const MOCKS = [
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
         id: getItem('userId'),
+        filter: '',
       },
     },
     result: {
       data: {
-        users: [
-          {
-            appUserProfile: {
-              createdOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  image: '',
-                  name: 'anyOrganization1',
-                  description: 'desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    name: 'John Doe',
-                  },
-                  members: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  admins: [
-                    {
-                      _id: '45gj5678jk45678fvgbhnr4rtgh',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                  membershipRequests: [
-                    {
-                      _id: '56gheqyr7deyfuiwfewifruy8',
-                      user: {
-                        _id: '45ydeg2yet721rtgdu32ry',
-                      },
-                    },
-                  ],
-                },
-              ],
+        user: {
+          id: getItem('userId'),
+          createdOrganizations: [
+            {
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              description: 'desc',
+              createdAt: '1234567890',
+              avatarMimeType: null,
+              isMember: true,
+              membersCount: 5,
+              adminsCount: 2,
             },
-          },
-        ],
+          ],
+        },
       },
     },
   },
@@ -108,92 +69,46 @@ const MOCKS = [
       data: {
         organizations: [
           {
-            __typename: 'Organization',
             id: '6401ff65ce8e8406b8f07af2',
-            image: '',
             name: 'anyOrganization1',
+            addressLine1: 'asdfg',
             description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
+            avatarURL: '',
+            membersCount: 5,
+            adminsCount: 2,
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: '45ydeg2yet721rtgdu32ry',
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+              },
             },
-            createdAt: '1234567890',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
           },
           {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
+            id: '6401ff65ce8e8406b8f07af3',
             name: 'anyOrganization2',
-            createdAt: '1234567890',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
+            addressLine1: 'asdfg',
             description: 'desc',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
+            avatarURL: '',
+            membersCount: 3,
+            adminsCount: 1,
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: '45ydeg2yet721rtgdu32ry',
+                  },
                 },
+              ],
+              pageInfo: {
+                hasNextPage: false,
               },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
+            },
           },
         ],
       },
@@ -222,6 +137,8 @@ const MOCKS = [
                   addressLine1: 'Test Line 1',
                   description: 'Test Description',
                   avatarURL: '',
+                  membersCount: 5,
+                  adminsCount: 2,
                   members: {
                     edges: [
                       {
@@ -240,6 +157,8 @@ const MOCKS = [
                   addressLine1: 'asdfg',
                   description: 'desc',
                   avatarURL: '',
+                  membersCount: 3,
+                  adminsCount: 1,
                   members: {
                     edges: [
                       {
@@ -268,48 +187,25 @@ const MOCKS = [
       data: {
         organizations: [
           {
-            __typename: 'Organization',
             id: '6401ff65ce8e8406b8f07af3',
-            image: '',
             name: 'anyOrganization2',
+            addressLine1: 'asdfg',
             description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
+            avatarURL: '',
+            membersCount: 3,
+            adminsCount: 1,
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: '45ydeg2yet721rtgdu32ry',
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+              },
             },
-            userRegistrationRequired: true,
-            createdAt: '1234567890',
-            creator: { __typename: 'User', name: 'John Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-                user: {
-                  _id: '4567890fgvhbjn',
-                },
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
           },
         ],
       },
