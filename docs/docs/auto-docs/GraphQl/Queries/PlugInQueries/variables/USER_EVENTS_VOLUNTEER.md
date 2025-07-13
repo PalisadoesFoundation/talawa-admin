@@ -6,4 +6,4 @@
 
 > `const` **USER\_EVENTS\_VOLUNTEER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L84)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L123)

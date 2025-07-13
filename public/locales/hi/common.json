@@ -94,5 +94,6 @@
   "late": "देर से",
   "createdLatest": "नवीनतम बनाया गया",
   "createdEarliest": "सबसे पहले बनाया गया",
-  "searchBy": "के द्वारा खोजें {{item}}"
+  "searchBy": "{{item}} से खोजें",
+  "plugins": "प्लगइन्स"
 }
