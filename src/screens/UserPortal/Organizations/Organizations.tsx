@@ -1,7 +1,4 @@
-/* global clearTimeout, HTMLButtonElement, HTMLTextAreaElement */
 /**
- * Organizations.tsx
- *
  * This file contains the `organizations` component, which is responsible for displaying
  * and managing the organizations associated with a user. It provides functionality to view all
  * organizations, joined organizations, and created organizations, along with search and pagination features.
@@ -16,20 +13,17 @@
  * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
  * - Pagination is implemented to handle large datasets efficiently.
  *
- * ### Dependencies
+ * Dependencies:
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/icons-material` for icons.
  * - `react-bootstrap` for UI components.
  * - `react-i18next` for internationalization.
  * - Custom components like `PaginationList`, `OrganizationCard`, and `UserSidebar`.
  *
- * @returns The Organizations component.
- *
  * @example
  * ```tsx
  * <Organizations />
  * ```
- *
  */
 
 import { useQuery } from '@apollo/client';
@@ -44,7 +38,7 @@ import PaginationList from 'components/Pagination/PaginationList/PaginationList'
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
@@ -380,7 +374,7 @@ export default function organizations(): React.JSX.Element {
    * pagination
    */
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
   ) => {
     setPage(newPage);
@@ -398,7 +392,7 @@ export default function organizations(): React.JSX.Element {
 
   return (
     <>
-      {/* {hideDrawer ? (
+      {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={() => setHideDrawer(!hideDrawer)}
@@ -414,14 +408,12 @@ export default function organizations(): React.JSX.Element {
         >
           <i className="fa fa-angle-double-left" />
         </Button>
-      )} */}
+      )}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{
-          marginLeft: hideDrawer ? '100px' : '20px',
-          paddingTop: '20px',
-        }}
+        className={`${styles.containerHeight} ${
+          hideDrawer ? styles.expandOrg : styles.contractOrg
+        }`}
         data-testid="organizations-container"
       >
         <div className={styles.mainContainerOrganization}>

@@ -6,4 +6,4 @@
 
 > `const` **IS\_USER\_BLOCKED**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:478](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L478)
+Defined in: [src/GraphQl/Queries/Queries.ts:479](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L479)

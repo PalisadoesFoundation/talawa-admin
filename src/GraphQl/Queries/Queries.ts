@@ -99,6 +99,8 @@ export const ALL_ORGANIZATIONS_PG = gql`
       addressLine1
       description
       avatarURL
+      membersCount
+      adminsCount
       members(first: 32) {
         edges {
           node {
@@ -286,32 +288,31 @@ export const USER_LIST_REQUEST = gql`
 `;
 
 export const EVENT_DETAILS = gql`
-  query GetEvent($eventId: String!) {
-    event(input: { id: $eventId }) {
-      id
-      name
+  query Event($id: ID!) {
+    event(id: $id) {
+      _id
+      title
       description
-      location
+      startDate
+      endDate
+      startTime
+      endTime
       allDay
-      isPublic
-      isRegisterable
-      startAt
-      endAt
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-        emailAddress
-      }
-      updater {
-        id
-        name
-        emailAddress
+      location
+      recurring
+      baseRecurringEvent {
+        _id
       }
       organization {
-        id
-        name
+        _id
+        members {
+          _id
+          firstName
+          lastName
+        }
+      }
+      attendees {
+        _id
       }
     }
   }
@@ -505,10 +506,6 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             description
             startAt
             endAt
-            allDay
-            location
-            isPublic
-            isRegisterable
             creator {
               id
               name
@@ -545,54 +542,20 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
-// Query to take the Organization with data
 export const GET_ORGANIZATION_DATA_PG = gql`
-  query getOrganizationData($id: String!, $first: Int, $after: String) {
+  query getOrganizationData($id: String!) {
     organization(input: { id: $id }) {
       id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
       avatarURL
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-        emailAddress
-      }
-      updater {
-        id
-        name
-        emailAddress
-      }
-      members(first: $first, after: $after) {
-        edges {
-          node {
-            id
-            name
-            emailAddress
-            role
-          }
-          cursor
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
+      name
+      city
     }
   }
 `;
-// list of a organizations
+
 export const ORGANIZATIONS_LIST = gql`
-  query Organizations {
-    organizations {
+  query getOrganization($id: String!) {
+    organization(input: { id: $id }) {
       id
       name
       description
@@ -639,15 +602,20 @@ export const MEMBERS_LIST_PG = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query GetMembersByOrganization($organizationId: ID!) {
-    usersByOrganizationId(organizationId: $organizationId) {
-      id
-      name
-      emailAddress
-      role
-      avatarURL
-      createdAt
-      updatedAt
+  query Organizations($id: ID!) {
+    organizations(id: $id) {
+      _id
+      members {
+        _id
+        firstName
+        lastName
+        image
+        email
+        createdAt
+        organizationsBlockedBy {
+          _id
+        }
+      }
     }
   }
 `;
@@ -814,6 +782,27 @@ export const USER_DETAILS = gql`
         }
         eventAdmin {
           _id
+        }
+      }
+    }
+  }
+`;
+
+// to take the organization event list
+export const ORGANIZATION_EVENT_LIST = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+          }
         }
       }
     }
@@ -1127,3 +1116,18 @@ export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
 } from './OrganizationQueries';
+
+export const GET_ORGANIZATION_EVENTS = gql`
+  query Organization($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      id
+      events {
+        id
+        name
+        description
+        startAt
+        endAt
+      }
+    }
+  }
+`;
