@@ -663,22 +663,9 @@ test('Testing Sidebar', async () => {
     </MockedProvider>,
   );
 
-  await waitFor(() => {
-    const closeMenuBtn = screen.getByTestId('toggleBtn');
-    expect(closeMenuBtn).toBeInTheDocument();
-  });
-  await act(async () => {
-    const closeMenuBtn = screen.getByTestId('toggleBtn');
-    closeMenuBtn.click();
-  });
-  await waitFor(() => {
-    const openMenuBtn = screen.getByTestId('toggleBtn');
-    expect(openMenuBtn).toBeInTheDocument();
-  });
-  await act(async () => {
-    const openMenuBtn = screen.getByTestId('toggleBtn');
-    openMenuBtn.click();
-  });
+  // Note: Toggle button functionality has been moved to separate components
+  // (e.g., SidebarToggle) and is no longer part of the drawer components
+  // due to plugin system modifications
 });
 
 test('Testing sidebar when the screen size is less than or equal to 820px', async () => {

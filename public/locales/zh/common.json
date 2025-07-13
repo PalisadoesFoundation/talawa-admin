@@ -94,5 +94,6 @@
   "late": "迟到",
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
-  "searchBy": "搜索依据 {{item}}"
+  "searchBy": "按{{item}}搜索",
+  "plugins": "插件"
 }
