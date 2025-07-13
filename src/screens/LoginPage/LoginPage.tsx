@@ -167,7 +167,10 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+      const userRole = getItem('role');
+      navigate(
+        userRole === 'administrator' ? '/orglist' : '/user/organizations',
+      );
       extendSession();
     }
   }, []);
@@ -357,13 +360,15 @@ const loginPage = (): JSX.Element => {
         // setItem('FirstName', user.firstName);
         // setItem('LastName', user.lastName);
         // setItem('UserImage', user.avatarURL);
-        if (role === 'admin') {
+        if (isAdmin) {
           setItem('id', loggedInUserId);
+          localStorage.removeItem('userId'); // Clear userId for admin users
         } else {
           setItem('userId', loggedInUserId);
+          localStorage.removeItem('id'); // Clear id for regular users
         }
 
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        navigate(isAdmin ? '/orglist' : '/user/organizations');
         startSession();
       } else {
         toast.warn(tErrors('notFound') as string);

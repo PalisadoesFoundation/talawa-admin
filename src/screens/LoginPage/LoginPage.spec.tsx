@@ -1071,7 +1071,7 @@ describe('Testing redirect if already logged in', () => {
   it('Logged in as USER', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', 'id');
+    setItem('role', 'user');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1089,7 +1089,7 @@ describe('Testing redirect if already logged in', () => {
   it('Logged in as Admin or SuperAdmin', async () => {
     const { setItem } = useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', null);
+    setItem('role', 'administrator');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
