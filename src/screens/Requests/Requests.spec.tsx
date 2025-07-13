@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -13,7 +13,6 @@ import Requests from './Requests';
 import {
   EMPTY_MOCKS,
   MOCKS_WITH_ERROR,
-  MOCKS,
   MOCKS2,
   EMPTY_REQUEST_MOCKS,
   UPDATED_MOCKS,

@@ -4,6 +4,6 @@
 
 # Variable: initialActiveData
 
-> `const` **initialActiveData**: `AdvertisementListMock`[]
+> `const` **initialActiveData**: `IAdvertisementListMock`[]
 
 Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L422)

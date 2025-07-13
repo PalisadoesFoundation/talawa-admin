@@ -635,20 +635,15 @@ export const MEMBERS_LIST_PG = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      members {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
-        organizationsBlockedBy {
-          _id
-        }
-      }
+  query GetMembersByOrganization($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
     }
   }
 `;

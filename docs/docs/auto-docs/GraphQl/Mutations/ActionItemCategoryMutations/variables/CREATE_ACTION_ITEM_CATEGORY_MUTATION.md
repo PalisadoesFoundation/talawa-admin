@@ -12,12 +12,7 @@ GraphQL mutation to create an action item category.
 
 ## Param
 
-Name of the ActionItemCategory.
-
-## Param
-
-Disabled status of the ActionItemCategory.
-
-## Param
-
-Organization to which the ActionItemCategory belongs.
+MutationCreateActionItemCategoryInput containing:
+  - name: String! - Name of the action item category
+  - isDisabled: Boolean - Whether the category is disabled (optional, defaults to false)
+  - organizationId: ID! - ID of the organization this category belongs to

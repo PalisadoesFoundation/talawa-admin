@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserAttendee
 
-Defined in: [src/types/User/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L17)
+Defined in: [src/types/User/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L19)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/User/interface.ts:17](https://github.com/PalisadoesFounda
 
 > **\_\_typename**: `string`
 
-Defined in: [src/types/User/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L21)
+Defined in: [src/types/User/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L23)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/User/interface.ts:21](https://github.com/PalisadoesFounda
 
 > **\_id**: `string`
 
-Defined in: [src/types/User/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L18)
+Defined in: [src/types/User/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L20)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/User/interface.ts:18](https://github.com/PalisadoesFounda
 
 > **isRegistered**: `boolean`
 
-Defined in: [src/types/User/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L20)
+Defined in: [src/types/User/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L22)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/User/interface.ts:20](https://github.com/PalisadoesFounda
 
 > **time**: `string`
 
-Defined in: [src/types/User/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L22)
+Defined in: [src/types/User/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L24)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/types/User/interface.ts:22](https://github.com/PalisadoesFounda
 
 > **userId**: `string`
 
-Defined in: [src/types/User/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L19)
+Defined in: [src/types/User/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L21)

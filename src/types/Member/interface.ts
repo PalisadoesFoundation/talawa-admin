@@ -17,3 +17,18 @@ export interface InterfaceRequestsListItem {
     name: string; // Changed from firstName/lastName
   };
 }
+
+export interface InterfaceMemberInfo {
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL: string;
+  createdAt: string;
+}
+
+export interface InterfaceMembersList {
+  organizations: {
+    id: string;
+    members: InterfaceMemberInfo[];
+  }[];
+}

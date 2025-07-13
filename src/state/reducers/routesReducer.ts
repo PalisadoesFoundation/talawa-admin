@@ -20,7 +20,9 @@ const reducer = (
   switch (action.type) {
     case 'UPDATE_TARGETS': {
       return Object.assign({}, state, {
-        targets: [...generateRoutes(components, action.payload)],
+        targets: [
+          ...generateRoutes(components, action.payload as string | undefined),
+        ],
       });
     }
     default: {
@@ -65,7 +67,7 @@ const components: ComponentType[] = [
 
 const generateRoutes = (
   comps: ComponentType[],
-  currentOrg = undefined,
+  currentOrg?: string,
 ): TargetsType[] => {
   return comps
     .filter((comp) => comp.name && comp.name !== '')

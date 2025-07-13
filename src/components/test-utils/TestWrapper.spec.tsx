@@ -1,13 +1,10 @@
-import React from 'react';
 import type { ReactNode } from 'react';
-import { render, screen } from '@testing-library/react';
-import { TestWrapper } from './TestWrapper';
-import { gql } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
-import { act } from 'react-dom/test-utils';
-import { vi } from 'vitest';
+import { I18nextProvider } from './I18nextProviderMock';
+import { TestErrorBoundary } from './TestErrorBoundary';
+import AsyncComponent from './AsyncComponent';
+import MockBrowserRouter from './MockBrowserRouter';
 
-// Mock the imported modules
 vi.mock('@apollo/client/testing', async () => {
   const actual = await vi.importActual('@apollo/client/testing');
   return {
@@ -27,26 +24,24 @@ vi.mock('@apollo/client/testing', async () => {
 });
 
 vi.mock('react-i18next', () => ({
-  I18nextProvider: ({ children, i18n }: { children: ReactNode; i18n: any }) => (
-    <div
-      data-testid="i18next-provider"
-      data-i18n={i18n ? 'provided' : 'missing'}
-    >
-      {children}
-    </div>
-  ),
+  I18nextProvider,
 }));
 
 vi.mock('react-router', () => ({
-  BrowserRouter: ({ children }: { children: ReactNode }) => (
-    <div data-testid="browser-router">{children}</div>
-  ),
+  BrowserRouter: MockBrowserRouter,
 }));
 
 vi.mock('utils/i18n', () => ({
   default: 'mocked-i18n-instance',
 }));
 
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { TestWrapper } from './TestWrapper';
+import { gql } from '@apollo/client';
+import { act } from 'react-dom/test-utils';
+import { vi } from 'vitest';
+// Mock the imported modules
 describe('TestWrapper', () => {
   it('renders without crashing', () => {
     render(
@@ -154,20 +149,6 @@ describe('TestWrapper', () => {
 
   it('handles async operations within wrapped components', async () => {
     // Create a component with an effect
-    const AsyncComponent = () => {
-      const [loaded, setLoaded] = React.useState(false);
-
-      React.useEffect(() => {
-        // Simulate async operation
-        setTimeout(() => {
-          setLoaded(true);
-        }, 0);
-      }, []);
-
-      return (
-        <div data-testid="async-component">{loaded ? 'Loaded' : 'Loading'}</div>
-      );
-    };
 
     render(
       <TestWrapper>
@@ -188,47 +169,6 @@ describe('TestWrapper', () => {
   });
 
   it('allows error boundaries to catch errors from children', () => {
-    // Define types for the error boundary
-    interface ErrorBoundaryProps {
-      children: ReactNode;
-    }
-
-    interface ErrorBoundaryState {
-      hasError: boolean;
-      error: Error | null;
-    }
-
-    // Create a properly typed error boundary for testing
-    class TestErrorBoundary extends React.Component<
-      ErrorBoundaryProps,
-      ErrorBoundaryState
-    > {
-      constructor(props: ErrorBoundaryProps) {
-        super(props);
-        this.state = {
-          hasError: false,
-          error: null,
-        };
-      }
-
-      static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-        return {
-          hasError: true,
-          error,
-        };
-      }
-
-      render(): React.ReactNode {
-        if (this.state.hasError && this.state.error) {
-          return (
-            <div data-testid="error-message">{this.state.error.message}</div>
-          );
-        }
-        return this.props.children;
-      }
-    }
-
-    // Component that throws during render
     const ErrorComponent = (): ReactNode => {
       throw new Error('Test error');
     };

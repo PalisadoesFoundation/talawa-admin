@@ -50,6 +50,10 @@
   --sidebar-option-bg: #d2d3d7;
   --sidebar-option-text-active: #000000;
 
+  /* Sidebar widths */
+  --sidebar-collapsed-width: 80px;
+  --sidebar-expanded-width: 345px;
+
   --unblockButton-font: #555555;
   --unblockButton-border: #eaebef;
   --unblockButton-bg: #a8c7fa;
@@ -4575,12 +4579,8 @@ form label,
   overflow: auto;
 }
 
-.containerHeight {
-  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
-  height: 100vh;
-}
-
 .expand {
+  margin-left: 100px;
   padding-left: 4rem;
   animation: moveLeft 0.9s ease-in-out;
 }
@@ -5235,7 +5235,7 @@ form {
   border: none;
   background-color: var(--signOut-container-bg);
   margin-top: 1rem;
-  margin-bottom: 4rem;
+  cursor: pointer;
 }
 
 .signOutButton {
@@ -5850,7 +5850,6 @@ form {
   display: flex;
   justify-content: space-between;
   height: 100vh;
-  padding-bottom: 48px;
 }
 
 /* -- UserSidebarOrg.tsx -- */
@@ -5931,7 +5930,7 @@ form {
 }
 
 .leftDrawer .optionList {
-  height: 75%;
+  /* height: 75%; */
   overflow-y: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
@@ -8711,10 +8710,9 @@ form {
 /* -- Settings.tsx -- */
 
 .containerHeight {
-  height: 100vh;
-  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
   background-color: var(--containerHeight-bg) !important;
   min-height: 100vh;
+  padding: 1rem 1.5rem 0 calc(300px + 1.5rem);
 }
 
 .expand {
@@ -9319,8 +9317,27 @@ form {
   background-color: #f8f9fa;
 }
 
-/* ----------------------------------------------------- */
-
 :global(.form-control:focus) {
   box-shadow: var(--form-control-focus-shadow);
 }
+
+.hamburgerIcon {
+  cursor: pointer;
+  color: var(--primaryText-color);
+  transition: transform 0.3s ease;
+}
+
+.collapsedDrawer {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebarText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--primaryText-color);
+}
+.expandedDrawer {
+  width: var(--sidebar-expanded-width);
+}
+/* ----------------------------------------------------- */

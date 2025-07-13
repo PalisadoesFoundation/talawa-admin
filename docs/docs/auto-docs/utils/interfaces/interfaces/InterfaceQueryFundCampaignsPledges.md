@@ -4,7 +4,13 @@
 
 # Interface: InterfaceQueryFundCampaignsPledges
 
-Defined in: [src/utils/interfaces.ts:1019](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1019)
+Defined in: [src/utils/interfaces.ts:1702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1702)
+
+InterfaceQueryFundCampaignsPledges
+
+## Description
+
+Defines the structure for a query result containing fund campaigns and their pledges.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:1019](https://github.com/PalisadoesFoundati
 
 > **currencyCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1025](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1025)
+Defined in: [src/utils/interfaces.ts:1708](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1708)
+
+The currency code of the campaign.
 
 ***
 
@@ -20,7 +28,9 @@ Defined in: [src/utils/interfaces.ts:1025](https://github.com/PalisadoesFoundati
 
 > **endAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1027](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1027)
+Defined in: [src/utils/interfaces.ts:1710](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1710)
+
+The end date of the campaign.
 
 ***
 
@@ -28,7 +38,9 @@ Defined in: [src/utils/interfaces.ts:1027](https://github.com/PalisadoesFoundati
 
 > **fundId**: `object`
 
-Defined in: [src/utils/interfaces.ts:1020](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1020)
+Defined in: [src/utils/interfaces.ts:1703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1703)
+
+The fund ID object.
 
 #### name
 
@@ -40,7 +52,9 @@ Defined in: [src/utils/interfaces.ts:1020](https://github.com/PalisadoesFoundati
 
 > **goalAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1024](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1024)
+Defined in: [src/utils/interfaces.ts:1707](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1707)
+
+The goal amount of the campaign.
 
 ***
 
@@ -48,7 +62,9 @@ Defined in: [src/utils/interfaces.ts:1024](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1023](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1023)
+Defined in: [src/utils/interfaces.ts:1706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1706)
+
+The name of the campaign.
 
 ***
 
@@ -56,7 +72,9 @@ Defined in: [src/utils/interfaces.ts:1023](https://github.com/PalisadoesFoundati
 
 > **pledges**: `object`
 
-Defined in: [src/utils/interfaces.ts:1028](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1028)
+Defined in: [src/utils/interfaces.ts:1711](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1711)
+
+The pledges connection object.
 
 #### edges
 
@@ -68,4 +86,6 @@ Defined in: [src/utils/interfaces.ts:1028](https://github.com/PalisadoesFoundati
 
 > **startAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1026](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1026)
+Defined in: [src/utils/interfaces.ts:1709](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1709)
+
+The start date of the campaign.

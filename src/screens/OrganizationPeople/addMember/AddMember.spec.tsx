@@ -1,4 +1,3 @@
-import React, { act } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -47,7 +46,10 @@ const setupLocationMock = () => {
 };
 
 // Helper function to create user list mock responses
-const createUserListMock = (variables: any, overrides: any = {}) => {
+const createUserListMock = (
+  variables: Record<string, unknown>,
+  overrides: Record<string, unknown> = {},
+) => {
   const defaultData = {
     allUsers: {
       edges: [
@@ -82,7 +84,7 @@ const createUserListMock = (variables: any, overrides: any = {}) => {
   };
 
   const data = { ...defaultData };
-  if (overrides.edges) {
+  if (Array.isArray(overrides.edges)) {
     data.allUsers.edges = overrides.edges;
   }
   if (overrides.pageInfo) {
@@ -107,21 +109,24 @@ const createOrganizationsMock = (orgId: string) => {
   };
 };
 
-const createAddMemberMutationMock = (variables: any) => {
+const createAddMemberMutationMock = (variables: Record<string, unknown>) => {
   return {
     request: { query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG, variables },
     result: { data: { createOrganizationMembership: { id: 'membership1' } } },
   };
 };
 
-const createRegisterMutationMock = (variables: any) => {
+const createRegisterMutationMock = (variables: Record<string, unknown>) => {
   return {
     request: { query: CREATE_MEMBER_PG, variables },
     result: { data: { createUser: { user: { id: 'newUser1' } } } },
   };
 };
 
-const createMemberConnectionMock = (variables: any, overrides: any = {}) => {
+const createMemberConnectionMock = (
+  variables: Record<string, unknown>,
+  overrides: Record<string, unknown> = {},
+) => {
   const defaultData = {
     organization: {
       members: {
@@ -158,7 +163,7 @@ const createMemberConnectionMock = (variables: any, overrides: any = {}) => {
   };
 
   const data = { ...defaultData };
-  if (overrides.edges) {
+  if (Array.isArray(overrides.edges)) {
     data.organization.members.edges = overrides.edges;
   }
   if (overrides.pageInfo) {
@@ -245,14 +250,14 @@ describe('AddMember Component', () => {
       () => {
         // Check if any element contains the text "John Doe" - this is more flexible
         expect(
-          screen.getByText((content, element) => {
+          screen.getByText((content) => {
             return content.includes('John Doe');
           }),
         ).toBeInTheDocument();
 
         // Also check for Jane Smith in the same way
         expect(
-          screen.getByText((content, element) => {
+          screen.getByText((content) => {
             return content.includes('Jane Smith');
           }),
         ).toBeInTheDocument();

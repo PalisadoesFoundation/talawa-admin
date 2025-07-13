@@ -43,7 +43,7 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import type {
   InterfacePledgeInfo,
-  InterfaceUserInfo_PG,
+  InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
@@ -96,7 +96,7 @@ const Pledges = (): JSX.Element => {
   const userId: string = userIdFromStorage as string;
 
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfo_PG[]>([]);
+  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -162,7 +162,7 @@ const Pledges = (): JSX.Element => {
 
   const handleClick = (
     event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfo_PG[],
+    users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
     setAnchor(anchor ? null : event.currentTarget);
@@ -205,7 +205,7 @@ const Pledges = (): JSX.Element => {
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
             {params.row.users
               .slice(0, 2)
-              .map((user: InterfaceUserInfo_PG, index: number) => (
+              .map((user: InterfaceUserInfoPG, index: number) => (
                 <div className={styles.pledgerContainer} key={index}>
                   {user.image ? (
                     <img
@@ -480,7 +480,7 @@ const Pledges = (): JSX.Element => {
         disablePortal
         className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
       >
-        {extraUsers.map((user: InterfaceUserInfo_PG, index: number) => (
+        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
           <div
             className={styles.pledgerContainer}
             key={index}

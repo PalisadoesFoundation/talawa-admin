@@ -4,7 +4,13 @@
 
 # Interface: InterfaceOrganizationPostsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:727](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L727)
+Defined in: [src/utils/interfaces.ts:1111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1111)
+
+InterfaceOrganizationPostsConnectionPg
+
+## Description
+
+Defines the structure for a connection of organization posts with PostgreSQL-specific fields.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:727](https://github.com/PalisadoesFoundatio
 
 > **edges**: [`InterfaceOrganizationPostsConnectionEdgePg`](InterfaceOrganizationPostsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:728](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L728)
+Defined in: [src/utils/interfaces.ts:1112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1112)
+
+An array of edges, where each edge contains a cursor and a post node.
 
 ***
 
@@ -20,4 +28,6 @@ Defined in: [src/utils/interfaces.ts:728](https://github.com/PalisadoesFoundatio
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:729](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L729)
+Defined in: [src/utils/interfaces.ts:1113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1113)
+
+Pagination information.

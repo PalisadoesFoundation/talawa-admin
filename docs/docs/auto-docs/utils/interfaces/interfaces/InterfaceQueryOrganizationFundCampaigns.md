@@ -4,7 +4,13 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:993](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L993)
+Defined in: [src/utils/interfaces.ts:1641](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1641)
+
+InterfaceQueryOrganizationFundCampaigns
+
+## Description
+
+Defines the structure for a query result containing organization fund campaigns.
 
 ## Properties
 
@@ -12,7 +18,9 @@ Defined in: [src/utils/interfaces.ts:993](https://github.com/PalisadoesFoundatio
 
 > **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:997](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L997)
+Defined in: [src/utils/interfaces.ts:1645](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1645)
+
+The campaigns connection object.
 
 #### edges
 
@@ -24,7 +32,9 @@ Defined in: [src/utils/interfaces.ts:997](https://github.com/PalisadoesFoundatio
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L994)
+Defined in: [src/utils/interfaces.ts:1642](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1642)
+
+The unique identifier of the fund.
 
 ***
 
@@ -32,7 +42,9 @@ Defined in: [src/utils/interfaces.ts:994](https://github.com/PalisadoesFoundatio
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:996](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L996)
+Defined in: [src/utils/interfaces.ts:1644](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1644)
+
+Indicates if the fund is archived.
 
 ***
 
@@ -40,4 +52,6 @@ Defined in: [src/utils/interfaces.ts:996](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L995)
+Defined in: [src/utils/interfaces.ts:1643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1643)
+
+The name of the fund.

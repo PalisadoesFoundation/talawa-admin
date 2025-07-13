@@ -20,13 +20,13 @@ Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:121](https://github
 
 ### newData()?
 
-> `optional` **newData**: () => `FetchResult`\<`Record`\<`string`, `any`\>\>
+> `optional` **newData**: () => `FetchResult`\<`Record`\<`string`, `unknown`\>\>
 
 Defined in: [src/screens/OrganizationPeople/MockDataTypes.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/MockDataTypes.ts#L122)
 
 #### Returns
 
-`FetchResult`\<`Record`\<`string`, `any`\>\>
+`FetchResult`\<`Record`\<`string`, `unknown`\>\>
 
 ***
 
