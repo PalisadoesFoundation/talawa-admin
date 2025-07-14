@@ -275,7 +275,7 @@ const leftDrawerOrg = ({
                       ? styles.leftDrawerActiveButton
                       : styles.leftDrawerInactiveButton
                   }
-                  data-cy={`leftDrawerButton-${name}`}                
+                  data-cy={`leftDrawerButton-${name}`}
                 >
                   <div className={styles.iconWrapper}>
                     <IconComponent
