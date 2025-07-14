@@ -1,12 +1,16 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
-import { useQuery } from '@apollo/client';
+import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
+import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
+import { getPluginManager } from 'plugin/manager';
+import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
+import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -73,9 +77,6 @@ const Organizations = lazy(
 const People = lazy(() => import('screens/UserPortal/People/People'));
 const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
-const UserScreen = lazy(
-  () => import('screens/UserPortal/UserScreen/UserScreen'),
-);
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
 );
@@ -87,6 +88,8 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
+
+const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
 const { setItem } = useLocalStorage();
 
@@ -102,12 +105,86 @@ const { setItem } = useLocalStorage();
  *   - Protected routes are wrapped with the `SecuredRoute` component to ensure they are only accessible to authenticated users.
  *   - Admin and Super Admin routes allow access to organization and user management screens.
  *   - User portal routes allow end-users to interact with organizations, settings, chat, events, etc.
+ *   - Plugin routes are dynamically added based on loaded plugins and user permissions.
  *
  * @returns  The rendered routes and components of the application.
  */
 
-function app(): JSX.Element {
+function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
+  const apolloClient = useApolloClient();
+
+  // Get user permissions and admin status (memoized to prevent infinite loops)
+  const userPermissions = useMemo(() => {
+    return (
+      data?.currentUser?.appUserProfile?.adminFor?.map((org: any) => org._id) ||
+      []
+    );
+  }, [data?.currentUser?.appUserProfile?.adminFor]);
+
+  const isAdmin =
+    data?.currentUser?.userType === 'ADMIN' ||
+    data?.currentUser?.userType === 'SUPERADMIN';
+  const isSuperAdmin = data?.currentUser?.userType === 'SUPERADMIN';
+
+  // Get plugin routes
+  const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
+  const adminOrgPluginRoutes = usePluginRoutes(userPermissions, true, true);
+  const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
+  const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
+
+  console.log('=== APP.TSX ROUTE DEBUG ===');
+  console.log('Current user data:', {
+    userType: data?.currentUser?.userType,
+    isAdmin,
+    isSuperAdmin,
+    userPermissions: userPermissions.length,
+    userPermissionsArray: userPermissions,
+  });
+  console.log('Plugin routes loaded:', {
+    admin: {
+      count: adminOrgPluginRoutes.length,
+      routes: adminOrgPluginRoutes.map((r) => ({
+        path: r.path,
+        component: r.component,
+        pluginId: r.pluginId,
+      })),
+    },
+    user: {
+      count: userOrgPluginRoutes.length,
+      routes: userOrgPluginRoutes.map((r) => ({
+        path: r.path,
+        component: r.component,
+        pluginId: r.pluginId,
+      })),
+    },
+  });
+  console.log('=== END APP.TSX ROUTE DEBUG ===');
+
+  // Initialize plugin system on app startup
+  useEffect(() => {
+    const initializePlugins = async () => {
+      try {
+        // Set Apollo client for plugin manager
+        getPluginManager().setApolloClient(apolloClient);
+
+        // Initialize plugin manager
+        await getPluginManager().initializePluginSystem();
+
+        // Import and initialize plugin registry
+        const { discoverAndRegisterAllPlugins } = await import(
+          './plugin/registry'
+        );
+        await discoverAndRegisterAllPlugins();
+
+        console.log('Plugin system initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize plugin system:', error);
+      }
+    };
+
+    initializePlugins();
+  }, [apolloClient]);
 
   useEffect(() => {
     if (!loading && data?.currentUser) {
@@ -133,6 +210,20 @@ function app(): JSX.Element {
               <Route path="/member" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
+              <Route path="/pluginstore" element={<PluginStore />} />
+              {/* Admin global plugin routes (e.g., settings) */}
+              {adminGlobalPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading admin plugin...</div>}
+                    />
+                  }
+                />
+              ))}
             </Route>
             <Route element={<OrganizationScreen />}>
               <Route path="/requests/:orgId" element={<Requests />} />
@@ -185,6 +276,19 @@ function app(): JSX.Element {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              {/* Admin org plugin routes */}
+              {adminOrgPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading admin plugin...</div>}
+                    />
+                  }
+                />
+              ))}
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
@@ -192,6 +296,21 @@ function app(): JSX.Element {
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
             <Route path="/user/settings" element={<Settings />} />
+            {/* User global plugin routes (no orgId required) */}
+            <Route element={<UserGlobalScreen />}>
+              {userGlobalPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading user plugin...</div>}
+                    />
+                  }
+                />
+              ))}
+            </Route>
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
@@ -209,6 +328,19 @@ function app(): JSX.Element {
                 path="/user/volunteer/:orgId"
                 element={<VolunteerManagement />}
               />
+              {/* User org plugin routes */}
+              {userOrgPluginRoutes.map((route) => (
+                <Route
+                  key={`${route.pluginId}-${route.path}`}
+                  path={route.path}
+                  element={
+                    <PluginRouteRenderer
+                      route={route}
+                      fallback={<div>Loading user plugin...</div>}
+                    />
+                  }
+                />
+              ))}
               <Route element={<EventDashboardScreen />}>
                 <Route
                   path="/user/event/:orgId/:eventId"
@@ -225,4 +357,4 @@ function app(): JSX.Element {
   );
 }
 
-export default app;
+export default App;

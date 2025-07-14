@@ -94,5 +94,6 @@
   "late": "Late",
   "createdLatest": "Created Latest",
   "createdEarliest": "Created Earliest",
-  "searchBy": "Search by {{item}}"
+  "searchBy": "Search by {{item}}",
+  "plugins": "Plugins"
 }
