@@ -21,6 +21,7 @@ import type {
   IInstalledPlugin,
   IPluginModalProps,
 } from 'plugin';
+import styles from './PluginModal.module.css';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -149,90 +150,31 @@ const PluginModal: React.FC<IPluginModalProps> = ({
 
   return (
     <Modal show={show} onHide={onHide} centered dialogClassName="modal-xl">
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          minHeight: 500,
-          background: '#fff',
-          borderRadius: 12,
-        }}
-      >
+      <div className={styles.modalContainer}>
         {/* Close Button */}
         <button
           type="button"
           aria-label="Close"
           onClick={onHide}
-          style={{
-            position: 'absolute',
-            top: 16,
-            right: 16,
-            zIndex: 10,
-            background: 'none',
-            border: 'none',
-            fontSize: 28,
-            color: '#888',
-            cursor: 'pointer',
-            lineHeight: 1,
-          }}
+          className={styles.closeButton}
         >
           &times;
         </button>
         {/* Sidebar */}
-        <div
-          style={{
-            width: 320,
-            background: '#f8f9fa',
-            color: '#222',
-            padding: 32,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            borderTopLeftRadius: 12,
-            borderBottomLeftRadius: 12,
-            borderRight: '1px solid #e7e7e7',
-          }}
-        >
+        <div className={styles.sidebar}>
           <img
             src={plugin?.icon}
             alt="Plugin Icon"
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 16,
-              objectFit: 'cover',
-              background: '#f5f5f5',
-              marginBottom: 24,
-            }}
+            className={styles.pluginIcon}
           />
-          <div
-            style={{
-              fontWeight: 700,
-              fontSize: 22,
-              marginBottom: 8,
-              textAlign: 'center',
-            }}
-          >
-            {plugin?.name}
-          </div>
-          <div
-            style={{
-              fontSize: 15,
-              color: '#555',
-              marginBottom: 8,
-              textAlign: 'center',
-            }}
-          >
-            {plugin?.author}
-          </div>
+          <div className={styles.pluginName}>{plugin?.name}</div>
+          <div className={styles.pluginAuthor}>{plugin?.author}</div>
           {details && (
             <>
-              <div style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>
-                v{details.version}
-              </div>
+              <div className={styles.pluginVersion}>v{details.version}</div>
             </>
           )}
-          <div style={{ width: '100%', marginTop: 16 }}>
+          <div className={styles.actionButtons}>
             {plugin && isInstalled(plugin.name) && meta && (
               <>
                 <Button
@@ -241,7 +183,11 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       ? 'light'
                       : 'primary'
                   }
-                  className="w-100 mb-2 d-flex align-items-center justify-content-center gap-2"
+                  className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
+                    getInstalledPlugin(plugin.name)?.status === 'active'
+                      ? styles.actionButtonLight
+                      : styles.actionButton
+                  }`}
                   onClick={() =>
                     togglePluginStatus(
                       meta,
@@ -251,13 +197,6 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )
                   }
                   disabled={loading}
-                  style={{
-                    height: '38px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    boxShadow: 'none',
-                    border: '1px solid #dee2e6',
-                  }}
                 >
                   {loading ? (
                     <FaSpinner className="animate-spin" />
@@ -278,17 +217,9 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                 </Button>
                 <Button
                   variant="light"
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
                   onClick={() => uninstallPlugin(meta)}
                   disabled={loading}
-                  style={{
-                    height: '38px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    boxShadow: 'none',
-                    border: '1px solid #dee2e6',
-                    color: '#dc3545',
-                  }}
                 >
                   {loading ? (
                     <FaSpinner className="animate-spin" />
@@ -312,103 +243,21 @@ const PluginModal: React.FC<IPluginModalProps> = ({
           </div>
         </div>
         {/* Main Content */}
-        <div
-          style={{
-            flex: 1,
-            background: '#fff',
-            color: '#222',
-            borderTopRightRadius: 12,
-            borderBottomRightRadius: 12,
-            padding: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'relative',
-            transition: 'all 0.3s ease',
-          }}
-        >
+        <div className={styles.mainContent}>
           {screenshotViewer.open ? (
             /* Screenshot Viewer */
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                animation: 'fadeIn 0.3s ease-out',
-                borderRadius: '0 12px 12px 0',
-              }}
-            >
+            <div className={styles.screenshotViewer}>
               {/* Header with back button */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 20,
-                  left: 0,
-                  right: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0 30px',
-                  zIndex: 10,
-                }}
-              >
+              <div className={styles.screenshotHeader}>
                 <button
                   onClick={closeScreenshotViewer}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(10px)',
-                    WebkitBackdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(0, 0, 0, 0.1)',
-                    borderRadius: '8px',
-                    padding: '10px 16px',
-                    color: '#495057',
-                    fontSize: 14,
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = '#ffffff';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow =
-                      '0 4px 12px rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background =
-                      'rgba(255, 255, 255, 0.95)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow =
-                      '0 2px 8px rgba(0, 0, 0, 0.1)';
-                  }}
+                  className={styles.backButton}
                 >
                   ← Back to Details
                 </button>
 
                 {screenshotViewer.screenshots.length > 1 && (
-                  <div
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      color: '#495057',
-                      padding: '8px 16px',
-                      borderRadius: '16px',
-                      fontSize: 14,
-                      fontWeight: 600,
-                      border: '1px solid rgba(0, 0, 0, 0.1)',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    }}
-                  >
+                  <div className={styles.screenshotCounter}>
                     {screenshotViewer.currentIndex + 1} of{' '}
                     {screenshotViewer.screenshots.length}
                   </div>
@@ -420,86 +269,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                 <>
                   <button
                     onClick={previousScreenshot}
-                    style={{
-                      position: 'absolute',
-                      left: 30,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(0, 0, 0, 0.1)',
-                      borderRadius: '50%',
-                      width: 48,
-                      height: 48,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      color: '#495057',
-                      fontSize: 18,
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      transition: 'all 0.2s ease',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = '#ffffff';
-                      e.currentTarget.style.transform =
-                        'translateY(-50%) scale(1.05)';
-                      e.currentTarget.style.boxShadow =
-                        '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background =
-                        'rgba(255, 255, 255, 0.95)';
-                      e.currentTarget.style.transform =
-                        'translateY(-50%) scale(1)';
-                      e.currentTarget.style.boxShadow =
-                        '0 2px 8px rgba(0, 0, 0, 0.1)';
-                    }}
+                    className={styles.navigationButtonLeft}
                     title="Previous image (←)"
                   >
                     <FaChevronLeft />
                   </button>
                   <button
                     onClick={nextScreenshot}
-                    style={{
-                      position: 'absolute',
-                      right: 30,
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'rgba(255, 255, 255, 0.95)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(0, 0, 0, 0.1)',
-                      borderRadius: '50%',
-                      width: 48,
-                      height: 48,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      color: '#495057',
-                      fontSize: 18,
-                      cursor: 'pointer',
-                      zIndex: 10,
-                      transition: 'all 0.2s ease',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.background = '#ffffff';
-                      e.currentTarget.style.transform =
-                        'translateY(-50%) scale(1.05)';
-                      e.currentTarget.style.boxShadow =
-                        '0 4px 12px rgba(0, 0, 0, 0.15)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.background =
-                        'rgba(255, 255, 255, 0.95)';
-                      e.currentTarget.style.transform =
-                        'translateY(-50%) scale(1)';
-                      e.currentTarget.style.boxShadow =
-                        '0 2px 8px rgba(0, 0, 0, 0.1)';
-                    }}
+                    className={styles.navigationButtonRight}
                     title="Next image (→)"
                   >
                     <FaChevronRight />
@@ -508,51 +285,21 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               )}
 
               {/* Image */}
-              <div
-                style={{
-                  maxWidth: 'calc(100% - 160px)',
-                  maxHeight: 'calc(100% - 160px)',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
+              <div className={styles.screenshotImageContainer}>
                 <img
                   key={screenshotViewer.currentIndex}
                   src={
                     screenshotViewer.screenshots[screenshotViewer.currentIndex]
                   }
                   alt={`Screenshot ${screenshotViewer.currentIndex + 1}`}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    borderRadius: '8px',
-                    boxShadow:
-                      '0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08)',
-                    background: '#ffffff',
-                    border: '1px solid rgba(0, 0, 0, 0.1)',
-                    animation: 'imageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                  }}
+                  className={styles.screenshotImage}
                 />
               </div>
 
               {/* Dot indicators */}
               {screenshotViewer.screenshots.length > 1 &&
                 screenshotViewer.screenshots.length <= 5 && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: 30,
-                      left: '50%',
-                      transform: 'translateX(-50%)',
-                      display: 'flex',
-                      gap: 12,
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className={styles.dotIndicators}>
                     {screenshotViewer.screenshots.map((_, index) => (
                       <button
                         key={index}
@@ -562,22 +309,11 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             currentIndex: index,
                           }));
                         }}
-                        style={{
-                          width: 8,
-                          height: 8,
-                          borderRadius: '50%',
-                          border: 'none',
-                          background:
-                            index === screenshotViewer.currentIndex
-                              ? '#495057'
-                              : 'rgba(73, 80, 87, 0.3)',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          transform:
-                            index === screenshotViewer.currentIndex
-                              ? 'scale(1.3)'
-                              : 'scale(1)',
-                        }}
+                        className={
+                          index === screenshotViewer.currentIndex
+                            ? styles.dotIndicatorActive
+                            : styles.dotIndicator
+                        }
                         title={`Go to screenshot ${index + 1}`}
                       />
                     ))}
@@ -588,32 +324,12 @@ const PluginModal: React.FC<IPluginModalProps> = ({
             /* Plugin Details Content */
             <>
               {/* Tabs */}
-              <div
-                style={{
-                  display: 'flex',
-                  borderBottom: '1px solid #e7e7e7',
-                  background: '#f8f9fa',
-                  borderTopRightRadius: 12,
-                }}
-              >
+              <div className={styles.tabsContainer}>
                 {TABS.map((t) => (
                   <div
                     key={t}
                     onClick={() => setTab(t)}
-                    style={{
-                      padding: '18px 32px',
-                      cursor: 'pointer',
-                      fontWeight: 600,
-                      color: tab === t ? '#222' : '#888',
-                      borderBottom:
-                        tab === t
-                          ? '3px solid #4caf50'
-                          : '3px solid transparent',
-                      fontSize: 16,
-                      letterSpacing: 0.2,
-                      transition: 'color 0.2s',
-                      background: 'none',
-                    }}
+                    className={tab === t ? styles.tabActive : styles.tab}
                   >
                     {t}
                   </div>
@@ -621,71 +337,27 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               </div>
 
               {/* Tab Content */}
-              <div
-                style={{
-                  flex: 1,
-                  padding: '32px 40px',
-                  minHeight: 420,
-                  maxHeight: '70vh',
-                  overflowY: 'auto',
-                  transition: 'min-height 0.2s, max-height 0.2s',
-                }}
-              >
+              <div className={styles.tabContent}>
                 {tab === 'Details' && (
                   <>
-                    <div
-                      style={{ fontWeight: 600, fontSize: 18, marginBottom: 8 }}
-                    >
-                      Description
-                    </div>
-                    <div style={{ marginBottom: 24 }}>
+                    <div className={styles.sectionTitle}>Description</div>
+                    <div className={styles.description}>
                       {plugin?.description}
                     </div>
 
                     {details?.screenshots && details.screenshots.length > 0 && (
                       <>
-                        <div
-                          style={{
-                            fontWeight: 600,
-                            fontSize: 18,
-                            marginBottom: 8,
-                          }}
-                        >
-                          Screenshots
-                        </div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            gap: 8,
-                            overflowX: 'auto',
-                            paddingBottom: 8,
-                            marginBottom: 24,
-                          }}
-                        >
+                        <div className={styles.sectionTitle}>Screenshots</div>
+                        <div className={styles.screenshotsContainer}>
                           {details.screenshots.map((src, idx) => (
                             <img
                               key={idx}
                               src={src}
                               alt={`Screenshot ${idx + 1}`}
-                              style={{
-                                width: 120,
-                                height: 80,
-                                objectFit: 'cover',
-                                borderRadius: 6,
-                                border: '1px solid #eee',
-                                background: '#fafbfc',
-                                cursor: 'pointer',
-                                transition: 'transform 0.2s ease-in-out',
-                              }}
+                              className={styles.screenshotThumbnail}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
-                              onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'scale(1.05)';
-                              }}
-                              onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'scale(1)';
-                              }}
                               title="Click to view full size"
                             />
                           ))}
@@ -693,9 +365,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       </>
                     )}
                     {fetching && (
-                      <div
-                        style={{ color: '#888', fontSize: 15, marginTop: 24 }}
-                      >
+                      <div className={styles.loadingText}>
                         Loading details...
                       </div>
                     )}
@@ -703,49 +373,22 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                 )}
                 {tab === 'Features' && (
                   <>
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: 18,
-                        marginBottom: 16,
-                      }}
-                    >
-                      Features
-                    </div>
+                    <div className={styles.sectionTitleLarge}>Features</div>
                     {features && features.length > 0 ? (
-                      <ul
-                        style={{
-                          color: '#555',
-                          fontSize: 15,
-                          paddingLeft: 24,
-                          lineHeight: 1.6,
-                        }}
-                      >
+                      <ul className={styles.featuresList}>
                         {features.map((f, i) => (
-                          <li key={i} style={{ marginBottom: 8 }}>
+                          <li key={i} className={styles.featuresListItem}>
                             {f}
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <div
-                        style={{
-                          color: '#888',
-                          fontSize: 15,
-                          fontStyle: 'italic',
-                          background: '#f8f9fa',
-                          padding: 16,
-                          borderRadius: 8,
-                          border: '1px solid #e9ecef',
-                        }}
-                      >
+                      <div className={styles.noFeaturesMessage}>
                         No features information available for this plugin.
                       </div>
                     )}
                     {fetching && (
-                      <div
-                        style={{ color: '#888', fontSize: 15, marginTop: 24 }}
-                      >
+                      <div className={styles.loadingText}>
                         Loading features...
                       </div>
                     )}
@@ -753,33 +396,13 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                 )}
                 {tab === 'Changelog' && (
                   <>
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        fontSize: 18,
-                        marginBottom: 16,
-                      }}
-                    >
-                      Changelog
-                    </div>
+                    <div className={styles.sectionTitleLarge}>Changelog</div>
                     {changelog.map((entry, idx) => (
-                      <div key={idx} style={{ marginBottom: 24 }}>
-                        <div
-                          style={{
-                            fontWeight: 600,
-                            fontSize: 15,
-                            marginBottom: 4,
-                          }}
-                        >
+                      <div key={idx} className={styles.changelogEntry}>
+                        <div className={styles.changelogVersion}>
                           v{entry.version} - {entry.date}
                         </div>
-                        <ul
-                          style={{
-                            color: '#555',
-                            fontSize: 15,
-                            paddingLeft: 24,
-                          }}
-                        >
+                        <ul className={styles.changelogList}>
                           {entry.changes.map((c, i) => (
                             <li key={i}>{c}</li>
                           ))}
@@ -787,9 +410,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       </div>
                     ))}
                     {fetching && (
-                      <div
-                        style={{ color: '#888', fontSize: 15, marginTop: 24 }}
-                      >
+                      <div className={styles.loadingText}>
                         Loading changelog...
                       </div>
                     )}
@@ -798,29 +419,6 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               </div>
             </>
           )}
-
-          {/* Add CSS animations */}
-          <style>{`
-            @keyframes fadeIn {
-              from { 
-                opacity: 0;
-              }
-              to { 
-                opacity: 1;
-              }
-            }
-            
-            @keyframes imageSlideIn {
-              from { 
-                opacity: 0;
-                transform: scale(0.98);
-              }
-              to { 
-                opacity: 1;
-                transform: scale(1);
-              }
-            }
-          `}</style>
         </div>
       </div>
     </Modal>
