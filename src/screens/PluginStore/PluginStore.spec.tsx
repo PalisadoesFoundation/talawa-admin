@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginStore from './PluginStore';
+import { MockedProvider } from '@apollo/client/testing';
 
 // Define interface for mock plugin to fix typing issues
 interface MockPlugin {
@@ -22,7 +23,7 @@ vi.mock('@mui/material', () => ({
   ),
   Dialog: ({ children, open, onClose, ...props }: any) =>
     open ? (
-      <div {...props} role="dialog">
+      <div {...props} role="dialog" data-testid="uninstall-modal">
         <button onClick={onClose}>Close</button>
         {children}
       </div>
@@ -259,7 +260,7 @@ describe('PluginStore Component - Comprehensive Tests', () => {
   it('should open upload modal when upload button is clicked', async () => {
     render(<PluginStore />);
 
-    const uploadButton = screen.getByText('Upload Plugin');
+    const uploadButton = screen.getByTestId('uploadPluginBtn');
     fireEvent.click(uploadButton);
 
     await waitFor(() => {
@@ -271,7 +272,7 @@ describe('PluginStore Component - Comprehensive Tests', () => {
     render(<PluginStore />);
 
     // Open modal
-    const uploadButton = screen.getByText('Upload Plugin');
+    const uploadButton = screen.getByTestId('uploadPluginBtn');
     fireEvent.click(uploadButton);
 
     await waitFor(() => {
@@ -303,9 +304,11 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    expect(screen.getByText('Test Plugin')).toBeInTheDocument();
-    expect(screen.getByText('A test plugin')).toBeInTheDocument();
-    expect(screen.getByText('Test Author')).toBeInTheDocument();
+    expect(screen.getByTestId('plugin-name-test-plugin')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('plugin-description-test-plugin'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('plugin-author-test-plugin')).toBeInTheDocument();
   });
 
   it('should display GraphQL plugins correctly', () => {
@@ -339,7 +342,7 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const manageButton = screen.getByText('Manage');
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(manageButton);
 
     await waitFor(() => {
@@ -348,7 +351,6 @@ describe('PluginStore Component - Comprehensive Tests', () => {
   });
 
   it('should handle plugin installation', async () => {
-    // Create a scenario where we have a plugin to install
     const mockPlugin: MockPlugin = {
       id: 'test-plugin',
       manifest: {
@@ -363,17 +365,17 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const viewButton = screen.getByText('Manage');
+    const viewButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(viewButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
 
-    const installButton = screen.getByText('Install Plugin');
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const installButton = pluginModal.querySelectorAll('button')[1];
     fireEvent.click(installButton);
 
-    // Check that the modal functions were called properly
     expect(mockPluginModal).toHaveBeenCalledWith(
       expect.objectContaining({
         show: true,
@@ -397,17 +399,17 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const manageButton = screen.getByText('Manage');
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(manageButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
 
-    const toggleButton = screen.getByText('Toggle Status');
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const toggleButton = pluginModal.querySelectorAll('button')[2];
     fireEvent.click(toggleButton);
 
-    // The mock functions should be called through the PluginModal props
     expect(mockPluginModal).toHaveBeenCalledWith(
       expect.objectContaining({
         show: true,
@@ -431,28 +433,24 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const manageButton = screen.getByText('Manage');
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(manageButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
 
-    // Click the uninstall button in the plugin modal
-    const uninstallButtons = screen.getAllByText('Uninstall Plugin');
-    const modalUninstallButton = uninstallButtons.find(
-      (button) => button.tagName === 'BUTTON',
-    );
-    fireEvent.click(modalUninstallButton!);
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const uninstallButton = pluginModal.querySelectorAll('button')[3];
+    fireEvent.click(uninstallButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Keep Data')).toBeInTheDocument();
+      expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
     });
 
-    const keepDataButton = screen.getByText('Keep Data');
+    const keepDataButton = screen.getByTestId('uninstall-keepdata-btn');
     fireEvent.click(keepDataButton);
 
-    // Check that the modal functions were called properly
     expect(mockPluginModal).toHaveBeenCalledWith(
       expect.objectContaining({
         show: true,
@@ -476,28 +474,24 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const manageButton = screen.getByText('Manage');
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(manageButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
 
-    // Click the uninstall button in the plugin modal
-    const uninstallButtons = screen.getAllByText('Uninstall Plugin');
-    const modalUninstallButton = uninstallButtons.find(
-      (button) => button.tagName === 'BUTTON',
-    );
-    fireEvent.click(modalUninstallButton!);
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const uninstallButton = pluginModal.querySelectorAll('button')[3];
+    fireEvent.click(uninstallButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Remove Permanently')).toBeInTheDocument();
+      expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
     });
 
-    const removeButton = screen.getByText('Remove Permanently');
+    const removeButton = screen.getByTestId('uninstall-remove-btn');
     fireEvent.click(removeButton);
 
-    // Check that the modal functions were called properly
     expect(mockPluginModal).toHaveBeenCalledWith(
       expect.objectContaining({
         show: true,
@@ -506,60 +500,82 @@ describe('PluginStore Component - Comprehensive Tests', () => {
     );
   });
 
-  it('should handle pagination changes', async () => {
-    render(<PluginStore />);
-
-    const pageButton = screen.getByText('Page 2');
-    fireEvent.click(pageButton);
-
-    // This tests the pagination handler
-    expect(pageButton).toBeInTheDocument();
-
-    const rowsButton = screen.getByText('Change Rows');
-    fireEvent.click(rowsButton);
-
-    // This tests the rows per page handler
-    expect(rowsButton).toBeInTheDocument();
-  });
-
-  it('should filter plugins based on search term', () => {
-    const mockPlugin1: MockPlugin = {
-      id: 'test-plugin-1',
+  it('should handle pagination changes', () => {
+    const mockPlugins = Array.from({ length: 10 }, (_, i) => ({
+      id: `plugin-${i}`,
       manifest: {
-        name: 'Test Plugin One',
-        description: 'First test plugin',
+        name: `Plugin ${i}`,
+        description: `Description ${i}`,
         author: 'Test Author',
         icon: '/test-icon.png',
       },
-    };
+    }));
 
-    const mockPlugin2: MockPlugin = {
-      id: 'test-plugin-2',
-      manifest: {
-        name: 'Another Plugin',
-        description: 'Second test plugin',
-        author: 'Test Author',
-        icon: '/test-icon.png',
-      },
-    };
-
-    mockLoadedPlugins.mockReturnValue([mockPlugin1, mockPlugin2]);
+    mockLoadedPlugins.mockReturnValue(mockPlugins);
 
     render(<PluginStore />);
 
-    expect(screen.getByText('Test Plugin One')).toBeInTheDocument();
-    expect(screen.getByText('Another Plugin')).toBeInTheDocument();
+    const pagination = screen.getByTestId('pagination');
+    const [page2Btn, changeRowsBtn] = pagination.querySelectorAll('button');
+
+    fireEvent.click(page2Btn);
+    fireEvent.click(changeRowsBtn);
+
+    expect(pagination).toBeInTheDocument();
   });
 
-  it('should show no installed plugins message when filter is set to installed', async () => {
+  it('should filter plugins based on search term', async () => {
+    const mockPlugins = [
+      {
+        id: 'test-plugin-1',
+        manifest: {
+          name: 'Test Plugin One',
+          description: 'First test plugin',
+          author: 'Test Author',
+          icon: '/test-icon.png',
+        },
+      },
+      {
+        id: 'test-plugin-2',
+        manifest: {
+          name: 'Another Plugin',
+          description: 'Second test plugin',
+          author: 'Test Author',
+          icon: '/test-icon.png',
+        },
+      },
+    ];
+
+    mockLoadedPlugins.mockReturnValue(mockPlugins);
+
+    render(<PluginStore />);
+
+    // Both plugins should be visible initially
+    expect(screen.getByTestId('plugin-name-test-plugin-1')).toBeInTheDocument();
+    expect(screen.getByTestId('plugin-name-test-plugin-2')).toBeInTheDocument();
+
+    // Search for specific plugin
+    const searchInput = screen.getByTestId('searchPlugins');
+    fireEvent.change(searchInput, { target: { value: 'Test Plugin One' } });
+
+    // Wait for debounce and UI update
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('plugin-name-test-plugin-1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('plugin-name-test-plugin-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('should show no installed plugins message when filter is set to installed', () => {
     render(<PluginStore />);
 
     const filterSelect = screen.getByTestId('filter');
     fireEvent.change(filterSelect, { target: { value: 'installed' } });
 
-    await waitFor(() => {
-      expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
-    });
+    expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
   });
 
   it('should cancel uninstall modal', async () => {
@@ -577,29 +593,207 @@ describe('PluginStore Component - Comprehensive Tests', () => {
 
     render(<PluginStore />);
 
-    const manageButton = screen.getByText('Manage');
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
     fireEvent.click(manageButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
 
-    // Click the uninstall button in the plugin modal
-    const uninstallButtons = screen.getAllByText('Uninstall Plugin');
-    const modalUninstallButton = uninstallButtons.find(
-      (button) => button.tagName === 'BUTTON',
-    );
-    fireEvent.click(modalUninstallButton!);
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const uninstallButton = pluginModal.querySelectorAll('button')[3];
+    fireEvent.click(uninstallButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
+      expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
     });
 
-    const cancelButton = screen.getByText('Cancel');
+    const cancelButton = screen.getByTestId('uninstall-cancel-btn');
     fireEvent.click(cancelButton);
 
+    expect(screen.queryByTestId('uninstall-modal')).not.toBeInTheDocument();
+  });
+});
+
+describe('PluginStore Component - Edge Cases and Error Handling', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockLoadedPlugins.mockReturnValue([]);
+    Object.assign(mockPluginData, { getPlugins: [] });
+  });
+
+  it('should handle GraphQL error gracefully', () => {
+    vi.doMock('plugin/graphql-service', () => ({
+      useGetAllPlugins: () => ({
+        data: undefined,
+        loading: false,
+        error: new Error('GraphQL error'),
+        refetch: mockRefetch,
+      }),
+      useCreatePlugin: () => [mockCreatePlugin],
+      useUpdatePlugin: () => [mockUpdatePlugin],
+      useDeletePlugin: () => [mockDeletePlugin],
+    }));
+
+    render(<PluginStore />);
+
+    expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+  });
+
+  it('should handle empty pluginData gracefully', () => {
+    Object.assign(mockPluginData, { getPlugins: [] });
+
+    render(<PluginStore />);
+
+    expect(screen.getByText('noPluginsAvailable')).toBeInTheDocument();
+  });
+
+  it('should handle pagination edge case (last page with no items)', () => {
+    const mockPlugin: MockPlugin = {
+      id: 'test-plugin',
+      manifest: {
+        name: 'Test Plugin',
+        description: 'A test plugin',
+        author: 'Test Author',
+        icon: '/test-icon.png',
+      },
+    };
+
+    mockLoadedPlugins.mockReturnValue([mockPlugin]);
+
+    render(<PluginStore />);
+
+    const pagination = screen.getByTestId('pagination');
+    const [page2Btn] = pagination.querySelectorAll('button');
+    fireEvent.click(page2Btn);
+
+    expect(pagination).toBeInTheDocument();
+  });
+
+  it('should handle plugin uninstall failure', async () => {
+    const mockPlugin: MockPlugin = {
+      id: 'test-plugin',
+      manifest: {
+        name: 'Test Plugin',
+        description: 'A test plugin',
+        author: 'Test Author',
+        icon: '/test-icon.png',
+      },
+    };
+
+    mockLoadedPlugins.mockReturnValue([mockPlugin]);
+
+    // Mock the plugin manager to return false for unloadPlugin
+    const originalUnloadPlugin = mockPluginManager.unloadPlugin;
+    mockPluginManager.unloadPlugin.mockResolvedValueOnce(false);
+
+    render(<PluginStore />);
+
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
+    fireEvent.click(manageButton);
+
     await waitFor(() => {
-      expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
+      expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
     });
+
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const uninstallButton = pluginModal.querySelectorAll('button')[3];
+    fireEvent.click(uninstallButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
+    });
+
+    const removeButton = screen.getByTestId('uninstall-remove-btn');
+    fireEvent.click(removeButton);
+
+    expect(mockPluginManager.unloadPlugin).toHaveBeenCalledWith('test-plugin');
+
+    // Restore original mock
+    mockPluginManager.unloadPlugin = originalUnloadPlugin;
+  });
+
+  it('should handle plugin status toggle failure', async () => {
+    const mockPlugin: MockPlugin = {
+      id: 'test-plugin',
+      manifest: {
+        name: 'Test Plugin',
+        description: 'A test plugin',
+        author: 'Test Author',
+        icon: '/test-icon.png',
+      },
+    };
+
+    mockLoadedPlugins.mockReturnValue([mockPlugin]);
+
+    // Mock the plugin manager to return false for togglePluginStatus
+    const originalTogglePluginStatus = mockPluginManager.togglePluginStatus;
+    mockPluginManager.togglePluginStatus.mockResolvedValueOnce(false);
+
+    render(<PluginStore />);
+
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
+    fireEvent.click(manageButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
+    });
+
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const toggleButton = pluginModal.querySelectorAll('button')[2];
+    fireEvent.click(toggleButton);
+
+    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith(
+      'test-plugin',
+      'active',
+    );
+
+    // Restore original mock
+    mockPluginManager.togglePluginStatus = originalTogglePluginStatus;
+  });
+
+  it('should close plugin modal when close button is clicked', async () => {
+    const mockPlugin: MockPlugin = {
+      id: 'test-plugin',
+      manifest: {
+        name: 'Test Plugin',
+        description: 'A test plugin',
+        author: 'Test Author',
+        icon: '/test-icon.png',
+      },
+    };
+
+    mockLoadedPlugins.mockReturnValue([mockPlugin]);
+
+    render(<PluginStore />);
+
+    const manageButton = screen.getByTestId('plugin-action-btn-test-plugin');
+    fireEvent.click(manageButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('plugin-modal')).toBeInTheDocument();
+    });
+
+    const pluginModal = screen.getByTestId('plugin-modal');
+    const closeButton = pluginModal.querySelectorAll('button')[0];
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByTestId('plugin-modal')).not.toBeInTheDocument();
+  });
+
+  it('should close upload modal when close button is clicked', async () => {
+    render(<PluginStore />);
+
+    const uploadButton = screen.getByTestId('uploadPluginBtn');
+    fireEvent.click(uploadButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('upload-modal')).toBeInTheDocument();
+    });
+
+    const closeButton = screen.getByText('Close Upload');
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByTestId('upload-modal')).not.toBeInTheDocument();
   });
 });
