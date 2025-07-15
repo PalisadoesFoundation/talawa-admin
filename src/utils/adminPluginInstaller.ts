@@ -194,7 +194,7 @@ export async function validateAdminPluginZip(
 /**
  * Validates admin plugin structure
  */
-function validateAdminPluginStructure(files: Record<string, string>): {
+export function validateAdminPluginStructure(files: Record<string, string>): {
   valid: boolean;
   error?: string;
 } {
