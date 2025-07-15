@@ -635,8 +635,19 @@ describe('LifecycleManager', () => {
         lifecycleManager,
       );
 
-      expect(isValidPluginId('valid-plugin')).toBe(true);
-      expect(isValidPluginId('another_valid-plugin123')).toBe(true);
+      // Valid plugin IDs (camelCase, PascalCase, underscore)
+      expect(isValidPluginId('validPlugin')).toBe(true);
+      expect(isValidPluginId('ValidPlugin')).toBe(true);
+      expect(isValidPluginId('valid_plugin')).toBe(true);
+      expect(isValidPluginId('anotherValidPlugin123')).toBe(true);
+      expect(isValidPluginId('a')).toBe(true);
+      expect(isValidPluginId('A')).toBe(true);
+
+      // Invalid plugin IDs (hyphens, numbers first, empty)
+      expect(isValidPluginId('valid-plugin')).toBe(false);
+      expect(isValidPluginId('another_valid-plugin123')).toBe(false);
+      expect(isValidPluginId('123plugin')).toBe(false);
+      expect(isValidPluginId('_underscore')).toBe(false);
       expect(isValidPluginId('')).toBe(false);
       expect(isValidPluginId('   ')).toBe(false);
       expect(isValidPluginId(null)).toBe(false);

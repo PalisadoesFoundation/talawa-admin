@@ -357,7 +357,6 @@ export default function PluginStore() {
                 id: existingPlugin.id,
                 isInstalled: false,
                 isActivated: false,
-                backup: true,
               },
             },
           });
@@ -370,6 +369,31 @@ export default function PluginStore() {
               },
             },
           });
+
+          // Remove plugin folder from admin filesystem
+          try {
+            const { adminPluginFileService } = await import(
+              '../../plugin/services/AdminPluginFileService'
+            );
+            const success = await adminPluginFileService.removePlugin(
+              pluginToUninstall.id,
+            );
+            if (success) {
+              console.log(
+                `Admin plugin directory removed for: ${pluginToUninstall.id}`,
+              );
+            } else {
+              console.error(
+                `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
+              );
+            }
+          } catch (error) {
+            console.error(
+              `Failed to remove admin plugin directory for ${pluginToUninstall.id}:`,
+              error,
+            );
+            // Don't throw error - plugin is already deleted from database
+          }
         }
       }
 

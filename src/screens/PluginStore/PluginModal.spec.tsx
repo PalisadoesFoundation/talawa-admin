@@ -1,10 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
+import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
 import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
 
-// Mock fetch globally
-global.fetch = vi.fn();
+// Mock AdminPluginFileService
+vi.mock('../../plugin/services/AdminPluginFileService', () => ({
+  AdminPluginFileService: {
+    getPluginDetails: vi.fn(),
+  },
+}));
 
 describe('PluginModal', () => {
   const mockMeta: IPluginMeta = {
@@ -22,12 +27,11 @@ describe('PluginModal', () => {
     description: 'A test plugin description',
     icon: 'test-icon.png',
     version: '1.2.3',
-    cdnUrl: 'https://dummy-cdn.talawa.io/plugins/test-plugin',
-    downloads: 1234,
-    rating: 4.5,
+    cdnUrl: '', // No longer used
     screenshots: ['screenshot1.png', 'screenshot2.png'],
     readme:
       'Features:\n- Feature 1\n- Feature 2\n\n## Installation\nInstall the plugin...',
+    features: ['Feature 1', 'Feature 2'],
     changelog: [
       {
         version: '1.2.3',
@@ -49,9 +53,7 @@ describe('PluginModal', () => {
     description: 'A test plugin description',
     icon: 'test-icon.png',
     version: '1.2.3',
-    cdnUrl: 'https://dummy-cdn.talawa.io/plugins/test-plugin',
-    downloads: 1234,
-    rating: 4.5,
+    cdnUrl: '', // No longer used
     screenshots: ['screenshot1.png', 'screenshot2.png'],
     readme: '',
     changelog: [],
@@ -64,8 +66,8 @@ describe('PluginModal', () => {
     pluginId: 'test-plugin',
     meta: mockMeta,
     loading: false,
-    isInstalled: vi.fn(() => false),
-    getInstalledPlugin: vi.fn(() => undefined),
+    isInstalled: vi.fn().mockReturnValue(false),
+    getInstalledPlugin: vi.fn().mockReturnValue(undefined),
     installPlugin: vi.fn(),
     togglePluginStatus: vi.fn(),
     uninstallPlugin: vi.fn(),
@@ -73,11 +75,10 @@ describe('PluginModal', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (global.fetch as any).mockClear();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Modal Display', () => {
@@ -133,7 +134,9 @@ describe('PluginModal', () => {
 
       fireEvent.click(screen.getByText('Features'));
 
-      expect(screen.getByText('No features listed.')).toBeInTheDocument();
+      expect(
+        screen.getByText('No features information available for this plugin.'),
+      ).toBeInTheDocument();
     });
 
     it('should switch to Changelog tab when clicked', () => {
@@ -146,60 +149,57 @@ describe('PluginModal', () => {
     });
   });
 
-  describe('Plugin Details Fetching', () => {
-    it('should fetch plugin details when modal opens', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+  describe('Plugin Details Loading', () => {
+    it('should load plugin details when modal opens', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          'https://dummy-cdn.talawa.io/plugins/test-plugin',
+        expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalledWith(
+          'test-plugin',
         );
       });
     });
 
-    it('should display detailed plugin information when fetched', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+    it('should display detailed plugin information when loaded', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
         expect(screen.getByText('v1.2.3')).toBeInTheDocument();
-        expect(screen.getByText('1,234 downloads')).toBeInTheDocument();
-        expect(screen.getByText('★ 4.5 / 5')).toBeInTheDocument();
       });
     });
 
-    it('should handle fetch error gracefully', async () => {
-      (global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+    it('should handle loading error gracefully', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockRejectedValueOnce(
+        new Error('File not found'),
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
+        expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalled();
       });
 
       // Should still show basic plugin info from meta
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
     });
 
-    it('should handle non-ok response gracefully', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: false,
-        status: 404,
-      });
+    it('should handle null response gracefully', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        null,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalled();
+        expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalled();
       });
 
       // Should still show basic plugin info from meta
@@ -207,7 +207,9 @@ describe('PluginModal', () => {
     });
 
     it('should show loading state while fetching', async () => {
-      (global.fetch as any).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
+      (AdminPluginFileService.getPluginDetails as any).mockImplementationOnce(
+        () => new Promise(() => {}),
+      ); // Never resolves
 
       render(<PluginModal {...defaultProps} />);
 
@@ -215,10 +217,9 @@ describe('PluginModal', () => {
     });
 
     it('should clear details when modal closes', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       const { rerender } = render(<PluginModal {...defaultProps} />);
 
@@ -229,8 +230,8 @@ describe('PluginModal', () => {
       rerender(<PluginModal {...defaultProps} show={false} />);
       rerender(<PluginModal {...defaultProps} show={true} />);
 
-      // Should fetch again when reopened
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      // Should load again when reopened
+      expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -348,84 +349,260 @@ describe('PluginModal', () => {
     });
 
     it('should display screenshots when available', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
         expect(screen.getByText('Screenshots')).toBeInTheDocument();
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        expect(screenshots).toHaveLength(2);
       });
-
-      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
-      expect(screenshots).toHaveLength(2);
-      expect(screenshots[0]).toHaveAttribute('src', 'screenshot1.png');
-      expect(screenshots[1]).toHaveAttribute('src', 'screenshot2.png');
     });
 
-    it('should display readme when available', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+    it('should open screenshot viewer when screenshot is clicked', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        expect(screen.getByText('Readme')).toBeInTheDocument();
-      });
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        expect(screenshots).toHaveLength(2);
 
-      const readme = screen.getByText(/Features:/);
-      expect(readme).toBeInTheDocument();
+        // Click on first screenshot
+        fireEvent.click(screenshots[0]);
+
+        // Screenshot viewer should open
+        expect(screen.getByAltText('Screenshot 1')).toBeInTheDocument();
+      });
     });
-  });
 
-  describe('Content Display - Features Tab', () => {
-    it('should parse and display features from readme', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+    it('should navigate between screenshots in viewer', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        fireEvent.click(screen.getByText('Features'));
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+
+        // Should show navigation buttons for multiple screenshots
+        expect(screen.getByTitle('Next image (→)')).toBeInTheDocument();
+        expect(screen.getByTitle('Previous image (←)')).toBeInTheDocument();
+
+        // Should show image counter
+        expect(screen.getByText('1 / 2')).toBeInTheDocument();
       });
+    });
+
+    it('should close screenshot viewer when escape key is pressed', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+
+        // Screenshot viewer should be open
+        expect(screen.getByAltText('Screenshot 1')).toBeInTheDocument();
+
+        // Press escape key
+        fireEvent.keyDown(window, { key: 'Escape' });
+
+        // Screenshot viewer should close
+        expect(screen.queryByAltText('Screenshot 1')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should navigate screenshots with arrow keys', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+
+        // Should show first screenshot
+        expect(screen.getByText('1 / 2')).toBeInTheDocument();
+
+        // Press right arrow key
+        fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+        // Should show second screenshot
+        expect(screen.getByText('2 / 2')).toBeInTheDocument();
+
+        // Press left arrow key
+        fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+        // Should show first screenshot again
+        expect(screen.getByText('1 / 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should not show navigation buttons for single screenshot', async () => {
+      const singleScreenshotDetails = {
+        ...mockDetails,
+        screenshots: ['screenshot1.png'],
+      };
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        singleScreenshotDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+
+        // Should not show navigation buttons
+        expect(screen.queryByTitle('Next image (→)')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTitle('Previous image (←)'),
+        ).not.toBeInTheDocument();
+
+        // Should not show image counter
+        expect(screen.queryByText('1 / 1')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should display features in both Details and Features tabs', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Check Details tab shows key features
+      await waitFor(() => {
+        expect(screen.getByText('Key Features')).toBeInTheDocument();
+        expect(screen.getByText('Feature 1')).toBeInTheDocument();
+        expect(screen.getByText('Feature 2')).toBeInTheDocument();
+      });
+
+      // Switch to Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
         expect(screen.getByText('Feature 1')).toBeInTheDocument();
         expect(screen.getByText('Feature 2')).toBeInTheDocument();
       });
     });
 
-    it('should show "No features listed" when no features available', () => {
+    it('should not display readme section', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
       render(<PluginModal {...defaultProps} />);
 
+      await waitFor(() => {
+        expect(screen.queryByText('Readme')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle plugins with no features gracefully', async () => {
+      const detailsWithoutFeatures = {
+        ...mockDetails,
+        features: [],
+      };
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        detailsWithoutFeatures,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Should not show Key Features section in Details tab
+      await waitFor(() => {
+        expect(screen.queryByText('Key Features')).not.toBeInTheDocument();
+      });
+
+      // Switch to Features tab
       fireEvent.click(screen.getByText('Features'));
 
-      expect(screen.getByText('No features listed.')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'No features information available for this plugin.',
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Content Display - Features Tab', () => {
+    it('should display features from info.json', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Switch to Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+        expect(screen.getByText('Feature 1')).toBeInTheDocument();
+        expect(screen.getByText('Feature 2')).toBeInTheDocument();
+      });
     });
 
     it('should show loading state in Features tab while fetching', async () => {
-      (global.fetch as any).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
+      (AdminPluginFileService.getPluginDetails as any).mockImplementationOnce(
+        () => new Promise(() => {}),
+      ); // Never resolves
 
       render(<PluginModal {...defaultProps} />);
 
+      // Switch to Features tab
       fireEvent.click(screen.getByText('Features'));
 
       expect(screen.getByText('Loading features...')).toBeInTheDocument();
+    });
+
+    it('should show appropriate message when no features are available', async () => {
+      const detailsWithoutFeatures = {
+        ...mockDetails,
+        features: [],
+        readme: '',
+      };
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        detailsWithoutFeatures,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Switch to Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'No features information available for this plugin.',
+          ),
+        ).toBeInTheDocument();
+      });
     });
   });
 
   describe('Content Display - Changelog Tab', () => {
     it('should display changelog entries when available', async () => {
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
@@ -441,7 +618,9 @@ describe('PluginModal', () => {
     });
 
     it('should show loading state in Changelog tab while fetching', async () => {
-      (global.fetch as any).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
+      (AdminPluginFileService.getPluginDetails as any).mockImplementationOnce(
+        () => new Promise(() => {}),
+      ); // Never resolves
 
       render(<PluginModal {...defaultProps} />);
 
@@ -456,7 +635,7 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} pluginId="" />);
 
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
-      expect(global.fetch).not.toHaveBeenCalled();
+      expect(AdminPluginFileService.getPluginDetails).not.toHaveBeenCalled();
     });
 
     it('should handle missing meta gracefully', () => {
@@ -474,23 +653,26 @@ describe('PluginModal', () => {
       expect(icon).toBeInTheDocument();
     });
 
-    it('should handle readme without features section', async () => {
+    it('should handle plugin without features in info.json', async () => {
       const detailsWithoutFeatures = {
         ...mockDetails,
-        readme: 'This is a readme without features section',
+        features: [],
       };
 
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(detailsWithoutFeatures),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        detailsWithoutFeatures,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
       fireEvent.click(screen.getByText('Features'));
 
       await waitFor(() => {
-        expect(screen.getByText('No features listed.')).toBeInTheDocument();
+        expect(
+          screen.getByText(
+            'No features information available for this plugin.',
+          ),
+        ).toBeInTheDocument();
       });
     });
 
@@ -500,10 +682,9 @@ describe('PluginModal', () => {
         changelog: [],
       };
 
-      (global.fetch as any).mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(detailsWithoutChangelog),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        detailsWithoutChangelog,
+      );
 
       render(<PluginModal {...defaultProps} />);
 
@@ -549,30 +730,29 @@ describe('PluginModal', () => {
 
   describe('Component Lifecycle', () => {
     it('should fetch details when pluginId changes', async () => {
-      (global.fetch as any).mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(mockDetails),
-      });
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
+        mockDetails,
+      );
 
       const { rerender } = render(
         <PluginModal {...defaultProps} pluginId="plugin1" />,
       );
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          'https://dummy-cdn.talawa.io/plugins/plugin1',
+        expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalledWith(
+          'plugin1',
         );
       });
 
       rerender(<PluginModal {...defaultProps} pluginId="plugin2" />);
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledWith(
-          'https://dummy-cdn.talawa.io/plugins/plugin2',
+        expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalledWith(
+          'plugin2',
         );
       });
 
-      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalledTimes(2);
     });
 
     it('should reset tab to Details when modal reopens', async () => {
@@ -580,7 +760,9 @@ describe('PluginModal', () => {
 
       // Switch to Features tab
       fireEvent.click(screen.getByText('Features'));
-      expect(screen.getByText('No features listed.')).toBeInTheDocument();
+      expect(
+        screen.getByText('No features information available for this plugin.'),
+      ).toBeInTheDocument();
 
       // Close and reopen modal
       rerender(<PluginModal {...defaultProps} show={false} />);

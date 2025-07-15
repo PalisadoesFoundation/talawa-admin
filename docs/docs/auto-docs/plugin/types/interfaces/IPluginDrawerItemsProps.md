@@ -4,7 +4,7 @@
 
 # Interface: IPluginDrawerItemsProps
 
-Defined in: [src/plugin/types.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L159)
+Defined in: [src/plugin/types.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L181)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:159](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **activeClassName**: `string`
 
-Defined in: [src/plugin/types.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L164)
+Defined in: [src/plugin/types.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L186)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:164](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **className**: `string`
 
-Defined in: [src/plugin/types.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L162)
+Defined in: [src/plugin/types.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L184)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:162](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/plugin/types.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L161)
+Defined in: [src/plugin/types.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L183)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:161](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **itemClassName**: `string`
 
-Defined in: [src/plugin/types.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L163)
+Defined in: [src/plugin/types.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L185)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/types.ts:163](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onItemClick**: (`item`) => `void`
 
-Defined in: [src/plugin/types.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L165)
+Defined in: [src/plugin/types.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L187)
 
 #### Parameters
 
@@ -62,4 +62,4 @@ Defined in: [src/plugin/types.ts:165](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **userPermissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L160)
+Defined in: [src/plugin/types.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L182)

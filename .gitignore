@@ -48,3 +48,4 @@ debug.log
 # Plugin related
 /src/plugin/available/*
 !/src/plugin/available/readme.md
+/server/node_modules

@@ -14,11 +14,12 @@ export function usePluginDrawerItems(
   const [drawerItems, setDrawerItems] = useState<IDrawerExtension[]>([]);
 
   useEffect(() => {
-    if (!getPluginManager().isSystemInitialized()) {
-      return;
-    }
-
     const updateDrawerItems = () => {
+      // Only update if system is initialized
+      if (!getPluginManager().isSystemInitialized()) {
+        return;
+      }
+
       let items: IDrawerExtension[] = [];
 
       if (isAdmin && !isOrg) {
@@ -94,6 +95,11 @@ export function usePluginRoutes(
 
   useEffect(() => {
     const updateRoutes = () => {
+      // Only update if system is initialized
+      if (!getPluginManager().isSystemInitialized()) {
+        return;
+      }
+
       let routeExtensions: IRouteExtension[] = [];
 
       if (isAdmin && !isOrg) {
@@ -144,11 +150,13 @@ export function usePluginRoutes(
     getPluginManager().on('plugin:loaded', handlePluginChange);
     getPluginManager().on('plugin:unloaded', handlePluginChange);
     getPluginManager().on('plugin:status-changed', handlePluginChange);
+    getPluginManager().on('plugins:initialized', updateRoutes);
 
     return () => {
       getPluginManager().off('plugin:loaded', handlePluginChange);
       getPluginManager().off('plugin:unloaded', handlePluginChange);
       getPluginManager().off('plugin:status-changed', handlePluginChange);
+      getPluginManager().off('plugins:initialized', updateRoutes);
     };
   }, [userPermissions, isAdmin, isOrg]);
 
@@ -191,6 +199,11 @@ export function usePluginInjectors(
 
   useEffect(() => {
     const updateInjectors = () => {
+      // Only update if system is initialized
+      if (!getPluginManager().isSystemInitialized()) {
+        return;
+      }
+
       const injectorExtensions = getPluginManager().getExtensionPoints(
         injectorType,
         [],
@@ -212,11 +225,13 @@ export function usePluginInjectors(
     getPluginManager().on('plugin:loaded', handlePluginChange);
     getPluginManager().on('plugin:unloaded', handlePluginChange);
     getPluginManager().on('plugin:status-changed', handlePluginChange);
+    getPluginManager().on('plugins:initialized', updateInjectors);
 
     return () => {
       getPluginManager().off('plugin:loaded', handlePluginChange);
       getPluginManager().off('plugin:unloaded', handlePluginChange);
       getPluginManager().off('plugin:status-changed', handlePluginChange);
+      getPluginManager().off('plugins:initialized', updateInjectors);
     };
   }, [injectorType]);
 

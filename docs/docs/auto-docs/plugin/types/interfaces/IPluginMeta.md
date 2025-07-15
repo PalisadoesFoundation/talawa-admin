@@ -4,7 +4,7 @@
 
 # Interface: IPluginMeta
 
-Defined in: [src/plugin/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L68)
+Defined in: [src/plugin/types.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L89)
 
 ## Extended by
 
@@ -16,7 +16,7 @@ Defined in: [src/plugin/types.ts:68](https://github.com/PalisadoesFoundation/tal
 
 > **author**: `string`
 
-Defined in: [src/plugin/types.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L72)
+Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L93)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/plugin/types.ts:72](https://github.com/PalisadoesFoundation/tal
 
 > **description**: `string`
 
-Defined in: [src/plugin/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L71)
+Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L92)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/plugin/types.ts:71](https://github.com/PalisadoesFoundation/tal
 
 > **icon**: `string`
 
-Defined in: [src/plugin/types.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L73)
+Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L94)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/plugin/types.ts:73](https://github.com/PalisadoesFoundation/tal
 
 > **id**: `string`
 
-Defined in: [src/plugin/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L69)
+Defined in: [src/plugin/types.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L90)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/plugin/types.ts:69](https://github.com/PalisadoesFoundation/tal
 
 > **name**: `string`
 
-Defined in: [src/plugin/types.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L70)
+Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L91)
