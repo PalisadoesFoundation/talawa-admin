@@ -107,10 +107,10 @@ export default function people(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query to fetch list of members of the organization
-  const { data, loading, refetch } = useQuery(
+  const { data, loading, fetchMore } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
-      variables: { orgId: organizationId, firstName_contains: '', first: 32 },
+      variables: { orgId: organizationId, firstName_contains: '', first: 5 },
       errorPolicy: 'ignore',
     },
   );
@@ -132,7 +132,16 @@ export default function people(): React.JSX.Element {
   };
 
   const handleSearch = (newFilter: string): void => {
-    refetch({ firstName_contains: newFilter });
+    // Client-side filtering logic
+    const sourceList = mode === 0 ? allMembers : admins;
+    if (!newFilter.trim()) {
+      setMembers(sourceList);
+      return;
+    }
+    const filtered = sourceList.filter((member) =>
+      member.node.name.toLowerCase().includes(newFilter.trim().toLowerCase()),
+    );
+    setMembers(filtered);
   };
 
   const handleSearchByEnter = (
@@ -152,34 +161,50 @@ export default function people(): React.JSX.Element {
   };
 
   useEffect(() => {
-    if (data?.organization?.members?.edges) {
-      const adminsList = data.organization.members.edges
+    if (!data?.organization?.members) return;
+
+    const fetchAll = async () => {
+      let allEdges = [...data.organization.members.edges];
+      let pageInfo = data.organization.members.pageInfo;
+
+      while (pageInfo.hasNextPage) {
+        const more = await fetchMore({
+          variables: {
+            orgId: organizationId,
+            first: 32,
+            after: pageInfo.endCursor,
+          },
+        });
+
+        const newEdges = more.data.organization.members.edges;
+        pageInfo = more.data.organization.members.pageInfo;
+        allEdges = [...allEdges, ...newEdges];
+      }
+
+      // Set Admins
+      const adminsList = allEdges
         .filter((member: IMemberEdge) => member.node.role === 'administrator')
         .map((admin: IMemberEdge) => ({
           ...admin,
           userType: 'Admin' as const,
         }));
-      setAdmins(adminsList);
-    }
-  }, [data]);
 
-  // Updated members effect
-  useEffect(() => {
-    if (data?.organization?.members?.edges) {
-      const membersList = data.organization.members.edges.map(
-        (memberData: IMemberEdge) => ({
-          ...memberData,
-          userType: admins?.some(
-            (admin) => admin.node.id === memberData.node.id,
-          )
-            ? ('Admin' as const)
-            : ('Member' as const),
-        }),
-      );
-      setAllMembers(membersList);
-      setMembers(mode === 0 ? membersList : admins);
-    }
-  }, [data, admins, mode]);
+      setAdmins(adminsList);
+
+      // Set All Members with userType
+      const allMembersList = allEdges.map((member: IMemberEdge) => ({
+        ...member,
+        userType: adminsList.some((admin) => admin.node.id === member.node.id)
+          ? ('Admin' as const)
+          : ('Member' as const),
+      }));
+
+      setAllMembers(allMembersList);
+      setMembers(mode === 0 ? allMembersList : adminsList);
+    };
+
+    fetchAll();
+  }, [data, fetchMore, mode, organizationId]);
 
   useEffect(() => {
     setMembers(mode === 0 ? allMembers : admins);
