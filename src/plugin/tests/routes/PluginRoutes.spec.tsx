@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import PluginRoutes from '../PluginRoutes';
-import { usePluginRoutes } from '../hooks';
+import PluginRoutes from '../../routes/PluginRoutes';
+import { usePluginRoutes } from '../../hooks';
 import React from 'react';
 
 // Mock the manager

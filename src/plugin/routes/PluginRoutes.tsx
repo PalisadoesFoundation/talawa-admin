@@ -7,8 +7,8 @@
 
 import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router';
-import { usePluginRoutes } from './hooks';
-import type { IRouteExtension } from './types';
+import { usePluginRoutes } from '../hooks';
+import type { IRouteExtension } from '../types';
 
 interface PluginRoutesProps {
   userPermissions?: string[];

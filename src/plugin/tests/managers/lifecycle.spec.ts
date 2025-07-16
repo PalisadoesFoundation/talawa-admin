@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { LifecycleManager } from './lifecycle';
-import { DiscoveryManager } from './discovery';
-import { ExtensionRegistryManager } from './extension-registry';
-import { EventManager } from './event-manager';
-import { ILoadedPlugin, PluginStatus, IPluginManifest } from '../types';
+import { LifecycleManager } from '../../managers/lifecycle';
+import { DiscoveryManager } from '../../managers/discovery';
+import { ExtensionRegistryManager } from '../../managers/extension-registry';
+import { EventManager } from '../../managers/event-manager';
+import { ILoadedPlugin, PluginStatus, IPluginManifest } from '../../types';
 import React from 'react';
 
 // Mock the managers
-vi.mock('./discovery');
-vi.mock('./extension-registry');
-vi.mock('./event-manager');
+vi.mock('../../managers/discovery');
+vi.mock('../../managers/extension-registry');
+vi.mock('../../managers/event-manager');
 
 // Mock fetch globally
 global.fetch = vi.fn();

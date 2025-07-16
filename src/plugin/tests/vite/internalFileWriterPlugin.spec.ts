@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   createInternalFileWriterPlugin,
   type InternalFileWriterPluginOptions,
-} from './internalFileWriterPlugin';
+} from '../../vite/internalFileWriterPlugin';
 
 describe('createInternalFileWriterPlugin', () => {
   it('should create a plugin with default options', () => {

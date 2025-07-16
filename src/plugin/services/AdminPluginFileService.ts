@@ -236,7 +236,6 @@ export class AdminPluginFileService {
       console.log(
         `Plugin ${pluginId} installed successfully (${response.filesWritten} files)`,
       );
-      console.log(`Files written to: ${response.path}`);
 
       return {
         success: true,

@@ -81,13 +81,6 @@ export function createInternalFileWriterPlugin(
               try {
                 const { method, params } = JSON.parse(body);
 
-                if (debug) {
-                  console.log('Internal File Writer Plugin: Handling request', {
-                    method,
-                    params,
-                  });
-                }
-
                 const result = await handleFileOperation(
                   method,
                   params,

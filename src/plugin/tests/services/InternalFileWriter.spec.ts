@@ -4,8 +4,8 @@ import {
   internalFileWriter,
   FileWriteResult,
   FileOperationResult,
-} from '../services/InternalFileWriter';
-import { AdminPluginManifest } from '../../utils/adminPluginInstaller';
+} from '../../services/InternalFileWriter';
+import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 
 // Mock fetch for Vite plugin API calls
 global.fetch = vi.fn();

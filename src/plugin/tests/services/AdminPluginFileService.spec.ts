@@ -4,13 +4,13 @@ import {
   PluginFileValidationResult,
   PluginInstallationResult,
   InstalledPlugin,
-} from '../services/AdminPluginFileService';
-import { AdminPluginManifest } from '../../utils/adminPluginInstaller';
-import { internalFileWriter } from '../services/InternalFileWriter';
-import type { IPluginDetails } from '../types';
+} from '../../services/AdminPluginFileService';
+import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
+import { internalFileWriter } from '../../services/InternalFileWriter';
+import type { IPluginDetails } from '../../types';
 
 // Mock InternalFileWriter
-vi.mock('../services/InternalFileWriter', () => ({
+vi.mock('../../services/InternalFileWriter', () => ({
   internalFileWriter: {
     writePluginFiles: vi.fn(),
     listInstalledPlugins: vi.fn(),
