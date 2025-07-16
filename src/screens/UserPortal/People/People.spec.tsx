@@ -31,13 +31,85 @@ import { vi, it } from 'vitest';
  */
 
 // Reusable mock data constants
+const randomMembersMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: '',
+      firstName_contains: '',
+      first: 32,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: Array.from({ length: 5 }, (_, i) => ({
+            cursor: `cursor${i + 1}`,
+            node: {
+              id: `user-${i + 1}`,
+              name: `User ${i + 1}`,
+              role: 'member',
+              avatarURL: null,
+              emailAddress: `user${i + 1}@example.com`,
+              createdAt: `2023-03-${String((i % 28) + 1).padStart(2, '0')}T03:22:08.101Z`,
+            },
+          })),
+          pageInfo: {
+            endCursor: 'cursor5',
+            hasPreviousPage: false,
+            hasNextPage: true,
+            startCursor: 'cursor1',
+          },
+        },
+      },
+    },
+  },
+};
+const fetchMoreMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: '',
+      firstName_contains: '',
+      first: 32,
+      after: 'cursor5',
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: Array.from({ length: 30 }, (_, i) => ({
+            cursor: `cursor${i + 6}`,
+            node: {
+              id: `user-${i + 6}`,
+              name: `User ${i + 6}`,
+              role: 'member',
+              avatarURL: null,
+              emailAddress: `user${i + 6}@example.com`,
+              createdAt: `2023-03-${String(((i + 6) % 28) + 1).padStart(2, '0')}T03:22:08.101Z`,
+            },
+          })),
+          pageInfo: {
+            endCursor: 'cursor35',
+            hasPreviousPage: true,
+            hasNextPage: false,
+            startCursor: 'cursor6',
+          },
+        },
+      },
+    },
+  },
+};
+
 const membersMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: '',
       firstName_contains: '',
-      first: 5,
+      first: 32,
     },
   },
   result: {
@@ -55,6 +127,7 @@ const membersMock = {
                 emailAddress: 'test@example.com',
                 createdAt: '2023-03-02T03:22:08.101Z',
               },
+              userType: 'member',
             },
             {
               cursor: 'cursor2',
@@ -66,6 +139,7 @@ const membersMock = {
                 emailAddress: 'admin@example.com',
                 createdAt: '2023-03-02T03:22:08.101Z',
               },
+              userType: 'admin',
             },
             {
               cursor: 'cursor3',
@@ -77,6 +151,7 @@ const membersMock = {
                 emailAddress: null,
                 createdAt: '2023-03-02T03:22:08.101Z',
               },
+              userType: 'member',
             },
           ],
           pageInfo: {
@@ -97,7 +172,7 @@ const LoadMoreMembersMock = {
     variables: {
       orgId: '',
       firstName_contains: '',
-      first: 5,
+      first: 32,
     },
   },
   result: {
@@ -444,6 +519,24 @@ describe('Testing People Screen [User Portal]', () => {
     );
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
+    await wait();
+  });
+
+  it('pagination working', async () => {
+    render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[randomMembersMock, fetchMoreMock]}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
     await wait();
   });
 });

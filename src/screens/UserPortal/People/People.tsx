@@ -110,7 +110,7 @@ export default function people(): React.JSX.Element {
   const { data, loading, fetchMore } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
-      variables: { orgId: organizationId, firstName_contains: '', first: 5 },
+      variables: { orgId: organizationId, firstName_contains: '', first: 32 },
       errorPolicy: 'ignore',
     },
   );
