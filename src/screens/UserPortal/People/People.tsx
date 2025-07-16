@@ -58,7 +58,6 @@ import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
 
-// GraphQL response interfaces
 interface IMemberNode {
   id: string;
   name: string;
@@ -86,62 +85,108 @@ interface IOrganizationCardProps {
   sno: string;
 }
 
-export default function people(): React.JSX.Element {
+export default function People(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });
-
   const { t: tCommon } = useTranslation('common');
-
-  const [page, setPage] = useState<number>(0);
-
-  // State for managing the number of rows per page in pagination
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
-  const [members, setMembers] = useState<IMemberWithUserType[]>([]);
-  const [allMembers, setAllMembers] = useState<IMemberWithUserType[]>([]);
-  const [admins, setAdmins] = useState<IMemberWithUserType[]>([]);
-  const [mode, setMode] = useState<number>(0);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [mode, setMode] = useState<number>(0); // 0: All Members, 1: Admins
+  const [pageCursors, setPageCursors] = useState<string[]>(['']); // Keep track of cursors for each page
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
-  // Extracting organization ID from URL parameters
   const { orgId: organizationId } = useParams();
 
-  // Filter modes for dropdown selection
   const modes = ['All Members', 'Admins'];
 
-  // Query to fetch list of members of the organization
-  const { data, loading, fetchMore } = useQuery(
+  // Query the current page of members
+  const { data, loading, fetchMore, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
-      variables: { orgId: organizationId, firstName_contains: '', first: 32 },
+      variables: {
+        orgId: organizationId,
+        firstName_contains: searchTerm,
+        first: rowsPerPage,
+        after: pageCursors[currentPage] || undefined,
+      },
       errorPolicy: 'ignore',
+      notifyOnNetworkStatusChange: true,
     },
   );
 
-  const handleChangePage = (
+  // Extract members for the current page and filter by role if needed
+  const members: IMemberWithUserType[] = React.useMemo(() => {
+    if (!data?.organization?.members?.edges) return [];
+    let edges: IMemberEdge[] = data.organization.members.edges;
+    let adminsList = edges
+      .filter((m) => m.node.role === 'administrator')
+      .map((admin) => ({ ...admin, userType: 'Admin' as const }));
+    if (mode === 1) return adminsList;
+    // For all members, assign userType based on role
+    return edges.map((member) => ({
+      ...member,
+      userType: member.node.role === 'administrator' ? 'Admin' : 'Member',
+    }));
+  }, [data, mode]);
+
+  // Pagination info from backend
+  const pageInfo = data?.organization?.members?.pageInfo;
+
+  // Handle page change: fetch next/prev page
+  const handleChangePage = async (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
-  ): void => {
-    setPage(newPage);
+  ) => {
+    // If moving forward, fetch next page
+    if (newPage > currentPage && pageInfo?.hasNextPage) {
+      const afterCursor = pageInfo.endCursor;
+      // fetchMore returns next page data
+      await fetchMore({
+        variables: {
+          orgId: organizationId,
+          firstName_contains: searchTerm,
+          first: rowsPerPage,
+          after: afterCursor,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
+      });
+      setPageCursors((prev) => {
+        const next = [...prev];
+        next[newPage] = afterCursor;
+        return next;
+      });
+      setCurrentPage(newPage);
+    }
+    // If moving backward, simply update page (cursors already tracked)
+    else if (newPage < currentPage && pageCursors[newPage] !== undefined) {
+      setCurrentPage(newPage);
+    }
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void => {
-    const newRowsPerPage = event.target.value;
-
-    setRowsPerPage(parseInt(newRowsPerPage, 10));
-    setPage(0);
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
+    setPageCursors(['']); // Reset pagination
+    setCurrentPage(0);
+    refetch({
+      orgId: organizationId,
+      firstName_contains: searchTerm,
+      first: newRowsPerPage,
+      after: undefined,
+    });
   };
 
   const handleSearch = (newFilter: string): void => {
-    // Client-side filtering logic
-    const sourceList = mode === 0 ? allMembers : admins;
-    if (!newFilter.trim()) {
-      setMembers(sourceList);
-      return;
-    }
-    const filtered = sourceList.filter((member) =>
-      member.node.name.toLowerCase().includes(newFilter.trim().toLowerCase()),
-    );
-    setMembers(filtered);
+    setSearchTerm(newFilter);
+    setPageCursors(['']);
+    setCurrentPage(0);
+    refetch({
+      orgId: organizationId,
+      firstName_contains: newFilter,
+      first: rowsPerPage,
+      after: undefined,
+    });
   };
 
   const handleSearchByEnter = (
@@ -161,54 +206,16 @@ export default function people(): React.JSX.Element {
   };
 
   useEffect(() => {
-    if (!data?.organization?.members) return;
-
-    const fetchAll = async () => {
-      let allEdges = [...data.organization.members.edges];
-      let pageInfo = data.organization.members.pageInfo;
-
-      while (pageInfo.hasNextPage) {
-        const more = await fetchMore({
-          variables: {
-            orgId: organizationId,
-            first: 32,
-            after: pageInfo.endCursor,
-          },
-        });
-
-        const newEdges = more.data.organization.members.edges;
-        pageInfo = more.data.organization.members.pageInfo;
-        allEdges = [...allEdges, ...newEdges];
-      }
-
-      // Set Admins
-      const adminsList = allEdges
-        .filter((member: IMemberEdge) => member.node.role === 'administrator')
-        .map((admin: IMemberEdge) => ({
-          ...admin,
-          userType: 'Admin' as const,
-        }));
-
-      setAdmins(adminsList);
-
-      // Set All Members with userType
-      const allMembersList = allEdges.map((member: IMemberEdge) => ({
-        ...member,
-        userType: adminsList.some((admin) => admin.node.id === member.node.id)
-          ? ('Admin' as const)
-          : ('Member' as const),
-      }));
-
-      setAllMembers(allMembersList);
-      setMembers(mode === 0 ? allMembersList : adminsList);
-    };
-
-    fetchAll();
-  }, [data, fetchMore, mode, organizationId]);
-
-  useEffect(() => {
-    setMembers(mode === 0 ? allMembers : admins);
-  }, [mode, allMembers, admins]);
+    // When mode changes, refetch from first page
+    setPageCursors(['']);
+    setCurrentPage(0);
+    refetch({
+      orgId: organizationId,
+      firstName_contains: searchTerm,
+      first: rowsPerPage,
+      after: undefined,
+    });
+  }, [mode, organizationId, rowsPerPage]); // intentionally not including searchTerm (it's handled above)
 
   return (
     <>
@@ -283,13 +290,7 @@ export default function people(): React.JSX.Element {
             ) : (
               <>
                 {members && members.length > 0 ? (
-                  (rowsPerPage > 0
-                    ? members.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage,
-                      )
-                    : members
-                  ).map((member: IMemberWithUserType, index) => {
+                  members.map((member: IMemberWithUserType, index) => {
                     const name = `${member.node.name}`;
                     const cardProps: IOrganizationCardProps = {
                       name,
@@ -297,7 +298,7 @@ export default function people(): React.JSX.Element {
                       id: member.node.id ?? '',
                       email: member.node.emailAddress ?? 'Not available',
                       role: member.userType ?? '',
-                      sno: (index + 1).toString(),
+                      sno: (index + 1 + currentPage * rowsPerPage).toString(),
                     };
                     return <PeopleCard key={index} {...cardProps} />;
                   })
@@ -308,9 +309,13 @@ export default function people(): React.JSX.Element {
             )}
           </div>
           <PaginationList
-            count={members ? members.length : 0}
+            count={
+              pageInfo?.hasNextPage
+                ? (currentPage + 1) * rowsPerPage + 1
+                : currentPage * rowsPerPage + members.length
+            }
             rowsPerPage={rowsPerPage}
-            page={page}
+            page={currentPage}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
