@@ -168,12 +168,6 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
     manifest.extensionPoints?.DU2,
   ];
 
-  drawerArrays.forEach((drawer, index) => {
-    if (drawer) {
-      // Drawer components don't need to be added to componentNames
-    }
-  });
-
   // Handle all injector types
   const injectorArrays = [
     manifest.extensionPoints?.G1,

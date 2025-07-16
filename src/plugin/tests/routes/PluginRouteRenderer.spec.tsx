@@ -4,7 +4,7 @@ import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
 import { getPluginComponents, isPluginRegistered } from '../../registry';
 
 // Mock the registry
-vi.mock('../registry', () => ({
+vi.mock('../../registry', () => ({
   getPluginComponents: vi.fn(),
   isPluginRegistered: vi.fn(),
 }));

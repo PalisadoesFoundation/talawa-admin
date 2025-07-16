@@ -6,7 +6,7 @@
  */
 
 import React, { lazy, Suspense } from 'react';
-import { Route } from 'react-router';
+import { Route } from 'react-router-dom';
 import { usePluginRoutes } from '../hooks';
 import type { IRouteExtension } from '../types';
 

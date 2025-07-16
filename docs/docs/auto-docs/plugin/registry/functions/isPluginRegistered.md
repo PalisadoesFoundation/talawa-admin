@@ -6,7 +6,7 @@
 
 > **isPluginRegistered**(`pluginId`): `boolean`
 
-Defined in: [src/plugin/registry.tsx:258](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L258)
+Defined in: [src/plugin/registry.tsx:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L252)
 
 Check if a plugin is registered
 

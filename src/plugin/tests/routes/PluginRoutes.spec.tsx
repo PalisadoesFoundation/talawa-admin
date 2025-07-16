@@ -6,7 +6,7 @@ import { usePluginRoutes } from '../../hooks';
 import React from 'react';
 
 // Mock the manager
-vi.mock('../manager', () => ({
+vi.mock('../../manager', () => ({
   getPluginManager: vi.fn(() => ({
     getExtensionPoints: vi.fn(() => []),
     getLoadedPlugins: vi.fn(() => []),
@@ -17,7 +17,7 @@ vi.mock('../manager', () => ({
 }));
 
 // Mock the hooks
-vi.mock('../hooks', () => ({
+vi.mock('../../hooks', () => ({
   usePluginRoutes: vi.fn(),
 }));
 
