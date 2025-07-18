@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createInternalFileWriterPlugin } from '../../vite/internalFileWriterPlugin';
+import { join } from 'path';
+
+// Get the current working directory dynamically
+const cwd = process.cwd();
+const resolvePath = (path: string) => join(cwd, path);
 
 // Mock fs module properly
 vi.mock('fs', () => {
@@ -152,14 +157,14 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.mkdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test/dir',
+        resolvePath('src/plugin/available/test/dir'),
         {
           recursive: true,
         },
       );
       // ensureDirectory doesn't return data, so we just check that mkdir was called
       expect(mockFs.mkdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test/dir',
+        resolvePath('src/plugin/available/test/dir'),
         {
           recursive: true,
         },
@@ -186,7 +191,7 @@ describe('createInternalFileWriterPlugin', () => {
 
       expect(mockFs.mkdir).toHaveBeenCalled();
       expect(mockFs.writeFile).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/test/file.txt',
+        resolvePath('test/file.txt'),
         'test content',
         'utf8',
       );
@@ -214,7 +219,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.writeFile).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/test/image.png',
+        resolvePath('test/image.png'),
         expect.any(Object),
       );
     });
@@ -235,7 +240,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.readFile).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test/file.txt',
+        resolvePath('src/plugin/available/test/file.txt'),
         'utf8',
       );
     });
@@ -258,7 +263,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.access).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test/file.txt',
+        resolvePath('src/plugin/available/test/file.txt'),
       );
     });
 
@@ -302,7 +307,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.readdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test',
+        resolvePath('src/plugin/available/test'),
         {
           withFileTypes: true,
         },
@@ -332,7 +337,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.readdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test',
+        resolvePath('src/plugin/available/test'),
         {
           withFileTypes: true,
         },
@@ -357,7 +362,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.rm).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test/dir',
+        resolvePath('src/plugin/available/test/dir'),
         {
           recursive: true,
           force: true,
@@ -524,12 +529,9 @@ describe('createInternalFileWriterPlugin', () => {
 
       await middleware(mockReq, mockRes);
 
-      expect(mockFs.mkdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/absolute/path',
-        {
-          recursive: true,
-        },
-      );
+      expect(mockFs.mkdir).toHaveBeenCalledWith(resolvePath('absolute/path'), {
+        recursive: true,
+      });
     });
 
     it('should resolve relative paths correctly', async () => {
@@ -555,7 +557,7 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.mkdir).toHaveBeenCalledWith(
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/relative/path',
+        resolvePath('src/plugin/relative/path'),
         {
           recursive: true,
         },
@@ -690,7 +692,7 @@ describe('createInternalFileWriterPlugin', () => {
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'Ensuring directory exists:',
-        '/Users/jaipannu/Desktop/palisadoes/talawa-admin-fork/src/plugin/available/test',
+        resolvePath('src/plugin/available/test'),
       );
 
       consoleSpy.mockRestore();
