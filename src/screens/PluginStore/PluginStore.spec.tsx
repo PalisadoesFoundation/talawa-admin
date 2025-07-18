@@ -324,35 +324,10 @@ describe('PluginStore', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Debug: Log modal state and available buttons
-      // eslint-disable-next-line no-console
-      console.log('Modal is open:', screen.getByRole('dialog').textContent);
-      // eslint-disable-next-line no-console
-      console.log(
-        'All buttons in modal:',
-        screen.getAllByRole('button').map((b) => ({
-          text: b.textContent,
-          disabled: (b as HTMLButtonElement).disabled,
-        })),
-      );
-
       // Activate plugin - look for button with "Activate" text
       const activateButton = screen.getByRole('button', { name: /Activate/i });
-      // eslint-disable-next-line no-console
-      console.log(
-        'Activate button found:',
-        activateButton.textContent,
-        'Enabled:',
-        !(activateButton as HTMLButtonElement).disabled,
-      );
-      fireEvent.click(activateButton);
 
-      // Debug: Check if modal is still open after click
-      // eslint-disable-next-line no-console
-      console.log(
-        'Modal still open after click:',
-        screen.queryByRole('dialog') !== null,
-      );
+      fireEvent.click(activateButton);
 
       await waitFor(() => {
         expect(mockUpdatePlugin).toHaveBeenCalled();
@@ -379,14 +354,7 @@ describe('PluginStore', () => {
       const deactivateButton = screen.getByRole('button', {
         name: /Deactivate/i,
       });
-      // Debug output
-      // eslint-disable-next-line no-console
-      console.log(
-        'Deactivate button:',
-        deactivateButton,
-        'Enabled:',
-        !(deactivateButton as HTMLButtonElement).disabled,
-      );
+
       fireEvent.click(deactivateButton);
 
       await waitFor(
@@ -450,14 +418,7 @@ describe('PluginStore', () => {
 
       // Keep data
       const keepDataButton = screen.getByTestId('uninstall-keepdata-btn');
-      // Debug output
-      // eslint-disable-next-line no-console
-      console.log(
-        'Keep data button:',
-        keepDataButton,
-        'Enabled:',
-        !(keepDataButton as HTMLButtonElement).disabled,
-      );
+
       fireEvent.click(keepDataButton);
 
       await waitFor(
@@ -496,14 +457,7 @@ describe('PluginStore', () => {
 
       // Remove permanently
       const removeButton = screen.getByTestId('uninstall-remove-btn');
-      // Debug output
-      // eslint-disable-next-line no-console
-      console.log(
-        'Remove permanently button:',
-        removeButton,
-        'Enabled:',
-        !(removeButton as HTMLButtonElement).disabled,
-      );
+
       fireEvent.click(removeButton);
 
       await waitFor(
