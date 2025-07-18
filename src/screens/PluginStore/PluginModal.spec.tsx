@@ -466,4 +466,269 @@ describe('PluginModal', () => {
       expect(screen.getByText('Changelog')).toBeInTheDocument();
     });
   });
+
+  describe('Screenshot Viewer', () => {
+    it('should open screenshot viewer when screenshot is clicked', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      expect(screen.getByText('← Back to Details')).toBeInTheDocument();
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should show navigation buttons when multiple screenshots', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Check for navigation buttons
+      const prevButton = screen.getByTitle('Previous image (←)');
+      const nextButton = screen.getByTitle('Next image (→)');
+      expect(prevButton).toBeInTheDocument();
+      expect(nextButton).toBeInTheDocument();
+    });
+
+    it('should show dot indicators for multiple screenshots', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Check for dot indicators (they should be present for 2 screenshots)
+      const dotIndicators = screen.getAllByTitle(/Go to screenshot \d+/);
+      expect(dotIndicators.length).toBe(2);
+    });
+
+    it('should navigate to next screenshot', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      const nextButton = screen.getByTitle('Next image (→)');
+      fireEvent.click(nextButton);
+
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should navigate to previous screenshot', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      const nextButton = screen.getByTitle('Next image (→)');
+      fireEvent.click(nextButton); // Go to second screenshot
+
+      const prevButton = screen.getByTitle('Previous image (←)');
+      fireEvent.click(prevButton); // Go back to first
+
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should close screenshot viewer when back button is clicked', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      const backButton = screen.getByText('← Back to Details');
+      fireEvent.click(backButton);
+
+      expect(screen.queryByText('← Back to Details')).not.toBeInTheDocument();
+      expect(screen.getByText('Description')).toBeInTheDocument();
+    });
+
+    it('should navigate to specific screenshot when dot is clicked', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      const dotIndicators = screen.getAllByTitle(/Go to screenshot \d+/);
+      fireEvent.click(dotIndicators[1]); // Click second dot
+
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('Keyboard Navigation', () => {
+    it('should close screenshot viewer on Escape key', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      fireEvent.keyDown(window, { key: 'Escape' });
+
+      expect(screen.queryByText('← Back to Details')).not.toBeInTheDocument();
+    });
+
+    it('should navigate to next screenshot on ArrowRight key', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should navigate to previous screenshot on ArrowLeft key', async () => {
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetails,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // First go to second screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Then go back to first
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('Edge Cases and Error Handling', () => {
+    it('should handle empty changelog gracefully', async () => {
+      const mockDetailsWithEmptyChangelog = {
+        ...mockDetails,
+        changelog: [],
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetailsWithEmptyChangelog,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const changelogTabs = screen.getAllByText('Changelog');
+        fireEvent.click(changelogTabs[0]);
+      });
+
+      // When changelog is empty, it should just show the changelog section title
+      expect(screen.getAllByText('Changelog')).toHaveLength(2); // Tab and section title
+    });
+
+    it('should handle single screenshot without navigation', async () => {
+      const mockDetailsWithSingleScreenshot = {
+        ...mockDetails,
+        screenshots: ['screenshot1.png'],
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetailsWithSingleScreenshot,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Should not show navigation buttons for single screenshot
+      expect(screen.queryByTitle('Previous image (←)')).not.toBeInTheDocument();
+      expect(screen.queryByTitle('Next image (→)')).not.toBeInTheDocument();
+      expect(screen.queryByText(/of \d+/)).not.toBeInTheDocument();
+    });
+
+    it('should handle many screenshots without dot indicators', async () => {
+      const mockDetailsWithManyScreenshots = {
+        ...mockDetails,
+        screenshots: [
+          'screenshot1.png',
+          'screenshot2.png',
+          'screenshot3.png',
+          'screenshot4.png',
+          'screenshot5.png',
+          'screenshot6.png',
+        ],
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
+        mockDetailsWithManyScreenshots,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Should show navigation buttons but not dot indicators for >5 screenshots
+      expect(screen.getByTitle('Previous image (←)')).toBeInTheDocument();
+      expect(screen.getByTitle('Next image (→)')).toBeInTheDocument();
+      expect(
+        screen.queryByTitle(/Go to screenshot \d+/),
+      ).not.toBeInTheDocument();
+    });
+  });
 });

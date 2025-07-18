@@ -220,6 +220,44 @@ describe('AdminPluginFileService', () => {
       expect(result.success).toBe(false);
       expect(result.error).toMatch(/Network error/);
     });
+
+    it('should handle writeFilesToFilesystem exceptions', async () => {
+      // Mock writePluginFiles to throw an error to test the catch block in writeFilesToFilesystem
+      mockInternalFileWriter.writePluginFiles.mockRejectedValue(
+        new Error('Internal file writer error'),
+      );
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Internal file writer error');
+    });
+
+    it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
+      // Mock writePluginFiles to throw a non-Error object
+      mockInternalFileWriter.writePluginFiles.mockRejectedValue('String error');
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Internal file writer error');
+    });
+
+    it('should handle non-Error exceptions in writeFilesToFilesystem with null', async () => {
+      // Mock writePluginFiles to throw null
+      mockInternalFileWriter.writePluginFiles.mockRejectedValue(null);
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Internal file writer error');
+    });
+
+    it('should handle non-Error exceptions in writeFilesToFilesystem with undefined', async () => {
+      // Mock writePluginFiles to throw undefined
+      mockInternalFileWriter.writePluginFiles.mockRejectedValue(undefined);
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Internal file writer error');
+    });
   });
 
   describe('getInstalledPlugins', () => {
@@ -385,6 +423,36 @@ describe('AdminPluginFileService', () => {
       const result = await service.healthCheck();
       expect(result.status).toBe('healthy');
       expect(result.message).toMatch(/0 plugins installed/);
+    });
+
+    it('should return error status when healthCheck throws', async () => {
+      // Mock the getInstalledPlugins method directly to throw an error
+      const originalGetInstalledPlugins =
+        service.getInstalledPlugins.bind(service);
+      service.getInstalledPlugins = vi
+        .fn()
+        .mockRejectedValue(new Error('Health check failed'));
+
+      const result = await service.healthCheck();
+      expect(result.status).toBe('error');
+      expect(result.message).toBe('Health check failed');
+
+      // Restore the original method
+      service.getInstalledPlugins = originalGetInstalledPlugins;
+    });
+
+    it('should return error status for non-Error exceptions in healthCheck', async () => {
+      // Mock the getInstalledPlugins method directly to throw a non-Error object
+      const originalGetInstalledPlugins =
+        service.getInstalledPlugins.bind(service);
+      service.getInstalledPlugins = vi.fn().mockRejectedValue('String error');
+
+      const result = await service.healthCheck();
+      expect(result.status).toBe('error');
+      expect(result.message).toBe('Unknown error');
+
+      // Restore the original method
+      service.getInstalledPlugins = originalGetInstalledPlugins;
     });
   });
 

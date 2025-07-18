@@ -447,4 +447,51 @@ describe('adminPluginInstaller', () => {
       errorSpy.mockRestore();
     });
   });
+
+  describe('Edge and fallback error coverage', () => {
+    it('should handle non-Error exception in removeAdminPlugin', async () => {
+      mockAdminPluginFileService.removePlugin.mockRejectedValue('string error');
+      const result =
+        await adminPluginInstallerModule.removeAdminPlugin('TestPlugin');
+      expect(result).toBe(false);
+    });
+
+    it('should handle non-Error exception in getInstalledAdminPlugins', async () => {
+      mockAdminPluginFileService.getInstalledPlugins.mockRejectedValue(
+        'string error',
+      );
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const result =
+        await adminPluginInstallerModule.getInstalledAdminPlugins();
+      expect(result).toEqual([]);
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Failed to get installed admin plugins:',
+        'string error',
+      );
+      errorSpy.mockRestore();
+    });
+
+    it('should handle non-Error exception in validateAdminPluginStructure', () => {
+      // Force JSON.parse to throw a string
+      const files = { 'manifest.json': '{invalid json}' };
+      const originalParse = JSON.parse;
+      JSON.parse = () => {
+        throw 'string error';
+      };
+      const result =
+        adminPluginInstallerModule.validateAdminPluginStructure(files);
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Invalid manifest.json format');
+      JSON.parse = originalParse;
+    });
+
+    it('should handle non-Error exception in removeAdminPlugin with object error', async () => {
+      mockAdminPluginFileService.removePlugin.mockRejectedValue({
+        message: 'test error',
+      });
+      const result =
+        await adminPluginInstallerModule.removeAdminPlugin('TestPlugin');
+      expect(result).toBe(false);
+    });
+  });
 });

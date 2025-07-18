@@ -586,4 +586,215 @@ describe('Node.js specific and error coverage', () => {
       force: true,
     });
   });
+
+  it('should handle Node.js readDirectoryRecursive with nested directories and files', async () => {
+    const instance = InternalFileWriter.getInstance();
+
+    // Mock fs.readdir to return a simple structure
+    const mockEntries = [
+      { name: 'file1.txt', isDirectory: () => false },
+      { name: 'file2.txt', isDirectory: () => false },
+    ];
+
+    vi.spyOn(mockFs.promises, 'readdir').mockResolvedValue(mockEntries);
+    vi.spyOn(mockFs.promises, 'readFile')
+      .mockResolvedValueOnce('file1 content')
+      .mockResolvedValueOnce('file2 content');
+
+    const result = await (instance as any).readDirectoryRecursive('/test/path');
+
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('object');
+    expect(result['file1.txt']).toBe('file1 content');
+    expect(result['file2.txt']).toBe('file2 content');
+    expect(mockFs.promises.readdir).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle Node.js readDirectoryRecursive with empty directory', async () => {
+    const instance = InternalFileWriter.getInstance();
+
+    // Mock fs.readdir to return empty array
+    vi.spyOn(mockFs.promises, 'readdir').mockResolvedValue([]);
+
+    const result = await (instance as any).readDirectoryRecursive('/test/path');
+
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('object');
+    expect(Object.keys(result)).toHaveLength(0);
+  });
+
+  it('should handle callVitePlugin with non-ok response', async () => {
+    global.window = {} as any;
+    (fetch as any).mockResolvedValue({
+      ok: false,
+      statusText: 'Not Found',
+    });
+
+    const instance = InternalFileWriter.getInstance();
+    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+      'Vite plugin error: Not Found',
+    );
+  });
+
+  it('should handle callVitePlugin with success: false response', async () => {
+    global.window = {} as any;
+    (fetch as any).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ success: false, error: 'Custom error' }),
+    });
+
+    const instance = InternalFileWriter.getInstance();
+    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+      'Custom error',
+    );
+  });
+
+  it('should handle callVitePlugin with success: false but no error message', async () => {
+    global.window = {} as any;
+    (fetch as any).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ success: false }),
+    });
+
+    const instance = InternalFileWriter.getInstance();
+    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+      'Vite plugin operation failed',
+    );
+  });
+
+  it('should handle Node.js ensureDirectoryExists', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'mkdir').mockResolvedValue(undefined);
+
+    await (instance as any).ensureDirectoryExists('/test/dir');
+
+    expect(mockFs.promises.mkdir).toHaveBeenCalledWith('/test/dir', {
+      recursive: true,
+    });
+  });
+
+  it('should handle Node.js writeFile with base64 content', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'writeFile').mockResolvedValue(undefined);
+
+    const base64Content =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
+    await (instance as any).writeFile('/test/file.png', base64Content);
+
+    expect(mockFs.promises.writeFile).toHaveBeenCalledWith(
+      '/test/file.png',
+      expect.any(Buffer),
+    );
+  });
+
+  it('should handle Node.js writeFile with text content', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'writeFile').mockResolvedValue(undefined);
+
+    await (instance as any).writeFile('/test/file.txt', 'Hello World');
+
+    expect(mockFs.promises.writeFile).toHaveBeenCalledWith(
+      '/test/file.txt',
+      'Hello World',
+      'utf8',
+    );
+  });
+
+  it('should handle Node.js readFile', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'readFile').mockResolvedValue('file content');
+
+    const result = await (instance as any).readFile('/test/file.txt');
+
+    expect(result).toBe('file content');
+    expect(mockFs.promises.readFile).toHaveBeenCalledWith(
+      '/test/file.txt',
+      'utf8',
+    );
+  });
+
+  it('should handle Node.js pathExists with existing path', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'access').mockResolvedValue(undefined);
+
+    const result = await (instance as any).pathExists('/test/path');
+
+    expect(result).toBe(true);
+    expect(mockFs.promises.access).toHaveBeenCalledWith('/test/path');
+  });
+
+  it('should handle Node.js pathExists with non-existing path', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(mockFs.promises, 'access').mockRejectedValue(new Error('ENOENT'));
+
+    const result = await (instance as any).pathExists('/test/path');
+
+    expect(result).toBe(false);
+  });
+
+  it('should handle Node.js listDirectories', async () => {
+    const instance = InternalFileWriter.getInstance();
+    const mockEntries = [
+      { name: 'dir1', isDirectory: () => true },
+      { name: 'file1.txt', isDirectory: () => false },
+      { name: 'dir2', isDirectory: () => true },
+    ];
+
+    vi.spyOn(mockFs.promises, 'readdir').mockResolvedValue(mockEntries);
+
+    const result = await (instance as any).listDirectories('/test/path');
+
+    expect(result).toEqual(['dir1', 'dir2']);
+    expect(mockFs.promises.readdir).toHaveBeenCalledWith('/test/path', {
+      withFileTypes: true,
+    });
+  });
+
+  it('should handle Node.js getDirectoryPath', () => {
+    const instance = InternalFileWriter.getInstance();
+    const spy = vi.spyOn(mockPath, 'dirname');
+    const filePath = '/foo/bar/baz.txt';
+    const dir = (instance as any).getDirectoryPath(filePath);
+    expect(spy).toHaveBeenCalledWith(filePath);
+    expect(dir).toBe('/foo/bar');
+  });
+
+  it('should handle non-Error exceptions in writePluginFiles', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(instance as any, 'initialize').mockRejectedValue('String error');
+
+    const result = await instance.writePluginFiles('TestPlugin', {
+      'test.txt': 'content',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Unknown error');
+  });
+
+  it('should handle non-Error exceptions in readPluginFiles', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
+    vi.spyOn(instance as any, 'readDirectoryRecursive').mockRejectedValue(
+      'String error',
+    );
+
+    const result = await instance.readPluginFiles('TestPlugin');
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Unknown error');
+  });
+
+  it('should handle non-Error exceptions in removePlugin', async () => {
+    const instance = InternalFileWriter.getInstance();
+    vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
+    vi.spyOn(instance as any, 'removeDirectory').mockRejectedValue(
+      'String error',
+    );
+
+    const result = await instance.removePlugin('TestPlugin');
+
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Unknown error');
+  });
 });

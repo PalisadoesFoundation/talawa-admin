@@ -628,6 +628,216 @@ describe('UploadPluginModal Component', () => {
       // Should not crash and should remain in initial state
       expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
     });
+
+    it('should handle non-Error exceptions in file selection', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (validateAdminPluginZip as any).mockRejectedValue('String error');
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Failed to parse plugin ZIP'),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should handle non-Error exceptions in plugin installation', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (validateAdminPluginZip as any).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+      (installAdminPluginFromZip as any).mockRejectedValue('String error');
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const installButton = screen.getByRole('button', {
+          name: /install plugin/i,
+        });
+        expect(installButton).not.toBeDisabled();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to install plugin. Please try again.',
+        );
+      });
+    });
+
+    it('should handle upload click when file input ref is null', () => {
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      // Simulate clicking the upload area
+      const uploadArea = screen
+        .getByText('Click to browse files')
+        .closest('div');
+      if (uploadArea) {
+        fireEvent.click(uploadArea);
+      }
+
+      // Should not crash even if fileInputRef.current is null
+      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle installation with null result', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (validateAdminPluginZip as any).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+      (installAdminPluginFromZip as any).mockResolvedValue(null);
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const installButton = screen.getByRole('button', {
+          name: /install plugin/i,
+        });
+        expect(installButton).not.toBeDisabled();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+
+      // Should handle null result gracefully - it will throw an error before reaching the catch block
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to install plugin. Please try again.',
+        );
+      });
+    });
+
+    it('should handle installation with undefined error', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (validateAdminPluginZip as any).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+      (installAdminPluginFromZip as any).mockResolvedValue({
+        success: false,
+        error: undefined,
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const installButton = screen.getByRole('button', {
+          name: /install plugin/i,
+        });
+        expect(installButton).not.toBeDisabled();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Failed to install plugin');
+      });
+    });
   });
 
   describe('Accessibility', () => {
