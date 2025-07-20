@@ -296,7 +296,8 @@ export default function People(): React.JSX.Element {
                       name,
                       image: member.node.avatarURL ?? '',
                       id: member.node.id ?? '',
-                      email: member.node.emailAddress ?? 'Not available',
+                      email:
+                        member.node.emailAddress ?? '***********************',
                       role: member.userType ?? '',
                       sno: (index + 1 + currentPage * rowsPerPage).toString(),
                     };
