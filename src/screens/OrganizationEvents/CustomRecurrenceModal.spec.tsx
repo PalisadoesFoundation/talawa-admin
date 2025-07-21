@@ -13,6 +13,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import {
   Frequency,
+  WeekDays,
   createDefaultRecurrenceRule,
 } from '../../utils/recurrenceUtils';
 
@@ -632,6 +633,130 @@ describe('CustomRecurrenceModal', () => {
         never: false,
         endDate: undefined,
         count: 15, // Should be parsed as number
+      }),
+    );
+    expect(mockSetModalOpen).toHaveBeenCalledWith(false);
+  });
+
+  test('Testing day click handling - adding day (lines 273-278)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        frequency: Frequency.WEEKLY,
+        byDay: [], // Start with no days selected
+      },
+    });
+
+    const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
+
+    // Click on Monday (index 1 in Days array) that's not currently selected (covers else branch lines 273-278)
+    await userEvent.click(dayButtons[1]); // Monday (Days[1] = WeekDays.MO)
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the state update function
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const newState = updateFunction({
+      ...mockProps.recurrenceRuleState,
+      byDay: [],
+    });
+
+    expect(newState.byDay).toContain(WeekDays.MO); // Monday should be added
+  });
+
+  test('Testing day click handling - removing day (lines 268-272)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        frequency: Frequency.WEEKLY,
+        byDay: [WeekDays.MO], // Start with Monday selected
+      },
+    });
+
+    const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
+
+    // Click on Monday that's already selected (covers if branch lines 268-272)
+    await userEvent.click(dayButtons[1]); // Monday (Days[1] = WeekDays.MO)
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the state update function
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const newState = updateFunction({
+      ...mockProps.recurrenceRuleState,
+      byDay: [WeekDays.MO],
+    });
+
+    expect(newState.byDay).not.toContain(WeekDays.MO); // Monday should be removed
+    expect(newState.byDay).toEqual([]);
+  });
+
+  test('Testing form submission with invalid interval - string parsing (lines 288-295)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    const mockSetModalOpen = vi.fn();
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      setCustomRecurrenceModalIsOpen: mockSetModalOpen,
+    });
+
+    // Clear the input to make it empty (which will cause isNaN to be true)
+    const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
+    await userEvent.clear(intervalInput);
+    // Don't type anything, leaving it empty
+
+    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    await userEvent.click(submitButton);
+
+    // Verify invalid interval handling (lines 292-295)
+    // Empty string will cause parseInt('') to return NaN, triggering the error
+    expect(consoleSpy).toHaveBeenCalledWith('Invalid interval:', '');
+    expect(mockSetModalOpen).not.toHaveBeenCalled(); // Should return early, not close modal
+
+    consoleSpy.mockRestore();
+  });
+
+  test('Testing form submission with ends on option (lines 305-315)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    const mockSetModalOpen = vi.fn();
+
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      setCustomRecurrenceModalIsOpen: mockSetModalOpen,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        endDate: new Date('2024-02-15'),
+        never: false,
+        count: undefined,
+      },
+    });
+
+    // Switch to "on" option
+    const onOption = screen.getByTestId('on');
+    await userEvent.click(onOption);
+
+    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    await userEvent.click(submitButton);
+
+    // Verify the "ends on" logic (lines 305-315)
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        never: false,
+        count: undefined,
+        endDate: expect.any(Date),
       }),
     );
     expect(mockSetModalOpen).toHaveBeenCalledWith(false);
