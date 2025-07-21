@@ -981,7 +981,8 @@
   },
   "people": {
     "title": "People",
-    "searchUsers": "Search users"
+    "searchUsers": "Search users",
+    "nothingToShow": "Nothing to show here"
   },
   "userLogin": {
     "login": "Login",
