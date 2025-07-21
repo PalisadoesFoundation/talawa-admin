@@ -440,6 +440,9 @@
     "on": "En",
     "after": "Después de",
     "occurences": "ocurrencias",
+    "monthlyOn": "Mensual en",
+    "yearlyOn": "Anual en",
+    "yearlyRecurrenceDesc": "Este evento se repetirá cada año en la misma fecha que la fecha de inicio del evento.",
     "done": "Hecho",
     "createChat": "Crear chat"
   },

@@ -16,46 +16,29 @@
  * ```tsx
  * <OrganizationEvents />
  * ```
- *
- * @remarks
- * Dependencies:
- * - `EventCalendar`: Displays events in a calendar view.
- * - `EventHeader`: Provides controls for changing calendar views and opening the event creation modal.
- * - `Loader`: Displays a loading spinner during data fetching.
- *
- * State:
- * - `createEventmodalisOpen` (boolean): Controls the visibility of the event creation modal.
- * - `startDate`, `endDate` (Date): Start and end dates for the event.
- * - `viewType` (ViewType): Current calendar view type (Day, Month, Year).
- * - `formState` (object): Stores form input values for event creation.
- *
- * Queries:
- * - `ORGANIZATION_EVENT_CONNECTION_LIST`: Fetches events for the organization.
- * - `ORGANIZATIONS_LIST`: Fetches organization details.
- *
- * Mutations:
- * - `CREATE_EVENT_MUTATION`: Creates a new event with the provided details.
- *
- * Hooks:
- * - `useQuery`: Fetches data for events and organization details.
- * - `useMutation`: Handles event creation.
- * - `useLocalStorage`: Retrieves user-related data from local storage.
- * - `useParams`, `useNavigate`: Manages routing and navigation.
- *
- * Error Handling:
- * - Displays toast notifications for validation errors and success messages.
- * - Redirects to the organization list page if event data fetching fails.
  */
-import React, { useState, useEffect, JSX } from 'react';
+
+import React, { useState, useEffect, useMemo, JSX } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { debounce } from '@mui/material';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import { TimePicker, DatePicker } from '@mui/x-date-pickers';
 import styles from '../../style/app-fixed.module.css';
+import CustomRecurrenceModal from './CustomRecurrenceModal';
+import {
+  Frequency,
+  WeekDays,
+  InterfaceRecurrenceRule,
+  createDefaultRecurrenceRule,
+  validateRecurrenceInput,
+  formatRecurrenceForApi,
+} from '../../utils/recurrenceUtils';
 import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
@@ -83,10 +66,31 @@ interface IEventEdge {
     location?: string | null;
     isPublic: boolean;
     isRegisterable: boolean;
+    // Recurring event fields
+    isMaterialized?: boolean;
+    isRecurringTemplate?: boolean;
+    recurringEventId?: string | null;
+    instanceStartTime?: string | null;
+    baseEventId?: string | null;
+    sequenceNumber?: number | null;
+    totalCount?: number | null;
+    hasExceptions?: boolean;
+    progressLabel?: string | null;
+    // Attachments
+    attachments?: Array<{
+      url: string;
+      mimeType: string;
+    }>;
     creator: {
       id: string;
       name: string;
     };
+    organization: {
+      id: string;
+      name: string;
+    };
+    createdAt: string;
+    updatedAt: string;
   };
   cursor: string;
 }
@@ -112,11 +116,21 @@ function organizationEvents(): JSX.Element {
   document.title = t('title');
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [debouncedMonth, setDebouncedMonth] = useState(new Date().getMonth());
+  const [debouncedYear, setDebouncedYear] = useState(new Date().getFullYear());
   const [alldaychecked, setAllDayChecked] = useState(true);
   const [publicchecked, setPublicChecked] = useState(true);
   const [registrablechecked, setRegistrableChecked] = useState(false);
+  const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
+    null,
+  );
+  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
+    useState(false);
+  const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
 
   const [formState, setFormState] = useState({
     name: '',
@@ -130,8 +144,141 @@ function organizationEvents(): JSX.Element {
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
+  const showCustomRecurrenceModal = (): void =>
+    setCustomRecurrenceModalIsOpen(true);
+  const hideCustomRecurrenceModal = (): void =>
+    setCustomRecurrenceModalIsOpen(false);
+
+  // Helper functions for recurrence dropdown
+  const getDayName = (dayIndex: number): string => {
+    const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    return days[dayIndex];
+  };
+
+  const getMonthName = (monthIndex: number): string => {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months[monthIndex];
+  };
+
+  const getRecurrenceOptions = () => {
+    const eventDate = new Date(startDate);
+    const dayOfWeek = eventDate.getDay();
+    const dayOfMonth = eventDate.getDate();
+    const month = eventDate.getMonth();
+    const dayName = getDayName(dayOfWeek);
+    const monthName = getMonthName(month);
+
+    return [
+      {
+        label: 'Does not repeat',
+        value: null,
+      },
+      {
+        label: 'Daily',
+        value: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
+      },
+      {
+        label: `Weekly on ${dayName}`,
+        value: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
+      },
+      {
+        label: `Monthly on day ${dayOfMonth}`,
+        value: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
+      },
+      {
+        label: `Annually on ${monthName} ${dayOfMonth}`,
+        value: {
+          frequency: Frequency.YEARLY,
+          interval: 1,
+          byMonth: [month + 1],
+          byMonthDay: [dayOfMonth],
+          never: true,
+        },
+      },
+      {
+        label: 'Every weekday (Monday to Friday)',
+        value: {
+          frequency: Frequency.WEEKLY,
+          interval: 1,
+          byDay: ['MO', 'TU', 'WE', 'TH', 'FR'] as WeekDays[],
+          never: true,
+        },
+      },
+      {
+        label: 'Custom...',
+        value: 'custom',
+      },
+    ];
+  };
+
+  const handleRecurrenceSelect = (option: {
+    label: string;
+    value: InterfaceRecurrenceRule | 'custom' | null;
+  }): void => {
+    if (option.value === 'custom') {
+      // Set a default recurrence and open custom modal
+      if (!recurrence) {
+        setRecurrence(createDefaultRecurrenceRule(startDate, Frequency.WEEKLY));
+      }
+      showCustomRecurrenceModal();
+    } else {
+      setRecurrence(option.value);
+    }
+    setRecurrenceDropdownOpen(false);
+  };
+
+  const getCurrentRecurrenceLabel = (): string => {
+    if (!recurrence) return 'Does not repeat';
+
+    const options = getRecurrenceOptions();
+    const matchingOption = options.find((option) => {
+      if (!option.value || option.value === 'custom') return false;
+      return JSON.stringify(option.value) === JSON.stringify(recurrence);
+    });
+
+    return matchingOption ? matchingOption.label : 'Custom';
+  };
+
+  // Debounced functions for month/year changes
+  const debouncedSetMonth = useMemo(
+    () => debounce((month: number) => setDebouncedMonth(month), 300),
+    [],
+  );
+
+  const debouncedSetYear = useMemo(
+    () => debounce((year: number) => setDebouncedYear(year), 300),
+    [],
+  );
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
+  };
+
+  const handleMonthChange = (month: number, year: number): void => {
+    setCurrentMonth(month);
+    setCurrentYear(year);
+    debouncedSetMonth(month);
+    debouncedSetYear(year);
   };
 
   const {
@@ -142,8 +289,15 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 10,
+      first: 50,
       after: null,
+      startDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+        .startOf('month')
+        .toISOString(),
+      endDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+        .endOf('month')
+        .toISOString(),
+      includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -188,6 +342,16 @@ function organizationEvents(): JSX.Element {
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
+    // Add recurring event information
+    isMaterialized: edge.node.isMaterialized,
+    isRecurringTemplate: edge.node.isRecurringTemplate,
+    recurringEventId: edge.node.recurringEventId,
+    instanceStartTime: edge.node.instanceStartTime,
+    baseEventId: edge.node.baseEventId,
+    sequenceNumber: edge.node.sequenceNumber,
+    totalCount: edge.node.totalCount,
+    hasExceptions: edge.node.hasExceptions,
+    progressLabel: edge.node.progressLabel,
     creator: {
       _id: edge.node.creator.id,
       name: edge.node.creator.name,
@@ -206,28 +370,44 @@ function organizationEvents(): JSX.Element {
         const startTimeParts = formState.startTime.split(':');
         const endTimeParts = formState.endTime.split(':');
 
+        let recurrenceInput;
+        if (recurrence) {
+          const { isValid, errors } = validateRecurrenceInput(
+            recurrence,
+            startDate,
+          );
+          if (!isValid) {
+            toast.error(errors.join(', '));
+            return;
+          }
+          recurrenceInput = formatRecurrenceForApi(recurrence);
+        }
+
         const input = {
           name: formState.name,
           description: formState.eventdescrip,
           startAt: alldaychecked
-            ? dayjs(startDate).startOf('day').toISOString()
+            ? dayjs(startDate)
+                .startOf('day')
+                .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
             : dayjs(startDate)
                 .hour(parseInt(startTimeParts[0]))
                 .minute(parseInt(startTimeParts[1]))
                 .second(parseInt(startTimeParts[2]))
-                .toISOString(),
+                .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
           endAt: alldaychecked
-            ? dayjs(endDate).endOf('day').toISOString()
+            ? dayjs(endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
             : dayjs(endDate)
                 .hour(parseInt(endTimeParts[0]))
                 .minute(parseInt(endTimeParts[1]))
                 .second(parseInt(endTimeParts[2]))
-                .toISOString(),
+                .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
           organizationId: currentUrl,
           allDay: alldaychecked,
           location: formState.location,
           isPublic: publicchecked,
           isRegisterable: registrablechecked,
+          recurrence: recurrenceInput,
         };
 
         const { data: createEventData } = await create({
@@ -250,10 +430,12 @@ function organizationEvents(): JSX.Element {
           setAllDayChecked(true);
           setPublicChecked(true);
           setRegistrableChecked(false);
+          setRecurrence(null);
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
-          console.log(error.message);
+          console.error('Event creation error:', error.message);
+          console.error('Full error:', error);
           errorHandler(t, error);
         }
       }
@@ -291,6 +473,9 @@ function organizationEvents(): JSX.Element {
         userId={userId}
         userRole={userRole}
         viewType={viewType}
+        onMonthChange={handleMonthChange}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
       />
 
       {/* Create Event Modal */}
@@ -298,7 +483,7 @@ function organizationEvents(): JSX.Element {
         <Modal.Header>
           <p className={styles.titlemodalOrganizationEvents}>
             {t('eventDetails')}
-          </p>
+          </p>{' '}
           <Button
             variant="danger"
             onClick={hideCreateEventModal}
@@ -362,7 +547,9 @@ function organizationEvents(): JSX.Element {
                     if (date) {
                       setStartDate(date.toDate());
                       setEndDate(
-                        endDate < date.toDate() ? date.toDate() : endDate,
+                        !endDate || endDate < date.toDate()
+                          ? date.toDate()
+                          : endDate,
                       );
                     }
                   }}
@@ -381,7 +568,7 @@ function organizationEvents(): JSX.Element {
               </div>
             </div>
             {!alldaychecked && (
-              <div className={styles.datedivOrganizationEvents}>
+              <div className={styles.datediv}>
                 <div className="mr-3">
                   <TimePicker
                     label={tCommon('startTime')}
@@ -423,6 +610,7 @@ function organizationEvents(): JSX.Element {
                 </div>
               </div>
             )}
+            {/* Recurrence Section */}
             <div className={styles.checkboxdiv}>
               <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="allday">{t('allDay')}?</label>
@@ -460,6 +648,40 @@ function organizationEvents(): JSX.Element {
                 />
               </div>
             </div>
+            <div>
+              <Dropdown
+                show={recurrenceDropdownOpen}
+                onToggle={setRecurrenceDropdownOpen}
+              >
+                <Dropdown.Toggle
+                  variant="outline-secondary"
+                  id="recurrence-dropdown"
+                  data-testid="recurrenceDropdown"
+                  className={`${styles.dropdown}`}
+                >
+                  {getCurrentRecurrenceLabel()}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {getRecurrenceOptions().map((option, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={() =>
+                        handleRecurrenceSelect({
+                          ...option,
+                          value: option.value as
+                            | InterfaceRecurrenceRule
+                            | 'custom'
+                            | null,
+                        })
+                      }
+                      data-testid={`recurrenceOption-${index}`}
+                    >
+                      {option.label}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
             <Button
               type="submit"
               className={styles.addButton}
@@ -471,6 +693,27 @@ function organizationEvents(): JSX.Element {
           </Form>
         </Modal.Body>
       </Modal>
+
+      {/* Custom Recurrence Modal */}
+      {recurrence && (
+        <CustomRecurrenceModal
+          recurrenceRuleState={recurrence}
+          setRecurrenceRuleState={(newRecurrence) => {
+            if (typeof newRecurrence === 'function') {
+              setRecurrence((prev) => (prev ? newRecurrence(prev) : null));
+            } else {
+              setRecurrence(newRecurrence);
+            }
+          }}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
+          hideCustomRecurrenceModal={hideCustomRecurrenceModal}
+          setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+          t={t}
+          startDate={startDate}
+        />
+      )}
     </>
   );
 }

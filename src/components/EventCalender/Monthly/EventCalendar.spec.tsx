@@ -22,8 +22,17 @@ async function wait(ms = 200): Promise<void> {
 }
 
 describe('Calendar', () => {
+  const onMonthChange = vi.fn();
   it('renders weekdays', () => {
-    render(<Calendar eventData={eventData} viewType={ViewType.MONTH} />);
+    render(
+      <Calendar
+        eventData={eventData}
+        viewType={ViewType.MONTH}
+        onMonthChange={onMonthChange}
+        currentMonth={new Date().getMonth()}
+        currentYear={new Date().getFullYear()}
+      />,
+    );
 
     weekdays.forEach((weekday) => {
       expect(screen.getByText(weekday)).toBeInTheDocument();
@@ -32,7 +41,14 @@ describe('Calendar', () => {
 
   it('should initialize currentMonth and currentYear with the current date', () => {
     const today = new Date();
-    const { getByTestId } = render(<Calendar eventData={eventData} />);
+    const { getByTestId } = render(
+      <Calendar
+        eventData={eventData}
+        onMonthChange={onMonthChange}
+        currentMonth={new Date().getMonth()}
+        currentYear={new Date().getFullYear()}
+      />,
+    );
 
     const currentMonth = getByTestId('current-date');
     const currentYear = getByTestId('current-date');
@@ -48,7 +64,14 @@ describe('Calendar', () => {
   });
 
   it('should render the current month and year', () => {
-    const { getByTestId } = render(<Calendar eventData={eventData} />);
+    const { getByTestId } = render(
+      <Calendar
+        eventData={eventData}
+        onMonthChange={onMonthChange}
+        currentMonth={new Date().getMonth()}
+        currentYear={new Date().getFullYear()}
+      />,
+    );
 
     // Find the element by its data-testid attribute
     const currentDateElement = getByTestId('current-date');
@@ -67,7 +90,12 @@ describe('Calendar', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} />
+          <Calendar
+            eventData={eventData}
+            onMonthChange={onMonthChange}
+            currentMonth={new Date().getMonth()}
+            currentYear={new Date().getFullYear()}
+          />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -90,7 +118,13 @@ describe('Calendar', () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <Calendar eventData={eventData} viewType={ViewType.YEAR} />
+          <Calendar
+            eventData={eventData}
+            viewType={ViewType.YEAR}
+            onMonthChange={onMonthChange}
+            currentMonth={new Date().getMonth()}
+            currentYear={new Date().getFullYear()}
+          />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -112,7 +146,12 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
+            <Calendar
+              eventData={eventData}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
       </Router>,
@@ -154,7 +193,13 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={currentDayEventMock} userRole={'SUPERADMIN'} />
+            <Calendar
+              eventData={currentDayEventMock}
+              userRole={'SUPERADMIN'}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
         ,
@@ -167,7 +212,13 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+            <Calendar
+              eventData={eventData}
+              userRole={'SUPERADMIN'}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
         ,
@@ -180,7 +231,13 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+            <Calendar
+              eventData={eventData}
+              userRole={'SUPERADMIN'}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
         ,
@@ -196,7 +253,13 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} userRole={'SUPERADMIN'} />
+            <Calendar
+              eventData={eventData}
+              userRole={'SUPERADMIN'}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
         ,
@@ -296,7 +359,13 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={multipleEventData} viewType={ViewType.MONTH} />
+            <Calendar
+              eventData={multipleEventData}
+              viewType={ViewType.MONTH}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
       </Router>,
@@ -339,7 +408,12 @@ describe('Calendar', () => {
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
-            <Calendar eventData={eventData} />
+            <Calendar
+              eventData={eventData}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
           </I18nextProvider>
         </MockedProvider>
         ,
@@ -352,7 +426,15 @@ describe('Calendar', () => {
   });
 
   it('renders year view', async () => {
-    render(<Calendar eventData={eventData} viewType={ViewType.YEAR} />);
+    render(
+      <Calendar
+        eventData={eventData}
+        viewType={ViewType.YEAR}
+        onMonthChange={onMonthChange}
+        currentMonth={new Date().getMonth()}
+        currentYear={new Date().getFullYear()}
+      />,
+    );
 
     await wait();
     months.forEach((month) => {
@@ -364,7 +446,15 @@ describe('Calendar', () => {
   });
 
   it('render the hour view', async () => {
-    render(<Calendar eventData={eventData} viewType={ViewType.DAY} />);
+    render(
+      <Calendar
+        eventData={eventData}
+        viewType={ViewType.DAY}
+        onMonthChange={onMonthChange}
+        currentMonth={new Date().getMonth()}
+        currentYear={new Date().getFullYear()}
+      />,
+    );
 
     await wait();
     const renderHourComponent = screen.getByTestId('hour');

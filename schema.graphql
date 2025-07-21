@@ -797,7 +797,7 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(input: MutationCreateEventInput!): Event
+  createEvent(input: MutationCreateEventInput!): EventPg
 
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
@@ -985,6 +985,9 @@ type OrganizationPg {
     before: String
     first: Int
     last: Int
+    startDate: DateTime
+    endDate: DateTime
+    includeRecurring: Boolean
   ): OrganizationEventsConnectionPg
 
   funds(
@@ -1259,6 +1262,21 @@ type EventPg {
   description: String
   startAt: DateTime
   endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
+  # Recurring event fields
+  isMaterialized: Boolean
+  isRecurringTemplate: Boolean
+  recurringEventId: ID
+  instanceStartTime: DateTime
+  baseEventId: ID
+  sequenceNumber: Int
+  totalCount: Int
+  hasExceptions: Boolean
+  progressLabel: String
+  # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
   creator: UserPg
@@ -1939,6 +1957,16 @@ input RecaptchaVerification {
   recaptchaToken: String!
 }
 
+input RecurrenceInput {
+  frequency: Frequency!
+  interval: PositiveInt!
+  byDay: [WeekDays!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: PositiveInt
+  until: DateTime
+}
+
 enum Status {
   ACTIVE
   BLOCKED
@@ -2158,6 +2186,7 @@ input MutationCreateEventInput {
   name: String!
   organizationId: ID!
   startAt: DateTime!
+  recurrence: RecurrenceInput
 }
 
 input MutationUpdateEventInput {
