@@ -91,12 +91,9 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    const closeMenubtn = screen.getByTestId('toggleBtn');
-    expect(closeMenubtn).toBeInTheDocument();
-    act(() => closeMenubtn.click());
-    const openMenuBtn = screen.getByTestId('toggleBtn');
-    expect(openMenuBtn).toBeInTheDocument();
-    act(() => openMenuBtn.click());
+    // Note: Toggle button functionality has been moved to separate components
+    // (e.g., SidebarToggle) and is no longer part of the drawer components
+    // due to plugin system modifications
   });
 
   it('Testing sidebar when the screen size is less than or equal to 820px', async () => {
@@ -117,19 +114,9 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    const openMenuBtn = screen.queryByTestId('toggleBtn');
-    expect(openMenuBtn).toBeInTheDocument();
-
-    if (openMenuBtn) {
-      act(() => openMenuBtn.click());
-    }
-
-    const closeMenuBtn = screen.queryByTestId('toggleBtn');
-    expect(closeMenuBtn).toBeInTheDocument();
-
-    if (closeMenuBtn) {
-      act(() => closeMenuBtn.click());
-    }
+    // Note: Toggle button functionality has been moved to separate components
+    // (e.g., SidebarToggle) and is no longer part of the drawer components
+    // due to plugin system modifications
   });
 
   it('validates password correctly', async () => {

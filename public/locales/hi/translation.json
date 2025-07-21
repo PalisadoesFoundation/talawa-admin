@@ -105,9 +105,11 @@
   },
   "leftDrawer": {
     "my organizations": "मेरे संगठन",
+    "plugin store": "प्लगइन स्टोर",
+    "pluginSettings": "प्लगइन सेटिंग्स",
     "requests": "सदस्यता अनुरोध",
     "communityProfile": "समुदाय प्रोफ़ाइल",
-    "talawaAdminPortal": "तालावा व्यवस्थापक पोर्टल",
+    "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
     "logout": "लॉगआउट"
@@ -115,7 +117,7 @@
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
     "People": "लोग",
-    "Events": "घटनाएँ",
+    "Events": "कार्यक्रम",
     "Contributions": "योगदान",
     "Posts": "पोस्ट",
     "Block/Unblock": "ब्लॉक/अनब्लॉक",
@@ -124,15 +126,16 @@
     "yourOrganization": "आपका संगठन",
     "notification": "सूचना",
     "language": "भाषा",
-    "notifications": "सूचनाएँ",
-    "spamsThe": "स्पैम",
+    "notifications": "सूचनाएं",
+    "spamsThe": "स्पैम करता है",
     "group": "समूह",
-    "noNotifications": "कोई सूचनाएँ नहीं",
-    "talawaAdminPortal": "तालावा व्यवस्थापक पोर्टल",
+    "noNotifications": "कोई सूचना नहीं",
+    "talawaAdminPortal": "तलावा एडमिन पोर्टल",
     "menu": "मेनू",
-    "talawa_portal": "तालावा पोर्टल",
+    "talawa_portal": "तलावा पोर्टल",
     "settings": "सेटिंग्स",
-    "logout": "लॉगआउट",
+    "plugins": "प्लगइन",
+    "logout": "लॉग आउट",
     "close": "बंद करें"
   },
   "orgList": {
@@ -941,7 +944,8 @@
   },
   "people": {
     "title": "लोग",
-    "searchUsers": "उपयोगकर्ताओं को खोजें"
+    "searchUsers": "उपयोगकर्ताओं को खोजें",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -1478,5 +1482,27 @@
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण"
+  },
+  "pluginStore": {
+    "title": "प्लगइन स्टोर",
+    "searchPlaceholder": "प्लगइन खोजें...",
+    "allPlugins": "सभी प्लगइन",
+    "installedPlugins": "स्थापित प्लगइन",
+    "view": "देखें",
+    "manage": "प्रबंधित करें",
+    "install": "स्थापना करें",
+    "uninstall": "अस्थापना करें",
+    "activate": "सक्रिय करें",
+    "deactivate": "निष्क्रिय करें",
+    "installed": "स्थापित",
+    "notInstalled": "स्थापित नहीं",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "noPluginsFound": "आपकी खोज से मेल खाने वाले कोई प्लगइन नहीं मिले",
+    "noInstalledPlugins": "अभी तक कोई प्लगइन स्थापित नहीं है",
+    "noPluginsAvailable": "कोई प्लगइन उपलब्ध नहीं",
+    "installPluginsToSeeHere": "प्लगइन देखने के लिए उन्हें स्थापित करें",
+    "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
   }
 }

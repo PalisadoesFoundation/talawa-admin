@@ -4,9 +4,9 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`__namedParameters`): `ReactElement`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L49)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L32)
 
 ## Parameters
 
@@ -16,4 +16,4 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:49](https://github.com/Pal
 
 ## Returns
 
-`Element`
+`ReactElement`
