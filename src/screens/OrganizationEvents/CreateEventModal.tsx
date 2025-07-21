@@ -22,18 +22,43 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';
 
+/**
+ * Converts a time string to a Dayjs object for the current date
+ * @param time - Time string in HH:mm:ss format
+ * @returns Dayjs object representing the time on today's date
+ */
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
 
+/**
+ * Props interface for the CreateEventModal component
+ */
 interface ICreateEventModalProps {
+  /** Whether the modal is currently open/visible */
   isOpen: boolean;
+  /** Callback function to close the modal */
   onClose: () => void;
+  /** Callback function triggered when an event is successfully created */
   onEventCreated: () => void;
+  /** Current organization URL/ID for event creation */
   currentUrl: string;
 }
 
+/**
+ * Modal component for creating new events in an organization
+ *
+ * Provides a comprehensive form interface for creating events with features including:
+ * - Basic event details (name, description, location)
+ * - Date and time selection with all-day option
+ * - Event visibility and registration settings
+ * - Recurring event configuration with multiple patterns
+ * - Form validation and error handling
+ *
+ * @param props - Component props
+ * @returns JSX element representing the create event modal
+ */
 const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   isOpen,
   onClose,
@@ -68,11 +93,23 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     CREATE_EVENT_MUTATION,
   );
 
+  /**
+   * Shows the custom recurrence configuration modal
+   */
   const showCustomRecurrenceModal = (): void =>
     setCustomRecurrenceModalIsOpen(true);
+
+  /**
+   * Hides the custom recurrence configuration modal
+   */
   const hideCustomRecurrenceModal = (): void =>
     setCustomRecurrenceModalIsOpen(false);
 
+  /**
+   * Gets the day name from a numeric day index
+   * @param dayIndex - Day index (0 = Sunday, 1 = Monday, etc.)
+   * @returns The full name of the day
+   */
   const getDayName = (dayIndex: number): string => {
     const days = [
       'Sunday',
@@ -86,6 +123,11 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     return days[dayIndex];
   };
 
+  /**
+   * Gets the month name from a numeric month index
+   * @param monthIndex - Month index (0 = January, 1 = February, etc.)
+   * @returns The full name of the month
+   */
   const getMonthName = (monthIndex: number): string => {
     const months = [
       'January',
@@ -104,6 +146,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     return months[monthIndex];
   };
 
+  /**
+   * Generates recurrence options based on the current start date
+   * @returns Array of recurrence options with labels and values
+   */
   const getRecurrenceOptions = () => {
     const eventDate = new Date(startDate);
     const dayOfWeek = eventDate.getDay();
@@ -155,6 +201,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     ];
   };
 
+  /**
+   * Handles selection of a recurrence option from the dropdown
+   * @param option - Selected recurrence option with label and value
+   */
   const handleRecurrenceSelect = (option: {
     label: string;
     value: InterfaceRecurrenceRule | 'custom' | null;
@@ -170,6 +220,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     setRecurrenceDropdownOpen(false);
   };
 
+  /**
+   * Gets the current recurrence label to display in the dropdown
+   * @returns String label describing the current recurrence pattern
+   */
   const getCurrentRecurrenceLabel = (): string => {
     if (!recurrence) return 'Does not repeat';
 
@@ -182,6 +236,9 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     return matchingOption ? matchingOption.label : 'Custom';
   };
 
+  /**
+   * Resets all form fields and state to their initial values
+   */
   const resetForm = (): void => {
     setFormState({
       name: '',
@@ -198,11 +255,19 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     setRecurrence(null);
   };
 
+  /**
+   * Handles closing the modal by resetting form and calling onClose
+   */
   const handleClose = (): void => {
     resetForm();
     onClose();
   };
 
+  /**
+   * Handles form submission to create a new event
+   * Validates form data, processes recurrence rules, and calls the GraphQL mutation
+   * @param e - Form submission event
+   */
   const createEvent = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     if (
