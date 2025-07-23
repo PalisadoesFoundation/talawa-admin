@@ -1268,14 +1268,15 @@ type EventPg {
   isRegisterable: Boolean
   # Recurring event fields
   isMaterialized: Boolean
-  isRecurringTemplate: Boolean
-  recurringEventId: ID
+  isRecurringEventTemplate: Boolean
   instanceStartTime: DateTime
-  baseEventId: ID
   sequenceNumber: Int
   totalCount: Int
   hasExceptions: Boolean
   progressLabel: String
+  # Base event relationships
+  baseEvent: EventPg
+  baseRecurringEvent: EventPg
   # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
@@ -1283,6 +1284,13 @@ type EventPg {
   updater: UserPg
   organization: OrganizationPg
   attachments: [EventAttachmentPg!]
+
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventActionItemsConnectionPg
 
   agendaFolders(
     after: String
@@ -1297,6 +1305,16 @@ type EventPg {
     first: Int
     last: Int
   ): EventVenuesConnectionPg
+}
+
+type EventActionItemsConnectionPg {
+  edges: [EventActionItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventActionItemsConnectionEdgePg {
+  cursor: String!
+  node: ActionItem
 }
 
 type EventVenuesConnectionPg {
