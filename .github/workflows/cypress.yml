@@ -31,9 +31,10 @@ jobs:
           sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
           # Fix unquoted FRONTEND_URL
           sed -i 's/^FRONTEND_URL=.*/FRONTEND_URL="http:\/\/localhost:4321"/' .env
-          # Verify fixes
+          # Update administrator email to match sample data
+          sed -i 's/^API_ADMINISTRATOR_USER_EMAIL_ADDRESS=.*/API_ADMINISTRATOR_USER_EMAIL_ADDRESS=testsuperadmin@example.com/' .env
           echo "=== Fixed .env contents ==="
-          grep -E 'CLOUDBEAVER_SERVER_NAME|FRONTEND_URL' .env
+          grep -E 'CLOUDBEAVER_SERVER_NAME|FRONTEND_URL|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
@@ -53,6 +54,11 @@ jobs:
           echo "=== Complete .env file contents ==="
           docker exec talawa-api-1 /bin/bash -c 'cat .env'
           echo "=== .env file verification complete ==="
+
+      - name: Patch Sample Data Script
+        run: |
+          docker exec talawa-api-1 sed -i "s/administrator@email.com/testsuperadmin@example.com/g" ./scripts/dbManagement/addSampleData.ts
+          docker exec talawa-api-1 sed -i "s/API_ADMINISTRATOR_USER_EMAIL_ADDRESS/testsuperadmin@example.com/g" ./scripts/dbManagement/helpers.ts          
 
       - name: Seed Sample Data
         run: |
