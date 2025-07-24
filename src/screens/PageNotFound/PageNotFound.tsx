@@ -58,7 +58,7 @@ const PageNotFound = (): JSX.Element => {
 
   // Get the admin status from local storage
   const { getItem } = useLocalStorage();
-  const adminFor = getItem('AdminFor');
+  const isAdmin = getItem('role') == 'administrator';
 
   return (
     <section className={styles.pageNotFound}>
@@ -66,7 +66,7 @@ const PageNotFound = (): JSX.Element => {
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
           {/* Display a message based on admin status */}
-          {adminFor != undefined ? (
+          {isAdmin ? (
             <h3 className="text-uppercase mt-4">
               {tCommon('talawaAdminPortal')}
             </h3>
@@ -81,7 +81,7 @@ const PageNotFound = (): JSX.Element => {
         {/* Display a not found message */}
         <p>{tErrors('notFoundMsg')}</p>
         {/* Provide a link to redirect users based on admin status */}
-        {adminFor != undefined ? (
+        {isAdmin ? (
           <Link to="/orglist" className="btn btn-outline-success mt-3">
             <i className="fas fa-home"></i> {t('backToHome')}
           </Link>
