@@ -31,9 +31,9 @@ jobs:
      - name: Reset DB Schema
        run: |
          # (Optional) Drop existing tables/schemas if reusing a DB container
-         docker exec -it talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
+         docker exec talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
          # Apply migrations to test database
-         docker exec -it talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'  
+         docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'  
 
      - name: Seed Sample Data
        run: |
