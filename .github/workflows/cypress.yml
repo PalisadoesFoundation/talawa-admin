@@ -33,7 +33,7 @@ jobs:
          # (Optional) Drop existing tables/schemas if reusing a DB container
          docker exec talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
          # Remove Old Migrations
-         docker exec talawa-api-1 /bin/bash -c 'pnpm drop_drizzle_migrations'
+         docker exec talawa-api-1 /bin/bash -c 'yes | pnpm drop_drizzle_migrations'
          # Create New Migrations
          docker exec talawa-api-1 /bin/bash -c 'pnpm generate_drizzle_migrations'
          # Apply migrations to test database
