@@ -92,7 +92,12 @@
     "setup": "tsx src/setup/setup.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
-    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js"
+    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open",
+    "start-server": "start-server-and-test serve http://localhost:4321",
+    "cy:open": "npm run start-server cypress:open",
+    "cy:run": "npm run start-server cypress:run"
   },
   "eslintConfig": {
     "extends": [
@@ -117,6 +122,8 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.26.0",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.22.0",
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@graphql-tools/graphql-file-loader": "^8.0.12",
@@ -146,6 +153,7 @@
     "@vitest/ui": "^3.0.5",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
+    "cypress": "^14.4.0",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-import": "^2.31.0",
@@ -165,6 +173,7 @@
     "postcss-modules": "^6.0.1",
     "prettier": "^3.5.3",
     "sass": "^1.80.7",
+    "start-server-and-test": "^2.0.12",
     "tsx": "^4.19.1",
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",

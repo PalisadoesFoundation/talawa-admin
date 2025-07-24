@@ -941,7 +941,8 @@
   },
   "people": {
     "title": "लोग",
-    "searchUsers": "उपयोगकर्ताओं को खोजें"
+    "searchUsers": "उपयोगकर्ताओं को खोजें",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
   },
   "userLogin": {
     "login": "लॉग इन करें",
