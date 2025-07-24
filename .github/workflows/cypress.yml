@@ -21,7 +21,6 @@ jobs:
         run: |
           npm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
-          sleep 5
           devcontainer up --workspace-folder .
           echo "Waiting for devcontainer services to be ready..."
           sleep 10
@@ -36,12 +35,11 @@ jobs:
           echo "=== Waiting for Database Stabilization ==="
           sleep 10
 
-      - name: Verify .env File
+      - name: Copying .env to Container
         run: |
-          echo "=== Checking Environment Variables ==="
-          docker exec talawa-api-1 /bin/bash -c 'ls -la /workspace/.env'
-          echo "=== File Content ==="
-          docker exec talawa-api-1 /bin/bash -c 'cat /workspace/.env'
+          echo "=== Copying .env to Container ==="
+          docker cp .env talawa-api-1:/workspace/.env
+          docker exec talawa-api-1 ls -la /workspace/.env
 
       - name: Seed Sample Data
         run: |
