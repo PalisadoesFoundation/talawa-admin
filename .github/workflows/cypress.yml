@@ -26,14 +26,18 @@ jobs:
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
-      - name: Reset DB Schema
+      - name: Apply Database Migrations
         run: |
-          echo "=== Resetting Database ==="
-          docker exec talawa-api-1 /bin/bash -c 'yes | pnpm run reset:data'
           echo "=== Applying Migrations (Synchronous) ==="
           docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_migrations'
           echo "=== Waiting for Database Stabilization ==="
           sleep 10
+
+      - name: Verify .env File
+        run: |
+          echo "=== Checking Environment Variables ==="
+          docker exec talawa-api-1 /bin/bash -c 'echo "API_ADMINISTRATOR_USER_EMAIL_ADDRESS: $API_ADMINISTRATOR_USER_EMAIL_ADDRESS"'
+          docker exec talawa-api-1 /bin/bash -c 'echo "API_ADMINISTRATOR_PASSWORD: $API_ADMINISTRATOR_PASSWORD"' 
 
       - name: Seed Sample Data
         run: |
@@ -100,7 +104,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
           cache: 'npm'
 
       - name: Install Frontend Dependencies
