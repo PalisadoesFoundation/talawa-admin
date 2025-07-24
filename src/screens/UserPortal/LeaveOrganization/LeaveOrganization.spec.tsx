@@ -10,7 +10,10 @@ import {
   useParams,
 } from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
-import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST_BASIC,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -59,82 +62,24 @@ vi.mock('utils/useLocalstorage', () => {
 const mocks = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BASIC,
       variables: { id: 'test-org-id' },
     },
     result: {
       data: {
         organizations: [
           {
-            _id: 'test-org-id',
-            image: 'https://example.com/organization-image.png',
-            creator: {
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john.doe@example.com',
-            },
+            id: 'test-org-id',
             name: 'Test Organization',
             description: 'This is a test organization.',
-            address: {
-              city: 'New York',
-              countryCode: 'US',
-              dependentLocality: null,
-              line1: '123 Main Street',
-              line2: 'Suite 456',
-              postalCode: '10001',
-              sortingCode: null,
-              state: 'NY',
-            },
-            userRegistrationRequired: true,
-            visibleInSearch: true,
-            members: [
-              {
-                _id: 'member-001',
-                firstName: 'Alice',
-                lastName: 'Smith',
-                email: 'alice.smith@example.com',
-              },
-              {
-                _id: 'member-002',
-                firstName: 'Bob',
-                lastName: 'Johnson',
-                email: 'bob.johnson@example.com',
-              },
-            ],
-            admins: [
-              {
-                _id: 'admin-001',
-                firstName: 'Jane',
-                lastName: 'Doe',
-                email: 'jane.doe@example.com',
-                createdAt: '2023-01-15T10:00:00Z',
-              },
-              {
-                _id: 'admin-002',
-                firstName: 'Tom',
-                lastName: 'Wilson',
-                email: 'tom.wilson@example.com',
-                createdAt: '2023-02-10T12:30:00Z',
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: 'req-001',
-                user: {
-                  firstName: 'Emily',
-                  lastName: 'Brown',
-                  email: 'emily.brown@example.com',
-                },
-              },
-            ],
-            blockedUsers: [
-              {
-                _id: 'blocked-001',
-                firstName: 'Henry',
-                lastName: 'Clark',
-                email: 'henry.clark@example.com',
-              },
-            ],
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatarURL: null,
+            __typename: 'Organization',
           },
         ],
       },
@@ -214,7 +159,7 @@ const mocks = [
 const errorMocks = [
   {
     request: {
-      query: ORGANIZATIONS_LIST,
+      query: ORGANIZATIONS_LIST_BASIC,
       variables: { id: 'test-org-id' },
     },
     error: new Error('Failed to load organization details'),
@@ -264,15 +209,10 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and displays content correctly', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
-          <Routes>
-            <Route
-              path="/user/leaveOrg/:orgId"
-              element={<LeaveOrganization />}
-            />
-          </Routes>
-        </MemoryRouter>
+      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
       </MockedProvider>,
     );
     await waitFor(() => {
@@ -649,7 +589,7 @@ describe('LeaveOrganization Component', () => {
         mocks={[
           {
             request: {
-              query: ORGANIZATIONS_LIST,
+              query: ORGANIZATIONS_LIST_BASIC,
               variables: { id: undefined },
             },
             result: {
@@ -708,7 +648,7 @@ describe('LeaveOrganization Component', () => {
     // Create a mock that returns empty organizations array
     const emptyOrgMock = {
       request: {
-        query: ORGANIZATIONS_LIST,
+        query: ORGANIZATIONS_LIST_BASIC,
         variables: { id: 'test-org-id' },
       },
       result: {
