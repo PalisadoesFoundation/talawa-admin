@@ -585,20 +585,28 @@ export const GET_ORGANIZATION_DATA_PG = gql`
     }
   }
 `;
-// list of a organizations
+
+// Shared fragment with common organization fields
+export const ORGANIZATION_FIELDS = gql`
+  fragment OrganizationFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+  }
+`;
+
+// Full query with all fields (metadata, creator, updater, etc.)
 export const ORGANIZATIONS_LIST = gql`
   query Organizations {
     organizations {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
+      ...OrganizationFields
       createdAt
       updatedAt
       creator {
@@ -613,6 +621,17 @@ export const ORGANIZATIONS_LIST = gql`
       }
     }
   }
+  ${ORGANIZATION_FIELDS}
+`;
+
+// Basic query using only the shared fragment (no metadata)
+export const ORGANIZATIONS_LIST_BASIC = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+    }
+  }
+  ${ORGANIZATION_FIELDS}
 `;
 
 export const MEMBERS_LIST_PG = gql`

@@ -367,8 +367,10 @@ export const REMOVE_ADMIN_MUTATION = gql`
 // to Remove member from an organization
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
-    removeMember(data: { organizationId: $orgid, userId: $userid }) {
-      _id
+    deleteOrganizationMembership(
+      input: { organizationId: $orgid, memberId: $userid }
+    ) {
+      id
     }
   }
 `;
