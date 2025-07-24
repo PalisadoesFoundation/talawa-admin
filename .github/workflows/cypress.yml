@@ -28,23 +28,41 @@ jobs:
      - name: Install Backend Dependencies
        run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
+    #  - name: Reset DB Schema
+    #    run: |
+    #      # (Optional) Drop existing tables/schemas if reusing a DB container
+    #      docker exec talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
+    #      # Remove Old Migrations
+    #      docker exec talawa-api-1 rm -rf drizzle_migrations
+    #      # Create New Migrations
+    #      docker exec talawa-api-1 /bin/bash -c 'pnpm generate_drizzle_migrations'
+    #      # Use the official reset command that handles test database properly
+    #      docker exec talawa-api-1 /bin/bash -c 'pnpm run reset:data'
+    #      # Apply migrations to test database
+    #      docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations' &
+    #      sleep 10
+         
      - name: Reset DB Schema
        run: |
-         # (Optional) Drop existing tables/schemas if reusing a DB container
-         docker exec talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
-         # Remove Old Migrations
-         docker exec talawa-api-1 rm -rf drizzle_migrations
-         # Create New Migrations
-         docker exec talawa-api-1 /bin/bash -c 'pnpm generate_drizzle_migrations'
+         # Reset the database schema
+         docker exec talawa-api-1 /bin/bash -c 'pnpm run reset:data'
          # Apply migrations to test database
          docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations' &
-         sleep 10
+         sleep 10         
+
+     - name: Debug Tools in Container
+       run: |
+         docker exec talawa-api-1 which pnpm || echo "pnpm not found"
+         docker exec talawa-api-1 which tsx || echo "tsx not found"
+         docker exec talawa-api-1 ls -la scripts/dbManagement || echo "scripts/dbManagement not found"
 
      - name: Seed Sample Data
        run: |
-         docker exec talawa-api-1 /bin/bash -c 'pnpm add:sample_data' &
-         sleep 10
-         
+        echo "Checking container status..."
+        docker ps -a
+        echo "Running seed script..."
+        docker exec talawa-api-1 pnpm run add:sample_data
+
      - name: Start Backend Server
        run: |
          docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
