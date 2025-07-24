@@ -58,7 +58,7 @@ const PageNotFound = (): JSX.Element => {
 
   // Get the admin status from local storage
   const { getItem } = useLocalStorage();
-  const isAdmin = getItem('role') == 'administrator';
+  const isAdmin = getItem('role') === 'administrator';
 
   return (
     <section className={styles.pageNotFound}>
