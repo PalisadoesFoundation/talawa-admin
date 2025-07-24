@@ -21,7 +21,10 @@ jobs:
         run: |
           npm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
+          sleep 5
           devcontainer up --workspace-folder .
+          echo "Waiting for devcontainer services to be ready..."
+          sleep 10
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
@@ -36,8 +39,9 @@ jobs:
       - name: Verify .env File
         run: |
           echo "=== Checking Environment Variables ==="
-          docker exec talawa-api-1 /bin/bash -c 'echo "API_ADMINISTRATOR_USER_EMAIL_ADDRESS: $API_ADMINISTRATOR_USER_EMAIL_ADDRESS"'
-          docker exec talawa-api-1 /bin/bash -c 'echo "API_ADMINISTRATOR_PASSWORD: $API_ADMINISTRATOR_PASSWORD"' 
+          docker exec talawa-api-1 /bin/bash -c 'ls -la /workspace/.env'
+          echo "=== File Content ==="
+          docker exec talawa-api-1 /bin/bash -c 'cat /workspace/.env'
 
       - name: Seed Sample Data
         run: |
