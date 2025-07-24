@@ -1,0 +1,11 @@
+{
+  "ad1": {
+    "name": "Advertisement 1",
+    "description": "This is a test advertisement",
+    "mediaPath": "cypress/fixtures/advertisement_banner.png",
+    "type": "Popup Ad"
+  },
+  "ad2": {
+    "updatedName": "Advertisement 2"
+  }
+}

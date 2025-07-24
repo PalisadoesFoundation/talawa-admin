@@ -478,6 +478,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       autoComplete="username"
                       data-testid="loginEmail"
+                      data-cy="loginEmail"
                     />
                     <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
@@ -502,6 +503,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       disabled={loginLoading}
                       autoComplete="current-password"
+                      data-cy="loginPassword"
                     />
                     <Button
                       onClick={togglePassword}
@@ -544,6 +546,7 @@ const loginPage = (): JSX.Element => {
                     className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
+                    data-cy="loginBtn"
                   >
                     {tCommon('login')}
                   </Button>
