@@ -45,23 +45,17 @@ jobs:
      - name: Reset DB Schema
        run: |
          # Reset the database schema
-         docker exec talawa-api-1 /bin/bash -c 'pnpm run reset:data'
+         docker exec talawa-api-1 /bin/bash -c 'yes | pnpm run reset:data'
          # Apply migrations to test database
          docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations' &
          sleep 10         
-
-     - name: Debug Tools in Container
-       run: |
-         docker exec talawa-api-1 which pnpm || echo "pnpm not found"
-         docker exec talawa-api-1 which tsx || echo "tsx not found"
-         docker exec talawa-api-1 ls -la scripts/dbManagement || echo "scripts/dbManagement not found"
 
      - name: Seed Sample Data
        run: |
         echo "Checking container status..."
         docker ps -a
         echo "Running seed script..."
-        docker exec talawa-api-1 pnpm run add:sample_data
+        docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'
 
      - name: Start Backend Server
        run: |
@@ -137,3 +131,5 @@ jobs:
          CYPRESS_API_URL: http://127.0.0.1:4000/graphql
          REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
+         
+         #  docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'
