@@ -35,41 +35,36 @@ jobs:
           echo "=== Waiting for Database Stabilization ==="
           sleep 10
 
-    #   - name: Determine Container Project Path
-    #     run: |
-    #       echo "=== Determining Project Path in Container ==="
-    #       # Get the container's project root path
-    #       CONTAINER_PATH=$(docker exec talawa-api-1 pwd)
-    #       echo "CONTAINER_PATH=${CONTAINER_PATH}" >> $GITHUB_ENV
-    #       docker exec talawa-api-1 ls -la $CONTAINER_PATH          
-
     #   - name: Copying .env to Container
     #     run: |
     #       echo "=== Copying .env to Container ==="
-    #       docker cp .env talawa-api-1:${{ env.CONTAINER_PATH }}/.env
-    #       docker exec talawa-api-1 ls -la ${{ env.CONTAINER_PATH }}/.env
-
-      - name: Copying .env to Container
+    #       # First, check container working directory and structure
+    #       echo "Container working directory and contents:"
+    #       docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la'
+          
+    #       # Copy .env to /tmp first (guaranteed to exist)
+    #       docker cp .env talawa-api-1:/tmp/.env
+          
+    #       # Move to working directory and verify
+    #       docker exec talawa-api-1 /bin/bash -c 'cp /tmp/.env ./.env && rm /tmp/.env'
+          
+    #       # Verify the file is in place
+    #       echo "Verifying .env file:"
+    #       docker exec talawa-api-1 /bin/bash -c 'ls -la ./.env && echo "=== .env contents ===" && head -3 ./.env'   
+    
+      - name: Verify .env Configuration
         run: |
-          echo "=== Copying .env to Container ==="
-          # First, check container working directory and structure
+          echo "=== Verifying .env Configuration ==="
           echo "Container working directory and contents:"
-          docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la'
-          
-          # Copy .env to /tmp first (guaranteed to exist)
-          docker cp .env talawa-api-1:/tmp/.env
-          
-          # Move to working directory and verify
-          docker exec talawa-api-1 /bin/bash -c 'cp /tmp/.env ./.env && rm /tmp/.env'
-          
-          # Verify the file is in place
-          echo "Verifying .env file:"
-          docker exec talawa-api-1 /bin/bash -c 'ls -la ./.env && echo "=== .env contents ===" && head -3 ./.env'    
+          docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la .env'
+          echo "=== Complete .env file contents ==="
+          docker exec talawa-api-1 /bin/bash -c 'cat .env'
+          echo "=== .env file verification complete ==="
 
       - name: Seed Sample Data
         run: |
           echo "=== Seeding Sample Data ==="
-          if docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'; then
+          if docker exec talawa-api-1 /bin/bash -c 'source ./.env && pnpm run add:sample_data'; then
             echo "✅ Seeding completed successfully"
           else
             echo "❌ Seeding failed - Debug Information:"
