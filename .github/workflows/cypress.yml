@@ -25,6 +25,16 @@ jobs:
           echo "Waiting for devcontainer services to be ready..."
           sleep 10
 
+      - name: Fix .env Formatting
+        run: |
+          # Fix unquoted values with spaces
+          sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
+          # Fix unquoted FRONTEND_URL
+          sed -i 's/^FRONTEND_URL=.*/FRONTEND_URL="http:\/\/localhost:4321"/' .env
+          # Verify fixes
+          echo "=== Fixed .env contents ==="
+          grep -E 'CLOUDBEAVER_SERVER_NAME|FRONTEND_URL' .env
+
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
@@ -33,24 +43,7 @@ jobs:
           echo "=== Applying Migrations (Synchronous) ==="
           docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_migrations'
           echo "=== Waiting for Database Stabilization ==="
-          sleep 10
-
-    #   - name: Copying .env to Container
-    #     run: |
-    #       echo "=== Copying .env to Container ==="
-    #       # First, check container working directory and structure
-    #       echo "Container working directory and contents:"
-    #       docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la'
-          
-    #       # Copy .env to /tmp first (guaranteed to exist)
-    #       docker cp .env talawa-api-1:/tmp/.env
-          
-    #       # Move to working directory and verify
-    #       docker exec talawa-api-1 /bin/bash -c 'cp /tmp/.env ./.env && rm /tmp/.env'
-          
-    #       # Verify the file is in place
-    #       echo "Verifying .env file:"
-    #       docker exec talawa-api-1 /bin/bash -c 'ls -la ./.env && echo "=== .env contents ===" && head -3 ./.env'   
+          sleep 10 
     
       - name: Verify .env Configuration
         run: |
@@ -64,17 +57,17 @@ jobs:
       - name: Seed Sample Data
         run: |
           echo "=== Seeding Sample Data ==="
-          if docker exec talawa-api-1 /bin/bash -c 'source ./.env && pnpm run add:sample_data'; then
+          if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
             echo "✅ Seeding completed successfully"
           else
             echo "❌ Seeding failed - Debug Information:"
             echo "Container status:"
             docker ps | grep talawa
             echo "Recent container logs:"
-            docker logs talawa-api-1 --tail 20
-            echo "Database tables:"
+            docker logs talawa-api-1 --tail 50
+            echo "=== Users table contents ==="
             docker exec talawa-postgres-1 psql -U talawa -d talawa \
-              -c "\dt" 2>/dev/null || echo "Could not list tables"
+            -c "SELECT id, email_address, name, role FROM users;" 2>/dev/null || echo "Could not query users"
             exit 1
           fi
 
