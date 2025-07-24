@@ -1,8 +1,8 @@
 name: Running Cypress Tests
 
 on:
- pull_request:
-   branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 
 jobs:
@@ -44,22 +44,41 @@ jobs:
          
      - name: Reset DB Schema
        run: |
-         # Reset the database schema
+         echo "=== Resetting Database ==="
          docker exec talawa-api-1 /bin/bash -c 'yes | pnpm run reset:data'
-         # Apply migrations to test database
-         docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations' &
-         sleep 10         
+
+         echo "=== Applying Migrations (Synchronous) ==="
+         docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'
+
+         echo "=== Waiting for Database Stabilization ==="
+         sleep 5         
 
      - name: Seed Sample Data
        run: |
-        echo "Checking container status..."
-        docker ps -a
-        echo "Running seed script..."
-        docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'
+         echo "=== Seeding Sample Data ==="
+         if docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'; then
+         echo "✅ Seeding completed successfully"
+         else
+         echo "❌ Seeding failed - Debug Information:"
+         echo "Container status:"
+         docker ps | grep talawa
+         echo "Recent container logs:"
+         docker logs talawa-api-1 --tail 20
+         echo "Database tables:"
+         docker exec talawa-postgres-1 psql -U talawa -d talawa -c "\dt" 2>/dev/null || echo "Could not list tables"
+         exit 1
+         fi
+
+     - name: Debug Database State
+       run: |
+         echo "=== Database Tables ==="
+         docker exec talawa-postgres-1 psql -U talawa -d talawa -c "\dt"
+         echo "=== Migration Status ==="
+         docker exec talawa-postgres-1 psql -U talawa -d talawa -c "SELECT * FROM information_schema.tables WHERE table_schema = 'public';" | head -10         
 
      - name: Start Backend Server
        run: |
-         docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
+         docker exec -d talawa-api-1 /bin/bash -c 'pnpm run start_development_server'
          sleep 15
         #  curl -X POST -H "Content-Type: application/json" -k http://127.0.0.1:4000/graphql -d '{
         #    "query": "query signIn($input: QuerySignInInput!) { signIn(input: $input) { authenticationToken user { emailAddress id name } } }",
@@ -73,7 +92,7 @@ jobs:
         #  sleep 10         
 
      - name: Wait for GraphQL endpoint to become available
-       if: always()
+       if: success()
        run: |
          echo "Waiting for the GraphQL endpoint to become available..."
          for i in {1..40}; do
@@ -106,6 +125,7 @@ jobs:
        uses: actions/setup-node@v4
        with:
          node-version: '20.x'
+         cache: 'npm'
     
      - name: Install Frontend Dependencies
        working-directory: frontend
@@ -129,7 +149,4 @@ jobs:
        env:
          CYPRESS_BASE_URL: http://localhost:4321
          CYPRESS_API_URL: http://127.0.0.1:4000/graphql
-         REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
-         
-         #  docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'
