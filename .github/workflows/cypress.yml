@@ -32,6 +32,10 @@ jobs:
        run: |
          # (Optional) Drop existing tables/schemas if reusing a DB container
          docker exec talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
+         # Remove Old Migrations
+         docker exec talawa-api-1 /bin/bash -c 'pnpm drop_drizzle_migrations'
+         # Create New Migrations
+         docker exec talawa-api-1 /bin/bash -c 'pnpm generate_drizzle_migrations'
          # Apply migrations to test database
          docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'  
 
@@ -43,16 +47,16 @@ jobs:
        run: |
          docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
          sleep 15
-         curl -X POST -H "Content-Type: application/json" -k http://127.0.0.1:4000/graphql -d '{
-           "query": "query signIn($input: QuerySignInInput!) { signIn(input: $input) { authenticationToken user { emailAddress id name } } }",
-           "variables": {
-             "input": {
-               "emailAddress": "administrator@email.com",
-               "password": "password"
-             }
-           }
-         }'
-         sleep 10         
+        #  curl -X POST -H "Content-Type: application/json" -k http://127.0.0.1:4000/graphql -d '{
+        #    "query": "query signIn($input: QuerySignInInput!) { signIn(input: $input) { authenticationToken user { emailAddress id name } } }",
+        #    "variables": {
+        #      "input": {
+        #        "emailAddress": "administrator@email.com",
+        #        "password": "password"
+        #      }
+        #    }
+        #  }'
+        #  sleep 10         
 
      - name: Wait for GraphQL endpoint to become available
        if: always()
