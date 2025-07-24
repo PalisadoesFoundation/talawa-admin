@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import dayjs from 'dayjs';
 
 import CustomRecurrenceModal from './CustomRecurrenceModal';
 import { store } from 'state/store';
@@ -16,6 +17,32 @@ import {
   WeekDays,
   createDefaultRecurrenceRule,
 } from '../../utils/recurrenceUtils';
+
+// Mock the DatePicker to capture its onChange prop
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual('@mui/x-date-pickers');
+  return {
+    ...actual,
+    DatePicker: ({ onChange, ...props }: any) => {
+      // Store the onChange function globally so we can call it in tests
+      (globalThis as any).mockDatePickerOnChange = onChange;
+      return (
+        <input
+          {...props}
+          type="text"
+          data-testid="mocked-date-picker"
+          onChange={(e) => {
+            // Mock a dayjs date object
+            const mockDate = dayjs(e.target.value);
+            if (onChange && mockDate.isValid()) {
+              onChange(mockDate);
+            }
+          }}
+        />
+      );
+    },
+  };
+});
 
 const theme = createTheme({
   palette: {
@@ -238,7 +265,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.click(onOption);
 
     // The date picker should be enabled
-    const datePicker = screen.getByLabelText('endDate');
+    const datePicker = screen.getByTestId('mocked-date-picker');
     expect(datePicker).not.toBeDisabled();
   });
 
@@ -425,7 +452,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.click(onOption);
 
     // Find and interact with the date picker
-    const datePicker = screen.getByLabelText('endDate');
+    const datePicker = screen.getByTestId('mocked-date-picker');
     expect(datePicker).not.toBeDisabled();
 
     // The onChange handler should be called when date changes (lines 531-539)
@@ -760,5 +787,399 @@ describe('CustomRecurrenceModal', () => {
       }),
     );
     expect(mockSetModalOpen).toHaveBeenCalledWith(false);
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleRecurrenceEndOptionChange - never option (line 152)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        never: false,
+        count: 5, // Start with count set so "never" isn't already selected
+        endDate: undefined,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const neverOption = screen.getByTestId('never');
+    await userEvent.click(neverOption);
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      never: false,
+      count: 5,
+      endDate: undefined,
+    };
+    const newState = updateFunction(prevState);
+
+    expect(newState).toEqual({
+      ...prevState,
+      never: true,
+      count: undefined,
+      endDate: undefined,
+    });
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleRecurrenceEndOptionChange - ends on option (line 163)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        never: false,
+        count: 5, // Start with count set so "on" isn't already selected
+        endDate: undefined,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const onOption = screen.getByTestId('on');
+    await userEvent.click(onOption);
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      never: false,
+      count: 5,
+      endDate: undefined,
+    };
+    const newState = updateFunction(prevState);
+
+    expect(newState.never).toBe(false);
+    expect(newState.count).toBeUndefined();
+    expect(newState.endDate).toBeInstanceOf(Date);
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleRecurrenceEndOptionChange - ends after option (line 172)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        never: true, // Start with never = true so "after" isn't already selected
+        count: undefined,
+        endDate: undefined,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const afterOption = screen.getByTestId('after');
+    await userEvent.click(afterOption);
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      never: true,
+      count: undefined,
+      endDate: undefined,
+    };
+    const newState = updateFunction(prevState);
+
+    expect(newState).toEqual({
+      ...prevState,
+      never: false,
+      endDate: undefined,
+      count: expect.any(Number),
+    });
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleFrequencyChange (line 216)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const frequencyDropdown = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown',
+    );
+    await userEvent.click(frequencyDropdown);
+
+    const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
+    await userEvent.click(weeklyOption);
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = { ...mockProps.recurrenceRuleState };
+    const newState = updateFunction(prevState);
+
+    expect(newState.frequency).toBe(Frequency.WEEKLY);
+    expect(newState.byDay).toBeDefined();
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleIntervalChange (line 238)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
+    await userEvent.clear(intervalInput);
+    await userEvent.type(intervalInput, '3');
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly - using the last call since typing may trigger multiple calls
+    const calls = mockSetRecurrenceRuleState.mock.calls;
+    const updateFunction = calls[calls.length - 1][0];
+    const prevState = { ...mockProps.recurrenceRuleState };
+    const newState = updateFunction(prevState);
+
+    expect(newState).toEqual({
+      ...prevState,
+      interval: 3,
+    });
+  });
+
+  test('Testing setRecurrenceRuleState callback for handleCountChange (line 254)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        count: 5,
+        never: false,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const afterOption = screen.getByTestId('after');
+    await userEvent.click(afterOption);
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const countInput = screen.getByTestId('customRecurrenceCountInput');
+    await userEvent.clear(countInput);
+    await userEvent.type(countInput, '7');
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly - using the last call since typing may trigger multiple calls
+    const calls = mockSetRecurrenceRuleState.mock.calls;
+    const updateFunction = calls[calls.length - 1][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      count: 5,
+      never: false,
+    };
+    const newState = updateFunction(prevState);
+
+    expect(newState).toEqual({
+      ...prevState,
+      count: 7,
+      never: false,
+      endDate: undefined,
+    });
+  });
+
+  test('Testing setRecurrenceRuleState callback for monthly dropdown selection (line 463)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        frequency: Frequency.MONTHLY,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const monthlyDropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+    await userEvent.click(monthlyDropdown);
+
+    const monthlyByDateOption = screen.getByTestId('monthlyByDate');
+    await userEvent.click(monthlyByDateOption);
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = { ...mockProps.recurrenceRuleState };
+    const newState = updateFunction(prevState);
+
+    expect(newState).toEqual({
+      ...prevState,
+      byMonthDay: [15], // Start date is 2024-01-15
+      byDay: undefined,
+    });
+  });
+
+  test('Testing setRecurrenceRuleState callback for date picker onChange (line 533)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        endDate: undefined,
+        never: false,
+        count: 5, // Start with count so 'on' isn't already selected
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const onOption = screen.getByTestId('on');
+    await userEvent.click(onOption);
+
+    // Get the most recent call which should be the date picker setup
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test the callback function directly
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      endDate: undefined,
+      never: false,
+      count: 5,
+    };
+    const newState = updateFunction(prevState);
+
+    expect(newState.never).toBe(false);
+    expect(newState.count).toBeUndefined();
+    expect(newState.endDate).toBeInstanceOf(Date);
+  });
+
+  test('Testing setRecurrenceRuleState callback maintains spread operator behavior', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+    const customState = {
+      ...mockProps.recurrenceRuleState,
+      customProperty: 'test',
+      anotherProperty: 123,
+    };
+
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: customState,
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
+    await userEvent.clear(intervalInput);
+    await userEvent.type(intervalInput, '2');
+
+    expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+      expect.any(Function),
+    );
+
+    // Test that the callback preserves all existing properties using spread operator
+    const calls = mockSetRecurrenceRuleState.mock.calls;
+    const updateFunction = calls[calls.length - 1][0];
+    const newState = updateFunction(customState);
+
+    expect(newState).toEqual({
+      ...customState,
+      interval: 2,
+    });
+    expect(newState.customProperty).toBe('test');
+    expect(newState.anotherProperty).toBe(123);
+  });
+
+  test('Testing setRecurrenceRuleState callback for DatePicker onChange (lines 533-538)', async () => {
+    const mockSetRecurrenceRuleState = vi.fn();
+
+    renderComponent({
+      ...mockProps,
+      setRecurrenceRuleState: mockSetRecurrenceRuleState,
+      recurrenceRuleState: {
+        ...mockProps.recurrenceRuleState,
+        never: false,
+        count: 5, // Start with count so 'on' option isn't already selected
+        endDate: undefined,
+      },
+    });
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    // First click the 'on' option to enable and show the date picker
+    const onOption = screen.getByTestId('on');
+    await userEvent.click(onOption);
+
+    mockSetRecurrenceRuleState.mockClear();
+
+    // Find the mocked DatePicker input
+    const dateInput = screen.getByTestId('mocked-date-picker');
+    expect(dateInput).toBeInTheDocument();
+
+    // Trigger the DatePicker onChange by changing the input value
+    // This will trigger our mocked DatePicker's onChange which calls the real onChange with a dayjs object
+    fireEvent.change(dateInput, { target: { value: '2024-03-15' } });
+
+    // Wait for the state update
+    await waitFor(() => {
+      expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
+        expect.any(Function),
+      );
+    });
+
+    // Test the callback function that was passed to setRecurrenceRuleState
+    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      never: false,
+      count: 5,
+      endDate: undefined,
+    };
+
+    const newState = updateFunction(prevState);
+
+    // Verify the callback produces the correct state transformation (lines 533-538)
+    expect(newState.never).toBe(false);
+    expect(newState.count).toBeUndefined();
+    expect(newState.endDate).toBeInstanceOf(Date);
+    // Check that the date is March 15, 2024 (ignore timezone differences)
+    expect(newState.endDate.getFullYear()).toBe(2024);
+    expect(newState.endDate.getMonth()).toBe(2); // March is month 2 (0-indexed)
+    expect(newState.endDate.getDate()).toBe(15);
+
+    // Verify spread operator preserved other properties
+    expect(newState.frequency).toBe(prevState.frequency);
+    expect(newState.interval).toBe(prevState.interval);
+    expect(newState.byDay).toBe(prevState.byDay);
   });
 });
