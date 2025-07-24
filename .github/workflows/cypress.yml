@@ -31,7 +31,7 @@ jobs:
           echo "=== Resetting Database ==="
           docker exec talawa-api-1 /bin/bash -c 'yes | pnpm run reset:data'
           echo "=== Applying Migrations (Synchronous) ==="
-          docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'
+          docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_migrations'
           echo "=== Waiting for Database Stabilization ==="
           sleep 10
 
