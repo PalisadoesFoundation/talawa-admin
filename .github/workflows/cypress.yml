@@ -8,7 +8,7 @@ on:
 jobs:
 
  Setup-Run-Cypress-Tests:
-   timeout-minutes: 25
+   timeout-minutes: 35
    runs-on: ubuntu-latest
    env:
      REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
@@ -28,10 +28,21 @@ jobs:
      - name: Install Backend Dependencies
        run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
-     - name: Setup Database
+     - name: Reset DB Schema
+       run: |
+         # (Optional) Drop existing tables/schemas if reusing a DB container
+         docker exec -it talawa-postgres-1 psql -U talawa -d talawa -c "DROP SCHEMA IF EXISTS drizzle CASCADE;"
+         # Apply migrations to test database
+         docker exec -it talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_test_migrations'  
+
+     - name: Seed Sample Data
        run: |
          docker exec talawa-api-1 /bin/bash -c 'pnpm run add:sample_data'
-         sleep 10
+         
+     - name: Start Backend Server
+       run: |
+         docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
+         sleep 15
          curl -X POST -H "Content-Type: application/json" -k http://127.0.0.1:4000/graphql -d '{
            "query": "query signIn($input: QuerySignInInput!) { signIn(input: $input) { authenticationToken user { emailAddress id name } } }",
            "variables": {
@@ -41,11 +52,7 @@ jobs:
              }
            }
          }'
-         
-     - name: Start Backend Server
-       run: |
-         docker exec talawa-api-1 /bin/bash -c 'pnpm run start_development_server' &
-         sleep 15
+         sleep 10         
 
      - name: Wait for GraphQL endpoint to become available
        if: always()
@@ -103,6 +110,6 @@ jobs:
          install: false
        env:
          CYPRESS_BASE_URL: http://localhost:4321
-         CYPRESS_apiUrl: http://127.0.0.1:4000/graphql
+         CYPRESS_API_URL: http://127.0.0.1:4000/graphql
          REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
