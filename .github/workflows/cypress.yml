@@ -55,11 +55,6 @@ jobs:
           docker exec talawa-api-1 /bin/bash -c 'cat .env'
           echo "=== .env file verification complete ==="
 
-      - name: Patch Sample Data Script
-        run: |
-          docker exec talawa-api-1 sed -i "s/administrator@email.com/testsuperadmin@example.com/g" ./scripts/dbManagement/addSampleData.ts
-          docker exec talawa-api-1 sed -i "s/API_ADMINISTRATOR_USER_EMAIL_ADDRESS/testsuperadmin@example.com/g" ./scripts/dbManagement/helpers.ts          
-
       - name: Seed Sample Data
         run: |
           echo "=== Seeding Sample Data ==="
