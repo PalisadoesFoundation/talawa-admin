@@ -392,6 +392,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementNameInput"
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rdesc">
@@ -408,6 +409,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementDescriptionInput"
               />
             </Form.Group>
             {formStatus === 'register' && (
@@ -424,6 +426,7 @@ function AdvertisementRegister({
                   multiple={true}
                   onChange={handleFileUpload}
                   className={styles.inputField}
+                  data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
                 {(formState.attachments || []).map((file, index) => (
@@ -473,6 +476,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementTypeSelect"
               >
                 <option value="banner">Banner Ad </option>
                 <option value="pop_up">Popup Ad</option>
@@ -538,6 +542,7 @@ function AdvertisementRegister({
               onClick={handleRegister}
               data-testid="addonregister"
               className={styles.addButton}
+              data-cy="registerAdvertisementButton"
             >
               {tCommon('register')}
             </Button>
@@ -546,6 +551,7 @@ function AdvertisementRegister({
               onClick={handleUpdate}
               data-testid="addonupdate"
               className={styles.addButton}
+              data-cy="saveChanges"
             >
               {tCommon('saveChanges')}
             </Button>

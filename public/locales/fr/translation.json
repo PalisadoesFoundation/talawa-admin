@@ -941,7 +941,8 @@
   },
   "people": {
     "title": "Personnes",
-    "searchUsers": "Rechercher des utilisateurs"
+    "searchUsers": "Rechercher des utilisateurs",
+    "nothingToShow": "Rien à montrer ici."
   },
   "userLogin": {
     "login": "Se connecter",

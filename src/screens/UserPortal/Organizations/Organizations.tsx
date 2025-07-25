@@ -532,6 +532,7 @@ export default function organizations(): React.JSX.Element {
                             data-membership-status={
                               organization.membershipRequestStatus
                             }
+                            data-cy="orgCard"
                           >
                             <div
                               data-testid={`membership-status-${organization.name}`}
