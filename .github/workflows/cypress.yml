@@ -27,24 +27,17 @@ jobs:
 
       - name: Fix .env Formatting
         run: |
-          # Fix unquoted values with spaces
           sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
-          # Fix unquoted FRONTEND_URL
-          sed -i 's/^FRONTEND_URL=.*/FRONTEND_URL="http:\/\/localhost:4321"/' .env
-          # Update administrator email to match sample data
           sed -i 's/^API_ADMINISTRATOR_USER_EMAIL_ADDRESS=.*/API_ADMINISTRATOR_USER_EMAIL_ADDRESS=testsuperadmin@example.com/' .env
           echo "=== Fixed .env contents ==="
-          grep -E 'CLOUDBEAVER_SERVER_NAME|FRONTEND_URL|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
+          grep -E 'CLOUDBEAVER_SERVER_NAME|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
 
       - name: Apply Database Migrations
         run: |
-          echo "=== Applying Migrations (Synchronous) ==="
           docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_migrations'
-          echo "=== Waiting for Database Stabilization ==="
-          sleep 10 
     
       - name: Verify .env Configuration
         run: |
@@ -148,3 +141,14 @@ jobs:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
           REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
+
+
+        #         - name: Fix .env Formatting
+        # run: |
+        #   # Fix unquoted values with spaces
+        #   sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
+        #   sed -i 's/^FRONTEND_URL=.*/FRONTEND_URL="http:\/\/localhost:4321"/' .env
+        #   # Update administrator email to match sample data
+        #   sed -i 's/^API_ADMINISTRATOR_USER_EMAIL_ADDRESS=.*/API_ADMINISTRATOR_USER_EMAIL_ADDRESS=testsuperadmin@example.com/' .env
+        #   echo "=== Fixed .env contents ==="
+        #   grep -E 'CLOUDBEAVER_SERVER_NAME|FRONTEND_URL|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
