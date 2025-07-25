@@ -797,7 +797,7 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(input: MutationCreateEventInput!): Event
+  createEvent(input: MutationCreateEventInput!): EventPg
 
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
@@ -985,6 +985,9 @@ type OrganizationPg {
     before: String
     first: Int
     last: Int
+    startDate: DateTime
+    endDate: DateTime
+    includeRecurring: Boolean
   ): OrganizationEventsConnectionPg
 
   funds(
@@ -1259,12 +1262,35 @@ type EventPg {
   description: String
   startAt: DateTime
   endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
+  # Recurring event fields
+  isMaterialized: Boolean
+  isRecurringEventTemplate: Boolean
+  instanceStartTime: DateTime
+  sequenceNumber: Int
+  totalCount: Int
+  hasExceptions: Boolean
+  progressLabel: String
+  # Base event relationships
+  baseEvent: EventPg
+  baseRecurringEvent: EventPg
+  # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
   creator: UserPg
   updater: UserPg
   organization: OrganizationPg
   attachments: [EventAttachmentPg!]
+
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventActionItemsConnectionPg
 
   agendaFolders(
     after: String
@@ -1279,6 +1305,16 @@ type EventPg {
     first: Int
     last: Int
   ): EventVenuesConnectionPg
+}
+
+type EventActionItemsConnectionPg {
+  edges: [EventActionItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventActionItemsConnectionEdgePg {
+  cursor: String!
+  node: ActionItem
 }
 
 type EventVenuesConnectionPg {
@@ -1939,6 +1975,16 @@ input RecaptchaVerification {
   recaptchaToken: String!
 }
 
+input RecurrenceInput {
+  frequency: Frequency!
+  interval: PositiveInt!
+  byDay: [WeekDays!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: PositiveInt
+  until: DateTime
+}
+
 enum Status {
   ACTIVE
   BLOCKED
@@ -2158,6 +2204,7 @@ input MutationCreateEventInput {
   name: String!
   organizationId: ID!
   startAt: DateTime!
+  recurrence: RecurrenceInput
 }
 
 input MutationUpdateEventInput {

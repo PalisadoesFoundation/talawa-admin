@@ -40,6 +40,14 @@ Defined in: [src/types/Event/interface.ts:62](https://github.com/PalisadoesFound
 
 ***
 
+### baseEventId?
+
+> `optional` **baseEventId**: `string`
+
+Defined in: [src/types/Event/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L69)
+
+***
+
 ### creator
 
 > **creator**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>
@@ -80,11 +88,43 @@ Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFound
 
 ***
 
+### hasExceptions?
+
+> `optional` **hasExceptions**: `boolean`
+
+Defined in: [src/types/Event/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L72)
+
+***
+
+### instanceStartTime?
+
+> `optional` **instanceStartTime**: `string`
+
+Defined in: [src/types/Event/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L68)
+
+***
+
+### isMaterialized?
+
+> `optional` **isMaterialized**: `boolean`
+
+Defined in: [src/types/Event/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L65)
+
+***
+
 ### isPublic
 
 > **isPublic**: `boolean`
 
 Defined in: [src/types/Event/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L58)
+
+***
+
+### isRecurringTemplate?
+
+> `optional` **isRecurringTemplate**: `boolean`
+
+Defined in: [src/types/Event/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L66)
 
 ***
 
@@ -120,6 +160,30 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFound
 
 ***
 
+### progressLabel?
+
+> `optional` **progressLabel**: `string`
+
+Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L73)
+
+***
+
+### recurringEventId?
+
+> `optional` **recurringEventId**: `string`
+
+Defined in: [src/types/Event/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L67)
+
+***
+
+### sequenceNumber?
+
+> `optional` **sequenceNumber**: `number`
+
+Defined in: [src/types/Event/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L70)
+
+***
+
 ### startDate
 
 > **startDate**: `string`
@@ -133,6 +197,14 @@ Defined in: [src/types/Event/interface.ts:52](https://github.com/PalisadoesFound
 > **startTime**: `string`
 
 Defined in: [src/types/Event/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L54)
+
+***
+
+### totalCount?
+
+> `optional` **totalCount**: `number`
+
+Defined in: [src/types/Event/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L71)
 
 ***
 

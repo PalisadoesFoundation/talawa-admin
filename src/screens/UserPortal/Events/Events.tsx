@@ -95,6 +95,14 @@ export default function events(): JSX.Element {
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const [createChatCheck, setCreateChatCheck] = React.useState(false);
   const { orgId: organizationId } = useParams();
+  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = React.useState(
+    new Date().getFullYear(),
+  );
+  const onMonthChange = (month: number, year: number): void => {
+    setCurrentMonth(month);
+    setCurrentYear(year);
+  };
 
   // Query to fetch events for the organization
   const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
@@ -257,6 +265,9 @@ export default function events(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
+        onMonthChange={onMonthChange}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
       />
       {/* </div> */}
       <Modal show={createEventModal} onHide={toggleCreateEventModal}>

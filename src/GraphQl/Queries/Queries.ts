@@ -491,9 +491,22 @@ export const IS_USER_BLOCKED = gql`
 `;
 
 export const GET_ORGANIZATION_EVENTS_PG = gql`
-  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+  query GetOrganizationEvents(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
     organization(input: { id: $id }) {
-      events(first: $first, after: $after) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
         edges {
           node {
             id
@@ -505,10 +518,32 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            # Recurring event fields
+            isMaterialized
+            isRecurringEventTemplate
+            instanceStartTime
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Creator information
             creator {
               id
               name
             }
+            # Organization
+            organization {
+              id
+              name
+            }
+            # Timestamps
+            createdAt
+            updatedAt
           }
           cursor
         }
