@@ -106,7 +106,7 @@ const MOCKS = [
               __typename: 'User',
             },
             likeCount: 0,
-            likedBy: [],
+            upVoters: [],
             text: 'testComment',
             __typename: 'Comment',
           },
@@ -216,7 +216,7 @@ describe('Testing PostCard Component [User Portal]', () => {
             __typename: 'User',
           },
           likeCount: 0,
-          likedBy: [],
+          upVoters: [],
           text: 'First comment from Talawa user portal.',
           __typename: 'Comment',
         },
@@ -230,12 +230,12 @@ describe('Testing PostCard Component [User Portal]', () => {
             __typename: 'User',
           },
           likeCount: 0,
-          likedBy: [],
+          upVoters: [],
           text: 'First comment from Talawa user portal.',
           __typename: 'Comment',
         },
       ],
-      likedBy: [
+      upVoters: [
         {
           firstName: '',
           lastName: '',
@@ -280,7 +280,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -329,7 +329,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -386,7 +386,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -436,7 +436,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -489,7 +489,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -539,7 +539,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -582,7 +582,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -632,7 +632,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -694,7 +694,7 @@ describe('Testing PostCard Component [User Portal]', () => {
             email: 'test@user.com',
           },
           likeCount: 1,
-          likedBy: [
+          upVoters: [
             {
               id: '1',
             },
@@ -711,7 +711,7 @@ describe('Testing PostCard Component [User Portal]', () => {
             email: 'test@user.com',
           },
           likeCount: 1,
-          likedBy: [
+          upVoters: [
             {
               id: '2',
             },
@@ -719,7 +719,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           text: 'testComment',
         },
       ],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -781,7 +781,7 @@ describe('Testing PostCard Component [User Portal]', () => {
             email: 'test@user.com',
           },
           likeCount: 1,
-          likedBy: [
+          upVoters: [
             {
               id: '1',
             },
@@ -798,7 +798,7 @@ describe('Testing PostCard Component [User Portal]', () => {
             email: 'test@user.com',
           },
           likeCount: 1,
-          likedBy: [
+          upVoters: [
             {
               id: '2',
             },
@@ -806,7 +806,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           text: 'testComment',
         },
       ],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -859,7 +859,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -905,7 +905,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -996,7 +996,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -1055,7 +1055,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -1126,7 +1126,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',
@@ -1195,7 +1195,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 0,
       comments: [],
-      likedBy: [
+      upVoters: [
         {
           firstName: 'test',
           lastName: 'user',

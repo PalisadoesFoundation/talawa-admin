@@ -13,7 +13,7 @@
  * @param props.image - URL of the post's image.
  * @param props.postedAt - Date when the post was created.
  * @param props.likeCount - Number of likes on the post.
- * @param props.likedBy - Array of users who liked the post.
+ * @param props.upVoters - Array of users who liked the post.
  * @param props.comments - Array of comments on the post.
  * @param props.commentCount - Total number of comments on the post.
  * @param props.fetchPosts - Function to refresh the list of posts.
@@ -66,13 +66,15 @@ import UserDefault from '../../../assets/images/defaultImg.png';
 
 interface InterfaceCommentCardProps {
   id: string;
-  creator: { id: string; firstName: string; lastName: string; email: string };
-  likeCount: number;
-  likedBy: { id: string }[];
+  creator: { id: string; name: string; email: string; };
   text: string;
+  upVoteCount: number;
+  downVoteCount: number;
+  upVoters: { id: string }[];
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;
 }
+
 
 export default function postCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
@@ -82,22 +84,41 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
 
   // Retrieve user ID from local storage
   const userId = getItem('userId') as string;
+  console.log("userID Posts", userId)
   // Check if the post is liked by the current user
-  const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
+const upVotersUser = props.upVoters?.edges.some((edge) => edge.node.id === userId);
+
 
   // State variables
   const [comments, setComments] = React.useState(props.comments);
   const [numComments, setNumComments] = React.useState(props.commentCount);
 
-  const [likes, setLikes] = React.useState(props.likeCount);
-  const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
+  const [likes, setLikes] = React.useState(props.upVoteCount);
+  const [isupVotersUser, setIsupVotersUser] = React.useState(upVotersUser);
   const [commentInput, setCommentInput] = React.useState('');
   const [viewPost, setViewPost] = React.useState(false);
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState<string>(props.text);
 
+  // ✅ Sync isupVotersUser with props
+React.useEffect(() => {
+  const liked = props.upVoters?.edges?.some(
+  (edge) => edge.node.id === userId
+) ?? false;
+setIsupVotersUser(liked);
+
+}, [props.upVoters, userId]);
+
+// ✅ Sync likes count with props
+React.useEffect(() => {
+ setLikes(props.upVoters?.edges.length || 0);
+
+}, [props.upVoters]);
+
+  // console.log("props: ", props)
   // Post creator's full name
-  const postCreator = `${props.creator.firstName} ${props.creator.lastName}`;
+  const postCreator = `${props.creator.name} `;
+  // console.log("postCreator: ", postCreator)
 
   // GraphQL mutations
   const [likePost, { loading: likeLoading }] = useMutation(LIKE_POST);
@@ -119,31 +140,48 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Toggle like or unlike the post
-  const handleToggleLike = async (): Promise<void> => {
-    if (isLikedByUser) {
-      try {
-        const { data } = await unLikePost({ variables: { postId: props.id } });
-
-        if (data) {
-          setLikes((likes) => likes - 1);
-          setIsLikedByUser(false);
+const handleToggleLike = async (): Promise<void> => {
+  if (isupVotersUser) {
+    try {
+      const { data } = await unLikePost({
+        variables: {
+          input: {
+            postId: props.id,
+            creatorId: userId,
+          }
         }
-      } catch (error: unknown) {
-        toast.error(error as string);
-      }
-    } else {
-      try {
-        const { data } = await likePost({ variables: { postId: props.id } });
+      });
 
-        if (data) {
-          setLikes((likes) => likes + 1);
-          setIsLikedByUser(true);
-        }
-      } catch (error: unknown) {
-        toast.error(error as string);
+      if (data) {
+        setLikes((likes: number) => likes - 1);
+        setIsupVotersUser(false);
       }
+    } catch (error: unknown) {
+      toast.error(error as string);
     }
-  };
+  } else {
+    try {
+      const { data } = await likePost({
+        variables: {
+          input: {
+            postId: props.id,
+            type: 'up_vote'
+          }
+        }
+      });
+
+      if (data) {
+        setLikes((likes: number) => likes + 1);
+        setIsupVotersUser(true);
+      }
+      console.log("like data",data);
+    } catch (error: unknown) {
+      toast.error(error as string);
+    }
+  }
+};
+
+
 
   // Handle changes to the comment input field
   const handleCommentInput = (
@@ -159,12 +197,12 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
       let updatedComment = { ...comment };
       if (
         comment.id === commentId &&
-        comment.likedBy.some((user) => user.id === userId)
+        comment.upVoters.some((user) => user.id === userId)
       ) {
         updatedComment = {
           ...comment,
-          likedBy: comment.likedBy.filter((user) => user.id !== userId),
-          likeCount: comment.likeCount - 1,
+          upVoters: comment.upVoters.filter((user) => user.id !== userId),
+          upVoteCount: comment.upVoteCount - 1,
         };
       }
       return updatedComment;
@@ -173,76 +211,83 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Like a comment
-  const handleLikeComment = (commentId: string): void => {
-    const updatedComments = comments.map((comment) => {
-      let updatedComment = { ...comment };
-      if (
-        comment.id === commentId &&
-        !comment.likedBy.some((user) => user.id === userId)
-      ) {
-        updatedComment = {
-          ...comment,
-          likedBy: [...comment.likedBy, { id: userId as string }],
-          likeCount: comment.likeCount + 1,
-        };
-      }
-      return updatedComment;
-    });
-    setComments(updatedComments);
-  };
+const handleLikeComment = (commentId: string): void => {
+  const updatedComments = comments.map((comment) => {
+    let updatedComment = { ...comment };
+    if (
+      comment.id === commentId &&
+      !comment.upVoters.some((user) => user.id === userId)
+    ) {
+      updatedComment = {
+        ...comment,
+        upVoters: [...comment.upVoters, { id: userId as string }],
+        upVoteCount: comment.upVoteCount + 1,
+      };
+    }
+    return updatedComment;
+  });
+  setComments(updatedComments);
+};
+
 
   // Create a new comment
-  const createComment = async (): Promise<void> => {
-    try {
-      // Ensure the input is not empty
-      if (!commentInput.trim()) {
-        toast.error(t('emptyCommentError'));
-        return;
-      }
-
-      const { data: createEventData } = await create({
-        variables: { postId: props.id, comment: commentInput },
-      });
-
-      if (createEventData) {
-        setCommentInput('');
-        setNumComments((numComments) => numComments + 1);
-
-        const newComment: InterfaceCommentCardProps = {
-          id: createEventData.createComment.id,
-          creator: {
-            id: createEventData.createComment.creator._id,
-            firstName: createEventData.createComment.creator.firstName,
-            lastName: createEventData.createComment.creator.lastName,
-            email: createEventData.createComment.creator.email,
-          },
-          likeCount: createEventData.createComment.likeCount,
-          likedBy: createEventData.createComment.likedBy,
-          text: createEventData.createComment.text,
-          handleLikeComment: handleLikeComment,
-          handleDislikeComment: handleDislikeComment,
-        };
-
-        setComments([...comments, newComment]);
-      }
-    } catch (error: unknown) {
-      // Handle errors
-      // Log error with context for debugging
-      console.error('Error creating comment:', error);
-
-      // Show user-friendly translated message based on error type
-      if (error instanceof Error) {
-        const isValidationError = error.message.includes(
-          'Comment validation failed',
-        );
-        toast.error(
-          isValidationError ? t('emptyCommentError') : t('unexpectedError'),
-        );
-      } else {
-        toast.error(t('unexpectedError'));
-      }
+// Create a new comment
+const createComment = async (): Promise<void> => {
+  try {
+    // Ensure the input is not empty
+    if (!commentInput.trim()) {
+      toast.error(t('emptyCommentError'));
+      return;
     }
-  };
+
+    const { data } = await create({
+      variables: {
+        input: {
+          postId: props.id,
+          text: commentInput,
+        },
+      },
+    });
+
+    const createEventData = data?.createComment;
+
+    if (createEventData) {
+      const newComment: InterfaceCommentCardProps = {
+        id: createEventData.id,
+        creator: {
+          id: createEventData.creator.id,
+          name: createEventData.creator.name,
+          email: createEventData.creator.email
+        },
+        text: commentInput,
+        upVoteCount: createEventData.upVoteCount, // Default as no one has liked it yet
+        downVoteCount: createEventData.downVoteCount, // Default as no one has disliked it yet
+        upVoters: [], // Empty initially
+        handleLikeComment,
+        handleDislikeComment,
+      };
+
+      setComments((prevComments) => [...prevComments, newComment]);
+
+      setCommentInput('');
+      setNumComments((prevCount) => prevCount + 1);
+    }
+  } catch (error: unknown) {
+    // Handle errors
+    console.error('Error creating comment:', error);
+    if (error instanceof Error) {
+      const isValidationError = error.message.includes(
+        'Comment validation failed',
+      );
+      toast.error(
+        isValidationError ? t('emptyCommentError') : t('unexpectedError'),
+      );
+    } else {
+      toast.error(t('unexpectedError'));
+    }
+  }
+};
+
 
   // Edit the post
   const handleEditPost = async (): Promise<void> => {
@@ -264,20 +309,25 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
   };
 
   // Delete the post
-  const handleDeletePost = async (): Promise<void> => {
-    try {
-      const { data: createEventData } = await deletePost({
-        variables: { id: props.id },
-      });
-
-      if (createEventData) {
-        props.fetchPosts(); // Refresh the posts
-        toast.success('Successfully deleted the Post.');
+const handleDeletePost = async (): Promise<void> => {
+  try {
+    const { data: createEventData } = await deletePost({
+      variables: {
+        input: {
+          id: props.id
+        }
       }
-    } catch (error: unknown) {
-      errorHandler(t, error);
+    });
+
+    if (createEventData) {
+      props.fetchPosts(); // Refresh the posts
+      toast.success('Successfully deleted the Post.');
     }
-  };
+  } catch (error: unknown) {
+    errorHandler(t, error);
+  }
+};
+
 
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
@@ -382,21 +432,24 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
             <div className={styles.commentContainer}>
               {numComments ? (
                 comments.map((comment, index: number) => {
-                  const cardProps: InterfaceCommentCardProps = {
-                    id: comment.id,
-                    creator: {
-                      id: comment.creator.id,
-                      firstName: comment.creator.firstName,
-                      lastName: comment.creator.lastName,
-                      email: comment.creator.email,
-                    },
-                    likeCount: comment.likeCount,
-                    likedBy: comment.likedBy,
-                    text: comment.text,
-                    handleLikeComment: handleLikeComment,
-                    handleDislikeComment: handleDislikeComment,
-                  };
-                  return <CommentCard key={index} {...cardProps} />;
+const cardProps: InterfaceCommentCardProps = {
+  id: comment.id,
+  creator: {
+    id: comment.creator.id,
+    name: comment.creator.name,
+    email: comment.creator.email
+  },
+  text: comment.text,
+  upVoteCount: comment.upVoteCount,
+  downVoteCount: comment.downVoteCount,
+  upVoters: comment.upVoters,
+  handleLikeComment,
+  handleDislikeComment,
+};
+
+return <CommentCard key={index} {...cardProps} />;
+
+
                 })
               ) : (
                 <p>No comments to show.</p>
@@ -412,7 +465,7 @@ export default function postCard(props: InterfacePostCard): JSX.Element {
                   >
                     {likeLoading || unlikeLoading ? (
                       <HourglassBottomIcon fontSize="small" />
-                    ) : isLikedByUser ? (
+                    ) : isupVotersUser ? (
                       <ThumbUpIcon fontSize="small" />
                     ) : (
                       <ThumbUpOffAltIcon fontSize="small" />

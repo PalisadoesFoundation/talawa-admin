@@ -9,7 +9,7 @@
  * @param props.id - The unique identifier of the comment.
  * @param props.creator - The creator of the comment, including their ID, first name, last name, and email.
  * @param props.likeCount - The initial number of likes on the comment.
- * @param props.likedBy - An array of users who have liked the comment.
+ * @param props.upVoters - An array of users who have liked the comment.
  * @param props.text - The text content of the comment.
  * @param props.handleLikeComment - Callback function triggered when the comment is liked.
  * @param props.handleDislikeComment - Callback function triggered when the comment is unliked.
@@ -27,7 +27,7 @@
  *   id="comment123"
  *   creator={{ id: "user1", firstName: "John", lastName: "Doe", email: "john.doe@example.com" }}
  *   likeCount={10}
- *   likedBy={[{ id: "user2" }]}
+ *   upVoters={[{ id: "user2" }]}
  *   text="This is a sample comment."
  *   handleLikeComment={(id) => console.log(`Liked comment with ID: ${id}`)}
  *   handleDislikeComment={(id) => console.log(`Disliked comment with ID: ${id}`)}
@@ -50,12 +50,10 @@ interface InterfaceCommentCardProps {
   id: string;
   creator: {
     id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    name: string;
   };
-  likeCount: number;
-  likedBy: {
+  upVoteCount: number;
+  upVoters: {
     id: string;
   }[];
   text: string;
@@ -65,18 +63,18 @@ interface InterfaceCommentCardProps {
 
 function commentCard(props: InterfaceCommentCardProps): JSX.Element {
   // Full name of the comment creator
-  const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
+  const creatorName = `${props.creator.name}`;
 
   // Hook to get user ID from local storage
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
   // Check if the current user has liked the comment
-  const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
+  const upVotersUser = props.upVoters?.some((upVoters) => upVoters.id === userId);
 
   // State to track the number of likes and if the comment is liked by the user
-  const [likes, setLikes] = React.useState(props.likeCount);
-  const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
+  const [likes, setLikes] = React.useState(props.upVoteCount);
+  const [isupVotersUser, setIsupVotersUser] = React.useState(upVotersUser);
 
   // Mutation hooks for liking and unliking comments
   const [likeComment, { loading: likeLoading }] = useMutation(LIKE_COMMENT);
@@ -92,7 +90,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
    * @returns  A promise that resolves when the like/unlike operation is complete.
    */
   const handleToggleLike = async (): Promise<void> => {
-    if (isLikedByUser) {
+    if (isupVotersUser) {
       try {
         const { data } = await unlikeComment({
           variables: {
@@ -101,7 +99,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
         });
         if (data && data.unlikeComment && data.unlikeComment._id) {
           setLikes((likes) => likes - 1);
-          setIsLikedByUser(false);
+          setIsupVotersUser(false);
           props.handleDislikeComment(props.id);
         }
       } catch (error: unknown) {
@@ -117,7 +115,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
 
         if (data && data.likeComment && data.likeComment._id) {
           setLikes((likes) => likes + 1);
-          setIsLikedByUser(true);
+          setIsupVotersUser(true);
           props.handleLikeComment(props.id);
         }
       } catch (error: unknown) {
@@ -143,7 +141,7 @@ function commentCard(props: InterfaceCommentCardProps): JSX.Element {
           >
             {likeLoading || unlikeLoading ? (
               <HourglassBottomIcon fontSize="small" />
-            ) : isLikedByUser ? (
+            ) : isupVotersUser ? (
               <ThumbUpIcon fontSize="small" />
             ) : (
               <ThumbUpOffAltIcon fontSize="small" />

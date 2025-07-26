@@ -433,16 +433,28 @@ export const UPDATE_POST_MUTATION = gql`
 `;
 
 export const LIKE_POST = gql`
-  mutation likePost($postId: ID!) {
-    likePost(id: $postId) {
-      _id
+  mutation createPostVote($input: MutationCreatePostVoteInput!) {
+    createPostVote(input: $input) {
+      id
+      type
     }
   }
 `;
 
+
 export const UNLIKE_POST = gql`
-  mutation unlikePost($postId: ID!) {
-    unlikePost(id: $postId) {
+  mutation deletePostVote($input: MutationDeletePostVoteInput!) {
+    deletePostVote(input: $input) {
+      id
+    }
+  }
+`;
+
+
+
+export const REGISTER_EVENT = gql`
+  mutation registerForEvent($eventId: ID!) {
+    registerForEvent(id: $eventId) {
       _id
     }
   }
@@ -592,7 +604,6 @@ export {
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
   DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
-  REGISTER_EVENT,
 } from './EventMutations';
 
 export const PRESIGNED_URL = gql`

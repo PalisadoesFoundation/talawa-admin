@@ -60,9 +60,9 @@ An array of comments on the post.
 
 > **likeCount**: `number`
 
-#### likedBy
+#### upVoters
 
-> **likedBy**: `object`[]
+> **upVoters**: `object`[]
 
 #### text
 
@@ -140,9 +140,9 @@ The number of likes on the post.
 
 ***
 
-### likedBy
+### upVoters
 
-> **likedBy**: `object`[]
+> **upVoters**: `object`[]
 
 Defined in: [src/utils/interfaces.ts:2138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2138)
 

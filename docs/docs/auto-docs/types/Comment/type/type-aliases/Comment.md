@@ -42,9 +42,9 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundatio
 
 ***
 
-### likedBy?
+### upVoters?
 
-> `optional` **likedBy**: [`User`](../../../User/type/type-aliases/User.md)[]
+> `optional` **upVoters**: [`User`](../../../User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)
 

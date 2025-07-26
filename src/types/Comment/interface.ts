@@ -4,7 +4,7 @@ export interface InterfaceCommentCardProps {
   id: string;
   creator: Partial<User>;
   likeCount: number;
-  likedBy: Partial<User>[];
+  upVoters: Partial<User>[];
   text: string;
   handleLikeComment: (commentId: string) => void;
   handleDislikeComment: (commentId: string) => void;

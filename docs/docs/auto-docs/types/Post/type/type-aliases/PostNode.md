@@ -82,9 +82,9 @@ Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation
 
 ***
 
-### likedBy
+### upVoters
 
-> **likedBy**: `object`[]
+> **upVoters**: `object`[]
 
 Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L116)
 

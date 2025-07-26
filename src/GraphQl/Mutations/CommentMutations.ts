@@ -19,7 +19,7 @@ export const CREATE_COMMENT_POST = gql`
         email
       }
       likeCount
-      likedBy {
+      upVoters {
         _id
       }
       text

@@ -10,7 +10,7 @@ export type Post = {
   creator?: User; // Optional
   imageUrl?: string; // Optional
   likeCount?: number; // Optional
-  likedBy?: User[]; // Optional
+  upVoters?: User[]; // Optional
   organization: Organization;
   pinned?: boolean; // Optional
   text: string;
@@ -90,40 +90,62 @@ export type PostComments = {
   };
 
   likeCount: number;
-  likedBy: {
+  upVoters: {
     id: string;
   }[];
   text: string;
 }[];
 
 export type PostLikes = {
-  firstName: string;
-  lastName: string;
+  name: string;
   id: string;
 }[];
 
 export type PostNode = {
-  commentCount: number;
+  id: string;
+  caption: string | null;
   createdAt: string;
+  commentCount: number;
   creator: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    _id: string;
+    id: string;
+    name: string;
+    emailAddress: string;
   };
-  imageUrl: string | null;
-  likeCount: number;
-  likedBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  pinned: boolean;
-  text: string;
-  title: string;
-  videoUrl: string | null;
-  _id: string;
+  upVotesCount: number; 
+  downVotesCount: number;
 
-  comments: PostComments;
-  likes: PostLikes;
+  upVoters: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
+
+  commentsCount: number;
+
+  comments?: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+        downVotesCount: number;
+        upVotesCount: number;
+        upVoters: {
+          id: string;
+        }[];
+        text: string;
+      };
+    }[];
+  };
 };
+
+

@@ -72,7 +72,7 @@ const MOCKS = [
                     commentCount: 0,
                     comments: [],
                     pinned: true,
-                    likedBy: [],
+                    upVoters: [],
                   },
                   cursor: '6411e53835d7ba2344a78e21',
                 },
@@ -93,7 +93,7 @@ const MOCKS = [
                     likeCount: 2,
                     commentCount: 1,
                     pinned: false,
-                    likedBy: [
+                    upVoters: [
                       {
                         _id: '640d98d9eb6a743d75341067',
                         firstName: 'Glen',
@@ -115,7 +115,7 @@ const MOCKS = [
                           email: 'glendsza@gmail.com',
                         },
                         likeCount: 2,
-                        likedBy: [
+                        upVoters: [
                           {
                             _id: '640d98d9eb6a743d75341067',
                             firstName: 'Glen',
