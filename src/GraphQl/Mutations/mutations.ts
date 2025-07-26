@@ -323,7 +323,7 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
 // to create the event by any organization
 
 export const CREATE_EVENT_MUTATION = gql`
-  mutation Mutation_createEvent($input: MutationCreateEventInput!) {
+  mutation CreateEvent($input: MutationCreateEventInput!) {
     createEvent(input: $input) {
       id
       name
@@ -334,18 +334,42 @@ export const CREATE_EVENT_MUTATION = gql`
       location
       isPublic
       isRegisterable
+      createdAt
+      updatedAt
+      # Recurring event fields (available for recurring events)
+      isRecurringEventTemplate
+      isMaterialized
+      hasExceptions
+      sequenceNumber
+      totalCount
+      progressLabel
+      instanceStartTime
+      # Attachments
+      attachments {
+        url
+        mimeType
+      }
+      # Relationships
+      creator {
+        id
+        name
+      }
       organization {
         id
+        name
       }
-      creator {
+      # Base event relationships (for recurring events)
+      baseEvent {
+        id
+        name
+      }
+      baseRecurringEvent {
         id
         name
       }
     }
   }
 `;
-
-// to delete any event by any organization
 
 export const DELETE_EVENT_MUTATION = gql`
   mutation DeleteEvent($input: MutationDeleteEventInput!) {

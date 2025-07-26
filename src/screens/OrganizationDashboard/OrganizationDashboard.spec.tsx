@@ -128,12 +128,7 @@ describe('OrganizationDashboard', () => {
       expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
       expect(screen.getByText('noPostsPresent')).toBeInTheDocument();
     });
-    const noRequestsElement = await screen.findByText(
-      (content) =>
-        content.includes('noMembershipRequests') ||
-        content.includes('membership') ||
-        content.includes('requests'),
-    );
+    const noRequestsElement = await screen.findByText('noMembershipRequests');
     expect(noRequestsElement).toBeInTheDocument();
   });
 

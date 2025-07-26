@@ -68,7 +68,7 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     // Verify basic event details
-    expect(getByTestId('event-title')).toHaveTextContent('Test Event');
+    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -95,7 +95,7 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     // Verify basic event details
-    expect(getByTestId('event-title')).toHaveTextContent('Test Event');
+    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -124,6 +124,6 @@ describe('Testing Event Dashboard Screen', () => {
     expect(queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     expect(queryByTestId('spinner')).not.toBeInTheDocument();
     expect(getByTestId('event-details')).toBeInTheDocument();
-    expect(getByTestId('event-title')).toBeInTheDocument();
+    expect(getByTestId('event-name')).toBeInTheDocument();
   });
 });

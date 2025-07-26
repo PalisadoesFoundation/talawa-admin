@@ -51,19 +51,26 @@ import type {
 } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 
-const Calendar: React.FC<InterfaceCalendarProps> = ({
+const Calendar: React.FC<
+  InterfaceCalendarProps & {
+    onMonthChange: (month: number, year: number) => void;
+    currentMonth: number;
+    currentYear: number;
+  }
+> = ({
   eventData,
   refetchEvents,
   orgData,
   userRole,
   userId,
   viewType,
+  onMonthChange,
+  currentMonth,
+  currentYear,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today.getDate());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
@@ -123,12 +130,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    onMonthChange(newMonth, newYear);
   };
 
   const filteredHolidays = useMemo(() => {
@@ -151,31 +155,20 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
+    const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+    onMonthChange(newMonth, newYear);
   };
 
   const handlePrevDate = (): void => {
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
-      if (currentMonth > 0) {
-        const lastDayOfPrevMonth = new Date(
-          currentYear,
-          currentMonth,
-          0,
-        ).getDate();
-        setCurrentDate(lastDayOfPrevMonth);
-        setCurrentMonth(currentMonth - 1);
-      } else {
-        setCurrentDate(31);
-        setCurrentMonth(11);
-        setCurrentYear(currentYear - 1);
-      }
+      const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+      const lastDayOfPrevMonth = new Date(newYear, newMonth + 1, 0).getDate();
+      setCurrentDate(lastDayOfPrevMonth);
+      onMonthChange(newMonth, newYear);
     }
   };
 
@@ -188,20 +181,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
     } else {
-      if (currentMonth < 11) {
-        setCurrentDate(1);
-        setCurrentMonth(currentMonth + 1);
-      } else {
-        setCurrentDate(1);
-        setCurrentMonth(0);
-        setCurrentYear(currentYear + 1);
-      }
+      const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+      const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+      setCurrentDate(1);
+      onMonthChange(newMonth, newYear);
     }
   };
 
   const handleTodayButton = (): void => {
-    setCurrentYear(today.getFullYear());
-    setCurrentMonth(today.getMonth());
+    const today = new Date();
+    onMonthChange(today.getMonth(), today.getFullYear());
     setCurrentDate(today.getDate());
   };
 
@@ -234,7 +223,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           key={datas._id}
           _id={datas._id}
           location={datas.location}
-          title={datas.title}
+          name={datas.name}
           description={datas.description}
           startDate={datas.startDate}
           endDate={datas.endDate}
@@ -403,7 +392,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               key={datas._id}
               _id={datas._id}
               location={datas.location}
-              title={datas.title}
+              name={datas.name}
               description={datas.description}
               startDate={datas.startDate}
               endDate={datas.endDate}

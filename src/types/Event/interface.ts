@@ -47,7 +47,7 @@ export interface IEvent {
   key?: string;
   _id: string;
   location: string;
-  title: string;
+  name: string;
   description: string;
   startDate: string;
   endDate: string;
@@ -61,6 +61,16 @@ export interface IEvent {
   creator: Partial<User>;
   averageFeedbackScore?: number;
   feedback?: Feedback[];
+  // Recurring event fields
+  isMaterialized?: boolean;
+  isRecurringTemplate?: boolean;
+  recurringEventId?: string | null;
+  instanceStartTime?: string | null;
+  baseEventId?: string | null;
+  sequenceNumber?: number | null;
+  totalCount?: number | null;
+  hasExceptions?: boolean;
+  progressLabel?: string | null;
 }
 
 export interface IOrgList {
@@ -99,6 +109,9 @@ export interface ICalendarProps {
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
+  onMonthChange?: (month: number, year: number) => void;
+  currentMonth?: number;
+  currentYear?: number;
 }
 
 export interface IEventHeaderProps {
@@ -140,14 +153,14 @@ export interface IPreviewEventModalProps {
   registrablechecked: boolean;
   setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
-    title: string;
+    name: string;
     eventdescrip: string;
     location: string;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
-    title: string;
+    name: string;
     eventdescrip: string;
     location: string;
     startTime: string;

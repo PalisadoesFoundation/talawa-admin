@@ -44,3 +44,11 @@ debug.log
 .idea
 .vscode
 *.swp
+
+# Plugin related
+/src/plugin/available/*
+!/src/plugin/available/readme.md
+
+# Cypress related
+cypress/videos
+cypress/screenshots

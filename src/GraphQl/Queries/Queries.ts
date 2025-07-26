@@ -491,9 +491,22 @@ export const IS_USER_BLOCKED = gql`
 `;
 
 export const GET_ORGANIZATION_EVENTS_PG = gql`
-  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+  query GetOrganizationEvents(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
     organization(input: { id: $id }) {
-      events(first: $first, after: $after) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
         edges {
           node {
             id
@@ -505,10 +518,32 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            # Recurring event fields
+            isMaterialized
+            isRecurringEventTemplate
+            instanceStartTime
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Creator information
             creator {
               id
               name
             }
+            # Organization
+            organization {
+              id
+              name
+            }
+            # Timestamps
+            createdAt
+            updatedAt
           }
           cursor
         }
@@ -635,20 +670,15 @@ export const MEMBERS_LIST_PG = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      members {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
-        organizationsBlockedBy {
-          _id
-        }
-      }
+  query GetMembersByOrganization($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
     }
   }
 `;
