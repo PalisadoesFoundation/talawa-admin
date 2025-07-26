@@ -133,13 +133,13 @@ const startPostModal = ({
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImageUserPost}>
               <Image
-                src={userData?.user?.image || UserDefault}
+                src={userData?.avatarURL || UserDefault}
                 roundedCircle
                 className="mt-2"
                 data-testid="userImage"
               />
             </span>
-            <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
+            <span>{`${userData?.name}`}</span>
           </span>
         </Modal.Title>
       </Modal.Header>

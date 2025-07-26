@@ -1969,53 +1969,41 @@ export interface InterfaceQueryBlockPageMemberListItem {
  * @property {string} appUserProfile.eventAdmin._id - The unique identifier of the event.
  */
 export interface InterfaceQueryUserListItem {
-  user: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string | null;
-    email: string;
-    organizationsBlockedBy: {
-      _id: string;
-      name: string;
-      image: string | null;
-      address: InterfaceAddress;
-      creator: {
-        _id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        image: string | null;
-      };
-      createdAt: string;
-    }[];
-    joinedOrganizations: {
-      _id: string;
-      name: string;
-      address: InterfaceAddress;
-      image: string | null;
-      createdAt: string;
-      creator: {
-        _id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        image: string | null;
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL: string | null;
+  birthDate: string | null;
+  city: string | null;
+  countryCode: string | null;
+  createdAt: string;
+  updatedAt: string;
+  educationGrade: string | null;
+  employmentStatus: string | null;
+  isEmailAddressVerified: boolean;
+  maritalStatus: string | null;
+  natalSex: string | null;
+  naturalLanguageCode: string | null;
+  postalCode: string | null;
+  role: string | null;
+  state: string | null;
+  mobilePhoneNumber: string | null;
+  homePhoneNumber: string | null;
+  workPhoneNumber: string | null;
+  createdOrganizations: {
+    id: string;
+    name: string;
+  }[];
+  organizationsWhereMember: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
       };
     }[];
-    createdAt: string;
-    registeredEvents: { _id: string }[];
-    membershipRequests: { id: string }[];
-  };
-  appUserProfile: {
-    _id: string;
-    adminFor: { _id: string }[];
-    isSuperAdmin: boolean;
-    createdOrganizations: { _id: string }[];
-    createdEvents: { _id: string }[];
-    eventAdmin: { _id: string }[];
   };
 }
+
 
 /**
  * @interface InterfaceQueryVenueListItem
@@ -2097,51 +2085,57 @@ export interface InterfaceCreateFund {
  * @property {string} comments.creator.lastName - The last name of the comment creator.
  * @property {string} comments.creator.email - The email address of the comment creator.
  * @property {number} comments.likeCount - The number of likes on the comment.
- * @property {object[]} comments.likedBy - An array of users who liked the comment.
- * @property {string} comments.likedBy.id - The unique identifier of the user who liked the comment.
+ * @property {object[]} comments.upVoters - An array of users who liked the comment.
+ * @property {string} comments.upVoters.id - The unique identifier of the user who liked the comment.
  * @property {string} comments.text - The text content of the comment.
- * @property {object[]} likedBy - An array of users who liked the post.
- * @property {string} likedBy.firstName - The first name of the user who liked the post.
- * @property {string} likedBy.lastName - The last name of the user who liked the post.
- * @property {string} likedBy.id - The unique identifier of the user who liked the post.
+ * @property {object[]} upVoters - An array of users who liked the post.
+ * @property {string} upVoters.firstName - The first name of the user who liked the post.
+ * @property {string} upVoters.lastName - The last name of the user who liked the post.
+ * @property {string} upVoters.id - The unique identifier of the user who liked the post.
  * @property {function} fetchPosts - A function to fetch posts.
  */
 export interface InterfacePostCard {
   id: string;
   creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
     id: string;
+    name: string;
+    email: string;
   };
   postedAt: string;
   image: string | null;
   video: string | null;
-  text: string;
   title: string;
-  likeCount: number;
+  text: string;
   commentCount: number;
+  upVoters: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  }; // ✅ updated to match the GraphQL query structure
+  upVoteCount: number;
+  downVoteCount: number;
   comments: {
     id: string;
     creator: {
       id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
       email: string;
     };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
+    downVoteCount: number;
+    upVoteCount: number;
+    upVoters: { id: string }[];
     text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
   }[];
   fetchPosts: () => void;
 }
+
+
 
 /**
  * @interface InterfaceCreatePledge

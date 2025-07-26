@@ -14,37 +14,83 @@ import gql from 'graphql-tag';
  */
 
 export const ORGANIZATION_POST_LIST = gql`
-  query OrganizationPostList(
-    $input: QueryOrganizationInput!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
+query OrganizationPostList(
+  $input: QueryOrganizationInput!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  organization(input: $input) {
+    id
+    posts(after: $after, before: $before, first: $first, last: $last) {
+      edges {
+        node {
+          id
+          caption
+          commentsCount
+          pinnedAt
+          downVotesCount
+          upVoters(first: 10) { # or any number based on how many upvoters you want to fetch
+  edges {
+    node {
       id
-      posts(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            id
-            caption
-            creator {
-              id
-            }
-            createdAt
-          }
-          cursor
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
+      creator {
+        id
+        name
       }
     }
   }
+  pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+}
+          upVotesCount
+          creator {
+            id
+            name
+          }
+          createdAt
+
+          comments(first: 10) { # fetch comments
+            edges {
+              node {
+                id
+                creator {
+                  id
+                  name
+                }
+                downVotesCount
+                upVotesCount
+                
+                body
+              }
+            }
+            pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+}
+
 `;
+
 
 export const GET_POSTS_BY_ORG = gql`
   query GetPostsByOrganization($input: GetPostsByOrgInput!) {

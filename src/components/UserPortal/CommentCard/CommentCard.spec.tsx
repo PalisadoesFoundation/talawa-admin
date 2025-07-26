@@ -83,7 +83,7 @@ const defaultProps = {
     email: 'test@user.com',
   },
   likeCount: 1,
-  likedBy: [{ id: '1' }],
+  upVoters: [{ id: '1' }],
   text: 'testComment',
   handleLikeComment: vi.fn(),
   handleDislikeComment: vi.fn(),
@@ -114,7 +114,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         email: 'test@user.com',
       },
       likeCount: 1,
-      likedBy: [
+      upVoters: [
         {
           id: '1',
         },
@@ -155,7 +155,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         email: 'test@user.com',
       },
       likeCount: 1,
-      likedBy: [
+      upVoters: [
         {
           id: '1',
         },
@@ -196,7 +196,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         email: 'test@user.com',
       },
       likeCount: 1,
-      likedBy: [
+      upVoters: [
         {
           id: '1',
         },
@@ -242,7 +242,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         email: 'test@user.com',
       },
       likeCount: 1,
-      likedBy: [
+      upVoters: [
         {
           id: '1',
         },

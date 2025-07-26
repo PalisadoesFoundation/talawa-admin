@@ -730,90 +730,45 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-  query User(
-    $id: ID!
-    $after: String
-    $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-  ) {
-    user(id: $id) {
-      user {
-        _id
-        eventsAttended {
-          _id
-        }
-        joinedOrganizations {
-          _id
-        }
-        firstName
-        lastName
-        email
-        image
-        createdAt
-        birthDate
-        educationGrade
-        employmentStatus
-        gender
-        maritalStatus
-        phone {
-          mobile
-        }
-        address {
-          line1
-          countryCode
-          city
-          state
-        }
-        tagsAssignedWith(
-          after: $after
-          before: $before
-          first: $first
-          last: $last
-        ) {
-          edges {
-            node {
-              _id
-              name
-              parentTag {
-                _id
-              }
-            }
-          }
-          pageInfo {
-            startCursor
-            endCursor
-            hasNextPage
-            hasPreviousPage
-          }
-          totalCount
-        }
-        registeredEvents {
-          _id
-        }
-        membershipRequests {
-          _id
-        }
-      }
-      appUserProfile {
-        _id
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        appLanguageCode
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
+query User($input: QueryUserInput!) {
+  user(input: $input) {
+    id
+    name
+    emailAddress
+    avatarURL
+    birthDate
+    city
+    countryCode
+    createdAt
+    updatedAt
+    educationGrade
+    employmentStatus
+    isEmailAddressVerified
+    maritalStatus
+    natalSex
+    naturalLanguageCode
+    postalCode
+    role
+    state
+    mobilePhoneNumber
+    homePhoneNumber
+    workPhoneNumber
+
+    organizationsWhereMember(first: 10) {
+      edges {
+        node {
+          id
+          name
         }
       }
     }
+
+    createdOrganizations {
+      id
+      name
+    }
   }
+}
 `;
 
 export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`

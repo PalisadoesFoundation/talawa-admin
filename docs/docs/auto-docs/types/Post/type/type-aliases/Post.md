@@ -66,9 +66,9 @@ Defined in: [src/types/Post/type.ts:12](https://github.com/PalisadoesFoundation/
 
 ***
 
-### likedBy?
+### upVoters?
 
-> `optional` **likedBy**: [`User`](../../../User/type/type-aliases/User.md)[]
+> `optional` **upVoters**: [`User`](../../../User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Post/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L13)
 

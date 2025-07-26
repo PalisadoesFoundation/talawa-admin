@@ -74,6 +74,9 @@ import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
 import { PostComments, PostLikes, PostNode } from 'types/Post/type';
+import { useLazyQuery } from '@apollo/client';
+import { log } from 'console';
+
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
   desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
@@ -121,30 +124,45 @@ export default function home(): JSX.Element {
     variables: { id: orgId, first: 6 },
   });
 
-  const {
-    data,
-    refetch,
-    loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, { variables: { id: orgId, first: 10 } });
+const { data, refetch, loading: loadingPosts } = useQuery(ORGANIZATION_POST_LIST, {
+  variables: {
+    input: { id: orgId },  
+    first: 10,
+  },
+});
+console.log("data", data);
+// console.log("orgId", orgId);
+
+
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
+  // console.log("userId", userId);
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: {
-      id: userId,
+      input: { id: userId, },
       first: TAGS_QUERY_DATA_CHUNK_SIZE, // This is for tagsAssignedWith pagination
     },
   });
+// console.log("User Data", userData);
+
+
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
+// console.log(user?.id);
+// console.log(user?.name);
+// console.log(user?.emailAddress);
+
+
   // Effect hook to update posts state when data changes
-  useEffect(() => {
-    if (data) {
-      setPosts(data.organizations[0].posts.edges);
-    }
-  }, [data]);
+useEffect(() => {
+  if (data && data.organization && data.organization.posts) {
+    setPosts(data.organization.posts.edges);
+  }
+}, [data]);
+
 
   // Effect hook to update advertisements state when data changes
   useEffect(() => {
@@ -161,7 +179,7 @@ export default function home(): JSX.Element {
   useEffect(() => {
     setPinnedPosts(
       posts.filter(({ node }: { node: PostNode }) => {
-        return node.pinned;
+        return node;
       }),
     );
   }, [posts]);
@@ -172,68 +190,94 @@ export default function home(): JSX.Element {
    * @param node - The post node to convert.
    * @returns The props for the `PostCard` component.
    */
-  const getCardProps = (node: PostNode): InterfacePostCard => {
-    const {
-      creator,
-      _id,
-      imageUrl,
-      videoUrl,
-      title,
-      text,
-      likeCount,
-      commentCount,
-      likedBy,
-      comments,
-    } = node;
 
-    const allLikes: PostLikes = likedBy.map((value) => ({
-      firstName: value.firstName,
-      lastName: value.lastName,
-      id: value._id,
-    }));
 
-    const postComments: PostComments = comments?.map((value) => ({
-      id: value.id,
+
+const getCardProps = (node: PostNode): InterfacePostCard => {
+  const {
+    id,
+    caption,
+    createdAt,
+    creator,
+    upVoters,
+    upVotesCount,
+    downVotesCount,
+    comments,
+  } = node;
+
+if (upVotesCount > 0) {
+  console.log(`Post ID: ${id}, upVotesCount: ${upVotesCount}`);
+  
+  const voters =
+    upVoters?.edges?.map(edge => ({
+      node: {
+      id: edge.node.id,
       creator: {
-        firstName: value.creator?.firstName ?? '',
-        lastName: value.creator?.lastName ?? '',
-        id: value.creator?.id ?? '',
-        email: value.creator?.email ?? '',
+        id: edge.node.creator.id,
+        name: edge.node.creator.name,
       },
-      likeCount: value.likeCount,
-      likedBy: value.likedBy?.map((like) => ({ id: like?.id ?? '' })) ?? [],
-      text: value.text,
-    }));
+    },
+    })) || [];
 
-    const date = new Date(node.createdAt);
-    const formattedDate = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(date);
+  console.log("Upvoted by:", voters);
+}
 
-    const cardProps: InterfacePostCard = {
-      id: _id,
+
+
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(createdAt));
+
+  const cardProps: InterfacePostCard = {
+    id,
+    creator: {
+      id: creator.id,
+      name: creator.name,
+      email: creator.emailAddress,
+    },
+    postedAt: formattedDate,
+    image: null,
+    video: null,
+    title: caption ?? '',
+    text: '',
+    commentCount: node.commentsCount,
+    upVoters: {
+  edges: upVoters?.edges?.map(edge => ({
+    node: {
+      id: edge.node.id,
       creator: {
-        id: creator._id,
-        firstName: creator.firstName,
-        lastName: creator.lastName,
-        email: creator.email,
+        id: edge.node.creator.id,
+        name: edge.node.creator.name,
       },
-      postedAt: formattedDate,
-      image: imageUrl,
-      video: videoUrl,
-      title,
-      text,
-      likeCount,
-      commentCount,
-      comments: postComments,
-      likedBy: allLikes,
-      fetchPosts: () => refetch(),
-    };
+    },
+  })) || [],
+},
 
-    return cardProps;
+
+    upVoteCount: upVotesCount,
+    downVoteCount: downVotesCount,
+    comments: comments?.edges?.map(({ node: comment }) => ({
+      id: comment.id,
+      creator: {
+        id: comment.creator.id,
+        name: comment.creator.name,
+        email: comment.creator.emailAddress,
+      },
+      downVoteCount: comment.downVotesCount,
+      upVoteCount: comment.upVotesCount,
+      upVoters: comment?.upVoters?.map(like => ({
+        id: like.id,
+      })),
+      text: comment.text,
+    })) ?? [],
+    fetchPosts: () => refetch(),
   };
+
+  return cardProps;
+};
+
 
   /**
    * Opens the post creation modal.
@@ -301,7 +345,7 @@ export default function home(): JSX.Element {
               <Carousel responsive={responsive}>
                 {pinnedPosts.map(({ node }: { node: PostNode }) => {
                   const cardProps = getCardProps(node);
-                  return <PostCard key={node._id} {...cardProps} />;
+                  return <PostCard key={node.id} {...cardProps} />;
                 })}
               </Carousel>
             )}
@@ -332,7 +376,7 @@ export default function home(): JSX.Element {
                   <Row className="my-2">
                     {posts.map(({ node }: { node: PostNode }) => {
                       const cardProps = getCardProps(node);
-                      return <PostCard key={node._id} {...cardProps} />;
+                      return <PostCard key={node.id} {...cardProps} />;
                     })}
                   </Row>
                 ) : (

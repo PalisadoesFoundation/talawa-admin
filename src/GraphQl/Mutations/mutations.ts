@@ -496,20 +496,23 @@ export const UPDATE_EVENT_MUTATION = gql`
 `;
 
 export const LIKE_POST = gql`
-  mutation likePost($postId: ID!) {
-    likePost(id: $postId) {
-      _id
+  mutation createPostVote($input: MutationCreatePostVoteInput!) {
+    createPostVote(input: $input) {
+      id
+      type
     }
   }
 `;
 
+
 export const UNLIKE_POST = gql`
-  mutation unlikePost($postId: ID!) {
-    unlikePost(id: $postId) {
-      _id
+  mutation deletePostVote($input: MutationDeletePostVoteInput!) {
+    deletePostVote(input: $input) {
+      id
     }
   }
 `;
+
 
 export const REGISTER_EVENT = gql`
   mutation registerForEvent($eventId: ID!) {
