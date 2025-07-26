@@ -2,6 +2,8 @@
  * EventListCardDeleteModal Component
  *
  * This component renders a modal for confirming the deletion of an event.
+ * For standalone events, shows simple confirmation.
+ * For recurring instances, shows three deletion options.
  *
  * @param  props - The props for the component.
  * @param eventListCardProps - The properties of the event to be deleted.
@@ -16,6 +18,7 @@
  * @remarks
  * - The modal is styled using `app-fixed.module.css`.
  * - The modal is centered and has a static backdrop to prevent accidental closure.
+ * - For recurring events, provides three deletion options: this instance, this and following, or all events.
  *
  * @example
  * ```tsx
@@ -29,8 +32,8 @@
  * />
  * ```
  */
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Modal, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 
@@ -42,9 +45,25 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   tCommon,
   deleteEventHandler,
 }) => {
+  const [deleteOption, setDeleteOption] = useState<
+    'single' | 'following' | 'all'
+  >('single');
+
+  // Check if this is a recurring instance
+  const isRecurringInstance =
+    !eventListCardProps.isRecurringTemplate && !!eventListCardProps.baseEventId;
+
+  const handleDelete = () => {
+    if (isRecurringInstance) {
+      deleteEventHandler(deleteOption);
+    } else {
+      deleteEventHandler();
+    }
+  };
+
   return (
     <Modal
-      size="sm"
+      size={isRecurringInstance ? 'lg' : 'sm'}
       id={`deleteEventModal${eventListCardProps._id}`}
       show={eventDeleteModalIsOpen}
       onHide={toggleDeleteModal}
@@ -60,7 +79,47 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           {t('deleteEvent')}
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>{t('deleteEventMsg')}</Modal.Body>
+      <Modal.Body>
+        {isRecurringInstance ? (
+          <div>
+            <p>{t('deleteRecurringEventMsg')}</p>
+            <Form>
+              <Form.Check
+                type="radio"
+                id="delete-single"
+                name="deleteOption"
+                value="single"
+                checked={deleteOption === 'single'}
+                onChange={() => setDeleteOption('single')}
+                label={t('deleteThisInstance')}
+                className="mb-2"
+              />
+              <Form.Check
+                type="radio"
+                id="delete-following"
+                name="deleteOption"
+                value="following"
+                checked={deleteOption === 'following'}
+                onChange={() => setDeleteOption('following')}
+                label={t('deleteThisAndFollowing')}
+                className="mb-2"
+              />
+              <Form.Check
+                type="radio"
+                id="delete-all"
+                name="deleteOption"
+                value="all"
+                checked={deleteOption === 'all'}
+                onChange={() => setDeleteOption('all')}
+                label={t('deleteAllEvents')}
+                className="mb-2"
+              />
+            </Form>
+          </div>
+        ) : (
+          <p>{t('deleteEventMsg')}</p>
+        )}
+      </Modal.Body>
       <Modal.Footer>
         <Button
           type="button"
@@ -74,7 +133,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
         <Button
           type="button"
           className={`btn ${styles.addButton}`}
-          onClick={deleteEventHandler}
+          onClick={handleDelete}
           data-testid="deleteEventBtn"
         >
           {tCommon('yes')}

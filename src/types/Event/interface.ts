@@ -130,7 +130,9 @@ export interface IDeleteEventModalProps {
   toggleDeleteModal: () => void;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  deleteEventHandler: () => Promise<void>;
+  deleteEventHandler: (
+    deleteOption?: 'single' | 'following' | 'all',
+  ) => Promise<void>;
 }
 
 export interface IPreviewEventModalProps {

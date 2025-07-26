@@ -556,6 +556,10 @@
   "eventListCard": {
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
+    "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
+    "deleteThisInstance": "Delete only this instance",
+    "deleteThisAndFollowing": "Delete this and all following events",
+    "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
     "eventName": "Name",
     "alreadyRegistered": "Already registered",

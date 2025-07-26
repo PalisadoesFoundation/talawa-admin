@@ -235,6 +235,13 @@ const Calendar: React.FC<
           attendees={datas.attendees || []}
           creator={datas.creator}
           userId={userId}
+          // Recurring event fields
+          isRecurringTemplate={datas.isRecurringTemplate}
+          baseEventId={datas.baseEventId}
+          sequenceNumber={datas.sequenceNumber}
+          totalCount={datas.totalCount}
+          hasExceptions={datas.hasExceptions}
+          progressLabel={datas.progressLabel}
         />
       ),
     );
@@ -404,6 +411,13 @@ const Calendar: React.FC<
               attendees={datas.attendees || []}
               creator={datas.creator}
               userId={userId}
+              // Recurring event fields
+              isRecurringTemplate={datas.isRecurringTemplate}
+              baseEventId={datas.baseEventId}
+              sequenceNumber={datas.sequenceNumber}
+              totalCount={datas.totalCount}
+              hasExceptions={datas.hasExceptions}
+              progressLabel={datas.progressLabel}
             />
           )) || [];
 
