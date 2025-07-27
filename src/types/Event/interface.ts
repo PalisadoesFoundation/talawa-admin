@@ -61,6 +61,16 @@ export interface IEvent {
   creator: Partial<User>;
   averageFeedbackScore?: number;
   feedback?: Feedback[];
+  // Recurring event fields
+  isMaterialized?: boolean;
+  isRecurringTemplate?: boolean;
+  recurringEventId?: string | null;
+  instanceStartTime?: string | null;
+  baseEventId?: string | null;
+  sequenceNumber?: number | null;
+  totalCount?: number | null;
+  hasExceptions?: boolean;
+  progressLabel?: string | null;
 }
 
 export interface IOrgList {
@@ -99,6 +109,9 @@ export interface ICalendarProps {
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
+  onMonthChange?: (month: number, year: number) => void;
+  currentMonth?: number;
+  currentYear?: number;
 }
 
 export interface IEventHeaderProps {
