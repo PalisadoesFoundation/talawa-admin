@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">IDeleteEventModalProps | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/auto-docs/types/Event/interface/interfaces/IDeleteEventModalProps"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="IDeleteEventModalProps | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Admin Docs"><meta data-rh="true" property="og:description" content="Admin Docs"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/auto-docs/types/Event/interface/interfaces/IDeleteEventModalProps"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/types/Event/interface/interfaces/IDeleteEventModalProps" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/types/Event/interface/interfaces/IDeleteEventModalProps" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"IDeleteEventModalProps","item":"https://docs-admin.talawa.io/docs/auto-docs/types/Event/interface/interfaces/IDeleteEventModalProps"}]}</script><link rel="stylesheet" href="/assets/css/styles.b7e1fda9.css">
-<script src="/assets/js/runtime~main.1c2176ef.js" defer="defer"></script>
-<script src="/assets/js/main.179b2e53.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.bb1100d6.js" defer="defer"></script>
+<script src="/assets/js/main.8fba0784.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -18,9 +18,12 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="deleteeventhandler">deleteEventHandler()<a href="#deleteeventhandler" class="hash-link" aria-label="Direct link to deleteEventHandler()" title="Direct link to deleteEventHandler()">​</a></h3>
 <blockquote>
-<p><strong>deleteEventHandler</strong>: () =&gt; <code>Promise</code>&lt;<code>void</code>&gt;</p>
+<p><strong>deleteEventHandler</strong>: (<code>deleteOption</code>?) =&gt; <code>Promise</code>&lt;<code>void</code>&gt;</p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L133" target="_blank" rel="noopener noreferrer">src/types/Event/interface.ts:133</a></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters">​</a></h4>
+<h5 class="anchor anchorWithStickyNavbar_LWe7" id="deleteoption">deleteOption?<a href="#deleteoption" class="hash-link" aria-label="Direct link to deleteOption?" title="Direct link to deleteOption?">​</a></h5>
+<p><code>&quot;single&quot;</code> | <code>&quot;following&quot;</code> | <code>&quot;all&quot;</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns">Returns<a href="#returns" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns">​</a></h4>
 <p><code>Promise</code>&lt;<code>void</code>&gt;</p>
 <hr>
@@ -41,7 +44,7 @@
 <p><strong>t</strong>: (<code>key</code>) =&gt; <code>string</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L131" target="_blank" rel="noopener noreferrer">src/types/Event/interface.ts:131</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="key">key<a href="#key" class="hash-link" aria-label="Direct link to key" title="Direct link to key">​</a></h5>
 <p><code>string</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns">​</a></h4>
@@ -52,7 +55,7 @@
 <p><strong>tCommon</strong>: (<code>key</code>) =&gt; <code>string</code></p>
 </blockquote>
 <p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L132" target="_blank" rel="noopener noreferrer">src/types/Event/interface.ts:132</a></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="key-1">key<a href="#key-1" class="hash-link" aria-label="Direct link to key" title="Direct link to key">​</a></h5>
 <p><code>string</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns">​</a></h4>
