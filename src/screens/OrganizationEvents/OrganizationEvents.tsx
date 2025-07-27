@@ -50,11 +50,11 @@ interface IEventEdge {
     isPublic: boolean;
     isRegisterable: boolean;
     // Recurring event fields
-    isMaterialized?: boolean;
-    isRecurringTemplate?: boolean;
-    recurringEventId?: string | null;
-    instanceStartTime?: string | null;
-    baseEventId?: string | null;
+    isRecurringEventTemplate?: boolean;
+    baseEvent?: {
+      id: string;
+      name: string;
+    } | null;
     sequenceNumber?: number | null;
     totalCount?: number | null;
     hasExceptions?: boolean;
@@ -182,11 +182,8 @@ function organizationEvents(): JSX.Element {
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
     // Add recurring event information
-    isMaterialized: edge.node.isMaterialized,
-    isRecurringTemplate: edge.node.isRecurringTemplate,
-    recurringEventId: edge.node.recurringEventId,
-    instanceStartTime: edge.node.instanceStartTime,
-    baseEventId: edge.node.baseEventId,
+    isRecurringTemplate: edge.node.isRecurringEventTemplate,
+    baseEventId: edge.node.baseEvent?.id || null,
     sequenceNumber: edge.node.sequenceNumber,
     totalCount: edge.node.totalCount,
     hasExceptions: edge.node.hasExceptions,

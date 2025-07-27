@@ -17,7 +17,7 @@ import {
   validateRecurrenceInput,
   formatRecurrenceForApi,
 } from '../../utils/recurrenceUtils';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import { errorHandler } from 'utils/errorHandler';

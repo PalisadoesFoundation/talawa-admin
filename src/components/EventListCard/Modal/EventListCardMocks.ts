@@ -1,14 +1,17 @@
 import {
-  DELETE_EVENT_MUTATION,
+  DELETE_STANDALONE_EVENT_MUTATION,
+  DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
+  DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+} from 'GraphQl/Mutations/EventMutations';
 import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
     request: {
-      query: DELETE_EVENT_MUTATION,
+      query: DELETE_STANDALONE_EVENT_MUTATION,
       variables: {
         input: {
           id: '1',
@@ -17,8 +20,8 @@ export const MOCKS = [
     },
     result: {
       data: {
-        removeEvent: {
-          _id: '1',
+        deleteStandaloneEvent: {
+          id: '1',
         },
       },
     },
@@ -200,7 +203,7 @@ export const MOCKS = [
 export const ERROR_MOCKS = [
   {
     request: {
-      query: DELETE_EVENT_MUTATION,
+      query: DELETE_STANDALONE_EVENT_MUTATION,
       variables: {
         input: {
           id: '1',

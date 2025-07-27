@@ -556,6 +556,10 @@
   "eventListCard": {
     "deleteEvent": "删除事件",
     "deleteEventMsg": "您想删除此事件吗？",
+    "deleteRecurringEventMsg": "这是一个重复事件。请选择您想要如何删除它：",
+    "deleteThisInstance": "仅删除此实例",
+    "deleteThisAndFollowing": "删除此事件和所有后续事件",
+    "deleteAllEvents": "删除此系列中的所有事件",
     "editEvent": "编辑事件",
     "eventName": "名称",
     "alreadyRegistered": "已经注册",

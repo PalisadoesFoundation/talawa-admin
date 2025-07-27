@@ -10,9 +10,15 @@ Defined in: [src/types/Event/interface.ts:127](https://github.com/PalisadoesFoun
 
 ### deleteEventHandler()
 
-> **deleteEventHandler**: () => `Promise`\<`void`\>
+> **deleteEventHandler**: (`deleteOption`?) => `Promise`\<`void`\>
 
 Defined in: [src/types/Event/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L133)
+
+#### Parameters
+
+##### deleteOption?
+
+`"single"` | `"following"` | `"all"`
 
 #### Returns
 
