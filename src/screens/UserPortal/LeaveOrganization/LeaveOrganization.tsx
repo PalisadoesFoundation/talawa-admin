@@ -42,7 +42,10 @@
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { ORGANIZATIONS_LIST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATIONS_LIST_BASIC,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
@@ -84,7 +87,7 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST, { variables: { id: organizationId } });
+  } = useQuery(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
 
   /**
    * Mutation to remove the member from the organization.
