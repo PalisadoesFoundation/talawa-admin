@@ -813,6 +813,16 @@ type Mutation {
   ): ActionItemCategory
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
+  deleteEntireRecurringEventSeries(
+    input: MutationDeleteEntireRecurringEventSeriesInput!
+  ): EventPg
+  deleteSingleEventInstance(
+    input: MutationDeleteSingleEventInstanceInput!
+  ): EventPg
+  deleteStandaloneEvent(input: MutationDeleteStandaloneEventInput!): EventPg
+  deleteThisAndFollowingEvents(
+    input: MutationDeleteThisAndFollowingEventsInput!
+  ): EventPg
   deleteVenue(id: ID!): Venue
   editVenue(data: EditVenueInput!): Venue
   forgotPassword(data: ForgotPasswordData!): Boolean!
@@ -831,7 +841,6 @@ type Mutation {
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
-  removeEvent(id: ID!): Event!
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
   removeMember(data: UserAndOrganizationInput!): Organization!
@@ -878,7 +887,7 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(data: MutationUpdateEventInput, id: ID!): Event!
+  updateEvent(input: MutationUpdateEventInput!): EventPg
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -1267,16 +1276,13 @@ type EventPg {
   isPublic: Boolean
   isRegisterable: Boolean
   # Recurring event fields
-  isMaterialized: Boolean
   isRecurringEventTemplate: Boolean
-  instanceStartTime: DateTime
   sequenceNumber: Int
   totalCount: Int
   hasExceptions: Boolean
   progressLabel: String
   # Base event relationships
   baseEvent: EventPg
-  baseRecurringEvent: EventPg
   # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
@@ -2218,7 +2224,20 @@ input MutationUpdateEventInput {
   isPublic: Boolean
   isRegisterable: Boolean
 }
+input MutationDeleteEntireRecurringEventSeriesInput {
+  id: ID!
+}
 
+input MutationDeleteSingleEventInstanceInput {
+  id: ID!
+}
+input MutationDeleteStandaloneEventInput {
+  id: ID!
+}
+
+input MutationDeleteThisAndFollowingEventsInput {
+  id: ID!
+}
 input MutationUpdateUserInput {
   addressLine1: String
   addressLine2: String

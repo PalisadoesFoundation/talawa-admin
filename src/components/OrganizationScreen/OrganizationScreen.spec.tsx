@@ -159,4 +159,17 @@ describe('Testing OrganizationScreen', () => {
     // Clean up the spy
     warnSpy.mockRestore();
   });
+
+  test('displays event name when on event path with valid event', async () => {
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'event123', orgId: '123' },
+    });
+    renderComponent();
+    await waitFor(() => {
+      const eventNameElement = screen.getByText('Test Event Title');
+      expect(eventNameElement).toBeInTheDocument();
+      expect(eventNameElement.tagName).toBe('H4');
+    });
+  });
 });
