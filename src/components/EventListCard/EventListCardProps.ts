@@ -23,6 +23,13 @@ export const props: IEventListCardProps[] = [
     },
     attendees: [],
     creator: {},
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     key: '123',
@@ -42,6 +49,13 @@ export const props: IEventListCardProps[] = [
     },
     attendees: [],
     creator: {},
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     userRole: 'REGULAR',
@@ -70,6 +84,13 @@ export const props: IEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     userRole: 'REGULAR',
@@ -98,6 +119,13 @@ export const props: IEventListCardProps[] = [
     refetchEvents: (): void => {
       /* refetch function */
     },
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     userRole: 'ADMINISTRATOR',
@@ -118,6 +146,13 @@ export const props: IEventListCardProps[] = [
     },
     attendees: [],
     creator: {},
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     userRole: 'ADMINISTRATOR',
@@ -138,6 +173,13 @@ export const props: IEventListCardProps[] = [
     },
     attendees: [],
     creator: {},
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
   {
     userRole: 'ADMINISTRATOR',
@@ -158,5 +200,12 @@ export const props: IEventListCardProps[] = [
     },
     attendees: [],
     creator: {},
+    // Recurring event fields
+    isRecurringTemplate: false,
+    baseEventId: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
   },
 ];

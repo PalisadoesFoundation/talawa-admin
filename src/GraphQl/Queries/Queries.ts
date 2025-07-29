@@ -519,9 +519,11 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             isPublic
             isRegisterable
             # Recurring event fields
-            isMaterialized
             isRecurringEventTemplate
-            instanceStartTime
+            baseEvent {
+              id
+              name
+            }
             sequenceNumber
             totalCount
             hasExceptions
