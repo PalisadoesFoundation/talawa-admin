@@ -39,6 +39,7 @@ describe('Testing Page not found component', () => {
         __typename: 'Organization',
       },
     ]);
+    setItem('role', 'administrator');
     render(
       <BrowserRouter>
         <Provider store={store}>
