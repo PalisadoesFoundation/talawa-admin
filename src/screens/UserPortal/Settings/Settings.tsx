@@ -175,7 +175,7 @@ export default function Settings(): React.JSX.Element {
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
-        setItem('email', updateData.updateCurrentUser.emailAddress);
+        setItem('email', updateData.updateCurrentuser.emailAddressAddress);
         setItem('id', updateData.updateCurrentUser.id);
         setItem('role', updateData.updateCurrentUser.role);
         setSelectedAvatar(null);

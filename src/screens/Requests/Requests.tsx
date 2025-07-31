@@ -27,7 +27,7 @@
  * @property {Object} user - The user details associated with the request.
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  *
  * @component
  * @name Requests

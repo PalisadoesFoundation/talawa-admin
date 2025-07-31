@@ -42,14 +42,6 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundatio
 
 ***
 
-### upVoters?
-
-> `optional` **upVoters**: [`User`](../../../User/type/type-aliases/User.md)[]
-
-Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)
-
-***
-
 ### post
 
 > **post**: [`Post`](../../../Post/type/type-aliases/Post.md)
@@ -71,3 +63,11 @@ Defined in: [src/types/Comment/type.ts:11](https://github.com/PalisadoesFoundati
 > **updatedAt**: `Date`
 
 Defined in: [src/types/Comment/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L12)
+
+***
+
+### upVoters?
+
+> `optional` **upVoters**: [`User`](../../../User/type/type-aliases/User.md)[]
+
+Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)

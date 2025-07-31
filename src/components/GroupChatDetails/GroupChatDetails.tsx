@@ -394,7 +394,7 @@ export default function groupChatDetails({
                                 ' ' +
                                 userDetails.user.lastName}
                               <br />
-                              {userDetails.user.email}
+                              {userDetails.user.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button

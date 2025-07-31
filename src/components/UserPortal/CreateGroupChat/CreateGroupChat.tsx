@@ -341,7 +341,7 @@ export default function CreateGroupChat({
                                 ' ' +
                                 userDetails.user.lastName}
                               <br />
-                              {userDetails.user.email}
+                              {userDetails.user.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               {userIds.includes(userDetails.user._id) ? (

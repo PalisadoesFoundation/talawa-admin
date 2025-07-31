@@ -241,7 +241,7 @@ const Users = (): JSX.Element => {
         const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
         const uniqueUsers = Array.from(
-          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+          new Map(mergedUsers.map((user) => [user.id, user])).values(),
         );
         if (uniqueUsers.length < mergedUsers.length) {
           setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
@@ -441,7 +441,7 @@ const Users = (): JSX.Element => {
                     (user: InterfaceQueryUserListItem, index: number) => {
                       return (
                         <UsersTableItem
-                          key={user.user._id}
+                          key={user.id}
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}

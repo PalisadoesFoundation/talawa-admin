@@ -1,31 +1,6 @@
-/**
- * Component representing a post card in the user portal.
- *
- * This component displays a post with its details such as title, content, creator,
- * likes, comments, and associated actions like editing, deleting, liking, and commenting.
- * It also includes modals for viewing the post in detail and editing the post content.
- *
- * @param props - The properties of the post card.
- * @param props.id - Unique identifier for the post.
- * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
- * @param props.title - Title of the post.
- * @param props.text - Content of the post.
- * @param props.image - URL of the post's image.
- * @param props.postedAt - Date when the post was created.
- * @param props.likeCount - Number of likes on the post.
- * @param props.upVoters - Array of users who liked the post.
- * @param props.comments - Array of comments on the post.
- * @param props.commentCount - Total number of comments on the post.
- * @param props.fetchPosts - Function to refresh the list of posts.
- *
- * @returns A JSX.Element representing the post card.
- *
- * @remarks
- * - Includes GraphQL mutations for liking, unliking, commenting, editing, and deleting posts.
- * - Uses `react-bootstrap` for UI components and `@apollo/client` for GraphQL operations.
- * - Handles state for likes, comments, and modals using React hooks.
- * - Displays error messages and success notifications using `react-toastify`.
- */
+// Updated PostCard component without local like/comment state management
+// All updates now reflect directly to DB and rely on fresh fetch from parent
+
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -54,280 +29,112 @@ import type { InterfacePostCard } from 'utils/interfaces';
 import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
-  LIKE_POST,
-  UNLIKE_POST,
+  UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import CommentCard from '../CommentCard/CommentCard';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 import UserDefault from '../../../assets/images/defaultImg.png';
+import useLocalStorage from 'utils/useLocalstorage';
 
-interface InterfaceCommentCardProps {
-  id: string;
-  creator: { id: string; name: string; email: string; };
-  text: string;
-  upVoteCount: number;
-  downVoteCount: number;
-  upVoters: { id: string }[];
-  handleLikeComment: (commentId: string) => void;
-  handleDislikeComment: (commentId: string) => void;
-}
-
-
-export default function postCard(props: InterfacePostCard): JSX.Element {
+export default function PostCard(props: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
-
   const { getItem } = useLocalStorage();
+  const userId: string | null = getItem('userId');
+  const isLikedByUser = props.upVoters?.edges.some(
+    (edge) => edge.node.id === userId,
+  );
 
-  // Retrieve user ID from local storage
-  const userId = getItem('userId') as string;
-  console.log("userID Posts", userId)
-  // Check if the post is liked by the current user
-const upVotersUser = props.upVoters?.edges.some((edge) => edge.node.id === userId);
-
-
-  // State variables
-  const [comments, setComments] = React.useState(props.comments);
-  const [numComments, setNumComments] = React.useState(props.commentCount);
-
-  const [likes, setLikes] = React.useState(props.upVoteCount);
-  const [isupVotersUser, setIsupVotersUser] = React.useState(upVotersUser);
   const [commentInput, setCommentInput] = React.useState('');
   const [viewPost, setViewPost] = React.useState(false);
   const [showEditPost, setShowEditPost] = React.useState(false);
-  const [postContent, setPostContent] = React.useState<string>(props.text);
+  const [postContent, setPostContent] = React.useState(props.text);
 
-  // ✅ Sync isupVotersUser with props
-React.useEffect(() => {
-  const liked = props.upVoters?.edges?.some(
-  (edge) => edge.node.id === userId
-) ?? false;
-setIsupVotersUser(liked);
+  const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
 
-}, [props.upVoters, userId]);
-
-// ✅ Sync likes count with props
-React.useEffect(() => {
- setLikes(props.upVoters?.edges.length || 0);
-
-}, [props.upVoters]);
-
-  // console.log("props: ", props)
-  // Post creator's full name
-  const postCreator = `${props.creator.name} `;
-  // console.log("postCreator: ", postCreator)
-
-  // GraphQL mutations
-  const [likePost, { loading: likeLoading }] = useMutation(LIKE_POST);
-  const [unLikePost, { loading: unlikeLoading }] = useMutation(UNLIKE_POST);
-  const [create, { loading: commentLoading }] =
+  const [createComment, { loading: commentLoading }] =
     useMutation(CREATE_COMMENT_POST);
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
 
-  // Toggle the view post modal
   const toggleViewPost = (): void => setViewPost(!viewPost);
-
-  // Toggle the edit post modal
   const toggleEditPost = (): void => setShowEditPost(!showEditPost);
-
-  // Handle input changes for the post content
-  const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setPostContent(e.target.value);
-  };
 
-  // Toggle like or unlike the post
-const handleToggleLike = async (): Promise<void> => {
-  if (isupVotersUser) {
+  const handleToggleLike = async (): Promise<void> => {
     try {
-      const { data } = await unLikePost({
+      await likePost({
         variables: {
           input: {
             postId: props.id,
-            creatorId: userId,
-          }
-        }
+            type: isLikedByUser ? 'down_vote' : 'up_vote',
+          },
+        },
       });
 
-      if (data) {
-        setLikes((likes: number) => likes - 1);
-        setIsupVotersUser(false);
-      }
-    } catch (error: unknown) {
+      props.fetchPosts();
+    } catch (error) {
       toast.error(error as string);
     }
-  } else {
-    try {
-      const { data } = await likePost({
-        variables: {
-          input: {
-            postId: props.id,
-            type: 'up_vote'
-          }
-        }
-      });
-
-      if (data) {
-        setLikes((likes: number) => likes + 1);
-        setIsupVotersUser(true);
-      }
-      console.log("like data",data);
-    } catch (error: unknown) {
-      toast.error(error as string);
-    }
-  }
-};
-
-
-
-  // Handle changes to the comment input field
-  const handleCommentInput = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const comment = event.target.value;
-    setCommentInput(comment);
   };
 
-  // Dislike a comment
-  const handleDislikeComment = (commentId: string): void => {
-    const updatedComments = comments.map((comment) => {
-      let updatedComment = { ...comment };
-      if (
-        comment.id === commentId &&
-        comment.upVoters.some((user) => user.id === userId)
-      ) {
-        updatedComment = {
-          ...comment,
-          upVoters: comment.upVoters.filter((user) => user.id !== userId),
-          upVoteCount: comment.upVoteCount - 1,
-        };
-      }
-      return updatedComment;
-    });
-    setComments(updatedComments);
-  };
+  const handleCommentInput = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setCommentInput(e.target.value);
 
-  // Like a comment
-const handleLikeComment = (commentId: string): void => {
-  const updatedComments = comments.map((comment) => {
-    let updatedComment = { ...comment };
-    if (
-      comment.id === commentId &&
-      !comment.upVoters.some((user) => user.id === userId)
-    ) {
-      updatedComment = {
-        ...comment,
-        upVoters: [...comment.upVoters, { id: userId as string }],
-        upVoteCount: comment.upVoteCount + 1,
-      };
-    }
-    return updatedComment;
-  });
-  setComments(updatedComments);
-};
-
-
-  // Create a new comment
-// Create a new comment
-const createComment = async (): Promise<void> => {
-  try {
-    // Ensure the input is not empty
+  const handleCreateComment = async (): Promise<void> => {
     if (!commentInput.trim()) {
       toast.error(t('emptyCommentError'));
       return;
     }
-
-    const { data } = await create({
-      variables: {
-        input: {
-          postId: props.id,
-          text: commentInput,
-        },
-      },
-    });
-
-    const createEventData = data?.createComment;
-
-    if (createEventData) {
-      const newComment: InterfaceCommentCardProps = {
-        id: createEventData.id,
-        creator: {
-          id: createEventData.creator.id,
-          name: createEventData.creator.name,
-          email: createEventData.creator.email
-        },
-        text: commentInput,
-        upVoteCount: createEventData.upVoteCount, // Default as no one has liked it yet
-        downVoteCount: createEventData.downVoteCount, // Default as no one has disliked it yet
-        upVoters: [], // Empty initially
-        handleLikeComment,
-        handleDislikeComment,
-      };
-
-      setComments((prevComments) => [...prevComments, newComment]);
-
+    try {
+      await createComment({
+        variables: { input: { postId: props.id, body: commentInput } },
+      });
       setCommentInput('');
-      setNumComments((prevCount) => prevCount + 1);
-    }
-  } catch (error: unknown) {
-    // Handle errors
-    console.error('Error creating comment:', error);
-    if (error instanceof Error) {
-      const isValidationError = error.message.includes(
-        'Comment validation failed',
-      );
-      toast.error(
-        isValidationError ? t('emptyCommentError') : t('unexpectedError'),
-      );
-    } else {
+      props.fetchPosts();
+    } catch (error: unknown) {
       toast.error(t('unexpectedError'));
     }
-  }
-};
+  };
 
-
-  // Edit the post
   const handleEditPost = async (): Promise<void> => {
     try {
-      const { data: createEventData } = await editPost({
-        variables: { id: props.id, text: postContent },
-      });
-
-      if (createEventData) {
-        props.fetchPosts(); // Refresh the posts
-        toggleEditPost();
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Post' }) as string,
-        );
-      }
-    } catch (error: unknown) {
+      await editPost({ variables: { id: props.id, text: postContent } });
+      props.fetchPosts();
+      toggleEditPost();
+      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
+    } catch (error) {
       errorHandler(t, error);
     }
   };
 
-  // Delete the post
-const handleDeletePost = async (): Promise<void> => {
-  try {
-    const { data: createEventData } = await deletePost({
-      variables: {
-        input: {
-          id: props.id
-        }
-      }
-    });
-
-    if (createEventData) {
-      props.fetchPosts(); // Refresh the posts
+  const handleDeletePost = async (): Promise<void> => {
+    try {
+      await deletePost({ variables: { input: { id: props.id } } });
+      props.fetchPosts();
       toast.success('Successfully deleted the Post.');
+    } catch (error) {
+      errorHandler(t, error);
     }
-  } catch (error: unknown) {
-    errorHandler(t, error);
-  }
-};
+  };
 
+  // console.log(props.upVoters.edges.map)
+  // console.log(
+  //   props.upVoters.edges
+  //     ?.filter(edge => edge?.node?.id)
+  //     .map(edge => edge.node.id)
+  // );
+  const upVoters =
+    props.upVoters?.edges.map((edge) => ({
+      id: edge.node.id,
+      node: { id: edge.node.id },
+    })) || [];
+
+  console.log('upVoters', upVoters);
+  console.log('upVoters', upVoters[0]?.node.id);
 
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
@@ -335,46 +142,35 @@ const handleDeletePost = async (): Promise<void> => {
         <Card.Header className={`${styles.cardHeaderPostCard}`}>
           <div className={`${styles.creator}`}>
             <AccountCircleIcon className="my-2" />
-            <p>{postCreator}</p>
+            <p>{props.creator.name}</p>
           </div>
           <Dropdown style={{ cursor: 'pointer' }}>
-            <Dropdown.Toggle
-              className={styles.customToggle}
-              data-testid={'dropdown'}
-            >
+            <Dropdown.Toggle className={styles.customToggle}>
               <MoreVertIcon />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={toggleEditPost} data-testid={'editPost'}>
+              <Dropdown.Item onClick={toggleEditPost}>
                 <EditOutlinedIcon
                   style={{ color: 'grey', marginRight: '8px' }}
                 />
                 {tCommon('edit')}
               </Dropdown.Item>
-              <Dropdown.Item
-                onClick={handleDeletePost}
-                data-testid={'deletePost'}
-              >
+              <Dropdown.Item onClick={handleDeletePost}>
                 <DeleteOutlineOutlinedIcon
                   style={{ color: 'red', marginRight: '8px' }}
                 />
                 {tCommon('delete')}
               </Dropdown.Item>
-              {/* <Dropdown.Item href="#/action-3">Pin Post</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Report</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Share</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Card.Header>
+
         <Card.Img
           className={styles.postImage}
           variant="top"
-          src={
-            props.image === '' || props.image === null
-              ? UserDefault
-              : props.image
-          }
+          src={props.image || UserDefault}
         />
+
         <Card.Body className="pb-0">
           <Card.Title className={`${styles.cardTitlePostCard}`}>
             {props.title}
@@ -386,12 +182,12 @@ const handleDeletePost = async (): Promise<void> => {
             {props.text}
           </Card.Text>
         </Card.Body>
+
         <Card.Footer style={{ border: 'none', background: 'white' }}>
           <div className={`${styles.cardActions}`}>
             <Button
               size="sm"
               className={`px-4 ${styles.addButton}`}
-              data-testid={'viewPostBtn'}
               onClick={toggleViewPost}
             >
               {t('viewPost')}
@@ -399,15 +195,12 @@ const handleDeletePost = async (): Promise<void> => {
           </div>
         </Card.Footer>
       </Card>
+
       <Modal show={viewPost} onHide={toggleViewPost} size="xl" centered>
         <Modal.Body className="d-flex w-100 p-0" style={{ minHeight: '80vh' }}>
-          <div className="w-50 d-flex  align-items-center justify-content-center">
+          <div className="w-50 d-flex align-items-center justify-content-center">
             <img
-              src={
-                props.image === '' || props.image === null
-                  ? UserDefault
-                  : props.image
-              }
+              src={props.image || UserDefault}
               alt="postImg"
               className="w-100"
             />
@@ -416,7 +209,7 @@ const handleDeletePost = async (): Promise<void> => {
             <div className="d-flex justify-content-between align-items-center">
               <div className={`${styles.cardHeaderPostCard} p-0`}>
                 <AccountCircleIcon className="my-2" />
-                <p>{postCreator}</p>
+                <p>{props.creator.name}</p>
               </div>
               <div style={{ cursor: 'pointer' }}>
                 <MoreVertIcon />
@@ -428,58 +221,50 @@ const handleDeletePost = async (): Promise<void> => {
               </p>
               <p>{props.text}</p>
             </div>
+
             <h4>Comments</h4>
             <div className={styles.commentContainer}>
-              {numComments ? (
-                comments.map((comment, index: number) => {
-const cardProps: InterfaceCommentCardProps = {
-  id: comment.id,
-  creator: {
-    id: comment.creator.id,
-    name: comment.creator.name,
-    email: comment.creator.email
-  },
-  text: comment.text,
-  upVoteCount: comment.upVoteCount,
-  downVoteCount: comment.downVoteCount,
-  upVoters: comment.upVoters,
-  handleLikeComment,
-  handleDislikeComment,
-};
-
-return <CommentCard key={index} {...cardProps} />;
-
-
-                })
+              {props.comments?.length ? (
+                props.comments.map((comment, index) => (
+                  <CommentCard
+                    key={index}
+                    id={comment.id}
+                    creator={comment.creator}
+                    text={comment.body}
+                    upVoteCount={comment.upVoteCount}
+                    downVoteCount={comment.downVoteCount}
+                    upVoters={{
+                      edges: upVoters,
+                    }}
+                  />
+                ))
               ) : (
                 <p>No comments to show.</p>
               )}
             </div>
+
             <div className={styles.modalFooter}>
               <div className={`${styles.modalActions}`}>
                 <div className="d-flex align-items-center gap-2">
                   <Button
                     className={`${styles.cardActionBtn}`}
                     onClick={handleToggleLike}
-                    data-testid={'likePostBtn'}
                   >
-                    {likeLoading || unlikeLoading ? (
+                    {likeLoading ? (
                       <HourglassBottomIcon fontSize="small" />
-                    ) : isupVotersUser ? (
+                    ) : isLikedByUser ? (
                       <ThumbUpIcon fontSize="small" />
                     ) : (
                       <ThumbUpOffAltIcon fontSize="small" />
                     )}
                   </Button>
-                  {likes}
-                  {` ${t('likes')}`}
+                  {props.upVoters?.edges.length || 0} {t('likes')}
                 </div>
                 <div className="d-flex align-items-center gap-2">
                   <Button className={`${styles.cardActionBtn}`}>
                     <CommentIcon fontSize="small" />
                   </Button>
-                  {numComments}
-                  {` ${t('comments')}`}
+                  {props.commentCount} {t('comments')}
                 </div>
               </div>
               <InputGroup className="mt-2">
@@ -489,12 +274,10 @@ return <CommentCard key={index} {...cardProps} />;
                   className={styles.inputArea}
                   value={commentInput}
                   onChange={handleCommentInput}
-                  data-testid="commentInput"
                 />
                 <InputGroup.Text
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
-                  onClick={createComment}
-                  data-testid="createCommentBtn"
+                  onClick={handleCreateComment}
                 >
                   {commentLoading ? (
                     <HourglassBottomIcon fontSize="small" />
@@ -507,11 +290,10 @@ return <CommentCard key={index} {...cardProps} />;
           </div>
         </Modal.Body>
       </Modal>
+
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
         <Modal.Header closeButton className={`py-2`}>
-          <p className="fs-3" data-testid={'editPostModalTitle'}>
-            {t('editPost')}
-          </p>
+          <p className="fs-3">{t('editPost')}</p>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
@@ -519,7 +301,6 @@ return <CommentCard key={index} {...cardProps} />;
             as="textarea"
             rows={3}
             className={styles.postInput}
-            data-testid="postInput"
             autoComplete="off"
             required
             onChange={handlePostInput}
@@ -530,7 +311,6 @@ return <CommentCard key={index} {...cardProps} />;
           <Button
             size="sm"
             className={`px-4 ${styles.addButton}`}
-            data-testid={'editPostBtn'}
             onClick={handleEditPost}
           >
             {t('editPost')}

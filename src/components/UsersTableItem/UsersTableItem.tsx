@@ -86,7 +86,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const confirmRemoveUser = async (): Promise<void> => {
     try {
       const { data } = await removeUser({
-        variables: { userid: user.user._id, orgid: removeUserProps.orgId },
+        variables: { userid: user.id, orgid: removeUserProps.orgId },
       });
       if (data) {
         toast.success(
@@ -106,7 +106,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
     try {
       const { data } = await updateUserInOrgType({
         variables: {
-          userId: user.user._id,
+          userId: user.id,
           role: inputData[0],
           organizationId: inputData[1],
         },
@@ -141,7 +141,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const searchOrgsBlockedBy = (value: string): void => {
     setSearchByNameOrgsBlockedBy(value);
     if (value == '') {
-      setOrgsBlockedBy(user.user.organizationsBlockedBy);
+      setOrgsBlockedBy(user.);
     } else {
       const filteredOrgs = user.user.organizationsBlockedBy.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase()),
@@ -185,18 +185,18 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setShowBlockedOrganizations(true);
     }
   }
-  const isSuperAdmin = user.appUserProfile.isSuperAdmin;
+  const isSuperAdmin = user.role === 'administrator';
   return (
     <>
       <tr>
         <th scope="row">{index + 1}</th>
-        <td>{`${user.user.firstName} ${user.user.lastName}`}</td>
-        <td>{user.user.email}</td>
+        <td>{`${user.name} `}</td>
+        <td>{user.emailAddress}</td>
         <td>
           <Button
             className={`btn ${styles.editButton}`}
             onClick={() => setShowJoinedOrganizations(true)}
-            data-testid={`showJoinedOrgsBtn${user.user._id}`}
+            data-testid={`showJoinedOrgsBtn${user.id}`}
           >
             {t('view')} ({user.user.joinedOrganizations.length})
           </Button>
@@ -204,10 +204,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>
           <Button
             className={`btn btn-danger ${styles.removeButton}`}
-            data-testid={`showBlockedByOrgsBtn${user.user._id}`}
+            data-testid={`showBlockedByOrgsBtn${user.id}`}
             onClick={() => setShowBlockedOrganizations(true)}
           >
-            {t('view')} ({user.user.organizationsBlockedBy.length})
+            {t('view')} ({user.organizationsBlockedBy.length})
           </Button>
         </td>
       </tr>
@@ -215,12 +215,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
         size="xl"
-        data-testid={`modal-joined-org-${user.user._id}`}
+        data-testid={`modal-joined-org-${user..}`}
         onHide={() => setShowJoinedOrganizations(false)}
       >
         <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
-            {t('orgJoinedBy')} {`${user.user.firstName}`}{' '}
+            {t('orgJoinedBy')} {`${user.name}`}{' '}
             {`${user.user.lastName}`} ({user.user.joinedOrganizations.length})
           </Modal.Title>
         </Modal.Header>
@@ -250,7 +250,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {user.user.joinedOrganizations.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.user.firstName} {user.user.lastName}{' '}
+                  {user.name} {user.user.lastName}{' '}
                   {t('hasNotJoinedAnyOrg')}
                 </h4>
               </div>
@@ -395,7 +395,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowJoinedOrganizations(false)}
-            data-testid={`closeJoinedOrgsBtn${user.user._id}`}
+            data-testid={`closeJoinedOrgsBtn${user.id}`}
           >
             {tCommon('close')}
           </Button>
@@ -406,12 +406,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
         key={`modal-blocked-org-${index}`}
         size="xl"
         onHide={() => setShowBlockedOrganizations(false)}
-        data-testid={`modal-blocked-org-${user.user._id}`}
+        data-testid={`modal-blocked-org-${user.id}`}
       >
         <Modal.Header className="bg-danger" closeButton>
           <Modal.Title className="text-white">
-            {t('orgThatBlocked')} {`${user.user.firstName}`}{' '}
-            {`${user.user.lastName}`} ({user.user.organizationsBlockedBy.length}
+            {t('orgThatBlocked')} {`${user.name}`}{' '}
+            {`${user.lastName}`} ({user.organizationsBlockedBy.length}
             )
           </Modal.Title>
         </Modal.Header>
@@ -439,10 +439,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
             </div>
           )}
           <Row>
-            {user.user.organizationsBlockedBy.length == 0 ? (
+            {user.organizationsBlockedBy.length == 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.user.firstName} {user.user.lastName}{' '}
+                  {user.name} {''}
                   {t('isNotBlockedByAnyOrg')}
                 </h4>
               </div>
@@ -578,7 +578,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => setShowBlockedOrganizations(false)}
-            data-testid={`closeBlockedByOrgsBtn${user.user._id}`}
+            data-testid={`closeBlockedByOrgsBtn${user.id}`}
           >
             {tCommon('close')}
           </Button>
@@ -587,7 +587,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <Modal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}
-        data-testid={`modal-remove-user-${user.user._id}`}
+        data-testid={`modal-remove-user-${user.id}`}
         onHide={() => onHideRemoveUserModal()}
       >
         <Modal.Header className={styles.modalHeader} closeButton>
@@ -599,7 +599,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
-              name: `${user.user.firstName} ${user.user.lastName}`,
+              name: `${user.name} `,
               org: removeUserProps.orgName,
             })}
           </p>
@@ -608,14 +608,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             variant="secondary"
             onClick={() => onHideRemoveUserModal()}
-            data-testid={`closeRemoveUserModal${user.user._id}`}
+            data-testid={`closeRemoveUserModal${user.id}`}
           >
             {tCommon('close')}
           </Button>
           <Button
             className={`btn btn-danger ${styles.removeButton}`}
             onClick={() => confirmRemoveUser()}
-            data-testid={`confirmRemoveUser${user.user._id}`}
+            data-testid={`confirmRemoveUser${user.id}`}
           >
             {tCommon('remove')}
           </Button>

@@ -351,7 +351,7 @@ const loginPage = (): JSX.Element => {
         setItem('token', authenticationToken);
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
-        setItem('email', user.emailAddress);
+        setItem('email', user.emailAddressAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
         // setItem('FirstName', user.firstName);

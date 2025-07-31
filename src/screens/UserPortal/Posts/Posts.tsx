@@ -124,16 +124,18 @@ export default function home(): JSX.Element {
     variables: { id: orgId, first: 6 },
   });
 
-const { data, refetch, loading: loadingPosts } = useQuery(ORGANIZATION_POST_LIST, {
-  variables: {
-    input: { id: orgId },  
-    first: 10,
-  },
-});
-console.log("data", data);
-// console.log("orgId", orgId);
-
-
+  const {
+    data,
+    refetch,
+    loading: loadingPosts,
+  } = useQuery(ORGANIZATION_POST_LIST, {
+    variables: {
+      input: { id: orgId },
+      first: 10,
+    },
+  });
+  console.log('data', data);
+  // console.log("orgId", orgId);
 
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
@@ -141,28 +143,24 @@ console.log("data", data);
 
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: {
-      input: { id: userId, },
+      input: { id: userId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE, // This is for tagsAssignedWith pagination
     },
   });
-// console.log("User Data", userData);
-
-
+  // console.log("User Data", userData);
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
-// console.log(user?.id);
-// console.log(user?.name);
-// console.log(user?.emailAddress);
-
+  // console.log(user?.id);
+  // console.log(user?.name);
+  // console.log(user?.emailAddress);
 
   // Effect hook to update posts state when data changes
-useEffect(() => {
-  if (data && data.organization && data.organization.posts) {
-    setPosts(data.organization.posts.edges);
-  }
-}, [data]);
-
+  useEffect(() => {
+    if (data && data.organization && data.organization.posts) {
+      setPosts(data.organization.posts.edges);
+    }
+  }, [data]);
 
   // Effect hook to update advertisements state when data changes
   useEffect(() => {
@@ -191,93 +189,90 @@ useEffect(() => {
    * @returns The props for the `PostCard` component.
    */
 
+  const getCardProps = (node: PostNode): InterfacePostCard => {
+    const {
+      id,
+      caption,
+      createdAt,
+      creator,
+      upVoters,
+      upVotesCount,
+      downVotesCount,
+      comments,
+    } = node;
 
+    if (upVotesCount > 0) {
+      console.log(`Post ID: ${id}, upVotesCount: ${upVotesCount}`);
 
-const getCardProps = (node: PostNode): InterfacePostCard => {
-  const {
-    id,
-    caption,
-    createdAt,
-    creator,
-    upVoters,
-    upVotesCount,
-    downVotesCount,
-    comments,
-  } = node;
+      const voters =
+        upVoters?.edges?.map((edge) => ({
+          node: {
+            id: edge.node.id,
+            creator: {
+              id: edge.node.creator.id,
+              name: edge.node.creator.name,
+            },
+          },
+        })) || [];
 
-if (upVotesCount > 0) {
-  console.log(`Post ID: ${id}, upVotesCount: ${upVotesCount}`);
-  
-  const voters =
-    upVoters?.edges?.map(edge => ({
-      node: {
-      id: edge.node.id,
+      console.log('Upvoted by:', voters);
+    }
+
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(createdAt));
+
+    const cardProps: InterfacePostCard = {
+      id,
       creator: {
-        id: edge.node.creator.id,
-        name: edge.node.creator.name,
+        id: creator.id,
+        name: creator.name,
+        email: creator.emailAddress,
       },
-    },
-    })) || [];
-
-  console.log("Upvoted by:", voters);
-}
-
-
-
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(new Date(createdAt));
-
-  const cardProps: InterfacePostCard = {
-    id,
-    creator: {
-      id: creator.id,
-      name: creator.name,
-      email: creator.emailAddress,
-    },
-    postedAt: formattedDate,
-    image: null,
-    video: null,
-    title: caption ?? '',
-    text: '',
-    commentCount: node.commentsCount,
-    upVoters: {
-  edges: upVoters?.edges?.map(edge => ({
-    node: {
-      id: edge.node.id,
-      creator: {
-        id: edge.node.creator.id,
-        name: edge.node.creator.name,
+      postedAt: formattedDate,
+      image: null,
+      video: null,
+      title: caption ?? '',
+      text: '',
+      commentCount: node.commentsCount,
+      upVoters: {
+        edges:
+          upVoters?.edges?.map((edge) => ({
+            node: {
+              id: edge.node.id,
+              creator: {
+                id: edge.node.creator.id,
+                name: edge.node.creator.name,
+              },
+            },
+          })) || [],
       },
-    },
-  })) || [],
-},
 
+      upVoteCount: upVotesCount,
+      downVoteCount: downVotesCount,
+      comments:
+        comments?.edges?.map(({ node: comment }) => ({
+          id: comment.id,
+          body: comment.body,
+          creator: {
+            id: comment.creator.id,
+            name: comment.creator.name,
+            email: comment.creator.emailAddress,
+          },
+          downVoteCount: comment.downVotesCount,
+          upVoteCount: comment.upVotesCount,
+          upVoters: comment?.upVoters?.map((like) => ({
+            id: like.id,
+          })),
+          text: comment.text,
+        })) ?? [],
+      fetchPosts: () => refetch(),
+    };
 
-    upVoteCount: upVotesCount,
-    downVoteCount: downVotesCount,
-    comments: comments?.edges?.map(({ node: comment }) => ({
-      id: comment.id,
-      creator: {
-        id: comment.creator.id,
-        name: comment.creator.name,
-        email: comment.creator.emailAddress,
-      },
-      downVoteCount: comment.downVotesCount,
-      upVoteCount: comment.upVotesCount,
-      upVoters: comment?.upVoters?.map(like => ({
-        id: like.id,
-      })),
-      text: comment.text,
-    })) ?? [],
-    fetchPosts: () => refetch(),
+    return cardProps;
   };
-
-  return cardProps;
-};
-
 
   /**
    * Opens the post creation modal.

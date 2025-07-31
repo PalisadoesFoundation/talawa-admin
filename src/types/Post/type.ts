@@ -111,7 +111,7 @@ export type PostNode = {
     name: string;
     emailAddress: string;
   };
-  upVotesCount: number; 
+  upVotesCount: number;
   downVotesCount: number;
 
   upVoters: {
@@ -132,6 +132,7 @@ export type PostNode = {
     edges: {
       node: {
         id: string;
+        body: string;
         creator: {
           id: string;
           name: string;
@@ -147,5 +148,3 @@ export type PostNode = {
     }[];
   };
 };
-
-
