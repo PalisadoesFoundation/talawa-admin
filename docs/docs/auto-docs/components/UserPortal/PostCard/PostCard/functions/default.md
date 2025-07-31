@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L77)
+Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L41)
 
 ## Parameters
 

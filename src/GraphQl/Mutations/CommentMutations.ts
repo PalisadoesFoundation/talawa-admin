@@ -9,20 +9,18 @@ import gql from 'graphql-tag';
  */
 
 export const CREATE_COMMENT_POST = gql`
-  mutation createComment($comment: String!, $postId: ID!) {
-    createComment(data: { text: $comment }, postId: $postId) {
-      _id
+  mutation createComment($input: MutationCreateCommentInput!) {
+    createComment(input: $input) {
+      id
+      caption
+      isPinned
+
       creator {
-        _id
-        firstName
-        lastName
-        email
+        id
+        name
+        emailAddress
       }
-      likeCount
-      upVoters {
-        _id
-      }
-      text
+      body
     }
   }
 `;
@@ -35,9 +33,9 @@ export const CREATE_COMMENT_POST = gql`
  */
 
 export const LIKE_COMMENT = gql`
-  mutation likeComment($commentId: ID!) {
-    likeComment(id: $commentId) {
-      _id
+  mutation createCommentVote($input: MutationCreateCommentVoteInput!) {
+    createCommentVote(input: $input) {
+      id
     }
   }
 `;
@@ -50,9 +48,9 @@ export const LIKE_COMMENT = gql`
  */
 
 export const UNLIKE_COMMENT = gql`
-  mutation unlikeComment($commentId: ID!) {
-    unlikeComment(id: $commentId) {
-      _id
+  mutation deleteCommentVote($input: MutationDeleteCommentVoteInput!) {
+    deleteCommentVote(input: $input) {
+      id
     }
   }
 `;

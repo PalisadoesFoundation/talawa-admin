@@ -247,7 +247,7 @@ function leaderboard(): JSX.Element {
             className="d-flex justify-content-center"
             data-testid="userEmail"
           >
-            {params.row.user.email}
+            {params.row.user.emailAddress}
           </div>
         );
       },

@@ -190,58 +190,61 @@ const link = new StaticMockLink(MOCKS, true);
 describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly', async () => {
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
       commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
       comments: [
         {
-          id: '64eb13beca85de60ebe0ed0e',
+          id: '1',
           creator: {
-            id: '63d6064458fce20ee25c3bf7',
-            firstName: 'Noble',
-            lastName: 'Mittal',
-            email: 'test@gmail.com',
-            __typename: 'User',
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
           },
-          likeCount: 0,
-          upVoters: [],
-          text: 'First comment from Talawa user portal.',
-          __typename: 'Comment',
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
         },
         {
-          id: '64eb13beca85de60ebe0ed0b',
-          creator: {
-            id: '63d6064458fce20ee25c3bf8',
-            firstName: 'Priyanshu',
-            lastName: 'Bartwal',
-            email: 'test1@gmail.com',
-            __typename: 'User',
-          },
-          likeCount: 0,
-          upVoters: [],
-          text: 'First comment from Talawa user portal.',
-          __typename: 'Comment',
-        },
-      ],
-      upVoters: [
-        {
-          firstName: '',
-          lastName: '',
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -264,29 +267,61 @@ describe('Testing PostCard Component [User Portal]', () => {
     setItem('userId', '2');
 
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -313,29 +348,61 @@ describe('Testing PostCard Component [User Portal]', () => {
     setItem('userId', '2');
 
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
-      text: 'test Post',
+      text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -370,29 +437,61 @@ describe('Testing PostCard Component [User Portal]', () => {
     setItem('userId', '2');
 
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -420,29 +519,61 @@ describe('Testing PostCard Component [User Portal]', () => {
     setItem('userId', '2');
 
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -473,29 +604,61 @@ describe('Testing PostCard Component [User Portal]', () => {
     setItem('userId', '2');
 
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -523,29 +686,61 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Component should be rendered properly if post image is defined', async () => {
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -567,28 +762,60 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Comment is created successfully after create comment button is clicked.', async () => {
     const cardProps = {
       id: '1',
-      userImage: 'image.png',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -617,28 +844,60 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Comment validation displays an error toast when an empty comment is submitted', async () => {
     const cardProps = {
       id: '1',
-      userImage: 'image.png',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -671,8 +930,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     const cardProps = {
       id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
@@ -683,51 +941,51 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 1,
       postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
       comments: [
         {
           id: '1',
           creator: {
-            _id: '1',
             id: '1',
-            firstName: 'test',
-            lastName: 'user',
+            name: 'test user',
             email: 'test@user.com',
           },
-          likeCount: 1,
-          upVoters: [
-            {
-              id: '1',
-            },
-          ],
           text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
         },
         {
           id: '2',
           creator: {
-            _id: '1',
             id: '1',
-            firstName: 'test',
-            lastName: 'user',
+            name: 'test user',
             email: 'test@user.com',
           },
-          likeCount: 1,
-          upVoters: [
-            {
-              id: '2',
-            },
-          ],
           text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      upVoters: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
+
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -758,8 +1016,7 @@ describe('Testing PostCard Component [User Portal]', () => {
     const cardProps = {
       id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
@@ -770,51 +1027,51 @@ describe('Testing PostCard Component [User Portal]', () => {
       likeCount: 1,
       commentCount: 1,
       postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
       comments: [
         {
           id: '1',
           creator: {
-            _id: '1',
             id: '1',
-            firstName: 'test',
-            lastName: 'user',
+            name: 'test user',
             email: 'test@user.com',
           },
-          likeCount: 1,
-          upVoters: [
-            {
-              id: '1',
-            },
-          ],
           text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
         },
         {
           id: '2',
           creator: {
-            _id: '1',
             id: '1',
-            firstName: 'test',
-            lastName: 'user',
+            name: 'test user',
             email: 'test@user.com',
           },
-          likeCount: 1,
-          upVoters: [
-            {
-              id: '2',
-            },
-          ],
           text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      upVoters: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
+
     const beforeUserId = getItem('userId');
     setItem('userId', '1');
 
@@ -843,29 +1100,61 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Comment modal pops when show comments button is clicked.', async () => {
     const cardProps = {
-      id: '',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -890,28 +1179,60 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Comment submission displays error toast when network error occurs', async () => {
     const cardProps = {
       id: '1',
-      userImage: 'image.png',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
       image: 'testImage',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
           id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
+          id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
       fetchPosts: vi.fn(),
     };
 
@@ -980,30 +1301,62 @@ describe('Testing PostCard Component [User Portal]', () => {
     const customLink = new StaticMockLink([deletePostMock], true);
 
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
-      text: 'test Post',
+      text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      fetchPosts: vi.fn(), // Mock function to verify it's called
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -1039,30 +1392,62 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Should handle delete post failure correctly', async () => {
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
-        id: '2',
+        id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
-      text: 'test Post',
+      text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      fetchPosts: vi.fn(), // Pass mock function
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
+      fetchPosts: vi.fn(),
     };
 
     const deleteErrorMock = {
@@ -1110,30 +1495,62 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Post image should render properly', async () => {
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: 'image.png',
+      image: 'testImage',
       video: '',
-      text: 'test Post',
+      text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      fetchPosts: vi.fn(), // Pass mock function
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
+      fetchPosts: vi.fn(),
     };
 
     render(
@@ -1179,30 +1596,62 @@ describe('Testing PostCard Component [User Portal]', () => {
     const fetchPostsSpy = vi.fn();
 
     const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
+      id: '1',
       creator: {
-        firstName: 'test',
-        lastName: 'user',
+        name: 'test user',
         email: 'test@user.com',
         id: '1',
       },
-      postedAt: '',
-      image: '',
+      image: 'testImage',
       video: '',
-      text: 'test Post',
+      text: 'This is post test text',
       title: 'This is post test title',
       likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      upVoters: [
+      commentCount: 1,
+      postedAt: '',
+      upVoteCount: 5,
+      downVoteCount: 0,
+      comments: [
         {
-          firstName: 'test',
-          lastName: 'user',
+          id: '1',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 2,
+          downVoteCount: 0,
+          upVoters: [{ id: '1' }],
+        },
+        {
           id: '2',
+          creator: {
+            id: '1',
+            name: 'test user',
+            email: 'test@user.com',
+          },
+          text: 'testComment',
+          upVoteCount: 1,
+          downVoteCount: 0,
+          upVoters: [{ id: '2' }],
         },
       ],
-      fetchPosts: fetchPostsSpy, // Use our spy function
+
+      upVoters: {
+        edges: [
+          {
+            node: {
+              id: '1',
+              creator: {
+                id: '1',
+                name: 'test user',
+              },
+            },
+          },
+        ],
+      },
+      fetchPosts: vi.fn(),
     };
 
     render(

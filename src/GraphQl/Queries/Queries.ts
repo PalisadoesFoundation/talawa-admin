@@ -788,45 +788,45 @@ export const USER_ORGANIZATION_LIST = gql`
 
 // To take the details of a user
 export const USER_DETAILS = gql`
-query User($input: QueryUserInput!) {
-  user(input: $input) {
-    id
-    name
-    emailAddress
-    avatarURL
-    birthDate
-    city
-    countryCode
-    createdAt
-    updatedAt
-    educationGrade
-    employmentStatus
-    isEmailAddressVerified
-    maritalStatus
-    natalSex
-    naturalLanguageCode
-    postalCode
-    role
-    state
-    mobilePhoneNumber
-    homePhoneNumber
-    workPhoneNumber
-
-    organizationsWhereMember(first: 10) {
-      edges {
-        node {
-          id
-          name
-        }
-      }
-    }
-
-    createdOrganizations {
+  query User($input: QueryUserInput!) {
+    user(input: $input) {
       id
       name
+      emailAddress
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      updatedAt
+      educationGrade
+      employmentStatus
+      isEmailAddressVerified
+      maritalStatus
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      mobilePhoneNumber
+      homePhoneNumber
+      workPhoneNumber
+
+      organizationsWhereMember(first: 10) {
+        edges {
+          node {
+            id
+            name
+          }
+        }
+      }
+
+      createdOrganizations {
+        id
+        name
+      }
     }
   }
-}
 `;
 
 export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`

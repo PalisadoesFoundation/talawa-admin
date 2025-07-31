@@ -26,7 +26,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       }
       const loginPath = role === 'user' ? '/' : '/admin';
       cy.visit(loginPath);
-      cy.get('[data-cy="loginEmail"]').type(user.email);
+      cy.get('[data-cy="loginEmail"]').type(user.emailAddress);
       cy.get('[data-cy="loginPassword"]').type(user.password);
       cy.get('[data-cy="loginBtn"]').click();
 

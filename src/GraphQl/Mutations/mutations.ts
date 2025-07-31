@@ -379,10 +379,11 @@ export const CREATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -436,11 +437,62 @@ export const LIKE_POST = gql`
   mutation createPostVote($input: MutationCreatePostVoteInput!) {
     createPostVote(input: $input) {
       id
-      type
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;
 
+export const UPDATE_EVENT_MUTATION = gql`
+  mutation UpdateEvent($input: MutationUpdateEventInput!) {
+    updateEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const UPDATE_POST_VOTE = gql`
+  mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
+    updatePostVote(input: $input) {
+
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const UNLIKE_POST = gql`
   mutation deletePostVote($input: MutationDeletePostVoteInput!) {
@@ -449,7 +501,6 @@ export const UNLIKE_POST = gql`
     }
   }
 `;
-
 
 
 export const REGISTER_EVENT = gql`
@@ -599,7 +650,6 @@ export {
 // Create, Update and Delete Events
 export {
   CREATE_EVENT_MUTATION,
-  UPDATE_EVENT_MUTATION,
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,

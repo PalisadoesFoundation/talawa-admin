@@ -14,84 +14,196 @@ Defines the structure for a user list item returned from a query.
 
 ## Properties
 
-### appUserProfile
+### avatarURL
 
-> **appUserProfile**: `object`
+> **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:2010](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2010)
-
-The application user profile.
-
-#### \_id
-
-> **\_id**: `string`
-
-#### adminFor
-
-> **adminFor**: `object`[]
-
-#### createdEvents
-
-> **createdEvents**: `object`[]
-
-#### createdOrganizations
-
-> **createdOrganizations**: `object`[]
-
-#### eventAdmin
-
-> **eventAdmin**: `object`[]
-
-#### isSuperAdmin
-
-> **isSuperAdmin**: `boolean`
+Defined in: [src/utils/interfaces.ts:1975](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1975)
 
 ***
 
-### user
+### birthDate
 
-> **user**: `object`
+> **birthDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:1972](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1972)
+Defined in: [src/utils/interfaces.ts:1976](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1976)
 
-The user object.
+***
 
-#### \_id
+### city
 
-> **\_id**: `string`
+> **city**: `string`
 
-#### createdAt
+Defined in: [src/utils/interfaces.ts:1977](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1977)
+
+***
+
+### countryCode
+
+> **countryCode**: `string`
+
+Defined in: [src/utils/interfaces.ts:1978](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1978)
+
+***
+
+### createdAt
 
 > **createdAt**: `string`
 
-#### email
+Defined in: [src/utils/interfaces.ts:1979](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1979)
 
-> **email**: `string`
+***
 
-#### firstName
+### createdOrganizations
 
-> **firstName**: `string`
+> **createdOrganizations**: `object`[]
 
-#### image
+Defined in: [src/utils/interfaces.ts:1993](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1993)
 
-> **image**: `string`
+#### id
 
-#### joinedOrganizations
+> **id**: `string`
 
-> **joinedOrganizations**: `object`[]
+#### name
 
-#### lastName
+> **name**: `string`
 
-> **lastName**: `string`
+***
 
-#### membershipRequests
+### educationGrade
 
-> **membershipRequests**: `object`[]
+> **educationGrade**: `string`
 
-#### organizationsBlockedBy
+Defined in: [src/utils/interfaces.ts:1981](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1981)
 
-> **organizationsBlockedBy**: `object`[]
+***
 
-#### registeredEvents
+### emailAddress
 
-> **registeredEvents**: `object`[]
+> **emailAddress**: `string`
+
+Defined in: [src/utils/interfaces.ts:1974](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1974)
+
+***
+
+### employmentStatus
+
+> **employmentStatus**: `string`
+
+Defined in: [src/utils/interfaces.ts:1982](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1982)
+
+***
+
+### homePhoneNumber
+
+> **homePhoneNumber**: `string`
+
+Defined in: [src/utils/interfaces.ts:1991](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1991)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:1972](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1972)
+
+***
+
+### isEmailAddressVerified
+
+> **isEmailAddressVerified**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:1983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1983)
+
+***
+
+### maritalStatus
+
+> **maritalStatus**: `string`
+
+Defined in: [src/utils/interfaces.ts:1984](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1984)
+
+***
+
+### mobilePhoneNumber
+
+> **mobilePhoneNumber**: `string`
+
+Defined in: [src/utils/interfaces.ts:1990](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1990)
+
+***
+
+### name
+
+> **name**: `string`
+
+Defined in: [src/utils/interfaces.ts:1973](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1973)
+
+***
+
+### natalSex
+
+> **natalSex**: `string`
+
+Defined in: [src/utils/interfaces.ts:1985](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1985)
+
+***
+
+### naturalLanguageCode
+
+> **naturalLanguageCode**: `string`
+
+Defined in: [src/utils/interfaces.ts:1986](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1986)
+
+***
+
+### organizationsWhereMember
+
+> **organizationsWhereMember**: `object`
+
+Defined in: [src/utils/interfaces.ts:1997](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1997)
+
+#### edges
+
+> **edges**: `object`[]
+
+***
+
+### postalCode
+
+> **postalCode**: `string`
+
+Defined in: [src/utils/interfaces.ts:1987](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1987)
+
+***
+
+### role
+
+> **role**: `string`
+
+Defined in: [src/utils/interfaces.ts:1988](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1988)
+
+***
+
+### state
+
+> **state**: `string`
+
+Defined in: [src/utils/interfaces.ts:1989](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1989)
+
+***
+
+### updatedAt
+
+> **updatedAt**: `string`
+
+Defined in: [src/utils/interfaces.ts:1980](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1980)
+
+***
+
+### workPhoneNumber
+
+> **workPhoneNumber**: `string`
+
+Defined in: [src/utils/interfaces.ts:1992](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1992)

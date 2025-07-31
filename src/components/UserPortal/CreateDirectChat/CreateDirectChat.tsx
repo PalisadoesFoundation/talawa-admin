@@ -253,7 +253,7 @@ export default function createDirectChatModal({
                                 ' ' +
                                 userDetails.user.lastName}
                               <br />
-                              {userDetails.user.email}
+                              {userDetails.user.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button

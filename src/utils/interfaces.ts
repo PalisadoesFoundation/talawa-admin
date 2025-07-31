@@ -342,7 +342,7 @@ enum AdvertisementTypePg {
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
  * @property {string | null} user.image - The URL of the user's image, or null if not available.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  */
 export interface InterfaceUserType {
   user: {
@@ -360,7 +360,7 @@ export interface InterfaceUserType {
  * @property {string} user.id - The unique identifier of the user.
  * @property {string} user.name - The full name of the user.
  * @property {string} user.role - The role of the user.
- * @property {string} user.emailAddress - The email address of the user.
+ * @property {string} user.emailAddressAddress - The email address of the user.
  */
 export interface InterfaceUserTypePG {
   user: {
@@ -378,7 +378,7 @@ export interface InterfaceUserTypePG {
  * @property {string} currentUser.id - The unique identifier of the current user.
  * @property {string} currentUser.name - The full name of the current user.
  * @property {string} currentUser.role - The role of the current user.
- * @property {string} currentUser.emailAddress - The email address of the current user.
+ * @property {string} currentuser.emailAddressAddress - The email address of the current user.
  */
 export interface InterfaceCurrentUserTypePG {
   currentUser: {
@@ -576,7 +576,7 @@ export interface InterfaceOrgInfoTypePG {
  * @property {object} membershipRequests.user - The user who made the membership request.
  * @property {string} membershipRequests.user.firstName - The first name of the user.
  * @property {string} membershipRequests.user.lastName - The last name of the user.
- * @property {string} membershipRequests.user.email - The email address of the user.
+ * @property {string} membershipRequests.user.emailAddress - The email address of the user.
  * @property {object[]} blockedUsers - An array of users blocked by the organization.
  * @property {string} blockedUsers._id - The unique identifier of the blocked user.
  * @property {string} blockedUsers.firstName - The first name of the blocked user.
@@ -1926,7 +1926,7 @@ export interface InterfaceQueryBlockPageMemberListItem {
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
  * @property {string | null} user.image - The URL of the user's image, or null.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  * @property {object[]} user.organizationsBlockedBy - An array of organizations that have blocked this user.
  * @property {string} user.organizationsBlockedBy._id - The unique identifier of the blocking organization.
  * @property {string} user.organizationsBlockedBy.name - The name of the blocking organization.
@@ -2003,7 +2003,6 @@ export interface InterfaceQueryUserListItem {
     }[];
   };
 }
-
 
 /**
  * @interface InterfaceQueryVenueListItem
@@ -2117,11 +2116,12 @@ export interface InterfacePostCard {
         };
       };
     }[];
-  }; // ✅ updated to match the GraphQL query structure
+  };
   upVoteCount: number;
   downVoteCount: number;
   comments: {
     id: string;
+    body: string;
     creator: {
       id: string;
       name: string;
@@ -2134,8 +2134,6 @@ export interface InterfacePostCard {
   }[];
   fetchPosts: () => void;
 }
-
-
 
 /**
  * @interface InterfaceCreatePledge
@@ -2165,7 +2163,7 @@ export interface InterfaceCreatePledge {
  * @property {string} organizations.membershipRequests.user.id - The unique identifier of the user.
  * @property {string} organizations.membershipRequests.user.firstName - The first name of the user.
  * @property {string} organizations.membershipRequests.user.lastName - The last name of the user.
- * @property {string} organizations.membershipRequests.user.email - The email address of the user.
+ * @property {string} organizations.membershipRequests.user.emailAddress - The email address of the user.
  */
 export interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
@@ -2511,7 +2509,7 @@ export interface InterfaceVolunteerMembership {
  * @property {string} user._id - The unique identifier of the user.
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  * @property {string | null} user.image - The URL of the user's image, or null.
  */
 export interface InterfaceVolunteerRank {
