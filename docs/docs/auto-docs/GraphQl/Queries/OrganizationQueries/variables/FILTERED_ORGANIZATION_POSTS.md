@@ -6,4 +6,4 @@
 
 > `const` **FILTERED\_ORGANIZATION\_POSTS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L113)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L111)

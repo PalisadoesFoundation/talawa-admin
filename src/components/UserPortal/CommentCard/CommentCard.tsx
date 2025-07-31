@@ -40,10 +40,6 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
   const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
 
-  //   console.log('userId:', userId);
-  // console.log('commentId:', props.id);
-  console.log('upVoters:', props.upVoters);
-
   React.useEffect(() => {
     if (!userId) return;
 

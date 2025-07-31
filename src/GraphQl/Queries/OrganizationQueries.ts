@@ -68,8 +68,6 @@ export const ORGANIZATION_POST_LIST = gql`
                   }
                   downVotesCount
                   upVotesCount
-
-                  body
                 }
               }
               pageInfo {

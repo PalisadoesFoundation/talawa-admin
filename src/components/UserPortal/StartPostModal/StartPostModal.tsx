@@ -105,7 +105,6 @@ const startPostModal = ({
     // Check for base64 data URI
     if (url.startsWith('data:')) {
       const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
-      console.log('mime', mime);
       switch (mime) {
         case 'image/jpeg':
           return 'IMAGE_JPEG';
@@ -126,7 +125,6 @@ const startPostModal = ({
 
     // Fallback for file URLs (e.g., https://.../file.png)
     const ext = url.split('.').pop()?.toLowerCase();
-    console.log('ext', ext);
     switch (ext) {
       case 'jpg':
       case 'jpeg':
