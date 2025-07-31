@@ -494,6 +494,21 @@ export const UPDATE_POST_VOTE = gql`
   }
 `;
 
+export const LIKE_POST = gql`
+  mutation createPostVote($input: MutationCreatePostVoteInput!) {
+    createPostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const UNLIKE_POST = gql`
   mutation deletePostVote($input: MutationDeletePostVoteInput!) {
     deletePostVote(input: $input) {

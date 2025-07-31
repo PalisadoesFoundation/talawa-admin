@@ -276,15 +276,13 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.user.createdAt).getTime() -
-          new Date(a.user.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       return sortedUsers;
     }
     sortedUsers.sort(
       (a, b) =>
-        new Date(a.user.createdAt).getTime() -
-        new Date(b.user.createdAt).getTime(),
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
     return sortedUsers;
   };
@@ -307,20 +305,17 @@ const Users = (): JSX.Element => {
       return filteredUsers;
     } else if (filteringOption === 'user') {
       const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.adminFor.length === 0;
+        return user?.role?.length === 0;
       });
       return output;
     } else if (filteringOption === 'admin') {
       const output = filteredUsers.filter((user) => {
-        return (
-          user.appUserProfile.isSuperAdmin === false &&
-          user.appUserProfile.adminFor.length !== 0
-        );
+        return user.role === 'administrator' && user.role.length !== 0;
       });
       return output;
     } else {
       const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.isSuperAdmin === true;
+        return user.role === 'administrator';
       });
       return output;
     }

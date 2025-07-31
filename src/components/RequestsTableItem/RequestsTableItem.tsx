@@ -117,7 +117,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
     <tr className={styles.tableItem}>
       <td className={styles.index}>{index + 1}.</td>
       <td className={styles.name}>{`${request.user.name}`}</td>
-      <td className={styles.email}>{request.user.emailAddressAddress}</td>
+      <td className={styles.email}>{request.user.emailAddress}</td>
       <td>
         <Button
           variant="success"
