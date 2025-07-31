@@ -6,8 +6,5 @@
 
 > `const` **GET\_ORGANIZATION\_BLOCKED\_USERS\_PG**: `DocumentNode`
 
-<<<<<<< HEAD
+
 Defined in: [src/GraphQl/Queries/Queries.ts:454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L454)
-=======
-Defined in: [src/GraphQl/Queries/Queries.ts:449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L449)
->>>>>>> 464f911900 (fixing)
