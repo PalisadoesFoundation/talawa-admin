@@ -243,23 +243,21 @@ export default function createDirectChatModal({
                         ) => (
                           <StyledTableRow
                             data-testid="user"
-                            key={userDetails.user._id}
+                            key={userDetails.id}
                           >
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {userDetails.user.firstName +
-                                ' ' +
-                                userDetails.user.lastName}
+                              {userDetails.name}
                               <br />
-                              {userDetails.user.emailAddress}
+                              {userDetails.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button
                                 onClick={() => {
                                   handleCreateDirectChat(
-                                    userDetails.user._id,
+                                    userDetails.id,
                                     chats,
                                     t,
                                     createChat,

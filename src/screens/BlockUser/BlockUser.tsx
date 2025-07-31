@@ -165,9 +165,7 @@ const BlockUser = (): JSX.Element => {
       const matchedBlockedUsers = blockedUsers.filter(
         (blockedUser) =>
           blockedUser.name?.toLowerCase().includes(lowercaseSearch) ||
-          blockeduser.emailAddressAddress
-            ?.toLowerCase()
-            .includes(lowercaseSearch),
+          blockedUser.emailAddress?.toLowerCase().includes(lowercaseSearch),
       );
       setFilteredBlockedUsers(matchedBlockedUsers);
     }
@@ -296,7 +294,7 @@ const BlockUser = (): JSX.Element => {
                     <tr key={user.id}>
                       <th scope="row">{index + 1}</th>
                       <td>{user.name}</td>
-                      <td>{user.emailAddressAddress}</td>
+                      <td>{user.emailAddress}</td>
                       <td>
                         <Button
                           variant="success"
@@ -337,7 +335,7 @@ const BlockUser = (): JSX.Element => {
                   <tr key={user.id}>
                     <th scope="row">{index + 1}</th>
                     <td>{user.name}</td>
-                    <td>{user.emailAddressAddress}</td>
+                    <td>{user.emailAddress}</td>
                     <td>
                       <Button
                         variant="success"

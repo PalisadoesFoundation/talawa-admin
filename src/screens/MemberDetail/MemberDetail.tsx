@@ -227,7 +227,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
-        setItem('email', updateData.updateCurrentuser.emailAddressAddress);
+        setItem('email', updateData.updateCurrentUser.emailAddress);
         setItem('id', updateData.updateCurrentUser.id);
         setItem('role', updateData.updateCurrentUser.role);
         setSelectedAvatar(null);

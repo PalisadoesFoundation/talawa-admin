@@ -78,15 +78,23 @@ const defaultProps = {
   id: '1',
   creator: {
     id: '1',
-    firstName: 'test',
-    lastName: 'user',
-    email: 'test@user.com',
+    name: 'test user',
   },
-  likeCount: 1,
-  upVoters: [{ id: '1' }],
+  upVoteCount: 1,
+  downVoteCount: 0,
+  upVoters: {
+    edges: [
+      {
+        id: '1',
+        node: {
+          id: '1',
+        },
+      },
+    ],
+  },
   text: 'testComment',
-  handleLikeComment: vi.fn(),
-  handleDislikeComment: vi.fn(),
+  handleLikeComment: jest.fn(), // or use your Mock<Procedure>
+  handleDislikeComment: jest.fn(), // or use your Mock<Procedure>
 };
 
 const handleLikeComment = vi.fn();
@@ -109,19 +117,21 @@ describe('Testing CommentCard Component [User Portal]', () => {
       id: '1',
       creator: {
         id: '1',
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
+        name: 'test user',
       },
-      likeCount: 1,
-      upVoters: [
-        {
-          id: '1',
-        },
-      ],
+      upVoteCount: 1,
+      downVoteCount: 0, // Add based on requirement
+      upVoters: {
+        edges: [
+          {
+            id: '1',
+            node: {
+              id: '1',
+            },
+          },
+        ],
+      },
       text: 'testComment',
-      handleLikeComment: handleLikeComment,
-      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -150,19 +160,21 @@ describe('Testing CommentCard Component [User Portal]', () => {
       id: '1',
       creator: {
         id: '1',
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
+        name: 'test user',
       },
-      likeCount: 1,
-      upVoters: [
-        {
-          id: '1',
-        },
-      ],
+      upVoteCount: 1,
+      downVoteCount: 0, // Add based on requirement
+      upVoters: {
+        edges: [
+          {
+            id: '1',
+            node: {
+              id: '1',
+            },
+          },
+        ],
+      },
       text: 'testComment',
-      handleLikeComment: handleLikeComment,
-      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -191,19 +203,21 @@ describe('Testing CommentCard Component [User Portal]', () => {
       id: '1',
       creator: {
         id: '1',
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
+        name: 'test user',
       },
-      likeCount: 1,
-      upVoters: [
-        {
-          id: '1',
-        },
-      ],
+      upVoteCount: 1,
+      downVoteCount: 0, // Add based on requirement
+      upVoters: {
+        edges: [
+          {
+            id: '1',
+            node: {
+              id: '1',
+            },
+          },
+        ],
+      },
       text: 'testComment',
-      handleLikeComment: handleLikeComment,
-      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');
@@ -237,19 +251,21 @@ describe('Testing CommentCard Component [User Portal]', () => {
       id: '1',
       creator: {
         id: '1',
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
+        name: 'test user',
       },
-      likeCount: 1,
-      upVoters: [
-        {
-          id: '1',
-        },
-      ],
+      upVoteCount: 1,
+      downVoteCount: 0, // Add based on requirement
+      upVoters: {
+        edges: [
+          {
+            id: '1',
+            node: {
+              id: '1',
+            },
+          },
+        ],
+      },
       text: 'testComment',
-      handleLikeComment: handleLikeComment,
-      handleDislikeComment: handleDislikeComment,
     };
 
     const beforeUserId = getItem('userId');

@@ -200,7 +200,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -208,6 +207,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -220,6 +220,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -231,7 +232,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -247,7 +247,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       },
       fetchPosts: vi.fn(),
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -277,7 +276,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -285,6 +283,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -297,6 +296,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -308,7 +308,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -358,7 +357,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -366,6 +364,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -378,6 +377,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -389,7 +389,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -447,7 +446,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -455,6 +453,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -467,6 +466,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -478,7 +478,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -517,7 +516,6 @@ describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly if user unlikes a post', async () => {
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
-
     const cardProps = {
       id: '1',
       creator: {
@@ -529,7 +527,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -537,6 +534,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -549,6 +547,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -560,7 +559,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -614,7 +612,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -622,6 +619,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -634,6 +632,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -645,7 +644,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -696,7 +694,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -704,6 +701,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -716,6 +714,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -727,7 +726,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -771,7 +769,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -779,6 +776,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -791,6 +789,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -802,7 +801,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -853,7 +851,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -861,6 +858,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -873,6 +871,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -884,7 +883,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -938,7 +936,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -946,6 +943,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -958,6 +956,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -969,7 +968,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -985,7 +983,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       },
       fetchPosts: vi.fn(),
     };
-
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
 
@@ -1024,7 +1021,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1032,6 +1028,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1044,6 +1041,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1055,7 +1053,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1110,7 +1107,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1118,6 +1114,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1130,6 +1127,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1141,7 +1139,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1188,7 +1185,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1196,6 +1192,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1208,6 +1205,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1219,7 +1217,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1311,7 +1308,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1319,6 +1315,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1331,6 +1328,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1342,7 +1340,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1402,7 +1399,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1410,6 +1406,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1422,6 +1419,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1433,7 +1431,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1505,7 +1502,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1513,6 +1509,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1525,6 +1522,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1536,7 +1534,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {
@@ -1606,7 +1603,6 @@ describe('Testing PostCard Component [User Portal]', () => {
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
-      likeCount: 1,
       commentCount: 1,
       postedAt: '',
       upVoteCount: 5,
@@ -1614,6 +1610,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
+          body: 'testComment', // ✅ required field
           creator: {
             id: '1',
             name: 'test user',
@@ -1626,6 +1623,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         },
         {
           id: '2',
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1637,7 +1635,6 @@ describe('Testing PostCard Component [User Portal]', () => {
           upVoters: [{ id: '2' }],
         },
       ],
-
       upVoters: {
         edges: [
           {

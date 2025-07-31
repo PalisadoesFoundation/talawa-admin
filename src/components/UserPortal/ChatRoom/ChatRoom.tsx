@@ -262,7 +262,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         );
         if (otherUser) {
           setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
-          setChatSubtitle(otheruser.emailAddress);
+          setChatSubtitle(otherUser.email);
           setChatImage(otherUser.image);
         }
       }

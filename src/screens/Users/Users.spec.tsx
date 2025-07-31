@@ -275,7 +275,9 @@ describe('Testing Users screen', () => {
       const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
       const uniqueUsers = Array.from(
-        new Map(mergedUsers.map((user: IUserData) => [user.id, user])).values(),
+        new Map(
+          mergedUsers.map((user: IUserData) => [user.user._id, user]),
+        ).values(),
       );
 
       return { users: uniqueUsers };
@@ -288,8 +290,8 @@ describe('Testing Users screen', () => {
     expect(result.users.length).toBe(10); // 5 initial + 5 new
 
     // Make sure we have users from both data sets
-    expect(result.users.some((user) => user.id === 'id0')).toBe(true);
-    expect(result.users.some((user) => user.id === 'id9')).toBe(true);
+    expect(result.users.some((user) => user.user._id === 'id0')).toBe(true);
+    expect(result.users.some((user) => user.user._id === 'id9')).toBe(true);
   });
 
   it('Testing filter functionality', async () => {

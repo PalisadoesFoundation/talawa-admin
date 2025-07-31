@@ -331,25 +331,23 @@ export default function CreateGroupChat({
                         ) => (
                           <StyledTableRow
                             data-testid="user"
-                            key={userDetails.user._id}
+                            key={userDetails.id}
                           >
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {userDetails.user.firstName +
-                                ' ' +
-                                userDetails.user.lastName}
+                              {userDetails.name}
                               <br />
-                              {userDetails.user.emailAddress}
+                              {userDetails.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {userIds.includes(userDetails.user._id) ? (
+                              {userIds.includes(userDetails.id) ? (
                                 <Button
                                   variant="danger"
                                   onClick={() => {
                                     const updatedUserIds = userIds.filter(
-                                      (id) => id !== userDetails.user._id,
+                                      (id) => id !== userDetails.id,
                                     );
                                     setUserIds(updatedUserIds);
                                   }}
@@ -361,10 +359,7 @@ export default function CreateGroupChat({
                                 <Button
                                   className={`${styles.colorPrimary} ${styles.borderNone}`}
                                   onClick={() => {
-                                    setUserIds([
-                                      ...userIds,
-                                      userDetails.user._id,
-                                    ]);
+                                    setUserIds([...userIds, userDetails.id]);
                                   }}
                                   data-testid="addBtn"
                                 >
