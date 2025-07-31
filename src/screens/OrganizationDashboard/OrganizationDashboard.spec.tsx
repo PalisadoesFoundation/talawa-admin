@@ -20,7 +20,10 @@ import {
   ERROR_MOCKS,
   MIXED_REQUESTS_MOCK,
 } from './OrganizationDashboardMocks';
-import { MEMBERSHIP_REQUEST } from 'GraphQl/Queries/Queries';
+import {
+  MEMBERSHIP_REQUEST,
+  GET_ORGANIZATION_BLOCKED_USERS_PG,
+} from 'GraphQl/Queries/Queries';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -340,6 +343,70 @@ describe('OrganizationDashboard', () => {
       expect(sectionText).toContain('Pending User 2');
       expect(sectionText).toContain('Pending User 3');
       expect(sectionText).not.toContain('Rejected User');
+    });
+  });
+
+  describe('Blocked Users Pagination', () => {
+    it('should accumulate blocked users count correctly as pages are fetched', async () => {
+      const INCREMENTAL_MOCK = [
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: 'orgId', first: 32, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                blockedUsers: {
+                  edges: Array.from({ length: 32 }, (_, i) => ({
+                    node: {
+                      id: `blocked${i + 1}`,
+                      name: `User ${i + 1}`,
+                      emailAddress: `user${i + 1}@test.com`,
+                      role: 'member',
+                    },
+                    cursor: `c${i + 1}`,
+                  })),
+                  pageInfo: { hasNextPage: true, endCursor: 'c32' },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: 'orgId', first: 32, after: 'c32' },
+          },
+          result: {
+            data: {
+              organization: {
+                blockedUsers: {
+                  edges: Array.from({ length: 15 }, (_, i) => ({
+                    node: {
+                      id: `blocked${i + 33}`,
+                      name: `User ${i + 33}`,
+                      emailAddress: `user${i + 33}@test.com`,
+                      role: 'member',
+                    },
+                    cursor: `c${i + 33}`,
+                  })),
+                  pageInfo: { hasNextPage: false, endCursor: 'c47' },
+                },
+              },
+            },
+          },
+        },
+        ...MOCKS.filter(
+          (mock) => mock.request.query !== GET_ORGANIZATION_BLOCKED_USERS_PG,
+        ),
+      ];
+
+      renderWithProviders({ mocks: INCREMENTAL_MOCK });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
     });
   });
 });
