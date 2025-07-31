@@ -119,6 +119,10 @@ describe('OrganizationDashboard', () => {
 
     const postCountElement = await screen.findByTestId('postsCount');
     expect(postCountElement).toHaveTextContent('10');
+
+    const blockedUsersCountElement =
+      await screen.findByTestId('blockedUsersCount');
+    expect(blockedUsersCountElement).toHaveTextContent('2');
   });
 
   it('renders empty states when no data is returned', async () => {
@@ -130,6 +134,11 @@ describe('OrganizationDashboard', () => {
     });
     const noRequestsElement = await screen.findByText('noMembershipRequests');
     expect(noRequestsElement).toBeInTheDocument();
+
+    // Check that blocked users count is 0 when no blocked users exist
+    const blockedUsersCountElement =
+      await screen.findByTestId('blockedUsersCount');
+    expect(blockedUsersCountElement).toHaveTextContent('0');
   });
 
   it('navigates to "/" and shows error toast when GraphQL errors occur', async () => {
@@ -182,110 +191,122 @@ describe('OrganizationDashboard', () => {
       ).toBeInTheDocument();
     });
   });
-});
-it('handles navigation to posts page', async () => {
-  renderWithProviders({ mocks: MOCKS });
 
-  await waitFor(() => {
-    const postsCountElement = screen.getByTestId('postsCount');
-    fireEvent.click(postsCountElement);
+  it('handles navigation to posts page', async () => {
+    renderWithProviders({ mocks: MOCKS });
 
-    expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
-  });
-});
+    await waitFor(() => {
+      const postsCountElement = screen.getByTestId('postsCount');
+      fireEvent.click(postsCountElement);
 
-it('handles navigation to events page', async () => {
-  renderWithProviders({ mocks: MOCKS });
-
-  await waitFor(() => {
-    const eventsCountElement = screen.getByTestId('eventsCount');
-    fireEvent.click(eventsCountElement);
-
-    expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
-  });
-});
-
-it('renders loading state for dashboard cards', async () => {
-  renderWithProviders({ mocks: MOCKS });
-
-  const fallbackUIs = screen.getAllByTestId('fallback-ui');
-  expect(fallbackUIs.length).toBeGreaterThan(0);
-});
-
-it('displays view all events button functionality', async () => {
-  renderWithProviders({ mocks: MOCKS });
-
-  await waitFor(() => {
-    const viewAllEventsButton = screen.getByTestId('viewAllEvents');
-    expect(viewAllEventsButton).toBeInTheDocument();
-  });
-});
-
-it('handles multiple page loads without memory leaks', async () => {
-  const { unmount } = renderWithProviders({ mocks: MOCKS });
-
-  await waitFor(() => {
-    expect(screen.getByText('posts')).toBeInTheDocument();
+      expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
+    });
   });
 
-  unmount();
-  renderWithProviders({ mocks: MOCKS });
+  it('handles navigation to events page', async () => {
+    renderWithProviders({ mocks: MOCKS });
 
-  await waitFor(() => {
-    expect(screen.getByText('posts')).toBeInTheDocument();
+    await waitFor(() => {
+      const eventsCountElement = screen.getByTestId('eventsCount');
+      fireEvent.click(eventsCountElement);
+
+      expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
+    });
   });
-});
 
-it('renders membership requests section with proper states', async () => {
-  const LOADING_MOCKS = MOCKS.map((mock) =>
-    mock.request.query === MEMBERSHIP_REQUEST ? { ...mock, delay: 500 } : mock,
-  );
+  it('handles navigation to blocked users page', async () => {
+    renderWithProviders({ mocks: MOCKS });
 
-  const { rerender } = renderWithProviders({ mocks: LOADING_MOCKS });
+    await waitFor(() => {
+      const blockedUsersCountElement = screen.getByTestId('blockedUsersCount');
+      fireEvent.click(blockedUsersCountElement);
 
-  await waitFor(() => {
+      expect(mockedNavigate).toHaveBeenCalledWith('/blockuser/orgId');
+    });
+  });
+
+  it('renders loading state for dashboard cards', async () => {
+    renderWithProviders({ mocks: MOCKS });
+
     const fallbackUIs = screen.getAllByTestId('fallback-ui');
     expect(fallbackUIs.length).toBeGreaterThan(0);
   });
 
-  const EMPTY_REQUESTS_MOCK = MOCKS.map((mock) =>
-    mock.request.query === MEMBERSHIP_REQUEST
-      ? {
-          ...mock,
-          result: {
-            data: {
-              organization: {
-                id: 'orgId',
-                membershipRequests: [],
+  it('displays view all events button functionality', async () => {
+    renderWithProviders({ mocks: MOCKS });
+
+    await waitFor(() => {
+      const viewAllEventsButton = screen.getByTestId('viewAllEvents');
+      expect(viewAllEventsButton).toBeInTheDocument();
+    });
+  });
+
+  it('handles multiple page loads without memory leaks', async () => {
+    const { unmount } = renderWithProviders({ mocks: MOCKS });
+
+    await waitFor(() => {
+      expect(screen.getByText('posts')).toBeInTheDocument();
+    });
+
+    unmount();
+    renderWithProviders({ mocks: MOCKS });
+
+    await waitFor(() => {
+      expect(screen.getByText('posts')).toBeInTheDocument();
+    });
+  });
+
+  it('renders membership requests section with proper states', async () => {
+    const LOADING_MOCKS = MOCKS.map((mock) =>
+      mock.request.query === MEMBERSHIP_REQUEST
+        ? { ...mock, delay: 500 }
+        : mock,
+    );
+
+    const { rerender } = renderWithProviders({ mocks: LOADING_MOCKS });
+
+    await waitFor(() => {
+      const fallbackUIs = screen.getAllByTestId('fallback-ui');
+      expect(fallbackUIs.length).toBeGreaterThan(0);
+    });
+
+    const EMPTY_REQUESTS_MOCK = MOCKS.map((mock) =>
+      mock.request.query === MEMBERSHIP_REQUEST
+        ? {
+            ...mock,
+            result: {
+              data: {
+                organization: {
+                  id: 'orgId',
+                  membershipRequests: [],
+                },
               },
             },
-          },
-        }
-      : mock,
-  );
-  rerender(
-    <MockedProvider mocks={EMPTY_REQUESTS_MOCK} addTypename={false}>
-      <MemoryRouter initialEntries={['/orgdash/orgId']}>
-        <Routes>
-          <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
-        </Routes>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
+          }
+        : mock,
+    );
+    rerender(
+      <MockedProvider mocks={EMPTY_REQUESTS_MOCK} addTypename={false}>
+        <MemoryRouter initialEntries={['/orgdash/orgId']}>
+          <Routes>
+            <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
 
-  await waitFor(() => {
-    expect(
-      screen.getByText(
-        (content) =>
-          content.includes('noMembershipRequests') ||
-          content.includes('membership') ||
-          content.includes('requests'),
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          (content) =>
+            content.includes('noMembershipRequests') ||
+            content.includes('membership') ||
+            content.includes('requests'),
+        ),
+      ).toBeInTheDocument();
+    });
   });
-});
 
-describe('Membership Requests Section Tests', () => {
   it('correctly displays pending membership requests and filters out non-pending ones', async () => {
     renderWithProviders({ mocks: MIXED_REQUESTS_MOCK });
 
