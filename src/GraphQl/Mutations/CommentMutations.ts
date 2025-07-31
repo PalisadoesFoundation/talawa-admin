@@ -12,15 +12,19 @@ export const CREATE_COMMENT_POST = gql`
   mutation createComment($input: MutationCreateCommentInput!) {
     createComment(input: $input) {
       id
-      caption
-      isPinned
-
+      body
+      createdAt
+      updatedAt
+      upVotesCount
+      downVotesCount
       creator {
         id
         name
         emailAddress
       }
-      body
+      post {
+        id
+      }
     }
   }
 `;
