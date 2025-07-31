@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_ADMINS\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L327)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L325)
 
 GraphQL query to retrieve the list of admins for a specific organization.
 

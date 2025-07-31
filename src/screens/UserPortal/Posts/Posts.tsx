@@ -74,9 +74,6 @@ import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
 import { PostComments, PostLikes, PostNode } from 'types/Post/type';
-import { useLazyQuery } from '@apollo/client';
-import { log } from 'console';
-
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
   desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
@@ -134,26 +131,16 @@ export default function home(): JSX.Element {
       first: 10,
     },
   });
-  console.log('data', data);
-  // console.log("orgId", orgId);
-
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
-  // console.log("userId", userId);
-
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: {
       input: { id: userId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE, // This is for tagsAssignedWith pagination
     },
   });
-  // console.log("User Data", userData);
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
-
-  // console.log(user?.id);
-  // console.log(user?.name);
-  // console.log(user?.emailAddress);
 
   // Effect hook to update posts state when data changes
   useEffect(() => {
@@ -200,10 +187,7 @@ export default function home(): JSX.Element {
       downVotesCount,
       comments,
     } = node;
-
     if (upVotesCount > 0) {
-      console.log(`Post ID: ${id}, upVotesCount: ${upVotesCount}`);
-
       const voters =
         upVoters?.edges?.map((edge) => ({
           node: {
@@ -214,10 +198,7 @@ export default function home(): JSX.Element {
             },
           },
         })) || [];
-
-      console.log('Upvoted by:', voters);
     }
-
     const formattedDate = new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'short',
