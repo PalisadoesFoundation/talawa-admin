@@ -45,6 +45,8 @@ export const ORGANIZATION_LIST = gql`
       addressLine1
       description
       avatarURL
+      adminsCount
+      membersCount
       members(first: 32) {
         edges {
           node {

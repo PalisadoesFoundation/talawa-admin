@@ -118,6 +118,8 @@ interface IOrganization {
   avatarURL?: string; // <-- add this
   addressLine1?: string; // <-- add this
   description: string;
+  adminsCount?: number;
+  membersCount?: number;
   admins: [];
   members?: InterfaceMembersConnection; // <-- update this
   address: {
@@ -141,6 +143,8 @@ interface IOrgData {
   addressLine1: string;
   avatarURL: string | null;
   id: string;
+  adminsCount: number;
+  membersCount: number;
   members: {
     edges: [
       {
@@ -287,6 +291,8 @@ export default function organizations(): React.JSX.Element {
               postalCode: '',
               state: '',
             },
+            adminsCount: org.adminsCount || 0,
+            membersCount: org.membersCount || 0,
             admins: [],
             members:
               org.members?.edges?.map(
@@ -488,12 +494,8 @@ export default function organizations(): React.JSX.Element {
                             organization.userRegistrationRequired,
                           membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
-                          membersCount: Array.isArray(organization.members)
-                            ? organization.members.length
-                            : 0,
-                          adminsCount: Array.isArray(organization.admins)
-                            ? organization.admins.length
-                            : 0,
+                          membersCount: organization.membersCount || 0,
+                          adminsCount: organization.adminsCount || 0,
                         };
                         return (
                           <div
