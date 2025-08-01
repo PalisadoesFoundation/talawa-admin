@@ -909,22 +909,28 @@ describe('Organisation Events Page', () => {
     // The initial view should be Month View by default
     expect(container.textContent).toMatch('Month');
 
-    // Find view type buttons/elements in EventHeader component
-    // Since EventHeader is rendered, we can test the view change functionality
-    const viewButtons = screen.getAllByRole('button');
-    const dayViewButton = viewButtons.find(
-      (button) =>
-        button.textContent?.includes('Day') ||
-        button.getAttribute('data-testid')?.includes('day'),
-    );
+    // Find view type dropdown in EventHeader component
+    // The Day view option is inside a SortingButton dropdown
 
-    if (dayViewButton) {
-      await userEvent.click(dayViewButton);
-      await waitFor(() => {
-        // Verify that the view type changed - this tests the line: if (item) setViewType(item as ViewType);
-        expect(container.textContent).toMatch('Day');
-      });
-    }
+    // First, click the view type dropdown toggle
+    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    expect(viewTypeDropdown).toBeInTheDocument();
+
+    await userEvent.click(viewTypeDropdown);
+
+    // Wait for dropdown menu to appear and click the Day option
+    await waitFor(() => {
+      expect(screen.getByTestId('Day')).toBeInTheDocument();
+    });
+
+    const dayViewOption = screen.getByTestId('Day');
+    await userEvent.click(dayViewOption);
+
+    // Verify that the view type changed - this tests the line: if (item) setViewType(item as ViewType);
+    await waitFor(() => {
+      // The view should change to Day view
+      expect(container.textContent).toMatch('Day');
+    });
   });
 
   test('Testing handleChangeView function with null item', async () => {
