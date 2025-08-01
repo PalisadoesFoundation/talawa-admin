@@ -25,12 +25,12 @@ jobs:
           echo "Waiting for devcontainer services to be ready..."
           sleep 10
 
-      - name: Fix .env Formatting
-        run: |
-          sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
-          sed -i 's/^API_ADMINISTRATOR_USER_EMAIL_ADDRESS=.*/API_ADMINISTRATOR_USER_EMAIL_ADDRESS=testsuperadmin@example.com/' .env
-          echo "=== Fixed .env contents ==="
-          grep -E 'CLOUDBEAVER_SERVER_NAME|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
+      # - name: Fix .env Formatting
+      #   run: |
+      #     sed -i 's/^CLOUDBEAVER_SERVER_NAME=.*/CLOUDBEAVER_SERVER_NAME="Talawa CloudBeaver Server"/' .env
+      #     sed -i 's/^API_ADMINISTRATOR_USER_EMAIL_ADDRESS=.*/API_ADMINISTRATOR_USER_EMAIL_ADDRESS=testsuperadmin@example.com/' .env
+      #     echo "=== Fixed .env contents ==="
+      #     grep -E 'CLOUDBEAVER_SERVER_NAME|API_ADMINISTRATOR_USER_EMAIL_ADDRESS' .env
 
       - name: Install Backend Dependencies
         run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
@@ -39,39 +39,39 @@ jobs:
         run: |
           docker exec talawa-api-1 /bin/bash -c 'pnpm apply_drizzle_migrations'
     
-      - name: Verify .env Configuration
-        run: |
-          echo "=== Verifying .env Configuration ==="
-          echo "Container working directory and contents:"
-          docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la .env'
-          echo "=== Complete .env file contents ==="
-          docker exec talawa-api-1 /bin/bash -c 'cat .env'
-          echo "=== .env file verification complete ==="
+      # - name: Verify .env Configuration
+      #   run: |
+      #     echo "=== Verifying .env Configuration ==="
+      #     echo "Container working directory and contents:"
+      #     docker exec talawa-api-1 /bin/bash -c 'pwd && ls -la .env'
+      #     echo "=== Complete .env file contents ==="
+      #     docker exec talawa-api-1 /bin/bash -c 'cat .env'
+      #     echo "=== .env file verification complete ==="
 
-      - name: Seed Sample Data
-        run: |
-          echo "=== Seeding Sample Data ==="
-          if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
-            echo "✅ Seeding completed successfully"
-          else
-            echo "❌ Seeding failed - Debug Information:"
-            echo "Container status:"
-            docker ps | grep talawa
-            echo "Recent container logs:"
-            docker logs talawa-api-1 --tail 50
-            echo "=== Users table contents ==="
-            docker exec talawa-postgres-1 psql -U talawa -d talawa \
-            -c "SELECT id, email_address, name, role FROM users;" 2>/dev/null || echo "Could not query users"
-            exit 1
-          fi
+      # - name: Seed Sample Data
+      #   run: |
+      #     echo "=== Seeding Sample Data ==="
+      #     if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
+      #       echo "✅ Seeding completed successfully"
+      #     else
+      #       echo "❌ Seeding failed - Debug Information:"
+      #       echo "Container status:"
+      #       docker ps | grep talawa
+      #       echo "Recent container logs:"
+      #       docker logs talawa-api-1 --tail 50
+      #       echo "=== Users table contents ==="
+      #       docker exec talawa-postgres-1 psql -U talawa -d talawa \
+      #       -c "SELECT id, email_address, name, role FROM users;" 2>/dev/null || echo "Could not query users"
+      #       exit 1
+      #     fi
 
-      - name: Debug Database State
-        run: |
-          echo "=== Database Tables ==="
-          docker exec talawa-postgres-1 psql -U talawa -d talawa -c "\dt"
-          echo "=== Migration Status ==="
-          docker exec talawa-postgres-1 psql -U talawa -d talawa \
-            -c "SELECT * FROM information_schema.tables WHERE table_schema = 'public';" | head -10
+      # - name: Debug Database State
+      #   run: |
+      #     echo "=== Database Tables ==="
+      #     docker exec talawa-postgres-1 psql -U talawa -d talawa -c "\dt"
+      #     echo "=== Migration Status ==="
+      #     docker exec talawa-postgres-1 psql -U talawa -d talawa \
+      #       -c "SELECT * FROM information_schema.tables WHERE table_schema = 'public';" | head -10
 
       - name: Start Backend Server
         run: |
@@ -105,6 +105,23 @@ jobs:
           echo "GraphQL endpoint did not become available within the expected time."
           exit 1
 
+      - name: Seed Sample Data
+        run: |
+          echo "=== Seeding Sample Data ==="
+          if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
+            echo "✅ Seeding completed successfully"
+          else
+            echo "❌ Seeding failed - Debug Information:"
+            echo "Container status:"
+            docker ps | grep talawa
+            echo "Recent container logs:"
+            docker logs talawa-api-1 --tail 50
+            echo "=== Users table contents ==="
+            docker exec talawa-postgres-1 psql -U talawa -d talawa \
+            -c "SELECT id, email_address, name, role FROM users;" 2>/dev/null || echo "Could not query users"
+            exit 1
+          fi
+                    
       - name: Checkout Frontend
         uses: actions/checkout@v4
         with:
