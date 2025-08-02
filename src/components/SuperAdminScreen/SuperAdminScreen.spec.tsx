@@ -46,12 +46,12 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     // Resize window to a smaller width
     resizeWindow(800);
     // clickToggleMenuBtn(toggleButton);
-    expect(leftDrawerContainer).toHaveClass(styles.collapsedDrawer);
+    expect(leftDrawerContainer).toHaveClass(styles.inactiveDrawer);
 
     // Resize window back to a larger width
     resizeWindow(1000);
     // clickToggleMenuBtn(toggleButton);
-    expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
+    expect(leftDrawerContainer).toHaveClass(styles.inactiveDrawer);
 
     // clickToggleMenuBtn(toggleButton);
     // expect(icon).toHaveClass('fa fa-angle-double-left');

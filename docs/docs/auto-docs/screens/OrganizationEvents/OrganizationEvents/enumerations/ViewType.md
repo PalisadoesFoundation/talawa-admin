@@ -4,7 +4,7 @@
 
 # Enumeration: ViewType
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L99)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L81)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:99](https://g
 
 > **DAY**: `"Day"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L100)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L82)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:100](https://
 
 > **MONTH**: `"Month View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L101)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L83)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:101](https://
 
 > **YEAR**: `"Year View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L102)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L84)

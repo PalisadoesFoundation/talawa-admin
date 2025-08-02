@@ -160,7 +160,7 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId, first: 32, after: null },
+    variables: { id: orgId, first: 50, after: null },
   });
 
   useEffect(() => {

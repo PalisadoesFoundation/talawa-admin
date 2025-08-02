@@ -52,7 +52,7 @@ export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
-  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const originalImageState = React.useRef<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);

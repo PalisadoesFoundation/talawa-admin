@@ -53,7 +53,11 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
+
+// Extend dayjs with UTC plugin
+dayjs.extend(utc);
 import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
@@ -228,8 +232,8 @@ function AdvertisementRegister({
         organizationId: currentOrg,
         name: formState.name as string,
         type: formState.type as string,
-        startAt: dayjs(formState.startAt).toISOString(),
-        endAt: dayjs(formState.endAt).toISOString(),
+        startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
+        endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
         attachments: formState.attachments,
       };
 
@@ -304,10 +308,10 @@ function AdvertisementRegister({
       }
 
       const startAt = formState.startAt
-        ? dayjs(formState.startAt).toISOString()
+        ? dayjs.utc(formState.startAt).startOf('day').toISOString()
         : null;
       const endAt = formState.endAt
-        ? dayjs(formState.endAt).toISOString()
+        ? dayjs.utc(formState.endAt).startOf('day').toISOString()
         : null;
 
       const mutationVariables = {
@@ -388,6 +392,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementNameInput"
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rdesc">
@@ -404,6 +409,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementDescriptionInput"
               />
             </Form.Group>
             {formStatus === 'register' && (
@@ -420,6 +426,7 @@ function AdvertisementRegister({
                   multiple={true}
                   onChange={handleFileUpload}
                   className={styles.inputField}
+                  data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
                 {(formState.attachments || []).map((file, index) => (
@@ -469,6 +476,7 @@ function AdvertisementRegister({
                   });
                 }}
                 className={styles.inputField}
+                data-cy="advertisementTypeSelect"
               >
                 <option value="banner">Banner Ad </option>
                 <option value="pop_up">Popup Ad</option>
@@ -483,12 +491,12 @@ function AdvertisementRegister({
                 required
                 value={
                   formState.startAt instanceof Date
-                    ? dayjs(formState.startAt).format('YYYY-MM-DD')
+                    ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
                     : ''
                 }
                 onChange={(e): void => {
-                  // Preserve the time component when updating the date
-                  const newDate = dayjs(e.target.value).toDate();
+                  // Create UTC date from date input to avoid timezone issues
+                  const newDate = dayjs.utc(e.target.value).toDate();
                   setFormState({
                     ...formState,
                     startAt: newDate,
@@ -504,11 +512,12 @@ function AdvertisementRegister({
                 required
                 value={
                   formState.endAt instanceof Date
-                    ? dayjs(formState.endAt).format('YYYY-MM-DD')
+                    ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
                     : ''
                 }
                 onChange={(e): void => {
-                  const newDate = dayjs(e.target.value).toDate();
+                  // Create UTC date from date input to avoid timezone issues
+                  const newDate = dayjs.utc(e.target.value).toDate();
                   setFormState({
                     ...formState,
                     endAt: newDate,
@@ -533,6 +542,7 @@ function AdvertisementRegister({
               onClick={handleRegister}
               data-testid="addonregister"
               className={styles.addButton}
+              data-cy="registerAdvertisementButton"
             >
               {tCommon('register')}
             </Button>
@@ -541,6 +551,7 @@ function AdvertisementRegister({
               onClick={handleUpdate}
               data-testid="addonupdate"
               className={styles.addButton}
+              data-cy="saveChanges"
             >
               {tCommon('saveChanges')}
             </Button>

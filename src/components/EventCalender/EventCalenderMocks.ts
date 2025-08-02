@@ -1,5 +1,5 @@
 import {
-  DELETE_EVENT_MUTATION,
+  DELETE_STANDALONE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
@@ -41,7 +41,7 @@ export const eventData = [
 export const MOCKS = [
   {
     request: {
-      query: DELETE_EVENT_MUTATION,
+      query: DELETE_STANDALONE_EVENT_MUTATION,
       variable: { id: '123' },
     },
     result: {

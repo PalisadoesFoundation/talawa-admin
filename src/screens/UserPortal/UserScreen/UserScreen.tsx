@@ -82,7 +82,7 @@ const UserScreen = (): React.JSX.Element => {
   );
 
   const { targets } = userRoutes;
-  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
 
   /**
    * Retrieves the organization ID from the URL parameters.

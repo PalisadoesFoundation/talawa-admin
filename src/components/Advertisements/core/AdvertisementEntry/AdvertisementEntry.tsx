@@ -152,6 +152,7 @@ function AdvertisementEntry({
                   className={styles.dropdownButton}
                   onClick={() => setDropdown(!dropdown)}
                   data-testid="moreiconbtn"
+                  data-cy="dropdownbtn"
                 >
                   <MoreVertIcon />
                 </button>
@@ -176,6 +177,7 @@ function AdvertisementEntry({
                         setDropdown(false); // Close dropdown after clicking
                       }}
                       data-testid="deletebtn"
+                      data-cy="deletebtn"
                     >
                       {tCommon('delete')}
                     </li>

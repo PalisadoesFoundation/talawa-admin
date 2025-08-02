@@ -491,9 +491,22 @@ export const IS_USER_BLOCKED = gql`
 `;
 
 export const GET_ORGANIZATION_EVENTS_PG = gql`
-  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+  query GetOrganizationEvents(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
     organization(input: { id: $id }) {
-      events(first: $first, after: $after) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
         edges {
           node {
             id
@@ -505,10 +518,34 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            # Recurring event fields
+            isRecurringEventTemplate
+            baseEvent {
+              id
+              name
+            }
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Creator information
             creator {
               id
               name
             }
+            # Organization
+            organization {
+              id
+              name
+            }
+            # Timestamps
+            createdAt
+            updatedAt
           }
           cursor
         }
@@ -585,20 +622,28 @@ export const GET_ORGANIZATION_DATA_PG = gql`
     }
   }
 `;
-// list of a organizations
+
+// Shared fragment with common organization fields
+export const ORGANIZATION_FIELDS = gql`
+  fragment OrganizationFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+  }
+`;
+
+// Full query with all fields (metadata, creator, updater, etc.)
 export const ORGANIZATIONS_LIST = gql`
   query Organizations {
     organizations {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
+      ...OrganizationFields
       createdAt
       updatedAt
       creator {
@@ -613,6 +658,17 @@ export const ORGANIZATIONS_LIST = gql`
       }
     }
   }
+  ${ORGANIZATION_FIELDS}
+`;
+
+// Basic query using only the shared fragment (no metadata)
+export const ORGANIZATIONS_LIST_BASIC = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+    }
+  }
+  ${ORGANIZATION_FIELDS}
 `;
 
 export const MEMBERS_LIST_PG = gql`
