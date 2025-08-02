@@ -886,7 +886,7 @@ describe('Organisation Events Page', () => {
     });
   });
 
-   test('Testing handleChangeView function with valid ViewType', async () => {
+  test('Testing handleChangeView function with valid ViewType', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -926,7 +926,7 @@ describe('Organisation Events Page', () => {
       });
     }
   });
-  
+
   test('Testing handleChangeView function with null item', async () => {
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
