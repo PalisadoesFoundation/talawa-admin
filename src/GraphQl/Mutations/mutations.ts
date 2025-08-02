@@ -380,7 +380,7 @@ export const CREATE_POST_MUTATION = gql`
       pinnedAt
       attachments {
         fileHash
-        mimetype
+        mimeType
         name
         objectName
       }
@@ -427,7 +427,10 @@ export const UPDATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
     }
   }

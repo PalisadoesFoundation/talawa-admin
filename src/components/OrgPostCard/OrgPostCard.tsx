@@ -240,8 +240,86 @@ export default function OrgPostCard({
     }
   };
 
+  async function getFileHashFromBase64(base64String: string): Promise<string> {
+    const base64 = base64String.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
+      switch (mime) {
+        case 'image/jpeg':
+          return 'IMAGE_JPEG';
+        case 'image/png':
+          return 'IMAGE_PNG';
+        case 'image/webp':
+          return 'IMAGE_WEBP';
+        case 'image/avif':
+          return 'IMAGE_AVIF';
+        case 'video/mp4':
+          return 'VIDEO_MP4';
+        case 'video/webm':
+          return 'VIDEO_WEBM';
+        default:
+          return 'IMAGE_JPEG'; // fallback
+      }
+    }
+
+    // Fallback for file URLs (e.g., https://.../file.png)
+    const ext = url.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'jpg':
+      case 'jpeg':
+        return 'IMAGE_JPEG';
+      case 'png':
+        return 'IMAGE_PNG';
+      case 'webp':
+        return 'IMAGE_WEBP';
+      case 'avif':
+        return 'IMAGE_AVIF';
+      case 'mp4':
+        return 'VIDEO_MP4';
+      case 'webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  };
+
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    let attachment = null;
+    if (postFormState.attachments.length > 0) {
+      const fileName =
+        postFormState.attachments[0].url.split('/').pop() || 'defaultFileName';
+      const mimeType = postFormState.attachments[0].mimeType;
+      const objectName = 'uploads/' + fileName;
+      console.log('fileHash: ', postFormState.attachments[0].url);
+      const fileHash = await getFileHashFromBase64(
+        postFormState.attachments[0].url,
+      );
+
+      console.log('mimeType:', mimeType);
+      console.log('fileHash:', fileHash);
+      console.log('objectName:', objectName);
+
+      attachment = {
+        fileHash,
+        mimetype: getMimeTypeEnum(mimeType),
+        name: fileName,
+        objectName,
+      };
+    }
 
     try {
       const { data } = await updatePostMutation({
@@ -249,7 +327,7 @@ export default function OrgPostCard({
           input: {
             id: post.id,
             caption: postFormState.caption.trim(),
-            attachments: postFormState.attachments,
+            attachments: attachment ? [attachment] : [],
           },
         },
       });

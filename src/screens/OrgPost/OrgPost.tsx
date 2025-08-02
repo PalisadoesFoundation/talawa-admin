@@ -111,93 +111,93 @@ function OrgPost(): JSX.Element {
     useMutation(CREATE_POST_MUTATION);
 
   async function getFileHashFromFile(file: File): Promise<string> {
-  const arrayBuffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-function getMimeTypeEnumFromType(mime: string): string {
-  console.log('Mime type:', mime);
-  switch (mime) {
-    case 'image/jpeg':
-      return 'IMAGE_JPEG';
-    case 'image/png':
-      return 'IMAGE_PNG';
-    case 'image/webp':
-      return 'IMAGE_WEBP';
-    case 'image/avif':
-      return 'IMAGE_AVIF';
-    case 'video/mp4':
-      return 'VIDEO_MP4';
-    case 'video/webm':
-      return 'VIDEO_WEBM';
-    default:
-      return 'IMAGE_JPEG'; // fallback
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
-}
 
-const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
-  e.preventDefault();
-
-  try {
-    if (!postformState.posttitle.trim()) {
-      throw new Error('Title field cannot be empty');
+  function getMimeTypeEnumFromType(mime: string): string {
+    console.log('Mime type:', mime);
+    switch (mime) {
+      case 'image/jpeg':
+        return 'IMAGE_JPEG';
+      case 'image/png':
+        return 'IMAGE_PNG';
+      case 'image/webp':
+        return 'IMAGE_WEBP';
+      case 'image/avif':
+        return 'IMAGE_AVIF';
+      case 'video/mp4':
+        return 'VIDEO_MP4';
+      case 'video/webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
     }
+  }
 
-    if (!currentUrl) {
-      throw new Error('Organization ID is required');
-    }
-    let attachment = null;
-    if( file && typeof file !== 'string') {
-      const fileName = file.name;
-      const mimeType = file.type;
-      const objectName = 'uploads/' + fileName;
-      const fileHash = await getFileHashFromFile(file);
+  const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    e.preventDefault();
 
-      console.log("mimeType:", mimeType);
-      console.log("fileHash:", fileHash);
-      console.log("objectName:", objectName);
+    try {
+      if (!postformState.posttitle.trim()) {
+        throw new Error('Title field cannot be empty');
+      }
 
+      if (!currentUrl) {
+        throw new Error('Organization ID is required');
+      }
+      let attachment = null;
+      if (file && typeof file !== 'string') {
+        const fileName = file.name.split('/').pop() || 'defaultFileName';
+        const mimeType = file.type;
+        const objectName = 'uploads/' + fileName;
+        const fileHash = await getFileHashFromFile(file);
 
-      attachment = {
-        fileHash,
-        mimetype: getMimeTypeEnumFromType(file.type),
-        name: fileName,
-        objectName,
-      };
-    }
-    console.log('Attachment:', attachment);
+        console.log('mimeType:', mimeType);
+        console.log('fileHash:', fileHash);
+        console.log('objectName:', objectName);
 
-    const { data } = await create({
-      variables: { input:{
-      caption: postformState.posttitle.trim(),
-      organizationId: currentUrl,
-      isPinned: postformState.pinPost,
-      attachments: attachment ? [attachment] : [],
-      } },
-    });
+        attachment = {
+          fileHash,
+          mimetype: getMimeTypeEnumFromType(file.type),
+          name: fileName,
+          objectName,
+        };
+      }
+      console.log('Attachment:', attachment);
 
-    if (data?.createPost) {
-      toast.success(t('postCreatedSuccess') as string);
-      await refetch();
-
-      setPostFormState({
-        posttitle: '',
-        postinfo: '',
-        postImage: '',
-        postVideo: '',
-        addMedia: '',
-        pinPost: false,
+      const { data } = await create({
+        variables: {
+          input: {
+            caption: postformState.posttitle.trim(),
+            organizationId: currentUrl,
+            isPinned: postformState.pinPost,
+            attachments: attachment ? [attachment] : [],
+          },
+        },
       });
-      setFile(null);
-      setPostModalIsOpen(false);
-    }
-  } catch (error: unknown) {
-    errorHandler(t, error);
-  }
-};
 
+      if (data?.createPost) {
+        toast.success(t('postCreatedSuccess') as string);
+        await refetch();
+
+        setPostFormState({
+          posttitle: '',
+          postinfo: '',
+          postImage: '',
+          postVideo: '',
+          addMedia: '',
+          pinPost: false,
+        });
+        setFile(null);
+        setPostModalIsOpen(false);
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
+  };
 
   console.log(setShowTitle);
   const handleAddMediaChange = async (
