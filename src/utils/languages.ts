@@ -1,4 +1,4 @@
-const languageArray = ['en', 'fr', 'hi', 'es', 'zh'];
+const languageArray = ['en', 'fr', 'hi', 'sp', 'zh'];
 
 const languages = [
   {
@@ -19,7 +19,7 @@ const languages = [
   {
     code: 'es',
     name: 'Español', // spanish
-    country_code: 'es',
+    country_code: 'ar',
   },
   {
     code: 'zh',
