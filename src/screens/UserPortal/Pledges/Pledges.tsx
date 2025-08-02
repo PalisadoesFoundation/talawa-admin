@@ -127,7 +127,7 @@ const Pledges = (): JSX.Element => {
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {
-      input: {userId},
+      input: { userId },
       where: {
         firstName_contains: searchBy === 'pledgers' ? searchTerm : undefined,
         name_contains: searchBy === 'campaigns' ? searchTerm : undefined,
@@ -212,12 +212,12 @@ const Pledges = (): JSX.Element => {
                   className={styles.TableImage}
                 />
               ) : (
-                  <Avatar
-                    containerStyle={styles.imageContainerPledge}
-                    avatarStyle={styles.TableImagePledge}
-                    name={params.row.name}
-                    alt={params.row.name}
-                  />
+                <Avatar
+                  containerStyle={styles.imageContainerPledge}
+                  avatarStyle={styles.TableImagePledge}
+                  name={params.row.name}
+                  alt={params.row.name}
+                />
               )}
               <span>{params.row.name}</span>
             </div>
@@ -308,7 +308,7 @@ const Pledges = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        console.log("amount",params.row.goalAmount)
+        console.log('amount', params.row.goalAmount);
         return (
           <div className="d-flex justify-content-center align-items-center h-100">
             <ProgressBar
@@ -434,7 +434,7 @@ const Pledges = (): JSX.Element => {
           campaign: pledge.campaign,
           pledger: pledge.pledger,
           currency: pledge.campaign?.currencyCode,
-          goalAmount: pledge.campaign?.goalAmount
+          goalAmount: pledge.campaign?.goalAmount,
         }))}
         columns={columns}
         isRowSelectable={() => false}
