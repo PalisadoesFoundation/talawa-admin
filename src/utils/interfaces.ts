@@ -1841,7 +1841,7 @@ export interface InterfacePledgeInfo {
     name: string;
     endDate: Date;
     currencyCode: string;
-    goalAmount: string;
+    goalAmount: number;
   };
   amount: number;
   note?: string | null;
