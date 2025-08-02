@@ -663,4 +663,4 @@ jobs:
         with:
           name: cypress-screenshots
           path: frontend/cypress/screenshots
-          compression-level: 9          
+          compression-level: 9
