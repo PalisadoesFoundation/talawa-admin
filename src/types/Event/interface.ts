@@ -1,5 +1,6 @@
 import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import type { Dispatch, SetStateAction } from 'react';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 
 import type { User, Feedback } from 'types/Event/type';
 
@@ -171,6 +172,10 @@ export interface IPreviewEventModalProps {
   registerEventHandler: () => Promise<void>;
   handleEventUpdate: () => Promise<void>;
   openEventDashboard: () => void;
+  recurrence: InterfaceRecurrenceRule | null;
+  setRecurrence: Dispatch<SetStateAction<InterfaceRecurrenceRule | null>>;
+  customRecurrenceModalIsOpen: boolean;
+  setCustomRecurrenceModalIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IUpdateEventModalProps {

@@ -47,8 +47,8 @@ export const CREATE_EVENT_MUTATION = gql`
 `;
 
 export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent($input: MutationUpdateEventInput!) {
-    updateEvent(input: $input) {
+  mutation UpdateStandaloneEvent($input: MutationUpdateEventInput!) {
+    updateStandaloneEvent(input: $input) {
       id
       name
       description
@@ -113,6 +113,50 @@ export const DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
     deleteThisAndFollowingEvents(input: $input) {
       id
       name
+    }
+  }
+`;
+
+export const UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION = gql`
+  mutation UpdateSingleRecurringEventInstance(
+    $input: MutationUpdateSingleRecurringEventInstanceInput!
+  ) {
+    updateSingleRecurringEventInstance(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      location
+      isPublic
+      isRegisterable
+      allDay
+      progressLabel
+      sequenceNumber
+      totalCount
+      updatedAt
+    }
+  }
+`;
+
+export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
+  mutation UpdateThisAndFollowingEvents(
+    $input: MutationUpdateThisAndFollowingEventsInput!
+  ) {
+    updateThisAndFollowingEvents(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      location
+      isPublic
+      isRegisterable
+      allDay
+      progressLabel
+      sequenceNumber
+      totalCount
+      updatedAt
     }
   }
 `;

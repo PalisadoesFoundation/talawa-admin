@@ -49,7 +49,9 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const renderEventListCard = (props: InterfaceEvent): RenderResult => {
+const renderEventListCard = (
+  props: InterfaceEvent & { refetchEvents?: () => void },
+): RenderResult => {
   const { key, ...restProps } = props; // Destructure the key and separate other props
 
   return render(
@@ -324,7 +326,8 @@ describe('Testing Event List Card', () => {
   });
 
   it('Should update a non-recurring event', async () => {
-    renderEventListCard(props[4]);
+    const refetchEvents = vi.fn();
+    renderEventListCard({ ...props[4], refetchEvents });
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -353,21 +356,20 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('updateAllDay'));
     await userEvent.click(screen.getByTestId('updateIsPublic'));
     await userEvent.click(screen.getByTestId('updateRegistrable'));
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('previewUpdateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(refetchEvents).toHaveBeenCalled();
     });
   });
 
   it('Should update a non all day non-recurring event', async () => {
-    renderEventListCard(props[4]);
+    const refetchEvents = vi.fn();
+    renderEventListCard({ ...props[4], refetchEvents });
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -407,16 +409,14 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('updateIsPublic'));
     await userEvent.click(screen.getByTestId('updateRegistrable'));
 
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
+    await userEvent.click(screen.getByTestId('previewUpdateEventBtn'));
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(refetchEvents).toHaveBeenCalled();
     });
   });
 

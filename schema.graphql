@@ -887,7 +887,13 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(input: MutationUpdateEventInput!): EventPg
+  updateStandaloneEvent(input: MutationUpdateEventInput!): EventPg
+  updateSingleRecurringEventInstance(
+    input: MutationUpdateSingleRecurringEventInstanceInput!
+  ): EventPg
+  updateThisAndFollowingEvents(
+    input: MutationUpdateThisAndFollowingEventsInput!
+  ): EventPg
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -2224,6 +2230,32 @@ input MutationUpdateEventInput {
   isPublic: Boolean
   isRegisterable: Boolean
 }
+
+input MutationUpdateSingleRecurringEventInstanceInput {
+  allDay: Boolean
+  description: String
+  endAt: DateTime
+  id: ID!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String
+  startAt: DateTime
+}
+
+input MutationUpdateThisAndFollowingEventsInput {
+  allDay: Boolean
+  description: String
+  endAt: DateTime
+  id: ID!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String
+  recurrence: RecurrenceInput
+  startAt: DateTime
+}
+
 input MutationDeleteEntireRecurringEventSeriesInput {
   id: ID!
 }
