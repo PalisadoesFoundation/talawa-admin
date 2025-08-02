@@ -127,7 +127,7 @@ const Pledges = (): JSX.Element => {
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {
-      userId: userId,
+      input: {userId},
       where: {
         firstName_contains: searchBy === 'pledgers' ? searchTerm : undefined,
         name_contains: searchBy === 'campaigns' ? searchTerm : undefined,
@@ -192,8 +192,8 @@ const Pledges = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     {
-      field: 'pledgers',
-      headerName: 'Pledgers',
+      field: 'pledger',
+      headerName: 'Pledger',
       flex: 4,
       minWidth: 50,
       align: 'left',
@@ -203,43 +203,24 @@ const Pledges = (): JSX.Element => {
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {params.row.users
-              .slice(0, 2)
-              .map((user: InterfaceUserInfoPG, index: number) => (
-                <div className={styles.pledgerContainer} key={index}>
-                  {user.image ? (
-                    <img
-                      src={user.image}
-                      alt="pledge"
-                      data-testid={`image${index + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={user.id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={user.firstName + ' ' + user.lastName}
-                        alt={user.firstName + ' ' + user.lastName}
-                      />
-                    </div>
-                  )}
-                  <span key={user.id + '2'}>
-                    {user.firstName + ' ' + user.lastName}
-                  </span>
-                </div>
-              ))}
-            {params.row.users.length > 2 && (
-              <div
-                className={styles.moreContainer}
-                aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, params.row.users.slice(2))}
-              >
-                <span>+{params.row.users.length - 2} more...</span>
-              </div>
-            )}
+            <div className={styles.pledgerContainer}>
+              {params.row.image ? (
+                <img
+                  src={params.row.image}
+                  alt="pledger"
+                  data-testid="image1"
+                  className={styles.TableImage}
+                />
+              ) : (
+                  <Avatar
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={params.row.name}
+                    alt={params.row.name}
+                  />
+              )}
+              <span>{params.row.name}</span>
+            </div>
           </div>
         );
       },
@@ -326,13 +307,14 @@ const Pledges = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: () => {
+      renderCell: (params: GridCellParams) => {
+        console.log("amount",params.row.goalAmount)
         return (
           <div className="d-flex justify-content-center align-items-center h-100">
             <ProgressBar
-              now={200}
-              label={`${(200 / 1000) * 100}%`}
-              max={1000}
+              now={(params.row.amount / params.row.goalAmount) * 100}
+              label={`${Math.round((params.row.amount / params.row.goalAmount) * 100)}%`}
+              max={100}
               className={styles.progressBar}
               data-testid="progressBar"
             />
@@ -444,12 +426,15 @@ const Pledges = (): JSX.Element => {
         rowHeight={65}
         rows={pledges.map((pledge) => ({
           id: pledge.id,
-          users: pledge.users,
+          name: pledge.pledger.name,
+          image: pledge.pledger.avatarURL,
           startDate: pledge.startDate,
           endDate: pledge.endDate,
           amount: pledge.amount,
-          currency: pledge.currency,
           campaign: pledge.campaign,
+          pledger: pledge.pledger,
+          currency: pledge.campaign?.currencyCode,
+          goalAmount: pledge.campaign?.goalAmount
         }))}
         columns={columns}
         isRowSelectable={() => false}
@@ -486,9 +471,9 @@ const Pledges = (): JSX.Element => {
             key={index}
             data-testid={`extra${index + 1}`}
           >
-            {user.image ? (
+            {user.avatarURL ? (
               <img
-                src={user.image}
+                src={user.avatarURL}
                 alt="pledger"
                 data-testid={`extraImage${index + 1}`}
                 className={styles.TableImage}
