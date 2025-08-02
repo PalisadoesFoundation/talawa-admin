@@ -379,10 +379,11 @@ export const CREATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimetype
+        name
+        objectName
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -432,18 +433,40 @@ export const UPDATE_POST_MUTATION = gql`
   }
 `;
 
+export const UPDATE_POST_VOTE = gql`
+  mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
+    updatePostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const LIKE_POST = gql`
-  mutation likePost($postId: ID!) {
-    likePost(id: $postId) {
-      _id
+  mutation createPostVote($input: MutationCreatePostVoteInput!) {
+    createPostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;
 
 export const UNLIKE_POST = gql`
-  mutation unlikePost($postId: ID!) {
-    unlikePost(id: $postId) {
-      _id
+  mutation deletePostVote($input: MutationDeletePostVoteInput!) {
+    deletePostVote(input: $input) {
+      id
     }
   }
 `;
