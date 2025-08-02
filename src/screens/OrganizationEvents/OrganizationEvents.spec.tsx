@@ -909,6 +909,7 @@ describe('Organisation Events Page', () => {
     // The initial view should be Month View by default
     expect(container.textContent).toMatch('Month');
 
+
     // Find and click the view type dropdown
     const viewTypeDropdown = screen.getByTestId('selectViewType');
     await userEvent.click(viewTypeDropdown);
@@ -921,6 +922,7 @@ describe('Organisation Events Page', () => {
     await waitFor(() => {
       // Check if the container's text content includes "Day"
       expect(container.textContent).toMatch('Day');
+
     });
   });
 
