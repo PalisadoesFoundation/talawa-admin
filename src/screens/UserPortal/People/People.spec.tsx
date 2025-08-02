@@ -552,7 +552,6 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
     // Force a re-render to trigger the useEffect with mocked state
 
-
     // Verify the component still renders valid fallback data (e.g., Admin/User list)
     await waitFor(() => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();

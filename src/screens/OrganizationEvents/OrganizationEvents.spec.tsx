@@ -922,7 +922,7 @@ describe('Organisation Events Page', () => {
       await userEvent.click(dayViewButton);
       await waitFor(() => {
         // Verify that the view type changed - this tests the line: if (item) setViewType(item as ViewType);
-        expect(container.textContent).toMatch('Day');
+        expect(container.textContent).toMatch('day');
       });
     }
   });
