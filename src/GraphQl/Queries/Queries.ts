@@ -36,17 +36,22 @@ export const CURRENT_USER = gql`
   }
 `;
 
-// Query to take the Organization list
+// Shared fields
+const ORG_FIELDS = gql`
+  fragment OrgFields on Organization {
+    id
+    name
+    addressLine1
+    description
+    avatarURL
+  }
+`;
+
+// Full query with members
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      id
-      name
-      addressLine1
-      description
-      avatarURL
-      adminsCount
-      membersCount
+      ...OrgFields
       members(first: 32) {
         edges {
           node {
@@ -59,6 +64,17 @@ export const ORGANIZATION_LIST = gql`
       }
     }
   }
+  ${ORG_FIELDS}
+`;
+
+// Lightweight version without members
+export const ORGANIZATION_LIST_NO_MEMBERS = gql`
+  query {
+    organizations {
+      ...OrgFields
+    }
+  }
+  ${ORG_FIELDS}
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
