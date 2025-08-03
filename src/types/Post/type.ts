@@ -125,6 +125,12 @@ export type PostNode = {
       };
     }[];
   };
+  attachments: {
+    mimeType: string;
+    name: string;
+    fileHash: string;
+    objectName: string;
+  }[];
 
   commentsCount: number;
 

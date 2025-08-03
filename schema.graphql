@@ -5208,7 +5208,7 @@ type PostAttachment {
   """
   Mime type of the attachment.
   """
-  mimeType: String
+  mimetype: String
 
   """
   Identifier name of the attachment.

@@ -10,6 +10,30 @@ Defined in: [src/types/Post/type.ts:104](https://github.com/PalisadoesFoundation
 
 ## Properties
 
+### attachments
+
+> **attachments**: `object`[]
+
+Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L128)
+
+#### fileHash
+
+> **fileHash**: `string`
+
+#### mimeType
+
+> **mimeType**: `string`
+
+#### name
+
+> **name**: `string`
+
+#### objectName
+
+> **objectName**: `string`
+
+***
+
 ### caption
 
 > **caption**: `string` \| `null`
@@ -30,7 +54,7 @@ Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation
 
 > `optional` **comments**: `object`
 
-Defined in: [src/types/Post/type.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L131)
+Defined in: [src/types/Post/type.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L137)
 
 #### edges
 
@@ -42,7 +66,7 @@ Defined in: [src/types/Post/type.ts:131](https://github.com/PalisadoesFoundation
 
 > **commentsCount**: `number`
 
-Defined in: [src/types/Post/type.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L129)
+Defined in: [src/types/Post/type.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L135)
 
 ***
 

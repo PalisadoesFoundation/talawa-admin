@@ -186,6 +186,7 @@ export default function home(): JSX.Element {
       upVotesCount,
       downVotesCount,
       comments,
+      attachments,
     } = node;
     if (upVotesCount > 0) {
       const voters =
@@ -230,7 +231,6 @@ export default function home(): JSX.Element {
             },
           })) || [],
       },
-
       upVoteCount: upVotesCount,
       downVoteCount: downVotesCount,
       comments:

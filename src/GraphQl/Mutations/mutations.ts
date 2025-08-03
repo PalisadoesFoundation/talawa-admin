@@ -427,7 +427,10 @@ export const UPDATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
     }
   }

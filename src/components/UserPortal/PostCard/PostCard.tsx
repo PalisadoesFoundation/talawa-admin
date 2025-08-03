@@ -1,5 +1,31 @@
-// Updated PostCard component without local like/comment state management
-// All updates now reflect directly to DB and rely on fresh fetch from parent
+/**
+ * Component representing a post card in the user portal.
+ *
+ * This component displays a post with its details such as title, content, creator,
+ * likes, comments, and associated actions like editing, deleting, liking, and commenting.
+ * It also includes modals for viewing the post in detail and editing the post content.
+ *
+ * @param props - The properties of the post card.
+ * @param props.id - Unique identifier for the post.
+ * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
+ * @param props.title - Title of the post.
+ * @param props.text - Content of the post.
+ * @param props.image - URL of the post's image.
+ * @param props.postedAt - Date when the post was created.
+ * @param props.likeCount - Number of likes on the post.
+ * @param props.likedBy - Array of users who liked the post.
+ * @param props.comments - Array of comments on the post.
+ * @param props.commentCount - Total number of comments on the post.
+ * @param props.fetchPosts - Function to refresh the list of posts.
+ *
+ * @returns A JSX.Element representing the post card.
+ *
+ * @remarks
+ * - Includes GraphQL mutations for liking, unliking, commenting, editing, and deleting posts.
+ * - Uses `react-bootstrap` for UI components and `@apollo/client` for GraphQL operations.
+ * - Handles state for likes, comments, and modals using React hooks.
+ * - Displays error messages and success notifications using `react-toastify`.
+ */
 
 import React from 'react';
 import { useMutation } from '@apollo/client';
@@ -133,8 +159,8 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
       node: { id: edge.node.id },
     })) || [];
 
-  console.log('upVoters', upVoters);
-  console.log('upVoters', upVoters[0]?.node.id);
+  // console.log('upVoters', upVoters);
+  // console.log('upVoters', upVoters[0]?.node.id);
 
   return (
     <Col key={props.id} className="d-flex justify-content-center my-2">
