@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 /**
  * GraphQL mutation to create a new plugin.
@@ -54,6 +54,20 @@ export const DELETE_PLUGIN_MUTATION = gql`
     deletePlugin(input: $input) {
       id
       pluginId
+    }
+  }
+`;
+
+export const UPLOAD_PLUGIN_ZIP_MUTATION = gql`
+  mutation UploadPluginZip($input: UploadPluginZipInput!) {
+    uploadPluginZip(input: $input) {
+      id
+      pluginId
+      isActivated
+      isInstalled
+      backup
+      createdAt
+      updatedAt
     }
   }
 `;

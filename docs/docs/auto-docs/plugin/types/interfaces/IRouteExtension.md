@@ -4,7 +4,7 @@
 
 # Interface: IRouteExtension
 
-Defined in: [src/plugin/types.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L42)
+Defined in: [src/plugin/types.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L63)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:42](https://github.com/PalisadoesFoundation/tal
 
 > **component**: `string`
 
-Defined in: [src/plugin/types.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L45)
+Defined in: [src/plugin/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L66)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:45](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **exact**: `boolean`
 
-Defined in: [src/plugin/types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L46)
+Defined in: [src/plugin/types.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L67)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:46](https://github.com/PalisadoesFoundation/tal
 
 > **path**: `string`
 
-Defined in: [src/plugin/types.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L44)
+Defined in: [src/plugin/types.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L65)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:44](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **permissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L47)
+Defined in: [src/plugin/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L68)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/types.ts:47](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L43)
+Defined in: [src/plugin/types.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L64)
