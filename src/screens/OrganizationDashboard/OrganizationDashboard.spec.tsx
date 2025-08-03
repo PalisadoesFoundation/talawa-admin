@@ -184,6 +184,39 @@ describe('OrganizationDashboard', () => {
     expect(screen.getByText('Home Page')).toBeInTheDocument();
   });
 
+  it('redirects to "/" when orgId is missing from URL params', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MemoryRouter initialEntries={['/orgdash/']}>
+          <Routes>
+            <Route
+              path="/orgdash/:orgId?"
+              element={<OrganizationDashboard />}
+            />
+            <Route path="/" element={<div>Redirected to Home</div>} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('Redirected to Home')).toBeInTheDocument();
+  });
+
+  it('redirects to "/" when orgId is undefined', () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MemoryRouter initialEntries={['/orgdash']}>
+          <Routes>
+            <Route path="/orgdash" element={<OrganizationDashboard />} />
+            <Route path="/" element={<div>Redirected to Home</div>} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('Redirected to Home')).toBeInTheDocument();
+  });
+
   it('displays view all buttons for active sections', async () => {
     renderWithProviders({ mocks: MOCKS });
 
