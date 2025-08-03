@@ -20,7 +20,7 @@ import {
 import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
-  ORGANIZATION_LIST,
+  ORGANIZATION_LIST_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -37,7 +37,14 @@ const MOCKS = [
     result: {
       data: {
         signIn: {
-          user: { id: '1', role: 'administrator' },
+          user: {
+            id: '1',
+            role: 'administrator',
+            name: 'John Doe',
+            emailAddress: 'johndoe@gmail.com',
+            countryCode: 'US',
+            avatarURL: 'https://example.com/avatar.jpg',
+          },
           authenticationToken: 'authenticationToken',
         },
       },
@@ -47,6 +54,7 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
+        ID: '',
         name: 'John Doe',
         email: 'johndoe@gmail.com',
         password: 'Johndoe@123',
@@ -69,51 +77,50 @@ const MOCKS = [
     request: { query: GET_COMMUNITY_DATA_PG },
     result: { data: { community: null } },
   },
-];
-
-const MOCKS3 = [
   {
-    request: { query: ORGANIZATION_LIST },
+    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
     result: {
       data: {
         organizations: [
           {
-            _id: '6437904485008f171cf29924',
-            image: null,
-            creator: { firstName: 'Wilt', lastName: 'Shepherd' },
+            id: '6437904485008f171cf29924',
             name: 'Unity Foundation',
-            members: [{ _id: '64378abd85008f171cf2990d' }],
-            admins: [{ _id: '64378abd85008f171cf2990d' }],
-            createdAt: '2023-04-13T05:16:52.827Z',
-            address: {
-              city: 'Bronx',
-              countryCode: 'US',
-              dependentLocality: 'Some Dependent Locality',
-              line1: '123 Random Street',
-              line2: 'Apartment 456',
-              postalCode: '10451',
-              sortingCode: 'ABC-123',
-              state: 'NYC',
-            },
+            addressLine1: '123 Random Street',
+            description: 'Unity Foundation for community development',
+            avatarURL: null,
           },
           {
-            _id: 'db1d5caad2ade57ab811e681',
-            image: null,
-            creator: { firstName: 'Sonya', lastName: 'Jones' },
+            id: 'db1d5caad2ade57ab811e681',
             name: 'Mills Group',
-            members: [{ _id: '661b8410bd25a325da05e67c' }],
-            admins: [{ _id: '661b8410bd25a325da05e67c' }],
-            createdAt: '2024-04-14T07:21:52.940Z',
-            address: {
-              city: 'Lake Martineside',
-              countryCode: 'SL',
-              dependentLocality: 'Apt. 544',
-              line1: '5112 Dare Centers',
-              line2: 'Suite 163',
-              postalCode: '10452',
-              sortingCode: '46565-3458',
-              state: 'New Hampshire',
-            },
+            addressLine1: '5112 Dare Centers',
+            description: 'Mills Group organization',
+            avatarURL: null,
+          },
+        ],
+      },
+    },
+  },
+];
+
+const MOCKS3 = [
+  {
+    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: '6437904485008f171cf29924',
+            name: 'Unity Foundation',
+            addressLine1: '123 Random Street',
+            description: 'Unity Foundation for community development',
+            avatarURL: null,
+          },
+          {
+            id: 'db1d5caad2ade57ab811e681',
+            name: 'Mills Group',
+            addressLine1: '5112 Dare Centers',
+            description: 'Mills Group organization',
+            avatarURL: null,
           },
         ],
       },
@@ -128,10 +135,29 @@ const MOCKS4 = [
       variables: {
         email: 'johndoe@gmail.com',
         password: 'johndoe1',
-        id: 'yttyt',
       },
     },
     error: new Error('Invalid credentials'),
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+  {
+    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: '6437904485008f171cf29924',
+            name: 'Unity Foundation',
+            addressLine1: '123 Random Street',
+            description: 'Unity Foundation for community development',
+            avatarURL: null,
+          },
+        ],
+      },
+    },
   },
 ];
 
