@@ -6,7 +6,7 @@
 
 > **usePluginInjectors**(`injectorType`): `any`[]
 
-Defined in: [src/plugin/hooks.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L187)
+Defined in: [src/plugin/hooks.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L195)
 
 Hook to get plugin injector extensions
 

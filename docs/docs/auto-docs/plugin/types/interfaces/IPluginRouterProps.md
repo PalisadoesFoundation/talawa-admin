@@ -4,7 +4,7 @@
 
 # Interface: IPluginRouterProps
 
-Defined in: [src/plugin/types.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L168)
+Defined in: [src/plugin/types.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L190)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:168](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L170)
+Defined in: [src/plugin/types.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L192)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **userPermissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L169)
+Defined in: [src/plugin/types.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L191)

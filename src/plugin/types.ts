@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-// Plugin Manifest Types
+// Plugin Manifest Types (Technical Configuration)
 export interface IPluginManifest {
   name: string;
   pluginId: string;
@@ -14,9 +14,30 @@ export interface IPluginManifest {
   main: string;
   extensionPoints?: IExtensionPoints;
   icon?: string;
+  homepage?: string; // Add missing homepage property
+  license?: string; // Add missing license property
+  tags?: string[]; // Add missing tags property
+}
+
+// Plugin Info Types (Descriptive/Marketing Data)
+export interface IPluginInfo {
   homepage?: string;
   license?: string;
   tags?: string[];
+  screenshots?: string[];
+  features?: string[];
+  changelog?: Array<{
+    version: string;
+    date: string;
+    changes: string[];
+  }>;
+  requirements?: {
+    talawaVersion?: string;
+    nodeVersion?: string;
+    dependencies?: Record<string, string>;
+  };
+  permissions?: string[];
+  categories?: string[];
 }
 
 // Extension Point Types
@@ -81,8 +102,7 @@ export interface IPluginDetails extends IPluginMeta {
   homepage?: string;
   license?: string;
   tags?: string[];
-  downloads?: number;
-  rating?: number;
+  features?: string[];
   changelog: Array<{
     version: string;
     date: string;
@@ -98,9 +118,11 @@ export interface IInstalledPlugin extends IPluginDetails {
 export interface ILoadedPlugin {
   id: string;
   manifest: IPluginManifest;
-  components: Record<string, React.ComponentType>;
-  status: PluginStatus;
-  errorMessage?: string;
+  info?: IPluginInfo;
+  status: 'active' | 'inactive' | 'error';
+  error?: string;
+  errorMessage?: string; // Additional error message property
+  components?: Record<string, React.ComponentType<any>>; // Plugin components
 }
 
 export interface IExtensionRegistry {
