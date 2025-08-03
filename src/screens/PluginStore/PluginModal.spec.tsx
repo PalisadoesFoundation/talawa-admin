@@ -731,4 +731,119 @@ describe('PluginModal', () => {
       ).not.toBeInTheDocument();
     });
   });
+
+  describe('Features Extraction', () => {
+    it('should extract features from readme when features are not available in details', async () => {
+      const mockDetailsWithReadme: IPluginDetails = {
+        ...mockDetails,
+        features: undefined, // No features in details
+        readme:
+          'Some content\nFeatures:\n- Feature 1\n- Feature 2\n- Feature 3\nMore content',
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
+        mockDetailsWithReadme,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Wait for the details to load
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+      });
+
+      // Click on Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      // Check that features extracted from readme are displayed
+      expect(screen.getByText('Feature 1')).toBeInTheDocument();
+      expect(screen.getByText('Feature 2')).toBeInTheDocument();
+      expect(screen.getByText('Feature 3')).toBeInTheDocument();
+    });
+
+    it('should handle readme without Features section', async () => {
+      const mockDetailsWithReadmeNoFeatures: IPluginDetails = {
+        ...mockDetails,
+        features: undefined, // No features in details
+        readme:
+          'Some content without Features section\n- This should not be extracted',
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
+        mockDetailsWithReadmeNoFeatures,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Wait for the details to load
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+      });
+
+      // Click on Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      // Should not display any features since there's no Features section
+      expect(
+        screen.queryByText('This should not be extracted'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should handle readme with Features section but no bullet points', async () => {
+      const mockDetailsWithReadmeNoBullets: IPluginDetails = {
+        ...mockDetails,
+        features: undefined, // No features in details
+        readme: 'Some content\nFeatures:\nNo bullet points here\nMore content',
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
+        mockDetailsWithReadmeNoBullets,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Wait for the details to load
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+      });
+
+      // Click on Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      // Should not display any features since there are no bullet points
+      expect(
+        screen.queryByText('No bullet points here'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should handle readme with mixed content in Features section', async () => {
+      const mockDetailsWithMixedContent: IPluginDetails = {
+        ...mockDetails,
+        features: undefined, // No features in details
+        readme:
+          'Some content\nFeatures:\n- Feature 1\nRegular text\n- Feature 2\nMore text\n- Feature 3',
+      };
+
+      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
+        mockDetailsWithMixedContent,
+      );
+
+      render(<PluginModal {...defaultProps} />);
+
+      // Wait for the details to load
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+      });
+
+      // Click on Features tab
+      fireEvent.click(screen.getByText('Features'));
+
+      // Should only display the bullet point features
+      expect(screen.getByText('Feature 1')).toBeInTheDocument();
+      expect(screen.getByText('Feature 2')).toBeInTheDocument();
+      expect(screen.getByText('Feature 3')).toBeInTheDocument();
+      expect(screen.queryByText('Regular text')).not.toBeInTheDocument();
+      expect(screen.queryByText('More text')).not.toBeInTheDocument();
+    });
+  });
 });

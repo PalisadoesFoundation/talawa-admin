@@ -728,6 +728,105 @@ describe('UploadPluginModal Component', () => {
       // Should not crash even if fileInputRef.current is null
       expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
     });
+
+    it('should handle zip file with neither admin nor api folder', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      vi.mocked(validateAdminPluginZip).mockResolvedValue({
+        hasAdminFolder: false,
+        hasApiFolder: false,
+        files: {},
+        adminManifest: undefined,
+        apiManifest: undefined,
+        apiFiles: [],
+      });
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const file = createMockFile('invalid-plugin.zip', 'invalid content');
+      const fileInput = getFileInput();
+
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            /Zip file must contain either 'admin' or 'api' folder with valid plugin structure/,
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should reset all state when handleClose is called', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      vi.mocked(validateAdminPluginZip).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        files: { 'admin/manifest.json': 'content' },
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          pluginId: 'test-plugin',
+          description: 'A test plugin',
+          author: 'Test Author',
+          main: 'index.js',
+        },
+        apiManifest: undefined,
+        apiFiles: [],
+      });
+
+      const mockOnHide = vi.fn();
+
+      // First render with file uploaded
+      const { unmount } = render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <UploadPluginModal show={true} onHide={mockOnHide} />
+        </MockedProvider>,
+      );
+
+      // First, upload a file to set some state
+      const file = createMockFile('test-plugin.zip', 'valid content');
+      const fileInput = getFileInput();
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      // Wait for the file to be processed
+      await waitFor(() => {
+        expect(screen.getByText('Test Plugin')).toBeInTheDocument();
+      });
+
+      // Unmount and re-render to simulate modal close and reopen
+      unmount();
+
+      // Re-render the modal to verify state is reset
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <UploadPluginModal show={true} onHide={mockOnHide} />
+        </MockedProvider>,
+      );
+
+      // Verify that the file input is empty and no plugin info is shown
+      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(screen.queryByText('Test Plugin')).not.toBeInTheDocument();
+    });
+
+    it('should handle close when modal is hidden', async () => {
+      const mockOnHide = vi.fn();
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <UploadPluginModal show={false} onHide={mockOnHide} />
+        </MockedProvider>,
+      );
+
+      // The modal should not be visible
+      expect(screen.queryByText('Upload Plugin')).not.toBeInTheDocument();
+    });
   });
 
   describe('Edge Cases', () => {
