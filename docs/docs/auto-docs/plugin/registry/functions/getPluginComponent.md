@@ -6,7 +6,7 @@
 
 > **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
 
-Defined in: [src/plugin/registry.tsx:268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L268)
+Defined in: [src/plugin/registry.tsx:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L259)
 
 Get a specific component from a plugin
 

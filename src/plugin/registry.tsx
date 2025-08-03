@@ -159,15 +159,6 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
     }
   });
 
-  // Handle all drawer types
-  const drawerArrays = [
-    manifest.extensionPoints?.drawer,
-    manifest.extensionPoints?.DA1,
-    manifest.extensionPoints?.DA2,
-    manifest.extensionPoints?.DU1,
-    manifest.extensionPoints?.DU2,
-  ];
-
   // Handle all injector types
   const injectorArrays = [
     manifest.extensionPoints?.G1,
