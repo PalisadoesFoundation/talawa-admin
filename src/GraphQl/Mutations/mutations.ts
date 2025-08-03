@@ -433,21 +433,6 @@ export const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-export const LIKE_POST = gql`
-  mutation createPostVote($input: MutationCreatePostVoteInput!) {
-    createPostVote(input: $input) {
-      id
-      upVoters(first: 10) {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const UPDATE_EVENT_MUTATION = gql`
   mutation UpdateEvent($input: MutationUpdateEventInput!) {
     updateEvent(input: $input) {
@@ -481,7 +466,6 @@ export const UPDATE_EVENT_MUTATION = gql`
 export const UPDATE_POST_VOTE = gql`
   mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
     updatePostVote(input: $input) {
-
       id
       upVoters(first: 10) {
         edges {
@@ -516,7 +500,6 @@ export const UNLIKE_POST = gql`
     }
   }
 `;
-
 
 export const REGISTER_EVENT = gql`
   mutation registerForEvent($eventId: ID!) {

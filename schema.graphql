@@ -72,57 +72,29 @@ type ActionItem {
   preCompletionNotes: String
 
   """
-  Timestamp when the action item was last updated.
-  """
-  updatedAt: DateTime
-
-  """
   User who last updated the action item.
   """
   updater: User
 }
 
-"""
-GraphQL connection for ActionItemCategory actionItems field
-"""
-type ActionItemCategoryActionItemsConnection {
-  edges: [ActionItemCategoryActionItemsConnectionEdge]
-  pageInfo: PageInfo!
-}
-
-"""
-GraphQL connection edge for ActionItemCategory actionItems field
-"""
-type ActionItemCategoryActionItemsConnectionEdge {
-  cursor: String!
-  node: ActionItem
-}
-"""
-Represents a category for action items, including metadata such as creation and update timestamps.
-"""
 type ActionItemCategory {
   """
-  GraphQL connection to traverse through the action items that belong to this category.
+  Action items that belong to this category.
   """
-  actionItems(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ActionItemCategoryActionItemsConnection
+  actionItems: [ActionItem!]
 
   """
-  Timestamp when the category was created.
+  Timestamp when the action item category was created.
   """
   createdAt: DateTime
 
   """
-  User who created the category.
+  User who created the action item category.
   """
   creator: User
 
   """
-  the description of the action item category.
+  The description of the action item category.
   """
   description: String
 
@@ -147,12 +119,12 @@ type ActionItemCategory {
   organization: Organization
 
   """
-  Timestamp when the category was last updated.
+  Timestamp when the action item category was last updated.
   """
   updatedAt: DateTime
 
   """
-  User who last updated the category.
+  User who last updated the action item category.
   """
   updater: User
 }
@@ -813,28 +785,11 @@ input CreateActionItemInput {
   preCompletionNotes: String
 }
 
-"""
-"""
-input MutationCreateActionItemCategoryInput {
-  """
-  Name of the action item category.
-  """
-  name: String!
-
-  """
-  Description of the action item category.
-  """
-  description: String
-
-  """
-  ID of the organization this category belongs to.
-  """
-  organizationId: ID!
-
-  """
-  Whether the category is disabled.
-  """
-  isDisabled: Boolean!
+input CreatePluginInput {
+  backup: Boolean
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String!
 }
 
 """
@@ -846,6 +801,10 @@ scalar Date
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+input DeletePluginInput {
+  id: String!
+}
 
 """
 Possible statuses for a membership request.
@@ -862,6 +821,9 @@ A field whose value conforms to the standard internet email address format as sp
 scalar EmailAddress
 
 type Event {
+  """
+  GraphQL connection to traverse through the action items associated with this event.
+  """
   actionItems(
     after: String
     before: String
@@ -880,14 +842,19 @@ type Event {
   ): EventAgendaFoldersConnection
 
   """
-  all day time.
+  A boolean flag indicating if the event lasts for the entire day.
   """
-  allDay: Boolean!
+  allDay: Boolean
 
   """
-  Array of attachments.
+  A list of attachments associated with the event, such as images or documents.
   """
   attachments: [EventAttachment!]
+
+  """
+  The base event from which this materialized instance was generated.
+  """
+  baseEvent: Event
 
   """
   Date time at the time the event was created.
@@ -900,39 +867,49 @@ type Event {
   creator: User
 
   """
-  Custom information about the event.
+  A detailed description of the event, providing custom information and context.
   """
   description: String
 
   """
-  Date time at the time the event ends at.
+  The date and time when the event is scheduled to end. For materialized instances, this reflects the actual end time if modified.
   """
   endAt: DateTime
 
   """
-  Global identifier of the event.
+  A boolean flag indicating if this materialized instance has any exceptions applied to it.
+  """
+  hasExceptions: Boolean
+
+  """
+  The unique global identifier for the event. For recurring instances, this ID refers to the specific materialized instance.
   """
   id: ID!
 
   """
-  Boolean to tell if the event is public
+  A boolean flag indicating if the event is visible to the public.
   """
   isPublic: Boolean
 
   """
-  Boolean to tell if the event is registerable.
+  A boolean flag indicating if this event serves as a template for a recurring series.
+  """
+  isRecurringEventTemplate: Boolean
+
+  """
+  A boolean flag indicating if users can register for this event.
   """
   isRegisterable: Boolean
 
   """
-  Name of the event.
-  """
-  name: String
-
-  """
-  location of the event.
+  The physical or virtual location where the event will take place.
   """
   location: String
+
+  """
+  The name or title of the event.
+  """
+  name: String
 
   """
   Organization the event belongs to.
@@ -940,357 +917,29 @@ type Event {
   organization: Organization
 
   """
-  Date time at the time the event starts at.
+  A human-readable label indicating the progress of this instance in the series, such as '5 of 12' or 'Episode #7'.
   """
-  startAt: DateTime
+  progressLabel: String
 
-<<<<<<< HEAD
-type MaximumLengthError implements FieldError {
-  message: String!
-  path: [String!]!
-}
+  """
+  The sequence number of this instance within its recurring series (e.g., 1, 2, 3, ...).
+  """
+  sequenceNumber: Int
 
-type MaximumValueError implements FieldError {
-  limit: Int!
-  message: String!
-  path: [String!]!
-}
-
-type MembershipRequest {
-  _id: ID!
-  organization: Organization!
-  user: User!
-}
-
-type MinimumLengthError implements FieldError {
-  limit: Int!
-  message: String!
-  path: [String!]!
-}
-
-type MinimumValueError implements FieldError {
-  message: String!
-  path: [String!]!
-}
-
-input CreateAdvertisementInput {
-  endDate: Date!
-  name: String!
-  organizationId: ID!
-  startDate: Date!
-  type: AdvertisementType!
-  mediaFile: String!
-}
-
-type CreateAdvertisementPayload {
-  advertisement: Advertisement
-}
-
-input EditVenueInput {
-  capacity: Int
-  description: String
-  file: String
-  id: ID!
-  name: String
-}
-
-input MutationCreateAdvertisementInput {
-  attachments: [Upload!]
-  description: String
-  endAt: DateTime!
-  name: String!
-  organizationId: ID!
+  """
+  The date and time when the event is scheduled to start. For materialized instances, this reflects the actual start time if modified.
+  """
   startAt: DateTime!
-  type: AdvertisementType!
-}
 
-input QueryOrganizationInput {
-  id: String!
-}
+  """
+  The total number of instances in the complete recurring series. This will be null for infinite series.
+  """
+  totalCount: Int
 
-type Mutation {
-  acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  addEventAttendee(data: EventAttendeeInput!): User!
-  addFeedback(data: FeedbackInput!): Feedback!
-  addLanguageTranslation(data: LanguageInput!): Language!
-  addOrganizationCustomField(
-    name: String!
-    organizationId: ID!
-    type: String!
-  ): OrganizationCustomField!
-  addOrganizationImage(file: String!, organizationId: String!): Organization!
-  addUserCustomData(
-    dataName: String!
-    dataValue: Any!
-    organizationId: ID!
-  ): UserCustomData!
-  addUserImage(file: String!): User!
-  addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
-  adminRemoveEvent(eventId: ID!): Event!
-  assignUserTag(input: ToggleUserTagAssignInput!): User
-  blockUser(organizationId: ID!, userId: ID!): User!
-  cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  checkIn(data: CheckInInput!): CheckIn!
-  createActionItem(input: CreateActionItemInput!): ActionItem
-
-  createActionItemCategory(
-    input: MutationCreateActionItemCategoryInput!
-  ): ActionItemCategory!
-  createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
-  createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
-  createComment(data: CommentInput!, postId: ID!): Comment
-  createChat(data: chatInput!): Chat!
-  createDonation(
-    amount: Float!
-    nameOfOrg: String!
-    nameOfUser: String!
-    orgId: ID!
-    payPalId: ID!
-    userId: ID!
-  ): Donation!
-  createEvent(input: MutationCreateEventInput!): EventPg
-
-  createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
-  createMember(input: UserAndOrganizationInput!): Organization!
-  createOrganization(data: OrganizationInput, file: String): Organization!
-  createPost(data: PostInput!, file: String): Post
-  createSampleOrganization: Boolean!
-  createUserFamily(data: createUserFamilyInput!): UserFamily!
-  createUserTag(input: CreateUserTagInput!): UserTag
-  createVenue(data: VenueInput!): Venue
-  deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
-  deleteActionItemCategory(
-    input: MutationDeleteActionItemCategoryInput!
-  ): ActionItemCategory
-  deleteAgendaCategory(id: ID!): ID!
-  deleteDonationById(id: ID!): DeletePayload!
-  deleteEntireRecurringEventSeries(
-    input: MutationDeleteEntireRecurringEventSeriesInput!
-  ): EventPg
-  deleteSingleEventInstance(
-    input: MutationDeleteSingleEventInstanceInput!
-  ): EventPg
-  deleteStandaloneEvent(input: MutationDeleteStandaloneEventInput!): EventPg
-  deleteThisAndFollowingEvents(
-    input: MutationDeleteThisAndFollowingEventsInput!
-  ): EventPg
-  deleteVenue(id: ID!): Venue
-  editVenue(data: EditVenueInput!): Venue
-  forgotPassword(data: ForgotPasswordData!): Boolean!
-  joinPublicOrganization(organizationId: ID!): User!
-  leaveOrganization(organizationId: ID!): User!
-  likeComment(id: ID!): Comment
-  likePost(id: ID!): Post
-  logout: Boolean!
-  markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
-  otp(data: OTPInput!): OtpData!
-  recaptcha(data: RecaptchaVerification!): Boolean!
-  refreshToken(refreshToken: String!): ExtendSession!
-  registerForEvent(id: ID!): Event!
-  rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  deleteActionItem(input: MutationDeleteActionItemInput!): ActionItem
-  removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  removeAdvertisement(id: ID!): Advertisement
-  removeComment(id: ID!): Comment
-  removeEventAttendee(data: EventAttendeeInput!): User!
-  removeEventVolunteer(id: ID!): EventVolunteer!
-  removeMember(data: UserAndOrganizationInput!): Organization!
-  deleteOrganizationMembership(
-    input: deleteOrganizationMembershipInput
-  ): Organization!
-  removeOrganization(id: ID!): UserData!
-  removeOrganizationCustomField(
-    customFieldId: ID!
-    organizationId: ID!
-  ): OrganizationCustomField!
-  removeOrganizationImage(organizationId: String!): Organization!
-  removePost(id: ID!): Post
-  removeSampleOrganization: Boolean!
-  removeUserCustomData(organizationId: ID!): UserCustomData!
-  removeUserFamily(familyId: ID!): UserFamily!
-  removeUserFromUserFamily(familyId: ID!, userId: ID!): UserFamily!
-  removeUserImage: User!
-  removeUserTag(id: ID!): UserTag
-  revokeRefreshTokenForUser: Boolean!
-  saveFcmToken(token: String): Boolean!
-  sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(
-    chatId: ID!
-    messageContent: String!
-    type: String!
-    replyTo: ID
-  ): ChatMessage!
-  signUp(input: UserInput!, file: String): AuthData!
-  createUser(input: createUserInput!): AuthData!
-  togglePostPin(id: ID!, title: String): Post!
-  unassignUserTag(input: ToggleUserTagAssignInput!): User
-  unblockUser(organizationId: ID!, userId: ID!): User!
-  unlikeComment(id: ID!): Comment
-  unlikePost(id: ID!): Post
-  unregisterForEventByUser(id: ID!): Event!
-  updateActionItem(input: MutationUpdateActionItemInput!): ActionItem
-  updateActionItemCategory(
-    input: MutationUpdateActionItemCategoryInput!
-  ): ActionItemCategory
-  updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
-  updateAgendaCategory(
-    id: ID!
-    input: UpdateAgendaCategoryInput!
-  ): AgendaCategory
-  updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(input: MutationUpdateEventInput!): EventPg
-  updateEventVolunteer(
-    data: UpdateEventVolunteerInput
-    id: ID!
-  ): EventVolunteer!
-  updateLanguage(languageCode: String!): User!
-  updateOrganization(
-    data: UpdateOrganizationInput
-    file: String
-    id: ID!
-  ): Organization!
-  updatePost(data: PostUpdateInput, id: ID!): Post!
-  updateSessionTimeout(timeout: Int!): Boolean!
-  updateUser(input: MutationUpdateUserInput!): UserPg
-  updateUserRoleInOrganization(
-    organizationId: ID!
-    role: String!
-    userId: ID!
-  ): Organization!
-  updateUserTag(input: UpdateUserTagInput!): UserTag
-  updateUserType(data: UpdateUserTypeInput!): Boolean!
-  venues: [Venue]
-}
-
-input OTPInput {
-  email: EmailAddress!
-}
-
-input AdvertisementWhereInput {
-  isCompleted: Boolean!
-}
-
-type Organization {
-  id: ID!
-  actionItemCategories: [ActionItemCategory]
-  address: Address
-  admins(adminId: ID): [User!]
-  agendaCategories: [AgendaCategory]
-  apiUrl: URL!
-  blockedUsers: [User]
-  createdAt: DateTime!
-  creator: User
-  customFields: [OrganizationCustomField!]!
-  description: String!
-  image: String
-  members: [User]
-  membershipRequests: [MembershipRequest]
-  name: String!
-  pinnedPosts: [Post]
-  updatedAt: DateTime!
-  userRegistrationRequired: Boolean!
-  userTags(
-    after: String
-    before: String
-    first: PositiveInt
-    last: PositiveInt
-  ): UserTagsConnection
-  visibleInSearch: Boolean!
-  venues: [Venue]
-}
-
-type OrganizationPg {
-  id: ID!
-  name: String
-  description: String
-  addressLine1: String
-  addressLine2: String
-  city: String
-  state: String
-  postalCode: String
-  countryCode: Iso3166Alpha2CountryCode
-  avatarMimeType: String
-  avatarURL: String
-  createdAt: DateTime
   """
   Date time at the time the event was last updated.
   """
   updatedAt: DateTime
-
-  advertisements(
-    after: String
-    before: String
-    first: Int
-    last: Int
-    where: AdvertisementWhereInput
-  ): OrganizationAdvertisementsConnectionPg
-
-  blockedUsers(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationBlockedUsersConnectionPg
-
-  chats(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationChatsConnectionPg
-
-  events(
-    after: String
-    before: String
-    first: Int
-    last: Int
-    startDate: DateTime
-    endDate: DateTime
-    includeRecurring: Boolean
-  ): OrganizationEventsConnectionPg
-
-  funds(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationFundsConnectionPg
-
-  members(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationMembersConnectionPg
-
-  pinnedPosts(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationPinnedPostsConnectionPg
-
-  posts(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationPostsConnectionPg
-
-  tagFolders(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationTagFoldersConnectionPg
-
-  tags(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationTagsConnectionPg
 
   """
   User who last updated the event.
@@ -1315,6 +964,8 @@ type EventActionItemsConnection {
   pageInfo: PageInfo!
 }
 
+"""
+"""
 type EventActionItemsConnectionEdge {
   cursor: String!
   node: ActionItem
@@ -1376,231 +1027,27 @@ input FileMetadataInput {
   """
   MIME type of the file
   """
-  mimeType: PostAttachmentMimeType!
+  mimetype: PostAttachmentMimeType!
 
-<<<<<<< HEAD
-type ChatMembersConnectionEdgePg {
-  cursor: String!
-  node: UserPg
-}
-
-type ChatMessagesConnectionPg {
-  edges: [ChatMessagesConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type ChatMessagePg {
-  id: ID!
-  body: String
-  chat: ChatPg
-  createdAt: DateTime
-  creator: UserPg
-  parentMessage: ChatMessagePg
-  updatedAt: DateTime
-}
-
-type ChatMessagesConnectionEdgePg {
-  cursor: String!
-  node: ChatMessagePg
-}
-
-type ChatPg {
-  id: ID!
-  name: String
-  description: String
-  avatarMimeType: String
-  avatarURL: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  creator: UserPg
-  updater: UserPg
-  organization: OrganizationPg
-  members(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ChatMembersConnectionPg
-
-  messages(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): ChatMessagesConnectionPg
-}
-
-type OrganizationEventsConnectionPg {
-  edges: [OrganizationEventsConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type OrganizationEventsConnectionEdgePg {
-  cursor: String!
-  node: EventPg
-}
-
-type EventAttachmentPg {
-  mimeType: String
-  url: String
-}
-
-type EventAgendaFoldersConnectionPg {
-  edges: [EventAgendaFoldersConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type EventAgendaFoldersConnectionEdgePg {
-  cursor: String!
-  node: AgendaFolderPg
-}
-
-type AgendaFolderChildFoldersConnectionPg {
-  edges: [AgendaFolderChildFoldersConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type AgendaFolderChildFoldersConnectionEdgePg {
-  cursor: String!
-  node: AgendaFolderPg
-}
-
-type AgendaFolderItemsConnectionPg {
-  edges: [AgendaFolderItemsConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type AgendaFolderItemsConnectionEdgePg {
-  cursor: String!
-  node: AgendaItemPg
-}
-
-enum AgendaItemTypePg {
-  general
-  note
-  scripture
-  song
-}
-
-type AgendaItemPg {
-  id: ID!
-  name: String
-  description: String
-  duration: String
-  event: AgendaFolderPg
-  key: String
-  type: AgendaItemTypePg
-  createdAt: DateTime
-  creator: UserPg
-  updatedAt: DateTime
-  updater: UserPg
-}
-
-type AgendaFolderPg {
-  id: ID!
-  name: String
-  createdAt: DateTime
-  creator: UserPg
-  event: EventPg
-  isAgendaItemFolder: Boolean
-  updatedAt: DateTime
-  updater: UserPg
-  parentFolder: AgendaFolderPg
-  childFolders(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): AgendaFolderChildFoldersConnectionPg
-  items(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): AgendaFolderItemsConnectionPg
-}
-
-type EventPg {
-  id: ID!
-  name: String
-  description: String
-  startAt: DateTime
-  endAt: DateTime
-  allDay: Boolean
-  location: String
-  isPublic: Boolean
-  isRegisterable: Boolean
-  # Recurring event fields
-  isRecurringEventTemplate: Boolean
-  sequenceNumber: Int
-  totalCount: Int
-  hasExceptions: Boolean
-  progressLabel: String
-  # Base event relationships
-  baseEvent: EventPg
-  # Standard fields
-  createdAt: DateTime
-  updatedAt: DateTime
-  creator: UserPg
-  updater: UserPg
-  organization: OrganizationPg
-  attachments: [EventAttachmentPg!]
-
-  actionItems(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): EventActionItemsConnectionPg
-
-  agendaFolders(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): EventAgendaFoldersConnectionPg
-
-  venues(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): EventVenuesConnectionPg
-}
-
-type EventActionItemsConnectionPg {
-  edges: [EventActionItemsConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type EventActionItemsConnectionEdgePg {
-  cursor: String!
-  node: ActionItem
-}
-
-type EventVenuesConnectionPg {
-  edges: [EventVenuesConnectionEdgePg]
-  pageInfo: PageInfoPg!
-}
-
-type EventVenuesConnectionEdgePg {
-  node: VenuePg!
-  cursor: String!
-}
-
-type VenuePg {
-  id: ID!
-=======
   """
   Name of the file
   """
->>>>>>> f708b10113 (fixed posts render on user portal)
   name: String!
 
   """
   Object name used in storage
   """
   objectName: String!
+}
+
+"""
+Possible variants of the frequency of a recurring event.
+"""
+enum Frequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
 }
 
 type Fund {
@@ -1802,293 +1249,7 @@ type FundCampaignsConnectionEdge {
   node: FundCampaign
 }
 
-<<<<<<< HEAD
-input PostWhereInput {
-  id: ID
-  id_contains: ID
-  id_in: [ID!]
-  id_not: ID
-  id_not_in: [ID!]
-  id_starts_with: ID
-  text: String
-  text_contains: String
-  text_in: [String!]
-  text_not: String
-  text_not_in: [String!]
-  text_starts_with: String
-  title: String
-  title_contains: String
-  title_in: [String!]
-  title_not: String
-  title_not_in: [String!]
-  title_starts_with: String
-}
-
-input OueryAllUsersWhereInput {
-  name: String
-}
-
-type Query {
-  signIn(input: LoginInput!): AuthenticationPayload
-  actionItemCategory(input: QueryActionItemCategoryInput!): ActionItemCategory
-  actionCategoriesByOrganization(
-    input: QueryActionCategoriesByOrganizationInput!
-  ): [ActionItemCategory!]
-  actionItemsByOrganization(
-    input: QueryActionItemsByOrganizationInput!
-  ): [ActionItem!]
-  actionItemsByUser(input: QueryActionItemsByUserInput!): [ActionItem!]
-  agendaCategory(id: ID!): AgendaCategory!
-  currentUser: UserPg!
-  customDataByOrganization(organizationId: ID!): [UserCustomData!]!
-  customFieldsByOrganization(id: ID!): [OrganizationCustomField]
-  chatById(id: ID!): Chat!
-  chatsByUserId(id: ID!): [Chat]
-  event(id: ID!): Event
-  eventsAttendedByUser(id: ID, orderBy: EventOrderByInput): [Event]
-  eventVolunteersByEvent(id: ID!): [EventVolunteer]
-  eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]
-  eventsByOrganizationConnection(
-    first: Int
-    orderBy: EventOrderByInput
-    skip: Int
-    where: EventWhereInput
-  ): [Event!]!
-  advertisementsConnection(
-    after: String
-    before: String
-    first: PositiveInt
-    last: PositiveInt
-  ): AdvertisementsConnection
-  getDonationById(id: ID!): Donation!
-  getDonationByOrgId(orgId: ID!): [Donation]
-  getDonationByOrgIdConnection(
-    first: Int
-    orgId: ID!
-    skip: Int
-    where: DonationWhereInput
-  ): [Donation!]!
-  getlanguage(lang_code: String!): [Translation]
-  hasSubmittedFeedback(eventId: ID!, userId: ID!): Boolean
-  isSampleOrganization(id: ID!): Boolean!
-  joinedOrganizations(id: ID): [Organization]
-  me: UserData!
-  myLanguage: String
-  fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
-  organization(input: QueryOrganizationInput!): OrganizationPg
-  organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
-  organizationsMemberConnection(
-    first: Int
-    orderBy: UserOrderByInput
-    orgId: ID!
-    skip: Int
-    where: UserWhereInput
-  ): UserConnection!
-  getRecurringEvents(baseRecurringEventId: ID!): [Event]
-  post(id: ID!): Post
-  postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
-  postsByOrganizationConnection(
-    first: Int
-    id: ID!
-    orderBy: PostOrderByInput
-    skip: Int
-    where: PostWhereInput
-  ): PostConnection
-  registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
-  registrantsByEvent(id: ID!): [User]
-  user(input: QueryUserInput!): UserPg!
-  usersByOrganizationId(organizationId: ID!): UserPg!
-  userLanguage(userId: ID!): String
-  users(
-    first: Int
-    orderBy: UserOrderByInput
-    skip: Int
-    where: UserWhereInput
-  ): [UserData]
-  usersConnection(
-    first: Int
-    orderBy: UserOrderByInput
-    skip: Int
-    where: UserWhereInput
-  ): [UserData]!
-  venue(id: ID!): [Venue]
-}
-
-input RecaptchaVerification {
-  recaptchaToken: String!
-}
-
-input RecurrenceInput {
-  frequency: Frequency!
-  interval: PositiveInt!
-  byDay: [WeekDays!]
-  byMonth: [Int!]
-  byMonthDay: [Int!]
-  count: PositiveInt
-  until: DateTime
-}
-
-enum Status {
-  ACTIVE
-  BLOCKED
-  DELETED
-}
-
-type Subscription {
-  messageSentToChat(userId: ID!): ChatMessage
-}
-
-scalar Time
-
-input ToggleUserTagAssignInput {
-  tagId: ID!
-  userId: ID!
-}
-
-type Translation {
-  en_value: String
-  lang_code: String
-  translation: String
-  verified: Boolean
-}
-
-enum Type {
-  PRIVATE
-  UNIVERSAL
-}
-
-scalar URL
-
-type UnauthenticatedError implements Error {
-  message: String!
-}
-
-type UnauthorizedError implements Error {
-  message: String!
-}
-
-input UpdateActionItemCategoryInput {
-  isDisabled: Boolean
-  name: String
-}
-
-input UpdateActionItemInput {
-  assigneeId: ID
-  completionDate: Date
-  dueDate: Date
-  isCompleted: Boolean
-  postCompletionNotes: String
-  preCompletionNotes: String
-}
-
-input UpdateAdvertisementInput {
-  _id: ID!
-  endDate: Date
-  link: String
-  name: String
-  startDate: Date
-  type: AdvertisementType
-}
-
-input MutationUpdateAdvertisementInput {
-  description: String
-  endAt: DateTime
-  id: ID!
-  name: String
-  startAt: DateTime
-  type: AdvertisementType
-}
-
-input MutationDeleteAdvertisementInput {
-  id: ID!
-}
-
-type UpdateAdvertisementPayload {
-  advertisement: Advertisement
-}
-
-input UpdateAgendaCategoryInput {
-  description: String
-  name: String
-}
-
-input UpdateEventInput {
-  allDay: Boolean
-  description: String
-  endDate: Date
-  endTime: Time
-  isPublic: Boolean
-  isRegisterable: Boolean
-  latitude: Latitude
-  location: String
-  longitude: Longitude
-  recurring: Boolean
-  startDate: Date
-  startTime: Time
-  title: String
-}
-
-input UpdateEventVolunteerInput {
-  eventId: ID
-  isAssigned: Boolean
-  isInvited: Boolean
-  response: EventVolunteerResponse
-}
-
-input UpdateOrganizationInput {
-  address: AddressInput
-  description: String
-  name: String
-  userRegistrationRequired: Boolean
-  visibleInSearch: Boolean
-}
-
-input AddressInput {
-  city: String
-  countryCode: String
-  dependentLocality: String
-  line1: String
-  line2: String
-  postalCode: String
-  sortingCode: String
-  state: String
-}
-
-enum EducationGrade {
-  GRADE_1
-  GRADE_2
-  GRADE_3
-  GRADE_4
-  GRADE_5
-  GRADE_6
-  GRADE_7
-  GRADE_8
-  GRADE_9
-  GRADE_10
-  GRADE_11
-  GRADE_12
-  GRADUATE
-  KG
-  NO_GRADE
-  PRE_KG
-}
-
-enum EmploymentStatus {
-  FULL_TIME
-  PART_TIME
-  UNEMPLOYED
-}
-
-enum Gender {
-  FEMALE
-  MALE
-  OTHER
-}
-
-input QueryActionItemsByOrganizationInput {
-=======
 input GetPostsByOrgInput {
->>>>>>> f708b10113 (fixed posts render on user portal)
   organizationId: String!
   sortOrder: String
 }
@@ -2118,228 +1279,6 @@ enum InviteStatus {
   no_response
 }
 
-<<<<<<< HEAD
-input MutationUpdateActionItemInput {
-  assigneeId: ID
-  categoryId: ID
-  id: ID!
-  isCompleted: Boolean!
-  postCompletionNotes: String
-  preCompletionNotes: String
-}
-
-input QueryActionCategoriesByOrganizationInput {
-  organizationId: String!
-}
-
-input QueryActionItemCategoryInput {
-  id: ID!
-}
-
-input MutationCreateActionItemCategoryInput {
-  name: String!
-  description: String
-  organizationId: ID!
-  isDisabled: Boolean
-}
-
-input MutationUpdateActionItemCategoryInput {
-  id: ID!
-  name: String
-  description: String
-  isDisabled: Boolean
-}
-
-input MutationDeleteActionItemCategoryInput {
-  id: ID!
-}
-input MutationCreateEventInput {
-  allDay: Boolean!
-  attachments: [Upload!]
-  description: String
-  endAt: DateTime!
-  isPublic: Boolean
-  isRegisterable: Boolean
-  location: String
-  name: String!
-  organizationId: ID!
-  startAt: DateTime!
-  recurrence: RecurrenceInput
-}
-
-input MutationUpdateEventInput {
-  id: ID!
-  name: String
-  description: String
-  startAt: DateTime
-  endAt: DateTime
-  allDay: Boolean
-  location: String
-  isPublic: Boolean
-  isRegisterable: Boolean
-}
-input MutationDeleteEntireRecurringEventSeriesInput {
-  id: ID!
-}
-
-input MutationDeleteSingleEventInstanceInput {
-  id: ID!
-}
-input MutationDeleteStandaloneEventInput {
-  id: ID!
-}
-
-input MutationDeleteThisAndFollowingEventsInput {
-  id: ID!
-}
-input MutationUpdateUserInput {
-  addressLine1: String
-  addressLine2: String
-  avatar: Upload
-  birthDate: Date
-  city: String
-  countryCode: Iso3166Alpha2CountryCode
-  description: String
-  educationGrade: UserEducationGrade
-  emailAddress: EmailAddress
-  employmentStatus: UserEmploymentStatus
-  homePhoneNumber: PhoneNumber
-  id: ID!
-  isEmailAddressVerified: Boolean
-  maritalStatus: UserMaritalStatus
-  mobilePhoneNumber: PhoneNumber
-  name: String
-  natalSex: UserNatalSex
-  naturalLanguageCode: Iso639Set1LanguageCode
-  password: String
-  postalCode: String
-  role: UserRole
-  state: String
-  workPhoneNumber: PhoneNumber
-}
-
-input MutationUpdateCurrentUserInput {
-  addressLine1: String
-  addressLine2: String
-  avatar: Upload
-  birthDate: Date
-  city: String
-  countryCode: Iso3166Alpha2CountryCode
-  description: String
-  educationGrade: UserEducationGrade
-  emailAddress: EmailAddress
-  employmentStatus: UserEmploymentStatus
-  homePhoneNumber: PhoneNumber
-  maritalStatus: UserMaritalStatus
-  mobilePhoneNumber: PhoneNumber
-  name: String
-  natalSex: UserNatalSex
-  naturalLanguageCode: Iso639Set1LanguageCode
-  password: String
-  postalCode: String
-  state: String
-  workPhoneNumber: PhoneNumber
-}
-
-input UpdateUserTagInput {
-  _id: ID!
-  name: String!
-}
-
-input UpdateUserTypeInput {
-  id: ID
-  userType: String
-}
-
-scalar Upload
-
-type User {
-  _id: ID!
-  address: Address
-  appUserProfileId: AppUserProfile
-  birthDate: Date
-  createdAt: DateTime!
-  educationGrade: EducationGrade
-  email: EmailAddress!
-  employmentStatus: EmploymentStatus
-  firstName: String!
-  gender: Gender
-  image: String
-  joinedOrganizations: [Organization]
-  lastName: String!
-  maritalStatus: UserMaritalStatus
-  membershipRequests: [MembershipRequest]
-  organizationsBlockedBy: [Organization]
-  phone: UserPhone
-  registeredEvents: [Event]
-  eventsAttended: [Event]
-  tagsAssignedWith(
-    after: String
-    before: String
-    first: PositiveInt
-    last: PositiveInt
-    organizationId: ID
-  ): UserTagsConnection
-  updatedAt: DateTime!
-}
-
-type UserPg {
-  addressLine1: String
-  addressLine2: String
-  avatarMimeType: String
-  avatarURL: String
-  birthDate: Date
-  city: String
-  countryCode: Iso3166Alpha2CountryCode
-  createdAt: DateTime
-  creator: UserPg
-  description: String
-  educationGrade: UserEducationGrade
-  emailAddress: String
-  employmentStatus: UserEmploymentStatus
-  homePhoneNumber: PhoneNumber
-  id: ID!
-  isEmailAddressVerified: Boolean
-  maritalStatus: UserMaritalStatus
-  mobilePhoneNumber: PhoneNumber
-  name: String
-  natalSex: UserNatalSex
-  organizationsWhereMember(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): UserOrganizationsWhereMemberConnection
-  postalCode: String
-  naturalLanguageCode: Iso639Set1LanguageCode
-  role: UserRole
-  state: String
-  updatedAt: DateTime
-  updater: User
-  workPhoneNumber: PhoneNumber
-}
-
-input QueryUserInput {
-  id: String!
-}
-
-input createUserInput {
-  name: String!
-  emailAddress: EmailAddress!
-  password: String!
-  role: UserRole!
-  isEmailAddressVerified: Boolean!
-}
-
-enum UserRole {
-  administrator
-  regular
-}
-
-input deleteOrganizationMembershipInput {
-  organizationId: String!
-  memberID: String!
-=======
 """
 Possible variants of the two-letter language code defined in ISO 639-1, part of the ISO 639 standard published by the International Organization for Standardization (ISO), to represent natural languages.
 """
@@ -2527,7 +1466,6 @@ enum Iso639Set1LanguageCode {
   za
   zh
   zu
->>>>>>> f708b10113 (fixed posts render on user portal)
 }
 
 """
@@ -3184,6 +2122,7 @@ type Mutation {
   createOrganizationMembership(
     input: MutationCreateOrganizationMembershipInput!
   ): Organization
+  createPlugin(input: CreatePluginInput!): Plugin
 
   """
   Mutation field to create a post.
@@ -3235,10 +2174,10 @@ type Mutation {
     input: MutationDeleteActionItemInput!
   ): ActionItem
 
+  """
+  Mutation field to delete an action item category.
+  """
   deleteActionItemCategory(
-    """
-    Delete an action item category
-    """
     input: MutationDeleteActionItemCategoryInput!
   ): ActionItemCategory
 
@@ -3288,9 +2227,14 @@ type Mutation {
   deleteCurrentUser: User
 
   """
-  Mutation field to delete an event.
+  Mutation field to delete an entire recurring event series (template and all instances).
   """
-  deleteEvent(input: MutationDeleteEventInput!): Event
+  deleteEntireRecurringEventSeries(
+    """
+    Input for deleting entire recurring event series.
+    """
+    input: MutationDeleteEntireRecurringEventSeriesInput!
+  ): Event
 
   """
   Mutation field to delete a volunteer group.
@@ -3327,6 +2271,7 @@ type Mutation {
   deleteOrganizationMembership(
     input: MutationDeleteOrganizationMembershipInput!
   ): Organization
+  deletePlugin(input: DeletePluginInput!): Plugin
 
   """
   Mutation field to delete a post.
@@ -3339,6 +2284,26 @@ type Mutation {
   deletePostVote(input: MutationDeletePostVoteInput!): Post
 
   """
+  Mutation field to delete (cancel) a single instance of a recurring event.
+  """
+  deleteSingleEventInstance(
+    """
+    Input for deleting a single instance of a recurring event.
+    """
+    input: MutationDeleteSingleEventInstanceInput!
+  ): Event
+
+  """
+  Mutation field to delete a standalone (non-recurring) event.
+  """
+  deleteStandaloneEvent(
+    """
+    Input for deleting a standalone event.
+    """
+    input: MutationDeleteStandaloneEventInput!
+  ): Event
+
+  """
   Mutation field to delete a tag.
   """
   deleteTag(input: MutationDeleteTagInput!): Tag
@@ -3347,6 +2312,16 @@ type Mutation {
   Mutation field to delete a tagFolder.
   """
   deleteTagFolder(input: MutationDeleteTagFolderInput!): TagFolder
+
+  """
+  Mutation field to delete the current instance and all following instances of a recurring event.
+  """
+  deleteThisAndFollowingEvents(
+    """
+    Input for deleting this and following event instances.
+    """
+    input: MutationDeleteThisAndFollowingEventsInput!
+  ): Event
 
   """
   Mutation field to delete a user.
@@ -3423,10 +2398,10 @@ type Mutation {
     input: MutationUpdateActionItemInput!
   ): ActionItem
 
+  """
+  Mutation field to update an action item category.
+  """
   updateActionItemCategory(
-    """
-    Update an action item category
-    """
     input: MutationUpdateActionItemCategoryInput!
   ): ActionItemCategory
 
@@ -3527,6 +2502,7 @@ type Mutation {
   updateOrganizationMembership(
     input: MutationUpdateOrganizationMembershipInput!
   ): Organization
+  updatePlugin(input: UpdatePluginInput!): Plugin
 
   """
   Mutation field to update a post.
@@ -3557,6 +2533,11 @@ type Mutation {
   Mutation field to update a venue.
   """
   updateVenue(input: MutationUpdateVenueInput!): Venue
+
+  """
+  Upload and install a plugin from a zip file
+  """
+  uploadPluginZip(input: UploadPluginZipInput!): Plugin
 }
 
 input MutationAcceptMembershipRequestInput {
@@ -3589,6 +2570,31 @@ input MutationCancelMembershipRequestInput {
   Global identifier of the membership request.
   """
   membershipRequestId: ID!
+}
+
+"""
+Input for creating a new action item category.
+"""
+input MutationCreateActionItemCategoryInput {
+  """
+  Description of the action item category.
+  """
+  description: String
+
+  """
+  Whether the category is disabled.
+  """
+  isDisabled: Boolean!
+
+  """
+  Name of the action item category.
+  """
+  name: String!
+
+  """
+  ID of the organization this category belongs to.
+  """
+  organizationId: ID!
 }
 
 """
@@ -3782,14 +2788,14 @@ input MutationCreateCommentVoteInput {
 """
 input MutationCreateEventInput {
   """
+  Indicates if the event spans the entire day
+  """
+  allDay: Boolean
+
+  """
   Attachments of the event.
   """
   attachments: [Upload!]
-
-  """
-  all day time.
-  """
-  allDay: Boolean
 
   """
   Custom information about the event.
@@ -3807,9 +2813,14 @@ input MutationCreateEventInput {
   isPublic: Boolean
 
   """
-  Boolean to tell if the event is registerable.
+  Indicates if users can register for this event
   """
   isRegisterable: Boolean
+
+  """
+  Physical or virtual location of the event
+  """
+  location: String
 
   """
   Name of the event.
@@ -3817,14 +2828,14 @@ input MutationCreateEventInput {
   name: String!
 
   """
-  location of the event.
-  """
-  location: String
-
-  """
   Global identifier of the associated organization.
   """
   organizationId: ID!
+
+  """
+  Recurrence pattern for the event. If provided, creates a recurring event.
+  """
+  recurrence: RecurrenceInput
 
   """
   Date time at the time the event starts at.
@@ -4276,21 +3287,7 @@ input MutationCreateVenueInput {
 }
 
 """
-Input for deleting an action item.
 """
-input MutationDeleteActionItemInput {
-  """
-  Global identifier of the action item.
-  """
-  id: ID!
-}
-
-input MutationDeleteActionItemCategoryInput {
-  """
-  Global identifier of the action item category.
-  """
-  id: ID!
-}
 input MutationCreateVolunteerGroupAssignmentsInput {
   """
   Global identifier of the user.
@@ -4306,6 +3303,26 @@ input MutationCreateVolunteerGroupAssignmentsInput {
   Invitation Status.
   """
   inviteStatus: InviteStatus!
+}
+
+"""
+Input for deleting an action item category.
+"""
+input MutationDeleteActionItemCategoryInput {
+  """
+  ID of the action item category to delete.
+  """
+  id: ID!
+}
+
+"""
+Input for deleting an action item.
+"""
+input MutationDeleteActionItemInput {
+  """
+  Global identifier of the action item.
+  """
+  id: ID!
 }
 
 """
@@ -4388,6 +3405,16 @@ input MutationDeleteCommentVoteInput {
   Global identifier of the user who voted.
   """
   creatorId: ID!
+}
+
+"""
+Input for deleting an entire recurring event series (template + all instances).
+"""
+input MutationDeleteEntireRecurringEventSeriesInput {
+  """
+  Global identifier of the recurring event template to delete the entire series.
+  """
+  id: ID!
 }
 
 """
@@ -4482,6 +3509,26 @@ input MutationDeletePostVoteInput {
 }
 
 """
+Input for deleting a single instance of a recurring event.
+"""
+input MutationDeleteSingleEventInstanceInput {
+  """
+  Global identifier of the recurring event instance to delete.
+  """
+  id: ID!
+}
+
+"""
+Input for deleting a standalone (non-recurring) event.
+"""
+input MutationDeleteStandaloneEventInput {
+  """
+  Global identifier of the standalone event to delete.
+  """
+  id: ID!
+}
+
+"""
 """
 input MutationDeleteTagFolderInput {
   """
@@ -4495,6 +3542,16 @@ input MutationDeleteTagFolderInput {
 input MutationDeleteTagInput {
   """
   Global identifier of the tag.
+  """
+  id: ID!
+}
+
+"""
+Input for deleting the current instance and all following instances of a recurring event.
+"""
+input MutationDeleteThisAndFollowingEventsInput {
+  """
+  Global identifier of the recurring event instance from which to delete this and following instances.
   """
   id: ID!
 }
@@ -4677,6 +3734,31 @@ input MutationUnblockUserInput {
   userId: ID!
 }
 
+"""
+Input for updating an action item category.
+"""
+input MutationUpdateActionItemCategoryInput {
+  """
+  New description of the action item category.
+  """
+  description: String
+
+  """
+  ID of the action item category to update.
+  """
+  id: ID!
+
+  """
+  Whether the category should be disabled.
+  """
+  isDisabled: Boolean
+
+  """
+  New name of the action item category.
+  """
+  name: String
+}
+
 input MutationUpdateActionItemInput {
   """
   Identifier for the assignee of the action item.
@@ -4707,18 +3789,6 @@ input MutationUpdateActionItemInput {
   Pre completion notes for the action item.
   """
   preCompletionNotes: String
-}
-
-input MutationUpdateActionItemCategoryInput {
-  """
-  Global identifier of the action item category.
-  """
-  id: ID!
-
-  """
-  Name of the action item category.
-  """
-  name: String
 }
 
 """
@@ -5065,14 +4135,9 @@ input MutationUpdateCurrentUserInput {
 """
 input MutationUpdateEventInput {
   """
-  Global identifier of the event to update.
+  Indicates if the event spans the entire day.
   """
-  id: ID!
-
-  """
-  Name of the event.
-  """
-  name: String
+  allDay: Boolean
 
   """
   Custom information about the event.
@@ -5080,24 +4145,14 @@ input MutationUpdateEventInput {
   description: String
 
   """
-  Date time at the time the event starts at.
-  """
-  startAt: DateTime
-
-  """
   Date time at the time the event ends at.
   """
   endAt: DateTime
 
   """
-  Indicates if the event spans the entire day.
+  Global identifier of the event.
   """
-  allDay: Boolean
-
-  """
-  Physical or virtual location of the event.
-  """
-  location: String
+  id: ID!
 
   """
   Indicates if the event is publicly visible.
@@ -5108,7 +4163,23 @@ input MutationUpdateEventInput {
   Indicates if users can register for this event.
   """
   isRegisterable: Boolean
+
+  """
+  Physical or virtual location of the event.
+  """
+  location: String
+
+  """
+  Name of the event.
+  """
+  name: String
+
+  """
+  Date time at the time the event starts at.
+  """
+  startAt: DateTime
 }
+
 """
 """
 input MutationUpdateEventVolunteerGroupInput {
@@ -5507,23 +4578,17 @@ input MutationUpdateVolunteerGroupAssignmentsInput {
   inviteStatus: UpdateInviteStatus!
 }
 
-"""
-GraphQL connection for Organization actionItemCategories field
-"""
-type OrganizationActionItemCategoriesConnection {
-  edges: [OrganizationActionItemCategoriesConnectionEdge]
-  pageInfo: PageInfo!
-}
-
-"""
-GraphQL connection edge for Organization actionItemCategories field
-"""
-type OrganizationActionItemCategoriesConnectionEdge {
-  cursor: String!
-  node: ActionItemCategory
-}
-
 type Organization {
+  """
+  GraphQL connection to traverse through the action item categories belonging to the organization.
+  """
+  actionItemCategories(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationActionItemCategoriesConnection
+
   """
   Address line 1 of the organization's address.
   """
@@ -5538,16 +4603,6 @@ type Organization {
   Total number of admins in the organization.
   """
   adminsCount: Int
-
-  """
-  GraphQL connection to traverse through the action item categories belonging to the organization.
-  """
-  actionItemCategories(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationActionItemCategoriesConnection
 
   """
   GraphQL connection to traverse through the advertisements belonging to the organization.
@@ -5620,13 +4675,28 @@ type Organization {
   description: String
 
   """
-  GraphQL connection to traverse through the events belonging to the organization.
+  GraphQL connection to traverse through the events belonging to the organization. Includes both standalone events and materialized instances from recurring events. Uses pure materialized approach - no virtual instances.
   """
   events(
     after: String
     before: String
+
+    """
+    End date for filtering events (defaults to 3 months from now)
+    """
+    endDate: DateTime
     first: Int
+
+    """
+    Whether to include materialized instances from recurring events (default: true)
+    """
+    includeRecurring: Boolean
     last: Int
+
+    """
+    Start date for filtering events (defaults to today)
+    """
+    startDate: DateTime
   ): OrganizationEventsConnection
 
   """
@@ -5778,6 +4848,20 @@ type Organization {
     first: Int
     last: Int
   ): OrganizationVenuesConnection
+}
+
+"""
+"""
+type OrganizationActionItemCategoriesConnection {
+  edges: [OrganizationActionItemCategoriesConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type OrganizationActionItemCategoriesConnectionEdge {
+  cursor: String!
+  node: ActionItemCategory
 }
 
 """
@@ -5975,6 +5059,46 @@ A field whose value conforms to the standard E.164 format as specified in: https
 """
 scalar PhoneNumber
 
+"""
+Represents a plugin in the system with its installation and activation status
+"""
+type Plugin {
+  """
+  Whether the plugin has an existing backup
+  """
+  backup: Boolean
+
+  """
+  Timestamp when the plugin record was created
+  """
+  createdAt: DateTime
+
+  """
+  Unique identifier for the plugin record
+  """
+  id: ID
+
+  """
+  Whether the plugin is currently activated
+  """
+  isActivated: Boolean
+
+  """
+  Whether the plugin is installed in the system
+  """
+  isInstalled: Boolean
+
+  """
+  The unique identifier/name of the plugin
+  """
+  pluginId: String
+
+  """
+  Timestamp when the plugin record was last updated
+  """
+  updatedAt: DateTime
+}
+
 type Post {
   """
   Array of attachments.
@@ -6171,6 +5295,11 @@ type Query {
   ): [ActionItemCategory!]
 
   """
+  Query field to fetch a single action item category by ID.
+  """
+  actionItemCategory(input: QueryActionItemCategoryInput!): ActionItemCategory
+
+  """
   Query field to fetch all action items linked to a specific organization.
   """
   actionItemsByOrganization(
@@ -6185,17 +5314,10 @@ type Query {
   """
   actionItemsByUser(
     """
-    Input parameters to fetch action items assigned to a user.
+    Input parameters to fetch action items by userId.
     """
     input: QueryActionItemsByUserInput!
   ): [ActionItem!]
-
-  actionItemCategory(
-    """
-    Input parameters to fetch an action item category by its ID.
-    """
-    input: QueryActionItemCategoryInput!
-  ): ActionItemCategory
 
   """
   Query field to read an advertisement.
@@ -6239,7 +5361,7 @@ type Query {
   chatMessage(input: QueryChatMessageInput!): ChatMessage
 
   """
-  Query field to read all chats a user is a member of.
+  Query field to read all chats the current user is a member of.
   """
   chatsByUser: [Chat!]
 
@@ -6259,12 +5381,17 @@ type Query {
   currentUser: User
 
   """
-  Query field to read an event.
+  Retrieves a single event by its ID, supporting both standalone events and materialized recurring instances.
   """
-  event(input: QueryEventInput!): Event
+  event(
+    """
+    Input containing the ID of the event to query.
+    """
+    input: QueryEventInput!
+  ): Event
 
   """
-  Fetch multiple events by their IDs.
+  Fetches multiple events by their IDs, supporting both standalone events and materialized recurring instances.
   """
   eventsByIds(input: QueryEventsByIdsInput!): [Event!]
 
@@ -6333,6 +5460,26 @@ type Query {
   ): [FundCampaignPledge!]
 
   """
+  Query field to fetch a single plugin by ID.
+  """
+  getPluginById(
+    """
+    Input parameters to fetch a plugin by ID.
+    """
+    input: QueryPluginInput!
+  ): Plugin
+
+  """
+  Query field to fetch multiple plugins with optional filtering.
+  """
+  getPlugins(
+    """
+    Input parameters to fetch plugins with optional filtering.
+    """
+    input: QueryPluginsInput
+  ): [Plugin!]
+
+  """
   Query field to read a post vote.
   """
   hasUserVoted(input: QueryHasUserVotedInput!): HasUserVoted
@@ -6398,6 +5545,10 @@ input QueryActionCategoriesByOrganizationInput {
   organizationId: String!
 }
 
+input QueryActionItemCategoryInput {
+  id: String!
+}
+
 """
 Input schema for querying ActionItems by organizationId.
 """
@@ -6409,25 +5560,18 @@ input QueryActionItemsByOrganizationInput {
 }
 
 """
-Input type for querying action items assigned to a specific user
+Input schema for querying ActionItems assigned to a user.
 """
 input QueryActionItemsByUserInput {
-  """
-  ID of the user to fetch assigned action items for.
-  """
-  userId: String!
-
   """
   Optional ID of organization to filter action items by.
   """
   organizationId: String
-}
 
-input QueryActionItemCategoryInput {
   """
-  Global id of the action item category.
+  ID of the user to fetch assigned action items for.
   """
-  id: String!
+  userId: String!
 }
 
 """
@@ -6595,6 +5739,16 @@ input QueryPledgeWhereInput {
   name_contains: String
 }
 
+input QueryPluginInput {
+  id: String!
+}
+
+input QueryPluginsInput {
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String
+}
+
 """
 """
 input QueryPostInput {
@@ -6661,6 +5815,51 @@ input QueryVolunteerGroupAssignmentsInput {
   Global id of the group.
   """
   groupId: String!
+}
+
+"""
+Input type for defining recurrence rules for events. Must specify exactly one end condition: endDate, count, or never.
+"""
+input RecurrenceInput {
+  """
+  Days of the week (e.g., ['MO', 'WE', 'FR']).
+  """
+  byDay: [String!]
+
+  """
+  Months of the year (1-12).
+  """
+  byMonth: [Int!]
+
+  """
+  Days of the month (-31 to 31, excluding 0).
+  """
+  byMonthDay: [Int!]
+
+  """
+  Number of occurrences.
+  """
+  count: Int
+
+  """
+  Date when the recurrence ends.
+  """
+  endDate: DateTime
+
+  """
+  Frequency of recurrence (DAILY, WEEKLY, MONTHLY, YEARLY).
+  """
+  frequency: Frequency!
+
+  """
+  Interval between recurrences (e.g., 2 for every 2 weeks). Defaults to 1.
+  """
+  interval: Int
+
+  """
+  Indicates if the event recurs indefinitely (never ends).
+  """
+  never: Boolean
 }
 
 type RejectMembershipResponse {
@@ -6853,10 +6052,33 @@ enum UpdateInviteStatus {
   no_response
 }
 
+input UpdatePluginInput {
+  backup: Boolean
+  id: String!
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String
+}
+
 """
 The `Upload` scalar type represents a file upload.
 """
 scalar Upload
+
+"""
+Input for uploading a plugin zip file
+"""
+input UploadPluginZipInput {
+  """
+  Whether to activate the plugin after installation
+  """
+  activate: Boolean
+
+  """
+  The plugin zip file to upload
+  """
+  pluginZip: Upload!
+}
 
 """
 UploadUrlResponse
