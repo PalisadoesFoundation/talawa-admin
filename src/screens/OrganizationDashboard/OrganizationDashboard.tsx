@@ -69,19 +69,16 @@ function OrganizationDashboard(): JSX.Element {
   const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const navigate = useNavigate();
-
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
   // const currentDate = dayjs().toISOString();
 
   // const leaderboardLink = `/leaderboard/${orgId}`;
