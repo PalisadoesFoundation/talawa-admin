@@ -184,9 +184,15 @@
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
-    "@types/react": "17.0.2",
-    "@types/react-dom": "17.0.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "graphql": "^16.5.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.46.2",
+    "@rollup/rollup-darwin-x64": "^4.46.2",
+    "@rollup/rollup-darwin-arm64": "^4.46.2"
   },
   "engines": {
     "node": ">=20.x"
@@ -195,8 +201,12 @@
     "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "rc-color-picker": {
-      "react": "^18.3.1",
-      "react-dom": "^18.3.1"
+      "react": "^19.1.0",
+      "react-dom": "^19.1.0"
+    },
+    "virtualizedtableforantd4": {
+      "react": "^19.1.0",
+      "react-dom": "^19.1.0"
     },
     "gulp-header": "^2.0.9"
   },
