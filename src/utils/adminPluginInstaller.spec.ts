@@ -5,6 +5,7 @@ import {
   installAdminPluginFromZip,
   getInstalledAdminPlugins,
   removeAdminPlugin,
+  validateAdminPluginStructure,
   type AdminPluginZipStructure,
   type AdminPluginInstallationOptions,
   type AdminPluginInstallationResult,
@@ -492,6 +493,347 @@ describe('adminPluginInstaller', () => {
       const result =
         await adminPluginInstallerModule.removeAdminPlugin('TestPlugin');
       expect(result).toBe(false);
+    });
+  });
+
+  describe('Additional coverage tests', () => {
+    it('should handle successful API installation with uploadPluginZip response', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockAdminManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+      const mockApiManifest = {
+        name: 'Test Plugin API',
+        version: '1.0.0',
+        description: 'A test plugin API',
+        author: 'Test Author',
+        main: 'api.js',
+        pluginId: 'TestPlugin',
+      };
+
+      // Mock JSZip content
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockAdminManifest),
+        'admin/index.js': 'console.log("Hello");',
+        'api/manifest.json': JSON.stringify(mockApiManifest),
+        'api/api.js': 'console.log("API");',
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      // Mock Apollo client to return successful uploadPluginZip response
+      mockApolloClient.mutate.mockResolvedValue({
+        data: { uploadPluginZip: { success: true } },
+      });
+
+      // Mock file service
+      mockAdminPluginFileService.installPlugin.mockResolvedValue({
+        success: true,
+        pluginId: 'TestPlugin',
+        manifest: mockAdminManifest,
+        path: '/test/path',
+        filesWritten: 2,
+        writtenFiles: ['manifest.json', 'index.js'],
+      });
+
+      const result = await installAdminPluginFromZip({
+        zipFile: mockFile,
+        apolloClient: mockApolloClient,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.pluginId).toBe('TestPlugin');
+      expect(result.installedComponents).toContain('Admin');
+      expect(result.installedComponents).toContain('API');
+    });
+
+    it('should handle successful admin installation with detailed logging', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+
+      // Mock JSZip content
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockManifest),
+        'admin/index.js': 'console.log("Hello");',
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      // Mock file service with detailed response
+      mockAdminPluginFileService.installPlugin.mockResolvedValue({
+        success: true,
+        pluginId: 'TestPlugin',
+        manifest: mockManifest,
+        path: '/test/path',
+        filesWritten: 2,
+        writtenFiles: ['manifest.json', 'index.js'],
+      });
+
+      const result = await installAdminPluginFromZip({
+        zipFile: mockFile,
+      });
+
+      expect(result.success).toBe(true);
+      expect(result.pluginId).toBe('TestPlugin');
+      expect(result.installedComponents).toContain('Admin');
+    });
+
+    it('should handle successful plugin removal', async () => {
+      mockAdminPluginFileService.removePlugin.mockResolvedValue(true);
+      const result = await removeAdminPlugin('TestPlugin');
+      expect(result).toBe(true);
+    });
+
+    it('should handle successful getInstalledAdminPlugins with mapping', async () => {
+      const mockPlugins = [
+        {
+          pluginId: 'TestPlugin',
+          manifest: {
+            name: 'Test Plugin',
+            version: '1.0.0',
+            description: 'A test plugin',
+            author: 'Test Author',
+            main: 'index.js',
+            pluginId: 'TestPlugin',
+          },
+          installedAt: '2023-01-01T00:00:00.000Z',
+          lastUpdated: '2023-01-01T00:00:00.000Z',
+        },
+      ];
+
+      mockAdminPluginFileService.getInstalledPlugins.mockResolvedValue(
+        mockPlugins,
+      );
+
+      const result = await getInstalledAdminPlugins();
+      expect(result).toEqual([
+        {
+          pluginId: 'TestPlugin',
+          manifest: mockPlugins[0].manifest,
+          installedAt: mockPlugins[0].installedAt,
+        },
+      ]);
+    });
+
+    it('should handle validateAdminPluginStructure with missing main file', () => {
+      const files = {
+        'manifest.json': JSON.stringify({
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'A test plugin',
+          author: 'Test Author',
+          main: 'index.js',
+          pluginId: 'TestPlugin',
+        }),
+        // Note: main file 'index.js' is missing
+      };
+
+      const result = validateAdminPluginStructure(files);
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Main file not found: index.js');
+    });
+
+    it('should handle validateAdminPluginStructure with invalid manifest format', () => {
+      const files = {
+        'manifest.json': 'invalid json',
+        'index.js': 'console.log("Hello");',
+      };
+
+      const result = validateAdminPluginStructure(files);
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe('Invalid manifest.json format');
+    });
+
+    it('should handle validateAdminPluginStructure with missing required fields', () => {
+      const files = {
+        'manifest.json': JSON.stringify({
+          name: 'Test Plugin',
+          // Missing required fields
+        }),
+        'index.js': 'console.log("Hello");',
+      };
+
+      const result = validateAdminPluginStructure(files);
+      expect(result.valid).toBe(false);
+      expect(result.error).toMatch(/Missing required field in manifest\.json/);
+    });
+
+    it('should handle validateAdminPluginZip with binary files', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+
+      // Mock JSZip content with binary files
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockManifest),
+        'admin/index.js': 'console.log("Hello");',
+        'admin/icon.png':
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      const result = await validateAdminPluginZip(mockFile);
+
+      expect(result.hasAdminFolder).toBe(true);
+      expect(result.adminManifest).toEqual(mockManifest);
+      expect(result.files['icon.png']).toMatch(
+        /^data:application\/octet-stream;base64,/,
+      );
+    });
+
+    it('should handle validateAdminPluginZip with API folder only', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockApiManifest = {
+        name: 'Test Plugin API',
+        version: '1.0.0',
+        description: 'A test plugin API',
+        author: 'Test Author',
+        main: 'api.js',
+        pluginId: 'TestPlugin',
+      };
+
+      // Mock JSZip content with only API folder
+      const mockZipContent = createMockZipContent({
+        'api/manifest.json': JSON.stringify(mockApiManifest),
+        'api/api.js': 'console.log("API");',
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      const result = await validateAdminPluginZip(mockFile);
+
+      expect(result.hasAdminFolder).toBe(false);
+      expect(result.hasApiFolder).toBe(true);
+      expect(result.apiManifest).toEqual(mockApiManifest);
+      expect(result.pluginId).toBe('TestPlugin');
+    });
+
+    it('should handle validateAdminPluginZip with both admin and API folders', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockAdminManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+      const mockApiManifest = {
+        name: 'Test Plugin API',
+        version: '1.0.0',
+        description: 'A test plugin API',
+        author: 'Test Author',
+        main: 'api.js',
+        pluginId: 'TestPlugin',
+      };
+
+      // Mock JSZip content with both folders
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockAdminManifest),
+        'admin/index.js': 'console.log("Hello");',
+        'api/manifest.json': JSON.stringify(mockApiManifest),
+        'api/api.js': 'console.log("API");',
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      const result = await validateAdminPluginZip(mockFile);
+
+      expect(result.hasAdminFolder).toBe(true);
+      expect(result.hasApiFolder).toBe(true);
+      expect(result.adminManifest).toEqual(mockAdminManifest);
+      expect(result.apiManifest).toEqual(mockApiManifest);
+      expect(result.pluginId).toBe('TestPlugin');
+    });
+
+    it('should handle validateAdminPluginZip with mismatched plugin IDs', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockAdminManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+      const mockApiManifest = {
+        name: 'Test Plugin API',
+        version: '1.0.0',
+        description: 'A test plugin API',
+        author: 'Test Author',
+        main: 'api.js',
+        pluginId: 'DifferentPlugin',
+      };
+
+      // Mock JSZip content with mismatched plugin IDs
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockAdminManifest),
+        'api/manifest.json': JSON.stringify(mockApiManifest),
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      await expect(validateAdminPluginZip(mockFile)).rejects.toThrow(
+        'Invalid api manifest.json',
+      );
+    });
+
+    it('should handle validateAdminPluginZip with missing required fields in admin manifest', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const invalidManifest = {
+        name: 'Test Plugin',
+        // Missing required fields
+      };
+
+      // Mock JSZip content with invalid admin manifest
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(invalidManifest),
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      await expect(validateAdminPluginZip(mockFile)).rejects.toThrow(
+        'Invalid admin manifest.json',
+      );
+    });
+
+    it('should handle validateAdminPluginZip with missing required fields in API manifest', async () => {
+      const mockFile = new File([''], 'test.zip');
+      const mockAdminManifest = {
+        name: 'Test Plugin',
+        version: '1.0.0',
+        description: 'A test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        pluginId: 'TestPlugin',
+      };
+      const invalidApiManifest = {
+        name: 'Test Plugin API',
+        // Missing required fields
+      };
+
+      // Mock JSZip content with invalid API manifest
+      const mockZipContent = createMockZipContent({
+        'admin/manifest.json': JSON.stringify(mockAdminManifest),
+        'api/manifest.json': JSON.stringify(invalidApiManifest),
+      });
+      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+
+      await expect(validateAdminPluginZip(mockFile)).rejects.toThrow(
+        'Invalid api manifest.json',
+      );
     });
   });
 });
