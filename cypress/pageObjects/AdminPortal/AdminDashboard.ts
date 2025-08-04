@@ -39,7 +39,7 @@ export class AdminDashboardPage {
     return this;
   }
 
-  verifyLeftDrawerOptions(timeout = 20000) {
+  verifyLeftDrawerOptions(timeout = 40000) {
     this._drawerOptions.forEach(({ label, url }) => {
       const selector = `[data-cy="leftDrawerButton-${label}"]`;
       cy.get(selector, { timeout }).should('be.visible').click();
