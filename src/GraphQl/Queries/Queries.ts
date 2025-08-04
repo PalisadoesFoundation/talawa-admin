@@ -44,6 +44,8 @@ const ORG_FIELDS = gql`
     addressLine1
     description
     avatarURL
+    membersCount
+    adminsCount
   }
 `;
 
