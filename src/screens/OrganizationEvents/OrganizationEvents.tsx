@@ -18,10 +18,9 @@
  * ```
  */
 
-import React, { useState, useEffect, useMemo, JSX } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useState, useEffect, useRef, JSX } from 'react';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { debounce } from '@mui/material';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from '../../style/app-fixed.module.css';
 import {
@@ -95,24 +94,13 @@ function organizationEvents(): JSX.Element {
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [debouncedMonth, setDebouncedMonth] = useState(new Date().getMonth());
-  const [debouncedYear, setDebouncedYear] = useState(new Date().getFullYear());
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
+  const queryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
 
-  // Debounced functions for month/year changes
-  const debouncedSetMonth = useMemo(
-    () => debounce((month: number) => setDebouncedMonth(month), 300),
-    [],
-  );
-
-  const debouncedSetYear = useMemo(
-    () => debounce((year: number) => setDebouncedYear(year), 300),
-    [],
-  );
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
   };
@@ -120,29 +108,49 @@ function organizationEvents(): JSX.Element {
   const handleMonthChange = (month: number, year: number): void => {
     setCurrentMonth(month);
     setCurrentYear(year);
-    debouncedSetMonth(month);
-    debouncedSetYear(year);
+
+    // Clear existing timeout
+    if (queryTimeoutRef.current) {
+      clearTimeout(queryTimeoutRef.current);
+    }
+
+    // Set new timeout to refetch after 300ms of inactivity
+    queryTimeoutRef.current = setTimeout(() => {
+      refetchEvents({
+        id: currentUrl,
+        first: 100,
+        after: null,
+        startDate: dayjs(new Date(year, month, 1))
+          .startOf('month')
+          .toISOString(),
+        endDate: dayjs(new Date(year, month, 1))
+          .endOf('month')
+          .toISOString(),
+        includeRecurring: true,
+      });
+    }, 300);
   };
 
   const {
     data: eventData,
-    loading: eventLoading,
     error: eventDataError,
     refetch: refetchEvents,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 80,
+      first: 50,
       after: null,
-      startDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
   });
 
   const {
@@ -196,10 +204,29 @@ function organizationEvents(): JSX.Element {
   }));
 
   useEffect(() => {
-    if (eventDataError || orgDataError) navigate('/orglist');
+    if (eventDataError || orgDataError) {
+      // Handle rate limiting errors more gracefully
+      if (
+        eventDataError?.message?.includes('too many requests') ||
+        eventDataError?.message?.includes('rate limit')
+      ) {
+        console.warn('Rate limit hit, please slow down month navigation');
+        return;
+      }
+      navigate('/orglist');
+    }
   }, [eventDataError, orgDataError]);
 
-  if (eventLoading || orgLoading) return <Loader />;
+  useEffect(() => {
+    // Cleanup timeout on unmount
+    return () => {
+      if (queryTimeoutRef.current) {
+        clearTimeout(queryTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (orgLoading) return <Loader />;
 
   return (
     <>
