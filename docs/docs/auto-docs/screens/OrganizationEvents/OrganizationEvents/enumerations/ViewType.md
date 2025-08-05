@@ -4,7 +4,10 @@
 
 # Enumeration: ViewType
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L80)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L85)
+
+Enumeration of available calendar view types.
+Determines how events are displayed in the calendar component.
 
 ## Enumeration Members
 
@@ -12,7 +15,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:80](https://g
 
 > **DAY**: `"Day"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L81)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L86)
 
 ***
 
@@ -20,7 +23,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:81](https://g
 
 > **MONTH**: `"Month View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L82)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L87)
 
 ***
 
@@ -28,4 +31,4 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:82](https://g
 
 > **YEAR**: `"Year View"`
 
-Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L83)
+Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L88)

@@ -2792,6 +2792,12 @@ form label,
   align-items: center;
 }
 
+.navigation_buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .buttonEventCalendar {
   border-radius: 100px;
   color: var(--buttonEventCalendar-color);
