@@ -17,11 +17,9 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import {
-  EMPTY_MOCKS,
-  MOCKS,
-  USER_PLEDGES_ERROR,
-} from './PledgesMocks';
+import { MOCKS } from './PledgesMocks';
+import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import type { ApolloLink } from '@apollo/client';
 import Pledges from './Pledges';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
@@ -178,9 +176,496 @@ export const MOCKS_WITH_MORE_USERS = [
   },
 ];
 
+// Empty mocks for testing empty state
+const EMPTY_MOCKS = [
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: undefined,
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: {
+        id: 'userId',
+      },
+    },
+    result: {
+      data: {
+        user: {
+          user: {
+            id: 'userId',
+            joinedOrganizations: [
+              {
+                id: '6537904485008f171cf29924',
+                __typename: 'Organization',
+              },
+            ],
+            firstName: 'Harve',
+            lastName: 'Lance',
+            email: 'testuser1@example.com',
+            image: null,
+            createdAt: '2023-04-13T04:53:17.742Z',
+            birthDate: null,
+            educationGrade: null,
+            employmentStatus: null,
+            gender: null,
+            maritalStatus: null,
+            phone: null,
+            address: {
+              line1: 'Line1',
+              countryCode: 'CountryCode',
+              city: 'CityName',
+              state: 'State',
+              __typename: 'Address',
+            },
+            registeredEvents: [],
+            membershipRequests: [],
+            __typename: 'User',
+          },
+          appUserProfile: {
+            id: '67078abd85008f171cf2991d',
+            adminFor: [],
+            isSuperAdmin: false,
+            appLanguageCode: 'en',
+            createdOrganizations: [],
+            createdEvents: [],
+            eventAdmin: [],
+            __typename: 'AppUserProfile',
+          },
+          __typename: 'UserData',
+        },
+      },
+    },
+  },
+];
+
+// Error mocks for testing error state
+const USER_PLEDGES_ERROR = [
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: undefined,
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    error: new Error('Mock Graphql USER_PLEDGES Error'),
+  },
+];
+
+// Additional mocks for searching
+const SEARCH_MOCKS = [
+  // Sort by amount DESC
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: undefined,
+        },
+        orderBy: 'amount_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-08-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  // Sort by endDate ASC
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: undefined,
+        },
+        orderBy: 'endDate_ASC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-08-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  // Campaign search with empty name_contains (firstName_contains + name_contains)
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: '',
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-08-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  // Campaign search with empty name_contains (only name_contains)
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          name_contains: '',
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-08-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  // Search by campaign name (with firstName_contains)
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: 'School',
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  // Search by campaign name (only name_contains)
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          name_contains: 'School',
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            endDate: '2024-09-30T23:59:59.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+];
+
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
+const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS]);
 const link2 = new StaticMockLink(USER_PLEDGES_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
 const translations = JSON.parse(
@@ -231,7 +716,6 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  // This test works:
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
     setItem('userId', null);
 
@@ -241,7 +725,6 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  // So let's structure our failing test similarly:
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link1}>
