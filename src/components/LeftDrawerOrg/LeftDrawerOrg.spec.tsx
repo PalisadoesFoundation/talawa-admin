@@ -38,6 +38,10 @@ vi.mock('react-i18next', () => ({
     }
     return { t: mockT };
   }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
 }));
 
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
@@ -70,6 +74,18 @@ vi.mock('components/Avatar/Avatar', () => ({
   default: vi.fn(({ name, alt }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
+    </div>
+  )),
+}));
+
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: vi.fn(() => <div data-testid="profile-card">Profile Card</div>),
+}));
+
+vi.mock('components/SignOut/SignOut', () => ({
+  default: vi.fn(({ hideDrawer }: { hideDrawer?: boolean }) => (
+    <div data-testid="sign-out" data-hide-drawer={hideDrawer}>
+      Sign Out Component
     </div>
   )),
 }));
@@ -109,8 +125,8 @@ vi.mock('../../style/app-fixed.module.css', () => ({
   default: {
     leftDrawer: 'leftDrawer',
     hideElemByDefault: 'hideElemByDefault',
-    inactiveDrawer: 'inactiveDrawer',
-    activeDrawer: 'activeDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
     brandingContainer: 'brandingContainer',
     talawaLogo: 'talawaLogo',
     talawaText: 'talawaText',
@@ -129,6 +145,7 @@ vi.mock('../../style/app-fixed.module.css', () => ({
     leftDrawerInactiveButton: 'leftDrawerInactiveButton',
     iconWrapper: 'iconWrapper',
     avatarContainer: 'avatarContainer',
+    userSidebarOrgFooter: 'userSidebarOrgFooter',
   },
 }));
 
@@ -305,14 +322,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'inactiveDrawer');
+      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'activeDrawer');
+      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
     });
   });
 
@@ -325,7 +342,7 @@ describe('LeftDrawerOrg', () => {
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
 
-      const avatar = screen.getByAltText('Test Organization profile picture');
+      const avatar = screen.getByAltText('Test Organization');
       expect(avatar).toBeInTheDocument();
       expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
@@ -346,10 +363,12 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, mocksWithoutAvatar);
 
       await waitFor(() => {
-        expect(screen.getByTestId('avatar')).toBeInTheDocument();
-        expect(
-          screen.getByText('Avatar: Test Organization'),
-        ).toBeInTheDocument();
+        const avatars = screen.getAllByTestId('avatar');
+        const orgAvatar = avatars.find(
+          (avatar) => avatar.getAttribute('data-name') === 'Test Organization',
+        );
+        expect(orgAvatar).toBeInTheDocument();
+        expect(orgAvatar).toHaveTextContent('Avatar: Test Organization');
       });
     });
 
