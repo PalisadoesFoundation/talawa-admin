@@ -46,7 +46,7 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     campaign: {
       id: '101',
       name: 'Campaign Name',
-      endDate: new Date('2024-01-15'),
+      endAt: new Date('2024-01-15'),
       currencyCode: 'USD',
       goalAmount: 500,
     },

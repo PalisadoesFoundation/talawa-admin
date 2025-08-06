@@ -1839,7 +1839,7 @@ export interface InterfacePledgeInfo {
   campaign?: {
     id: string;
     name: string;
-    endDate: Date;
+    endAt: Date;
     currencyCode: string;
     goalAmount: number;
   };

@@ -65,7 +65,7 @@ const editPledgeProps = (): InterfacePledgeModal => ({
     campaign: {
       id: '101',
       name: 'Campaign Name',
-      endDate: new Date('2024-01-15'),
+      endAt: new Date('2024-01-15'),
       currencyCode: 'USD',
       goalAmount: 500,
     },
@@ -557,7 +557,7 @@ describe('PledgeModal', () => {
   it('should handle missing pledgeUsers array', async () => {
     const invalidPledge = {
       ...(pledgeProps[1].pledge ? pledgeProps[1].pledge : {}),
-      users: undefined,
+      pledger: undefined,
     };
 
     const props = {

@@ -192,39 +192,57 @@ const Pledges = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     {
-      field: 'pledger',
-      headerName: 'Pledger',
-      flex: 4,
-      minWidth: 50,
-      align: 'left',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            <div className={styles.pledgerContainer}>
-              {params.row.image ? (
-                <img
-                  src={params.row.image}
-                  alt="pledger"
-                  data-testid="image1"
-                  className={styles.TableImage}
-                />
-              ) : (
+  field: 'pledger',
+  headerName: 'Pledger',
+  flex: 4,
+  minWidth: 50,
+  align: 'left',
+  headerAlign: 'center',
+  headerClassName: `${styles.tableHeader}`,
+  sortable: false,
+  renderCell: (params: GridCellParams) => {
+    const pledger = params.row.pledger;
+    const users = params.row.users || (pledger ? [pledger] : []);
+    return (
+      <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+        {users.slice(0, 2).map((user: InterfaceUserInfoPG, index: number) => (
+          <div className={styles.pledgerContainer} key={`${user.id}-${index}`}>
+            {user.avatarURL ? (
+              <img
+                src={user.avatarURL}
+                alt={user.avatarURL}
+                data-testid={`image-pledger-${user.id}`}
+                className={styles.TableImage}
+              />
+            ) : (
+              <div className={styles.avatarContainer}>
                 <Avatar
+                  key={`${user.id}-avatar`}
                   containerStyle={styles.imageContainerPledge}
                   avatarStyle={styles.TableImagePledge}
-                  name={params.row.name}
-                  alt={params.row.name}
+                  name={user.name}
+                  alt={user.name}
+                  dataTestId={`avatar-pledger-${user.id}`}
                 />
-              )}
-              <span>{params.row.name}</span>
-            </div>
+              </div>
+            )}
+            <span key={`${user.id}-name`}>{user.name}</span>
+          </div>
+        ))}
+        {users.length > 2 && (
+          <div
+            className={styles.moreContainer}
+            aria-describedby={id}
+            data-testid="moreContainer"
+            onClick={(e) => handleClick(e, users.slice(2))}
+          >
+            <span>+{users.length - 2} more...</span>
+          </div>
+        )}
           </div>
         );
       },
-    },
+    },  
     {
       field: 'associatedCampaign',
       headerName: 'Associated Campaign',
@@ -308,7 +326,6 @@ const Pledges = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        console.log('amount', params.row.goalAmount);
         return (
           <div className="d-flex justify-content-center align-items-center h-100">
             <ProgressBar
@@ -447,7 +464,7 @@ const Pledges = (): JSX.Element => {
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledge?.campaign ? pledge?.campaign.endDate : new Date()}
+        endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
         mode={'edit'}
       />
 
