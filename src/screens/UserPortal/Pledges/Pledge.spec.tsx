@@ -17,7 +17,12 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import { EMPTY_MOCKS, MOCKS, USER_PLEDGES_ERROR } from './PledgesMocks';
+import {
+  EMPTY_MOCKS,
+  MOCKS,
+  MOCKS_WITH_MORE_USERS,
+  USER_PLEDGES_ERROR,
+} from './PledgesMocks';
 import type { ApolloLink } from '@apollo/client';
 import Pledges from './Pledges';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -139,7 +144,7 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
-    const image = await screen.findByTestId('image1');
+    const image = await screen.findByTestId('image-pledger-userId');
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', 'image-url');
   });
@@ -285,34 +290,19 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it('should render extraUserDetails in Popup', async () => {
-    renderMyPledges(link1);
+  it('should render all pledges as separate rows', async () => {
+    const linkWithMoreUsers = new StaticMockLink(MOCKS_WITH_MORE_USERS, true);
+    renderMyPledges(linkWithMoreUsers);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
     await waitFor(() => {
+      // All pledgers should be visible as separate rows
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.queryByText('Jeramy Gracia')).toBeNull();
-      expect(screen.queryByText('Praise Norris')).toBeNull();
-    });
-
-    const moreContainer = await screen.findAllByTestId('moreContainer');
-    await userEvent.click(moreContainer[0]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('extra1')).toBeInTheDocument();
-      expect(screen.getByTestId('extra2')).toBeInTheDocument();
-      expect(screen.getByTestId('extraAvatar2')).toBeInTheDocument();
-      const image = screen.getByTestId('extraImage1');
-      expect(image).toBeInTheDocument();
-      expect(image).toHaveAttribute('src', 'image-url3');
-    });
-
-    await userEvent.click(moreContainer[0]);
-    await waitFor(() => {
-      expect(screen.queryByText('Jeramy Gracia')).toBeNull();
-      expect(screen.queryByText('Praise Norris')).toBeNull();
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jeramy Gracia')).toBeInTheDocument();
+      expect(screen.getByText('Praise Norris')).toBeInTheDocument();
     });
   });
 

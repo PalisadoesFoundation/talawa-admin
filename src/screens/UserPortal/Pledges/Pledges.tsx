@@ -192,57 +192,62 @@ const Pledges = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     {
-  field: 'pledger',
-  headerName: 'Pledger',
-  flex: 4,
-  minWidth: 50,
-  align: 'left',
-  headerAlign: 'center',
-  headerClassName: `${styles.tableHeader}`,
-  sortable: false,
-  renderCell: (params: GridCellParams) => {
-    const pledger = params.row.pledger;
-    const users = params.row.users || (pledger ? [pledger] : []);
-    return (
-      <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-        {users.slice(0, 2).map((user: InterfaceUserInfoPG, index: number) => (
-          <div className={styles.pledgerContainer} key={`${user.id}-${index}`}>
-            {user.avatarURL ? (
-              <img
-                src={user.avatarURL}
-                alt={user.avatarURL}
-                data-testid={`image-pledger-${user.id}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={`${user.id}-avatar`}
-                  containerStyle={styles.imageContainerPledge}
-                  avatarStyle={styles.TableImagePledge}
-                  name={user.name}
-                  alt={user.name}
-                  dataTestId={`avatar-pledger-${user.id}`}
-                />
+      field: 'pledger',
+      headerName: 'Pledger',
+      flex: 4,
+      minWidth: 50,
+      align: 'left',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const pledger = params.row.pledger;
+        const users = params.row.users || (pledger ? [pledger] : []);
+        return (
+          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+            {users
+              .slice(0, 2)
+              .map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={`${user.id}-${index}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt={user.avatarURL}
+                      data-testid={`image-pledger-${user.id}`}
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={`${user.id}-avatar`}
+                        containerStyle={styles.imageContainerPledge}
+                        avatarStyle={styles.TableImagePledge}
+                        name={user.name}
+                        alt={user.name}
+                        dataTestId={`avatar-pledger-${user.id}`}
+                      />
+                    </div>
+                  )}
+                  <span key={`${user.id}-name`}>{user.name}</span>
+                </div>
+              ))}
+            {users.length > 2 && (
+              <div
+                className={styles.moreContainer}
+                aria-describedby={id}
+                data-testid="moreContainer"
+                onClick={(e) => handleClick(e, users.slice(2))}
+              >
+                <span>+{users.length - 2} more...</span>
               </div>
             )}
-            <span key={`${user.id}-name`}>{user.name}</span>
-          </div>
-        ))}
-        {users.length > 2 && (
-          <div
-            className={styles.moreContainer}
-            aria-describedby={id}
-            data-testid="moreContainer"
-            onClick={(e) => handleClick(e, users.slice(2))}
-          >
-            <span>+{users.length - 2} more...</span>
-          </div>
-        )}
           </div>
         );
       },
-    },  
+    },
     {
       field: 'associatedCampaign',
       headerName: 'Associated Campaign',
@@ -446,7 +451,7 @@ const Pledges = (): JSX.Element => {
           name: pledge.pledger.name,
           image: pledge.pledger.avatarURL,
           startDate: pledge.startDate,
-          endDate: pledge.endDate,
+          endDate: pledge.campaign?.endAt,
           amount: pledge.amount,
           campaign: pledge.campaign,
           pledger: pledge.pledger,
@@ -501,15 +506,13 @@ const Pledges = (): JSX.Element => {
                   key={user.id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
-                  name={user.firstName + ' ' + user.lastName}
-                  alt={user.firstName + ' ' + user.lastName}
+                  name={user.name}
+                  alt={user.name}
                   dataTestId={`extraAvatar${index + 1}`}
                 />
               </div>
             )}
-            <span key={user.id + '2'}>
-              {user.firstName + ' ' + user.lastName}
-            </span>
+            <span key={user.id + '2'}>{user.name}</span>
           </div>
         ))}
       </BasePopup>
