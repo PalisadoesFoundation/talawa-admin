@@ -1867,7 +1867,13 @@ export interface InterfacePledgeInfo {
  */
 export interface InterfacePledgeInfoPG {
   id: string;
-  campaign?: { id: string; name: string; endDate: Date; currencyCode: string, goalAmount: number; };
+  campaign?: {
+    id: string;
+    name: string;
+    endDate: Date;
+    currencyCode: string;
+    goalAmount: number;
+  };
   amount: number;
   currencyCode: string;
   endAt: string;
