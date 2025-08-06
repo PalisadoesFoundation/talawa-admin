@@ -20,11 +20,11 @@ import i18nForTest from 'utils/i18nForTest';
 import {
   EMPTY_MOCKS,
   MOCKS,
-  MOCKS_WITH_MORE_USERS,
   USER_PLEDGES_ERROR,
 } from './PledgesMocks';
 import type { ApolloLink } from '@apollo/client';
 import Pledges from './Pledges';
+import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, describe, it } from 'vitest';
 
@@ -50,6 +50,133 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
     DateTimePicker: actualModule.DesktopDateTimePicker,
   };
 });
+
+// Mock for testing "more users" functionality - includes 4 users
+export const MOCKS_WITH_MORE_USERS = [
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {
+          firstName_contains: '',
+          name_contains: undefined,
+        },
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId3',
+            amount: 300,
+            note: 'Library pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId3',
+              name: 'Library Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-15T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 3000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId3',
+              name: 'Jeramy Gracia',
+              avatarURL: 'image-url3',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId3',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId4',
+            amount: 200,
+            note: 'Park pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId4',
+              name: 'Park Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-10T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 2000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId4',
+              name: 'Praise Norris',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId4',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+];
 
 const { setItem } = useLocalStorage();
 
