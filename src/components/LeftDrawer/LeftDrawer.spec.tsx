@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
+import { MockedProvider } from '@apollo/react-testing';
 import LeftDrawer, { type ILeftDrawerProps } from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
@@ -19,6 +20,30 @@ vi.mock('utils/useLocalstorage', () => ({
 // Mock the plugin system
 vi.mock('plugin', () => ({
   usePluginDrawerItems: vi.fn(() => []),
+}));
+
+// Mock useSession hook
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+  })),
+}));
+
+// Mock the SignOut component to avoid Apollo Client dependencies
+vi.mock('components/SignOut/SignOut', () => ({
+  default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
+    <div
+      data-testid="sign-out-component"
+      style={{ display: hideDrawer ? 'none' : 'block' }}
+    >
+      Sign Out Mock
+    </div>
+  ),
+}));
+
+// Mock ProfileCard component
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: () => <div data-testid="profile-card">Profile Card Mock</div>,
 }));
 
 // Mock translations
@@ -69,11 +94,13 @@ describe('LeftDrawer Component', () => {
   ): ReturnType<typeof render> => {
     const finalProps = { ...defaultProps, ...props };
     return render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18n}>
-          <LeftDrawer {...finalProps} />
-        </I18nextProvider>
-      </BrowserRouter>,
+      <MockedProvider mocks={[]}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <LeftDrawer {...finalProps} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
   };
 
@@ -144,13 +171,13 @@ describe('LeftDrawer Component', () => {
     it('applies correct styles when drawer is hidden', () => {
       renderComponent({ ...defaultProps, hideDrawer: true });
       const element = screen.getByTestId('leftDrawerContainer');
-      expect(element.className).toContain('inactiveDrawer');
+      expect(element.className).toContain('collapsedDrawer');
     });
 
     it('applies correct styles when drawer is visible', () => {
       renderComponent({ ...defaultProps, hideDrawer: false });
       const element = screen.getByTestId('leftDrawerContainer');
-      expect(element.className).toContain('activeDrawer');
+      expect(element.className).toContain('expandedDrawer');
     });
   });
 
@@ -207,18 +234,20 @@ describe('LeftDrawer Component', () => {
       const setHideDrawer = vi.fn();
 
       render(
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-          </I18nextProvider>
-        </BrowserRouter>,
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
       );
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
       fireEvent.click(organizationsButton);
       const leftDrawerContainer = screen.getByTestId('leftDrawerContainer');
 
-      expect(leftDrawerContainer).toHaveClass(styles.activeDrawer);
+      expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
     });
 
     it('hides drawer on mobile view for all navigation buttons', () => {
@@ -232,11 +261,13 @@ describe('LeftDrawer Component', () => {
       const setHideDrawer = vi.fn();
 
       render(
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-          </I18nextProvider>
-        </BrowserRouter>,
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
       );
 
       // Test community profile button
@@ -264,11 +295,13 @@ describe('LeftDrawer Component', () => {
 
       const setHideDrawer = vi.fn();
       render(
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-          </I18nextProvider>
-        </BrowserRouter>,
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
       );
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
@@ -410,11 +443,13 @@ describe('LeftDrawer Component', () => {
 
       const setHideDrawer = vi.fn();
       render(
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
-          </I18nextProvider>
-        </BrowserRouter>,
+        <MockedProvider mocks={[]}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
       );
 
       const pluginButton = screen.getByTestId('plugin-mobile-plugin-btn');
