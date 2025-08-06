@@ -348,9 +348,6 @@ export const MOCKS = [
     },
   },
 
-
-
-
   // Delete pledge mock
   {
     request: {
