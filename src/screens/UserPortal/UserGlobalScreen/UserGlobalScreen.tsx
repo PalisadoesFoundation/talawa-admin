@@ -30,9 +30,14 @@ import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const UserGlobalScreen = (): JSX.Element => {
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const { getItem } = useLocalStorage();
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   /**
    * Handles window resize events to toggle the sidebar visibility

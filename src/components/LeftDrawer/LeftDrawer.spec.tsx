@@ -123,14 +123,6 @@ describe('LeftDrawer Component', () => {
   });
 
   describe('Drawer State Initialization', () => {
-    it('should initialize hideDrawer to false when it is null', () => {
-      const setHideDrawer = vi.fn();
-      renderComponent({ hideDrawer: null, setHideDrawer });
-
-      // The useEffect should call setHideDrawer(false) when hideDrawer is null
-      expect(setHideDrawer).toHaveBeenCalledWith(false);
-    });
-
     it('should not initialize hideDrawer when it has a value', () => {
       const setHideDrawer = vi.fn();
       renderComponent({ hideDrawer: true, setHideDrawer });
@@ -159,12 +151,6 @@ describe('LeftDrawer Component', () => {
       renderComponent({ ...defaultProps, hideDrawer: false });
       const element = screen.getByTestId('leftDrawerContainer');
       expect(element.className).toContain('activeDrawer');
-    });
-
-    it('applies hideElemByDefault styles when hideDrawer is null', () => {
-      renderComponent({ ...defaultProps, hideDrawer: null });
-      const element = screen.getByTestId('leftDrawerContainer');
-      expect(element.className).toContain('hideElemByDefault');
     });
   });
 

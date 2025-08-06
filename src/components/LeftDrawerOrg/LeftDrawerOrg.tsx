@@ -44,12 +44,15 @@ import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
+import { FaBars } from 'react-icons/fa';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from 'components/SignOut/SignOut';
 
 export interface ILeftDrawerProps {
   orgId: string;
   targets: TargetsType[];
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 /**
@@ -132,11 +135,6 @@ const leftDrawerOrg = ({
     [location.pathname],
   );
 
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, [hideDrawer, setHideDrawer]);
   // Check if the current page is admin profile page
 
   useEffect(() => {
@@ -191,78 +189,116 @@ const leftDrawerOrg = ({
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
       {/* Branding Section */}
-      <div className={styles.brandingContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <span className={styles.talawaText}>
-          {tCommon('talawaAdminPortal')}
-        </span>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <div
+          className={`d-flex align-items-center`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
       {/* Organization Section */}
-      <div className={`${styles.organizationContainer} pe-3`}>
-        {loading ? (
-          <button
-            className={`${styles.profileContainer} shimmer`}
-            data-testid="orgBtn"
-          />
-        ) : !data?.organization ? (
-          !isProfilePage && (
+      {!hideDrawer && (
+        <div className={`${styles.organizationContainer} pe-3`}>
+          {loading ? (
             <button
-              className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
-              disabled
+              className={`${styles.profileContainer} shimmer`}
+              data-testid="orgBtn"
+            />
+          ) : !data?.organization ? (
+            !isProfilePage && (
+              <button
+                type="button"
+                className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
+                disabled
+              >
+                <div className="px-3">
+                  <WarningAmberOutlined />
+                </div>
+                {tErrors('errorLoading', { entity: 'Organization' })}
+              </button>
+            )
+          ) : (
+            <button
+              type="button"
+              className={styles.profileContainer}
+              data-testid="OrgBtn"
             >
-              <div className="px-3">
-                <WarningAmberOutlined />
+              <div className={styles.imageContainer}>
+                {data.organization.avatarURL ? (
+                  <img
+                    src={data.organization.avatarURL}
+                    alt={`${data.organization.name}`}
+                  />
+                ) : (
+                  <Avatar
+                    name={data.organization.name}
+                    containerStyle={styles.avatarContainer}
+                    alt={`${data.organization.name} Picture`}
+                  />
+                )}
               </div>
-              {tErrors('errorLoading', { entity: 'Organization' })}
+              <div className={styles.ProfileRightConatiner}>
+                <div className={styles.profileText}>
+                  <span className={styles.primaryText}>
+                    {data.organization.name}
+                  </span>
+                  <span className={styles.secondaryText}>
+                    {data.organization.city || 'N/A'}
+                  </span>
+                </div>
+                <div className={styles.ArrowIcon}>
+                  <AngleRightIcon fill={'var(--bs-secondary)'} />
+                </div>
+              </div>
             </button>
-          )
-        ) : (
-          <button className={styles.profileContainer} data-testid="OrgBtn">
-            <div className={styles.imageContainer}>
-              {data.organization.avatarURL ? (
-                <img
-                  src={data.organization.avatarURL}
-                  alt={`${data.organization.name} profile picture`}
-                />
-              ) : (
-                <Avatar
-                  name={data.organization.name}
-                  containerStyle={styles.avatarContainer}
-                  alt={`${data.organization.name} Picture`}
-                />
-              )}
-            </div>
-            <div className={styles.ProfileRightConatiner}>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>
-                  {data.organization.name}
-                </span>
-                <span className={styles.secondaryText}>
-                  {data.organization.city || 'N/A'}
-                </span>
-              </div>
-              <div className={styles.ArrowIcon}>
-                <AngleRightIcon fill={'var(--bs-secondary)'} />
-              </div>
-            </div>
-          </button>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Options List */}
       <h5 className={`${styles.titleHeader} text-secondary`}>
-        {tCommon('menu')}
+        {!hideDrawer && tCommon('menu')}
       </h5>
       <div className={styles.optionList} data-cy="leftDrawerOptionList">
         {targets.map(({ name, url }, index) =>
@@ -270,22 +306,31 @@ const leftDrawerOrg = ({
             <NavLink to={url} key={name} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <button
-                  className={
-                    isActive
-                      ? styles.leftDrawerActiveButton
-                      : styles.leftDrawerInactiveButton
-                  }
-                  data-cy={`leftDrawerButton-${name}`}
+                  type="button"
+                  style={{ height: '40px' }}
+                  data-testid={name}
+                  className={`
+                    ${
+                      isActive
+                        ? styles.leftDrawerActiveButton
+                        : styles.leftDrawerInactiveButton
+                    }
+                      ${styles.talawaText} ${styles.sidebarText}
+                  `}
                 >
-                  <div className={styles.iconWrapper}>
-                    <IconComponent
-                      name={name === 'Membership Requests' ? 'Requests' : name}
-                      fill={
-                        isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
-                      }
-                    />
+                  <div style={{ display: 'flex', alignItems: 'left' }}>
+                    <div className={styles.iconWrapper}>
+                      <IconComponent
+                        name={
+                          name === 'Membership Requests' ? 'Requests' : name
+                        }
+                        fill={
+                          isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
+                        }
+                      />
+                    </div>
+                    {!hideDrawer && tCommon(name)}
                   </div>
-                  {tCommon(name)}
                 </button>
               )}
             </NavLink>
@@ -311,11 +356,19 @@ const leftDrawerOrg = ({
                 color: 'var(--bs-secondary)',
               }}
             >
-              {tCommon('plugins')}
+              <h5 className={`${styles.titleHeader} text-secondary`}>
+                {!hideDrawer && tCommon('plugins')}
+              </h5>
             </h4>
             {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
           </>
         )}
+      </div>
+      <div className={styles.userSidebarOrgFooter}>
+        <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <ProfileCard />
+        </div>
+        <SignOut hideDrawer={hideDrawer} />
       </div>
     </div>
   );

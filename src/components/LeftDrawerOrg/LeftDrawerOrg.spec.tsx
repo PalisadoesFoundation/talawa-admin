@@ -301,13 +301,6 @@ describe('LeftDrawerOrg', () => {
   });
 
   describe('Drawer State Management', () => {
-    it('should apply correct CSS classes when hideDrawer is null', () => {
-      renderComponent({ hideDrawer: null });
-
-      const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'hideElemByDefault');
-    });
-
     it('should apply correct CSS classes when hideDrawer is true', () => {
       renderComponent({ hideDrawer: true });
 
@@ -320,14 +313,6 @@ describe('LeftDrawerOrg', () => {
 
       const container = screen.getByTestId('leftDrawerContainer');
       expect(container).toHaveClass('leftDrawer', 'activeDrawer');
-    });
-
-    it('should set hideDrawer to false when it is null', async () => {
-      renderComponent({ hideDrawer: null });
-
-      await waitFor(() => {
-        expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-      });
     });
   });
 

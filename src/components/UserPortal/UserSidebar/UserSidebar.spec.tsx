@@ -150,13 +150,6 @@ describe('UserSidebar', () => {
   });
 
   describe('Drawer State Management', () => {
-    it('should apply correct CSS classes when hideDrawer is null', () => {
-      renderComponent({ hideDrawer: null });
-
-      const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'hideElemByDefault');
-    });
-
     it('should apply correct CSS classes when hideDrawer is true', () => {
       renderComponent({ hideDrawer: true });
 

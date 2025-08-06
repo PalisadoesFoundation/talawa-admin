@@ -35,20 +35,24 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const OrganizationScreen = (): JSX.Element => {
   // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  const { getItem, setItem } = useLocalStorage();
 
   // State to manage visibility of the side drawer
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
@@ -73,6 +77,10 @@ const OrganizationScreen = (): JSX.Element => {
   useEffect(() => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
 
   const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
@@ -131,7 +139,6 @@ const OrganizationScreen = (): JSX.Element => {
             <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
-          <ProfileDropdown />
         </div>
         <Outlet />
       </div>

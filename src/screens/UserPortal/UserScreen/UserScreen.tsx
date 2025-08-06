@@ -46,6 +46,8 @@ import styles from 'style/app-fixed.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
+import { get } from 'http';
 
 const map: InterfaceMapType = {
   organization: 'home',
@@ -62,6 +64,7 @@ const map: InterfaceMapType = {
 const UserScreen = (): React.JSX.Element => {
   // Get the current location path for debugging or conditional rendering
   const location = useLocation();
+  const { getItem, setItem } = useLocalStorage();
 
   /**
    * State to manage the visibility of the sidebar (drawer).
@@ -82,7 +85,10 @@ const UserScreen = (): React.JSX.Element => {
   );
 
   const { targets } = userRoutes;
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   /**
    * Retrieves the organization ID from the URL parameters.
@@ -106,8 +112,6 @@ const UserScreen = (): React.JSX.Element => {
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
-    } else {
-      setHideDrawer(false);
     }
   };
 
@@ -119,6 +123,10 @@ const UserScreen = (): React.JSX.Element => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
 
   return (
     <>
