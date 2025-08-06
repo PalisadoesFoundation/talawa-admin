@@ -663,8 +663,6 @@ const SEARCH_MOCKS = [
   },
 ];
 
-const { setItem } = useLocalStorage();
-
 const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS]);
 const link2 = new StaticMockLink(USER_PLEDGES_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
@@ -695,6 +693,7 @@ const renderMyPledges = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing User Pledge Screen', () => {
+  const { setItem } = useLocalStorage();
   beforeEach(() => {
     setItem('userId', 'userId');
   });
