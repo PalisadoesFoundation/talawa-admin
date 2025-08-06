@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import { MockedProvider } from '@apollo/client/testing';
 import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
 
@@ -10,21 +11,44 @@ const mockT = vi.fn((key: string) => {
     talawaUserPortal: 'Talawa User Portal',
     'my organizations': 'My Organizations',
     menu: 'Menu',
-    settings: 'Settings',
+    Settings: 'Settings', // Capital S for common namespace
+  };
+  return translations[key] || key;
+});
+
+const mockTCommon = vi.fn((key: string) => {
+  const translations: Record<string, string> = {
+    menu: 'Menu',
+    Settings: 'Settings',
   };
   return translations[key] || key;
 });
 
 vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn(() => ({
-    t: mockT,
-  })),
+  useTranslation: vi.fn((namespace: string) => {
+    if (namespace === 'common') {
+      return { t: mockTCommon };
+    }
+    return { t: mockT };
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
 }));
 
-vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+vi.mock('components/ProfileCard/ProfileCard', () => ({
   default: vi.fn(() => (
-    <div data-testid="profile-dropdown">ProfileDropdown</div>
+    <div data-testid="profile-dropdown">
+      <div data-testid="display-name">Test User</div>
+      <div data-testid="display-type">Admin</div>
+      <button data-testid="profileBtn">Profile Button</button>
+    </div>
   )),
+}));
+
+vi.mock('components/UserPortal/SignOut/SignOut', () => ({
+  default: vi.fn(() => <button data-testid="signOutBtn">Sign Out</button>),
 }));
 
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
@@ -33,8 +57,17 @@ const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
   ),
 }));
 
+const { mockUseLocalStorage } = vi.hoisted(() => ({
+  mockUseLocalStorage: vi.fn(() => ({ setItem: vi.fn() })),
+}));
+
 vi.mock('plugin', () => ({
   usePluginDrawerItems: mockUsePluginDrawerItems,
+}));
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: mockUseLocalStorage,
+  setItem: vi.fn(),
 }));
 
 // Mock SVG imports
@@ -71,8 +104,8 @@ vi.mock('../../../style/app-fixed.module.css', () => ({
   default: {
     leftDrawer: 'leftDrawer',
     hideElemByDefault: 'hideElemByDefault',
-    inactiveDrawer: 'inactiveDrawer',
-    activeDrawer: 'activeDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
     talawaLogo: 'talawaLogo',
     talawaText: 'talawaText',
     titleHeader: 'titleHeader',
@@ -94,6 +127,7 @@ describe('UserSidebar', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockT.mockClear();
+    mockTCommon.mockClear();
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
@@ -115,9 +149,11 @@ describe('UserSidebar', () => {
 
   const renderComponent = (props: Partial<InterfaceUserSidebarProps> = {}) => {
     return render(
-      <MemoryRouter>
-        <UserSidebar {...defaultProps} {...props} />
-      </MemoryRouter>,
+      <MockedProvider mocks={[]} addTypename={false}>
+        <MemoryRouter>
+          <UserSidebar {...defaultProps} {...props} />
+        </MemoryRouter>
+      </MockedProvider>,
     );
   };
 
@@ -154,14 +190,14 @@ describe('UserSidebar', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'inactiveDrawer');
+      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'activeDrawer');
+      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
     });
   });
 
@@ -400,8 +436,8 @@ describe('UserSidebar', () => {
 
       expect(mockT).toHaveBeenCalledWith('talawaUserPortal');
       expect(mockT).toHaveBeenCalledWith('my organizations');
-      expect(mockT).toHaveBeenCalledWith('menu');
-      expect(mockT).toHaveBeenCalledWith('settings');
+      expect(mockTCommon).toHaveBeenCalledWith('menu');
+      expect(mockTCommon).toHaveBeenCalledWith('Settings');
     });
   });
 
@@ -410,8 +446,7 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const profileDropdown = screen.getByTestId('profile-dropdown');
-      const parentElement = profileDropdown.closest('.mt-auto');
-      expect(parentElement).toBeInTheDocument();
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -423,16 +458,22 @@ describe('UserSidebar', () => {
       // Check for the main content structure
       const mainContent = container.querySelector('.leftbarcompheight');
       expect(mainContent).toBeInTheDocument();
-      expect(mainContent).toHaveClass('d-flex', 'align-items', 'flex-column');
+      expect(mainContent).toHaveClass(
+        'd-flex',
+        'flex-column',
+        'leftbarcompheight',
+      );
     });
   });
 
   describe('Active State Styling', () => {
     it('should apply active styles when on organizations route', () => {
       render(
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <UserSidebar {...defaultProps} />
-        </MemoryRouter>,
+        <MockedProvider mocks={[]} addTypename={false}>
+          <MemoryRouter initialEntries={['/user/organizations']}>
+            <UserSidebar {...defaultProps} />
+          </MemoryRouter>
+        </MockedProvider>,
       );
 
       const orgsButton = screen.getByTestId('orgsBtn');
@@ -441,9 +482,11 @@ describe('UserSidebar', () => {
 
     it('should apply active styles when on settings route', () => {
       render(
-        <MemoryRouter initialEntries={['/user/settings']}>
-          <UserSidebar {...defaultProps} />
-        </MemoryRouter>,
+        <MockedProvider mocks={[]} addTypename={false}>
+          <MemoryRouter initialEntries={['/user/settings']}>
+            <UserSidebar {...defaultProps} />
+          </MemoryRouter>
+        </MockedProvider>,
       );
 
       const settingsButton = screen.getByTestId('settingsBtn');
@@ -452,30 +495,28 @@ describe('UserSidebar', () => {
 
     it('should apply active stroke color to icons when route is active', () => {
       render(
-        <MemoryRouter initialEntries={['/user/organizations']}>
-          <UserSidebar {...defaultProps} />
-        </MemoryRouter>,
+        <MockedProvider mocks={[]} addTypename={false}>
+          <MemoryRouter initialEntries={['/user/organizations']}>
+            <UserSidebar {...defaultProps} />
+          </MemoryRouter>
+        </MockedProvider>,
       );
 
       const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute(
-        'data-stroke',
-        'var(--sidebar-icon-stroke-active)',
-      );
+      expect(orgIcon).toHaveAttribute('data-stroke', '#000000');
     });
 
     it('should apply inactive stroke color to icons when route is not active', () => {
       render(
-        <MemoryRouter initialEntries={['/user/other']}>
-          <UserSidebar {...defaultProps} />
-        </MemoryRouter>,
+        <MockedProvider mocks={[]} addTypename={false}>
+          <MemoryRouter initialEntries={['/user/other']}>
+            <UserSidebar {...defaultProps} />
+          </MemoryRouter>
+        </MockedProvider>,
       );
 
       const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute(
-        'data-stroke',
-        'var(--sidebar-icon-stroke-inactive)',
-      );
+      expect(orgIcon).toHaveAttribute('data-stroke', 'var(--bs-secondary)');
     });
   });
 
@@ -519,6 +560,88 @@ describe('UserSidebar', () => {
 
       fireEvent.click(orgsButton);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('Toggle Button Functionality', () => {
+    it('should render toggle button with correct attributes', () => {
+      renderComponent();
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      expect(toggleBtn).toBeInTheDocument();
+      expect(toggleBtn).toHaveAttribute('tabIndex', '0');
+      expect(toggleBtn).toHaveAttribute('role', 'button');
+      // The aria-label is on the FaBars icon inside the toggle button
+      expect(
+        toggleBtn.querySelector('[aria-label="Toggle sidebar"]'),
+      ).toBeInTheDocument();
+    });
+
+    it('should toggle drawer when toggle button is clicked', () => {
+      const mockSetItem = vi.fn();
+      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+
+      renderComponent();
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      fireEvent.click(toggleBtn);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    });
+
+    it('should toggle drawer when Enter key is pressed on toggle button', () => {
+      const mockSetItem = vi.fn();
+      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+
+      renderComponent();
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      fireEvent.keyDown(toggleBtn, { key: 'Enter' });
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    });
+
+    it('should toggle drawer when Space key is pressed on toggle button', () => {
+      const mockSetItem = vi.fn();
+      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+
+      renderComponent();
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      fireEvent.keyDown(toggleBtn, { key: ' ' });
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    });
+
+    it('should not toggle drawer when other keys are pressed on toggle button', () => {
+      const mockSetItem = vi.fn();
+      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+
+      renderComponent();
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      fireEvent.keyDown(toggleBtn, { key: 'Tab' });
+      fireEvent.keyDown(toggleBtn, { key: 'Escape' });
+      fireEvent.keyDown(toggleBtn, { key: 'ArrowDown' });
+
+      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      expect(mockSetItem).not.toHaveBeenCalled();
+    });
+
+    it('should toggle from expanded to collapsed state', () => {
+      const mockSetItem = vi.fn();
+      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+
+      renderComponent({ hideDrawer: true });
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      fireEvent.click(toggleBtn);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
     });
   });
 });
