@@ -136,16 +136,10 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       Organization: {
         fields: {
           events: {
-            // Each query with different arguments should be cached separately
-            keyArgs: [
-              'startDate',
-              'endDate',
-              'first',
-              'after',
-              'includeRecurring',
-            ],
+            // Cache by date range and recurring flag only
+            keyArgs: ['startDate', 'endDate', 'includeRecurring'],
             merge(_existing, incoming) {
-              // Replace existing data with incoming data for each unique query
+              // Always replace with incoming data to avoid cache conflicts
               return incoming;
             },
           },

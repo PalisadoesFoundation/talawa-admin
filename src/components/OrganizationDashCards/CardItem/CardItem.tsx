@@ -63,9 +63,59 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
 
           {type == 'Post' && time && (
             <span className={`${styles.CardItemDate}`}>
-              Posted on:
-              {dayjs(time).format('MMM D, YYYY')}
+              Posted on: {dayjs(time).format('MMM D, YYYY')}
             </span>
+          )}
+
+          {type === 'Event' && (
+            <div className="d-flex flex-column mt-2">
+              {startdate && (
+                <div
+                  className="text-muted d-flex align-items-center mb-1"
+                  style={{ fontSize: '12px' }}
+                >
+                  <DateIcon
+                    title="Event Date"
+                    fill="var(--bs-gray-500)"
+                    width={14}
+                    height={14}
+                    className="me-2"
+                  />
+                  {dayjs(startdate).format('MMM D, YYYY')}
+                </div>
+              )}
+              {location && (
+                <div
+                  className="text-muted d-flex align-items-center"
+                  style={{ fontSize: '12px' }}
+                >
+                  <MarkerIcon
+                    title="Event Location"
+                    stroke="var(--bs-gray-500)"
+                    width={14}
+                    height={14}
+                    className="me-2"
+                  />
+                  {location}
+                </div>
+              )}
+              {startdate && (
+                <div
+                  className="text-muted d-flex align-items-center mt-1"
+                  style={{ fontSize: '12px' }}
+                >
+                  <DateIcon
+                    title="Event Time"
+                    fill="var(--bs-gray-500)"
+                    width={14}
+                    height={14}
+                    className="me-2"
+                  />
+                  {dayjs(startdate).format('h:mm A')}
+                  {enddate && ` - ${dayjs(enddate).format('h:mm A')}`}
+                </div>
+              )}
+            </div>
           )}
 
           {creator && (
@@ -75,7 +125,8 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           )}
 
           <div className={styles.rightCard}>
-            {location && (
+            {/* Keep original location/time for non-Event types */}
+            {type != 'Event' && location && (
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
                   title="Event Location"
@@ -86,18 +137,16 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 {location}
               </span>
             )}
-            {type == 'Event' && startdate && (
+            {type != 'Event' && startdate && (
               <span className={`${styles.time} fst-normal fw-semibold`}>
-                {type === 'Event' && (
-                  <DateIcon
-                    title="Event Date"
-                    fill="var(--bs-gray-600)"
-                    width={20}
-                    height={20}
-                  />
-                )}{' '}
-                {dayjs(startdate).format('MMM D, YYYY')} -{' '}
-                {dayjs(enddate).format('MMM D, YYYY')}
+                <DateIcon
+                  title="Event Time"
+                  fill="var(--bs-gray-600)"
+                  width={20}
+                  height={20}
+                />{' '}
+                {dayjs(startdate).format('h:mm A')}
+                {enddate && ` - ${dayjs(enddate).format('h:mm A')}`}
               </span>
             )}
           </div>

@@ -1,21 +1,24 @@
 /**
  * OrganizationEvents Component
  *
- * Main screen component for managing and viewing organization events.
- * Provides calendar views (Day, Month, Year) with event filtering based on user permissions.
- * Supports event creation, editing, and real-time updates through GraphQL subscriptions.
+ * This component is responsible for rendering and managing the organization events page.
+ * It includes functionalities for viewing events in different calendar views and creating new events.
  *
- * Key Features:
- * - Multiple calendar view types (Day, Month, Year)
- * - Event caching by month to improve performance
- * - Role-based event visibility (Admin vs Regular users)
- * - Real-time event updates and synchronization
- * - Event creation modal integration
+ * @returns The rendered OrganizationEvents component.
  *
- * @fileoverview Organization Events management screen
+ * @remarks
+ * - Utilizes Apollo Client for GraphQL queries and mutations.
+ * - Integrates with `react-bootstrap` for UI components and `@mui/x-date-pickers` for date/time pickers.
+ * - Supports multilingual translations using `react-i18next`.
+ * - Handles event creation with validations.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationEvents />
+ * ```
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef, JSX } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -25,7 +28,6 @@ import {
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router';
@@ -34,12 +36,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import CreateEventModal from './CreateEventModal';
 
-dayjs.extend(utc);
-
-/**
- * GraphQL edge interface for paginated event results.
- * Represents a single event node with cursor for pagination.
- */
+// Define the type for an event edge
 interface IEventEdge {
   node: {
     id: string;
@@ -51,6 +48,7 @@ interface IEventEdge {
     location?: string | null;
     isPublic: boolean;
     isRegisterable: boolean;
+    // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
       id: string;
@@ -60,6 +58,7 @@ interface IEventEdge {
     totalCount?: number | null;
     hasExceptions?: boolean;
     progressLabel?: string | null;
+    // Attachments
     attachments?: Array<{
       url: string;
       mimeType: string;
@@ -78,30 +77,12 @@ interface IEventEdge {
   cursor: string;
 }
 
-/**
- * Enumeration of available calendar view types.
- * Determines how events are displayed in the calendar component.
- */
 export enum ViewType {
   DAY = 'Day',
   MONTH = 'Month View',
   YEAR = 'Year View',
 }
 
-/**
- * OrganizationEvents functional component.
- *
- * Manages the main organization events screen with calendar views and event management.
- * Handles event fetching, caching, and display across different time periods.
- *
- * @returns JSX.Element - The rendered organization events screen
- *
- * @example
- * ```tsx
- * // Route usage
- * <Route path="/orgevents/:orgId" element={<OrganizationEvents />} />
- * ```
- */
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
@@ -109,210 +90,146 @@ function organizationEvents(): JSX.Element {
   const { getItem } = useLocalStorage();
 
   document.title = t('title');
-
-  // Modal and view state management
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
-  const [currentMonth, setCurrentMonth] = useState(dayjs().month());
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
+  const queryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Event caching system - stores events by month key to avoid repeated API calls
-  const [eventsByMonth, setEventsByMonth] = useState<{
-    [key: string]: InterfaceEvent[];
-  }>({});
-
-  // Currently displayed events - prevents blank screen during month transitions
-  const [displayedEvents, setDisplayedEvents] = useState<InterfaceEvent[]>([]);
-
-  /**
-   * Opens the create event modal dialog.
-   */
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
-
-  /**
-   * Closes the create event modal dialog.
-   */
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
 
-  /**
-   * Handles calendar view type changes (Day, Month, Year).
-   * @param item - The selected view type string
-   */
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
   };
 
-  /**
-   * Generates a unique cache key for storing events by month and year.
-   * @param month - Zero-based month index (0-11)
-   * @param year - Full year number
-   * @returns Cache key string in format "YYYY-M"
-   */
-  const getMonthKey = (month: number, year: number): string =>
-    `${year}-${month}`;
-
-  /**
-   * Calculates the date range for a given month and year.
-   * Returns ISO string dates for the start and end of the month in UTC.
-   * @param month - Zero-based month index (0-11)
-   * @param year - Full year number
-   * @returns Object with startDate and endDate ISO strings
-   */
-  const getDateRange = (month: number, year: number) => {
-    const startDate = dayjs
-      .utc()
-      .year(year)
-      .month(month)
-      .startOf('month')
-      .toISOString();
-    const endDate = dayjs
-      .utc()
-      .year(year)
-      .month(month)
-      .endOf('month')
-      .toISOString();
-    return { startDate, endDate };
+  const handleMonthChange = (month: number, year: number): void => {
+    setCurrentMonth(month);
+    setCurrentYear(year);
+    // No manual refetch - let useQuery handle it automatically with cache-first policy
   };
+
+  const {
+    data: eventData,
+    error: eventDataError,
+    refetch: refetchEvents,
+  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+    variables: {
+      id: currentUrl,
+      first: 150,
+      after: null,
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
+        .startOf('month')
+        .toISOString(),
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
+        .endOf('month')
+        .toISOString(),
+      includeRecurring: true,
+    },
+    notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
+  });
 
   const {
     data: orgData,
     loading: orgLoading,
     error: orgDataError,
   } = useQuery(GET_ORGANIZATION_DATA_PG, {
-    variables: { id: currentUrl, first: 10, after: null },
-    skip: !currentUrl,
+    variables: {
+      id: currentUrl,
+      first: 10,
+      after: null,
+    },
   });
 
-  // User authentication and role management
   const userId = getItem('id') as string;
   const storedRole = getItem('role') as string | null;
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  /**
-   * Transforms GraphQL event data into the internal event interface format.
-   * Converts GraphQL edge structure to flat event objects with proper date formatting.
-   *
-   * @param data - Raw GraphQL response data
-   * @returns Array of transformed InterfaceEvent objects
-   */
-  const transformEvents = (data: any): InterfaceEvent[] => {
-    if (!data?.organization?.events?.edges) return [];
-
-    return data.organization.events.edges.map((edge: IEventEdge) => ({
-      _id: edge.node.id,
-      name: edge.node.name,
-      description: edge.node.description || '',
-      startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
-      endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
-      startTime: edge.node.allDay
-        ? undefined
-        : dayjs(edge.node.startAt).format('HH:mm:ss'),
-      endTime: edge.node.allDay
-        ? undefined
-        : dayjs(edge.node.endAt).format('HH:mm:ss'),
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      isRecurringTemplate: edge.node.isRecurringEventTemplate,
-      baseEventId: edge.node.baseEvent?.id || null,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      creator: {
-        _id: edge.node.creator.id,
-        name: edge.node.creator.name,
-      },
-      attendees: [],
-    }));
-  };
-
-  const { startDate, endDate } = getDateRange(currentMonth, currentYear);
-
-  const {
-    loading,
-    error: eventError,
-    refetch,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
-      id: currentUrl,
-      first: 300,
-      after: null,
-      startDate,
-      endDate,
-      includeRecurring: true,
+  // Normalize event data for EventCalendar with proper typing
+  const events: InterfaceEvent[] = (
+    eventData?.organization?.events?.edges || []
+  ).map((edge: IEventEdge) => ({
+    _id: edge.node.id,
+    name: edge.node.name,
+    description: edge.node.description || '',
+    startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
+    endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
+    startTime: edge.node.allDay
+      ? undefined
+      : dayjs(edge.node.startAt).format('HH:mm:ss'),
+    endTime: edge.node.allDay
+      ? undefined
+      : dayjs(edge.node.endAt).format('HH:mm:ss'),
+    allDay: edge.node.allDay,
+    location: edge.node.location || '',
+    isPublic: edge.node.isPublic,
+    isRegisterable: edge.node.isRegisterable,
+    // Add recurring event information
+    isRecurringTemplate: edge.node.isRecurringEventTemplate,
+    baseEventId: edge.node.baseEvent?.id || null,
+    sequenceNumber: edge.node.sequenceNumber,
+    totalCount: edge.node.totalCount,
+    hasExceptions: edge.node.hasExceptions,
+    progressLabel: edge.node.progressLabel,
+    creator: {
+      _id: edge.node.creator.id,
+      name: edge.node.creator.name,
     },
-    skip: !currentUrl,
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-    onCompleted: (data) => {
-      const monthKey = getMonthKey(currentMonth, currentYear);
-      const transformedEvents = transformEvents(data);
+    attendees: [], // Adjust if attendees are added to schema
+  }));
 
-      // Update both cache and display state to prevent blank screens
-      setEventsByMonth((prev) => ({
-        ...prev,
-        [monthKey]: transformedEvents,
-      }));
-      setDisplayedEvents(transformedEvents);
-    },
-  });
-
-  /**
-   * Handles calendar month/year navigation changes.
-   * Implements smart caching - uses cached data immediately if available,
-   * otherwise triggers a new API request.
-   *
-   * @param month - Target month (0-11)
-   * @param year - Target year
-   */
-  const handleMonthChange = useCallback(
-    (month: number, year: number): void => {
-      const newMonthKey = getMonthKey(month, year);
-
-      // Use cached events if available to prevent blank screen
-      if (eventsByMonth[newMonthKey]) {
-        setDisplayedEvents(eventsByMonth[newMonthKey]);
-      }
-
-      // Update state to trigger API fetch if needed
-      setCurrentMonth(month);
-      setCurrentYear(year);
-    },
-    [eventsByMonth],
-  );
-
-  /**
-   * Refetches events for the current month and updates the display.
-   * Used after event creation, editing, or deletion to sync with server state.
-   *
-   * @returns Promise resolving to the refetch result
-   */
-  const refetchEvents = useCallback(async () => {
-    const result = await refetch();
-    return result;
-  }, [refetch]);
-
-  /**
-   * Handles authentication errors by redirecting to organization list.
-   * Monitors both organization data and event query errors.
-   */
   useEffect(() => {
-    if (orgDataError || eventError) {
-      if (
-        orgDataError?.message?.includes('Unauthorized') ||
-        eventError?.message?.includes('Authentication')
-      ) {
-        navigate('/orglist');
-      }
-    }
-  }, [orgDataError, eventError, navigate]);
+    // Only navigate away for serious errors, not for empty results or month navigation
+    if (eventDataError || orgDataError) {
+      // Handle rate limiting errors more gracefully - check multiple variations
+      const isRateLimitError =
+        eventDataError?.message?.toLowerCase().includes('too many requests') ||
+        eventDataError?.message?.toLowerCase().includes('rate limit') ||
+        eventDataError?.message?.includes('Please try again later');
 
-  if (orgLoading && !orgData) return <Loader />;
+      if (isRateLimitError) {
+        // Just suppress rate limit errors silently
+        return;
+      }
+
+      // Only navigate away for authentication or authorization errors
+      if (
+        eventDataError?.message?.includes('unauthenticated') ||
+        eventDataError?.message?.includes('unauthorized') ||
+        orgDataError?.message?.includes('unauthenticated') ||
+        orgDataError?.message?.includes('unauthorized') ||
+        orgDataError?.message?.includes('not found')
+      ) {
+        console.warn(
+          'Authentication/authorization error, redirecting to org list',
+        );
+        navigate('/orglist');
+        return;
+      }
+
+      // For other errors (like empty results), just log them but don't redirect
+      console.warn('Non-critical error in events page:', {
+        eventDataError: eventDataError?.message,
+        orgDataError: orgDataError?.message,
+      });
+    }
+  }, [eventDataError, orgDataError, navigate]);
+
+  useEffect(() => {
+    // Cleanup timeout on unmount
+    return () => {
+      if (queryTimeoutRef.current) {
+        clearTimeout(queryTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (orgLoading) return <Loader />;
 
   return (
     <>
@@ -325,37 +242,17 @@ function organizationEvents(): JSX.Element {
           />
         </div>
       </div>
-      <div style={{ position: 'relative', minHeight: '400px' }}>
-        {loading && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(255, 255, 255, 0.7)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10,
-            }}
-          >
-            <Loader size="sm" />
-          </div>
-        )}
-        <EventCalendar
-          eventData={displayedEvents}
-          refetchEvents={refetchEvents}
-          orgData={orgData?.organization}
-          userId={userId}
-          userRole={userRole}
-          viewType={viewType}
-          onMonthChange={handleMonthChange}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-        />
-      </div>
+      <EventCalendar
+        eventData={events}
+        refetchEvents={refetchEvents}
+        orgData={orgData?.organization}
+        userId={userId}
+        userRole={userRole}
+        viewType={viewType}
+        onMonthChange={handleMonthChange}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
+      />
 
       <CreateEventModal
         isOpen={createEventmodalisOpen}

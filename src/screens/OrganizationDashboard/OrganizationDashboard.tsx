@@ -39,7 +39,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
 // import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
-import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
@@ -52,6 +51,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 import type {
   IEvent,
   InterfaceOrganizationMembersConnectionEdgePg,
@@ -77,7 +77,6 @@ function OrganizationDashboard(): JSX.Element {
 
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
-  const [eventCount, setEventCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
   // const currentDate = dayjs().toISOString();
@@ -160,25 +159,31 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId, first: 50, after: null },
+    variables: {
+      id: orgId,
+      first: 10,
+      after: null,
+      startDate: dayjs().startOf('day').toISOString(),
+      endDate: dayjs().add(3, 'months').endOf('day').toISOString(),
+      includeRecurring: true,
+    },
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-first',
   });
 
   useEffect(() => {
     if (orgEventsData && !hasFetchedAllEvents.current) {
       const now = new Date();
-
       const allEvents = orgEventsData.organization.events.edges;
 
-      const newTotalEventCount = allEvents.length;
+      // Use the correct data structure: edge.node.startAt (not edge.node.event.startAt)
+      const upcomingEvents = allEvents.filter((edge: any) => {
+        const eventStartDate = edge?.node?.startAt;
+        return eventStartDate && new Date(eventStartDate) > now;
+      });
 
-      const upcomingEvents = allEvents.filter(
-        (event: InterfaceOrganizationEventsConnectionEdgePg) =>
-          new Date(event?.node?.event?.startAt) > now,
-      );
-
-      setEventCount((prevCount) => prevCount + newTotalEventCount);
-
-      setUpcomingEvents((prevEvents) => [...prevEvents, ...upcomingEvents]);
+      setUpcomingEvents(upcomingEvents);
+      hasFetchedAllEvents.current = true; // Set to true since we're getting all upcoming events in date range
 
       if (orgEventsData.organization.events.pageInfo.hasNextPage) {
         fetchMore({
@@ -186,6 +191,9 @@ function OrganizationDashboard(): JSX.Element {
             id: orgId,
             first: 32,
             after: orgEventsData.organization.events.pageInfo.endCursor,
+            startDate: dayjs().startOf('day').toISOString(),
+            endDate: dayjs().add(3, 'months').endOf('day').toISOString(),
+            includeRecurring: true,
           },
         });
       }
@@ -248,7 +256,7 @@ function OrganizationDashboard(): JSX.Element {
         <Col xl={8}>
           {orgMemberLoading || orgPostsLoading || orgEventsLoading ? (
             <Row style={{ display: 'flex' }}>
-              {[...Array(6)].map((_, index) => {
+              {[...Array(5)].map((_, index) => {
                 return (
                   <Col
                     xs={6}
@@ -317,22 +325,6 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                data-testid="eventsCount"
-                onClick={async (): Promise<void> => {
-                  await navigate(eventsLink);
-                }}
-              >
-                <DashBoardCard
-                  count={eventCount}
-                  title={t('events')}
-                  icon={<EventsIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
                 onClick={(): void => {
                   // navigate(blockUserLink);
                 }}
@@ -391,15 +383,15 @@ function OrganizationDashboard(): JSX.Element {
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents?.map((event) => {
+                    upcomingEvents?.slice(0, 10).map((edge: any) => {
                       return (
                         <CardItem
-                          data-testid="cardItem"
+                          key={edge.node.id}
                           type="Event"
-                          key={event.event.id}
-                          startdate={event?.event?.startAt}
-                          enddate={event?.event?.endAt}
-                          title={event.event?.name}
+                          title={edge.node.name || 'Untitled Event'}
+                          startdate={edge.node.startAt}
+                          enddate={edge.node.endAt}
+                          location={edge.node.location}
                         />
                       );
                     })
