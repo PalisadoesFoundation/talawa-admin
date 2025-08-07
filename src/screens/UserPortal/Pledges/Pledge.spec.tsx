@@ -18,7 +18,6 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import { MOCKS } from './PledgesMocks';
-import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import type { ApolloLink } from '@apollo/client';
 import Pledges from './Pledges';
@@ -959,5 +958,104 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() =>
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument(),
     );
+  });
+
+  it('should handle search functionality', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchPledges');
+    const searchButton = screen.getByTestId('searchBtn');
+
+    // Test search input
+    await userEvent.type(searchInput, 'Harve');
+    await userEvent.click(searchButton);
+
+    // Verify search input has the value
+    expect(searchInput).toHaveValue('Harve');
+  });
+
+  it('should handle dropdown interactions', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Test search by dropdown
+    const searchByDropdown = screen.getByTestId('searchByDrpdwn');
+    expect(searchByDropdown).toBeInTheDocument();
+    expect(searchByDropdown).toHaveTextContent('Search by');
+
+    // Test sort dropdown
+    const sortDropdown = screen.getByTestId('filter');
+    expect(sortDropdown).toBeInTheDocument();
+    expect(sortDropdown).toHaveTextContent('Sort');
+  });
+
+  it('should render DataGrid component', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Check if DataGrid is rendered
+    const dataGrid = document.querySelector('.MuiDataGrid-root');
+    expect(dataGrid).toBeInTheDocument();
+  });
+
+  it('should handle loading state', async () => {
+    renderMyPledges(link1);
+
+    // Initially should show loading spinner
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+
+    // Wait for component to load and show search input
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle empty search input', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchPledges');
+    const searchButton = screen.getByTestId('searchBtn');
+
+    // Test with empty search
+    await userEvent.clear(searchInput);
+    await userEvent.click(searchButton);
+
+    expect(searchInput).toHaveValue('');
+  });
+
+  it('should render search and filter controls', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Check all main UI elements are present
+    expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchByDrpdwn')).toBeInTheDocument();
+    expect(screen.getByTestId('filter')).toBeInTheDocument();
+  });
+
+  it('should handle component unmounting', async () => {
+    const { unmount } = renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Unmount component
+    unmount();
+
+    // Component should be unmounted
+    expect(screen.queryByTestId('searchPledges')).not.toBeInTheDocument();
   });
 });

@@ -334,8 +334,16 @@ const Pledges = (): JSX.Element => {
         return (
           <div className="d-flex justify-content-center align-items-center h-100">
             <ProgressBar
-              now={(params.row.amount / params.row.goalAmount) * 100}
-              label={`${Math.round((params.row.amount / params.row.goalAmount) * 100)}%`}
+              now={
+                params.row.goalAmount > 0
+                  ? (params.row.amount / params.row.goalAmount) * 100
+                  : 0
+              }
+              label={
+                params.row.goalAmount > 0
+                  ? `${Math.round((params.row.amount / params.row.goalAmount) * 100)}%`
+                  : '0%'
+              }
               max={100}
               className={styles.progressBar}
               data-testid="progressBar"
