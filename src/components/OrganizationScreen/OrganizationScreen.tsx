@@ -42,17 +42,16 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const OrganizationScreen = (): JSX.Element => {
-  // Get the current location to determine the translation key
-  const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const { getItem, setItem } = useLocalStorage();
-
   // State to manage visibility of the side drawer
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
   });
+  // Get the current location to determine the translation key
+  const location = useLocation();
+  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();

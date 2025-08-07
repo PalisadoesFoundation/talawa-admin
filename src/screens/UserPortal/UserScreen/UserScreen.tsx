@@ -47,7 +47,6 @@ import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg'
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import { get } from 'http';
 
 const map: InterfaceMapType = {
   organization: 'home',
@@ -65,10 +64,10 @@ const UserScreen = (): React.JSX.Element => {
   // Get the current location path for debugging or conditional rendering
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
-
-  /**
-   * State to manage the visibility of the sidebar (drawer).
-   */
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   const { orgId } = useParams();
 
@@ -85,10 +84,6 @@ const UserScreen = (): React.JSX.Element => {
   );
 
   const { targets } = userRoutes;
-  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
-    const stored = getItem('sidebar');
-    return stored === 'true';
-  });
 
   /**
    * Retrieves the organization ID from the URL parameters.

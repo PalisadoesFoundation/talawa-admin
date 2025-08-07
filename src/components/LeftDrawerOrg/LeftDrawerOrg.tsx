@@ -106,6 +106,7 @@ const leftDrawerOrg = ({
 
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { setItem } = useLocalStorage();
 
   // Memoize the user permissions and admin status
   const userPermissions = useMemo(() => [], []);
@@ -201,12 +202,16 @@ const leftDrawerOrg = ({
           className={`d-flex align-items-center`}
           data-testid="toggleBtn"
           onClick={() => {
-            setHideDrawer(!hideDrawer);
+            const newState = !hideDrawer;
+            setItem('sidebar', newState.toString());
+            setHideDrawer(newState);
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              setHideDrawer(!hideDrawer);
+              const newState = !hideDrawer;
+              setItem('sidebar', newState.toString());
+              setHideDrawer(newState);
             }
           }}
           role="button"
@@ -244,6 +249,7 @@ const leftDrawerOrg = ({
             <button
               className={`${styles.profileContainer} shimmer`}
               data-testid="orgBtn"
+              type="button"
             />
           ) : !data?.organization ? (
             !isProfilePage && (
