@@ -59,7 +59,7 @@ const MOCKS = [
                   id: '6411e53835d7ba2344a78e21',
                   caption: 'post one',
                   commentsCount: 0,
-                  pinnedAt: '2024-03-05T00:00:00.000Z', 
+                  pinnedAt: '2024-03-05T00:00:00.000Z',
                   downVotesCount: 0,
                   upVoters: {
                     edges: [],
@@ -221,7 +221,6 @@ const MOCKS = [
   },
 ];
 
-
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
@@ -335,9 +334,9 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
     await wait();
 
-const postCardContainers = await screen.findAllByTestId('postCardContainer');
-expect(postCardContainers.length).toBeGreaterThan(0);
-
+    const postCardContainers =
+      await screen.findAllByTestId('postCardContainer');
+    expect(postCardContainers.length).toBeGreaterThan(0);
 
     expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
     expect(
