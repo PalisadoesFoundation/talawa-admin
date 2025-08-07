@@ -152,8 +152,8 @@ export const MOCKS_WITH_MORE_USERS = [
   },
 ];
 
-// Mock for testing multiple pledgers functionality
-const MOCKS_WITH_MULTIPLE_PLEDGERS = [
+// Mock for testing single pledger (matches actual schema)
+const MOCKS_WITH_SINGLE_PLEDGER_ALT = [
   {
     request: {
       query: USER_PLEDGES,
@@ -189,33 +189,6 @@ const MOCKS_WITH_MULTIPLE_PLEDGERS = [
               avatarURL: 'image-url',
               __typename: 'User',
             },
-            // Adding users array for multiple pledgers functionality
-            users: [
-              {
-                id: 'userId1',
-                name: 'Alice Smith',
-                avatarURL: 'image-url1',
-                __typename: 'User',
-              },
-              {
-                id: 'userId2',
-                name: 'Bob Johnson',
-                avatarURL: null,
-                __typename: 'User',
-              },
-              {
-                id: 'userId3',
-                name: 'Charlie Brown',
-                avatarURL: 'image-url3',
-                __typename: 'User',
-              },
-              {
-                id: 'userId4',
-                name: 'Diana Prince',
-                avatarURL: null,
-                __typename: 'User',
-              },
-            ],
             updater: {
               id: 'userId',
               __typename: 'User',
@@ -858,7 +831,7 @@ const link3 = new StaticMockLink(EMPTY_MOCKS);
 const link4 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER);
 const link5 = new StaticMockLink(MOCKS_WITH_DIFFERENT_CURRENCIES);
 const link6 = new StaticMockLink(MOCKS_WITH_ZERO_GOAL);
-const link7 = new StaticMockLink(MOCKS_WITH_MULTIPLE_PLEDGERS);
+const link7 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER_ALT);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -1139,26 +1112,23 @@ describe('Testing User Pledge Screen', () => {
     expect(screen.getByText('$700')).toBeInTheDocument();
   });
 
-  it('should display multiple pledgers data correctly', async () => {
+  it('should display single pledger deterministically', async () => {
     renderMyPledges(link7);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
-    // Wait for the data to load - the component should render with the pledger data
+    // Wait for the data to load and verify single pledger is displayed
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
       expect(screen.getByText('$700')).toBeInTheDocument();
     });
+    const moreContainer = screen.queryByTestId('moreContainer');
+    expect(moreContainer).not.toBeInTheDocument();
 
-    // Since the multiple pledgers functionality depends on the users array being properly
-    // processed by the component, we'll verify that the component renders successfully
-    // with the mock data that includes a users array
-    expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-
-    // The component should handle the users array gracefully, even if the UI doesn't
-    // display multiple users (which may be the current behavior)
+    // Verify the pledger information is displayed correctly
+    expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     const dataGrid = screen.getByRole('grid');
     expect(dataGrid).toBeInTheDocument();
   });
