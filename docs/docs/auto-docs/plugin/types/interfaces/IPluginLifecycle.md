@@ -4,7 +4,7 @@
 
 # Interface: IPluginLifecycle
 
-Defined in: [src/plugin/types.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L174)
+Defined in: [src/plugin/types.ts:196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L196)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:174](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onActivate**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L175)
+Defined in: [src/plugin/types.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L197)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/plugin/types.ts:175](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onDeactivate**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L176)
+Defined in: [src/plugin/types.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L198)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:176](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onInstall**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L177)
+Defined in: [src/plugin/types.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L199)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/types.ts:177](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onUninstall**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L178)
+Defined in: [src/plugin/types.ts:200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L200)
 
 #### Returns
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:178](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **onUpdate**: (`fromVersion`, `toVersion`) => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L179)
+Defined in: [src/plugin/types.ts:201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L201)
 
 #### Parameters
 

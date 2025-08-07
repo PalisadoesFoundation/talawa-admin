@@ -111,26 +111,15 @@ export class DiscoveryManager {
       const mainFile = this.normalizeMainFile(manifest.main);
       const importPath = `/src/plugin/available/${pluginId}/${mainFile}`;
 
-      console.log(`=== LOADING PLUGIN COMPONENTS: ${pluginId} ===`);
-      console.log(`Attempting to import plugin from: ${importPath}`);
-
       const pluginModule = await import(/* @vite-ignore */ importPath);
-
-      console.log(`Plugin module imported successfully`);
-      console.log(`Module keys:`, Object.keys(pluginModule));
-      console.log(`Module default:`, pluginModule.default);
 
       const result = pluginModule.default
         ? { [pluginId]: pluginModule.default, ...pluginModule }
         : pluginModule;
 
-      console.log(`Final components:`, Object.keys(result));
-      console.log(`=== END LOADING PLUGIN COMPONENTS: ${pluginId} ===`);
-
       return result;
     } catch (error) {
       console.error(`Failed to load components for plugin ${pluginId}:`, error);
-      console.error(`Error details:`, error);
       throw new Error(
         `Component loading failed for plugin ${pluginId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );

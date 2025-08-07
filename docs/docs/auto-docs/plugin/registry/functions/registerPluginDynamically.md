@@ -6,7 +6,7 @@
 
 > **registerPluginDynamically**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/registry.tsx:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L217)
+Defined in: [src/plugin/registry.tsx:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L185)
 
 Register a plugin dynamically by discovering its components from manifest
 

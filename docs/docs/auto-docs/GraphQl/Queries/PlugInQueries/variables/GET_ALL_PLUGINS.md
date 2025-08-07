@@ -12,4 +12,4 @@ GraphQL query to retrieve all plugins.
 
 ## Returns
 
-The list of plugins with details such as id, pluginId, isActivated, isInstalled, backup, createdAt, and updatedAt.
+The list of plugins with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.

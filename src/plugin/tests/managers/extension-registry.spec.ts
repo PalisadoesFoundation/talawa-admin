@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ExtensionRegistryManager } from './extension-registry';
+import { ExtensionRegistryManager } from '../../managers/extension-registry';
 import {
   IPluginManifest,
   IExtensionRegistry,
@@ -7,7 +7,7 @@ import {
   IRouteExtension,
   IDrawerExtension,
   IInjectorExtension,
-} from '../types';
+} from '../../types';
 
 describe('ExtensionRegistryManager', () => {
   let manager: ExtensionRegistryManager;
