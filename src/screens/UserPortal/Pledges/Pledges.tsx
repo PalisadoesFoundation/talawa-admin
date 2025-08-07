@@ -241,7 +241,7 @@ const Pledges = (): JSX.Element => {
                 data-testid="moreContainer"
                 onClick={(e) => handleClick(e, users.slice(2))}
               >
-                <span>+{users.length - 2} more...</span>
+                +{users.length - 2} more...
               </div>
             )}
           </div>
