@@ -25,7 +25,7 @@ export default defineConfig({
 
     // Environment variables
     env: {
-      apiUrl: process.env.CYPRESS_apiUrl || 'http://localhost:4000/graphql',
+      apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
     },
     setupNodeEvents(on, config) {
       // Custom task to log messages and read files

@@ -25,10 +25,11 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
   DELETE_PLUGIN_MUTATION: 'DELETE_PLUGIN_MUTATION',
 }));
 
-// Mock Apollo hooks
+// Mock Apollo hooks and gql
 vi.mock('@apollo/client', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
+  gql: vi.fn((strings, ...args) => strings.join('')),
 }));
 
 describe('PluginGraphQLService', () => {

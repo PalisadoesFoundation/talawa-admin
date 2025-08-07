@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 /**
  * GraphQL query to retrieve all plugins.
  *
- * @returns The list of plugins with details such as id, pluginId, isActivated, isInstalled, backup, createdAt, and updatedAt.
+ * @returns The list of plugins with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.
  */
 export const GET_ALL_PLUGINS = gql`
   query GetAllPlugins {
@@ -23,7 +23,7 @@ export const GET_ALL_PLUGINS = gql`
  * GraphQL query to retrieve a single plugin by ID.
  *
  * @param id - The ID of the plugin to retrieve.
- * @returns The plugin object with details such as id, pluginId, isActivated, isInstalled, backup, createdAt, and updatedAt.
+ * @returns The plugin object with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.
  */
 export const GET_PLUGIN_BY_ID = gql`
   query GetPluginById($input: QueryPluginInput!) {

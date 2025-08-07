@@ -4,7 +4,7 @@
 
 # Interface: IInjectorExtension
 
-Defined in: [src/plugin/types.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L59)
+Defined in: [src/plugin/types.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L80)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:59](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **description**: `string`
 
-Defined in: [src/plugin/types.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L62)
+Defined in: [src/plugin/types.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L83)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:62](https://github.com/PalisadoesFoundation/tal
 
 > **injector**: `string`
 
-Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L61)
+Defined in: [src/plugin/types.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L82)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **order**: `number`
 
-Defined in: [src/plugin/types.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L64)
+Defined in: [src/plugin/types.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L85)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:64](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L60)
+Defined in: [src/plugin/types.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L81)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **target**: `string`
 
-Defined in: [src/plugin/types.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L63)
+Defined in: [src/plugin/types.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L84)

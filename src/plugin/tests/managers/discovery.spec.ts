@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { DiscoveryManager } from './discovery';
-import { PluginGraphQLService, IPlugin } from '../graphql-service';
-import { IPluginManifest } from '../types';
-import { validatePluginManifest } from '../utils';
+import { DiscoveryManager } from '../../managers/discovery';
+import { PluginGraphQLService, IPlugin } from '../../graphql-service';
+import { IPluginManifest } from '../../types';
+import { validatePluginManifest } from '../../utils';
 import React from 'react';
 
 // Mock the dependencies
-vi.mock('../graphql-service');
-vi.mock('../utils');
+vi.mock('../../graphql-service');
+vi.mock('../../utils');
 
 // Mock fetch globally
 global.fetch = vi.fn();

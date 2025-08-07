@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import PluginRouteRenderer from '../PluginRouteRenderer';
-import { getPluginComponents, isPluginRegistered } from '../registry';
+import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
+import { getPluginComponents, isPluginRegistered } from '../../registry';
 
 // Mock the registry
-vi.mock('../registry', () => ({
+vi.mock('../../registry', () => ({
   getPluginComponents: vi.fn(),
   isPluginRegistered: vi.fn(),
 }));

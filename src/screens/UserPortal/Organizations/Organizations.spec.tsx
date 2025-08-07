@@ -20,8 +20,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import {
   ORGANIZATION_LIST,
   USER_JOINED_ORGANIZATIONS_PG,
-  USER_CREATED_ORGANIZATIONS,
 } from 'GraphQl/Queries/Queries';
+import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -649,36 +649,26 @@ test('Join Now button renders correctly', async () => {
           {
             id: 'org-id-1',
             name: 'anyOrganization1',
-            image: '',
+            avatarURL: '',
             description: 'Test description 1',
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
+            addressLine1: 'Test Address',
+            adminsCount: 5,
+            membersCount: 100,
+            members: {
+              edges: [],
             },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
           },
           {
-            _id: 'org-id-2',
+            id: 'org-id-2',
             name: 'anyOrganization2',
-            image: '',
+            avatarURL: '',
             description: 'Test description 2',
-            address: {
-              city: 'Test City',
-              countryCode: 'TC',
-              line1: 'Test Address',
-              postalCode: '12345',
-              state: 'TS',
+            addressLine1: 'Test Address',
+            adminsCount: 3,
+            membersCount: 50,
+            members: {
+              edges: [],
             },
-            userRegistrationRequired: true,
-            admins: [],
-            members: [],
-            membershipRequests: [],
           },
         ],
       },
