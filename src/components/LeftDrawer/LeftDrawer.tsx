@@ -23,10 +23,13 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
+import { FaBars } from 'react-icons/fa';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from 'components/SignOut/SignOut';
 
 export interface ILeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawer = ({
@@ -72,12 +75,12 @@ const leftDrawer = ({
                   : 'var(--sidebar-icon-stroke-inactive)',
               })}
             </div>
-            {label}
+            {!hideDrawer && label}
           </button>
         )}
       </NavLink>
     ),
-    [handleLinkClick],
+    [handleLinkClick, hideDrawer],
   );
 
   // Render a plugin drawer item
@@ -168,29 +171,71 @@ const leftDrawer = ({
       superAdmin,
       t,
       tCommon,
+      hideDrawer,
     ],
   );
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
-      <div className={styles.talawaLogoContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <button
+          className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </button>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
-      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
+        {!hideDrawer && tCommon('menu')}
+      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         {drawerContent}
+      </div>
+      <div className={styles.userSidebarOrgFooter}>
+        <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <ProfileCard />
+        </div>
+        <SignOut hideDrawer={hideDrawer} />
       </div>
     </div>
   );

@@ -52,7 +52,10 @@ const EventDashboardScreen = (): React.JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
   const { orgId } = useParams();
 
   // Redirect to home if orgId is not present or if user is not logged in
