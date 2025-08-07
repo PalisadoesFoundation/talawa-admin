@@ -6,6 +6,7 @@ import {
   GET_ORGANIZATION_BLOCKED_USERS_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
+import { expect } from 'vitest';
 
 export const MOCKS = [
   {
@@ -47,7 +48,14 @@ export const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: {
+        id: 'orgId',
+        first: 10,
+        after: null,
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        includeRecurring: true,
+      },
     },
     result: {
       data: {
@@ -247,7 +255,14 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: {
+        id: 'orgId',
+        first: 10,
+        after: null,
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        includeRecurring: true,
+      },
     },
     result: {
       data: {
@@ -392,7 +407,14 @@ export const ERROR_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: {
+        id: 'orgId',
+        first: 10,
+        after: null,
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+        includeRecurring: true,
+      },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_EVENTS_PG Error'),
   },

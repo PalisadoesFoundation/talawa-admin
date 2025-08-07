@@ -197,21 +197,6 @@ function organizationEvents(): JSX.Element {
         return;
       }
 
-      // Only navigate away for authentication or authorization errors
-      if (
-        eventDataError?.message?.includes('unauthenticated') ||
-        eventDataError?.message?.includes('unauthorized') ||
-        orgDataError?.message?.includes('unauthenticated') ||
-        orgDataError?.message?.includes('unauthorized') ||
-        orgDataError?.message?.includes('not found')
-      ) {
-        console.warn(
-          'Authentication/authorization error, redirecting to org list',
-        );
-        navigate('/orglist');
-        return;
-      }
-
       // For other errors (like empty results), just log them but don't redirect
       console.warn('Non-critical error in events page:', {
         eventDataError: eventDataError?.message,
