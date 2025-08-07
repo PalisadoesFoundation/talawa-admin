@@ -59,11 +59,6 @@ const OrganizationScreen = (): JSX.Element => {
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
 
-  // If no organization ID is found, navigate back to the home page
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.appRoutes,
@@ -72,18 +67,25 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
+  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+    variables: { id: orgId },
+  });
+
   // Update targets whenever the organization ID changes
   useEffect(() => {
-    dispatch(updateTargets(orgId));
-  }, [orgId]);
+    if (orgId) {
+      dispatch(updateTargets(orgId));
+    }
+  }, [orgId, dispatch]);
 
   useEffect(() => {
     setItem('sidebar', hideDrawer.toString());
   }, [hideDrawer, setItem]);
 
-  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId },
-  });
+  // If no organization ID is found, navigate back to the home page
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   useEffect(() => {
     if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {

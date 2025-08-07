@@ -48,7 +48,11 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 }));
 
 vi.mock('components/UserPortal/SignOut/SignOut', () => ({
-  default: vi.fn(() => <button data-testid="signOutBtn">Sign Out</button>),
+  default: vi.fn(() => (
+    <button data-testid="signOutBtn" type="button">
+      Sign Out
+    </button>
+  )),
 }));
 
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
