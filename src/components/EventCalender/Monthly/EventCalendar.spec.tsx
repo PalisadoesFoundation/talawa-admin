@@ -81,7 +81,7 @@ describe('Calendar', () => {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    const expectedText = ` ${currentYear} ${currentMonth}`;
+    const expectedText = `${currentYear} ${currentMonth}`;
     expect(currentDateElement.textContent).toContain(expectedText);
   });
 

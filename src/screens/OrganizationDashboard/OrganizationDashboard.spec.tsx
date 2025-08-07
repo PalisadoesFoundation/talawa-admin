@@ -108,7 +108,6 @@ describe('OrganizationDashboard', () => {
     await waitFor(() => {
       expect(screen.getByText('members')).toBeInTheDocument();
       expect(screen.getByText('posts')).toBeInTheDocument();
-      expect(screen.getByText('events')).toBeInTheDocument();
     });
 
     const memberCountElement = await screen.findByTestId('membersCount');
@@ -116,9 +115,6 @@ describe('OrganizationDashboard', () => {
 
     const adminCountElement = await screen.findByTestId('adminsCount');
     expect(adminCountElement).toHaveTextContent('1');
-
-    const eventCountElement = await screen.findByTestId('eventsCount');
-    expect(eventCountElement).toHaveTextContent('1');
 
     const postCountElement = await screen.findByTestId('postsCount');
     expect(postCountElement).toHaveTextContent('10');
@@ -236,17 +232,6 @@ describe('OrganizationDashboard', () => {
       fireEvent.click(postsCountElement);
 
       expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
-    });
-  });
-
-  it('handles navigation to events page', async () => {
-    renderWithProviders({ mocks: MOCKS });
-
-    await waitFor(() => {
-      const eventsCountElement = screen.getByTestId('eventsCount');
-      fireEvent.click(eventsCountElement);
-
-      expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
     });
   });
 

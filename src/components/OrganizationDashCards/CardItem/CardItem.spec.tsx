@@ -38,7 +38,7 @@ describe('CardItem Component', () => {
     expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 
     expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('date-icon')).toBeInTheDocument();
+    expect(screen.getAllByTestId('date-icon')).not.toHaveLength(0);
   });
 
   it('handles long titles by truncating them', () => {

@@ -133,6 +133,34 @@ function App(): React.ReactElement {
   const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
 
+  console.log('=== APP.TSX ROUTE DEBUG ===');
+  console.log('Current user data:', {
+    userType: data?.currentUser?.userType,
+    isAdmin,
+    isSuperAdmin,
+    userPermissions: userPermissions.length,
+    userPermissionsArray: userPermissions,
+  });
+  console.log('Plugin routes loaded:', {
+    admin: {
+      count: adminOrgPluginRoutes.length,
+      routes: adminOrgPluginRoutes.map((r) => ({
+        path: r.path,
+        component: r.component,
+        pluginId: r.pluginId,
+      })),
+    },
+    user: {
+      count: userOrgPluginRoutes.length,
+      routes: userOrgPluginRoutes.map((r) => ({
+        path: r.path,
+        component: r.component,
+        pluginId: r.pluginId,
+      })),
+    },
+  });
+  console.log('=== END APP.TSX ROUTE DEBUG ===');
+
   // Initialize plugin system on app startup
   useEffect(() => {
     const initializePlugins = async () => {
@@ -148,6 +176,8 @@ function App(): React.ReactElement {
           './plugin/registry'
         );
         await discoverAndRegisterAllPlugins();
+
+        console.log('Plugin system initialized successfully');
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);
       }

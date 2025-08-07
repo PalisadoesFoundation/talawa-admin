@@ -80,8 +80,10 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                     width={14}
                     height={14}
                     className="me-2"
+                    data-testid="date-icon"
                   />
                   {dayjs(startdate).format('MMM D, YYYY')}
+                  {enddate && ` - ${dayjs(enddate).format('MMM D, YYYY')}`}
                 </div>
               )}
               {location && (
@@ -95,6 +97,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                     width={14}
                     height={14}
                     className="me-2"
+                    data-testid="marker-icon"
                   />
                   {location}
                 </div>
@@ -110,6 +113,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                     width={14}
                     height={14}
                     className="me-2"
+                    data-testid="time-icon"
                   />
                   {dayjs(startdate).format('h:mm A')}
                   {enddate && ` - ${dayjs(enddate).format('h:mm A')}`}

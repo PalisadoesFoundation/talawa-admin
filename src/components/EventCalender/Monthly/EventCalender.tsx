@@ -504,7 +504,7 @@ const Calendar: React.FC<
                 data-testid="current-date"
               >
                 {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                {months[currentMonth]} {currentYear}
+                {currentYear} {months[currentMonth]}
               </div>
             </div>
           </div>
