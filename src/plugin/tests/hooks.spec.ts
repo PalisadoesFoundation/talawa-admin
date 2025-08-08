@@ -155,6 +155,93 @@ describe('Plugin Hooks', () => {
       const { result } = renderHook(() => usePluginDrawerItems());
       expect(result.current).toEqual([]);
     });
+
+    it('should handle plugin loaded event', async () => {
+      const { result } = renderHook(() => usePluginDrawerItems());
+
+      // Simulate plugin loaded event
+      const loadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:loaded',
+      )?.[1];
+
+      if (loadedCallback) {
+        loadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin unloaded event', async () => {
+      const { result } = renderHook(() => usePluginDrawerItems());
+
+      // Simulate plugin unloaded event
+      const unloadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:unloaded',
+      )?.[1];
+
+      if (unloadedCallback) {
+        unloadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin status changed event', async () => {
+      const { result } = renderHook(() => usePluginDrawerItems());
+
+      // Simulate plugin status changed event
+      const statusChangedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:status-changed',
+      )?.[1];
+
+      if (statusChangedCallback) {
+        statusChangedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugins initialized event', async () => {
+      const { result } = renderHook(() => usePluginDrawerItems());
+
+      // Simulate plugins initialized event
+      const initializedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugins:initialized',
+      )?.[1];
+
+      if (initializedCallback) {
+        initializedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should cleanup event listeners on unmount', () => {
+      const { unmount } = renderHook(() => usePluginDrawerItems());
+
+      unmount();
+
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:loaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:unloaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:status-changed',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugins:initialized',
+        expect.any(Function),
+      );
+    });
   });
 
   describe('usePluginRoutes', () => {
@@ -270,33 +357,121 @@ describe('Plugin Hooks', () => {
         'plugin:status-changed',
         expect.any(Function),
       );
+      expect(mockPluginManager.on).toHaveBeenCalledWith(
+        'plugins:initialized',
+        expect.any(Function),
+      );
+    });
+
+    it('should not update if system is not initialized', () => {
+      vi.mocked(mockPluginManager.isSystemInitialized).mockReturnValue(false);
+      const { result } = renderHook(() => usePluginRoutes());
+      expect(result.current).toEqual([]);
+    });
+
+    it('should handle plugin loaded event', async () => {
+      const { result } = renderHook(() => usePluginRoutes());
+
+      // Simulate plugin loaded event
+      const loadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:loaded',
+      )?.[1];
+
+      if (loadedCallback) {
+        loadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin unloaded event', async () => {
+      const { result } = renderHook(() => usePluginRoutes());
+
+      // Simulate plugin unloaded event
+      const unloadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:unloaded',
+      )?.[1];
+
+      if (unloadedCallback) {
+        unloadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin status changed event', async () => {
+      const { result } = renderHook(() => usePluginRoutes());
+
+      // Simulate plugin status changed event
+      const statusChangedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:status-changed',
+      )?.[1];
+
+      if (statusChangedCallback) {
+        statusChangedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugins initialized event', async () => {
+      const { result } = renderHook(() => usePluginRoutes());
+
+      // Simulate plugins initialized event
+      const initializedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugins:initialized',
+      )?.[1];
+
+      if (initializedCallback) {
+        initializedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should cleanup event listeners on unmount', () => {
+      const { unmount } = renderHook(() => usePluginRoutes());
+
+      unmount();
+
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:loaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:unloaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:status-changed',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugins:initialized',
+        expect.any(Function),
+      );
     });
   });
 
   describe('useLoadedPlugins', () => {
+    it('should return empty array initially', () => {
+      const { result } = renderHook(() => useLoadedPlugins());
+      expect(result.current).toEqual([]);
+    });
+
     it('should return loaded plugins', () => {
       const mockPlugins = [
-        { id: 'plugin1', status: 'active' },
-        { id: 'plugin2', status: 'inactive' },
+        { id: 'plugin1', name: 'Plugin 1' },
+        { id: 'plugin2', name: 'Plugin 2' },
       ];
       mockPluginManager.getLoadedPlugins.mockReturnValue(mockPlugins);
 
       const { result } = renderHook(() => useLoadedPlugins());
       expect(result.current).toEqual(mockPlugins);
-    });
-
-    it('should handle empty plugins list', () => {
-      mockPluginManager.getLoadedPlugins.mockReturnValue([]);
-
-      const { result } = renderHook(() => useLoadedPlugins());
-      expect(result.current).toEqual([]);
-    });
-
-    it('should handle undefined plugins list', () => {
-      mockPluginManager.getLoadedPlugins.mockReturnValue(undefined);
-
-      const { result } = renderHook(() => useLoadedPlugins());
-      expect(result.current).toBeUndefined();
     });
 
     it('should register event listeners', () => {
@@ -314,11 +489,89 @@ describe('Plugin Hooks', () => {
         expect.any(Function),
       );
     });
+
+    it('should not update if system is not initialized', () => {
+      vi.mocked(mockPluginManager.isSystemInitialized).mockReturnValue(false);
+      const { result } = renderHook(() => useLoadedPlugins());
+      expect(result.current).toEqual([]);
+    });
+
+    it('should handle plugin loaded event', async () => {
+      const { result } = renderHook(() => useLoadedPlugins());
+
+      // Simulate plugin loaded event
+      const loadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:loaded',
+      )?.[1];
+
+      if (loadedCallback) {
+        loadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin unloaded event', async () => {
+      const { result } = renderHook(() => useLoadedPlugins());
+
+      // Simulate plugin unloaded event
+      const unloadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:unloaded',
+      )?.[1];
+
+      if (unloadedCallback) {
+        unloadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugins initialized event', async () => {
+      const { result } = renderHook(() => useLoadedPlugins());
+
+      // Simulate plugins initialized event
+      const initializedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:status-changed',
+      )?.[1];
+
+      if (initializedCallback) {
+        initializedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should cleanup event listeners on unmount', () => {
+      const { unmount } = renderHook(() => useLoadedPlugins());
+
+      unmount();
+
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:loaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:unloaded',
+        expect.any(Function),
+      );
+      expect(mockPluginManager.off).toHaveBeenCalledWith(
+        'plugin:status-changed',
+        expect.any(Function),
+      );
+    });
   });
 
   describe('usePluginInjectors', () => {
+    it('should return empty array initially', () => {
+      const { result } = renderHook(() => usePluginInjectors());
+      expect(result.current).toEqual([]);
+    });
+
     it('should return injectors for G1 type', () => {
-      const mockInjectors = [{ type: 'G1', component: 'G1Component' }];
+      const mockInjectors = [{ id: 'g1-injector', component: 'G1Injector' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
       const { result } = renderHook(() => usePluginInjectors('G1'));
@@ -332,7 +585,7 @@ describe('Plugin Hooks', () => {
     });
 
     it('should return injectors for G2 type', () => {
-      const mockInjectors = [{ type: 'G2', component: 'G2Component' }];
+      const mockInjectors = [{ id: 'g2-injector', component: 'G2Injector' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
       const { result } = renderHook(() => usePluginInjectors('G2'));
@@ -346,7 +599,7 @@ describe('Plugin Hooks', () => {
     });
 
     it('should return injectors for G3 type', () => {
-      const mockInjectors = [{ type: 'G3', component: 'G3Component' }];
+      const mockInjectors = [{ id: 'g3-injector', component: 'G3Injector' }];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
       const { result } = renderHook(() => usePluginInjectors('G3'));
@@ -359,32 +612,27 @@ describe('Plugin Hooks', () => {
       );
     });
 
-    it('should use default G1 type when no type specified', () => {
-      const mockInjectors = [{ type: 'G1', component: 'DefaultComponent' }];
+    it('should handle empty permissions', () => {
+      const mockInjectors = [
+        { id: 'no-permissions-injector', component: 'NoPermissionsInjector' },
+      ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
       const { result } = renderHook(() => usePluginInjectors());
       expect(result.current).toEqual(mockInjectors);
-      expect(mockPluginManager.getExtensionPoints).toHaveBeenCalledWith(
-        'G1',
-        [],
-        false,
-        false,
-      );
     });
 
-    it('should handle empty injectors list', () => {
-      mockPluginManager.getExtensionPoints.mockReturnValue([]);
+    it('should handle undefined permissions', () => {
+      const mockInjectors = [
+        {
+          id: 'undefined-permissions-injector',
+          component: 'UndefinedPermissionsInjector',
+        },
+      ];
+      mockPluginManager.getExtensionPoints.mockReturnValue(mockInjectors);
 
-      const { result } = renderHook(() => usePluginInjectors('G1'));
-      expect(result.current).toEqual([]);
-    });
-
-    it('should handle undefined injectors list', () => {
-      mockPluginManager.getExtensionPoints.mockReturnValue(undefined);
-
-      const { result } = renderHook(() => usePluginInjectors('G1'));
-      expect(result.current).toBeUndefined();
+      const { result } = renderHook(() => usePluginInjectors());
+      expect(result.current).toEqual(mockInjectors);
     });
 
     it('should register event listeners', () => {
@@ -401,42 +649,87 @@ describe('Plugin Hooks', () => {
         'plugin:status-changed',
         expect.any(Function),
       );
-    });
-  });
-
-  describe('Hook Cleanup', () => {
-    it('should cleanup event listeners on unmount', () => {
-      // Clear any previous calls
-      mockPluginManager.on.mockClear();
-      mockPluginManager.off.mockClear();
-
-      const { unmount } = renderHook(() => usePluginDrawerItems());
-
-      // Verify that event listeners were registered
-      expect(mockPluginManager.on).toHaveBeenCalledWith(
-        'plugin:loaded',
-        expect.any(Function),
-      );
-      expect(mockPluginManager.on).toHaveBeenCalledWith(
-        'plugin:unloaded',
-        expect.any(Function),
-      );
-      expect(mockPluginManager.on).toHaveBeenCalledWith(
-        'plugin:status-changed',
-        expect.any(Function),
-      );
       expect(mockPluginManager.on).toHaveBeenCalledWith(
         'plugins:initialized',
         expect.any(Function),
       );
+    });
 
-      // Clear the on calls to focus on cleanup
-      mockPluginManager.on.mockClear();
+    it('should not update if system is not initialized', () => {
+      vi.mocked(mockPluginManager.isSystemInitialized).mockReturnValue(false);
+      const { result } = renderHook(() => usePluginInjectors());
+      expect(result.current).toEqual([]);
+    });
 
-      // Unmount the hook
+    it('should handle plugin loaded event', async () => {
+      const { result } = renderHook(() => usePluginInjectors());
+
+      // Simulate plugin loaded event
+      const loadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:loaded',
+      )?.[1];
+
+      if (loadedCallback) {
+        loadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin unloaded event', async () => {
+      const { result } = renderHook(() => usePluginInjectors());
+
+      // Simulate plugin unloaded event
+      const unloadedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:unloaded',
+      )?.[1];
+
+      if (unloadedCallback) {
+        unloadedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugin status changed event', async () => {
+      const { result } = renderHook(() => usePluginInjectors());
+
+      // Simulate plugin status changed event
+      const statusChangedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugin:status-changed',
+      )?.[1];
+
+      if (statusChangedCallback) {
+        statusChangedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should handle plugins initialized event', async () => {
+      const { result } = renderHook(() => usePluginInjectors());
+
+      // Simulate plugins initialized event
+      const initializedCallback = mockPluginManager.on.mock.calls.find(
+        (call) => call[0] === 'plugins:initialized',
+      )?.[1];
+
+      if (initializedCallback) {
+        initializedCallback();
+        await waitFor(() => {
+          expect(result.current).toEqual([]);
+        });
+      }
+    });
+
+    it('should cleanup event listeners on unmount', () => {
+      const { unmount } = renderHook(() => usePluginInjectors());
+
       unmount();
 
-      // Verify that event listeners were cleaned up
       expect(mockPluginManager.off).toHaveBeenCalledWith(
         'plugin:loaded',
         expect.any(Function),

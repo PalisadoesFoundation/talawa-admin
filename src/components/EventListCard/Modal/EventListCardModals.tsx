@@ -26,10 +26,13 @@ import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
 import {
-  DELETE_EVENT_MUTATION,
+  DELETE_STANDALONE_EVENT_MUTATION,
+  DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
+  DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+} from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
@@ -131,17 +134,75 @@ function EventListCardModals({
     }
   };
 
-  const [deleteEvent] = useMutation(DELETE_EVENT_MUTATION);
+  const [deleteStandaloneEvent] = useMutation(DELETE_STANDALONE_EVENT_MUTATION);
+  const [deleteSingleInstance] = useMutation(
+    DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
+  );
+  const [deleteThisAndFollowing] = useMutation(
+    DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  );
+  const [deleteEntireSeries] = useMutation(
+    DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
+  );
 
-  const deleteEventHandler = async (): Promise<void> => {
+  const deleteEventHandler = async (
+    deleteOption?: 'single' | 'following' | 'all',
+  ): Promise<void> => {
     try {
-      const { data } = await deleteEvent({
-        variables: {
-          input: {
-            id: eventListCardProps._id,
+      let data;
+
+      // Check if this is a recurring instance
+      const isRecurringInstance =
+        !eventListCardProps.isRecurringTemplate &&
+        !!eventListCardProps.baseEventId;
+
+      if (!isRecurringInstance) {
+        // Standalone event
+        const result = await deleteStandaloneEvent({
+          variables: {
+            input: {
+              id: eventListCardProps._id,
+            },
           },
-        },
-      });
+        });
+        data = result.data;
+      } else {
+        // Recurring instance - handle based on selected option
+        switch (deleteOption) {
+          case 'single':
+            const singleResult = await deleteSingleInstance({
+              variables: {
+                input: {
+                  id: eventListCardProps._id,
+                },
+              },
+            });
+            data = singleResult.data;
+            break;
+          case 'following':
+            const followingResult = await deleteThisAndFollowing({
+              variables: {
+                input: {
+                  id: eventListCardProps._id,
+                },
+              },
+            });
+            data = followingResult.data;
+            break;
+          case 'all':
+            const allResult = await deleteEntireSeries({
+              variables: {
+                input: {
+                  id: eventListCardProps.baseEventId,
+                },
+              },
+            });
+            data = allResult.data;
+            break;
+          default:
+            throw new Error('Invalid delete option for recurring event');
+        }
+      }
 
       if (data) {
         toast.success(t('eventDeleted') as string);

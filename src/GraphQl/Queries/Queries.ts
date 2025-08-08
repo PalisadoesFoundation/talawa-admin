@@ -36,15 +36,24 @@ export const CURRENT_USER = gql`
   }
 `;
 
-// Query to take the Organization list
+// Shared fields
+const ORG_FIELDS = gql`
+  fragment OrgFields on Organization {
+    id
+    name
+    addressLine1
+    description
+    avatarURL
+    membersCount
+    adminsCount
+  }
+`;
+
+// Full query with members
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      id
-      name
-      addressLine1
-      description
-      avatarURL
+      ...OrgFields
       members(first: 32) {
         edges {
           node {
@@ -57,6 +66,17 @@ export const ORGANIZATION_LIST = gql`
       }
     }
   }
+  ${ORG_FIELDS}
+`;
+
+// Lightweight version without members
+export const ORGANIZATION_LIST_NO_MEMBERS = gql`
+  query {
+    organizations {
+      ...OrgFields
+    }
+  }
+  ${ORG_FIELDS}
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
@@ -519,9 +539,11 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             isPublic
             isRegisterable
             # Recurring event fields
-            isMaterialized
             isRecurringEventTemplate
-            instanceStartTime
+            baseEvent {
+              id
+              name
+            }
             sequenceNumber
             totalCount
             hasExceptions
@@ -620,20 +642,28 @@ export const GET_ORGANIZATION_DATA_PG = gql`
     }
   }
 `;
-// list of a organizations
+
+// Shared fragment with common organization fields
+export const ORGANIZATION_FIELDS = gql`
+  fragment OrganizationFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+  }
+`;
+
+// Full query with all fields (metadata, creator, updater, etc.)
 export const ORGANIZATIONS_LIST = gql`
   query Organizations {
     organizations {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
+      ...OrganizationFields
       createdAt
       updatedAt
       creator {
@@ -648,6 +678,17 @@ export const ORGANIZATIONS_LIST = gql`
       }
     }
   }
+  ${ORGANIZATION_FIELDS}
+`;
+
+// Basic query using only the shared fragment (no metadata)
+export const ORGANIZATIONS_LIST_BASIC = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+    }
+  }
+  ${ORGANIZATION_FIELDS}
 `;
 
 export const MEMBERS_LIST_PG = gql`

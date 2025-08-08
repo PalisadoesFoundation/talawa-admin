@@ -3,6 +3,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG, // re-enabled!
   GET_ORGANIZATION_POSTS_PG,
+  GET_ORGANIZATION_BLOCKED_USERS_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 
@@ -176,6 +177,42 @@ export const MOCKS = [
       loading: false,
     },
   },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          blockedUsers: {
+            edges: [
+              {
+                node: {
+                  id: 'blockedUser1',
+                  name: 'Blocked User 1',
+                  emailAddress: 'blocked1@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'blockedUser2',
+                  name: 'Blocked User 2',
+                  emailAddress: 'blocked2@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
 ];
 
 export const EMPTY_MOCKS = [
@@ -252,6 +289,22 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: { posts: { edges: [] } },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          blockedUsers: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
       },
     },
   },
@@ -362,5 +415,12 @@ export const ERROR_MOCKS = [
       variables: { id: 'orgId', first: 5 },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_POSTS_PG Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_BLOCKED_USERS_PG Error'),
   },
 ];

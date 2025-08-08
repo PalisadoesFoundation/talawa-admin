@@ -16,4 +16,4 @@ The ID of the plugin to retrieve.
 
 ## Returns
 
-The plugin object with details such as id, pluginId, isActivated, isInstalled, backup, createdAt, and updatedAt.
+The plugin object with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.
