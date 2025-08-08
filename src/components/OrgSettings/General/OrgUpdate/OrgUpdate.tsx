@@ -8,11 +8,11 @@ import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
+import { urlToFile } from 'utils/urlToFile';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 
@@ -30,7 +30,7 @@ interface InterfaceMutationUpdateOrganizationInput {
   state?: string;
   postalCode?: string;
   countryCode?: string;
-  avatar?: string | null;
+  avatar?: File | null;
 }
 
 /**
@@ -50,7 +50,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     orgName: string;
     orgDescrip: string;
     address: InterfaceAddress;
-    orgImage: string | null;
+    orgImage: File | null;
   }>({
     orgName: '',
     orgDescrip: '',
@@ -100,36 +100,36 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }
 
   const {
-    data,
+    data: organizationData,
     loading,
     refetch,
     error,
   }: {
     data?: { organization: InterfaceOrganization };
     loading: boolean;
-    refetch: (variables: { input: { id: string } }) => void;
+    refetch: (variables: { id: string }) => void;
     error?: ApolloError;
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { input: { id: orgId } },
+  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
   // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
-    if (data?.organization && isMounted) {
+    if (organizationData?.organization && isMounted) {
       setFormState({
-        orgName: data.organization.name,
-        orgDescrip: data.organization.description,
+        orgName: organizationData.organization.name,
+        orgDescrip: organizationData.organization.description,
         address: {
-          city: data.organization.city,
-          countryCode: data.organization.countryCode,
+          city: organizationData.organization.city,
+          countryCode: organizationData.organization.countryCode,
           dependentLocality: '',
-          line1: data.organization.addressLine1,
-          line2: data.organization.addressLine2,
-          postalCode: data.organization.postalCode,
+          line1: organizationData.organization.addressLine1,
+          line2: organizationData.organization.addressLine2,
+          postalCode: organizationData.organization.postalCode,
           sortingCode: '',
-          state: data.organization.state,
+          state: organizationData.organization.state,
         },
         orgImage: null,
       });
@@ -137,7 +137,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return () => {
       isMounted = false;
     };
-  }, [data]);
+  }, [organizationData]);
 
   /**
    * Handles the save button click event.
@@ -155,25 +155,55 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
       setIsSaving(true);
 
+      let avatarFile: File | null = null;
+      if (formState.orgImage) {
+        avatarFile = formState.orgImage;
+      } else if (organizationData?.organization?.avatarURL) {
+        try {
+          avatarFile = await urlToFile(organizationData.organization.avatarURL);
+        } catch (error) {
+          console.log('Error converting avatar URL to file:', error);
+        }
+      }
+
+      // Function to remove empty string fields from the input object
+      const removeEmptyFields = (
+        obj: InterfaceMutationUpdateOrganizationInput,
+      ): Partial<InterfaceMutationUpdateOrganizationInput> => {
+        return Object.fromEntries(
+          Object.entries(obj).filter(
+            ([key, value]) =>
+              key === 'id' ||
+              (value != null && (typeof value !== 'string' || value.trim())),
+          ),
+        ) as Partial<InterfaceMutationUpdateOrganizationInput>;
+      };
+
+      // Build the input object with only non-empty values
+      const inputData = {
+        id: orgId,
+        name: formState.orgName,
+        description: formState.orgDescrip,
+        addressLine1: formState.address.line1,
+        addressLine2: formState.address.line2,
+        city: formState.address.city,
+        state: formState.address.state,
+        postalCode: formState.address.postalCode,
+        countryCode: formState.address?.countryCode,
+        avatar: avatarFile,
+      };
+
+      // Filter out empty fields
+      const cleanedInput = removeEmptyFields(inputData);
+
       const { data } = await updateOrganization({
         variables: {
-          input: {
-            id: orgId,
-            name: formState.orgName,
-            description: formState.orgDescrip,
-            addressLine1: formState.address.line1,
-            addressLine2: formState.address.line2,
-            city: formState.address.city,
-            state: formState.address.state,
-            postalCode: formState.address.postalCode,
-            countryCode: formState.address.countryCode,
-            avatar: formState.orgImage,
-          },
+          input: cleanedInput as InterfaceMutationUpdateOrganizationInput,
         },
       });
 
       if (data) {
-        refetch({ input: { id: orgId } });
+        refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
       } else {
         toast.error('Failed to update organization');
@@ -260,11 +290,12 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              if (file)
+              if (file) {
                 setFormState({
                   ...formState,
-                  orgImage: await convertToBase64(file),
+                  orgImage: file,
                 });
+              }
             }}
             data-testid="organisationImage"
           />

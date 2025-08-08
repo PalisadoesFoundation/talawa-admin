@@ -598,6 +598,26 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
+// Query to get basic organization data for updates
+export const GET_ORGANIZATION_BASIC_DATA = gql`
+  query getOrganizationBasicData($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      name
+      description
+      addressLine1
+      addressLine2
+      city
+      state
+      postalCode
+      countryCode
+      avatarURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Query to take the Organization with data
 export const GET_ORGANIZATION_DATA_PG = gql`
   query getOrganizationData($id: String!, $first: Int, $after: String) {

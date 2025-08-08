@@ -8,7 +8,7 @@ import i18n from 'i18next';
 import { toast } from 'react-toastify';
 
 import OrgUpdate from './OrgUpdate';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-toastify', () => ({
@@ -66,8 +66,8 @@ describe('OrgUpdate Component', () => {
   const mocks = [
     {
       request: {
-        query: ORGANIZATIONS_LIST,
-        variables: { input: { id: '1' } },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: '1' },
       },
       result: {
         data: mockOrgData,
@@ -87,18 +87,24 @@ describe('OrgUpdate Component', () => {
             state: 'Test State',
             postalCode: '12345',
             countryCode: 'US',
-            avatar: null,
           },
         },
       },
       result: {
         data: {
           updateOrganization: {
-            organization: {
-              ...mockOrgData.organization,
-              name: 'Updated Org',
-              description: 'Updated Description',
-            },
+            id: '1',
+            name: 'Updated Org',
+            description: 'Updated Description',
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatarMimeType: null,
+            avatarURL: null,
+            updatedAt: '2023-01-01T00:00:00.000Z',
           },
         },
       },
@@ -175,8 +181,8 @@ describe('OrgUpdate Component', () => {
   it('displays error when form submission fails', async () => {
     const queryMock = {
       request: {
-        query: ORGANIZATIONS_LIST,
-        variables: { input: { id: '1' } },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: '1' },
       },
       result: {
         data: {
@@ -210,7 +216,6 @@ describe('OrgUpdate Component', () => {
             state: 'Test State',
             postalCode: '12345',
             countryCode: 'US',
-            avatar: null,
           },
         },
       },
@@ -336,8 +341,8 @@ describe('OrgUpdate Component', () => {
 
       const loadingMock = {
         request: {
-          query: ORGANIZATIONS_LIST,
-          variables: { input: { id: '1' } },
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
         },
         result: {
           data: mockOrgData,
@@ -367,8 +372,8 @@ describe('OrgUpdate Component', () => {
     it('shows error state when data fetch fails', async () => {
       const errorMock = {
         request: {
-          query: ORGANIZATIONS_LIST,
-          variables: { input: { id: '1' } },
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
         },
         error: new Error('Failed to load organization'),
       };
@@ -395,8 +400,8 @@ describe('OrgUpdate Component', () => {
       const successMocks = [
         {
           request: {
-            query: ORGANIZATIONS_LIST,
-            variables: { input: { id: '1' } },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
           },
           result: {
             data: {
@@ -441,7 +446,6 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
-                avatar: null,
               },
             },
           },
@@ -545,8 +549,8 @@ describe('OrgUpdate Component', () => {
       const errorMocks = [
         {
           request: {
-            query: ORGANIZATIONS_LIST,
-            variables: { input: { id: '1' } },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
           },
           result: {
             data: mockOrgData,
@@ -566,7 +570,6 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
-                avatar: null,
               },
             },
           },
@@ -619,8 +622,8 @@ describe('OrgUpdate Component', () => {
     const mocks = [
       {
         request: {
-          query: ORGANIZATIONS_LIST,
-          variables: { input: { id: '1' } },
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
         },
         result: {
           data: mockOrgData,
@@ -735,8 +738,8 @@ describe('OrgUpdate Component', () => {
       const mocks = [
         {
           request: {
-            query: ORGANIZATIONS_LIST,
-            variables: { input: { id: '1' } },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
           },
           result: {
             data: mockOrgData,
@@ -756,7 +759,6 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
-                avatar: null,
               },
             },
           },
