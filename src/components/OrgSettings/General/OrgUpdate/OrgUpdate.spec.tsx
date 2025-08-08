@@ -49,6 +49,7 @@ i18n.init({
 
 const mockOrgData = {
   organization: {
+    __typename: 'Organization',
     id: '1',
     name: 'Test Org',
     description: 'Test Description',
@@ -59,6 +60,8 @@ const mockOrgData = {
     postalCode: '12345',
     countryCode: 'US',
     avatarURL: null,
+    createdAt: '2024-02-24T00:00:00Z',
+    updatedAt: '2024-02-24T00:00:00Z',
   },
 };
 
@@ -93,6 +96,7 @@ describe('OrgUpdate Component', () => {
       result: {
         data: {
           updateOrganization: {
+            __typename: 'Organization',
             id: '1',
             name: 'Updated Org',
             description: 'Updated Description',
@@ -117,12 +121,17 @@ describe('OrgUpdate Component', () => {
 
   it('loads and displays organization data', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
       </MockedProvider>,
     );
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
@@ -132,7 +141,7 @@ describe('OrgUpdate Component', () => {
 
   it('handles form input changes', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -150,7 +159,7 @@ describe('OrgUpdate Component', () => {
 
   it('handles form submission successfully', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -187,6 +196,7 @@ describe('OrgUpdate Component', () => {
       result: {
         data: {
           organization: {
+            __typename: 'Organization',
             id: '1',
             name: 'Test Org',
             description: 'Test Description',
@@ -197,6 +207,8 @@ describe('OrgUpdate Component', () => {
             postalCode: '12345',
             countryCode: 'US',
             avatarURL: null,
+            createdAt: '2024-02-24T00:00:00Z',
+            updatedAt: '2024-02-24T00:00:00Z',
           },
         },
       },
@@ -223,7 +235,7 @@ describe('OrgUpdate Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[queryMock, errorMock]} addTypename={false}>
+      <MockedProvider mocks={[queryMock, errorMock]} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -268,7 +280,7 @@ describe('OrgUpdate Component', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -298,6 +310,7 @@ describe('OrgUpdate Component', () => {
   describe('OrgUpdate Loading and Error States', () => {
     const mockOrgData = {
       organization: {
+        __typename: 'Organization',
         id: '1',
         name: 'Test Org',
         description: 'Test Description',
@@ -308,12 +321,27 @@ describe('OrgUpdate Component', () => {
         postalCode: '12345',
         countryCode: 'US',
         avatarURL: null,
+        createdAt: '2024-02-24T00:00:00Z',
+        updatedAt: '2024-02-24T00:00:00Z',
+        creator: {
+          __typename: 'User',
+          id: '1',
+          name: 'Test Creator',
+          emailAddress: 'creator@test.com',
+        },
+        updater: {
+          __typename: 'User',
+          id: '1',
+          name: 'Test Updater',
+          emailAddress: 'updater@test.com',
+        },
       },
     };
 
     it('shows loading state while fetching data', async () => {
       const mockOrgData = {
         organization: {
+          __typename: 'Organization',
           id: '1',
           name: 'Test Org',
           description: 'Test Description',
@@ -351,7 +379,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[loadingMock]} addTypename={false}>
+        <MockedProvider mocks={[loadingMock]} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -379,7 +407,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <MockedProvider mocks={[errorMock]} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -406,6 +434,7 @@ describe('OrgUpdate Component', () => {
           result: {
             data: {
               organization: {
+                __typename: 'Organization',
                 id: '1',
                 name: 'Test Org',
                 description: 'Test Description',
@@ -452,30 +481,19 @@ describe('OrgUpdate Component', () => {
           result: {
             data: {
               updateOrganization: {
-                organization: {
-                  id: '1',
-                  name: 'Updated Org',
-                  description: 'Test Description',
-                  addressLine1: '123 Test St',
-                  addressLine2: 'Suite 100',
-                  city: 'Test City',
-                  state: 'Test State',
-                  postalCode: '12345',
-                  countryCode: 'US',
-                  avatarURL: null,
-                  createdAt: '2024-02-24T00:00:00Z',
-                  updatedAt: '2024-02-24T00:00:00Z',
-                  creator: {
-                    id: '1',
-                    name: 'Test Creator',
-                    emailAddress: 'creator@test.com',
-                  },
-                  updater: {
-                    id: '1',
-                    name: 'Test Updater',
-                    emailAddress: 'updater@test.com',
-                  },
-                },
+                __typename: 'Organization',
+                id: '1',
+                name: 'Updated Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarMimeType: null,
+                avatarURL: null,
+                updatedAt: '2024-02-24T00:00:00Z',
               },
             },
           },
@@ -483,7 +501,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={successMocks} addTypename={false}>
+        <MockedProvider mocks={successMocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -508,7 +526,7 @@ describe('OrgUpdate Component', () => {
     });
     it('shows error toast when name or description is missing', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -578,7 +596,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider mocks={errorMocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -606,6 +624,7 @@ describe('OrgUpdate Component', () => {
   describe('OrgUpdate Form Switch Controls', () => {
     const mockOrgData = {
       organization: {
+        __typename: 'Organization',
         id: '1',
         name: 'Test Org',
         description: 'Test Description',
@@ -616,6 +635,8 @@ describe('OrgUpdate Component', () => {
         postalCode: '12345',
         countryCode: 'US',
         avatarURL: null,
+        createdAt: '2024-02-24T00:00:00Z',
+        updatedAt: '2024-02-24T00:00:00Z',
       },
     };
 
@@ -637,7 +658,7 @@ describe('OrgUpdate Component', () => {
 
     it('toggles user registration switch correctly', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -670,7 +691,7 @@ describe('OrgUpdate Component', () => {
 
     it('toggles visibility switch correctly', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -769,7 +790,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -804,7 +825,7 @@ describe('OrgUpdate Component', () => {
 
   it('updates address line1 when input changes', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>

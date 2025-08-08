@@ -11,8 +11,8 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
+import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
-import { urlToFile } from 'utils/urlToFile';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 
@@ -30,7 +30,7 @@ interface InterfaceMutationUpdateOrganizationInput {
   state?: string;
   postalCode?: string;
   countryCode?: string;
-  avatar?: File | null;
+  avatar?: string | null;
 }
 
 /**
@@ -50,7 +50,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     orgName: string;
     orgDescrip: string;
     address: InterfaceAddress;
-    orgImage: File | null;
+    orgImage: string | null;
   }>({
     orgName: '',
     orgDescrip: '',
@@ -100,7 +100,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }
 
   const {
-    data: organizationData,
+    data,
     loading,
     refetch,
     error,
@@ -117,19 +117,19 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
-    if (organizationData?.organization && isMounted) {
+    if (data?.organization && isMounted) {
       setFormState({
-        orgName: organizationData.organization.name,
-        orgDescrip: organizationData.organization.description,
+        orgName: data.organization.name,
+        orgDescrip: data.organization.description,
         address: {
-          city: organizationData.organization.city,
-          countryCode: organizationData.organization.countryCode,
+          city: data.organization.city,
+          countryCode: data.organization.countryCode,
           dependentLocality: '',
-          line1: organizationData.organization.addressLine1,
-          line2: organizationData.organization.addressLine2,
-          postalCode: organizationData.organization.postalCode,
+          line1: data.organization.addressLine1,
+          line2: data.organization.addressLine2,
+          postalCode: data.organization.postalCode,
           sortingCode: '',
-          state: organizationData.organization.state,
+          state: data.organization.state,
         },
         orgImage: null,
       });
@@ -137,7 +137,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return () => {
       isMounted = false;
     };
-  }, [organizationData]);
+  }, [data]);
 
   /**
    * Handles the save button click event.
@@ -154,17 +154,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       }
 
       setIsSaving(true);
-
-      let avatarFile: File | null = null;
-      if (formState.orgImage) {
-        avatarFile = formState.orgImage;
-      } else if (organizationData?.organization?.avatarURL) {
-        try {
-          avatarFile = await urlToFile(organizationData.organization.avatarURL);
-        } catch (error) {
-          console.log('Error converting avatar URL to file:', error);
-        }
-      }
 
       // Function to remove empty string fields from the input object
       const removeEmptyFields = (
@@ -190,7 +179,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         state: formState.address.state,
         postalCode: formState.address.postalCode,
         countryCode: formState.address?.countryCode,
-        avatar: avatarFile,
+        ...(formState.orgImage ? { avatar: formState.orgImage } : {}),
       };
 
       // Filter out empty fields
@@ -290,12 +279,11 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              if (file) {
+              if (file)
                 setFormState({
                   ...formState,
-                  orgImage: file,
+                  orgImage: await convertToBase64(file),
                 });
-              }
             }}
             data-testid="organisationImage"
           />
