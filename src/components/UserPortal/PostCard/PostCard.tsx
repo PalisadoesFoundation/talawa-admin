@@ -128,10 +128,12 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
 
   const handleEditPost = async (): Promise<void> => {
     try {
-      await editPost({ variables: { id: props.id, text: postContent } });
+      await editPost({
+        variables: { input: { id: props.id, caption: postContent } },
+      });
       props.fetchPosts();
       toggleEditPost();
-      toast.success(tCommon('updatedSuccessfully', { item: 'Post' }) as string);
+      toast.success('Successfully edited the Post.');
     } catch (error) {
       errorHandler(t, error);
     }
@@ -171,17 +173,23 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
             <p>{props.creator.name}</p>
           </div>
           <Dropdown style={{ cursor: 'pointer' }}>
-            <Dropdown.Toggle className={styles.customToggle}>
+            <Dropdown.Toggle
+              className={styles.customToggle}
+              data-testid="dropdown"
+            >
               <MoreVertIcon />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={toggleEditPost}>
+              <Dropdown.Item data-testid="editPost" onClick={toggleEditPost}>
                 <EditOutlinedIcon
                   style={{ color: 'grey', marginRight: '8px' }}
                 />
                 {tCommon('edit')}
               </Dropdown.Item>
-              <Dropdown.Item onClick={handleDeletePost}>
+              <Dropdown.Item
+                data-testid="deletePost"
+                onClick={handleDeletePost}
+              >
                 <DeleteOutlineOutlinedIcon
                   style={{ color: 'red', marginRight: '8px' }}
                 />
@@ -215,6 +223,7 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
               size="sm"
               className={`px-4 ${styles.addButton}`}
               onClick={toggleViewPost}
+              data-testid="viewPostBtn"
             >
               {t('viewPost')}
             </Button>
@@ -275,6 +284,7 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
                   <Button
                     className={`${styles.cardActionBtn}`}
                     onClick={handleToggleLike}
+                    data-testid="likePostBtn"
                   >
                     {likeLoading ? (
                       <HourglassBottomIcon fontSize="small" />
@@ -300,10 +310,12 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
                   className={styles.inputArea}
                   value={commentInput}
                   onChange={handleCommentInput}
+                  data-testid="commentInput"
                 />
                 <InputGroup.Text
                   className={`${styles.colorPrimary} ${styles.borderNone}`}
                   onClick={handleCreateComment}
+                  data-testid="createCommentBtn"
                 >
                   {commentLoading ? (
                     <HourglassBottomIcon fontSize="small" />
@@ -319,7 +331,9 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
 
       <Modal show={showEditPost} onHide={toggleEditPost} size="lg" centered>
         <Modal.Header closeButton className={`py-2`}>
-          <p className="fs-3">{t('editPost')}</p>
+          <p className="fs-3" data-testid="editPostModalTitle">
+            {t('editPost')}
+          </p>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
@@ -330,6 +344,7 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
             autoComplete="off"
             required
             onChange={handlePostInput}
+            data-testid="postInput"
             value={postContent}
           />
         </Modal.Body>
@@ -338,6 +353,7 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
             size="sm"
             className={`px-4 ${styles.addButton}`}
             onClick={handleEditPost}
+            data-testid="editPostBtn"
           >
             {t('editPost')}
           </Button>

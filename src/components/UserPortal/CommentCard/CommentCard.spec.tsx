@@ -93,8 +93,8 @@ const defaultProps = {
     ],
   },
   text: 'testComment',
-  handleLikeComment: jest.fn(), // or use your Mock<Procedure>
-  handleDislikeComment: jest.fn(), // or use your Mock<Procedure>
+  handleLikeComment: vi.fn(), // or use your Mock<Procedure>
+  handleDislikeComment: vi.fn(), // or use your Mock<Procedure>
 };
 
 const handleLikeComment = vi.fn();

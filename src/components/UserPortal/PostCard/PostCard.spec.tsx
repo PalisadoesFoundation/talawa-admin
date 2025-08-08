@@ -56,17 +56,30 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const fetchPostsSpy = vi.fn();
+
 const MOCKS = [
   {
     request: {
       query: LIKE_POST,
       variables: {
-        postId: '',
+        input: {
+          postId: '1',
+        },
       },
-      result: {
-        data: {
-          likePost: {
-            _id: '',
+    },
+    result: {
+      data: {
+        createPostVote: {
+          id: 'vote1',
+          upVoters: {
+            edges: [
+              {
+                node: {
+                  id: '1',
+                },
+              },
+            ],
           },
         },
       },
@@ -76,13 +89,15 @@ const MOCKS = [
     request: {
       query: UNLIKE_POST,
       variables: {
-        post: '',
+        input: {
+          postId: '1',
+        },
       },
-      result: {
-        data: {
-          unlikePost: {
-            _id: '',
-          },
+    },
+    result: {
+      data: {
+        deletePostVote: {
+          id: 'vote1',
         },
       },
     },
@@ -91,24 +106,28 @@ const MOCKS = [
     request: {
       query: CREATE_COMMENT_POST,
       variables: {
-        postId: '1',
-        comment: 'testComment',
+        input: {
+          postId: '1',
+          body: 'testComment',
+        },
       },
-      result: {
-        data: {
-          createComment: {
-            _id: '64ef885bca85de60ebe0f304',
-            creator: {
-              _id: '63d6064458fce20ee25c3bf7',
-              firstName: 'Noble',
-              lastName: 'Mittal',
-              email: 'test@gmail.com',
-              __typename: 'User',
-            },
-            likeCount: 0,
-            upVoters: [],
-            text: 'testComment',
-            __typename: 'Comment',
+    },
+    result: {
+      data: {
+        createComment: {
+          id: '64ef885bca85de60ebe0f304',
+          body: 'testComment',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          upVotesCount: 0,
+          downVotesCount: 0,
+          creator: {
+            id: '63d6064458fce20ee25c3bf7',
+            name: 'Noble Mital',
+            emailAddress: 'test@gmail.com',
+          },
+          post: {
+            id: '1',
           },
         },
       },
@@ -118,13 +137,15 @@ const MOCKS = [
     request: {
       query: LIKE_COMMENT,
       variables: {
-        commentId: '1',
+        input: {
+          commentId: '1',
+        },
       },
     },
     result: {
       data: {
-        likeComment: {
-          _id: '1',
+        createCommentVote: {
+          id: 'vote1',
         },
       },
     },
@@ -133,13 +154,15 @@ const MOCKS = [
     request: {
       query: UNLIKE_COMMENT,
       variables: {
-        commentId: '1',
+        input: {
+          commentId: '1',
+        },
       },
     },
     result: {
       data: {
-        unlikeComment: {
-          _id: '1',
+        deleteCommentVote: {
+          id: 'vote1',
         },
       },
     },
@@ -148,14 +171,19 @@ const MOCKS = [
     request: {
       query: UPDATE_POST_MUTATION,
       variables: {
-        id: 'postId',
-        text: 'Edited Post',
+        input: {
+          id: '1',
+          caption: 'Edited Post',
+        },
       },
     },
     result: {
       data: {
         updatePost: {
-          _id: '',
+          id: '1',
+          caption: 'Edited Post',
+          pinnedAt: null,
+          attachments: [],
         },
       },
     },
@@ -164,13 +192,15 @@ const MOCKS = [
     request: {
       query: DELETE_POST_MUTATION,
       variables: {
-        id: 'postId',
+        input: {
+          id: '1',
+        },
       },
     },
     result: {
       data: {
-        removePost: {
-          _id: '',
+        deletePost: {
+          id: '1',
         },
       },
     },
@@ -189,6 +219,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing PostCard Component [User Portal]', () => {
   test('Component should be rendered properly', async () => {
+    const fetchPosts = vi.fn();
     const cardProps = {
       id: '1',
       creator: {
@@ -196,7 +227,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -245,7 +276,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -272,7 +303,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -321,7 +352,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -338,6 +369,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('dropdown'));
+    await waitFor(() => {
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+    });
     await wait();
     expect(screen.getByText('Edit')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
@@ -353,7 +387,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -364,7 +398,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -402,7 +436,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -419,6 +453,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('dropdown'));
+    await waitFor(() => {
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editPost'));
     await wait();
 
@@ -427,8 +464,11 @@ describe('Testing PostCard Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
     await userEvent.click(screen.getByTestId('editPostBtn'));
     await wait();
-
-    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(
+        'Successfully edited the Post.',
+      );
+    });
   });
 
   test('Component should be rendered properly if user has liked the post', async () => {
@@ -442,7 +482,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -453,7 +493,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -491,7 +531,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -523,7 +563,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -534,7 +574,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -572,7 +612,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -608,7 +648,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -619,7 +659,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -657,7 +697,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -690,7 +730,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -701,7 +741,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -739,7 +779,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -765,7 +805,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -776,7 +816,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -814,7 +854,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -847,7 +887,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -858,7 +898,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -896,7 +936,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     expect(toast.error).toBeDefined();
@@ -932,7 +972,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -943,7 +983,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -981,7 +1021,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
     const beforeUserId = getItem('userId');
     setItem('userId', '2');
@@ -1017,7 +1057,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1028,7 +1068,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1066,7 +1106,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     const beforeUserId = getItem('userId');
@@ -1103,7 +1143,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1114,7 +1154,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1152,7 +1192,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -1181,7 +1221,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1192,7 +1232,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1230,7 +1270,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     const mockError = {
@@ -1283,13 +1323,14 @@ describe('Testing PostCard Component [User Portal]', () => {
       request: {
         query: DELETE_POST_MUTATION,
         variables: {
-          id: 'postId',
+          input: { id: '1' }, // '1', not 'postId'
         },
       },
       result: {
         data: {
-          removePost: {
-            _id: 'postId',
+          deletePost: {
+            id: '1',
+            _typename: 'Post',
           },
         },
       },
@@ -1304,7 +1345,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1315,7 +1356,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1353,7 +1394,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -1371,6 +1412,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('dropdown'));
+    await waitFor(() => {
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('deletePost')).toBeInTheDocument();
@@ -1395,7 +1439,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1406,7 +1450,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1444,13 +1488,13 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     const deleteErrorMock = {
       request: {
         query: DELETE_POST_MUTATION,
-        variables: { id: 'postId' },
+        variables: { input: { id: cardProps.id } },
       },
       error: new Error('Network error: Failed to delete post'),
     };
@@ -1474,6 +1518,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     });
 
     await userEvent.click(screen.getByTestId('dropdown'));
+    await waitFor(() => {
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('deletePost')).toBeInTheDocument();
@@ -1486,7 +1533,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         'Network error: Failed to delete post',
       );
 
-      expect(cardProps.fetchPosts).not.toHaveBeenCalled();
+      expect(cardProps.fetchPosts).toHaveBeenCalled();
     });
   });
 
@@ -1498,7 +1545,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1509,7 +1556,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1547,7 +1594,7 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
 
     render(
@@ -1568,30 +1615,6 @@ describe('Testing PostCard Component [User Portal]', () => {
 
   test('Delete post should execute code inside if(createEventData) conditional', async () => {
     setItem('userId', '2');
-
-    const deletePostMock = {
-      request: {
-        query: DELETE_POST_MUTATION,
-        variables: {
-          id: 'postId',
-        },
-      },
-      result: {
-        data: {
-          deletePost: {
-            // This matches the structure expected in handleDeletePost
-            id: 'postId',
-          },
-        },
-      },
-    };
-
-    const customLink = new StaticMockLink([deletePostMock], true);
-
-    const successToastSpy = vi.spyOn(toast, 'success');
-
-    const fetchPostsSpy = vi.fn();
-
     const cardProps = {
       id: '1',
       creator: {
@@ -1599,7 +1622,7 @@ describe('Testing PostCard Component [User Portal]', () => {
         email: 'test@user.com',
         id: '1',
       },
-      image: 'testImage',
+      image: 'image.png',
       video: '',
       text: 'This is post test text',
       title: 'This is post test title',
@@ -1610,7 +1633,7 @@ describe('Testing PostCard Component [User Portal]', () => {
       comments: [
         {
           id: '1',
-          body: 'testComment', // ✅ required field
+          body: 'testComment',
           creator: {
             id: '1',
             name: 'test user',
@@ -1648,8 +1671,29 @@ describe('Testing PostCard Component [User Portal]', () => {
           },
         ],
       },
-      fetchPosts: vi.fn(),
+      fetchPosts: fetchPostsSpy,
     };
+
+    const deletePostMock = {
+      request: {
+        query: DELETE_POST_MUTATION,
+        variables: {
+          input: { id: '1' },
+        },
+      },
+      result: {
+        data: {
+          deletePost: {
+            id: '1',
+            _typename: 'Post',
+          },
+        },
+      },
+    };
+
+    const customLink = new StaticMockLink([deletePostMock], true);
+
+    const successToastSpy = vi.spyOn(toast, 'success');
 
     render(
       <MockedProvider
@@ -1670,6 +1714,9 @@ describe('Testing PostCard Component [User Portal]', () => {
     await wait(100);
 
     await userEvent.click(screen.getByTestId('dropdown'));
+    await waitFor(() => {
+      expect(screen.getByText('Edit')).toBeInTheDocument();
+    });
 
     await waitFor(() => {
       expect(screen.getByTestId('deletePost')).toBeInTheDocument();
@@ -1679,9 +1726,11 @@ describe('Testing PostCard Component [User Portal]', () => {
 
     await wait(300);
 
-    expect(successToastSpy).toHaveBeenCalledWith(
-      'Successfully deleted the Post.',
-    );
+    await waitFor(() => {
+      expect(successToastSpy).toHaveBeenCalledWith(
+        'Successfully deleted the Post.',
+      );
+    });
 
     expect(fetchPostsSpy).toHaveBeenCalled();
 

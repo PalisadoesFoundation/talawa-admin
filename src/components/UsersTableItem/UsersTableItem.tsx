@@ -62,8 +62,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
     if (value == '') {
       setJoinedOrgs(user.organizationsWhereMember);
     } else {
-      const filteredOrgs = user.organizationsWhereMember.edges.filter((org) =>
-        org.node.name.toLowerCase().includes(value.toLowerCase()),
+      const filteredOrgs = (user.organizationsWhereMember?.edges ?? []).filter(
+        (org) => org.node.name.toLowerCase().includes(value.toLowerCase()),
       );
       setJoinedOrgs({ edges: filteredOrgs });
     }
@@ -111,11 +111,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
             {t('orgJoinedBy')} {user.name} (
-            {user.organizationsWhereMember.edges.length})
+            {user.organizationsWhereMember.edges.length || 0})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {user.organizationsWhereMember.edges.length !== 0 && (
+          {(user.organizationsWhereMember?.edges ?? []).length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-joined-orgs"

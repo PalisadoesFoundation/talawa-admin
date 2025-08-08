@@ -433,7 +433,7 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($input: MutationUpdatePostInput!) {
+  mutation updatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {
       id
       caption
