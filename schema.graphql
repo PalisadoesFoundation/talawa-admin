@@ -1,0 +1,3122 @@
+directive @auth on FIELD_DEFINITION
+
+directive @role(requires: UserType) on FIELD_DEFINITION
+
+type ActionItem {
+  assignedAt: DateTime
+  assignee: UserPg
+  category: ActionItemCategory
+  completionAt: DateTime
+  createdAt: DateTime
+  creator: UserPg
+  event: Event
+  id: ID
+  isCompleted: Boolean
+  organization: Organization
+  postCompletionNotes: String
+  preCompletionNotes: String
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type ActionItemCategoryActionItemsConnection {
+  edges: [ActionItemCategoryActionItemsConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type ActionItemCategoryActionItemsConnectionEdge {
+  cursor: String!
+  node: ActionItem
+}
+
+type ActionItemCategory {
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ActionItemCategoryActionItemsConnection
+  createdAt: DateTime
+  creator: UserPg
+  description: String
+  id: ID
+  isDisabled: Boolean
+  name: String
+  organization: Organization
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type Address {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
+type Advertisement {
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
+  endDate: Date!
+  mediaUrl: URL!
+  name: String!
+  orgId: ID!
+  startDate: Date!
+  type: AdvertisementType!
+  updatedAt: DateTime!
+}
+
+enum AdvertisementType {
+  BANNER
+  MENU
+  POPUP
+}
+
+type AdvertisementEdge {
+  cursor: String
+  node: Advertisement
+}
+
+type AdvertisementsConnection {
+  edges: [AdvertisementEdge]
+  pageInfo: DefaultConnectionPageInfo
+  totalCount: Int
+}
+
+type AgendaCategory {
+  _id: ID!
+  createdAt: Date!
+  createdBy: User!
+  description: String
+  name: String!
+  organization: Organization!
+  updatedAt: Date
+  updatedBy: User
+}
+
+type AggregatePost {
+  count: Int!
+}
+
+type AggregateUser {
+  count: Int!
+}
+
+scalar Any
+
+type AppUserProfile {
+  _id: ID!
+  adminFor: [Organization]
+  appLanguageCode: String!
+  createdEvents: [Event]
+  createdOrganizations: [Organization]
+  eventAdmin: [Event]
+  isSuperAdmin: Boolean!
+  userId: User!
+}
+
+type AuthData {
+  accessToken: String!
+  appUserProfile: AppUserProfile!
+  refreshToken: String!
+  user: User!
+}
+
+scalar BigInt
+
+type CheckIn {
+  _id: ID!
+  allotedRoom: String
+  allotedSeat: String
+  createdAt: DateTime!
+  event: Event!
+  feedbackSubmitted: Boolean!
+  time: DateTime!
+  updatedAt: DateTime!
+  user: User!
+}
+
+input CheckInInput {
+  allotedRoom: String
+  allotedSeat: String
+  eventId: ID!
+  userId: ID!
+}
+
+type CheckInStatus {
+  _id: ID!
+  checkIn: CheckIn
+  user: User!
+}
+
+type Comment {
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
+  likeCount: Int
+  likedBy: [User]
+  post: Post!
+  text: String!
+  updatedAt: DateTime!
+}
+
+input CommentInput {
+  text: String!
+}
+
+type Community {
+  _id: ID!
+  logoUrl: String
+  name: String!
+  socialMediaUrls: SocialMediaUrls
+  timeout: Int
+  websiteLink: String
+}
+
+type CommunityPg {
+  createdAt: String
+  facebookURL: String
+  githubURL: String
+  id: ID!
+  inactivityTimeoutDuration: Int
+  instagramURL: String
+  linkedInURL: String
+  logoMimeType: String
+  logoURL: String
+  name: String
+  redditURL: String
+  slackURL: String
+  updatedAt: String
+  updater: User
+  websiteURL: String
+  xURL: String
+  youtubeURL: String
+}
+
+union ConnectionError = InvalidCursor | MaximumValueError
+
+type ConnectionPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+scalar CountryCode
+
+input CreateActionItemInput {
+  assignedAt: String
+  assigneeId: ID!
+  categoryId: ID!
+  eventId: ID
+  organizationId: ID!
+  preCompletionNotes: String
+}
+
+input CreateAgendaCategoryInput {
+  description: String
+  name: String!
+  organizationId: ID!
+}
+
+input CreateUserTagInput {
+  name: String!
+  organizationId: ID!
+  parentTagId: ID
+}
+
+input CursorPaginationInput {
+  cursor: String
+  direction: PaginationDirection!
+  limit: PositiveInt!
+}
+
+scalar Date
+
+scalar DateTime
+
+type DeletePayload {
+  success: Boolean!
+}
+
+type Donation {
+  _id: ID!
+  amount: Float!
+  createdAt: DateTime!
+  nameOfOrg: String!
+  nameOfUser: String!
+  orgId: ID!
+  payPalId: String!
+  updatedAt: DateTime!
+  userId: ID!
+}
+
+input DonationWhereInput {
+  id: ID
+  id_contains: ID
+  id_in: [ID!]
+  id_not: ID
+  id_not_in: [ID!]
+  id_starts_with: ID
+  name_of_user: String
+  name_of_user_contains: String
+  name_of_user_in: [String!]
+  name_of_user_not: String
+  name_of_user_not_in: [String!]
+  name_of_user_starts_with: String
+}
+
+scalar EmailAddress
+
+interface Error {
+  message: String!
+}
+
+type Event {
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnectionPg
+
+  allDay: Boolean
+  attachments: [EventAttachmentPg!]
+  createdAt: DateTime
+  creator: User
+  description: String
+  endAt: DateTime
+  id: ID!
+  isPublic: Boolean!
+  isRegisterable: Boolean!
+  location: String
+  name: String
+  organization: Organization
+  startAt: DateTime
+  updatedAt: DateTime
+  updater: User
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnectionPg
+}
+
+input EventAttendeeInput {
+  eventId: ID!
+  userId: ID!
+}
+
+input EventInput {
+  allDay: Boolean!
+  description: String!
+  endDate: Date
+  endTime: Time
+  isPublic: Boolean!
+  isRegisterable: Boolean!
+  latitude: Latitude
+  location: String
+  longitude: Longitude
+  organizationId: ID!
+  recurring: Boolean!
+  startDate: Date!
+  startTime: Time
+  title: String!
+}
+
+enum EventOrderByInput {
+  allDay_ASC
+  allDay_DESC
+  description_ASC
+  description_DESC
+  endDate_ASC
+  endDate_DESC
+  endTime_ASC
+  endTime_DESC
+  id_ASC
+  id_DESC
+  location_ASC
+  location_DESC
+  startDate_ASC
+  startDate_DESC
+  startTime_ASC
+  startTime_DESC
+  title_ASC
+  title_DESC
+}
+
+type EventVolunteer {
+  _id: ID!
+  createdAt: DateTime!
+  creator: User
+  event: Event
+  isAssigned: Boolean
+  isInvited: Boolean
+  response: String
+  updatedAt: DateTime!
+  user: User!
+}
+
+input EventVolunteerInput {
+  eventId: ID!
+  userId: ID!
+}
+
+enum EventVolunteerResponse {
+  NO
+  YES
+}
+
+input EventWhereInput {
+  description: String
+  description_contains: String
+  description_in: [String!]
+  description_not: String
+  description_not_in: [String!]
+  description_starts_with: String
+  id: ID
+  id_contains: ID
+  id_in: [ID!]
+  id_not: ID
+  id_not_in: [ID!]
+  id_starts_with: ID
+  location: String
+  location_contains: String
+  location_in: [String!]
+  location_not: String
+  location_not_in: [String!]
+  location_starts_with: String
+  organization_id: ID
+  title: String
+  title_contains: String
+  title_in: [String!]
+  title_not: String
+  title_not_in: [String!]
+  title_starts_with: String
+}
+
+type ExtendSession {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Feedback {
+  _id: ID!
+  createdAt: DateTime!
+  event: Event!
+  rating: Int!
+  review: String
+  updatedAt: DateTime!
+}
+
+input FeedbackInput {
+  eventId: ID!
+  rating: Int!
+  review: String
+}
+
+interface FieldError {
+  message: String!
+  path: [String!]!
+}
+
+input ForgotPasswordData {
+  newPassword: String!
+  otpToken: String!
+  userOtp: String!
+}
+
+enum Frequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
+}
+
+enum Iso4217CurrencyCode {
+  AED
+  AFN
+  ALL
+  AMD
+  ANG
+  AOA
+  ARS
+  AUD
+  AWG
+  AZN
+  BAM
+  BBD
+  BDT
+  BGN
+  BHD
+  BIF
+  BMD
+  BND
+  BOB
+  BOV
+  BRL
+  BSD
+  BTN
+  BWP
+  BYN
+  BZD
+  CAD
+  CDF
+  CHE
+  CHF
+  CHW
+  CLF
+  CLP
+  CNY
+  COP
+  COU
+  CRC
+  CUP
+  CVE
+  CZK
+  DJF
+  DKK
+  DOP
+  DZD
+  EGP
+  ERN
+  ETB
+  EUR
+  FJD
+  FKP
+  GBP
+  GEL
+  GHS
+  GIP
+  GMD
+  GNF
+  GTQ
+  GYD
+  HKD
+  HNL
+  HTG
+  HUF
+  IDR
+  ILS
+  INR
+  IQD
+  IRR
+  ISK
+  JMD
+  JOD
+  JPY
+  KES
+  KGS
+  KHR
+  KMF
+  KPW
+  KRW
+  KWD
+  KYD
+  KZT
+  LAK
+  LBP
+  LKR
+  LRD
+  LSL
+  LYD
+  MAD
+  MDL
+  MGA
+  MKD
+  MMK
+  MNT
+  MOP
+  MRU
+  MUR
+  MVR
+  MWK
+  MXN
+  MXV
+  MYR
+  MZN
+  NAD
+  NGN
+  NIO
+  NOK
+  NPR
+  NZD
+  OMR
+  PAB
+  PEN
+  PGK
+  PHP
+  PKR
+  PLN
+  PYG
+  QAR
+  RON
+  RSD
+  RUB
+  RWF
+  SAR
+  SBD
+  SCR
+  SDG
+  SEK
+  SGD
+  SHP
+  SLE
+  SOS
+  SRD
+  SSP
+  STN
+  SVC
+  SYP
+  SZL
+  THB
+  TJS
+  TMT
+  TND
+  TOP
+  TRY
+  TTD
+  TWD
+  TZS
+  UAH
+  UGX
+  USD
+  USN
+  UYI
+  UYU
+  UYW
+  UZS
+  VED
+  VES
+  VND
+  VUV
+  WST
+  XAF
+  XAG
+  XAU
+  XBA
+  XBB
+  XBC
+  XBD
+  XCD
+  XDR
+  XOF
+  XPD
+  XPF
+  XPT
+  XSU
+  XTS
+  XUA
+  XXX
+  YER
+  ZAR
+  ZMW
+  ZWG
+}
+
+type Group {
+  _id: ID!
+  admins: [User!]!
+  createdAt: DateTime!
+  description: String
+  organization: Organization!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type InvalidCursor implements FieldError {
+  message: String!
+  path: [String!]!
+}
+
+scalar JSON
+
+type Language {
+  _id: ID!
+  createdAt: String!
+  en: String!
+  translation: [LanguageModel]
+}
+
+input LanguageInput {
+  en_value: String!
+  translation_lang_code: String!
+  translation_value: String!
+}
+
+type LanguageModel {
+  _id: ID!
+  createdAt: DateTime!
+  lang_code: String!
+  value: String!
+  verified: Boolean!
+}
+
+scalar Latitude
+
+input LoginInput {
+  email: EmailAddress!
+  password: String!
+}
+
+scalar Longitude
+
+type Chat {
+  _id: ID!
+  isGroup: Boolean!
+  name: String
+  createdAt: DateTime!
+  creator: User
+  messages: [ChatMessage]
+  organization: Organization
+  updatedAt: DateTime!
+  users: [User!]!
+  admins: [User]
+  lastMessageId: String
+}
+
+type ChatMessage {
+  _id: ID!
+  createdAt: DateTime!
+  chatMessageBelongsTo: Chat!
+  messageContent: String!
+  type: String!
+  replyTo: ChatMessage
+  sender: User!
+  deletedBy: [User]
+  updatedAt: DateTime!
+}
+
+type MaximumLengthError implements FieldError {
+  message: String!
+  path: [String!]!
+}
+
+type MaximumValueError implements FieldError {
+  limit: Int!
+  message: String!
+  path: [String!]!
+}
+
+type MembershipRequest {
+  _id: ID!
+  organization: Organization!
+  user: User!
+}
+
+type MinimumLengthError implements FieldError {
+  limit: Int!
+  message: String!
+  path: [String!]!
+}
+
+type MinimumValueError implements FieldError {
+  message: String!
+  path: [String!]!
+}
+
+input CreateAdvertisementInput {
+  endDate: Date!
+  name: String!
+  organizationId: ID!
+  startDate: Date!
+  type: AdvertisementType!
+  mediaFile: String!
+}
+
+type CreateAdvertisementPayload {
+  advertisement: Advertisement
+}
+
+input EditVenueInput {
+  capacity: Int
+  description: String
+  file: String
+  id: ID!
+  name: String
+}
+
+input MutationCreateAdvertisementInput {
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
+  type: AdvertisementType!
+}
+
+input QueryOrganizationInput {
+  id: String!
+}
+
+type Mutation {
+  acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
+  addEventAttendee(data: EventAttendeeInput!): User!
+  addFeedback(data: FeedbackInput!): Feedback!
+  addLanguageTranslation(data: LanguageInput!): Language!
+  addOrganizationCustomField(
+    name: String!
+    organizationId: ID!
+    type: String!
+  ): OrganizationCustomField!
+  addOrganizationImage(file: String!, organizationId: String!): Organization!
+  addUserCustomData(
+    dataName: String!
+    dataValue: Any!
+    organizationId: ID!
+  ): UserCustomData!
+  addUserImage(file: String!): User!
+  addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
+  adminRemoveEvent(eventId: ID!): Event!
+  assignUserTag(input: ToggleUserTagAssignInput!): User
+  blockUser(organizationId: ID!, userId: ID!): User!
+  cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
+  checkIn(data: CheckInInput!): CheckIn!
+  createActionItem(input: CreateActionItemInput!): ActionItem
+
+  createActionItemCategory(
+    input: MutationCreateActionItemCategoryInput!
+  ): ActionItemCategory!
+  createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
+  createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
+  createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
+  createComment(data: CommentInput!, postId: ID!): Comment
+  createChat(data: chatInput!): Chat!
+  createDonation(
+    amount: Float!
+    nameOfOrg: String!
+    nameOfUser: String!
+    orgId: ID!
+    payPalId: ID!
+    userId: ID!
+  ): Donation!
+  createEvent(input: MutationCreateEventInput!): EventPg
+
+  createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
+  createMember(input: UserAndOrganizationInput!): Organization!
+  createOrganization(data: OrganizationInput, file: String): Organization!
+  createPost(data: PostInput!, file: String): Post
+  createSampleOrganization: Boolean!
+  createUserFamily(data: createUserFamilyInput!): UserFamily!
+  createUserTag(input: CreateUserTagInput!): UserTag
+  createVenue(data: VenueInput!): Venue
+  deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
+  deleteActionItemCategory(
+    input: MutationDeleteActionItemCategoryInput!
+  ): ActionItemCategory
+  deleteAgendaCategory(id: ID!): ID!
+  deleteDonationById(id: ID!): DeletePayload!
+  deleteEntireRecurringEventSeries(
+    input: MutationDeleteEntireRecurringEventSeriesInput!
+  ): EventPg
+  deleteSingleEventInstance(
+    input: MutationDeleteSingleEventInstanceInput!
+  ): EventPg
+  deleteStandaloneEvent(input: MutationDeleteStandaloneEventInput!): EventPg
+  deleteThisAndFollowingEvents(
+    input: MutationDeleteThisAndFollowingEventsInput!
+  ): EventPg
+  deleteVenue(id: ID!): Venue
+  editVenue(data: EditVenueInput!): Venue
+  forgotPassword(data: ForgotPasswordData!): Boolean!
+  joinPublicOrganization(organizationId: ID!): User!
+  leaveOrganization(organizationId: ID!): User!
+  likeComment(id: ID!): Comment
+  likePost(id: ID!): Post
+  logout: Boolean!
+  markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
+  otp(data: OTPInput!): OtpData!
+  recaptcha(data: RecaptchaVerification!): Boolean!
+  refreshToken(refreshToken: String!): ExtendSession!
+  registerForEvent(id: ID!): Event!
+  rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
+  deleteActionItem(input: MutationDeleteActionItemInput!): ActionItem
+  removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
+  removeAdvertisement(id: ID!): Advertisement
+  removeComment(id: ID!): Comment
+  removeEventAttendee(data: EventAttendeeInput!): User!
+  removeEventVolunteer(id: ID!): EventVolunteer!
+  removeMember(data: UserAndOrganizationInput!): Organization!
+  deleteOrganizationMembership(
+    input: deleteOrganizationMembershipInput
+  ): Organization!
+  removeOrganization(id: ID!): UserData!
+  removeOrganizationCustomField(
+    customFieldId: ID!
+    organizationId: ID!
+  ): OrganizationCustomField!
+  removeOrganizationImage(organizationId: String!): Organization!
+  removePost(id: ID!): Post
+  removeSampleOrganization: Boolean!
+  removeUserCustomData(organizationId: ID!): UserCustomData!
+  removeUserFamily(familyId: ID!): UserFamily!
+  removeUserFromUserFamily(familyId: ID!, userId: ID!): UserFamily!
+  removeUserImage: User!
+  removeUserTag(id: ID!): UserTag
+  revokeRefreshTokenForUser: Boolean!
+  saveFcmToken(token: String): Boolean!
+  sendMembershipRequest(organizationId: ID!): MembershipRequest!
+  sendMessageToChat(
+    chatId: ID!
+    messageContent: String!
+    type: String!
+    replyTo: ID
+  ): ChatMessage!
+  signUp(input: UserInput!, file: String): AuthData!
+  createUser(input: createUserInput!): AuthData!
+  togglePostPin(id: ID!, title: String): Post!
+  unassignUserTag(input: ToggleUserTagAssignInput!): User
+  unblockUser(organizationId: ID!, userId: ID!): User!
+  unlikeComment(id: ID!): Comment
+  unlikePost(id: ID!): Post
+  unregisterForEventByUser(id: ID!): Event!
+  updateActionItem(input: MutationUpdateActionItemInput!): ActionItem
+  updateActionItemCategory(
+    input: MutationUpdateActionItemCategoryInput!
+  ): ActionItemCategory
+  updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
+  updateAgendaCategory(
+    id: ID!
+    input: UpdateAgendaCategoryInput!
+  ): AgendaCategory
+  updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
+  updateEvent(input: MutationUpdateEventInput!): EventPg
+  updateEventVolunteer(
+    data: UpdateEventVolunteerInput
+    id: ID!
+  ): EventVolunteer!
+  updateLanguage(languageCode: String!): User!
+  updateOrganization(
+    data: UpdateOrganizationInput
+    file: String
+    id: ID!
+  ): Organization!
+  updatePost(data: PostUpdateInput, id: ID!): Post!
+  updateSessionTimeout(timeout: Int!): Boolean!
+  updateUser(input: MutationUpdateUserInput!): UserPg
+  updateUserRoleInOrganization(
+    organizationId: ID!
+    role: String!
+    userId: ID!
+  ): Organization!
+  updateUserTag(input: UpdateUserTagInput!): UserTag
+  updateUserType(data: UpdateUserTypeInput!): Boolean!
+  venues: [Venue]
+}
+
+input OTPInput {
+  email: EmailAddress!
+}
+
+input AdvertisementWhereInput {
+  isCompleted: Boolean!
+}
+
+type Organization {
+  id: ID!
+  actionItemCategories: [ActionItemCategory]
+  address: Address
+  admins(adminId: ID): [User!]
+  agendaCategories: [AgendaCategory]
+  apiUrl: URL!
+  blockedUsers: [User]
+  createdAt: DateTime!
+  creator: User
+  customFields: [OrganizationCustomField!]!
+  description: String!
+  image: String
+  members: [User]
+  membershipRequests: [MembershipRequest]
+  name: String!
+  pinnedPosts: [Post]
+  updatedAt: DateTime!
+  userRegistrationRequired: Boolean!
+  userTags(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): UserTagsConnection
+  visibleInSearch: Boolean!
+  venues: [Venue]
+}
+
+type OrganizationPg {
+  id: ID!
+  name: String
+  description: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  state: String
+  postalCode: String
+  countryCode: Iso3166Alpha2CountryCode
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  postsCount: Int
+  pinnedPostsCount: Int
+
+  advertisements(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    where: AdvertisementWhereInput
+  ): OrganizationAdvertisementsConnectionPg
+
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnectionPg
+
+  chats(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationChatsConnectionPg
+
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    startDate: DateTime
+    endDate: DateTime
+    includeRecurring: Boolean
+  ): OrganizationEventsConnectionPg
+
+  funds(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationFundsConnectionPg
+
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationMembersConnectionPg
+
+  pinnedPosts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPinnedPostsConnectionPg
+
+  posts(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationPostsConnectionPg
+
+  tagFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagFoldersConnectionPg
+
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagsConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationVenuesConnectionPg
+}
+
+type PageInfoPg {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type OrganizationAdvertisementsConnectionPg {
+  edges: [OrganizationAdvertisementsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationAdvertisementsConnectionEdgePg {
+  cursor: String!
+  node: AdvertisementPg
+}
+
+enum AdvertisementTypePg {
+  banner
+  menu
+  pop_up
+}
+
+type AdvertisementAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type AdvertisementPg {
+  id: ID!
+  name: String
+  description: String
+  type: AdvertisementTypePg
+  startAt: DateTime
+  endAt: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [AdvertisementAttachmentPg!]
+}
+
+type BlockedUserPg {
+  createdAt: Date
+  id: ID!
+  organization: OrganizationPg
+  user: UserPg
+}
+
+type OrganizationBlockedUsersConnectionPg {
+  edges: [OrganizationBlockedUsersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationBlockedUsersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type OrganizationChatsConnectionPg {
+  edges: [OrganizationChatsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationChatsConnectionEdgePg {
+  cursor: String!
+  node: ChatPg
+}
+
+type ChatMembersConnectionPg {
+  edges: [ChatMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type ChatMessagesConnectionPg {
+  edges: [ChatMessagesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type ChatMessagePg {
+  id: ID!
+  body: String
+  chat: ChatPg
+  createdAt: DateTime
+  creator: UserPg
+  parentMessage: ChatMessagePg
+  updatedAt: DateTime
+}
+
+type ChatMessagesConnectionEdgePg {
+  cursor: String!
+  node: ChatMessagePg
+}
+
+type ChatPg {
+  id: ID!
+  name: String
+  description: String
+  avatarMimeType: String
+  avatarURL: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMembersConnectionPg
+
+  messages(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): ChatMessagesConnectionPg
+}
+
+type OrganizationEventsConnectionPg {
+  edges: [OrganizationEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
+type EventAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type EventAgendaFoldersConnectionPg {
+  edges: [EventAgendaFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventAgendaFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderChildFoldersConnectionPg {
+  edges: [AgendaFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: AgendaFolderPg
+}
+
+type AgendaFolderItemsConnectionPg {
+  edges: [AgendaFolderItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type AgendaFolderItemsConnectionEdgePg {
+  cursor: String!
+  node: AgendaItemPg
+}
+
+enum AgendaItemTypePg {
+  general
+  note
+  scripture
+  song
+}
+
+type AgendaItemPg {
+  id: ID!
+  name: String
+  description: String
+  duration: String
+  event: AgendaFolderPg
+  key: String
+  type: AgendaItemTypePg
+  createdAt: DateTime
+  creator: UserPg
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type AgendaFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  creator: UserPg
+  event: EventPg
+  isAgendaItemFolder: Boolean
+  updatedAt: DateTime
+  updater: UserPg
+  parentFolder: AgendaFolderPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderChildFoldersConnectionPg
+  items(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): AgendaFolderItemsConnectionPg
+}
+
+type EventPg {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
+  # Recurring event fields
+  isRecurringEventTemplate: Boolean
+  sequenceNumber: Int
+  totalCount: Int
+  hasExceptions: Boolean
+  progressLabel: String
+  # Base event relationships
+  baseEvent: EventPg
+  # Standard fields
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [EventAttachmentPg!]
+
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventActionItemsConnectionPg
+
+  agendaFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventAgendaFoldersConnectionPg
+
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventVenuesConnectionPg
+}
+
+type EventActionItemsConnectionPg {
+  edges: [EventActionItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventActionItemsConnectionEdgePg {
+  cursor: String!
+  node: ActionItem
+}
+
+type EventVenuesConnectionPg {
+  edges: [EventVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventVenuesConnectionEdgePg {
+  node: VenuePg!
+  cursor: String!
+}
+
+type VenuePg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  updater: UserPg
+  organization: OrganizationPg
+  attachments: [VenueAttachmentPg!]!
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): VenueEventsConnectionPg
+}
+
+type OrganizationFundsConnectionPg {
+  edges: [OrganizationFundsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationFundsConnectionEdgePg {
+  cursor: String!
+  node: FundPg
+}
+
+type FundPg {
+  campaigns(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignsConnectionPg
+  createdAt: DateTime
+  creator: User
+  id: ID!
+  isTaxDeductible: Boolean
+  name: String
+  organization: Organization
+  updatedAt: DateTime
+  updater: User
+}
+
+type FundCampaignsConnectionPg {
+  edges: [FundCampaignsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignsConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPg
+}
+
+type FundCampaignPg {
+  id: ID!
+  name: String!
+  description: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  startAt: DateTime!
+  endAt: DateTime!
+  goalAmount: Int!
+  pledgedAmount: BigInt!
+  currencyCode: Iso4217CurrencyCode!
+  creator: UserPg!
+  updater: UserPg
+  fund: FundPg!
+  pledges(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignPledgesConnectionPg
+}
+
+type FundCampaignPledgesConnectionPg {
+  edges: [FundCampaignPledgesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type FundCampaignPledgesConnectionEdgePg {
+  cursor: String!
+  node: FundCampaignPledgePg
+}
+
+type FundCampaignPledgePg {
+  id: ID!
+  amount: Int!
+  note: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  campaign: FundCampaignPg!
+  creator: UserPg!
+  pledger: UserPg!
+  updater: UserPg
+}
+
+type OrganizationMembersConnectionPg {
+  edges: [OrganizationMembersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationMembersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type OrganizationPinnedPostsConnectionPg {
+  edges: [OrganizationPinnedPostsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationPinnedPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type PostPg {
+  attachments: [PostAttachmentPg!]
+  caption: String
+  comments(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostCommentsConnectionPg
+  commentsCount: Int
+  createdAt: DateTime
+  creator: UserPg
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostDownVotersConnectionPg
+  downVotesCount: Int
+  id: ID!
+  organization: OrganizationPg
+  pinnedAt: DateTime
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostUpVotersConnectionPg
+  upVotesCount: Int
+  updatedAt: DateTime
+  updater: UserPg
+}
+
+type PostCommentsConnectionPg {
+  edges: [PostCommentsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostCommentsConnectionEdgePg {
+  cursor: String!
+  node: CommentPg
+}
+
+type CommentPg {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  creator: UserPg!
+  post: PostPg!
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentDownVotersConnectionPg
+  downVotesCount: Int!
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentUpVotersConnectionPg
+  upVotesCount: Int!
+}
+
+type CommentDownVotersConnectionPg {
+  edges: [CommentDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostUpVotersConnectionPg {
+  edges: [PostUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostDownVotersConnectionPg {
+  edges: [PostDownVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type PostDownVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type CommentUpVotersConnectionPg {
+  edges: [CommentUpVotersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type CommentUpVotersConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type PostAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type OrganizationPostsConnectionPg {
+  edges: [OrganizationPostsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationPostsConnectionEdgePg {
+  cursor: String!
+  node: PostPg
+}
+
+type OrganizationTagFoldersConnectionPg {
+  edges: [OrganizationTagFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderChildFoldersConnectionPg {
+  edges: [TagFolderChildFoldersConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderChildFoldersConnectionEdgePg {
+  cursor: String!
+  node: TagFolderPg
+}
+
+type TagFolderPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  organization: OrganizationPg
+  parentFolder: TagFolderPg
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderChildFoldersConnectionPg
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderTagsConnectionPg
+}
+
+type TagFolderTagsConnectionPg {
+  edges: [TagFolderTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagFolderTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
+}
+
+type OrganizationTagsConnectionPg {
+  edges: [OrganizationTagsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationTagsConnectionEdgePg {
+  cursor: String!
+  node: TagPg
+}
+
+type TagAssigneesConnectionPg {
+  edges: [TagAssigneesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type TagAssigneesConnectionEdgePg {
+  cursor: String!
+  node: UserPg
+}
+
+type TagPg {
+  id: ID!
+  name: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  creator: UserPg
+  updater: UserPg
+  folder: TagFolderPg
+  assignees(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagAssigneesConnectionPg
+  organization: OrganizationPg
+}
+
+type OrganizationVenuesConnectionPg {
+  edges: [OrganizationVenuesConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type OrganizationVenuesConnectionEdgePg {
+  cursor: String!
+  node: VenuePg
+}
+
+type VenueAttachmentPg {
+  mimeType: String
+  url: String
+}
+
+type VenueEventsConnectionPg {
+  edges: [VenueEventsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type VenueEventsConnectionEdgePg {
+  cursor: String!
+  node: EventPg
+}
+
+type OrganizationCustomField {
+  _id: ID!
+  name: String!
+  organizationId: String!
+  type: String!
+}
+
+type OrganizationInfoNode {
+  _id: ID!
+  apiUrl: URL!
+  creator: User
+  description: String!
+  image: String
+  name: String!
+  userRegistrationRequired: Boolean!
+  visibleInSearch: Boolean!
+}
+
+type AuthenticationPayload {
+  authenticationToken: String
+  user: User
+}
+input OrganizationInput {
+  address: AddressInput!
+  apiUrl: URL
+  attendees: String
+  description: String!
+  image: String
+  name: String!
+  userRegistrationRequired: Boolean
+  visibleInSearch: Boolean
+}
+
+enum OrganizationOrderByInput {
+  apiUrl_ASC
+  apiUrl_DESC
+  createdAt_ASC
+  createdAt_DESC
+  description_ASC
+  description_DESC
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+input OrganizationWhereInput {
+  apiUrl: URL
+  apiUrl_contains: URL
+  apiUrl_in: [URL!]
+  apiUrl_not: URL
+  apiUrl_not_in: [URL!]
+  apiUrl_starts_with: URL
+  description: String
+  description_contains: String
+  description_in: [String!]
+  description_not: String
+  description_not_in: [String!]
+  description_starts_with: String
+  id: ID
+  id_contains: ID
+  id_in: [ID!]
+  id_not: ID
+  id_not_in: [ID!]
+  id_starts_with: ID
+  name: String
+  name_contains: String
+  name_in: [String!]
+  name_not: String
+  name_not_in: [String!]
+  name_starts_with: String
+  userRegistrationRequired: Boolean
+  visibleInSearch: Boolean
+}
+
+type OtpData {
+  otpToken: String!
+}
+
+"""
+Information about pagination in a connection.
+"""
+type PageInfo {
+  currPageNo: Int
+
+  """
+  When paginating forwards, are there more items?
+  """
+  hasNextPage: Boolean!
+
+  """
+  When paginating backwards, are there more items?
+  """
+  hasPreviousPage: Boolean!
+  nextPageNo: Int
+  prevPageNo: Int
+  totalPages: Int
+}
+
+enum PaginationDirection {
+  BACKWARD
+  FORWARD
+}
+
+scalar PhoneNumber
+
+scalar PositiveInt
+
+type Post {
+  _id: ID
+  commentCount: Int
+  comments: [Comment]
+  createdAt: DateTime!
+  creator: User
+  imageUrl: URL
+  likeCount: Int
+  likedBy: [User]
+  organization: Organization!
+  pinned: Boolean
+  text: String!
+  title: String
+  updatedAt: DateTime!
+  videoUrl: URL
+}
+
+"""
+A connection to a list of items.
+"""
+type PostConnection {
+  aggregate: AggregatePost!
+
+  """
+  A list of edges.
+  """
+  edges: [Post]!
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+}
+
+input PostInput {
+  _id: ID
+  imageUrl: URL
+  organizationId: ID!
+  pinned: Boolean
+  text: String!
+  title: String
+  videoUrl: URL
+}
+
+enum PostOrderByInput {
+  commentCount_ASC
+  commentCount_DESC
+  createdAt_ASC
+  createdAt_DESC
+  id_ASC
+  id_DESC
+  imageUrl_ASC
+  imageUrl_DESC
+  likeCount_ASC
+  likeCount_DESC
+  text_ASC
+  text_DESC
+  title_ASC
+  title_DESC
+  videoUrl_ASC
+  videoUrl_DESC
+}
+
+input PostUpdateInput {
+  imageUrl: String
+  text: String
+  title: String
+  videoUrl: String
+}
+
+input PostWhereInput {
+  id: ID
+  id_contains: ID
+  id_in: [ID!]
+  id_not: ID
+  id_not_in: [ID!]
+  id_starts_with: ID
+  text: String
+  text_contains: String
+  text_in: [String!]
+  text_not: String
+  text_not_in: [String!]
+  text_starts_with: String
+  title: String
+  title_contains: String
+  title_in: [String!]
+  title_not: String
+  title_not_in: [String!]
+  title_starts_with: String
+}
+
+input OueryAllUsersWhereInput {
+  name: String
+}
+
+type Query {
+  signIn(input: LoginInput!): AuthenticationPayload
+  actionItemCategory(input: QueryActionItemCategoryInput!): ActionItemCategory
+  actionCategoriesByOrganization(
+    input: QueryActionCategoriesByOrganizationInput!
+  ): [ActionItemCategory!]
+  actionItemsByOrganization(
+    input: QueryActionItemsByOrganizationInput!
+  ): [ActionItem!]
+  actionItemsByUser(input: QueryActionItemsByUserInput!): [ActionItem!]
+  agendaCategory(id: ID!): AgendaCategory!
+  currentUser: UserPg!
+  customDataByOrganization(organizationId: ID!): [UserCustomData!]!
+  customFieldsByOrganization(id: ID!): [OrganizationCustomField]
+  chatById(id: ID!): Chat!
+  chatsByUserId(id: ID!): [Chat]
+  event(id: ID!): Event
+  eventsAttendedByUser(id: ID, orderBy: EventOrderByInput): [Event]
+  eventVolunteersByEvent(id: ID!): [EventVolunteer]
+  eventsByOrganization(id: ID, orderBy: EventOrderByInput): [Event]
+  eventsByOrganizationConnection(
+    first: Int
+    orderBy: EventOrderByInput
+    skip: Int
+    where: EventWhereInput
+  ): [Event!]!
+  advertisementsConnection(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+  ): AdvertisementsConnection
+  getDonationById(id: ID!): Donation!
+  getDonationByOrgId(orgId: ID!): [Donation]
+  getDonationByOrgIdConnection(
+    first: Int
+    orgId: ID!
+    skip: Int
+    where: DonationWhereInput
+  ): [Donation!]!
+  getlanguage(lang_code: String!): [Translation]
+  hasSubmittedFeedback(eventId: ID!, userId: ID!): Boolean
+  isSampleOrganization(id: ID!): Boolean!
+  joinedOrganizations(id: ID): [Organization]
+  me: UserData!
+  myLanguage: String
+  fundsByOrganization(organizationId: ID!, where: FundWhereInput): [Fund]
+  organization(input: QueryOrganizationInput!): OrganizationPg
+  organizations(id: ID, orderBy: OrganizationOrderByInput): [Organization]
+  organizationsMemberConnection(
+    first: Int
+    orderBy: UserOrderByInput
+    orgId: ID!
+    skip: Int
+    where: UserWhereInput
+  ): UserConnection!
+  getRecurringEvents(baseRecurringEventId: ID!): [Event]
+  post(id: ID!): Post
+  postsByOrganization(id: ID!, orderBy: PostOrderByInput): [Post]
+  postsByOrganizationConnection(
+    first: Int
+    id: ID!
+    orderBy: PostOrderByInput
+    skip: Int
+    where: PostWhereInput
+  ): PostConnection
+  registeredEventsByUser(id: ID, orderBy: EventOrderByInput): [Event]
+  registrantsByEvent(id: ID!): [User]
+  user(input: QueryUserInput!): UserPg!
+  usersByOrganizationId(organizationId: ID!): UserPg!
+  userLanguage(userId: ID!): String
+  users(
+    first: Int
+    orderBy: UserOrderByInput
+    skip: Int
+    where: UserWhereInput
+  ): [UserData]
+  usersConnection(
+    first: Int
+    orderBy: UserOrderByInput
+    skip: Int
+    where: UserWhereInput
+  ): [UserData]!
+  venue(id: ID!): [Venue]
+}
+
+input RecaptchaVerification {
+  recaptchaToken: String!
+}
+
+input RecurrenceInput {
+  frequency: Frequency!
+  interval: PositiveInt!
+  byDay: [WeekDays!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: PositiveInt
+  until: DateTime
+}
+
+enum Status {
+  ACTIVE
+  BLOCKED
+  DELETED
+}
+
+type Subscription {
+  messageSentToChat(userId: ID!): ChatMessage
+}
+
+scalar Time
+
+input ToggleUserTagAssignInput {
+  tagId: ID!
+  userId: ID!
+}
+
+type Translation {
+  en_value: String
+  lang_code: String
+  translation: String
+  verified: Boolean
+}
+
+enum Type {
+  PRIVATE
+  UNIVERSAL
+}
+
+scalar URL
+
+type UnauthenticatedError implements Error {
+  message: String!
+}
+
+type UnauthorizedError implements Error {
+  message: String!
+}
+
+input UpdateActionItemCategoryInput {
+  isDisabled: Boolean
+  name: String
+}
+
+input UpdateActionItemInput {
+  assigneeId: ID
+  completionDate: Date
+  dueDate: Date
+  isCompleted: Boolean
+  postCompletionNotes: String
+  preCompletionNotes: String
+}
+
+input UpdateAdvertisementInput {
+  _id: ID!
+  endDate: Date
+  link: String
+  name: String
+  startDate: Date
+  type: AdvertisementType
+}
+
+input MutationUpdateAdvertisementInput {
+  description: String
+  endAt: DateTime
+  id: ID!
+  name: String
+  startAt: DateTime
+  type: AdvertisementType
+}
+
+input MutationDeleteAdvertisementInput {
+  id: ID!
+}
+
+type UpdateAdvertisementPayload {
+  advertisement: Advertisement
+}
+
+input UpdateAgendaCategoryInput {
+  description: String
+  name: String
+}
+
+input UpdateEventInput {
+  allDay: Boolean
+  description: String
+  endDate: Date
+  endTime: Time
+  isPublic: Boolean
+  isRegisterable: Boolean
+  latitude: Latitude
+  location: String
+  longitude: Longitude
+  recurring: Boolean
+  startDate: Date
+  startTime: Time
+  title: String
+}
+
+input UpdateEventVolunteerInput {
+  eventId: ID
+  isAssigned: Boolean
+  isInvited: Boolean
+  response: EventVolunteerResponse
+}
+
+input UpdateOrganizationInput {
+  address: AddressInput
+  description: String
+  name: String
+  userRegistrationRequired: Boolean
+  visibleInSearch: Boolean
+}
+
+input AddressInput {
+  city: String
+  countryCode: String
+  dependentLocality: String
+  line1: String
+  line2: String
+  postalCode: String
+  sortingCode: String
+  state: String
+}
+
+enum EducationGrade {
+  GRADE_1
+  GRADE_2
+  GRADE_3
+  GRADE_4
+  GRADE_5
+  GRADE_6
+  GRADE_7
+  GRADE_8
+  GRADE_9
+  GRADE_10
+  GRADE_11
+  GRADE_12
+  GRADUATE
+  KG
+  NO_GRADE
+  PRE_KG
+}
+
+enum EmploymentStatus {
+  FULL_TIME
+  PART_TIME
+  UNEMPLOYED
+}
+
+enum Gender {
+  FEMALE
+  MALE
+  OTHER
+}
+
+input QueryActionItemsByOrganizationInput {
+  organizationId: String!
+}
+
+input QueryActionItemsByUserInput {
+  userId: String!
+  organizationId: String
+}
+
+input MarkActionItemAsPendingInput {
+  id: ID!
+}
+
+input MutationDeleteActionItemInput {
+  id: ID!
+}
+
+input MutationUpdateActionItemInput {
+  assigneeId: ID
+  categoryId: ID
+  id: ID!
+  isCompleted: Boolean!
+  postCompletionNotes: String
+  preCompletionNotes: String
+}
+
+input QueryActionCategoriesByOrganizationInput {
+  organizationId: String!
+}
+
+input QueryActionItemCategoryInput {
+  id: ID!
+}
+
+input MutationCreateActionItemCategoryInput {
+  name: String!
+  description: String
+  organizationId: ID!
+  isDisabled: Boolean
+}
+
+input MutationUpdateActionItemCategoryInput {
+  id: ID!
+  name: String
+  description: String
+  isDisabled: Boolean
+}
+
+input MutationDeleteActionItemCategoryInput {
+  id: ID!
+}
+input MutationCreateEventInput {
+  allDay: Boolean!
+  attachments: [Upload!]
+  description: String
+  endAt: DateTime!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String!
+  organizationId: ID!
+  startAt: DateTime!
+  recurrence: RecurrenceInput
+}
+
+input MutationUpdateEventInput {
+  id: ID!
+  name: String
+  description: String
+  startAt: DateTime
+  endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
+}
+input MutationDeleteEntireRecurringEventSeriesInput {
+  id: ID!
+}
+
+input MutationDeleteSingleEventInstanceInput {
+  id: ID!
+}
+input MutationDeleteStandaloneEventInput {
+  id: ID!
+}
+
+input MutationDeleteThisAndFollowingEventsInput {
+  id: ID!
+}
+input MutationUpdateUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  role: UserRole
+  state: String
+  workPhoneNumber: PhoneNumber
+}
+
+input MutationUpdateCurrentUserInput {
+  addressLine1: String
+  addressLine2: String
+  avatar: Upload
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: EmailAddress
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  naturalLanguageCode: Iso639Set1LanguageCode
+  password: String
+  postalCode: String
+  state: String
+  workPhoneNumber: PhoneNumber
+}
+
+input UpdateUserTagInput {
+  _id: ID!
+  name: String!
+}
+
+input UpdateUserTypeInput {
+  id: ID
+  userType: String
+}
+
+scalar Upload
+
+type User {
+  _id: ID!
+  address: Address
+  appUserProfileId: AppUserProfile
+  birthDate: Date
+  createdAt: DateTime!
+  educationGrade: EducationGrade
+  email: EmailAddress!
+  employmentStatus: EmploymentStatus
+  firstName: String!
+  gender: Gender
+  image: String
+  joinedOrganizations: [Organization]
+  lastName: String!
+  maritalStatus: UserMaritalStatus
+  membershipRequests: [MembershipRequest]
+  organizationsBlockedBy: [Organization]
+  phone: UserPhone
+  registeredEvents: [Event]
+  eventsAttended: [Event]
+  tagsAssignedWith(
+    after: String
+    before: String
+    first: PositiveInt
+    last: PositiveInt
+    organizationId: ID
+  ): UserTagsConnection
+  updatedAt: DateTime!
+}
+
+type UserPg {
+  addressLine1: String
+  addressLine2: String
+  avatarMimeType: String
+  avatarURL: String
+  birthDate: Date
+  city: String
+  countryCode: Iso3166Alpha2CountryCode
+  createdAt: DateTime
+  creator: UserPg
+  description: String
+  educationGrade: UserEducationGrade
+  emailAddress: String
+  employmentStatus: UserEmploymentStatus
+  homePhoneNumber: PhoneNumber
+  id: ID!
+  isEmailAddressVerified: Boolean
+  maritalStatus: UserMaritalStatus
+  mobilePhoneNumber: PhoneNumber
+  name: String
+  natalSex: UserNatalSex
+  organizationsWhereMember(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserOrganizationsWhereMemberConnection
+  postalCode: String
+  naturalLanguageCode: Iso639Set1LanguageCode
+  role: UserRole
+  state: String
+  updatedAt: DateTime
+  updater: User
+  workPhoneNumber: PhoneNumber
+}
+
+input QueryUserInput {
+  id: String!
+}
+
+input createUserInput {
+  name: String!
+  emailAddress: EmailAddress!
+  password: String!
+  role: UserRole!
+  isEmailAddressVerified: Boolean!
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
+input deleteOrganizationMembershipInput {
+  organizationId: String!
+  memberID: String!
+}
+
+enum Iso3166Alpha2CountryCode {
+  ad
+  ae
+  af
+  ag
+  ai
+  al
+  am
+  ao
+  aq
+  ar
+  as
+  at
+  au
+  aw
+  ax
+  az
+  ba
+  bb
+  bd
+  be
+  bf
+  bg
+  bh
+  bi
+  bj
+  bl
+  bm
+  bn
+  bo
+  bq
+  br
+  bs
+  bt
+  bv
+  bw
+  by
+  bz
+  ca
+  cc
+  cd
+  cf
+  cg
+  ch
+  ci
+  ck
+  cl
+  cm
+  cn
+  co
+  cr
+  cu
+  cv
+  cw
+  cx
+  cy
+  cz
+  de
+  dj
+  dk
+  dm
+  do
+  dz
+  ec
+  ee
+  eg
+  eh
+  er
+  es
+  et
+  fi
+  fj
+  fk
+  fm
+  fo
+  fr
+  ga
+  gb
+  gd
+  ge
+  gf
+  gg
+  gh
+  gi
+  gl
+  gm
+  gn
+  gp
+  gq
+  gr
+  gs
+  gt
+  gu
+  gw
+  gy
+  hk
+  hm
+  hn
+  hr
+  ht
+  hu
+  id
+  ie
+  il
+  im
+  in
+  io
+  iq
+  ir
+  is
+  it
+  je
+  jm
+  jo
+  jp
+  ke
+  kg
+  kh
+  ki
+  km
+  kn
+  kp
+  kr
+  kw
+  ky
+  kz
+  la
+  lb
+  lc
+  li
+  lk
+  lr
+  ls
+  lt
+  lu
+  lv
+  ly
+  ma
+  mc
+  md
+  me
+  mf
+  mg
+  mh
+  mk
+  ml
+  mm
+  mn
+  mo
+  mp
+  mq
+  mr
+  ms
+  mt
+  mu
+  mv
+  mw
+  mx
+  my
+  mz
+  na
+  nc
+  ne
+  nf
+  ng
+  ni
+  nl
+  no
+  np
+  nr
+  nu
+  nz
+  om
+  pa
+  pe
+  pf
+  pg
+  ph
+  pk
+  pl
+  pm
+  pn
+  pr
+  ps
+  pt
+  pw
+  py
+  qa
+  re
+  ro
+  rs
+  ru
+  rw
+  sa
+  sb
+  sc
+  sd
+  se
+  sg
+  sh
+  si
+  sj
+  sk
+  sl
+  sm
+  sn
+  so
+  sr
+  ss
+  st
+  sv
+  sx
+  sy
+  sz
+  tc
+  td
+  tf
+  tg
+  th
+  tj
+  tk
+  tl
+  tm
+  tn
+  to
+  tr
+  tt
+  tv
+  tw
+  tz
+  ua
+  ug
+  um
+  us
+  uy
+  uz
+  va
+  vc
+  ve
+  vg
+  vi
+  vn
+  vu
+  wf
+  ws
+  ye
+  yt
+  za
+  zm
+  zw
+}
+
+enum Iso639Set1LanguageCode {
+  aa
+  ab
+  ae
+  af
+  ak
+  am
+  an
+  ar
+  as
+  av
+  ay
+  az
+  ba
+  be
+  bg
+  bi
+  bm
+  bn
+  bo
+  br
+  bs
+  ca
+  ce
+  ch
+  co
+  cr
+  cs
+  cu
+  cv
+  cy
+  da
+  de
+  dv
+  dz
+  ee
+  el
+  en
+  eo
+  es
+  et
+  eu
+  fa
+  ff
+  fi
+  fj
+  fo
+  fr
+  fy
+  ga
+  gd
+  gl
+  gn
+  gu
+  gv
+  ha
+  he
+  hi
+  ho
+  hr
+  ht
+  hu
+  hy
+  hz
+  ia
+  id
+  ie
+  ig
+  ii
+  ik
+  io
+  is
+  it
+  iu
+  ja
+  jv
+  ka
+  kg
+  ki
+  kj
+  kk
+  kl
+  km
+  kn
+  ko
+  kr
+  ks
+  ku
+  kv
+  kw
+  ky
+  la
+  lb
+  lg
+  li
+  ln
+  lo
+  lt
+  lu
+  lv
+  mg
+  mh
+  mi
+  mk
+  ml
+  mn
+  mr
+  ms
+  mt
+  my
+  na
+  nb
+  nd
+  ne
+  ng
+  nl
+  nn
+  no
+  nr
+  nv
+  ny
+  oc
+  oj
+  om
+  or
+  os
+  pa
+  pi
+  pl
+  ps
+  pt
+  qu
+  rm
+  rn
+  ro
+  ru
+  rw
+  sa
+  sc
+  sd
+  se
+  sg
+  si
+  sk
+  sl
+  sm
+  sn
+  so
+  sq
+  sr
+  ss
+  st
+  su
+  sv
+  sw
+  ta
+  te
+  tg
+  th
+  ti
+  tk
+  tl
+  tn
+  to
+  tr
+  ts
+  tt
+  tw
+  ty
+  ug
+  uk
+  ur
+  uz
+  ve
+  vi
+  vo
+  wa
+  wo
+  xh
+  yi
+  yo
+  za
+  zh
+  zu
+}
+
+enum UserEducationGrade {
+  grade_1
+  grade_2
+  grade_3
+  grade_4
+  grade_5
+  grade_6
+  grade_7
+  grade_8
+  grade_9
+  grade_10
+  grade_11
+  grade_12
+  graduate
+  kg
+  no_grade
+  pre_kg
+}
+
+enum UserEmploymentStatus {
+  full_time
+  part_time
+  unemployed
+}
+
+enum UserMaritalStatus {
+  divorced
+  engaged
+  married
+  seperated
+  single
+  widowed
+}
+
+enum UserNatalSex {
+  female
+  intersex
+  male
+}
+
+type UserOrganizationsWhereMemberConnection {
+  edges: [UserOrganizationsWhereMemberConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+type UserOrganizationsWhereMemberConnectionEdge {
+  cursor: String!
+  node: Organization
+}
+
+enum UserRole {
+  administrator
+  regular
+}
+
+type Fund {
+  _id: ID!
+  campaigns: [FundraisingCampaign!]
+  createdAt: DateTime!
+  isArchived: Boolean!
+  isDefault: Boolean!
+  name: String!
+  creator: User
+  organizationId: ID!
+  refrenceNumber: String
+  taxDeductible: Boolean!
+  updatedAt: DateTime!
+}
+
+input FundWhereInput {
+  name_contains: String
+}
+
+input UserAndOrganizationInput {
+  organizationId: ID!
+  userId: ID!
+}
+
+type UserConnection {
+  aggregate: AggregateUser!
+  edges: [User]!
+  pageInfo: PageInfo!
+}
+
+type UserCustomData {
+  _id: ID!
+  organizationId: ID!
+  userId: ID!
+  values: JSON!
+}
+
+type UserData {
+  appUserProfile: AppUserProfile!
+  user: User!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User!
+}
+
+type UserFamily {
+  _id: ID!
+  admins: [User!]!
+  creator: User!
+  title: String
+  users: [User!]!
+}
+
+input UserInput {
+  appLanguageCode: String
+  email: EmailAddress!
+  firstName: String!
+  lastName: String!
+  password: String!
+  selectedOrganization: ID!
+}
+
+enum UserOrderByInput {
+  email_ASC
+  email_DESC
+  firstName_ASC
+  firstName_DESC
+  id_ASC
+  id_DESC
+  lastName_ASC
+  lastName_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type UserPhone {
+  home: PhoneNumber
+  mobile: PhoneNumber
+  work: PhoneNumber
+}
+
+input UserPhoneInput {
+  home: PhoneNumber
+  mobile: PhoneNumber
+  work: PhoneNumber
+}
+
+type UserTag {
+  _id: ID!
+  childTags(input: UserTagsConnectionInput!): UserTagsConnectionResult!
+  name: String!
+  organization: Organization
+  parentTag: UserTag
+  usersAssignedTo(input: UsersConnectionInput!): UsersConnectionResult!
+}
+
+type UserTagEdge {
+  cursor: String!
+  node: UserTag!
+}
+
+type UserTagsConnection {
+  edges: [UserTagEdge!]!
+  pageInfo: ConnectionPageInfo!
+}
+
+input UserTagsConnectionInput {
+  cursor: String
+  direction: PaginationDirection!
+  limit: PositiveInt!
+}
+
+type UserTagsConnectionResult {
+  data: UserTagsConnection
+  errors: [ConnectionError!]!
+}
+
+enum UserType {
+  ADMIN
+  NON_USER
+  SUPERADMIN
+  USER
+}
+
+input UserWhereInput {
+  email: EmailAddress
+  email_contains: EmailAddress
+  email_in: [EmailAddress!]
+  email_not: EmailAddress
+  email_not_in: [EmailAddress!]
+  email_starts_with: EmailAddress
+  event_title_contains: String
+  firstName: String
+  firstName_contains: String
+  firstName_in: [String!]
+  firstName_not: String
+  firstName_not_in: [String!]
+  firstName_starts_with: String
+  id: ID
+  id_contains: ID
+  id_in: [ID!]
+  id_not: ID
+  id_not_in: [ID!]
+  id_starts_with: ID
+  lastName: String
+  lastName_contains: String
+  lastName_in: [String!]
+  lastName_not: String
+  lastName_not_in: [String!]
+  lastName_starts_with: String
+}
+
+type UsersConnection {
+  edges: [UserEdge!]!
+  pageInfo: ConnectionPageInfo!
+}
+
+input UsersConnectionInput {
+  cursor: String
+  direction: PaginationDirection!
+  limit: PositiveInt!
+}
+
+type UsersConnectionResult {
+  data: UsersConnection
+  errors: [ConnectionError!]!
+}
+
+enum WeekDays {
+  FR
+  MO
+  SA
+  SU
+  TH
+  TU
+  WE
+}
+
+type Venue {
+  _id: ID!
+  capacity: Int!
+  description: String
+  imageUrl: URL
+  name: String!
+  organization: Organization!
+}
+
+input VenueInput {
+  capacity: Int!
+  description: String
+  file: String
+  name: String!
+  organizationId: ID!
+}
+
+input createUserFamilyInput {
+  title: String!
+  userIds: [ID!]!
+}
+
+input chatInput {
+  isGroup: Boolean!
+  organizationId: ID
+  userIds: [ID!]!
+  name: String
+}
+
+type DefaultConnectionPageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type SocialMediaUrls {
+  facebook: String
+  instagram: String
+  twitter: String
+  linkedin: String
+  youtube: String
+  website: String
+}
+
+type FundraisingCampaign {
+  _id: ID!
+  name: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  fundingGoal: Float!
+  description: String
+  creator: User
+  organization: Organization!
+  members: [User]
+  isPublic: Boolean!
+  isArchived: Boolean!
+  refrenceNumber: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
