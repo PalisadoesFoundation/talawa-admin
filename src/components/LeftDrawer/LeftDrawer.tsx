@@ -1,168 +1,241 @@
 /**
- * LeftDrawer Component
- *
- * This component represents the left navigation drawer for the Talawa Admin Portal.
- * It provides navigation options for different sections of the application, such as
- * organizations, users, and community profile. The drawer's visibility can be toggled
- * based on the screen size or user interaction.
- *
- * @component
- * @param {InterfaceLeftDrawerProps} props - The props for the LeftDrawer component.
- * @param {boolean | null} props.hideDrawer - Determines the visibility of the drawer.
- *                                            `null` indicates the initial state.
- * @param {React.Dispatch<React.SetStateAction<boolean | null>>} props.setHideDrawer -
- *                                            Function to update the visibility state of the drawer.
- *
- * @returns {JSX.Element} The rendered LeftDrawer component.
+ * Represents the left navigation drawer for the Talawa Admin Portal.
  *
  * @remarks
- * - The component uses `useTranslation` for internationalization.
- * - The drawer automatically hides on smaller screens (width <= 820px) when a link is clicked.
- * - The `SuperAdmin` status is retrieved from local storage to conditionally render the "Users" section.
+ * - Uses `useTranslation` for i18n.
+ * - Automatically hides on screen widths ≤ 820px after clicking a link.
+ * - Conditionally renders the "Users" section based on SuperAdmin status.
+ * - Includes dynamic plugin drawer items for admin routes.
  *
- * @example
- * ```tsx
- * <LeftDrawer
- *   hideDrawer={false}
- *   setHideDrawer={setHideDrawerFunction}
- * />
- * ```
- *
- * @fileoverview
- * - Contains navigation links for "My Organizations", "Users" (if SuperAdmin), and "Community Profile".
- * - Uses SVG icons for visual representation of navigation options.
- * - Applies dynamic styles based on the drawer's visibility state and active navigation link.
+ * @param props - Props including drawer visibility state and setter function.
+ * @returns The rendered LeftDrawer component.
  */
-import React, { useEffect } from 'react';
+
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
+import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { usePluginDrawerItems } from 'plugin';
+import type { IDrawerExtension } from 'plugin';
+import { FaBars } from 'react-icons/fa';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from 'components/SignOut/SignOut';
 
-export interface InterfaceLeftDrawerProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+export interface ILeftDrawerProps {
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
-}: InterfaceLeftDrawerProps): JSX.Element => {
+}: ILeftDrawerProps): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') !== null;
+  const superAdmin = getItem('SuperAdmin') === 'true';
 
+  // Initialize drawer state only once
   useEffect(() => {
     if (hideDrawer === null) {
       setHideDrawer(false);
     }
-  }, []);
+  }, []); // Empty dependency array since we only want to run this once
 
-  const handleLinkClick = (): void => {
+  const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  };
+  }, [setHideDrawer]);
+
+  // Render a drawer item with icon
+  const renderDrawerItem = useCallback(
+    (to: string, icon: React.ReactNode, label: string, testId: string) => (
+      <NavLink key={to} to={to} onClick={handleLinkClick}>
+        {({ isActive }) => (
+          <button
+            className={`${
+              isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+            }`}
+            data-testid={testId}
+          >
+            <div className={styles.iconWrapper}>
+              {React.cloneElement(icon as React.ReactElement, {
+                fill: 'none',
+                fontSize: 25,
+                stroke: isActive
+                  ? 'var(--sidebar-icon-stroke-active)'
+                  : 'var(--sidebar-icon-stroke-inactive)',
+              })}
+            </div>
+            {!hideDrawer && label}
+          </button>
+        )}
+      </NavLink>
+    ),
+    [handleLinkClick, hideDrawer],
+  );
+
+  // Render a plugin drawer item
+  const renderPluginDrawerItem = useCallback(
+    (item: IDrawerExtension) => {
+      const Icon = item.icon ? (
+        <img
+          src={item.icon}
+          alt={item.label}
+          style={{ width: 25, height: 25 }}
+        />
+      ) : (
+        <PluginLogo
+          fill="none"
+          fontSize={25}
+          stroke="var(--sidebar-icon-stroke-inactive)"
+        />
+      );
+
+      return renderDrawerItem(
+        item.path,
+        Icon,
+        item.label,
+        `plugin-${item.pluginId}-btn`,
+      );
+    },
+    [renderDrawerItem],
+  );
+
+  // Memoize the user permissions and admin status
+  const userPermissions = useMemo(() => [], []);
+  const isAdmin = useMemo(() => superAdmin, [superAdmin]);
+
+  // Get plugin drawer items for admin global (settings only)
+  const pluginDrawerItems = usePluginDrawerItems(userPermissions, true, false);
+
+  // Memoize the main content to prevent unnecessary re-renders
+  const drawerContent = useMemo(
+    () => (
+      <div className={styles.optionList}>
+        {renderDrawerItem(
+          '/orglist',
+          <OrganizationsIcon />,
+          t('my organizations'),
+          'organizationsBtn',
+        )}
+
+        {renderDrawerItem(
+          '/pluginstore',
+          <PluginLogo />,
+          t('plugin store'),
+          'pluginStoreBtn',
+        )}
+
+        {superAdmin &&
+          renderDrawerItem('/users', <RolesIcon />, t('users'), 'rolesBtn')}
+
+        {renderDrawerItem(
+          '/CommunityProfile',
+          <SettingsIcon />,
+          t('communityProfile'),
+          'communityProfileBtn',
+        )}
+
+        {/* Plugin Settings Section */}
+        {pluginDrawerItems?.length > 0 && (
+          <>
+            <h4
+              className={styles.titleHeader}
+              style={{
+                fontSize: '1.1rem',
+                marginTop: '1.5rem',
+                marginBottom: '0.75rem',
+                color: 'var(--bs-secondary)',
+              }}
+            >
+              Plugin Settings
+            </h4>
+            {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+          </>
+        )}
+      </div>
+    ),
+    [
+      renderDrawerItem,
+      renderPluginDrawerItem,
+      pluginDrawerItems,
+      superAdmin,
+      t,
+      tCommon,
+      hideDrawer,
+    ],
+  );
 
   return (
     <div
-      className={`${styles.leftDrawer} ${
-        hideDrawer === null
-          ? styles.hideElemByDefault
-          : hideDrawer
-            ? styles.inactiveDrawer
-            : styles.activeDrawer
-      }`}
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
       data-testid="leftDrawerContainer"
     >
-      <div className={styles.talawaLogoContainer}>
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{tCommon('talawaAdminPortal')}</p>
+      <div
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+      >
+        <button
+          className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </button>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            paddingRight: '40px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('talawaAdminPortal')}
+          </div>
+        </div>
       </div>
 
-      <h5 className={`${styles.titleHeader}`}>{tCommon('menu')}</h5>
+      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
+        {!hideDrawer && tCommon('menu')}
+      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
-        <div className={styles.optionList}>
-          <NavLink to={'/orglist'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="organizationsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <OrganizationsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
-                </div>
-                {t('my organizations')}
-              </button>
-            )}
-          </NavLink>
-
-          {superAdmin && (
-            <NavLink to={'/users'} onClick={handleLinkClick}>
-              {({ isActive }) => (
-                <button
-                  className={`${
-                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                  }`}
-                  data-testid="rolesBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RolesIcon
-                      fill="none"
-                      stroke={
-                        isActive
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }
-                    />
-                  </div>
-                  {t('users')}
-                </button>
-              )}
-            </NavLink>
-          )}
-
-          <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="communityProfileBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <SettingsIcon
-                    fill="none"
-                    fontSize={25}
-                    stroke={
-                      isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
-                  />
-                </div>
-                {t('communityProfile')}
-              </button>
-            )}
-          </NavLink>
+        {drawerContent}
+      </div>
+      <div className={styles.userSidebarOrgFooter}>
+        <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <ProfileCard />
         </div>
+        <SignOut hideDrawer={hideDrawer} />
       </div>
     </div>
   );

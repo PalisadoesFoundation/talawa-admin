@@ -17,12 +17,12 @@ import {
 
 type AdvertisementType = 'banner' | 'pop_up' | 'menu';
 
-interface Attachment {
+interface IAttachment {
   mimeType: string;
   url: string;
 }
 
-interface AdvertisementNode {
+interface IAdvertisementNode {
   id: string;
   createdAt: string;
   description: string;
@@ -33,21 +33,21 @@ interface AdvertisementNode {
   name: string;
   startAt: string;
   type: AdvertisementType;
-  attachments: Attachment[];
+  attachments: IAttachment[];
 }
 
-interface PageInfo {
+interface IPageInfo {
   startCursor: string | null;
   endCursor: string | null;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
 
-interface Edge {
-  node: AdvertisementNode;
+interface IEdge {
+  node: IAdvertisementNode;
 }
 
-interface AdvertisementListMock {
+interface IAdvertisementListMock {
   request: {
     query: DocumentNode;
     variables: {
@@ -63,15 +63,15 @@ interface AdvertisementListMock {
     data: {
       organization: {
         advertisements: {
-          edges: Edge[];
-          pageInfo: PageInfo;
+          edges: IEdge[];
+          pageInfo: IPageInfo;
         };
       };
     };
   };
 }
 
-interface AdvertisementNodeParams {
+interface IAdvertisementNodeParams {
   id: string;
   name: string;
   description: string;
@@ -80,28 +80,28 @@ interface AdvertisementNodeParams {
   type?: AdvertisementType;
   organizationId?: string;
   createdAt?: string;
-  attachments?: Attachment[];
+  attachments?: IAttachment[];
 }
 
-interface AdvertisementListParams {
+interface IAdvertisementListParams {
   id?: string;
   first?: number;
   after?: string | null;
   isCompleted?: boolean;
-  edges?: Edge[];
+  edges?: IEdge[];
   startCursor?: string | null;
   endCursor?: string | null;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
 }
 
-interface BaseMutationMock<T = any> {
+interface IBaseMutationMock<T = unknown> {
   request: {
     query: DocumentNode;
     variables: T;
   };
   result?: {
-    data: any;
+    data: unknown;
   };
   error?: Error;
 }
@@ -173,7 +173,7 @@ const createAdvertisementNode = ({
       url: 'http://127.0.0.1:4000/objects/01IR2V4ROX1FCZ3EQN518NE37Z',
     },
   ],
-}: AdvertisementNodeParams): Edge => ({
+}: IAdvertisementNodeParams): IEdge => ({
   node: {
     id,
     createdAt,
@@ -199,7 +199,7 @@ const createAdvertisementListMock = ({
   endCursor = 'cursor-2',
   hasNextPage = true,
   hasPreviousPage = false,
-}: AdvertisementListParams): AdvertisementListMock => ({
+}: IAdvertisementListParams): IAdvertisementListMock => ({
   request: {
     query: ORGANIZATION_ADVERTISEMENT_LIST,
     variables: {
@@ -221,7 +221,7 @@ const createAdvertisementListMock = ({
             endCursor,
             hasNextPage,
             hasPreviousPage,
-          },
+          } as IPageInfo,
         },
       },
     },
@@ -234,7 +234,7 @@ const createBatchNodes = (
   description: string,
   endAt: string,
   numbered = false,
-): Edge[] => {
+): IEdge[] => {
   return Array.from({ length: count }, (_, i) =>
     createAdvertisementNode({
       id: String(i + 1),
@@ -248,10 +248,10 @@ const createBatchNodes = (
 const createMutationMock = <T>(
   query: DocumentNode,
   variables: T,
-  resultData?: any,
+  resultData?: unknown,
   error?: Error,
-): BaseMutationMock<T> => {
-  const mock: BaseMutationMock<T> = {
+): IBaseMutationMock<T> => {
+  const mock: IBaseMutationMock<T> = {
     request: {
       query,
       variables,
@@ -269,7 +269,7 @@ const createMutationMock = <T>(
   return mock;
 };
 
-export const emptyMocks: AdvertisementListMock[] = [
+export const emptyMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: false,
     edges: [],
@@ -298,12 +298,12 @@ const activeAdNode = createAdvertisementNode({
   endAt: new Date('2030-01-01').toISOString(),
 });
 
-export const getCompletedAdvertisementMocks: AdvertisementListMock[] = [
+export const getCompletedAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
   createAdvertisementListMock({ isCompleted: false, edges: [] }),
 ];
 
-export const getActiveAdvertisementMocks: AdvertisementListMock[] = [
+export const getActiveAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
@@ -338,7 +338,7 @@ export const deleteAdvertisementMocks = [
   ),
 ];
 
-export const infiniteScrollMocks: AdvertisementListMock[] = [
+export const infiniteScrollMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: true,
     edges: [
@@ -386,7 +386,7 @@ export const infiniteScrollMocks: AdvertisementListMock[] = [
   }),
 ];
 
-export const initialArchivedData: AdvertisementListMock[] = [
+export const initialArchivedData: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: false,
     edges: [],
@@ -419,7 +419,7 @@ export const initialArchivedData: AdvertisementListMock[] = [
   }),
 ];
 
-export const initialActiveData: AdvertisementListMock[] = [
+export const initialActiveData: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: true,
     edges: [],
@@ -452,7 +452,7 @@ export const initialActiveData: AdvertisementListMock[] = [
   }),
 ];
 
-export const filterActiveAdvertisementData: AdvertisementListMock[] = [
+export const filterActiveAdvertisementData: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: false,
     edges: createBatchNodes(
@@ -466,7 +466,7 @@ export const filterActiveAdvertisementData: AdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
-export const filterCompletedAdvertisementData: AdvertisementListMock[] = [
+export const filterCompletedAdvertisementData: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: true,
     edges: createBatchNodes(
@@ -487,8 +487,8 @@ export const createAdvertisement = [
       organizationId: '1',
       name: 'Ad1',
       type: 'banner',
-      startAt: createDates.startISOReceived,
-      endAt: createDates.endISOReceived,
+      startAt: createDates.startAtCalledWith,
+      endAt: createDates.endAtCalledWith,
     },
     { createAdvertisement: { id: '123' } },
   ),
@@ -512,8 +512,8 @@ export const createAdvertisementWithoutName = [
     {
       organizationId: '1',
       type: 'banner',
-      startAt: createDates.startISOReceived,
-      endAt: createDates.endISOReceived,
+      startAt: createDates.startAtCalledWith,
+      endAt: createDates.endAtCalledWith,
     },
     { createAdvertisement: { id: '123' } },
   ),
@@ -525,8 +525,8 @@ export const createAdvertisementWithEndDateBeforeStart = [
     {
       organizationId: '1',
       type: 'banner',
-      startAt: createDates.startISOReceived,
-      endAt: createDates.endBeforeStartISOReceived,
+      startAt: createDates.startAtCalledWith,
+      endAt: createDates.endBeforeStartCalledWith,
     },
     { createAdvertisement: { id: '123' } },
   ),
@@ -538,8 +538,8 @@ export const createAdvertisementError = [
     {
       organizationId: '1',
       type: 'banner',
-      startAt: createDates.startISOReceived,
-      endAt: createDates.endISOReceived,
+      startAt: createDates.startAtCalledWith,
+      endAt: createDates.endAtCalledWith,
     },
     undefined,
     new Error('An unknown error occurred'),
@@ -564,8 +564,8 @@ export const updateAdMocks = [
     {
       id: '1',
       description: 'This is an updated advertisement',
-      startAt: updateDates.startISOReceived,
-      endAt: updateDates.endISOReceived,
+      startAt: updateDates.startAtCalledWith,
+      endAt: updateDates.endAtCalledWith,
     },
     { updateAdvertisement: { id: '1' } },
   ),

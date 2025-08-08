@@ -4,60 +4,60 @@
 
 # Enumeration: WeekDays
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L36)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L27)
 
 ## Enumeration Members
 
-### FRIDAY
+### FR
 
-> **FRIDAY**: `"FRIDAY"`
+> **FR**: `"FR"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
-
-***
-
-### MONDAY
-
-> **MONDAY**: `"MONDAY"`
-
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L33)
 
 ***
 
-### SATURDAY
+### MO
 
-> **SATURDAY**: `"SATURDAY"`
+> **MO**: `"MO"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
-
-***
-
-### SUNDAY
-
-> **SUNDAY**: `"SUNDAY"`
-
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L37)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
 
 ***
 
-### THURSDAY
+### SA
 
-> **THURSDAY**: `"THURSDAY"`
+> **SA**: `"SA"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
-
-***
-
-### TUESDAY
-
-> **TUESDAY**: `"TUESDAY"`
-
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L34)
 
 ***
 
-### WEDNESDAY
+### SU
 
-> **WEDNESDAY**: `"WEDNESDAY"`
+> **SU**: `"SU"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
+
+***
+
+### TH
+
+> **TH**: `"TH"`
+
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)
+
+***
+
+### TU
+
+> **TU**: `"TU"`
+
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
+
+***
+
+### WE
+
+> **WE**: `"WE"`
+
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)

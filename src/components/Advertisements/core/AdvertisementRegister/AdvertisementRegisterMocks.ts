@@ -5,7 +5,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 
-interface PageInfo {
+interface IPageInfo {
   startCursor: string | null;
   endCursor: string | null;
   hasNextPage: boolean;
@@ -49,10 +49,12 @@ export const dateConstants = {
   },
 };
 
-const createMockResponse = <T extends Record<string, any> | undefined>(
-  query: any,
+import { DocumentNode } from 'graphql';
+
+const createMockResponse = <T extends Record<string, unknown> | undefined>(
+  query: DocumentNode,
   variables: T,
-  resultData?: any,
+  resultData?: unknown,
   error?: Error,
 ): MockedResponse => {
   const response: MockedResponse = {
@@ -66,17 +68,33 @@ const createMockResponse = <T extends Record<string, any> | undefined>(
     response.error = error;
   } else {
     response.result = {
-      data: resultData,
+      data: resultData as Record<string, unknown>,
     };
   }
 
   return response;
 };
 
+interface IAdvertisementEdge {
+  node: {
+    id: string;
+    createdAt: string;
+    description: string;
+    endAt: string;
+    organization: {
+      id: string;
+    };
+    name: string;
+    startAt: string;
+    type: string;
+    attachments: File[];
+  };
+}
+
 const createAdvertisementListResponse = (
   isCompleted: boolean,
-  edges: any[] = [],
-  pageInfo: Partial<PageInfo> = {},
+  edges: IAdvertisementEdge[] = [],
+  pageInfo: Partial<IPageInfo> = {},
 ) => {
   return createMockResponse(
     ORGANIZATION_ADVERTISEMENT_LIST,
@@ -114,7 +132,7 @@ const createAdvertisementNode = (
   startAt: string,
   endAt: string,
   type: string = 'banner',
-  attachments: any[] = [],
+  attachments: File[] = [],
 ) => ({
   node: {
     id,
@@ -169,8 +187,8 @@ export const createAdvertisement = [
       name: 'Ad1',
       description: 'this is a banner',
       type: 'banner',
-      startAt: dateConstants.create.startISOReceived,
-      endAt: dateConstants.create.endISOReceived,
+      startAt: dateConstants.create.startAtCalledWith,
+      endAt: dateConstants.create.endAtCalledWith,
     },
     {
       createAdvertisement: {

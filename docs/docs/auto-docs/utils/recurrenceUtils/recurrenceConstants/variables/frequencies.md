@@ -6,22 +6,22 @@
 
 > `const` **frequencies**: `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L13)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L8)
 
 ## Type declaration
 
 ### DAILY
 
-> **DAILY**: `string` = `'Day'`
+> **DAILY**: `string` = `'Daily'`
 
 ### MONTHLY
 
-> **MONTHLY**: `string` = `'Month'`
+> **MONTHLY**: `string` = `'Monthly'`
 
 ### WEEKLY
 
-> **WEEKLY**: `string` = `'Week'`
+> **WEEKLY**: `string` = `'Weekly'`
 
 ### YEARLY
 
-> **YEARLY**: `string` = `'Year'`
+> **YEARLY**: `string` = `'Yearly'`

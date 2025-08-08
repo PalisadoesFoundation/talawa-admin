@@ -1,0 +1,17 @@
+$progress-height: 1rem;
+$progress-font-size: $font-size-base * 0.75;
+$progress-bg: var(--#{$prefix}secondary-bg);
+$progress-border-radius: var(--#{$prefix}border-radius);
+$progress-box-shadow: var(--#{$prefix}box-shadow-inset);
+$progress-bar-color: $white;
+$progress-bar-bg: $primary;
+$progress-bar-animation-timing: 1s linear infinite;
+$progress-bar-transition: width 0.6s ease;
+
+@if $enable-transitions {
+  @keyframes progress-bar-stripes {
+    0% {
+      background-position-x: $progress-height;
+    }
+  }
+}

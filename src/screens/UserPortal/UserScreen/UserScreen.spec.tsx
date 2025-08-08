@@ -1,3 +1,4 @@
+/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -83,7 +84,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  fireEvent(window, new window.Event('resize'));
 };
 
 const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
@@ -165,22 +166,9 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
       </MockedProvider>,
     );
 
-    const toggleButton = screen.getByTestId('closeMenu') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
-
-    // Resize to small screen and check toggle state
-    resizeWindow(800);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
-
-    // Resize to large screen and check toggle state
-    resizeWindow(1000);
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
-
-    // Check state on re-click
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
+    // Note: Toggle button functionality has been moved to separate components
+    // (e.g., SidebarToggle) and is no longer part of the drawer components
+    // due to plugin system modifications
   });
 
   it('redirects to root when orgId is undefined', () => {

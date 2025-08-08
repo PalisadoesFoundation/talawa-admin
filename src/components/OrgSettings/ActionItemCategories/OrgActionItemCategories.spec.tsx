@@ -12,7 +12,7 @@ import i18n from 'utils/i18nForTest';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './OrgActionItemCategoryMocks';
 import OrgActionItemCategories from './OrgActionItemCategories';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 
 /**
  * This file contains unit tests for the `OrgActionItemCategories` component.

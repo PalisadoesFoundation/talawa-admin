@@ -86,17 +86,16 @@ const renderEventListCard = (props: InterfaceEvent): RenderResult => {
 
 describe('Testing Event List Card', () => {
   const updateData = {
-    title: 'Updated title',
+    name: 'Updated name',
     description: 'This is a new update',
     isPublic: true,
-    recurring: false,
     isRegisterable: true,
     allDay: false,
     location: 'New Delhi',
     startDate: '03/18/2022',
     endDate: '03/20/2022',
-    startTime: '09:00 AM',
-    endTime: '05:00 PM',
+    startTime: '09:00:00',
+    endTime: '17:00:00',
   };
 
   beforeAll(() => {
@@ -135,7 +134,7 @@ describe('Testing Event List Card', () => {
             <EventListCard
               key="123"
               _id="1"
-              title=""
+              name=""
               location=""
               description=""
               startDate="19/03/2022"
@@ -143,9 +142,6 @@ describe('Testing Event List Card', () => {
               startTime="02:00"
               endTime="06:00"
               allDay={true}
-              recurring={false}
-              recurrenceRule={null}
-              isRecurringEventException={false}
               isPublic={true}
               isRegisterable={false}
               attendees={[]}
@@ -174,7 +170,7 @@ describe('Testing Event List Card', () => {
   it('should render props and text elements test for the screen', async () => {
     renderEventListCard(props[1]);
 
-    expect(screen.getByText(props[1].title)).toBeInTheDocument();
+    expect(screen.getByText(props[1].name)).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -198,15 +194,15 @@ describe('Testing Event List Card', () => {
 
   it('Should render truncated event name when length is more than 100', async () => {
     const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], title: longEventName });
+    renderEventListCard({ ...props[1], name: longEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+      expect(screen.getByTestId('updateName')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('updateTitle')).toHaveValue(
+    expect(screen.getByTestId('updateName')).toHaveValue(
       `${longEventName.substring(0, 100)}...`,
     );
 
@@ -221,15 +217,15 @@ describe('Testing Event List Card', () => {
 
   it('Should render full event name when length is less than or equal to 100', async () => {
     const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], title: shortEventName });
+    renderEventListCard({ ...props[1], name: shortEventName });
 
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
+      expect(screen.getByTestId('updateName')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('updateTitle')).toHaveValue(shortEventName);
+    expect(screen.getByTestId('updateName')).toHaveValue(shortEventName);
 
     await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
 
@@ -293,7 +289,7 @@ describe('Testing Event List Card', () => {
   });
 
   it('Should navigate to event dashboard when clicked (For Admin)', async () => {
-    renderEventListCard(props[1]);
+    renderEventListCard(props[4]);
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -328,13 +324,13 @@ describe('Testing Event List Card', () => {
   });
 
   it('Should update a non-recurring event', async () => {
-    renderEventListCard(props[1]);
+    renderEventListCard(props[4]);
 
     await userEvent.click(screen.getByTestId('card'));
 
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
+    const eventName = screen.getByTestId('updateName');
+    fireEvent.change(eventName, { target: { value: '' } });
+    await userEvent.type(eventName, updateData.name);
 
     const description = screen.getByTestId('updateDescription');
     fireEvent.change(description, { target: { value: '' } });
@@ -371,13 +367,13 @@ describe('Testing Event List Card', () => {
   });
 
   it('Should update a non all day non-recurring event', async () => {
-    renderEventListCard(props[1]);
+    renderEventListCard(props[4]);
 
     await userEvent.click(screen.getByTestId('card'));
 
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
+    const eventName = screen.getByTestId('updateName');
+    fireEvent.change(eventName, { target: { value: '' } });
+    await userEvent.type(eventName, updateData.name);
 
     const description = screen.getByTestId('updateDescription');
     fireEvent.change(description, { target: { value: '' } });
@@ -407,371 +403,10 @@ describe('Testing Event List Card', () => {
       target: { value: updateData.endTime },
     });
 
+    // Only toggle isRegistrable since we want isPublic to be false
     await userEvent.click(screen.getByTestId('updateIsPublic'));
     await userEvent.click(screen.getByTestId('updateRegistrable'));
 
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('should update a single event to be recurring', async () => {
-    renderEventListCard(props[1]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
-
-    const description = screen.getByTestId('updateDescription');
-    fireEvent.change(description, { target: { value: '' } });
-    await userEvent.type(description, updateData.description);
-
-    const eventLocation = screen.getByTestId('updateLocation');
-    fireEvent.change(eventLocation, { target: { value: '' } });
-    await userEvent.type(eventLocation, updateData.location);
-
-    const startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: updateData.startDate },
-    });
-
-    const endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: updateData.endDate },
-    });
-
-    await userEvent.click(screen.getByTestId('updateAllDay'));
-    await userEvent.click(screen.getByTestId('updateRecurring'));
-    await userEvent.click(screen.getByTestId('updateIsPublic'));
-    await userEvent.click(screen.getByTestId('updateRegistrable'));
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('should show different update options for a recurring event based on different conditions', async () => {
-    renderEventListCard(props[5]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('updateEventBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
-    await waitFor(() => {
-      expect(screen.getByTestId('update-thisInstance')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('update-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-      expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
-    });
-
-    await userEvent.click(
-      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
-    });
-
-    // change the event dates
-    let startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: updateData.startDate },
-    });
-
-    let endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: updateData.endDate },
-    });
-
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    // shows options to update thisInstance and thisAndFollowingInstances only
-    await waitFor(() => {
-      expect(screen.getByTestId('update-thisInstance')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('update-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-      expect(
-        screen.queryByTestId('update-allInstances'),
-      ).not.toBeInTheDocument();
-    });
-
-    await userEvent.click(
-      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
-    });
-
-    // reset the event dates to their original values
-    startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: '03/17/2022' },
-    });
-
-    endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: '03/17/2022' },
-    });
-
-    // now change the recurrence rule of the event
-    await waitFor(() => {
-      expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('recurrenceOptions'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customRecurrence'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toBeInTheDocument();
-    });
-    await userEvent.click(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customDailyRecurrence'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('customRecurrenceSubmitBtn'),
-      ).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    // shows options to update thisAndFollowingInstances and allInstances only
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('update-thisInstance'),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.getByTestId('update-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-      expect(screen.queryByTestId('update-allInstances')).toBeInTheDocument();
-    });
-
-    await userEvent.click(
-      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('should show recurrenceRule as changed if the recurrence weekdays have changed', async () => {
-    renderEventListCard(props[4]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('recurrenceOptions'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customRecurrence'));
-
-    // since the current recurrence weekDay for the current recurring event is "SATURDAY",
-    // let's first deselect it, and then we'll select a different day
-    // the recurrence rule should be marked as changed and we should see the option to update
-    // thisAndFollowingInstances and allInstances only
-    await waitFor(() => {
-      expect(screen.getAllByTestId('recurrenceWeekDay')[6]).toBeInTheDocument();
-    });
-
-    // deselect saturday, which is the 7th day in recurrenceWeekDay options
-    await userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[6]);
-
-    // select a different day, say wednesday, the 4th day in recurrenceWeekDay options
-    await userEvent.click(screen.getAllByTestId('recurrenceWeekDay')[3]);
-
-    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('update-thisInstance'),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.getByTestId('update-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-      expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
-    });
-
-    await userEvent.click(
-      screen.getByTestId('eventUpdateOptionsModalCloseBtn'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('should update all instances of a recurring event', async () => {
-    renderEventListCard(props[6]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateTitle')).toBeInTheDocument();
-    });
-
-    const eventTitle = screen.getByTestId('updateTitle');
-    fireEvent.change(eventTitle, { target: { value: '' } });
-    await userEvent.type(eventTitle, updateData.title);
-
-    const description = screen.getByTestId('updateDescription');
-    fireEvent.change(description, { target: { value: '' } });
-    await userEvent.type(description, updateData.description);
-
-    const eventLocation = screen.getByTestId('updateLocation');
-    fireEvent.change(eventLocation, { target: { value: '' } });
-    await userEvent.type(eventLocation, updateData.location);
-
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    // shows options to update thisInstance and thisAndFollowingInstances, and allInstances
-    await waitFor(() => {
-      expect(screen.getByTestId('update-thisInstance')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('update-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-      expect(screen.getByTestId('update-allInstances')).toBeInTheDocument();
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('update-allInstances'));
-      fireEvent.click(
-        screen.getByTestId('recurringEventUpdateOptionSubmitBtn'),
-      );
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('should update thisAndFollowingInstances of a recurring event', async () => {
-    renderEventListCard(props[5]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByLabelText(translations.startDate)).toBeInTheDocument();
-    });
-
-    // change the event dates
-    const startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: updateData.startDate },
-    });
-
-    const endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: updateData.endDate },
-    });
-
-    // now change the recurrence rule of the event
-    await waitFor(() => {
-      expect(screen.getByTestId('recurrenceOptions')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('recurrenceOptions'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('customRecurrence')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customRecurrence'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toBeInTheDocument();
-    });
-    await userEvent.click(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customDailyRecurrence'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('customRecurrenceSubmitBtn'),
-      ).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateEventBtn')).toBeInTheDocument();
-    });
     await userEvent.click(screen.getByTestId('updateEventBtn'));
 
     await waitFor(() => {
@@ -786,7 +421,7 @@ describe('Testing Event List Card', () => {
   });
 
   it('should render the delete modal', async () => {
-    renderEventListCard(props[1]);
+    renderEventListCard(props[4]);
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -821,7 +456,7 @@ describe('Testing Event List Card', () => {
   });
 
   it('should call the delete event mutation when the "Yes" button is clicked', async () => {
-    renderEventListCard(props[1]);
+    renderEventListCard(props[4]);
 
     await userEvent.click(screen.getByTestId('card'));
 
@@ -846,51 +481,9 @@ describe('Testing Event List Card', () => {
     });
   });
 
-  it('select different delete options on recurring events & then delete the recurring event', async () => {
-    renderEventListCard(props[4]);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('card')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('delete-thisAndFollowingInstances'),
-      ).toBeInTheDocument();
-    });
-
-    await userEvent.click(
-      screen.getByTestId('delete-thisAndFollowingInstances'),
-    );
-
-    await userEvent.click(screen.getByTestId('delete-allInstances'));
-    await userEvent.click(screen.getByTestId('delete-thisInstance'));
-
-    await userEvent.click(screen.getByTestId('deleteEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
   it('should show an error toast when the delete event mutation fails', async () => {
     // Destructure key from props[1] and pass it separately to avoid spreading it
-    const { key, ...otherProps } = props[1];
+    const { key, ...otherProps } = props[4];
     render(
       <MockedProvider addTypename={false} link={link2}>
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
@@ -937,7 +530,7 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        `Successfully registered for ${props[2].title}`,
+        `Successfully registered for ${props[2].name}`,
       );
     });
 

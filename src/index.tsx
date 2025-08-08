@@ -52,7 +52,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: `Bearer ${getItem('token')}` || '',
+      authorization: getItem('token') ? `Bearer ${getItem('token')}` : '',
       'Accept-Language': lng,
     },
   };
@@ -77,6 +77,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 const uploadLink = createUploadLink({
   uri: BACKEND_URL,
   headers: { 'Apollo-Require-Preflight': 'true' },
+  credentials: 'include',
+  useGETForQueries: false,
 });
 
 const wsLink = new GraphQLWsLink(

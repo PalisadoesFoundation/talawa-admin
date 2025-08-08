@@ -5,52 +5,22 @@
  * It includes a side drawer for navigation, a header with a title and profile dropdown,
  * and dynamically renders child routes using React Router's `Outlet`.
  *
- * @component
- *
  * @remarks
  * - The component uses Redux for state management and Apollo Client for GraphQL queries.
  * - It dynamically updates the page title and event name based on the current route.
  * - The side drawer visibility is responsive to screen resizing.
  *
- * @returns {JSX.Element} The rendered OrganizationScreen component.
+ * @returns  The rendered OrganizationScreen component.
  *
  * @example
  * ```tsx
  * <OrganizationScreen />
  * ```
  *
- * @dependencies
- * - `useLocation`, `useParams`, `useMatch`, `Navigate`, and `Outlet` from `react-router-dom`
- * - `useSelector` and `useAppDispatch` for Redux state management
- * - `useQuery` from `@apollo/client` for fetching organization events
- * - `useTranslation` from `react-i18next` for internationalization
- *
- * @state
- * - `hideDrawer` (`boolean | null`): Manages the visibility of the side drawer.
- * - `eventName` (`string | null`): Stores the name of the currently selected event.
- *
- * @redux
- * - `appRoutes.targets`: Contains the application routes for the organization.
- * - Dispatches `updateTargets` action to update targets based on the organization ID.
- *
- * @graphql
- * - Query: `ORGANIZATION_EVENT_LIST` to fetch events for the organization.
- *
- * @hooks
- * - `useEffect`: Handles side drawer visibility, updates targets, and sets the event name.
- * - `useQuery`: Fetches organization events data.
- *
- * @styles
- * - Uses CSS modules for styling (`app-fixed.module.css`).
- *
- * @translation
- * - Dynamically sets the page title using `useTranslation` and a mapping object.
- *
- * @events
- * - Listens to window resize events to toggle the side drawer visibility.
  */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
+import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import {
@@ -65,31 +35,29 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
-import { ORGANIZATION_EVENT_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const OrganizationScreen = (): JSX.Element => {
+  const { getItem, setItem } = useLocalStorage();
+  // State to manage visibility of the side drawer
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
   // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-
-  // State to manage visibility of the side drawer
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
-
-  // If no organization ID is found, navigate back to the home page
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
@@ -99,14 +67,25 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  // Update targets whenever the organization ID changes
-  useEffect(() => {
-    dispatch(updateTargets(orgId));
-  }, [orgId]);
-
-  const { data: eventsData } = useQuery(ORGANIZATION_EVENT_LIST, {
+  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
   });
+
+  // Update targets whenever the organization ID changes
+  useEffect(() => {
+    if (orgId) {
+      dispatch(updateTargets(orgId));
+    }
+  }, [orgId, dispatch]);
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
+
+  // If no organization ID is found, navigate back to the home page
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   useEffect(() => {
     if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {
@@ -153,13 +132,7 @@ const OrganizationScreen = (): JSX.Element => {
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
+        className={`${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
@@ -167,7 +140,6 @@ const OrganizationScreen = (): JSX.Element => {
             <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
-          <ProfileDropdown />
         </div>
         <Outlet />
       </div>

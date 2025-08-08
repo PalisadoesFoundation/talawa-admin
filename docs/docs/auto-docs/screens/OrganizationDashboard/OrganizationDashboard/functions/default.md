@@ -4,10 +4,10 @@
 
 # Function: default()
 
-> **default**(): `JSX.Element`
+> **default**(): `Element`
 
-Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L68)
+Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L65)
 
 ## Returns
 
-`JSX.Element`
+`Element`

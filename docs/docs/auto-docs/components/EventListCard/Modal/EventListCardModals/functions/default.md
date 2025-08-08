@@ -4,16 +4,16 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L76)
+Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L55)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`InterfaceEventListCardModalProps`
+`IEventListCardModalProps`
 
 ## Returns
 
-`JSX.Element`
+`Element`

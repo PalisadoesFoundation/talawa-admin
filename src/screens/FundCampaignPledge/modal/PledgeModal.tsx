@@ -49,14 +49,14 @@
  * - Reusable class `.addButton` for consistent button styling.
  */
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { type Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
-  InterfaceUserInfo_PG,
+  InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -114,7 +114,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       : new Date(),
   });
 
-  const [pledgers, setPledgers] = useState<InterfaceUserInfo_PG[]>([]);
+  const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
@@ -141,7 +141,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (memberData) {
       const members = memberData.organization.members.edges.map(
-        (edge: { node: InterfaceUserInfo_PG }) => edge.node,
+        (edge: { node: InterfaceUserInfoPG }) => edge.node,
       );
       setPledgers(members);
     }
@@ -260,7 +260,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               value={pledgeUsers[0] || null}
               // isOptionEqualToValue={(option, value) => option?.id === value?.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo_PG): string =>
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
                 `${member.name || ''}`
               }
               onChange={(_, newPledger): void => {

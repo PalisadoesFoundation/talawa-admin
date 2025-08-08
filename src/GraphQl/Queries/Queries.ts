@@ -36,15 +36,24 @@ export const CURRENT_USER = gql`
   }
 `;
 
-// Query to take the Organization list
+// Shared fields
+const ORG_FIELDS = gql`
+  fragment OrgFields on Organization {
+    id
+    name
+    addressLine1
+    description
+    avatarURL
+    membersCount
+    adminsCount
+  }
+`;
+
+// Full query with members
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      id
-      name
-      addressLine1
-      description
-      avatarURL
+      ...OrgFields
       members(first: 32) {
         edges {
           node {
@@ -57,6 +66,17 @@ export const ORGANIZATION_LIST = gql`
       }
     }
   }
+  ${ORG_FIELDS}
+`;
+
+// Lightweight version without members
+export const ORGANIZATION_LIST_NO_MEMBERS = gql`
+  query {
+    organizations {
+      ...OrgFields
+    }
+  }
+  ${ORG_FIELDS}
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
@@ -282,31 +302,32 @@ export const USER_LIST_REQUEST = gql`
 `;
 
 export const EVENT_DETAILS = gql`
-  query Event($id: ID!) {
-    event(id: $id) {
-      _id
-      title
+  query GetEvent($eventId: String!) {
+    event(input: { id: $eventId }) {
+      id
+      name
       description
-      startDate
-      endDate
-      startTime
-      endTime
-      allDay
       location
-      recurring
-      baseRecurringEvent {
-        _id
+      allDay
+      isPublic
+      isRegisterable
+      startAt
+      endAt
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
+      }
+      updater {
+        id
+        name
+        emailAddress
       }
       organization {
-        _id
-        members {
-          _id
-          firstName
-          lastName
-        }
-      }
-      attendees {
-        _id
+        id
+        name
       }
     }
   }
@@ -490,9 +511,22 @@ export const IS_USER_BLOCKED = gql`
 `;
 
 export const GET_ORGANIZATION_EVENTS_PG = gql`
-  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+  query GetOrganizationEvents(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
     organization(input: { id: $id }) {
-      events(first: $first, after: $after) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
         edges {
           node {
             id
@@ -500,10 +534,38 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             description
             startAt
             endAt
+            allDay
+            location
+            isPublic
+            isRegisterable
+            # Recurring event fields
+            isRecurringEventTemplate
+            baseEvent {
+              id
+              name
+            }
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Creator information
             creator {
               id
               name
             }
+            # Organization
+            organization {
+              id
+              name
+            }
+            # Timestamps
+            createdAt
+            updatedAt
           }
           cursor
         }
@@ -536,19 +598,9 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
+// Query to take the Organization with data
 export const GET_ORGANIZATION_DATA_PG = gql`
-  query getOrganizationData($id: String!) {
-    organization(input: { id: $id }) {
-      id
-      avatarURL
-      name
-      city
-    }
-  }
-`;
-
-export const ORGANIZATIONS_LIST = gql`
-  query getOrganization($id: String!) {
+  query getOrganizationData($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
       id
       name
@@ -572,8 +624,71 @@ export const ORGANIZATIONS_LIST = gql`
         name
         emailAddress
       }
+      members(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            emailAddress
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
     }
   }
+`;
+
+// Shared fragment with common organization fields
+export const ORGANIZATION_FIELDS = gql`
+  fragment OrganizationFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+  }
+`;
+
+// Full query with all fields (metadata, creator, updater, etc.)
+export const ORGANIZATIONS_LIST = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+        emailAddress
+      }
+      updater {
+        id
+        name
+        emailAddress
+      }
+    }
+  }
+  ${ORGANIZATION_FIELDS}
+`;
+
+// Basic query using only the shared fragment (no metadata)
+export const ORGANIZATIONS_LIST_BASIC = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+    }
+  }
+  ${ORGANIZATION_FIELDS}
 `;
 
 export const MEMBERS_LIST_PG = gql`
@@ -596,20 +711,15 @@ export const MEMBERS_LIST_PG = gql`
 
 // Query to take the Members of a particular organization
 export const MEMBERS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      members {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
-        organizationsBlockedBy {
-          _id
-        }
-      }
+  query GetMembersByOrganization($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -776,27 +886,6 @@ export const USER_DETAILS = gql`
         }
         eventAdmin {
           _id
-        }
-      }
-    }
-  }
-`;
-
-// to take the organization event list
-export const ORGANIZATION_EVENT_LIST = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        edges {
-          node {
-            id
-            name
-            description
-            startAt
-            endAt
-            location
-          }
         }
       }
     }
@@ -1110,18 +1199,3 @@ export {
   ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
 } from './OrganizationQueries';
-
-export const GET_ORGANIZATION_EVENTS = gql`
-  query Organization($input: QueryOrganizationInput!) {
-    organization(input: $input) {
-      id
-      events {
-        id
-        name
-        description
-        startAt
-        endAt
-      }
-    }
-  }
-`;

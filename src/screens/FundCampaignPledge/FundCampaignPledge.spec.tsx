@@ -11,11 +11,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
-import {
-  EMPTY_MOCKS,
-  MOCKS,
-  MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR,
-} from './PledgesMocks';
+import { MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR } from './PledgesMocks';
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
@@ -706,7 +702,6 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('should handle default case in sort function', async () => {
-    const mockSortBy = 'invalid_sort' as any;
     renderFundCampaignPledge(link1);
 
     await waitFor(() => {

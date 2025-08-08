@@ -6,34 +6,34 @@
 
 > `const` **dayNames**: `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L60)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L47)
 
 ## Type declaration
 
-### FRIDAY
+### FR
 
-> **FRIDAY**: `string` = `'Friday'`
+> **FR**: `string` = `'Friday'`
 
-### MONDAY
+### MO
 
-> **MONDAY**: `string` = `'Monday'`
+> **MO**: `string` = `'Monday'`
 
-### SATURDAY
+### SA
 
-> **SATURDAY**: `string` = `'Saturday'`
+> **SA**: `string` = `'Saturday'`
 
-### SUNDAY
+### SU
 
-> **SUNDAY**: `string` = `'Sunday'`
+> **SU**: `string` = `'Sunday'`
 
-### THURSDAY
+### TH
 
-> **THURSDAY**: `string` = `'Thursday'`
+> **TH**: `string` = `'Thursday'`
 
-### TUESDAY
+### TU
 
-> **TUESDAY**: `string` = `'Tuesday'`
+> **TU**: `string` = `'Tuesday'`
 
-### WEDNESDAY
+### WE
 
-> **WEDNESDAY**: `string` = `'Wednesday'`
+> **WE**: `string` = `'Wednesday'`

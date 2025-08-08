@@ -5,16 +5,15 @@
  * (day, month, and year) and displays events and holidays. It provides
  * navigation between dates and months, and allows users to view event details.
  *
- * @component
- * @param {InterfaceCalendarProps} props - The props for the Calendar component.
- * @param {InterfaceEvent[]} props.eventData - Array of event data to display.
- * @param {() => void} props.refetchEvents - Function to refetch events.
- * @param {InterfaceIOrgList} [props.orgData] - Organization data for filtering events.
- * @param {string} [props.userRole] - Role of the current user (e.g., SUPERADMIN, ADMIN).
- * @param {string} [props.userId] - ID of the current user.
- * @param {ViewType} props.viewType - The current view type (DAY, MONTH, YEAR).
+ * @param props - The props for the Calendar component.
+ * @param eventData - Array of event data to display.
+ * @param refetchEvents - Function to refetch events.
+ * @param orgData - Organization data for filtering events.
+ * @param userRole - Role of the current user (ADMINISTRATOR or REGULAR).
+ * @param userId - ID of the current user.
+ * @param viewType - The current view type (DAY, MONTH, YEAR).
  *
- * @returns {JSX.Element} The rendered Calendar component.
+ * @returns The rendered Calendar component.
  *
  * @remarks
  * - The component dynamically adjusts its layout based on the screen width.
@@ -27,7 +26,7 @@
  *   eventData={events}
  *   refetchEvents={fetchEvents}
  *   orgData={organizationData}
- *   userRole="ADMIN"
+ *   userRole={UserRole.ADMINISTRATOR}
  *   userId="12345"
  *   viewType={ViewType.MONTH}
  * />
@@ -37,8 +36,9 @@
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
+import type { JSX } from 'react';
 import Button from 'react-bootstrap/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from '../../../style/app-fixed.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
@@ -49,25 +49,32 @@ import type {
   InterfaceCalendarProps,
   InterfaceIOrgList,
 } from 'types/Event/interface';
-import { Role } from 'types/Event/interface';
-import { type User } from 'types/User/type';
+import { UserRole } from 'types/Event/interface';
 
-const Calendar: React.FC<InterfaceCalendarProps> = ({
+const Calendar: React.FC<
+  InterfaceCalendarProps & {
+    onMonthChange: (month: number, year: number) => void;
+    currentMonth: number;
+    currentYear: number;
+  }
+> = ({
   eventData,
   refetchEvents,
   orgData,
   userRole,
   userId,
   viewType,
+  onMonthChange,
+  currentMonth,
+  currentYear,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
   const today = new Date();
   const [currentDate, setCurrentDate] = useState(today.getDate());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+
   useEffect(() => {
     function handleResize(): void {
       setWindowWidth(window.screen.width);
@@ -82,59 +89,61 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
-    const data: InterfaceEvent[] = [];
-    if (userRole === Role.SUPERADMIN) return eventData;
-    // Hard to test all the cases
+    const filteredEvents: InterfaceEvent[] = [];
 
-    if (userRole === Role.ADMIN) {
-      eventData?.forEach((event) => {
-        if (event.isPublic) data.push(event);
-        if (!event.isPublic) {
-          const filteredOrg: boolean | undefined = orgData?.admins?.some(
-            (data) => data._id === userId,
-          );
-
-          if (filteredOrg) {
-            data.push(event);
-          }
-        }
-      });
-    } else {
-      eventData?.forEach((event) => {
-        if (event.isPublic) data.push(event);
-        const userAttending = event.attendees?.some(
-          (data) => data._id === userId,
-        );
-        if (userAttending) {
-          data.push(event);
-        }
-      });
+    if (!userRole || !userId) {
+      return eventData.filter((event) => event.isPublic);
     }
-    return data;
+
+    if (userRole === UserRole.ADMINISTRATOR) {
+      return eventData;
+    }
+
+    eventData.forEach((event) => {
+      if (event.isPublic) {
+        filteredEvents.push(event);
+        return;
+      }
+
+      const isMember = orgData?.members?.edges.some(
+        (edge) => edge.node.id === userId,
+      );
+      if (!event.isPublic && isMember) {
+        filteredEvents.push(event);
+      }
+    });
+
+    return filteredEvents;
   };
 
   useEffect(() => {
-    const data = filterData(eventData, orgData, userRole, userId);
-    setEvents(data);
+    const filteredEvents = filterData(
+      eventData || [],
+      orgData,
+      userRole,
+      userId,
+    );
+    setEvents(filteredEvents);
   }, [eventData, orgData, userRole, userId]);
 
   /**
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear(currentYear - 1);
-    } else {
-      setCurrentMonth(currentMonth - 1);
-    }
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    onMonthChange(newMonth, newYear);
   };
 
   const filteredHolidays = useMemo(() => {
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            if (process.env.NODE_ENV !== 'test') {
+            if (
+              typeof globalThis !== 'undefined' &&
+              typeof globalThis.process !== 'undefined' &&
+              globalThis.process.env?.NODE_ENV !== 'test'
+            ) {
               console.warn(`Holiday "${holiday.name}" has no date specified.`);
             }
             return false;
@@ -146,114 +155,96 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear(currentYear + 1);
-    } else {
-      setCurrentMonth(currentMonth + 1);
-    }
+    const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+    onMonthChange(newMonth, newYear);
   };
+
   const handlePrevDate = (): void => {
     if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
-      if (currentMonth > 0) {
-        const lastDayOfPrevMonth = new Date(
-          currentYear,
-          currentMonth,
-          0,
-        ).getDate();
-        setCurrentDate(lastDayOfPrevMonth);
-        setCurrentMonth(currentMonth - 1);
-      } else {
-        setCurrentDate(31);
-        setCurrentMonth(11);
-        setCurrentYear(currentYear - 1);
-      }
+      const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+      const lastDayOfPrevMonth = new Date(newYear, newMonth + 1, 0).getDate();
+      setCurrentDate(lastDayOfPrevMonth);
+      onMonthChange(newMonth, newYear);
     }
   };
 
   const handleNextDate = (): void => {
     const lastDayOfCurrentMonth = new Date(
       currentYear,
-      currentMonth - 1,
+      currentMonth + 1,
       0,
     ).getDate();
     if (currentDate < lastDayOfCurrentMonth) {
       setCurrentDate(currentDate + 1);
     } else {
-      if (currentMonth < 12) {
-        setCurrentDate(1);
-        setCurrentMonth(currentMonth + 1);
-      } else {
-        setCurrentDate(1);
-        setCurrentMonth(1);
-        setCurrentYear(currentYear + 1);
-      }
+      const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+      const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+      setCurrentDate(1);
+      onMonthChange(newMonth, newYear);
     }
   };
 
   const handleTodayButton = (): void => {
-    setCurrentYear(today.getFullYear());
-    setCurrentMonth(today.getMonth());
+    const today = new Date();
+    onMonthChange(today.getMonth(), today.getFullYear());
     setCurrentDate(today.getDate());
   };
 
-  const timezoneString = `UTC${
-    new Date().getTimezoneOffset() > 0 ? '-' : '+'
-  }${String(Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60)).padStart(
+  const timezoneString = `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${String(
+    Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60),
+  ).padStart(
     2,
     '0',
   )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
 
   const renderHours = (): JSX.Element => {
     const toggleExpand = (index: number): void => {
-      if (expanded === index) {
-        setExpanded(-1);
-      } else {
-        setExpanded(index);
-      }
+      if (expanded === index) setExpanded(-1);
+      else setExpanded(index);
     };
 
-    const allDayEventsList: JSX.Element[] =
-      events
-        ?.filter((datas) => {
-          const currDate = new Date(currentYear, currentMonth, currentDate);
-          if (datas.startDate == dayjs(currDate).format('YYYY-MM-DD')) {
-            return datas;
-          }
-        })
-        .map((datas: InterfaceEvent) => {
-          const attendees: Partial<User>[] = [];
-          datas.attendees?.forEach((attendee) => {
-            const r = { _id: attendee._id };
-            attendees.push(r);
-          });
+    // Filter events for the current date
+    const currentDateEvents =
+      events?.filter((datas) => {
+        const currDate = new Date(currentYear, currentMonth, currentDate);
+        return datas.startDate === dayjs(currDate).format('YYYY-MM-DD');
+      }) || [];
 
-          return (
-            <EventListCard
-              refetchEvents={refetchEvents}
-              userRole={userRole}
-              key={datas._id}
-              _id={datas._id}
-              location={datas.location}
-              title={datas.title}
-              description={datas.description}
-              startDate={datas.startDate}
-              endDate={datas.endDate}
-              startTime={datas.startTime}
-              endTime={datas.endTime}
-              allDay={datas.allDay}
-              recurring={datas.recurring}
-              recurrenceRule={datas.recurrenceRule}
-              isRecurringEventException={datas.isRecurringEventException}
-              isPublic={datas.isPublic}
-              isRegisterable={datas.isRegisterable}
-              attendees={attendees}
-              creator={datas.creator}
-            />
-          );
-        }) || [];
+    // Map events to EventListCard components
+    const allDayEventsList: JSX.Element[] = currentDateEvents.map(
+      (datas: InterfaceEvent) => (
+        <EventListCard
+          refetchEvents={refetchEvents}
+          userRole={userRole}
+          key={datas._id}
+          _id={datas._id}
+          location={datas.location}
+          name={datas.name}
+          description={datas.description}
+          startDate={datas.startDate}
+          endDate={datas.endDate}
+          startTime={datas.startTime}
+          endTime={datas.endTime}
+          allDay={datas.allDay}
+          isPublic={datas.isPublic}
+          isRegisterable={datas.isRegisterable}
+          attendees={datas.attendees || []}
+          creator={datas.creator}
+          userId={userId}
+          // Recurring event fields
+          isRecurringTemplate={datas.isRecurringTemplate}
+          baseEventId={datas.baseEventId}
+          sequenceNumber={datas.sequenceNumber}
+          totalCount={datas.totalCount}
+          hasExceptions={datas.hasExceptions}
+          progressLabel={datas.progressLabel}
+        />
+      ),
+    );
 
     const shouldShowViewMore =
       allDayEventsList.length > 2 ||
@@ -294,9 +285,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 {Array.isArray(allDayEventsList) &&
                 allDayEventsList.length > 0 ? (
                   expanded === -100 ? (
-                    allDayEventsList
+                    allDayEventsList // Show all events when expanded
                   ) : (
-                    allDayEventsList.slice(0, 1)
+                    allDayEventsList.slice(0, 2) // Show up to 2 events when not expanded
                   )
                 ) : (
                   <p className={styles.no_events_message}>
@@ -304,16 +295,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   </p>
                 )}
               </div>
-              {Array.isArray(allDayEventsList) && (
+              {Array.isArray(allDayEventsList) && shouldShowViewMore && (
                 <button
                   className={styles.btn__more}
                   onClick={handleExpandClick}
+                  data-testid="view-more-button"
                 >
-                  {shouldShowViewMore
-                    ? expanded === -100
-                      ? 'View less'
-                      : 'View all'
-                    : null}
+                  {expanded === -100 ? 'View less' : 'View all'}
                 </button>
               )}
             </div>
@@ -395,63 +383,58 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         styles.day,
       ].join(' ');
       const toggleExpand = (index: number): void => {
-        if (expanded === index) {
-          setExpanded(-1);
-        } else {
-          setExpanded(index);
-        }
+        if (expanded === index) setExpanded(-1);
+        else setExpanded(index);
       };
 
       const allEventsList: JSX.Element[] =
         events
-          ?.filter((datas) => {
-            if (datas.startDate == dayjs(date).format('YYYY-MM-DD'))
-              return datas;
-          })
-          .map((datas: InterfaceEvent) => {
-            const attendees: Partial<User>[] = [];
-            datas.attendees?.forEach((attendee) => {
-              const r = { _id: attendee._id };
-              attendees.push(r);
-            });
-
-            return (
-              <EventListCard
-                refetchEvents={refetchEvents}
-                userRole={userRole}
-                key={datas._id}
-                _id={datas._id}
-                location={datas.location}
-                title={datas.title}
-                description={datas.description}
-                startDate={datas.startDate}
-                endDate={datas.endDate}
-                startTime={datas.startTime}
-                endTime={datas.endTime}
-                allDay={datas.allDay}
-                recurring={datas.recurring}
-                recurrenceRule={datas.recurrenceRule}
-                isRecurringEventException={datas.isRecurringEventException}
-                isPublic={datas.isPublic}
-                isRegisterable={datas.isRegisterable}
-                attendees={attendees}
-                creator={datas.creator}
-              />
-            );
-          }) || [];
+          ?.filter(
+            (datas) => datas.startDate === dayjs(date).format('YYYY-MM-DD'),
+          )
+          .map((datas: InterfaceEvent) => (
+            <EventListCard
+              refetchEvents={refetchEvents}
+              userRole={userRole}
+              key={datas._id}
+              _id={datas._id}
+              location={datas.location}
+              name={datas.name}
+              description={datas.description}
+              startDate={datas.startDate}
+              endDate={datas.endDate}
+              startTime={datas.startTime}
+              endTime={datas.endTime}
+              allDay={datas.allDay}
+              isPublic={datas.isPublic}
+              isRegisterable={datas.isRegisterable}
+              attendees={datas.attendees || []}
+              creator={datas.creator}
+              userId={userId}
+              // Recurring event fields
+              isRecurringTemplate={datas.isRecurringTemplate}
+              baseEventId={datas.baseEventId}
+              sequenceNumber={datas.sequenceNumber}
+              totalCount={datas.totalCount}
+              hasExceptions={datas.hasExceptions}
+              progressLabel={datas.progressLabel}
+            />
+          )) || [];
 
       const holidayList: JSX.Element[] = filteredHolidays
         .filter((holiday) => holiday.date === dayjs(date).format('MM-DD'))
-        .map((holiday) => {
-          return <HolidayCard key={holiday.name} holidayName={holiday.name} />;
-        });
+        .map((holiday) => (
+          <HolidayCard key={holiday.name} holidayName={holiday.name} />
+        ));
+
+      const shouldShowViewMore =
+        allEventsList.length > 2 ||
+        (windowWidth <= 700 && allEventsList.length > 0);
 
       return (
         <div
           key={index}
-          className={
-            className + ' ' + (allEventsList?.length > 0 && styles.day__events)
-          }
+          className={`${className} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
           data-testid="day"
         >
           {date.getDate()}
@@ -473,14 +456,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     ? allEventsList?.slice(0, 1)
                     : allEventsList?.slice(0, 2)}
               </div>
-              {(allEventsList?.length > 2 ||
-                (windowWidth <= 700 && allEventsList?.length > 0)) && (
+              {shouldShowViewMore && (
                 <button
                   className={styles.btn__more}
                   data-testid="more"
-                  onClick={() => {
-                    toggleExpand(index);
-                  }}
+                  onClick={() => toggleExpand(index)}
                 >
                   {expanded === index ? 'View less' : 'View all'}
                 </button>
@@ -494,14 +474,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
   return (
     <div className={styles.calendar}>
-      {viewType != ViewType.YEAR && (
+      {viewType !== ViewType.YEAR && (
         <div className={styles.calendar__header}>
           <div className={styles.calender_month}>
             <Button
               variant="outlined"
               className={styles.buttonEventCalendar}
               onClick={
-                viewType == ViewType.DAY ? handlePrevDate : handlePrevMonth
+                viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
               }
               data-testid="prevmonthordate"
             >
@@ -512,14 +492,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
               className={styles.calendar__header_month}
               data-testid="current-date"
             >
-              {viewType == ViewType.DAY ? `${currentDate}` : ``} {currentYear}{' '}
+              {viewType === ViewType.DAY ? `${currentDate}` : ''} {currentYear}{' '}
               <div>{months[currentMonth]}</div>
             </div>
             <Button
               variant="outlined"
               className={styles.buttonEventCalendar}
               onClick={
-                viewType == ViewType.DAY ? handleNextDate : handleNextMonth
+                viewType === ViewType.DAY ? handleNextDate : handleNextMonth
               }
               data-testid="nextmonthordate"
             >
@@ -538,7 +518,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         </div>
       )}
       <div>
-        {viewType == ViewType.MONTH ? (
+        {viewType === ViewType.MONTH ? (
           <>
             <div className={styles.calendar__weekdays}>
               {weekdays.map((weekday, index) => (
@@ -549,8 +529,14 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             </div>
             <div className={styles.calendar__days}>{renderDays()}</div>
           </>
-        ) : viewType == ViewType.YEAR ? (
-          <YearlyEventCalender eventData={eventData} />
+        ) : viewType === ViewType.YEAR ? (
+          <YearlyEventCalender
+            eventData={eventData}
+            refetchEvents={refetchEvents}
+            orgData={orgData}
+            userRole={userRole}
+            userId={userId}
+          />
         ) : (
           <div className={styles.calendar__hours}>{renderHours()}</div>
         )}

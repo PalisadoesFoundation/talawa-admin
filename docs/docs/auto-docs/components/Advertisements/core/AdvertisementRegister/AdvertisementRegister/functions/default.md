@@ -4,9 +4,9 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `JSX.Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L65)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegister.tsx#L69)
 
 ## Parameters
 
@@ -16,4 +16,4 @@ Defined in: [src/components/Advertisements/core/AdvertisementRegister/Advertisem
 
 ## Returns
 
-`JSX.Element`
+`Element`

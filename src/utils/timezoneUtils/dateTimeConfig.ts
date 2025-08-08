@@ -5,8 +5,7 @@ export const dateTimeFields = {
     'createdAt',
     'birthDate',
     'updatedAt',
-    'recurrenceStartDate',
-    'recurrenceEndDate',
+
     'dueDate',
     'completionDate',
     'startCursor',

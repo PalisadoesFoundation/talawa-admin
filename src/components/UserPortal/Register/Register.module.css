@@ -1,0 +1,15 @@
+.loginText {
+  cursor: pointer;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.colorPrimary {
+  background: #31bb6b;
+}

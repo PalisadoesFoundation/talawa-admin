@@ -1,0 +1,46 @@
+.alignimg {
+  border-radius: 50%;
+  background-blend-mode: darken;
+  height: 65px;
+  width: 65px;
+}
+
+.box {
+  color: #ffbd59;
+}
+
+.box :hover {
+  color: #ffbd59;
+}
+
+.first_box {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.second_box {
+  padding-left: 20px;
+  padding-top: 10px;
+}
+
+.second_box > h4 {
+  font-size: 10;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.second_box > h5 {
+  text-decoration: none;
+  font-size: 10;
+  font-weight: 100;
+  color: #969696;
+}
+
+.deco {
+  border: 1px solid #dfdfdf;
+  width: 65vw;
+  height: 0px !important;
+}

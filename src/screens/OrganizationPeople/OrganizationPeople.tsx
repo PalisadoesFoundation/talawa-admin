@@ -75,7 +75,7 @@ import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 
 const PAGE_SIZE = 10;
-interface ProcessedRow {
+interface IProcessedRow {
   _id: string;
   name: string;
   email: string;
@@ -85,7 +85,7 @@ interface ProcessedRow {
   rowNumber: number;
 }
 
-interface Edges {
+interface IEdges {
   cursor: string;
   node: {
     id: string;
@@ -97,7 +97,7 @@ interface Edges {
   };
 }
 
-interface QueryVariable {
+interface IQueryVariable {
   orgId?: string | undefined;
   first?: number | null;
   after?: string | null;
@@ -131,8 +131,19 @@ function OrganizationPeople(): JSX.Element {
   const pageCursors = useRef<{
     [page: number]: { startCursor: string; endCursor: string };
   }>({});
-  const [currentRows, setCurrentRows] = useState<ProcessedRow[]>([]);
-  const [data, setData] = useState<any>();
+  const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
+  const [data, setData] = useState<
+    | {
+        edges: IEdges[];
+        pageInfo: {
+          startCursor?: string;
+          endCursor?: string;
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+        };
+      }
+    | undefined
+  >();
 
   // Pagination metadata
   const [paginationMeta, setPaginationMeta] = useState<{
@@ -163,7 +174,7 @@ function OrganizationPeople(): JSX.Element {
       const { edges, pageInfo } = data;
       const baseIndex = paginationModel.page * PAGE_SIZE;
       const processedRows = edges.map(
-        (edge: Edges, index: number): ProcessedRow => ({
+        (edge: IEdges, index: number): IProcessedRow => ({
           _id: edge.node.id,
           name: edge.node.name,
           email: edge.node.emailAddress,
@@ -198,7 +209,7 @@ function OrganizationPeople(): JSX.Element {
     setPaginationModel({ page: 0, pageSize: PAGE_SIZE });
     pageCursors.current = {};
 
-    const variables: QueryVariable = {
+    const variables: IQueryVariable = {
       first: PAGE_SIZE,
       after: null,
       last: null,
@@ -253,7 +264,7 @@ function OrganizationPeople(): JSX.Element {
     const currentPage = paginationModel.page;
     const currentPageCursors = pageCursors.current[currentPage];
 
-    const variables: QueryVariable = { orgId: currentUrl };
+    const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
       // Forward navigation uses "after" with the endCursor of the current page

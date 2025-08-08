@@ -25,6 +25,7 @@
  * @requires components/LoginPortalToggle/LoginPortalToggle
  * @requires assets/svgs/palisadoes.svg
  * @requires assets/svgs/talawa.svg
+ * @requires plugin/PluginInjector
  *
  * @component
  * @description The `loginPage` component renders a login and registration interface with the following features:
@@ -71,13 +72,14 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST,
+  ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import { PluginInjector } from 'plugin';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
@@ -182,7 +184,7 @@ const loginPage = (): JSX.Element => {
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
@@ -192,9 +194,8 @@ const loginPage = (): JSX.Element => {
             label: string;
             id: string;
           };
-          tempObj['label'] =
-            `${org.name}(${org.address?.city},${org.address?.state},${org.address?.countryCode})`;
-          tempObj['id'] = org._id;
+          tempObj['label'] = `${org.name}(${org.addressLine1})`;
+          tempObj['id'] = org.id;
           return tempObj;
         },
       );
@@ -276,6 +277,7 @@ const loginPage = (): JSX.Element => {
         try {
           const { data: signUpData } = await signup({
             variables: {
+              ID: signformState.signOrg,
               name: signName,
               email: signEmail,
               password: signPassword,
@@ -432,7 +434,11 @@ const loginPage = (): JSX.Element => {
                 </a>
               )}
             </div>
-            <div className={styles.socialIcons}>{socialIconsList}</div>
+            <div className={styles.socialIcons}>
+              {socialIconsList}
+              {/* Plugin injector for additional social media icons */}
+              <PluginInjector injectorType="G1" />
+            </div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>
@@ -472,6 +478,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       autoComplete="username"
                       data-testid="loginEmail"
+                      data-cy="loginEmail"
                     />
                     <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
@@ -496,6 +503,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       disabled={loginLoading}
                       autoComplete="current-password"
+                      data-cy="loginPassword"
                     />
                     <Button
                       onClick={togglePassword}
@@ -538,6 +546,7 @@ const loginPage = (): JSX.Element => {
                     className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
+                    data-cy="loginBtn"
                   >
                     {tCommon('login')}
                   </Button>

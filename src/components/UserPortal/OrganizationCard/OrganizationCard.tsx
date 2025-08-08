@@ -53,7 +53,7 @@ import {
   JOIN_PUBLIC_ORGANIZATION,
   SEND_MEMBERSHIP_REQUEST,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router';
@@ -109,10 +109,6 @@ function OrganizationCard({
   });
   const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
-  });
-  const { refetch } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
-    variables: { id: userId, first: 5 },
-    skip: !userId,
   });
 
   /**
@@ -223,6 +219,7 @@ function OrganizationCard({
             className={styles.addButton}
             onClick={() => navigate(`/user/organization/${id}`)}
             style={{ width: '8rem' }}
+            data-cy="manageBtn"
           >
             {t('visit')}
           </Button>

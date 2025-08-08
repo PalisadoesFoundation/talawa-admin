@@ -1,0 +1,43 @@
+$modal-inner-padding: $spacer;
+
+$modal-footer-margin-between: 0.5rem;
+
+$modal-dialog-margin: 0.5rem;
+$modal-dialog-margin-y-sm-up: 1.75rem;
+
+$modal-title-line-height: $line-height-base;
+
+$modal-content-color: null;
+$modal-content-bg: var(--#{$prefix}body-bg);
+$modal-content-border-color: var(--#{$prefix}border-color-translucent);
+$modal-content-border-width: var(--#{$prefix}border-width);
+$modal-content-border-radius: var(--#{$prefix}border-radius-lg);
+$modal-content-inner-border-radius: subtract(
+  $modal-content-border-radius,
+  $modal-content-border-width
+);
+$modal-content-box-shadow-xs: $box-shadow-sm;
+$modal-content-box-shadow-sm-up: $box-shadow;
+
+$modal-backdrop-bg: $black;
+$modal-backdrop-opacity: 0.5;
+
+$modal-header-border-color: var(--#{$prefix}border-color);
+$modal-header-border-width: 0; // We dont want border here
+$modal-header-padding-y: $modal-inner-padding * 0.8;
+$modal-header-padding-x: $modal-inner-padding;
+$modal-header-padding: $modal-header-padding-y $modal-header-padding-x; // Keep this for backwards compatibility
+
+$modal-footer-bg: null;
+$modal-footer-border-color: $modal-header-border-color;
+$modal-footer-border-width: 0; // We don't want border here
+
+$modal-sm: 300px;
+$modal-md: 500px;
+$modal-lg: 800px;
+$modal-xl: 1140px;
+
+$modal-fade-transform: translate(0, -50px);
+$modal-show-transform: none;
+$modal-transition: transform 0.3s ease-out;
+$modal-scale-transform: scale(1.02);

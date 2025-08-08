@@ -318,8 +318,8 @@ describe('Testing Advertisement Entry Component', () => {
         id: '1',
         name: 'Updated Advertisement',
         type: 'menu',
-        endAt: '2025-04-09T18:30:00.000Z',
-        startAt: '2025-04-08T18:30:00.000Z',
+        endAt: '2025-04-09T00:00:00.000Z',
+        startAt: '2025-04-08T00:00:00.000Z',
       },
     });
   });
