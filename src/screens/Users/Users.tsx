@@ -241,7 +241,7 @@ const Users = (): JSX.Element => {
         const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
         const uniqueUsers = Array.from(
-          new Map(mergedUsers.map((user) => [user.id, user])).values(),
+          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
         );
         if (uniqueUsers.length < mergedUsers.length) {
           setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
@@ -276,13 +276,15 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          new Date(b.user.createdAt).getTime() -
+          new Date(a.user.createdAt).getTime(),
       );
       return sortedUsers;
     }
     sortedUsers.sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        new Date(a.user.createdAt).getTime() -
+        new Date(b.user.createdAt).getTime(),
     );
     return sortedUsers;
   };
@@ -305,17 +307,20 @@ const Users = (): JSX.Element => {
       return filteredUsers;
     } else if (filteringOption === 'user') {
       const output = filteredUsers.filter((user) => {
-        return user?.role?.length === 0;
+        return user.appUserProfile.adminFor.length === 0;
       });
       return output;
     } else if (filteringOption === 'admin') {
       const output = filteredUsers.filter((user) => {
-        return user.role === 'administrator' && user.role.length !== 0;
+        return (
+          user.appUserProfile.isSuperAdmin === false &&
+          user.appUserProfile.adminFor.length !== 0
+        );
       });
       return output;
     } else {
       const output = filteredUsers.filter((user) => {
-        return user.role === 'administrator';
+        return user.appUserProfile.isSuperAdmin === true;
       });
       return output;
     }
@@ -436,7 +441,7 @@ const Users = (): JSX.Element => {
                     (user: InterfaceQueryUserListItem, index: number) => {
                       return (
                         <UsersTableItem
-                          key={user.id}
+                          key={user.user._id}
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}
