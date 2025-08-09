@@ -269,13 +269,13 @@ function OrganizationPeople(): JSX.Element {
     if (isForwardNavigation) {
       // Forward navigation uses "after" with the endCursor of the current page
       variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.startCursor || null;
+      variables.after = currentPageCursors?.endCursor || null;
       variables.last = null;
       variables.before = null;
     } else {
       // Backward navigation uses "before" with the startCursor of the current page
       variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.endCursor || null;
+      variables.before = currentPageCursors?.startCursor || null;
       variables.first = null;
       variables.after = null;
     }
@@ -520,7 +520,11 @@ function OrganizationPeople(): JSX.Element {
           getRowId={(row) => row._id}
           rows={filteredRows}
           columns={columns}
-          rowCount={-1}
+          rowCount={
+            paginationMeta.hasNextPage
+              ? (paginationModel.page + 2) * PAGE_SIZE
+              : (paginationModel.page + 1) * PAGE_SIZE
+          }
           paginationMode="server"
           paginationModel={paginationModel}
           onPaginationModelChange={handlePaginationModelChange}
