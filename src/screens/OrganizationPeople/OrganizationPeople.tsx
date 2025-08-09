@@ -267,29 +267,15 @@ function OrganizationPeople(): JSX.Element {
     const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
-      // Forward navigation uses pageInfo.endCursor, fallback to last row’s cursor.
+      // Forward navigation uses "after" with the endCursor of the current page
       variables.first = PAGE_SIZE;
-      const inferredEndCursor =
-        currentPageCursors?.endCursor ??
-        currentRows[currentRows.length - 1]?.cursor ??
-        null;
-      if (!inferredEndCursor) {
-        // No valid cursor → stop navigation to avoid re-fetching current page
-        return;
-      }
-      variables.after = inferredEndCursor;
+      variables.after = currentPageCursors?.endCursor;
       variables.last = null;
       variables.before = null;
     } else {
-      // Backward navigation uses "before" with the startCursor of the current page.
-      // Fallback to the first row's cursor if pageInfo is inconsistent.
+      // Backward navigation uses "before" with the startCursor of the current page
       variables.last = PAGE_SIZE;
-      const inferredStartCursor =
-        currentPageCursors?.startCursor ?? currentRows[0]?.cursor ?? null;
-      if (!inferredStartCursor) {
-        return;
-      }
-      variables.before = inferredStartCursor;
+      variables.before = currentPageCursors?.startCursor;
       variables.first = null;
       variables.after = null;
     }
