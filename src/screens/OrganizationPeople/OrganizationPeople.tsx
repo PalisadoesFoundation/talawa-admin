@@ -267,15 +267,29 @@ function OrganizationPeople(): JSX.Element {
     const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
-      // Forward navigation uses "after" with the endCursor of the current page
+      // Forward navigation uses pageInfo.endCursor, fallback to last row’s cursor.
       variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.endCursor || null;
+      const inferredEndCursor =
+        currentPageCursors?.endCursor ??
+        currentRows[currentRows.length - 1]?.cursor ??
+        null;
+      if (!inferredEndCursor) {
+        // No valid cursor → stop navigation to avoid re-fetching current page
+        return;
+      }
+      variables.after = inferredEndCursor;
       variables.last = null;
       variables.before = null;
     } else {
-      // Backward navigation uses "before" with the startCursor of the current page
+      // Backward navigation uses "before" with the startCursor of the current page.
+      // Fallback to the first row's cursor if pageInfo is inconsistent.
       variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.startCursor || null;
+      const inferredStartCursor =
+        currentPageCursors?.startCursor ?? currentRows[0]?.cursor ?? null;
+      if (!inferredStartCursor) {
+        return;
+      }
+      variables.before = inferredStartCursor;
       variables.first = null;
       variables.after = null;
     }
@@ -521,9 +535,9 @@ function OrganizationPeople(): JSX.Element {
           rows={filteredRows}
           columns={columns}
           rowCount={
-            paginationMeta.hasNextPage
-              ? (paginationModel.page + 2) * PAGE_SIZE
-              : (paginationModel.page + 1) * PAGE_SIZE
+            paginationModel.page * PAGE_SIZE +
+            currentRows.length +
+            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
           }
           paginationMode="server"
           paginationModel={paginationModel}
