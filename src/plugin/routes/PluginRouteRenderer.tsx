@@ -6,8 +6,8 @@
  */
 
 import React, { Suspense } from 'react';
-import type { IRouteExtension } from './types';
-import { getPluginComponents, isPluginRegistered } from './registry';
+import type { IRouteExtension } from '../types';
+import { getPluginComponents, isPluginRegistered } from '../registry';
 
 interface PluginRouteRendererProps {
   route: IRouteExtension;
@@ -21,11 +21,6 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
   route,
   fallback = <div>Loading plugin...</div>,
 }) => {
-  console.log(`=== PLUGIN ROUTE RENDERER ===`);
-  console.log(`Route:`, route);
-  console.log(`Plugin ID:`, route.pluginId);
-  console.log(`Component:`, route.component);
-
   // Check if pluginId is provided
   if (!route.pluginId) {
     console.error(`Plugin ID is missing from route`);
@@ -84,9 +79,6 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
   // Get the plugin components
   const pluginComponents = getPluginComponents(route.pluginId);
 
-  console.log(`Plugin components:`, pluginComponents);
-  console.log(`Available components:`, Object.keys(pluginComponents || {}));
-
   if (!pluginComponents) {
     console.error(`No components found for plugin '${route.pluginId}'`);
     return (
@@ -112,8 +104,6 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
 
   // Get the specific component for this route
   const PluginComponent = pluginComponents[route.component];
-
-  console.log(`Found component:`, PluginComponent);
 
   if (!PluginComponent) {
     console.error(
@@ -145,8 +135,6 @@ const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
       </div>
     );
   }
-
-  console.log(`=== END PLUGIN ROUTE RENDERER ===`);
 
   return (
     <Suspense fallback={fallback}>

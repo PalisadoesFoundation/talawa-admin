@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import PluginInjector from '../components/PluginInjector';
-import { usePluginInjectors } from '../hooks';
-import { getPluginComponent } from '../registry';
+import PluginInjector from '../../components/PluginInjector';
+import { usePluginInjectors } from '../../hooks';
+import { getPluginComponent } from '../../registry';
 
 // Mock the hooks
-vi.mock('../hooks', () => ({
+vi.mock('../../hooks', () => ({
   usePluginInjectors: vi.fn(),
 }));
 
 // Mock the registry
-vi.mock('../registry', () => ({
+vi.mock('../../registry', () => ({
   getPluginComponent: vi.fn(),
 }));
 

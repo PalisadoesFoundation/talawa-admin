@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import EnvironmentPlugin from 'vite-plugin-environment';
+import createInternalFileWriterPlugin from '../src/plugin/vite/internalFileWriterPlugin';
 
 export default defineConfig({
   // depending on your application, base can also be "/"
@@ -19,6 +20,11 @@ export default defineConfig({
         icon: true,
         // ...svgr options (https://react-svgr.com/docs/options/)
       },
+    }),
+    createInternalFileWriterPlugin({
+      enabled: true,
+      debug: process.env.NODE_ENV === 'development',
+      basePath: 'src/plugin/available',
     }),
   ],
   server: {

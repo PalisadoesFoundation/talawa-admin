@@ -357,7 +357,6 @@ export default function PluginStore() {
                 id: existingPlugin.id,
                 isInstalled: false,
                 isActivated: false,
-                backup: true,
               },
             },
           });
@@ -370,6 +369,31 @@ export default function PluginStore() {
               },
             },
           });
+
+          // Remove plugin folder from admin filesystem
+          try {
+            const { adminPluginFileService } = await import(
+              '../../plugin/services/AdminPluginFileService'
+            );
+            const success = await adminPluginFileService.removePlugin(
+              pluginToUninstall.id,
+            );
+            if (success) {
+              console.log(
+                `Admin plugin directory removed for: ${pluginToUninstall.id}`,
+              );
+            } else {
+              console.error(
+                `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
+              );
+            }
+          } catch (error) {
+            console.error(
+              `Failed to remove admin plugin directory for ${pluginToUninstall.id}:`,
+              error,
+            );
+            // Don't throw error - plugin is already deleted from database
+          }
         }
       }
 
@@ -408,15 +432,25 @@ export default function PluginStore() {
   };
 
   return (
-    <div className={styles.pageContent} style={{ paddingRight: 24 }}>
-      <div className={styles.btnsContainerSearchBar}>
+    <div
+      className={styles.pageContent}
+      style={{ paddingRight: 24 }}
+      data-testid="plugin-store-page"
+    >
+      <div
+        className={styles.btnsContainerSearchBar}
+        data-testid="plugin-store-searchbar"
+      >
         <SearchBar
           placeholder={t('searchPlaceholder')}
           onSearch={debouncedSearch}
           inputTestId="searchPlugins"
           buttonTestId="searchPluginsBtn"
         />
-        <div className={styles.btnsBlockSearchBar}>
+        <div
+          className={styles.btnsBlockSearchBar}
+          data-testid="plugin-store-filters"
+        >
           <SortingButton
             title="Filter plugins"
             sortingOptions={[
@@ -446,6 +480,7 @@ export default function PluginStore() {
           gap: 20,
           marginTop: 24,
         }}
+        data-testid="plugin-list-container"
       >
         {paginatedPlugins.length === 0 ? (
           <div
@@ -456,6 +491,7 @@ export default function PluginStore() {
               borderRadius: 12,
               border: '1px solid #e7e7e7',
             }}
+            data-testid="plugin-list-empty"
           >
             <div style={{ fontSize: 18, color: '#666', marginBottom: 8 }}>
               {filteredPlugins.length === 0 && searchTerm
@@ -471,7 +507,7 @@ export default function PluginStore() {
             </div>
           </div>
         ) : (
-          paginatedPlugins.map((plugin) => {
+          paginatedPlugins.map((plugin, idx) => {
             const installed = isInstalled(plugin.name);
             return (
               <div
@@ -487,6 +523,7 @@ export default function PluginStore() {
                   minHeight: 80,
                   transition: 'box-shadow 0.2s',
                 }}
+                data-testid={`plugin-list-item-${plugin.id}`}
               >
                 {/* Icon */}
                 <img
@@ -500,6 +537,7 @@ export default function PluginStore() {
                     background: '#f5f5f5',
                     marginRight: 24,
                   }}
+                  data-testid={`plugin-icon-${plugin.id}`}
                 />
                 {/* Name, Description, Author */}
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -512,6 +550,7 @@ export default function PluginStore() {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}
+                    data-testid={`plugin-name-${plugin.id}`}
                   >
                     {plugin.name}
                   </div>
@@ -524,10 +563,14 @@ export default function PluginStore() {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}
+                    data-testid={`plugin-description-${plugin.id}`}
                   >
                     {plugin.description}
                   </div>
-                  <div style={{ fontSize: 13, color: '#888' }}>
+                  <div
+                    style={{ fontSize: 13, color: '#888' }}
+                    data-testid={`plugin-author-${plugin.id}`}
+                  >
                     {plugin.author}
                   </div>
                 </div>
@@ -538,6 +581,7 @@ export default function PluginStore() {
                     color="primary"
                     onClick={() => openPlugin(plugin)}
                     className="w-100 mb-2"
+                    data-testid={`plugin-action-btn-${plugin.id}`}
                   >
                     {installed ? 'Manage' : 'View'}
                   </Button>
@@ -555,6 +599,7 @@ export default function PluginStore() {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          data-testid="plugin-pagination"
         />
       </div>
       {/* Plugin Details Modal */}
@@ -569,19 +614,29 @@ export default function PluginStore() {
         installPlugin={installPlugin}
         togglePluginStatus={togglePluginStatus}
         uninstallPlugin={uninstallPlugin}
+        data-testid="plugin-modal"
       />
       {/* Upload Plugin Modal */}
-      <UploadPluginModal show={showUploadModal} onHide={closeUploadModal} />
+      <UploadPluginModal
+        show={showUploadModal}
+        onHide={closeUploadModal}
+        data-testid="upload-plugin-modal"
+      />
       {/* Uninstall Confirmation Modal */}
       <Dialog
         open={showUninstallModal}
         onClose={() => setShowUninstallModal(false)}
         maxWidth="sm"
         fullWidth
+        data-testid="uninstall-modal"
       >
         <DialogTitle sx={{ pb: 1 }}>Uninstall Plugin</DialogTitle>
         <DialogContent>
-          <Typography variant="body1" sx={{ mb: 2 }}>
+          <Typography
+            variant="body1"
+            sx={{ mb: 2 }}
+            data-testid="uninstall-modal-title"
+          >
             How would you like to uninstall {pluginToUninstall?.name}?
           </Typography>
           <Typography variant="body2" color="text.secondary">
@@ -596,6 +651,7 @@ export default function PluginStore() {
             onClick={() => setShowUninstallModal(false)}
             color="inherit"
             sx={{ mr: 1 }}
+            data-testid="uninstall-cancel-btn"
           >
             Cancel
           </Button>
@@ -604,6 +660,7 @@ export default function PluginStore() {
             color="error"
             variant="outlined"
             sx={{ mr: 1 }}
+            data-testid="uninstall-remove-btn"
           >
             Remove Permanently
           </Button>
@@ -611,6 +668,7 @@ export default function PluginStore() {
             onClick={() => handleUninstallConfirm(true)}
             color="primary"
             variant="contained"
+            data-testid="uninstall-keepdata-btn"
           >
             Keep Data
           </Button>

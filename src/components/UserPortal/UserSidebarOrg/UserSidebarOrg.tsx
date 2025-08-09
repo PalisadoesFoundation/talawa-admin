@@ -58,12 +58,13 @@ import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
+import { FaBars } from 'react-icons/fa';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
   targets: TargetsType[];
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserSidebarOrg = ({
@@ -152,7 +153,9 @@ const UserSidebarOrg = ({
                       }
                     />
                   </div>
-                  {tCommon(name)}
+                  {!hideDrawer && (
+                    <div style={{ whiteSpace: 'nowrap' }}>{tCommon(name)}</div>
+                  )}
                 </Button>
               )}
             </NavLink>
@@ -192,25 +195,73 @@ const UserSidebarOrg = ({
       renderPluginDrawerItem,
       showDropdown,
       tCommon,
+      hideDrawer,
     ],
   );
 
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          marginRight: hideDrawer ? '20px' : '200px',
+        }}
+        className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : ''}`}
         data-testid="leftDrawerContainer"
       >
-        {/* Branding Section */}
-        <div className={styles.brandingContainer}>
-          <TalawaLogo className={styles.talawaLogo} />
-          <span className={styles.talawaText}>{t('talawaUserPortal')}</span>
+        <div>
+          {/* Branding Section */}
+          <div
+            className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+          >
+            <button
+              className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+              data-testid="toggleBtn"
+              onClick={() => {
+                setHideDrawer(!hideDrawer);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setHideDrawer(!hideDrawer);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              <FaBars
+                className={styles.hamburgerIcon}
+                aria-label="Toggle sidebar"
+                size={22}
+                style={{
+                  cursor: 'pointer',
+                  height: '38px',
+                  marginLeft: hideDrawer ? '0px' : '10px',
+                }}
+              />
+            </button>
+            <div
+              style={{
+                display: hideDrawer ? 'none' : 'flex',
+                alignItems: 'center',
+                paddingRight: '40px',
+              }}
+            >
+              <TalawaLogo className={styles.talawaLogo} />
+              <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+                {t('talawaUserPortal')}
+              </div>
+            </div>
+          </div>
+          {/* Options List */}
+          {!hideDrawer ? (
+            <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
+          ) : (
+            <div style={{ paddingBottom: '40px' }}></div>
+          )}{' '}
+          {drawerContent}
         </div>
 
         {/* Organization Section */}
@@ -257,12 +308,9 @@ const UserSidebarOrg = ({
           )}
         </div> */}
 
-        {/* Options List */}
-        <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
-        {drawerContent}
         <div className={styles.userSidebarOrgFooter}>
-          <ProfileCard />
-          <SignOut />
+          {!hideDrawer && <ProfileCard />}
+          <SignOut hideDrawer={hideDrawer} />
         </div>
       </div>
     </>

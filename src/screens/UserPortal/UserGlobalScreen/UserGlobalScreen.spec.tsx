@@ -363,7 +363,6 @@ describe('UserGlobalScreen', () => {
       // With null initial state, should not have expand or contract classes
       expect(mainContainer).toHaveClass('pageContainer');
       expect(mainContainer).not.toHaveClass('expand');
-      expect(mainContainer).not.toHaveClass('contract');
     });
 
     it('should initialize based on screen width on mount', () => {

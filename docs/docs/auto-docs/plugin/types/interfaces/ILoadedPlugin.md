@@ -4,15 +4,23 @@
 
 # Interface: ILoadedPlugin
 
-Defined in: [src/plugin/types.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L98)
+Defined in: [src/plugin/types.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L118)
 
 ## Properties
 
-### components
+### components?
 
-> **components**: `Record`\<`string`, `ComponentType`\<\{\}\>\>
+> `optional` **components**: `Record`\<`string`, `ComponentType`\<`any`\>\>
 
-Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L101)
+Defined in: [src/plugin/types.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L125)
+
+***
+
+### error?
+
+> `optional` **error**: `string`
+
+Defined in: [src/plugin/types.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L123)
 
 ***
 
@@ -20,7 +28,7 @@ Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **errorMessage**: `string`
 
-Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L103)
+Defined in: [src/plugin/types.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L124)
 
 ***
 
@@ -28,7 +36,15 @@ Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/ta
 
 > **id**: `string`
 
-Defined in: [src/plugin/types.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L99)
+Defined in: [src/plugin/types.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L119)
+
+***
+
+### info?
+
+> `optional` **info**: [`IPluginInfo`](IPluginInfo.md)
+
+Defined in: [src/plugin/types.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L121)
 
 ***
 
@@ -36,12 +52,12 @@ Defined in: [src/plugin/types.ts:99](https://github.com/PalisadoesFoundation/tal
 
 > **manifest**: [`IPluginManifest`](IPluginManifest.md)
 
-Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L100)
+Defined in: [src/plugin/types.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L120)
 
 ***
 
 ### status
 
-> **status**: [`PluginStatus`](../enumerations/PluginStatus.md)
+> **status**: `"error"` \| `"active"` \| `"inactive"`
 
-Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L102)
+Defined in: [src/plugin/types.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L122)
