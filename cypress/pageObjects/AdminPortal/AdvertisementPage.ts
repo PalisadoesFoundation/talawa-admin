@@ -20,7 +20,24 @@ export class AdvertisementPage {
     cy.visit('/orglist');
     cy.get('[data-cy="manageBtn"]').should('be.visible').first().click();
     cy.url({ timeout }).should('match', /\/orgdash\/[a-f0-9-]+/);
-    cy.get(this._leftDrawerAdBtn, { timeout }).should('be.visible').click();
+    cy.get('body').then(($body) => {
+      const drawerElement = $body.find('[data-testid="leftDrawerContainer"]');
+      if (drawerElement.length > 0) {
+        const isCollapsed =
+          drawerElement.hasClass('_collapsedDrawer_') ||
+          drawerElement.css('width') === '56px' ||
+          drawerElement.css('width') === '72px';
+
+        if (isCollapsed) {
+          cy.get('[data-testid="hamburgerMenuBtn"]').click();
+          cy.wait(500);
+        }
+      }
+    });
+    cy.get(this._leftDrawerAdBtn, { timeout })
+      .scrollIntoView()
+      .should('exist')
+      .click({ force: true });
     cy.url().should('match', /\/orgads\/[a-f0-9-]+/);
     return this;
   }

@@ -169,7 +169,11 @@ export default function organizations(): React.JSX.Element {
     keyPrefix: 'userOrganizations',
   });
 
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const { getItem, setItem } = useLocalStorage();
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   /**
    * Handles window resize events to toggle drawer visibility.
@@ -177,10 +181,12 @@ export default function organizations(): React.JSX.Element {
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
-    } else {
-      setHideDrawer(false);
     }
   };
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
 
   useEffect(() => {
     handleResize();
