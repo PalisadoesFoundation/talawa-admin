@@ -601,32 +601,56 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
-// Query to take the Organization with data
+// Organization fragments for reusability
+const ORGANIZATION_BASIC_FIELDS = gql`
+  fragment OrganizationBasicFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+    createdAt
+    updatedAt
+  }
+`;
+
+const ORGANIZATION_DETAILED_FIELDS = gql`
+  fragment OrganizationDetailedFields on Organization {
+    ...OrganizationBasicFields
+    creator {
+      id
+      name
+      emailAddress
+    }
+    updater {
+      id
+      name
+      emailAddress
+    }
+  }
+  ${ORGANIZATION_BASIC_FIELDS}
+`;
+
+// Query to get basic organization data for updates
+export const GET_ORGANIZATION_BASIC_DATA = gql`
+  query getOrganizationBasicData($id: String!) {
+    organization(input: { id: $id }) {
+      ...OrganizationBasicFields
+    }
+  }
+  ${ORGANIZATION_BASIC_FIELDS}
+`;
+
+// Query to take the Organization with data (keeping same name for compatibility)
 export const GET_ORGANIZATION_DATA_PG = gql`
   query getOrganizationData($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-        emailAddress
-      }
-      updater {
-        id
-        name
-        emailAddress
-      }
+      ...OrganizationDetailedFields
       members(first: $first, after: $after) {
         edges {
           node {
@@ -644,6 +668,7 @@ export const GET_ORGANIZATION_DATA_PG = gql`
       }
     }
   }
+  ${ORGANIZATION_DETAILED_FIELDS}
 `;
 
 // Shared fragment with common organization fields
