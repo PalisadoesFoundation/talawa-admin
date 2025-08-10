@@ -241,7 +241,7 @@ const Users = (): JSX.Element => {
         const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
         const uniqueUsers = Array.from(
-          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+          new Map(mergedUsers.map((user) => [user.id, user])).values(),
         );
         if (uniqueUsers.length < mergedUsers.length) {
           setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
@@ -276,15 +276,13 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.user.createdAt).getTime() -
-          new Date(a.user.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       return sortedUsers;
     }
     sortedUsers.sort(
       (a, b) =>
-        new Date(a.user.createdAt).getTime() -
-        new Date(b.user.createdAt).getTime(),
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
     return sortedUsers;
   };
@@ -305,25 +303,18 @@ const Users = (): JSX.Element => {
 
     if (filteringOption === 'cancel') {
       return filteredUsers;
-    } else if (filteringOption === 'user') {
-      const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.adminFor.length === 0;
-      });
-      return output;
-    } else if (filteringOption === 'admin') {
-      const output = filteredUsers.filter((user) => {
-        return (
-          user.appUserProfile.isSuperAdmin === false &&
-          user.appUserProfile.adminFor.length !== 0
-        );
-      });
-      return output;
-    } else {
-      const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.isSuperAdmin === true;
-      });
-      return output;
     }
+    if (filteringOption === 'user') {
+      return allUsers.filter((user) => user.role === 'regular');
+    }
+    if (filteringOption === 'admin') {
+      return allUsers.filter((user) => user.role === 'administrator');
+    }
+    if (filteringOption === 'superAdmin') {
+      return [];
+    }
+
+    return [];
   };
 
   const headerTitles: string[] = [
@@ -441,7 +432,7 @@ const Users = (): JSX.Element => {
                     (user: InterfaceQueryUserListItem, index: number) => {
                       return (
                         <UsersTableItem
-                          key={user.user._id}
+                          key={user.id}
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}

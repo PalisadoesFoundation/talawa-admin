@@ -1979,15 +1979,25 @@ export interface InterfaceQueryUserListItem {
   mobilePhoneNumber: string | null;
   homePhoneNumber: string | null;
   workPhoneNumber: string | null;
+
   createdOrganizations: {
     id: string;
     name: string;
   }[];
+
   organizationsWhereMember: {
     edges: {
       node: {
         id: string;
         name: string;
+        image?: string | null;
+        city?: string | null;
+        createdAt: string;
+        creator: {
+          id: string;
+          name: string;
+          avatarURL?: string | null;
+        };
       };
     }[];
   };

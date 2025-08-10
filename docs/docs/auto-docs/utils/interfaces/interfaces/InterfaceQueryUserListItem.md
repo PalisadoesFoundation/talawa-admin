@@ -58,7 +58,7 @@ Defined in: [src/utils/interfaces.ts:1968](https://github.com/PalisadoesFoundati
 
 > **createdOrganizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1982](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1982)
+Defined in: [src/utils/interfaces.ts:1983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1983)
 
 #### id
 
@@ -162,7 +162,7 @@ Defined in: [src/utils/interfaces.ts:1975](https://github.com/PalisadoesFoundati
 
 > **organizationsWhereMember**: `object`
 
-Defined in: [src/utils/interfaces.ts:1986](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1986)
+Defined in: [src/utils/interfaces.ts:1988](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1988)
 
 #### edges
 
