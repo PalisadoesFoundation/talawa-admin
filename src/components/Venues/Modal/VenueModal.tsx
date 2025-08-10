@@ -74,10 +74,10 @@ const VenueModal = ({
   // State to manage image preview and form data
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [formState, setFormState] = useState({
-    name: venueData?.name || '',
-    description: venueData?.description || '',
-    capacity: venueData?.capacity || '',
-    objectName: venueData?.image || '',
+    name: venueData?.node.name || '',
+    description: venueData?.node.description || '',
+    capacity: venueData?.node.capacity || '',
+    objectName: venueData?.node.image || '',
   });
 
   // Reference for the file input element
@@ -106,10 +106,10 @@ const VenueModal = ({
     }
 
     // Only validate name uniqueness if it has changed
-    if (edit && formState.name.trim() === venueData?.name) {
+    if (edit && formState.name.trim() === venueData?.node.name) {
       // If name hasn't changed, only update other fields
       const variables = {
-        id: venueData._id,
+        id: venueData.node.id,
         capacity: parseInt(formState.capacity, 10),
         description: formState.description?.trim() || '',
         file: formState.objectName || '',
@@ -118,7 +118,7 @@ const VenueModal = ({
       try {
         const result = await mutate({ variables });
 
-        if (result?.data?.editVenue) {
+        if (result?.data?.updateVenue) {
           toast.success(t('venueUpdated'));
           refetchVenues();
           onHide();
@@ -138,10 +138,10 @@ const VenueModal = ({
     }
 
     try {
-      if (edit && venueData?._id) {
+      if (edit && venueData?.node.id) {
         // If name has changed, include all fields
         const variables = {
-          id: venueData._id,
+          id: venueData.node.id,
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
@@ -150,7 +150,7 @@ const VenueModal = ({
 
         const result = await mutate({ variables });
 
-        if (result?.data?.editVenue) {
+        if (result?.data?.updateVenue) {
           toast.success(t('venueUpdated'));
           refetchVenues();
           onHide();
@@ -201,16 +201,16 @@ const VenueModal = ({
   // Update form state when venueData changes
   useEffect(() => {
     setFormState({
-      name: venueData?.name || '', // Prefill name or set as empty
-      description: venueData?.description || '', // Prefill description
-      capacity: venueData?.capacity?.toString() || '', // Prefill capacity as a string
-      objectName: venueData?.image || '', // Prefill image
+      name: venueData?.node.name || '', // Prefill name or set as empty
+      description: venueData?.node.description || '', // Prefill description
+      capacity: venueData?.node.capacity?.toString() || '', // Prefill capacity as a string
+      objectName: venueData?.node.image || '', // Prefill image
     });
 
-    if (venueData?.image) {
+    if (venueData?.node.image) {
       try {
         const previewUrl = new URL(
-          `/api/images/${venueData.image}`,
+          `/api/images/${venueData.node.image}`,
           window.location.origin,
         ).toString();
         setImagePreviewUrl(previewUrl);

@@ -12,22 +12,20 @@ import gql from 'graphql-tag';
 
 export const CREATE_VENUE_MUTATION = gql`
   mutation createVenue(
-    $capacity: Int!
-    $description: String
-    $file: String
     $name: String!
+    $description: String
     $organizationId: ID!
   ) {
     createVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
+      input: {
         name: $name
+        description: $description
         organizationId: $organizationId
       }
     ) {
-      _id
+      id
+      name
+      description
     }
   }
 `;
@@ -43,23 +41,11 @@ export const CREATE_VENUE_MUTATION = gql`
  */
 
 export const UPDATE_VENUE_MUTATION = gql`
-  mutation editVenue(
-    $capacity: Int
-    $description: String
-    $file: String
-    $id: ID!
-    $name: String
-  ) {
-    editVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
-        id: $id
-        name: $name
-      }
-    ) {
-      _id
+  mutation updateVenue($id: ID!, $name: String, $description: String) {
+    updateVenue(input: { id: $id, name: $name, description: $description }) {
+      id
+      name
+      description
     }
   }
 `;
@@ -72,8 +58,8 @@ export const UPDATE_VENUE_MUTATION = gql`
 
 export const DELETE_VENUE_MUTATION = gql`
   mutation DeleteVenue($id: ID!) {
-    deleteVenue(id: $id) {
-      _id
+    deleteVenue(input: { id: $id }) {
+      id
     }
   }
 `;

@@ -35,22 +35,22 @@ const MOCKS = [
         file: '',
       },
     },
-    result: { data: { createVenue: { _id: 'orgId' } } },
+    result: { data: { createVenue: { id: 'orgId' } } },
   },
 
-  // Basic update venue mock
+  // Basic update venue mock - matches changed name case
   {
     request: {
       query: UPDATE_VENUE_MUTATION,
       variables: {
         id: 'venue1',
         name: 'Updated Venue',
-        capacity: 200,
         description: 'Updated description',
+        capacity: 200,
         file: 'image1',
       },
     },
-    result: { data: { editVenue: { _id: 'venue1' } } },
+    result: { data: { updateVenue: { id: 'venue1' } } },
   },
 
   // First sequential update mock
@@ -60,12 +60,12 @@ const MOCKS = [
       variables: {
         id: 'venue1',
         name: 'Updated Venue 1',
-        capacity: parseInt('100'),
         description: 'Updated description for venue 1',
+        capacity: 100,
         file: 'image1',
       },
     },
-    result: { data: { editVenue: { _id: 'venue1' } } },
+    result: { data: { updateVenue: { id: 'venue1' } } },
   },
 
   // Second sequential update mock
@@ -75,12 +75,12 @@ const MOCKS = [
       variables: {
         id: 'venue1',
         name: 'Updated Venue 2',
-        capacity: parseInt('100'),
         description: 'Updated description for venue 1',
+        capacity: 100,
         file: 'image1',
       },
     },
-    result: { data: { editVenue: { _id: 'venue1' } } },
+    result: { data: { updateVenue: { id: 'venue1' } } },
   },
 
   // Duplicate name error mock
@@ -119,12 +119,13 @@ const MOCKS = [
       query: UPDATE_VENUE_MUTATION,
       variables: {
         id: 'venue1',
-        capacity: parseInt('150'),
+        // No name field when unchanged
+        capacity: 150,
         description: 'Changed description',
         file: 'image1',
       },
     },
-    result: { data: { editVenue: { _id: 'venue1' } } },
+    result: { data: { updateVenue: { id: 'venue1' } } },
   },
 
   // Mock for whitespace trimming test
@@ -185,11 +186,13 @@ const editProps: InterfaceVenueModalProps = {
   onHide: vi.fn(),
   edit: true,
   venueData: {
-    _id: 'venue1',
-    name: 'Venue 1',
-    description: 'Updated description for venue 1',
-    image: 'image1',
-    capacity: '100',
+    node: {
+      id: 'venue1',
+      name: 'Venue 1',
+      description: 'Updated description for venue 1',
+      image: 'image1',
+      capacity: '100',
+    },
   },
   refetchVenues: vi.fn(),
   orgId: 'orgId',
@@ -670,11 +673,13 @@ describe('VenueModal', () => {
             <VenueModal
               {...defaultProps}
               venueData={{
-                _id: '123',
-                name: 'Test Venue',
-                description: 'Test Description',
-                capacity: '100',
-                image: 'some-image.jpg',
+                node: {
+                  id: '123',
+                  name: 'Test Venue',
+                  description: 'Test Description',
+                  capacity: '100',
+                  image: 'some-image.jpg',
+                },
               }}
             />
           </I18nextProvider>
@@ -1006,7 +1011,7 @@ describe('VenueModal', () => {
               file: '', // Test objectName fallback
             },
           },
-          result: { data: { editVenue: { _id: 'venue1' } } },
+          result: { data: { updateVenue: { id: 'venue1' } } },
         },
       ];
 
@@ -1014,11 +1019,13 @@ describe('VenueModal', () => {
       const customEditProps = {
         ...editProps,
         venueData: {
-          _id: 'venue1', // Keep the required fields
-          name: 'Venue 1',
-          capacity: '100',
-          description: null, // Changed to null from undefined
-          image: null, // Changed to null from undefined
+          node: {
+            id: 'venue1', // Keep the required fields
+            name: 'Venue 1',
+            capacity: '100',
+            description: null, // Changed to null from undefined
+            image: null, // Changed to null from undefined
+          },
         },
       };
 
@@ -1444,11 +1451,13 @@ describe('VenueModal', () => {
               {
                 ...defaultProps,
                 venueData: {
-                  _id: 'testVenue',
-                  name: 'Test Venue',
-                  description: 'Test Description',
-                  capacity: '100',
-                  image: null, // Null image
+                  node: {
+                    id: 'testVenue',
+                    name: 'Test Venue',
+                    description: 'Test Description',
+                    capacity: '100',
+                    image: null, // Null image
+                  },
                 },
               },
               new StaticMockLink([createVenueMock], true),
@@ -1658,18 +1667,20 @@ describe('VenueModal', () => {
                 file: '',
               },
             },
-            result: { data: { editVenue: { _id: 'venue1' } } },
+            result: { data: { updateVenue: { id: 'venue1' } } },
           };
 
           renderVenueModal(
             {
               ...editProps,
               venueData: {
-                _id: 'venue1',
-                name: 'Original Venue',
-                description: '',
-                image: '',
-                capacity: '100',
+                node: {
+                  id: 'venue1',
+                  name: 'Original Venue',
+                  description: '',
+                  image: '',
+                  capacity: '100',
+                },
               },
             },
             new StaticMockLink([updateMock], true),
