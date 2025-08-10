@@ -40,7 +40,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
     setShowOnCancel: 'JOINED' | '';
   }>({ orgName: '', orgId: '', setShowOnCancel: '' });
 
-  const memberOrgs = user.organizationsWhereMember.edges.map((e) => e.node);
+  const memberOrgs =
+    user.organizationsWhereMember?.edges?.map((e) => e.node) ?? [];
   const [joinedOrgs, setJoinedOrgs] = useState(memberOrgs);
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
 

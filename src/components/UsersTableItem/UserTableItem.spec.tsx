@@ -156,12 +156,9 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
     expect(screen.getByTestId(`showJoinedOrgsBtn${123}`)).toBeInTheDocument();
-    expect(
-      screen.getByTestId(`showBlockedByOrgsBtn${123}`),
-    ).toBeInTheDocument();
   });
 
-  test('Should render elements correctly when JoinedOrgs and BlockedByOrgs are empty', async () => {
+  test('Should render elements correctly when JoinedOrgs is empty', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
       index: number;
@@ -233,9 +230,6 @@ describe('Testing User Table Item', () => {
 
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`); // 123 is userId
-    const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`,
-    ); // 123 is userId
 
     // Open JoinedOrgs Modal -> Expect modal to contain text and no search box -> Close Modal
     fireEvent.click(showJoinedOrgsBtn);
@@ -246,16 +240,6 @@ describe('Testing User Table Item', () => {
       screen.getByText(/John Doe has not joined any organization/i),
     ).toBeInTheDocument();
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
-
-    // Open BlockedByOrgs Modal -> Expect modal to contain text and no search box -> Close Modal
-    fireEvent.click(showBlockedByOrgsBtn);
-    expect(
-      screen.queryByTestId(`searchByNameOrgsBlockedBy`),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByText(/John Doe is not blocked by any organization/i),
-    ).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
   });
 
   test('Should render props and text elements test for the Joined Organizations Modal properly', async () => {
@@ -410,161 +394,6 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
 
-  test('Should render props and text elements test for the Blocked By Organizations Modal properly', async () => {
-    const props: {
-      user: InterfaceQueryUserListItem;
-      index: number;
-      loggedInUserId: string;
-      resetAndRefetch: () => void;
-    } = {
-      user: {
-        id: '123',
-        name: 'John Doe',
-        emailAddress: 'john@example.com',
-        avatarURL: null,
-        birthDate: null,
-        city: null,
-        countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
-        educationGrade: null,
-        employmentStatus: null,
-        isEmailAddressVerified: true,
-        maritalStatus: null,
-        natalSex: null,
-        naturalLanguageCode: null,
-        postalCode: null,
-        role: null,
-        state: null,
-        mobilePhoneNumber: null,
-        homePhoneNumber: null,
-        workPhoneNumber: null,
-
-        createdOrganizations: [],
-
-        organizationsWhereMember: {
-          edges: [
-            {
-              node: {
-                id: 'abc',
-                name: 'Joined Organization 1',
-                image: null,
-                city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
-                creator: {
-                  id: '123',
-                  name: 'John Doe',
-                  avatarURL: null,
-                },
-              },
-            },
-            {
-              node: {
-                id: 'def',
-                name: 'Joined Organization 2',
-                image: null,
-                city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
-                creator: {
-                  id: '123',
-                  name: 'John Doe',
-                  avatarURL: null,
-                },
-              },
-            },
-          ],
-        },
-      },
-      index: 0,
-      loggedInUserId: '123',
-      resetAndRefetch: resetAndRefetchMock,
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <UsersTableItem {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`,
-    );
-    expect(showBlockedByOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showBlockedByOrgsBtn);
-    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
-
-    // Close using escape key and reopen
-    fireEvent.keyDown(screen.getByTestId('modal-blocked-org-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
-    });
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
-    fireEvent.click(showBlockedByOrgsBtn);
-    // Close using close button and reopen
-    fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
-
-    fireEvent.click(showBlockedByOrgsBtn);
-
-    // Expect the following to exist in modal
-
-    const inputBox = screen.getByTestId(`searchByNameOrgsBlockedBy`);
-    expect(inputBox).toBeInTheDocument();
-    expect(screen.getByText(/XYZ/i)).toBeInTheDocument();
-    expect(screen.getByText(/MNO/i)).toBeInTheDocument();
-    const elementsWithKingston = screen.getAllByText(/Kingston/i);
-    elementsWithKingston.forEach((element) => {
-      expect(element).toBeInTheDocument();
-    });
-    expect(screen.getByText(/29-01-2023/i)).toBeInTheDocument();
-    expect(screen.getByText(/29-03-2023/i)).toBeInTheDocument();
-    expect(screen.getByTestId('removeUserFromOrgBtnxyz')).toBeInTheDocument();
-    expect(screen.getByTestId('removeUserFromOrgBtnmno')).toBeInTheDocument();
-    // Click on Creator Link
-    fireEvent.click(screen.getByTestId(`creatorxyz`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
-
-    // Search for Blocked Organization 1
-    const searchBtn = screen.getByTestId(`searchBtnOrgsBlockedBy`);
-    fireEvent.keyUp(inputBox, {
-      target: { value: 'XYZ' },
-    });
-    fireEvent.click(searchBtn);
-    expect(screen.getByText(/XYZ/i)).toBeInTheDocument();
-    expect(screen.queryByText(/MNO/i)).not.toBeInTheDocument();
-
-    // Search for an Organization which does not exist
-    fireEvent.keyUp(inputBox, {
-      key: 'Enter',
-      target: { value: 'Blocked Organization 3' },
-    });
-    expect(
-      screen.getByText(`No results found for "Blocked Organization 3"`),
-    ).toBeInTheDocument();
-
-    // Now clear the search box
-    fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
-    fireEvent.keyUp(inputBox, { target: { value: '' } });
-    fireEvent.click(searchBtn);
-
-    // Click on Organization Link
-    fireEvent.click(screen.getByText(/XYZ/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/xyz');
-    expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/xyz');
-    fireEvent.click(screen.getByTestId(`closeBlockedByOrgsBtn${123}`));
-  });
-
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -683,126 +512,6 @@ describe('Testing User Table Item', () => {
     fireEvent.click(confirmRemoveBtn);
   });
 
-  test('Remove user from Organization should function properly in Organizations Blocked by Modal', async () => {
-    const props: {
-      user: InterfaceQueryUserListItem;
-      index: number;
-      loggedInUserId: string;
-      resetAndRefetch: () => void;
-    } = {
-      user: {
-        id: '123',
-        name: 'John Doe',
-        emailAddress: 'john@example.com',
-        avatarURL: null,
-        birthDate: null,
-        city: null,
-        countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
-        educationGrade: null,
-        employmentStatus: null,
-        isEmailAddressVerified: true,
-        maritalStatus: null,
-        natalSex: null,
-        naturalLanguageCode: null,
-        postalCode: null,
-        role: null,
-        state: null,
-        mobilePhoneNumber: null,
-        homePhoneNumber: null,
-        workPhoneNumber: null,
-
-        createdOrganizations: [],
-
-        organizationsWhereMember: {
-          edges: [
-            {
-              node: {
-                id: 'abc',
-                name: 'Joined Organization 1',
-                image: null,
-                city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
-                creator: {
-                  id: '123',
-                  name: 'John Doe',
-                  avatarURL: null,
-                },
-              },
-            },
-            {
-              node: {
-                id: 'def',
-                name: 'Joined Organization 2',
-                image: null,
-                city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
-                creator: {
-                  id: '123',
-                  name: 'John Doe',
-                  avatarURL: null,
-                },
-              },
-            },
-          ],
-        },
-      },
-      index: 0,
-      loggedInUserId: '123',
-      resetAndRefetch: resetAndRefetchMock,
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <UsersTableItem {...props} />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`,
-    );
-    expect(showBlockedByOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showBlockedByOrgsBtn);
-    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
-    fireEvent.click(showBlockedByOrgsBtn);
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'xyz'}`));
-    expect(screen.getByTestId('modal-remove-user-123')).toBeInTheDocument();
-
-    // Close using escape key and reopen
-    fireEvent.keyDown(screen.getByTestId('modal-blocked-org-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
-    });
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show')),
-    ).toBeTruthy();
-    fireEvent.click(showBlockedByOrgsBtn);
-    // Close using close button and reopen
-    fireEvent.click(screen.getByTestId('closeRemoveUserModal123'));
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show')),
-    ).toBeTruthy();
-
-    fireEvent.click(showBlockedByOrgsBtn);
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'xyz'}`));
-    const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
-    expect(confirmRemoveBtn).toBeInTheDocument();
-
-    fireEvent.click(confirmRemoveBtn);
-  });
-
   test('handles errors in removeUser mutation', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -882,14 +591,6 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
-    const showBlockedByOrgsBtn = screen.getByTestId(
-      `showBlockedByOrgsBtn${123}`,
-    );
-    expect(showBlockedByOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showBlockedByOrgsBtn);
-    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
   });
 
   test('change role button should function properly', async () => {
