@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -14,22 +14,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { toast } from 'react-toastify';
 
-/**
- * Unit tests for the CommentCard component.
- *
- * These tests ensure the CommentCard component renders and behaves as expected
- * under different scenarios. They cover various functionalities like:
- *  - Initial rendering with comment liked/not liked by user
- *  - User liking a comment
- *  - User unliking a comment
- * Mocked dependencies like `useLocalStorage` and Apollo Client mocks are used
- * to isolate the component and test its behavior independently.
- */
 const { getItem, setItem } = useLocalStorage();
 
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
+    warn: vi.fn(),
   },
 }));
 
@@ -46,13 +36,16 @@ const MOCKS = [
     request: {
       query: LIKE_COMMENT,
       variables: {
-        commentId: '1',
+        input: {
+          commentId: '1',
+          type: 'up_vote',
+        },
       },
-      result: {
-        data: {
-          likeComment: {
-            _id: '1',
-          },
+    },
+    result: {
+      data: {
+        createCommentVote: {
+          id: '1',
         },
       },
     },
@@ -61,13 +54,16 @@ const MOCKS = [
     request: {
       query: UNLIKE_COMMENT,
       variables: {
-        commentId: '1',
+        input: {
+          commentId: '1',
+          creatorId: '1',
+        },
       },
-      result: {
-        data: {
-          unlikeComment: {
-            _id: '1',
-          },
+    },
+    result: {
+      data: {
+        deleteCommentVote: {
+          id: '1',
         },
       },
     },
@@ -93,17 +89,14 @@ const defaultProps = {
     ],
   },
   text: 'testComment',
-  handleLikeComment: vi.fn(), // or use your Mock<Procedure>
-  handleDislikeComment: vi.fn(), // or use your Mock<Procedure>
 };
 
-const handleLikeComment = vi.fn();
-const handleDislikeComment = vi.fn();
 const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing CommentCard Component [User Portal]', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    setItem('userId', '1');
   });
 
   afterEach(async () => {
@@ -113,36 +106,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   it('Component should be rendered properly if comment is already liked by the user.', async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        id: '1',
-        name: 'test user',
-      },
-      upVoteCount: 1,
-      downVoteCount: 0, // Add based on requirement
-      upVoters: {
-        edges: [
-          {
-            id: '1',
-            node: {
-              id: '1',
-            },
-          },
-        ],
-      },
-      text: 'testComment',
-    };
-
-    const beforeUserId = getItem('userId');
-    setItem('userId', '2');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...cardProps} />
+              <CommentCard {...defaultProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -150,42 +119,18 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
+    expect(screen.getByText('testComment')).toBeInTheDocument();
+    expect(screen.getByText('test user')).toBeInTheDocument();
   });
 
   it('Component should be rendered properly if comment is not already liked by the user.', async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        id: '1',
-        name: 'test user',
-      },
-      upVoteCount: 1,
-      downVoteCount: 0, // Add based on requirement
-      upVoters: {
-        edges: [
-          {
-            id: '1',
-            node: {
-              id: '1',
-            },
-          },
-        ],
-      },
-      text: 'testComment',
-    };
-
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
+    setItem('userId', '2');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...cardProps} />
+              <CommentCard {...defaultProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -193,42 +138,17 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
+    expect(screen.getByText('testComment')).toBeInTheDocument();
   });
 
   it('Component renders as expected if user likes the comment.', async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        id: '1',
-        name: 'test user',
-      },
-      upVoteCount: 1,
-      downVoteCount: 0, // Add based on requirement
-      upVoters: {
-        edges: [
-          {
-            id: '1',
-            node: {
-              id: '1',
-            },
-          },
-        ],
-      },
-      text: 'testComment',
-    };
-
-    const beforeUserId = getItem('userId');
     setItem('userId', '2');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...cardProps} />
+              <CommentCard {...defaultProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -236,47 +156,17 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-
     await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
   });
 
   it('Component renders as expected if user unlikes the comment.', async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        id: '1',
-        name: 'test user',
-      },
-      upVoteCount: 1,
-      downVoteCount: 0, // Add based on requirement
-      upVoters: {
-        edges: [
-          {
-            id: '1',
-            node: {
-              id: '1',
-            },
-          },
-        ],
-      },
-      text: 'testComment',
-    };
-
-    const beforeUserId = getItem('userId');
-    setItem('userId', '1');
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...cardProps} />
+              <CommentCard {...defaultProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -284,28 +174,29 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
+    await wait();
   });
 
   it('should handle like mutation error correctly', async () => {
     const errorMock = {
       request: {
         query: LIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            type: 'up_vote',
+          },
+        },
       },
       error: new Error('Failed to like comment'),
     };
 
-    const link = new StaticMockLink([errorMock], true);
-    setItem('userId', '2'); // Set user as not having liked the comment
+    const errorLink = new StaticMockLink([errorMock], true);
+    setItem('userId', '2');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -317,28 +208,30 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     expect(toast.error).toHaveBeenCalled();
-    expect(defaultProps.handleLikeComment).not.toHaveBeenCalled();
   });
 
   it('should handle unlike mutation error correctly', async () => {
     const errorMock = {
       request: {
         query: UNLIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            creatorId: '1',
+          },
+        },
       },
       error: new Error('Failed to unlike comment'),
     };
 
-    const link = new StaticMockLink([errorMock], true);
-    setItem('userId', '1'); // Set user as having liked the comment
+    const errorLink = new StaticMockLink([errorMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -350,32 +243,16 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     expect(toast.error).toHaveBeenCalled();
-    expect(defaultProps.handleDislikeComment).not.toHaveBeenCalled();
   });
 
   it('should successfully like a comment and update UI', async () => {
-    const successMock = {
-      request: {
-        query: LIKE_COMMENT,
-        variables: { commentId: '1' },
-      },
-      result: {
-        data: {
-          likeComment: {
-            _id: '1',
-          },
-        },
-      },
-    };
+    setItem('userId', '2'); // User hasn't liked yet
 
-    const link = new StaticMockLink([successMock], true);
-    setItem('userId', '2'); // Set user as not having liked the comment
-
+    // Render with initial upVoteCount of 1
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -390,33 +267,18 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
 
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
+    // Verify initial state shows 1 Like
+    expect(container.textContent).toMatch(/1 Likes/);
+
+    // Click the like button
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    expect(updatedLikes).not.toBe(initialLikes);
-    expect(defaultProps.handleLikeComment).toHaveBeenCalledWith('1');
+    // After liking, expect 2 Likes (initial 1 + new like)
+    expect(container.textContent).toMatch(/2 Likes/);
   });
 
   it('should successfully unlike a comment and update UI', async () => {
-    const successMock = {
-      request: {
-        query: UNLIKE_COMMENT,
-        variables: { commentId: '1' },
-      },
-      result: {
-        data: {
-          unlikeComment: {
-            _id: '1',
-          },
-        },
-      },
-    };
-
-    const link = new StaticMockLink([successMock], true);
-    setItem('userId', '1'); // Set user as having liked the comment
-
     const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -430,37 +292,38 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    expect(updatedLikes).not.toBe(initialLikes);
-    expect(defaultProps.handleDislikeComment).toHaveBeenCalledWith('1');
+    expect(container.textContent).toMatch(/0 Likes/);
   });
 
   it('should show loading state while mutation is in progress', async () => {
     const slowMock = {
       request: {
         query: LIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            type: 'up_vote',
+          },
+        },
       },
       result: {
         data: {
-          likeComment: {
-            _id: '1',
+          createCommentVote: {
+            id: '1',
           },
         },
       },
       delay: 100,
     };
 
-    const link = new StaticMockLink([slowMock], true);
-    setItem('userId', '2'); // Set user as not having liked the comment
+    const slowLink = new StaticMockLink([slowMock], true);
+    setItem('userId', '2');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={slowLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -472,38 +335,34 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
 
-    // HourglassBottomIcon should be visible during loading
-    expect(
-      document.querySelector('[data-testid="HourglassBottomIcon"]'),
-    ).toBeInTheDocument();
-
+    expect(screen.getByTestId('HourglassBottomIcon')).toBeInTheDocument();
     await wait(150);
-
-    // After loading, ThumbUpIcon should be visible
-    expect(
-      document.querySelector('[data-testid="ThumbUpIcon"]'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('ThumbUpIcon')).toBeInTheDocument();
   });
 
   it('should not update state if mutation returns no data', async () => {
     const noDataMock = {
       request: {
         query: LIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            type: 'up_vote',
+          },
+        },
       },
       result: {
         data: null,
       },
     };
 
-    const link = new StaticMockLink([noDataMock], true);
-    setItem('userId', '2'); // Set user as not having liked the comment
+    const noDataLink = new StaticMockLink([noDataMock], true);
+    setItem('userId', '2');
 
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={noDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -515,34 +374,36 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
-
     const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     expect(updatedLikes).toBe(initialLikes);
-    expect(defaultProps.handleLikeComment).not.toHaveBeenCalled();
   });
 
   it('should handle successful mutation with empty data for unlike', async () => {
     const emptyDataMock = {
       request: {
         query: UNLIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            creatorId: '1',
+          },
+        },
       },
       result: {
         data: {
-          unlikeComment: null,
+          deleteCommentVote: null,
         },
       },
     };
 
-    const link = new StaticMockLink([emptyDataMock], true);
-    setItem('userId', '1'); // Set user as having liked the comment
+    const emptyDataLink = new StaticMockLink([emptyDataMock], true);
 
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -553,39 +414,38 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-
     await wait();
-
+    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    // Verify that the likes count hasn't changed
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     expect(updatedLikes).toBe(initialLikes);
-
-    // Verify that the callback wasn't called
-    expect(defaultProps.handleDislikeComment).not.toHaveBeenCalled();
   });
 
   it('should handle successful mutation with empty data for like', async () => {
     const emptyDataMock = {
       request: {
         query: LIKE_COMMENT,
-        variables: { commentId: '1' },
+        variables: {
+          input: {
+            commentId: '1',
+            type: 'up_vote',
+          },
+        },
       },
       result: {
         data: {
-          likeComment: null,
+          createCommentVote: null,
         },
       },
     };
 
-    const link = new StaticMockLink([emptyDataMock], true);
-    setItem('userId', '2'); // Set user as not having liked the comment
+    const emptyDataLink = new StaticMockLink([emptyDataMock], true);
+    setItem('userId', '2');
 
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -596,18 +456,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-
     await wait();
-
+    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    // Verify that the likes count hasn't changed
     const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
     expect(updatedLikes).toBe(initialLikes);
-
-    // Verify that the callback wasn't called
-    expect(defaultProps.handleLikeComment).not.toHaveBeenCalled();
   });
 });

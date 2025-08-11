@@ -157,9 +157,12 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             disabled={liking || unliking}
           >
             {liking || unliking ? (
-              <HourglassBottomIcon fontSize="small" />
+              <HourglassBottomIcon
+                data-testid="HourglassBottomIcon"
+                fontSize="small"
+              />
             ) : isLiked ? (
-              <ThumbUpIcon fontSize="small" />
+              <ThumbUpIcon data-testid="ThumbUpIcon" fontSize="small" />
             ) : (
               <ThumbUpOffAltIcon fontSize="small" />
             )}
