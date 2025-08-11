@@ -110,7 +110,11 @@ export const mocks = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
-      variables: { firstName_contains: '', lastName_contains: '' },
+      variables: {
+        id_not_in: undefined, // or [] if you expect an array
+        firstName_contains: '',
+        lastName_contains: '',
+      },
     },
     result: {
       data: {
@@ -122,6 +126,14 @@ export const mocks = [
               'Marks',
               'testuser8@example.com',
             ),
+            appUserProfile: {
+              _id: 'profile1',
+              adminFor: [],
+              isSuperAdmin: false,
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+            },
           },
         ],
       },

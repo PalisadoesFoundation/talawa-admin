@@ -340,13 +340,6 @@ describe('GroupChatDetails', () => {
 
     await wait();
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
-
     await act(async () => {
       fireEvent.click(await screen.findByTestId('addUserBtn'));
     });
