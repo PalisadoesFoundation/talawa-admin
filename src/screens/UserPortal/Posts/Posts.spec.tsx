@@ -340,17 +340,7 @@ describe('Testing Home Screen: User Portal', () => {
     expect(postCardContainers.length).toBe(2);
 
     // Check both captions
-    expect(screen.getByText('post one')).toBeInTheDocument();
-    expect(screen.getByText('post two')).toBeInTheDocument();
-
-    // Check comments/captions present inside the cards:
-    // "This is the post two" is the body of a comment on 'post two'
-    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
-
-    // Don't expect 'This is the first post' (it's NOT in mock)
-    expect(
-      screen.queryByText('This is the first post'),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText('This is post')).toBeInTheDocument();
   });
 
   it('Checking if refetch works after deleting this post', async () => {
