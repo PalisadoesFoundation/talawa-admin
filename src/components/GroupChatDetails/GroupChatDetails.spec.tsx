@@ -330,7 +330,7 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       fireEvent.change(await screen.findByTestId('searchUser'), {
-        target: { value: ' Smith' },
+        target: { value: 'Smith' },
       });
     });
 

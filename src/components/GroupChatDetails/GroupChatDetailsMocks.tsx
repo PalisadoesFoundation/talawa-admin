@@ -111,8 +111,7 @@ export const mocks = [
     request: {
       query: USERS_CONNECTION_LIST,
       variables: {
-        id_not_in: undefined, // or [] if you expect an array
-        firstName_contains: '',
+        firstName_contains: 'Disha',
         lastName_contains: '',
       },
     },
@@ -120,12 +119,7 @@ export const mocks = [
       data: {
         users: [
           {
-            user: createUser(
-              'user3',
-              'Deanne',
-              'Marks',
-              'testuser8@example.com',
-            ),
+            user: createUser('user3', 'Disha', 'Smith', 'disha@example.com'),
             appUserProfile: {
               _id: 'profile1',
               adminFor: [],
@@ -142,7 +136,7 @@ export const mocks = [
   {
     request: {
       query: ADD_USER_TO_GROUP_CHAT,
-      variables: { userId: 'user3', chatId: 'chat1' },
+      variables: { chatId: 'chat1' }, // Match test variables
     },
     result: { data: { addUserToGroupChat: { _id: 'chat1', success: true } } },
   },
