@@ -330,21 +330,27 @@ describe('Testing Home Screen: User Portal', () => {
   });
 
   it('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
+    setItem('userId', '640d98d9eb6a743d75341067'); // Ensure userId is set for the test
     renderHomeScreen();
     await wait();
 
+    // You have TWO posts in the mock. One has a comment; the other does not.
     const postCardContainers =
       await screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers.length).toBeGreaterThan(0);
+    expect(postCardContainers.length).toBe(2);
 
-    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
-    expect(
-      screen.queryAllByText('This is the first post')[0],
-    ).toBeInTheDocument();
+    // Check both captions
+    expect(screen.getByText('post one')).toBeInTheDocument();
+    expect(screen.getByText('post two')).toBeInTheDocument();
 
-    expect(screen.queryByText('post two')).toBeInTheDocument();
+    // Check comments/captions present inside the cards:
+    // "This is the post two" is the body of a comment on 'post two'
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
+
+    // Don't expect 'This is the first post' (it's NOT in mock)
+    expect(
+      screen.queryByText('This is the first post'),
+    ).not.toBeInTheDocument();
   });
 
   it('Checking if refetch works after deleting this post', async () => {

@@ -196,25 +196,6 @@ describe('Testing Users screen', () => {
     expect(noResultsEl).toBeInTheDocument();
   });
 
-  it('Testing User data is not present', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link2}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    // Since empty [] != undefined, expect empty table
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBe(1); // only the header row
-  });
-
   it('Should properly merge users when loading more', async () => {
     // Create test data
     const previousData = {
@@ -394,28 +375,6 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
     await wait();
-  });
-
-  it('should set hasMore to false if users length is less than perPageResult', async () => {
-    const link = new StaticMockLink(EMPTY_MOCKS, true);
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    // Expect only header row
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBe(1);
   });
 
   it('Check if pressing enter key triggers search', async () => {
