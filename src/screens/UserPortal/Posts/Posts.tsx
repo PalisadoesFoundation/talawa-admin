@@ -341,7 +341,10 @@ export default function home(): JSX.Element {
             </div>
           )}
           <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
-          <div className={` ${styles.postsCardsContainer}`}>
+          <div
+            className={` ${styles.postsCardsContainer}`}
+            data-testid="postCardContainer"
+          >
             {loadingPosts ? (
               <div className={`d-flex flex-row justify-content-center`}>
                 <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
