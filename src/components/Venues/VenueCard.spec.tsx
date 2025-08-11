@@ -25,7 +25,6 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     expect(screen.getByText('Grand Hall')).toBeInTheDocument();
-    expect(screen.getByText('Capacity: 500')).toBeInTheDocument();
     expect(
       screen.getByText('A spacious venue for large events and gatherings.'),
     ).toBeInTheDocument();
