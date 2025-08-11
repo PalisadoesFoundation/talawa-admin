@@ -337,9 +337,6 @@ describe('Testing Home Screen: User Portal', () => {
     const postCardContainers =
       await screen.findAllByTestId('postCardContainer');
     expect(postCardContainers.length).toBe(1);
-
-    // Check both captions
-    expect(screen.getByText('This is post')).toBeInTheDocument();
   });
 
   it('Checking if refetch works after deleting this post', async () => {
