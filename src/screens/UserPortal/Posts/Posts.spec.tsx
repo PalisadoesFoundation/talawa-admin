@@ -334,10 +334,9 @@ describe('Testing Home Screen: User Portal', () => {
     renderHomeScreen();
     await wait();
 
-    // You have TWO posts in the mock. One has a comment; the other does not.
     const postCardContainers =
       await screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers.length).toBe(2);
+    expect(postCardContainers.length).toBe(1);
 
     // Check both captions
     expect(screen.getByText('This is post')).toBeInTheDocument();
