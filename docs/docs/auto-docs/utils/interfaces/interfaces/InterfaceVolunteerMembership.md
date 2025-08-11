@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/utils/interfaces.ts:2483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2483)
+Defined in: [src/utils/interfaces.ts:2487](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2487)
 
 InterfaceVolunteerMembership
 
@@ -18,7 +18,7 @@ Defines the structure for volunteer membership information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2484)
+Defined in: [src/utils/interfaces.ts:2488](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2488)
 
 The unique identifier of the volunteer membership.
 
@@ -28,7 +28,7 @@ The unique identifier of the volunteer membership.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2486](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2486)
+Defined in: [src/utils/interfaces.ts:2490](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2490)
 
 The creation date of the volunteer membership record.
 
@@ -38,7 +38,7 @@ The creation date of the volunteer membership record.
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2487](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2487)
+Defined in: [src/utils/interfaces.ts:2491](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2491)
 
 The event associated with the volunteer membership.
 
@@ -60,7 +60,7 @@ The event associated with the volunteer membership.
 
 > **group**: `object`
 
-Defined in: [src/utils/interfaces.ts:2496](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2496)
+Defined in: [src/utils/interfaces.ts:2500](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2500)
 
 The group associated with the membership.
 
@@ -78,7 +78,7 @@ The group associated with the membership.
 
 > **status**: `string`
 
-Defined in: [src/utils/interfaces.ts:2485](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2485)
+Defined in: [src/utils/interfaces.ts:2489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2489)
 
 The status of the volunteer membership.
 
@@ -88,7 +88,7 @@ The status of the volunteer membership.
 
 > **volunteer**: `object`
 
-Defined in: [src/utils/interfaces.ts:2492](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2492)
+Defined in: [src/utils/interfaces.ts:2496](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2496)
 
 The volunteer associated with the membership.
 

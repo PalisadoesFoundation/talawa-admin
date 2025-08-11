@@ -51,8 +51,8 @@ const ORG_FIELDS = gql`
 
 // Full query with members
 export const ORGANIZATION_LIST = gql`
-  query {
-    organizations {
+  query GetOrganizations($filter: String, $limit: Int, $offset: Int) {
+    organizations(filter: $filter, limit: $limit, offset: $offset) {
       ...OrgFields
       members(first: 32) {
         edges {
@@ -128,101 +128,45 @@ export const ALL_ORGANIZATIONS_PG = gql`
 
 // Query to take the User list
 export const USER_LIST = gql`
-  query Users(
-    $firstName_contains: String
-    $lastName_contains: String
-    $skip: Int
-    $first: Int
-    $order: UserOrderByInput
-  ) {
-    users(
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-      skip: $skip
-      first: $first
-      orderBy: $order
-    ) {
-      user {
-        _id
-        joinedOrganizations {
-          _id
-          name
-          image
-          createdAt
-          address {
+  query UsersByIds($input: UsersByIdsInput!) {
+    usersByIds(input: $input) {
+      id
+      name
+      emailAddress
+      avatarURL
+      createdAt
+      city
+      state
+      countryCode
+      postalCode
+      organizationsWhereMember(first: 10) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            createdAt
             city
-            countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
             state
-          }
-          creator {
-            _id
-            firstName
-            lastName
-            image
-            email
-          }
-        }
-        firstName
-        lastName
-        email
-        image
-        createdAt
-        registeredEvents {
-          _id
-        }
-        organizationsBlockedBy {
-          _id
-          name
-          image
-          address {
-            city
             countryCode
-            dependentLocality
-            line1
-            line2
-            postalCode
-            sortingCode
-            state
+            creator {
+              id
+              name
+              emailAddress
+              avatarURL
+            }
           }
-          creator {
-            _id
-            firstName
-            lastName
-            image
-            email
-          }
-          createdAt
-        }
-        membershipRequests {
-          _id
         }
       }
-      appUserProfile {
-        _id
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
-        }
+      createdOrganizations {
+        id
+        name
+        avatarURL
       }
     }
   }
 `;
+
 export const USER_LIST_FOR_TABLE = gql`
   query allUsers(
     $first: Int

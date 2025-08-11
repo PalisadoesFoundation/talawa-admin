@@ -231,8 +231,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org.id)}
                           >
-                            {org.image ? (
-                              <img src={org.image} alt="orgImage" />
+                            {org.avatarURL ? (
+                              <img src={org.avatarURL} alt="orgImage" />
                             ) : (
                               <Avatar name={org.name} alt="orgImage" />
                             )}

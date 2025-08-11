@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventVolunteerInfo
 
-Defined in: [src/utils/interfaces.ts:2351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2351)
+Defined in: [src/utils/interfaces.ts:2355](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2355)
 
 InterfaceEventVolunteerInfo
 
@@ -18,7 +18,7 @@ Defines the structure for event volunteer information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2352)
+Defined in: [src/utils/interfaces.ts:2356](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2356)
 
 The unique identifier of the event volunteer.
 
@@ -28,7 +28,7 @@ The unique identifier of the event volunteer.
 
 > **assignments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2356](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2356)
+Defined in: [src/utils/interfaces.ts:2360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2360)
 
 An array of assignments for the volunteer.
 
@@ -42,7 +42,7 @@ An array of assignments for the volunteer.
 
 > **groups**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2359)
+Defined in: [src/utils/interfaces.ts:2363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2363)
 
 An array of groups the volunteer belongs to.
 
@@ -64,7 +64,7 @@ An array of groups the volunteer belongs to.
 
 > **hasAccepted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2353](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2353)
+Defined in: [src/utils/interfaces.ts:2357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2357)
 
 Indicates if the volunteer has accepted.
 
@@ -74,7 +74,7 @@ Indicates if the volunteer has accepted.
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/utils/interfaces.ts:2354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2354)
+Defined in: [src/utils/interfaces.ts:2358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2358)
 
 The number of hours volunteered, or null.
 
@@ -84,6 +84,6 @@ The number of hours volunteered, or null.
 
 > **user**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:2355](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2355)
+Defined in: [src/utils/interfaces.ts:2359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2359)
 
 The user information of the volunteer.

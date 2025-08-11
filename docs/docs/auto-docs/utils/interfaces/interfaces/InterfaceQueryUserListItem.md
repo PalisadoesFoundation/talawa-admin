@@ -60,6 +60,10 @@ Defined in: [src/utils/interfaces.ts:1968](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1983)
 
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
+
 #### id
 
 > **id**: `string`
@@ -162,7 +166,7 @@ Defined in: [src/utils/interfaces.ts:1975](https://github.com/PalisadoesFoundati
 
 > **organizationsWhereMember**: `object`
 
-Defined in: [src/utils/interfaces.ts:1988](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1988)
+Defined in: [src/utils/interfaces.ts:1989](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1989)
 
 #### edges
 

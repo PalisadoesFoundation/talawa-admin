@@ -1983,6 +1983,7 @@ export interface InterfaceQueryUserListItem {
   createdOrganizations: {
     id: string;
     name: string;
+    avatarURL?: string;
   }[];
 
   organizationsWhereMember: {
@@ -1990,13 +1991,16 @@ export interface InterfaceQueryUserListItem {
       node: {
         id: string;
         name: string;
-        image?: string | null;
-        city?: string | null;
+        avatarURL?: string;
         createdAt: string;
+        city?: string;
+        state?: string;
+        countryCode?: string;
         creator: {
           id: string;
           name: string;
-          avatarURL?: string | null;
+          emailAddress: string;
+          avatarURL?: string;
         };
       };
     }[];

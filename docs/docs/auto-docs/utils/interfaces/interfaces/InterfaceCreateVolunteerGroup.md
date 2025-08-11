@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateVolunteerGroup
 
-Defined in: [src/utils/interfaces.ts:2426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2426)
+Defined in: [src/utils/interfaces.ts:2430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2430)
 
 InterfaceCreateVolunteerGroup
 
@@ -18,7 +18,7 @@ Defines the structure for creating a volunteer group.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2428](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2428)
+Defined in: [src/utils/interfaces.ts:2432](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2432)
 
 The description of the volunteer group, or null.
 
@@ -28,7 +28,7 @@ The description of the volunteer group, or null.
 
 > **leader**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:2429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2429)
+Defined in: [src/utils/interfaces.ts:2433](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2433)
 
 The leader of the volunteer group, or null.
 
@@ -38,7 +38,7 @@ The leader of the volunteer group, or null.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2427](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2427)
+Defined in: [src/utils/interfaces.ts:2431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2431)
 
 The name of the volunteer group.
 
@@ -48,7 +48,7 @@ The name of the volunteer group.
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/utils/interfaces.ts:2430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2430)
+Defined in: [src/utils/interfaces.ts:2434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2434)
 
 The number of volunteers required for the group, or null.
 
@@ -58,6 +58,6 @@ The number of volunteers required for the group, or null.
 
 > **volunteerUsers**: [`InterfaceUserInfo`](InterfaceUserInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:2431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2431)
+Defined in: [src/utils/interfaces.ts:2435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2435)
 
 An array of user information for the volunteers in the group.
