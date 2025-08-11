@@ -218,9 +218,6 @@ describe('Organisation Venues', () => {
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();
-
-    // Search functionality might not be working with current query structure
-    // This test needs to be updated when search is properly implemented
     const searchInput = screen.getByTestId('searchBy');
     fireEvent.change(searchInput, {
       target: { value: 'Updated Venue 1' },
@@ -354,9 +351,18 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
+    // Verify venue is initially present
+    expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
+
     const deleteButton = screen.getByTestId('deleteVenueBtn1');
-    fireEvent.click(deleteButton);
-    await wait();
+
+    // Test that clicking the button doesn't cause any errors
+    expect(() => fireEvent.click(deleteButton)).not.toThrow();
+
+    await waitFor(() => {
+      // Verify the button is still clickable (component hasn't crashed)
+      expect(deleteButton).toBeInTheDocument();
+    });
   });
 
   test('displays loader when data is loading', () => {

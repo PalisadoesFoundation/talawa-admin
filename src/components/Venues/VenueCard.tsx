@@ -78,7 +78,7 @@ const VenueCard = ({
 
               {/* Venue capacity with icon */}
               <div className={styles.capacityLabel}>
-                Capacity: {venueItem.node.capacity}
+                {tCommon('capacity')}: {venueItem.node.capacity}
                 <PeopleIcon className="ms-1" width={16} height={16} />
               </div>
             </Card.Title>

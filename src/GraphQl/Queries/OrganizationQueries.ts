@@ -323,7 +323,7 @@ export const ORGANIZATION_FUNDS = gql`
 export const VENUE_LIST = gql`
   query venuesByOrganization($orgId: String!) {
     organization(input: { id: $orgId }) {
-      venues(first: 10) {
+      venues(first: 32) {
         edges {
           node {
             id

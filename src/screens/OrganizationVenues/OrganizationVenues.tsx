@@ -175,7 +175,7 @@ function organizationVenues(): JSX.Element {
 
   // Updating venues state when venue data changes
   useEffect(() => {
-    if (venueData && venueData.organization.venues.edges) {
+    if (venueData && venueData?.organization?.venues?.edges) {
       let filteredVenues = venueData.organization.venues.edges;
 
       // Client-side filtering

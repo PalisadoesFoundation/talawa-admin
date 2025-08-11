@@ -2020,8 +2020,8 @@ export interface InterfaceQueryVenueListItem {
     id: string;
     name: string;
     description: string | null;
-    image: string | null;
-    capacity: string;
+    image?: string | null;
+    capacity?: string;
   };
 }
 

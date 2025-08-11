@@ -35,7 +35,7 @@ const MOCKS = [
         file: '',
       },
     },
-    result: { data: { createVenue: { id: 'orgId' } } },
+    result: { data: { createVenue: { id: 'newVenue' } } },
   },
 
   // Basic update venue mock - matches changed name case
@@ -140,7 +140,7 @@ const MOCKS = [
         file: '',
       },
     },
-    result: { data: { createVenue: { _id: 'newVenue' } } },
+    result: { data: { createVenue: { id: 'newVenue' } } },
   },
 ];
 const mockId = 'orgId';
@@ -361,7 +361,7 @@ describe('VenueModal', () => {
       // Create a spy to capture the mutation variables
       const mutationSpy = vi.fn().mockImplementation(() => {
         return {
-          data: { createVenue: { _id: 'newVenue' } },
+          data: { createVenue: { id: 'newVenue' } },
         };
       });
 
@@ -369,7 +369,7 @@ describe('VenueModal', () => {
       const mockLink = new ApolloLink((operation) => {
         // This will capture the actual variables being sent
         mutationSpy(operation);
-        return Observable.of({ data: { createVenue: { _id: 'newVenue' } } });
+        return Observable.of({ data: { createVenue: { id: 'newVenue' } } });
       });
 
       // Create a component with the spy link
@@ -430,7 +430,7 @@ describe('VenueModal', () => {
               file: '', // This tests the || '' fallback for objectName
             },
           },
-          result: { data: { createVenue: { _id: 'newVenue' } } },
+          result: { data: { createVenue: { id: 'newVenue' } } },
         },
       ];
 
@@ -482,7 +482,7 @@ describe('VenueModal', () => {
               file: '',
             },
           },
-          result: { data: { createVenue: { _id: 'newVenue' } } },
+          result: { data: { createVenue: { id: 'newVenue' } } },
         },
       ];
 
@@ -1406,7 +1406,7 @@ describe('VenueModal', () => {
                   file: '',
                 },
               },
-              result: { data: { createVenue: { _id: 'newVenue' } } },
+              result: { data: { createVenue: { id: 'newVenue' } } },
             };
 
             const mockLink = new StaticMockLink([createVenueMock], true);
@@ -1444,7 +1444,7 @@ describe('VenueModal', () => {
                   file: '', // Explicitly passing empty string
                 },
               },
-              result: { data: { createVenue: { _id: 'newVenue' } } },
+              result: { data: { createVenue: { id: 'newVenue' } } },
             };
 
             renderVenueModal(
@@ -1486,7 +1486,7 @@ describe('VenueModal', () => {
                   file: '',
                 },
               },
-              result: { data: { createVenue: { _id: 'newVenue' } } },
+              result: { data: { createVenue: { id: 'newVenue' } } },
             };
 
             const mockLink = new StaticMockLink([createVenueMock], true);
@@ -1626,7 +1626,7 @@ describe('VenueModal', () => {
                 file: '',
               },
             },
-            result: { data: { createVenue: { _id: 'newVenue' } } },
+            result: { data: { createVenue: { id: 'newVenue' } } },
           };
 
           renderVenueModal(

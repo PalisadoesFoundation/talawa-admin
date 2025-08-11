@@ -76,7 +76,7 @@ const VenueModal = ({
   const [formState, setFormState] = useState({
     name: venueData?.node.name || '',
     description: venueData?.node.description || '',
-    capacity: venueData?.node.capacity || '',
+    capacity: venueData?.node.capacity?.toString() || '',
     objectName: venueData?.node.image || '',
   });
 
