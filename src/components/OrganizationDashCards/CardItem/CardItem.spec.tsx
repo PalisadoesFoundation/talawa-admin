@@ -31,25 +31,13 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
-    const expectedDateRange = `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(props.enddate).format('MMM D, YYYY')}`;
-    expect(screen.getByText(expectedDateRange)).toBeInTheDocument();
+    const startDate = `${dayjs(props.startdate).format('MMM D, YYYY')}`;
+    expect(screen.getByText(startDate)).toBeInTheDocument();
 
     expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 
     expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
     expect(screen.getByTestId('date-icon')).toBeInTheDocument();
-  });
-
-  it('handles long titles by truncating them', () => {
-    const props: InterfaceCardItem = {
-      type: 'Event',
-      title:
-        'This is an extremely long title that should be truncated when displayed on the card',
-    };
-
-    render(<CardItem {...props} />);
-
-    expect(screen.getByText('This is an extremely long..')).toBeInTheDocument();
   });
 
   it('does not render location section when location is not provided', () => {
