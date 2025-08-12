@@ -439,18 +439,25 @@ function OrganizationDashboard(): JSX.Element {
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents.slice(0, 10)?.map((event) => {
-                      return (
-                        <CardItem
-                          data-testid="cardItem"
-                          type="Event"
-                          key={event.node.id}
-                          startdate={event?.node.startAt}
-                          enddate={event?.node.endAt}
-                          title={event?.node.name}
-                        />
-                      );
-                    })
+                    upcomingEvents
+                      .sort(
+                        (a, b) =>
+                          new Date(a.node.startAt).getTime() -
+                          new Date(b.node.startAt).getTime(),
+                      )
+                      .slice(0, 10)
+                      .map((event) => {
+                        return (
+                          <CardItem
+                            data-testid="cardItem"
+                            type="Event"
+                            key={event.node.id}
+                            startdate={event?.node.startAt}
+                            enddate={event?.node.endAt}
+                            title={event?.node.name}
+                          />
+                        );
+                      })
                   )}
                 </Card.Body>
               </Card>

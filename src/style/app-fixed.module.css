@@ -9343,4 +9343,9 @@ form {
   justify-content: space-between;
   align-items: center;
 }
+.upcomingEventsTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 /* ----------------------------------------------------- */

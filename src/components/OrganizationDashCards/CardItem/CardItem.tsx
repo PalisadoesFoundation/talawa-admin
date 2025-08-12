@@ -63,12 +63,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
         >
           {title && (
             <div
-              className={styles.cardItemtitle}
-              style={{
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-              }}
+              className={`${styles.cardItemtitle} ${styles.upcomingEventsTitle}`}
             >
               {title}
             </div>
