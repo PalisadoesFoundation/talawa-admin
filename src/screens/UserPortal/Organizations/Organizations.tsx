@@ -118,6 +118,8 @@ interface IOrganization {
   avatarURL?: string; // <-- add this
   addressLine1?: string; // <-- add this
   description: string;
+  adminsCount?: number;
+  membersCount?: number;
   admins: [];
   members?: InterfaceMembersConnection; // <-- update this
   address: {
@@ -141,6 +143,8 @@ interface IOrgData {
   addressLine1: string;
   avatarURL: string | null;
   id: string;
+  adminsCount: number;
+  membersCount: number;
   members: {
     edges: [
       {
@@ -165,7 +169,11 @@ export default function organizations(): React.JSX.Element {
     keyPrefix: 'userOrganizations',
   });
 
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
+  const { getItem, setItem } = useLocalStorage();
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   /**
    * Handles window resize events to toggle drawer visibility.
@@ -173,10 +181,12 @@ export default function organizations(): React.JSX.Element {
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
-    } else {
-      setHideDrawer(false);
     }
   };
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
 
   useEffect(() => {
     handleResize();
@@ -287,6 +297,8 @@ export default function organizations(): React.JSX.Element {
               postalCode: '',
               state: '',
             },
+            adminsCount: org.adminsCount || 0,
+            membersCount: org.membersCount || 0,
             admins: [],
             members:
               org.members?.edges?.map(
@@ -488,12 +500,8 @@ export default function organizations(): React.JSX.Element {
                             organization.userRegistrationRequired,
                           membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
-                          membersCount: Array.isArray(organization.members)
-                            ? organization.members.length
-                            : 0,
-                          adminsCount: Array.isArray(organization.admins)
-                            ? organization.admins.length
-                            : 0,
+                          membersCount: organization.membersCount || 0,
+                          adminsCount: organization.adminsCount || 0,
                         };
                         return (
                           <div
@@ -504,6 +512,7 @@ export default function organizations(): React.JSX.Element {
                             data-membership-status={
                               organization.membershipRequestStatus
                             }
+                            data-cy="orgCard"
                           >
                             <div
                               data-testid={`membership-status-${organization.name}`}

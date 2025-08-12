@@ -3,6 +3,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG, // re-enabled!
   GET_ORGANIZATION_POSTS_PG,
+  GET_ORGANIZATION_BLOCKED_USERS_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 
@@ -46,7 +47,7 @@ export const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      variables: { id: 'orgId', first: 50, after: null },
     },
     result: {
       data: {
@@ -60,7 +61,24 @@ export const MOCKS = [
                   description: 'Description for Event One',
                   startAt: '2025-10-29T00:00:00.000Z',
                   endAt: '2025-10-30T00:00:00.000Z',
+                  allDay: false,
+                  location: 'Test Location',
+                  isPublic: true,
+                  isRegisterable: true,
+                  isMaterialized: true,
+                  isRecurringTemplate: false,
+                  recurringEventId: null,
+                  instanceStartTime: null,
+                  baseEventId: null,
+                  sequenceNumber: null,
+                  totalCount: 1,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  attachments: [],
                   creator: { id: 'creator1', name: 'John Doe' },
+                  organization: { id: 'orgId', name: 'Test Organization' },
+                  createdAt: '2025-10-28T00:00:00.000Z',
+                  updatedAt: '2025-10-28T00:00:00.000Z',
                 },
                 cursor: 'cursor1',
               },
@@ -106,7 +124,7 @@ export const MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: '',
+        firstName_contains: '',
       },
     },
     result: {
@@ -159,6 +177,42 @@ export const MOCKS = [
       loading: false,
     },
   },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          blockedUsers: {
+            edges: [
+              {
+                node: {
+                  id: 'blockedUser1',
+                  name: 'Blocked User 1',
+                  emailAddress: 'blocked1@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'blockedUser2',
+                  name: 'Blocked User 2',
+                  emailAddress: 'blocked2@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
 ];
 
 export const EMPTY_MOCKS = [
@@ -193,7 +247,7 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      variables: { id: 'orgId', first: 50, after: null },
     },
     result: {
       data: {
@@ -214,7 +268,7 @@ export const EMPTY_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: '',
+        firstName_contains: '',
       },
     },
     result: {
@@ -235,6 +289,22 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: { posts: { edges: [] } },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          blockedUsers: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
       },
     },
   },
@@ -322,7 +392,7 @@ export const ERROR_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      variables: { id: 'orgId', first: 50, after: null },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_EVENTS_PG Error'),
   },
@@ -333,7 +403,7 @@ export const ERROR_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        name_contains: '',
+        firstName_contains: '',
       },
     },
     error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
@@ -345,5 +415,12 @@ export const ERROR_MOCKS = [
       variables: { id: 'orgId', first: 5 },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_POSTS_PG Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_BLOCKED_USERS_PG Error'),
   },
 ];

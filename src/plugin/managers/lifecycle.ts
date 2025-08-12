@@ -42,7 +42,7 @@ export class LifecycleManager {
       return undefined;
     }
 
-    return plugin.components[componentName];
+    return plugin.components?.[componentName];
   }
 
   getPluginCount(): number {
@@ -156,9 +156,15 @@ export class LifecycleManager {
   }
 
   private isValidPluginId(pluginId: string): boolean {
-    return Boolean(
-      pluginId && typeof pluginId === 'string' && pluginId.trim().length > 0,
-    );
+    if (!pluginId || typeof pluginId !== 'string') {
+      return false;
+    }
+
+    // Plugin ID should support camelCase, PascalCase, and underscore formats
+    // Must start with a letter, can contain letters, numbers, and underscores
+    // No hyphens allowed since plugin IDs will be prefixed to GraphQL queries/mutations
+    const pluginIdRegex = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+    return pluginIdRegex.test(pluginId);
   }
 
   private determineInitialPluginStatus(pluginId: string): PluginStatus {

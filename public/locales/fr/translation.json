@@ -437,6 +437,9 @@
     "on": "Sur",
     "after": "Après",
     "occurences": "événements",
+    "monthlyOn": "Mensuel le",
+    "yearlyOn": "Annuel le",
+    "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
     "events": "Événements",
     "description": "Description",
     "location": "Emplacement",
@@ -553,6 +556,10 @@
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
+    "deleteRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le supprimer :",
+    "deleteThisInstance": "Supprimer uniquement cette instance",
+    "deleteThisAndFollowing": "Supprimer cet événement et tous les suivants",
+    "deleteAllEvents": "Supprimer tous les événements de cette série",
     "editEvent": "Modifier l'événement",
     "eventName": "Nom",
     "alreadyRegistered": "Déjà enregistré",
@@ -941,7 +948,8 @@
   },
   "people": {
     "title": "Personnes",
-    "searchUsers": "Rechercher des utilisateurs"
+    "searchUsers": "Rechercher des utilisateurs",
+    "nothingToShow": "Rien à montrer ici."
   },
   "userLogin": {
     "login": "Se connecter",

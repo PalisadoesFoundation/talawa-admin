@@ -4,7 +4,7 @@
 
 # Interface: IPluginStoreProps
 
-Defined in: [src/plugin/types.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L138)
+Defined in: [src/plugin/types.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L160)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:138](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/plugin/types.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L140)
+Defined in: [src/plugin/types.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L162)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:140](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **userPermissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L139)
+Defined in: [src/plugin/types.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L161)

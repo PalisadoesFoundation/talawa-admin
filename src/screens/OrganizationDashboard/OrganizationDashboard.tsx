@@ -35,10 +35,11 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
+  GET_ORGANIZATION_BLOCKED_USERS_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
-// import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
+import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
 import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
@@ -68,25 +69,23 @@ function OrganizationDashboard(): JSX.Element {
   const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
+  const navigate = useNavigate();
+  const [memberCount, setMemberCount] = useState(0);
+  const [adminCount, setAdminCount] = useState(0);
+  const [eventCount, setEventCount] = useState(0);
+  const [blockedCount, setBlockedCount] = useState(0);
+  const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
-
-  const navigate = useNavigate();
-
-  const [memberCount, setMemberCount] = useState(0);
-  const [adminCount, setAdminCount] = useState(0);
-  const [eventCount, setEventCount] = useState(0);
-  const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
-
   // const currentDate = dayjs().toISOString();
 
   // const leaderboardLink = `/leaderboard/${orgId}`;
   // const peopleLink = `/orgpeople/${orgId}`;
   const postsLink = `/orgpost/${orgId}`;
   const eventsLink = `/orgevents/${orgId}`;
-  // const blockUserLink = `/blockuser/${orgId}`;
+  const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = `/requests/${orgId}`;
 
   /**
@@ -107,6 +106,7 @@ function OrganizationDashboard(): JSX.Element {
 
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedAllEvents = useRef(false);
+  const hasFetchedAllBlockedUsers = useRef(false);
 
   const {
     data: orgMemberData,
@@ -160,7 +160,17 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+    variables: { id: orgId, first: 50, after: null },
+  });
+
+  const {
+    data: orgBlockedUsersData,
+    loading: orgBlockedUsersLoading,
+    error: orgBlockedUsersError,
+    fetchMore: fetchMoreBlockedUsers,
+  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_PG, {
     variables: { id: orgId, first: 32, after: null },
+    notifyOnNetworkStatusChange: true,
   });
 
   useEffect(() => {
@@ -191,6 +201,28 @@ function OrganizationDashboard(): JSX.Element {
       }
     }
   }, [orgEventsData, fetchMore, orgId]);
+
+  useEffect(() => {
+    if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
+      const newBlockedUserCount =
+        orgBlockedUsersData.organization.blockedUsers.edges.length;
+
+      setBlockedCount((prevCount) => prevCount + newBlockedUserCount);
+
+      if (orgBlockedUsersData.organization.blockedUsers.pageInfo.hasNextPage) {
+        fetchMoreBlockedUsers({
+          variables: {
+            id: orgId,
+            first: 32,
+            after:
+              orgBlockedUsersData.organization.blockedUsers.pageInfo.endCursor,
+          },
+        });
+      } else {
+        hasFetchedAllBlockedUsers.current = true;
+      }
+    }
+  }, [orgBlockedUsersData, fetchMoreBlockedUsers, orgId]);
 
   /**
    * Query to fetch vvolunteer rankings.
@@ -236,17 +268,32 @@ function OrganizationDashboard(): JSX.Element {
    * UseEffect to handle errors and navigate if necessary.
    */
   useEffect(() => {
-    if (errorPost || orgPostsError || orgMemberError || orgEventsError) {
+    if (
+      errorPost ||
+      orgPostsError ||
+      orgMemberError ||
+      orgEventsError ||
+      orgBlockedUsersError
+    ) {
       toast.error(tErrors('errorLoading', { entity: '' }));
       navigate('/');
     }
-  }, [orgPostsError, errorPost, orgMemberError, orgEventsError]);
+  }, [
+    orgPostsError,
+    errorPost,
+    orgMemberError,
+    orgEventsError,
+    orgBlockedUsersError,
+  ]);
 
   return (
     <>
       <Row className="mt-4">
         <Col xl={8}>
-          {orgMemberLoading || orgPostsLoading || orgEventsLoading ? (
+          {orgMemberLoading ||
+          orgPostsLoading ||
+          orgEventsLoading ||
+          orgBlockedUsersLoading ? (
             <Row style={{ display: 'flex' }}>
               {[...Array(6)].map((_, index) => {
                 return (
@@ -333,15 +380,16 @@ function OrganizationDashboard(): JSX.Element {
                 sm={4}
                 role="button"
                 className="mb-4"
-                onClick={(): void => {
-                  // navigate(blockUserLink);
+                data-testid="blockedUsersCount"
+                onClick={async (): Promise<void> => {
+                  await navigate(blockUserLink);
                 }}
               >
-                {/* <DashBoardCard
-                  count={data?.organizations[0].blockedUsers?.length}
+                <DashBoardCard
+                  count={blockedCount}
                   title={t('blockedUsers')}
-                  icon={<BlockedUsersIcon fill="var(--bs-primary)" />}
-                /> */}
+                  icon={<BlockedUsersIcon fill="#555555" />}
+                />
               </Col>
               <Col
                 xs={6}
@@ -360,7 +408,7 @@ function OrganizationDashboard(): JSX.Element {
                     )?.length
                   }
                   title={tCommon('requests')}
-                  icon={<UsersIcon fill="var(--bs-primary)" />}
+                  icon={<UsersIcon fill="#555555" />}
                 />
               </Col>
             </Row>

@@ -167,8 +167,20 @@ export const UPDATE_USER_PASSWORD_MUTATION = gql`
 // to sign up in the talawa admin
 
 export const SIGNUP_MUTATION = gql`
-  mutation SignUp($name: String!, $email: EmailAddress!, $password: String!) {
-    signUp(input: { name: $name, emailAddress: $email, password: $password }) {
+  mutation SignUp(
+    $ID: ID!
+    $name: String!
+    $email: EmailAddress!
+    $password: String!
+  ) {
+    signUp(
+      input: {
+        selectedOrganization: $ID
+        name: $name
+        emailAddress: $email
+        password: $password
+      }
+    ) {
       user {
         id
       }
@@ -320,41 +332,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to create the event by any organization
-
-export const CREATE_EVENT_MUTATION = gql`
-  mutation Mutation_createEvent($input: MutationCreateEventInput!) {
-    createEvent(input: $input) {
-      id
-      name
-      description
-      startAt
-      endAt
-      allDay
-      location
-      isPublic
-      isRegisterable
-      organization {
-        id
-      }
-      creator {
-        id
-        name
-      }
-    }
-  }
-`;
-
-// to delete any event by any organization
-
-export const DELETE_EVENT_MUTATION = gql`
-  mutation DeleteEvent($input: MutationDeleteEventInput!) {
-    deleteEvent(input: $input) {
-      id
-    }
-  }
-`;
-
 // to remove an admin from an organization
 export const REMOVE_ADMIN_MUTATION = gql`
   mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
@@ -367,8 +344,10 @@ export const REMOVE_ADMIN_MUTATION = gql`
 // to Remove member from an organization
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
-    removeMember(data: { organizationId: $orgid, userId: $userid }) {
-      _id
+    deleteOrganizationMembership(
+      input: { organizationId: $orgid, memberId: $userid }
+    ) {
+      id
     }
   }
 `;
@@ -465,36 +444,6 @@ export const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent($input: MutationUpdateEventInput!) {
-    updateEvent(input: $input) {
-      id
-      name
-      description
-      startAt
-      endAt
-      allDay
-      location
-      isPublic
-      isRegisterable
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-      }
-      updater {
-        id
-        name
-      }
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const LIKE_POST = gql`
   mutation likePost($postId: ID!) {
     likePost(id: $postId) {
@@ -506,14 +455,6 @@ export const LIKE_POST = gql`
 export const UNLIKE_POST = gql`
   mutation unlikePost($postId: ID!) {
     unlikePost(id: $postId) {
-      _id
-    }
-  }
-`;
-
-export const REGISTER_EVENT = gql`
-  mutation registerForEvent($eventId: ID!) {
-    registerForEvent(id: $eventId) {
       _id
     }
   }
@@ -654,6 +595,17 @@ export {
   DELETE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from './VenueMutations';
+
+// Create, Update and Delete Events
+export {
+  CREATE_EVENT_MUTATION,
+  UPDATE_EVENT_MUTATION,
+  DELETE_STANDALONE_EVENT_MUTATION,
+  DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
+  DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
+  DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  REGISTER_EVENT,
+} from './EventMutations';
 
 export const PRESIGNED_URL = gql`
   mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {

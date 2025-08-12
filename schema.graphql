@@ -797,7 +797,7 @@ type Mutation {
     payPalId: ID!
     userId: ID!
   ): Donation!
-  createEvent(input: MutationCreateEventInput!): Event
+  createEvent(input: MutationCreateEventInput!): EventPg
 
   createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
   createMember(input: UserAndOrganizationInput!): Organization!
@@ -813,6 +813,16 @@ type Mutation {
   ): ActionItemCategory
   deleteAgendaCategory(id: ID!): ID!
   deleteDonationById(id: ID!): DeletePayload!
+  deleteEntireRecurringEventSeries(
+    input: MutationDeleteEntireRecurringEventSeriesInput!
+  ): EventPg
+  deleteSingleEventInstance(
+    input: MutationDeleteSingleEventInstanceInput!
+  ): EventPg
+  deleteStandaloneEvent(input: MutationDeleteStandaloneEventInput!): EventPg
+  deleteThisAndFollowingEvents(
+    input: MutationDeleteThisAndFollowingEventsInput!
+  ): EventPg
   deleteVenue(id: ID!): Venue
   editVenue(data: EditVenueInput!): Venue
   forgotPassword(data: ForgotPasswordData!): Boolean!
@@ -831,7 +841,6 @@ type Mutation {
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
-  removeEvent(id: ID!): Event!
   removeEventAttendee(data: EventAttendeeInput!): User!
   removeEventVolunteer(id: ID!): EventVolunteer!
   removeMember(data: UserAndOrganizationInput!): Organization!
@@ -878,7 +887,7 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(data: MutationUpdateEventInput, id: ID!): Event!
+  updateEvent(input: MutationUpdateEventInput!): EventPg
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -985,6 +994,9 @@ type OrganizationPg {
     before: String
     first: Int
     last: Int
+    startDate: DateTime
+    endDate: DateTime
+    includeRecurring: Boolean
   ): OrganizationEventsConnectionPg
 
   funds(
@@ -1259,12 +1271,32 @@ type EventPg {
   description: String
   startAt: DateTime
   endAt: DateTime
+  allDay: Boolean
+  location: String
+  isPublic: Boolean
+  isRegisterable: Boolean
+  # Recurring event fields
+  isRecurringEventTemplate: Boolean
+  sequenceNumber: Int
+  totalCount: Int
+  hasExceptions: Boolean
+  progressLabel: String
+  # Base event relationships
+  baseEvent: EventPg
+  # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
   creator: UserPg
   updater: UserPg
   organization: OrganizationPg
   attachments: [EventAttachmentPg!]
+
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventActionItemsConnectionPg
 
   agendaFolders(
     after: String
@@ -1279,6 +1311,16 @@ type EventPg {
     first: Int
     last: Int
   ): EventVenuesConnectionPg
+}
+
+type EventActionItemsConnectionPg {
+  edges: [EventActionItemsConnectionEdgePg]
+  pageInfo: PageInfoPg!
+}
+
+type EventActionItemsConnectionEdgePg {
+  cursor: String!
+  node: ActionItem
 }
 
 type EventVenuesConnectionPg {
@@ -1939,6 +1981,16 @@ input RecaptchaVerification {
   recaptchaToken: String!
 }
 
+input RecurrenceInput {
+  frequency: Frequency!
+  interval: PositiveInt!
+  byDay: [WeekDays!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: PositiveInt
+  until: DateTime
+}
+
 enum Status {
   ACTIVE
   BLOCKED
@@ -2158,6 +2210,7 @@ input MutationCreateEventInput {
   name: String!
   organizationId: ID!
   startAt: DateTime!
+  recurrence: RecurrenceInput
 }
 
 input MutationUpdateEventInput {
@@ -2171,7 +2224,20 @@ input MutationUpdateEventInput {
   isPublic: Boolean
   isRegisterable: Boolean
 }
+input MutationDeleteEntireRecurringEventSeriesInput {
+  id: ID!
+}
 
+input MutationDeleteSingleEventInstanceInput {
+  id: ID!
+}
+input MutationDeleteStandaloneEventInput {
+  id: ID!
+}
+
+input MutationDeleteThisAndFollowingEventsInput {
+  id: ID!
+}
 input MutationUpdateUserInput {
   addressLine1: String
   addressLine2: String

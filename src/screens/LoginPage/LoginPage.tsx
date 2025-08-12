@@ -72,7 +72,7 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST,
+  ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -184,7 +184,7 @@ const loginPage = (): JSX.Element => {
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
@@ -194,9 +194,8 @@ const loginPage = (): JSX.Element => {
             label: string;
             id: string;
           };
-          tempObj['label'] =
-            `${org.name}(${org.address?.city},${org.address?.state},${org.address?.countryCode})`;
-          tempObj['id'] = org._id;
+          tempObj['label'] = `${org.name}(${org.addressLine1})`;
+          tempObj['id'] = org.id;
           return tempObj;
         },
       );
@@ -278,6 +277,7 @@ const loginPage = (): JSX.Element => {
         try {
           const { data: signUpData } = await signup({
             variables: {
+              ID: signformState.signOrg,
               name: signName,
               email: signEmail,
               password: signPassword,
@@ -478,6 +478,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       autoComplete="username"
                       data-testid="loginEmail"
+                      data-cy="loginEmail"
                     />
                     <Button tabIndex={-1} className={styles.email_button}>
                       <EmailOutlinedIcon />
@@ -502,6 +503,7 @@ const loginPage = (): JSX.Element => {
                       }}
                       disabled={loginLoading}
                       autoComplete="current-password"
+                      data-cy="loginPassword"
                     />
                     <Button
                       onClick={togglePassword}
@@ -544,6 +546,7 @@ const loginPage = (): JSX.Element => {
                     className={styles.login_btn}
                     value="Login"
                     data-testid="loginBtn"
+                    data-cy="loginBtn"
                   >
                     {tCommon('login')}
                   </Button>

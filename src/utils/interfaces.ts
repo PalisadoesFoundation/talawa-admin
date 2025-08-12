@@ -1358,21 +1358,10 @@ export interface InterfaceOrganizationPg {
  * @property {InterfaceAddress} address - The address of the organization.
  */
 export interface InterfaceQueryOrganizationListObject {
-  _id: string;
-  image: string | null;
-  creator: {
-    firstName: string;
-    lastName: string;
-  };
+  id: string;
   name: string;
-  members: {
-    _id: string;
-  }[];
-  admins: {
-    _id: string;
-  }[];
-  createdAt: string;
-  address: InterfaceAddress;
+  addressLine1: string;
+  description: string;
 }
 
 /**

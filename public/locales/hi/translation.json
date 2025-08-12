@@ -437,6 +437,9 @@
     "on": "पर",
     "after": "बाद",
     "occurences": "घटनाओं",
+    "monthlyOn": "मासिक पर",
+    "yearlyOn": "वार्षिक पर",
+    "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
     "events": "कार्यक्रम",
     "description": "विवरण",
     "location": "स्थान",
@@ -553,6 +556,10 @@
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
     "deleteEventMsg": "क्या आप इस ईवेंट को हटाना चाहते हैं?",
+    "deleteRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे हटाना चाहते हैं:",
+    "deleteThisInstance": "केवल इस इंस्टेंस को हटाएं",
+    "deleteThisAndFollowing": "इस और सभी निम्नलिखित ईवेंट्स को हटाएं",
+    "deleteAllEvents": "इस सीरीज़ के सभी ईवेंट्स को हटाएं",
     "editEvent": "इवेंट संपादित करें",
     "eventName": "नाम",
     "alreadyRegistered": "पहले से ही पंजीकृत",
@@ -941,7 +948,8 @@
   },
   "people": {
     "title": "लोग",
-    "searchUsers": "उपयोगकर्ताओं को खोजें"
+    "searchUsers": "उपयोगकर्ताओं को खोजें",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
   },
   "userLogin": {
     "login": "लॉग इन करें",

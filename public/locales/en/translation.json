@@ -435,6 +435,9 @@
     "on": "On",
     "after": "After",
     "occurences": "occurences",
+    "monthlyOn": "Monthly On",
+    "yearlyOn": "Yearly On",
+    "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
     "startTime": "startTime",
     "endTime": "endTime",
     "eventLocation": "eventLocation",
@@ -553,6 +556,10 @@
   "eventListCard": {
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
+    "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
+    "deleteThisInstance": "Delete only this instance",
+    "deleteThisAndFollowing": "Delete this and all following events",
+    "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
     "eventName": "Name",
     "alreadyRegistered": "Already registered",
@@ -981,7 +988,8 @@
   },
   "people": {
     "title": "People",
-    "searchUsers": "Search users"
+    "searchUsers": "Search users",
+    "nothingToShow": "Nothing to show here"
   },
   "userLogin": {
     "login": "Login",

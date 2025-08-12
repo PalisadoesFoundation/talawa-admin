@@ -36,15 +36,24 @@ export const CURRENT_USER = gql`
   }
 `;
 
-// Query to take the Organization list
+// Shared fields
+const ORG_FIELDS = gql`
+  fragment OrgFields on Organization {
+    id
+    name
+    addressLine1
+    description
+    avatarURL
+    membersCount
+    adminsCount
+  }
+`;
+
+// Full query with members
 export const ORGANIZATION_LIST = gql`
   query {
     organizations {
-      id
-      name
-      addressLine1
-      description
-      avatarURL
+      ...OrgFields
       members(first: 32) {
         edges {
           node {
@@ -57,6 +66,17 @@ export const ORGANIZATION_LIST = gql`
       }
     }
   }
+  ${ORG_FIELDS}
+`;
+
+// Lightweight version without members
+export const ORGANIZATION_LIST_NO_MEMBERS = gql`
+  query {
+    organizations {
+      ...OrgFields
+    }
+  }
+  ${ORG_FIELDS}
 `;
 
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
@@ -491,9 +511,22 @@ export const IS_USER_BLOCKED = gql`
 `;
 
 export const GET_ORGANIZATION_EVENTS_PG = gql`
-  query GetOrganizationEvents($id: String!, $first: Int, $after: String) {
+  query GetOrganizationEvents(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
     organization(input: { id: $id }) {
-      events(first: $first, after: $after) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
         edges {
           node {
             id
@@ -505,10 +538,34 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            # Recurring event fields
+            isRecurringEventTemplate
+            baseEvent {
+              id
+              name
+            }
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Creator information
             creator {
               id
               name
             }
+            # Organization
+            organization {
+              id
+              name
+            }
+            # Timestamps
+            createdAt
+            updatedAt
           }
           cursor
         }
@@ -541,32 +598,56 @@ export const GET_ORGANIZATION_POSTS_PG = gql`
   }
 `;
 
-// Query to take the Organization with data
+// Organization fragments for reusability
+const ORGANIZATION_BASIC_FIELDS = gql`
+  fragment OrganizationBasicFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+    createdAt
+    updatedAt
+  }
+`;
+
+const ORGANIZATION_DETAILED_FIELDS = gql`
+  fragment OrganizationDetailedFields on Organization {
+    ...OrganizationBasicFields
+    creator {
+      id
+      name
+      emailAddress
+    }
+    updater {
+      id
+      name
+      emailAddress
+    }
+  }
+  ${ORGANIZATION_BASIC_FIELDS}
+`;
+
+// Query to get basic organization data for updates
+export const GET_ORGANIZATION_BASIC_DATA = gql`
+  query getOrganizationBasicData($id: String!) {
+    organization(input: { id: $id }) {
+      ...OrganizationBasicFields
+    }
+  }
+  ${ORGANIZATION_BASIC_FIELDS}
+`;
+
+// Query to take the Organization with data (keeping same name for compatibility)
 export const GET_ORGANIZATION_DATA_PG = gql`
   query getOrganizationData($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-        emailAddress
-      }
-      updater {
-        id
-        name
-        emailAddress
-      }
+      ...OrganizationDetailedFields
       members(first: $first, after: $after) {
         edges {
           node {
@@ -584,21 +665,30 @@ export const GET_ORGANIZATION_DATA_PG = gql`
       }
     }
   }
+  ${ORGANIZATION_DETAILED_FIELDS}
 `;
-// list of a organizations
+
+// Shared fragment with common organization fields
+export const ORGANIZATION_FIELDS = gql`
+  fragment OrganizationFields on Organization {
+    id
+    name
+    description
+    addressLine1
+    addressLine2
+    city
+    state
+    postalCode
+    countryCode
+    avatarURL
+  }
+`;
+
+// Full query with all fields (metadata, creator, updater, etc.)
 export const ORGANIZATIONS_LIST = gql`
   query Organizations {
     organizations {
-      id
-      name
-      description
-      addressLine1
-      addressLine2
-      city
-      state
-      postalCode
-      countryCode
-      avatarURL
+      ...OrganizationFields
       createdAt
       updatedAt
       creator {
@@ -613,6 +703,17 @@ export const ORGANIZATIONS_LIST = gql`
       }
     }
   }
+  ${ORGANIZATION_FIELDS}
+`;
+
+// Basic query using only the shared fragment (no metadata)
+export const ORGANIZATIONS_LIST_BASIC = gql`
+  query Organizations {
+    organizations {
+      ...OrganizationFields
+    }
+  }
+  ${ORGANIZATION_FIELDS}
 `;
 
 export const MEMBERS_LIST_PG = gql`
