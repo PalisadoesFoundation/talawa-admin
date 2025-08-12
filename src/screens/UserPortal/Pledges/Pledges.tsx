@@ -456,13 +456,14 @@ const Pledges = (): JSX.Element => {
         rowHeight={65}
         rows={pledges.map((pledge) => ({
           id: pledge.id,
-          name: pledge.pledger.name,
-          image: pledge.pledger.avatarURL,
+          name: pledge.pledger?.name,
+          image: pledge.pledger?.avatarURL,
           startDate: pledge.startDate,
           endDate: pledge.campaign?.endAt,
           amount: pledge.amount,
           campaign: pledge.campaign,
           pledger: pledge.pledger,
+          users: (pledge as any).users, // Include users array for multiple pledgers functionality
           currency: pledge.campaign?.currencyCode,
           goalAmount: pledge.campaign?.goalAmount,
         }))}
