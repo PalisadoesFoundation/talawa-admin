@@ -3159,9 +3159,9 @@ form label,
 .time {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
-  padding-bottom: 0px;
-  width: 33%;
+  align-items: center;
+  padding: 12px;
+  width: fit-content;
   border: 1px solid var(--time-border);
   box-sizing: border-box;
   background: var(--time-bg);
@@ -3938,7 +3938,7 @@ form label,
 .rightCard {
   display: flex;
   gap: 7px;
-  min-width: 170px;
+  min-width: 100%;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
@@ -9339,5 +9339,9 @@ form {
 }
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+}
+
+.CardItemMainDiv{
+  width: 100%;
 }
 /* ----------------------------------------------------- */

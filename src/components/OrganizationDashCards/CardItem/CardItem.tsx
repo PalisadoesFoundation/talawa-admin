@@ -52,9 +52,9 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
-        <div className={`${styles.CardItemImage}`}>
+        {type!="Event" && <div className={`${styles.CardItemImage}`}>
           <img src="" alt="" />
-        </div>
+        </div>}
 
         <div className={`${styles.CardItemMainDiv}`}>
           {title && (

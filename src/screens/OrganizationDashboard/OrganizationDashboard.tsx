@@ -176,14 +176,16 @@ function OrganizationDashboard(): JSX.Element {
   useEffect(() => {
     if (orgEventsData && !hasFetchedAllEvents.current) {
       const now = new Date();
-
+      
       const allEvents = orgEventsData.organization.events.edges;
 
       const newTotalEventCount = allEvents.length;
 
       const upcomingEvents = allEvents.filter(
-        (event: InterfaceOrganizationEventsConnectionEdgePg) =>
-          new Date(event?.node?.event?.startAt) > now,
+        (event: InterfaceOrganizationEventsConnectionEdgePg) =>{
+          // Filter events that start after the current date
+          return(
+          new Date(event?.node?.startAt) > now)}
       );
 
       setEventCount((prevCount) => prevCount + newTotalEventCount);
@@ -439,15 +441,16 @@ function OrganizationDashboard(): JSX.Element {
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents?.map((event) => {
+                    upcomingEvents.slice(0,10)?.map((event) => {
+                      console.log("event", event)
                       return (
                         <CardItem
                           data-testid="cardItem"
                           type="Event"
-                          key={event.event.id}
-                          startdate={event?.event?.startAt}
-                          enddate={event?.event?.endAt}
-                          title={event.event?.name}
+                          key={event.node.id}
+                          startdate={event?.node.startAt}
+                          enddate={event?.node.endAt}
+                          title={event?.node.name}
                         />
                       );
                     })
