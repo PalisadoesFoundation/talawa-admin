@@ -3169,9 +3169,6 @@ form label,
   border-radius: 20px;
   background: var(--time-bg);
   border-radius: 8px;
-  margin-bottom: 0;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3938,12 +3935,10 @@ form label,
 .rightCard {
   display: flex;
   gap: 7px;
-  min-width: 100%;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  width: 210px;
 }
 
 .creator {
@@ -9341,7 +9336,12 @@ form {
   width: var(--sidebar-expanded-width);
 }
 
-.CardItemMainDiv{
+.CardItemMainDiv {
   width: 100%;
+}
+.CardItemMainDivEvent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 /* ----------------------------------------------------- */

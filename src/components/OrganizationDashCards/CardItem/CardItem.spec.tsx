@@ -28,7 +28,7 @@ describe('CardItem Component', () => {
     };
 
     render(<CardItem {...props} />);
-    expect(screen.getByText('Tech Conference 2023..')).toBeInTheDocument();
+    expect(screen.getByText('Tech Conference 2023')).toBeInTheDocument();
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
@@ -75,5 +75,14 @@ describe('CardItem Component', () => {
     render(<CardItem {...props} />);
 
     expect(screen.queryByTestId('date-icon')).not.toBeInTheDocument();
+  });
+
+  it('renders post card correctly', () => {
+    const props: InterfaceCardItem = {
+      type: 'Post',
+      title: '#1 Post Title',
+    };
+    render(<CardItem {...props} />);
+    expect(screen.getByText('#1 Post Title')).toBeInTheDocument();
   });
 });

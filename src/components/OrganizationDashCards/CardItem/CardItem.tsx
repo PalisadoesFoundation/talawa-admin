@@ -52,13 +52,20 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
-        {type!="Event" && <div className={`${styles.CardItemImage}`}>
-          <img src="" alt="" />
-        </div>}
+        {type != 'Event' && (
+          <div className={`${styles.CardItemImage}`}>
+            <img src="" alt="" />
+          </div>
+        )}
 
-        <div className={`${styles.CardItemMainDiv}`}>
+        <div
+          className={`${styles.CardItemMainDiv} ${type == 'Event' ? styles.CardItemMainDivEvent : ''}`}
+        >
           {title && (
-            <div className={styles.cardItemtitle}>{title.slice(0, 25)}..</div>
+            <div className={styles.cardItemtitle}>
+              {title.slice(0, 25)}
+              {title.length > 25 ? '..' : ''}
+            </div>
           )}
 
           {type == 'Post' && time && (
