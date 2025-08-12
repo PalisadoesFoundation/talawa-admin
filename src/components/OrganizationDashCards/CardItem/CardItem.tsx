@@ -59,12 +59,18 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
         )}
 
         <div
-          className={`${styles.CardItemMainDiv} ${type == 'Event' ? styles.CardItemMainDivEvent : ''}`}
+          className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
         >
           {title && (
-            <div className={styles.cardItemtitle}>
-              {title.slice(0, 25)}
-              {title.length > 25 ? '..' : ''}
+            <div
+              className={styles.cardItemtitle}
+              style={{
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+              }}
+            >
+              {title}
             </div>
           )}
 
@@ -103,8 +109,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                     height={20}
                   />
                 )}{' '}
-                {dayjs(startdate).format('MMM D, YYYY')} -{' '}
-                {dayjs(enddate).format('MMM D, YYYY')}
+                {dayjs(startdate).format('MMM D, YYYY')}
               </span>
             )}
           </div>

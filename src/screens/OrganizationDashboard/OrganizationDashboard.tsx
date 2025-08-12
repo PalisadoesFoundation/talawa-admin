@@ -440,7 +440,6 @@ function OrganizationDashboard(): JSX.Element {
                     </div>
                   ) : (
                     upcomingEvents.slice(0, 10)?.map((event) => {
-                      console.log('event', event);
                       return (
                         <CardItem
                           data-testid="cardItem"

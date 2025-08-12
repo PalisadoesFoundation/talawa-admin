@@ -3166,8 +3166,6 @@ form label,
   box-sizing: border-box;
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
-  border-radius: 20px;
-  background: var(--time-bg);
   border-radius: 8px;
 }
 
@@ -3939,6 +3937,7 @@ form label,
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
+  min-width: 140px;
 }
 
 .creator {

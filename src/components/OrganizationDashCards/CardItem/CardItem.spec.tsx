@@ -19,7 +19,6 @@ describe('CardItem Component', () => {
       type: 'Event',
       title: 'Tech Conference 2023',
       startdate: '2023-09-15',
-      enddate: '2023-09-17',
       location: 'Convention Center',
       creator: {
         id: '1',
@@ -58,7 +57,6 @@ describe('CardItem Component', () => {
       type: 'Event',
       title: 'No Location Event',
       startdate: '2023-10-01',
-      enddate: '2023-10-02',
     };
 
     render(<CardItem {...props} />);
