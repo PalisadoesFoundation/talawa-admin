@@ -136,9 +136,16 @@ export const mocks = [
   {
     request: {
       query: ADD_USER_TO_GROUP_CHAT,
-      variables: { chatId: 'chat1' },
+      variables: { chatId: 'chat1' }, // Match test variables
     },
     result: { data: { addUserToGroupChat: { _id: 'chat1', success: true } } },
+  },
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: { input: { _id: 'chat1', image: '', name: 'Group name' } },
+    },
+    result: { data: { updateChat: { _id: 'chat1', success: true } } },
   },
   {
     request: {
@@ -156,19 +163,5 @@ export const mocks = [
   {
     request: { query: UPDATE_CHAT, variables: {} },
     result: { data: { updateChat: { _id: 'chat3', success: true } } },
-  },
-  {
-    request: {
-      query: UPDATE_CHAT,
-      variables: {
-        input: {
-          _id: 'chat1',
-          image:
-            'data:application/octet-stream;base64,c21hbGwtZmlsZS1jb250ZW50',
-          name: '',
-        },
-      },
-    },
-    result: { data: { updateChat: { _id: 'chat1', success: true } } },
   },
 ];
