@@ -1142,7 +1142,10 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute('src', 'image-url');
+      expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
+        'src',
+        'image-url',
+      );
     });
   });
 
@@ -1150,7 +1153,10 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute('alt', 'John Doe');
+      expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
+        'alt',
+        'John Doe',
+      );
     });
   });
 
@@ -1348,7 +1354,9 @@ describe('Testing User Pledge Screen', () => {
 
     await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
     await waitFor(() => {
-      expect(screen.queryByTestId('deletePledgeCloseBtn')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('deletePledgeCloseBtn'),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -1366,7 +1374,9 @@ describe('Testing User Pledge Screen', () => {
 
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() => {
-      expect(screen.queryByTestId('pledgeModalCloseBtn')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('pledgeModalCloseBtn'),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -1374,7 +1384,9 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(link2);
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-      expect(screen.getByText(/Error occured while loading Pledges data/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occured while loading Pledges data/i),
+      ).toBeInTheDocument();
     });
     // Check that the error message is displayed (it's in the same element)
     const errorElement = screen.getByTestId('errorMsg');
@@ -1384,7 +1396,9 @@ describe('Testing User Pledge Screen', () => {
   it('should render empty state', async () => {
     renderMyPledges(link3);
     await waitFor(() => {
-      expect(screen.getByText(translations.userCampaigns.noPledges)).toBeInTheDocument();
+      expect(
+        screen.getByText(translations.userCampaigns.noPledges),
+      ).toBeInTheDocument();
     });
   });
 
