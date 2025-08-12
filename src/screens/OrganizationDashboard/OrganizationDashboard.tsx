@@ -439,7 +439,7 @@ function OrganizationDashboard(): JSX.Element {
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents
+                    [...upcomingEvents]
                       .sort(
                         (a, b) =>
                           new Date(a.node.startAt).getTime() -
@@ -453,7 +453,6 @@ function OrganizationDashboard(): JSX.Element {
                             type="Event"
                             key={event.node.id}
                             startdate={event?.node.startAt}
-                            enddate={event?.node.endAt}
                             title={event?.node.name}
                           />
                         );
