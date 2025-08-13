@@ -19,6 +19,7 @@ describe('CardItem Component', () => {
       type: 'Event',
       title: 'Tech Conference 2023',
       startdate: '2023-09-15',
+      enddate: '2023-09-16',
       location: 'Convention Center',
       creator: {
         id: '1',
@@ -31,8 +32,10 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
-    const expectedDateRange = `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(props.enddate).format('MMM D, YYYY')}`;
-    expect(screen.getByText(expectedDateRange)).toBeInTheDocument();
+    const startdate = `${dayjs(props.startdate).format('MMM D, YYYY')}`;
+    const enddate = `${dayjs(props.enddate).format('MMM D, YYYY')}`;
+    const dateRange = `${startdate} - ${enddate}`;
+    expect(screen.getByText(dateRange)).toBeInTheDocument();
 
     expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 
