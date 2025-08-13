@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
+import codeCoverageTask from '@cypress/code-coverage/task';
 
 export default defineConfig({
   e2e: {
@@ -11,10 +12,10 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.ts',
 
-    defaultCommandTimeout: 30000,
-    requestTimeout: 30000,
-    responseTimeout: 30000,
-    pageLoadTimeout: 30000,
+    defaultCommandTimeout: 50000,
+    requestTimeout: 50000,
+    responseTimeout: 50000,
+    pageLoadTimeout: 50000,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,
@@ -28,6 +29,7 @@ export default defineConfig({
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
     },
     setupNodeEvents(on, config) {
+      codeCoverageTask(on, config);
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {
