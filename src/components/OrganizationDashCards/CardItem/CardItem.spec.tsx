@@ -31,8 +31,8 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
-    const startDate = `${dayjs(props.startdate).format('MMM D, YYYY')}`;
-    expect(screen.getByText(startDate)).toBeInTheDocument();
+    const expectedDateRange = `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(props.enddate).format('MMM D, YYYY')}`;
+    expect(screen.getByText(expectedDateRange)).toBeInTheDocument();
 
     expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 

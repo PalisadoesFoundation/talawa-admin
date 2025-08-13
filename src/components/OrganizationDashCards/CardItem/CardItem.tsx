@@ -42,12 +42,13 @@ export interface InterfaceCardItem {
   title: string;
   time?: string;
   startdate?: string;
+  enddate?: string;
   creator?: { id: string | number; name: string };
   location?: string;
 }
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
-  const { creator, type, title, startdate, time, location } = props;
+  const { creator, type, title, startdate, enddate, time, location } = props;
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
@@ -104,7 +105,8 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                     height={20}
                   />
                 )}{' '}
-                {dayjs(startdate).format('MMM D, YYYY')}
+                {dayjs(startdate).format('MMM D, YYYY')} -{' '}
+                {dayjs(enddate).format('MMM D, YYYY')}
               </span>
             )}
           </div>

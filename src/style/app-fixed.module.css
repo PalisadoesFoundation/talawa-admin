@@ -3937,7 +3937,7 @@ form label,
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  min-width: 140px;
+  min-width: 240px;
 }
 
 .creator {

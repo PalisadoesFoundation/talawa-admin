@@ -453,6 +453,7 @@ function OrganizationDashboard(): JSX.Element {
                             type="Event"
                             key={event.node.id}
                             startdate={event?.node.startAt}
+                            enddate={event?.node.endAt}
                             title={event?.node.name}
                           />
                         );
