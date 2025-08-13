@@ -58,6 +58,8 @@ interface IEventEdge {
     totalCount?: number | null;
     hasExceptions?: boolean;
     progressLabel?: string | null;
+    // New recurrence description fields
+    recurrenceDescription?: string | null;
     // Attachments
     attachments?: Array<{
       url: string;
@@ -176,6 +178,7 @@ function organizationEvents(): JSX.Element {
     totalCount: edge.node.totalCount,
     hasExceptions: edge.node.hasExceptions,
     progressLabel: edge.node.progressLabel,
+    recurrenceDescription: edge.node.recurrenceDescription,
     creator: {
       _id: edge.node.creator.id,
       name: edge.node.creator.name,

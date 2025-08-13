@@ -168,6 +168,14 @@ Defined in: [src/types/Event/interface.ts:74](https://github.com/PalisadoesFound
 
 ***
 
+### recurrenceDescription?
+
+> `optional` **recurrenceDescription**: `string`
+
+Defined in: [src/types/Event/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L76)
+
+***
+
 ### recurringEventId?
 
 > `optional` **recurringEventId**: `string`

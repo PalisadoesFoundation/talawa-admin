@@ -18,9 +18,10 @@
  * - Uses Apollo Client mutations for updating and deleting events.
  *
  */
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -37,6 +38,7 @@ import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
   UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -46,6 +48,9 @@ import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import { Button, Modal, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+
+// Extend dayjs with utc plugin
+dayjs.extend(utc);
 
 interface IEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
@@ -83,9 +88,9 @@ function EventListCardModals({
   );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
-  const [updateOption, setUpdateOption] = useState<'single' | 'following'>(
-    'single',
-  );
+  const [updateOption, setUpdateOption] = useState<
+    'single' | 'following' | 'entireSeries'
+  >('single');
   const [eventStartDate, setEventStartDate] = useState(
     new Date(eventListCardProps.startDate),
   );
@@ -103,13 +108,160 @@ function EventListCardModals({
 
       if (isRecurringEvent) {
         const startDate = new Date(eventListCardProps.startDate);
-        // Use the exact same function that generates the dropdown options
-        return createDefaultRecurrenceRule(startDate, Frequency.WEEKLY);
+        // Try to detect frequency from recurrenceDescription if available
+        let detectedFrequency = Frequency.WEEKLY; // default
+
+        if (eventListCardProps.recurrenceDescription) {
+          const description =
+            eventListCardProps.recurrenceDescription.toLowerCase();
+          // Check in order of specificity - more specific patterns first
+          if (description.includes('weekly') || description.includes('week')) {
+            detectedFrequency = Frequency.WEEKLY;
+          } else if (
+            description.includes('monthly') ||
+            description.includes('month')
+          ) {
+            detectedFrequency = Frequency.MONTHLY;
+          } else if (
+            description.includes('yearly') ||
+            description.includes('year')
+          ) {
+            detectedFrequency = Frequency.YEARLY;
+          } else if (
+            description.includes('daily') ||
+            description.includes(' day ') ||
+            description.startsWith('day ') ||
+            description.endsWith(' day')
+          ) {
+            detectedFrequency = Frequency.DAILY;
+          }
+        }
+
+        return createDefaultRecurrenceRule(startDate, detectedFrequency);
       }
 
       return null;
     },
   );
+
+  // Store the original recurrence rule to detect changes
+  const [originalRecurrence] = useState<InterfaceRecurrenceRule | null>(() => {
+    const isRecurringEvent =
+      eventListCardProps.isRecurringTemplate ||
+      (!eventListCardProps.isRecurringTemplate &&
+        !!eventListCardProps.baseEventId);
+
+    if (isRecurringEvent) {
+      const startDate = new Date(eventListCardProps.startDate);
+      // Try to detect frequency from recurrenceDescription if available
+      let detectedFrequency = Frequency.WEEKLY; // default
+
+      if (eventListCardProps.recurrenceDescription) {
+        const description =
+          eventListCardProps.recurrenceDescription.toLowerCase();
+        // Check in order of specificity - more specific patterns first
+        if (description.includes('weekly') || description.includes('week')) {
+          detectedFrequency = Frequency.WEEKLY;
+        } else if (
+          description.includes('monthly') ||
+          description.includes('month')
+        ) {
+          detectedFrequency = Frequency.MONTHLY;
+        } else if (
+          description.includes('yearly') ||
+          description.includes('year')
+        ) {
+          detectedFrequency = Frequency.YEARLY;
+        } else if (
+          description.includes('daily') ||
+          description.includes(' day ') ||
+          description.startsWith('day ') ||
+          description.endsWith(' day')
+        ) {
+          detectedFrequency = Frequency.DAILY;
+        }
+      }
+
+      return createDefaultRecurrenceRule(startDate, detectedFrequency);
+    }
+
+    return null;
+  });
+
+  // Helper function to check if recurrence rule has changed
+  const hasRecurrenceChanged = (): boolean => {
+    if (!originalRecurrence && !recurrence) return false;
+    if (!originalRecurrence || !recurrence) return true;
+
+    const changed =
+      originalRecurrence.frequency !== recurrence.frequency ||
+      originalRecurrence.interval !== recurrence.interval ||
+      JSON.stringify(originalRecurrence.byDay) !==
+        JSON.stringify(recurrence.byDay) ||
+      originalRecurrence.byMonthDay !== recurrence.byMonthDay ||
+      originalRecurrence.count !== recurrence.count ||
+      originalRecurrence.endDate !== recurrence.endDate ||
+      originalRecurrence.never !== recurrence.never;
+
+    return changed;
+  };
+
+  // Helper function to check if only name/description changed (eligible for entireSeries update)
+  const hasOnlyNameOrDescriptionChanged = (): boolean => {
+    const nameChanged = formState.name !== eventListCardProps.name;
+    const descriptionChanged =
+      formState.eventdescrip !== eventListCardProps.description;
+    const locationChanged = formState.location !== eventListCardProps.location;
+    const publicChanged = publicchecked !== eventListCardProps.isPublic;
+    const registrableChanged =
+      registrablechecked !== eventListCardProps.isRegisterable;
+    const allDayChanged = alldaychecked !== eventListCardProps.allDay;
+    const recurrenceChanged = hasRecurrenceChanged();
+
+    // Check if dates have changed
+    const newStartAt = alldaychecked
+      ? dayjs.utc(eventStartDate).startOf('day').toISOString()
+      : dayjs(eventStartDate)
+          .hour(parseInt(formState.startTime.split(':')[0]))
+          .minute(parseInt(formState.startTime.split(':')[1]))
+          .second(parseInt(formState.startTime.split(':')[2]))
+          .toISOString();
+
+    const newEndAt = alldaychecked
+      ? dayjs.utc(eventEndDate).endOf('day').toISOString()
+      : dayjs(eventEndDate)
+          .hour(parseInt(formState.endTime.split(':')[0]))
+          .minute(parseInt(formState.endTime.split(':')[1]))
+          .second(parseInt(formState.endTime.split(':')[2]))
+          .toISOString();
+
+    const originalStartAt = eventListCardProps.allDay
+      ? dayjs.utc(eventListCardProps.startDate).startOf('day').toISOString()
+      : dayjs(
+          eventListCardProps.startDate + 'T' + eventListCardProps.startTime,
+        ).toISOString();
+
+    const originalEndAt = eventListCardProps.allDay
+      ? dayjs(eventListCardProps.endDate).endOf('day').toISOString()
+      : dayjs(
+          eventListCardProps.endDate + 'T' + eventListCardProps.endTime,
+        ).toISOString();
+
+    const datesChanged =
+      newStartAt !== originalStartAt || newEndAt !== originalEndAt;
+
+    // Return true if only name/description changed, and no other fields changed
+    return (
+      (nameChanged || descriptionChanged) &&
+      !locationChanged &&
+      !publicChanged &&
+      !registrableChanged &&
+      !allDayChanged &&
+      !datesChanged &&
+      !recurrenceChanged
+    );
+  };
+
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState(false);
 
@@ -128,10 +280,57 @@ function EventListCardModals({
   const [updateThisAndFollowingEvents] = useMutation(
     UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
   );
+  const [updateEntireRecurringEventSeries] = useMutation(
+    UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
+  );
+
+  // Automatically switch to "following" option when recurrence rule changes
+  useEffect(() => {
+    if (hasRecurrenceChanged() && updateOption === 'single') {
+      setUpdateOption('following');
+    }
+  }, [recurrence, updateOption]);
+
+  // Compute available options reactively
+  const availableUpdateOptions = useMemo(() => {
+    const recurrenceChanged = hasRecurrenceChanged();
+    const onlyNameOrDescChanged = hasOnlyNameOrDescriptionChanged();
+
+    return {
+      single: !recurrenceChanged,
+      following: true,
+      entireSeries: onlyNameOrDescChanged,
+    };
+  }, [
+    recurrence,
+    formState,
+    publicchecked,
+    registrablechecked,
+    alldaychecked,
+    eventStartDate,
+    eventEndDate,
+  ]);
+
+  // Ensure updateOption is always valid
+  useEffect(() => {
+    if (
+      !availableUpdateOptions[
+        updateOption as keyof typeof availableUpdateOptions
+      ]
+    ) {
+      if (availableUpdateOptions.following) {
+        setUpdateOption('following');
+      } else if (availableUpdateOptions.single) {
+        setUpdateOption('single');
+      } else if (availableUpdateOptions.entireSeries) {
+        setUpdateOption('entireSeries');
+      }
+    }
+  }, [availableUpdateOptions, updateOption]);
 
   // This function handles the actual update logic with the selected option
   const updateEventHandler = async (
-    updateOption?: 'single' | 'following',
+    updateOption?: 'single' | 'following' | 'entireSeries',
   ): Promise<void> => {
     // Check if this is a recurring instance
     const isRecurringInstance =
@@ -141,39 +340,51 @@ function EventListCardModals({
     try {
       let data;
 
-      // Build update input with only changed fields
+      // Build update input based on update type
       const updateInput: any = {
         id: eventListCardProps._id,
       };
 
-      // Only add fields that have potentially changed
-      if (formState.name !== eventListCardProps.name) {
+      // For "following" updates, we send all current values to propagate the exception's state
+      // For "single" updates, we only send changed fields
+      const isFollowingUpdate = updateOption === 'following';
+
+      if (isFollowingUpdate || formState.name !== eventListCardProps.name) {
         updateInput.name = formState.name;
       }
 
-      if (formState.eventdescrip !== eventListCardProps.description) {
+      if (
+        isFollowingUpdate ||
+        formState.eventdescrip !== eventListCardProps.description
+      ) {
         updateInput.description = formState.eventdescrip;
       }
 
-      if (formState.location !== eventListCardProps.location) {
+      if (
+        isFollowingUpdate ||
+        formState.location !== eventListCardProps.location
+      ) {
         updateInput.location = formState.location;
       }
 
-      if (publicchecked !== eventListCardProps.isPublic) {
+      if (isFollowingUpdate || publicchecked !== eventListCardProps.isPublic) {
         updateInput.isPublic = publicchecked;
       }
 
-      if (registrablechecked !== eventListCardProps.isRegisterable) {
+      if (
+        isFollowingUpdate ||
+        registrablechecked !== eventListCardProps.isRegisterable
+      ) {
         updateInput.isRegisterable = registrablechecked;
       }
 
-      if (alldaychecked !== eventListCardProps.allDay) {
+      if (isFollowingUpdate || alldaychecked !== eventListCardProps.allDay) {
         updateInput.allDay = alldaychecked;
       }
 
       // Always include dates/times as they may have been modified
       const newStartAt = alldaychecked
-        ? dayjs(eventStartDate).startOf('day').toISOString()
+        ? dayjs.utc(eventStartDate).startOf('day').toISOString()
         : dayjs(eventStartDate)
             .hour(parseInt(formState.startTime.split(':')[0]))
             .minute(parseInt(formState.startTime.split(':')[1]))
@@ -181,7 +392,7 @@ function EventListCardModals({
             .toISOString();
 
       const newEndAt = alldaychecked
-        ? dayjs(eventEndDate).endOf('day').toISOString()
+        ? dayjs.utc(eventEndDate).endOf('day').toISOString()
         : dayjs(eventEndDate)
             .hour(parseInt(formState.endTime.split(':')[0]))
             .minute(parseInt(formState.endTime.split(':')[1]))
@@ -190,22 +401,23 @@ function EventListCardModals({
 
       // Check if dates have changed
       const originalStartAt = eventListCardProps.allDay
-        ? dayjs(eventListCardProps.startDate).startOf('day').toISOString()
+        ? dayjs.utc(eventListCardProps.startDate).startOf('day').toISOString()
         : dayjs(
             eventListCardProps.startDate + 'T' + eventListCardProps.startTime,
           ).toISOString();
 
       const originalEndAt = eventListCardProps.allDay
-        ? dayjs(eventListCardProps.endDate).endOf('day').toISOString()
+        ? dayjs.utc(eventListCardProps.endDate).endOf('day').toISOString()
         : dayjs(
             eventListCardProps.endDate + 'T' + eventListCardProps.endTime,
           ).toISOString();
 
-      if (newStartAt !== originalStartAt) {
+      // For date/time handling, use same logic as above
+      if (isFollowingUpdate || newStartAt !== originalStartAt) {
         updateInput.startAt = newStartAt;
       }
 
-      if (newEndAt !== originalEndAt) {
+      if (isFollowingUpdate || newEndAt !== originalEndAt) {
         updateInput.endAt = newEndAt;
       }
 
@@ -216,11 +428,13 @@ function EventListCardModals({
         updateInput.recurrence = recurrence;
       }
 
-      // Check if any changes were made
+      // Check if any changes were made (but allow "following" updates even without changes)
       const hasChanges = Object.keys(updateInput).length > 1; // More than just the ID
 
-      if (!hasChanges) {
-        toast.info(t('noChangesToUpdate') || 'No changes to update');
+      if (!hasChanges && updateOption !== 'following') {
+        toast.info(
+          t('eventListCard.noChangesToUpdate') || 'No changes to update',
+        );
         return;
       }
 
@@ -250,6 +464,24 @@ function EventListCardModals({
               },
             });
             data = followingResult.data;
+            break;
+          case 'entireSeries':
+            // For entire series updates, only send name/description
+            const entireSeriesInput: any = {
+              id: eventListCardProps._id,
+            };
+            if (formState.name !== eventListCardProps.name) {
+              entireSeriesInput.name = formState.name;
+            }
+            if (formState.eventdescrip !== eventListCardProps.description) {
+              entireSeriesInput.description = formState.eventdescrip;
+            }
+            const entireSeriesResult = await updateEntireRecurringEventSeries({
+              variables: {
+                input: entireSeriesInput,
+              },
+            });
+            data = entireSeriesResult.data;
             break;
         }
       }
@@ -470,26 +702,44 @@ function EventListCardModals({
           <div>
             <p>{t('updateRecurringEventMsg')}</p>
             <Form>
-              <Form.Check
-                type="radio"
-                id="update-single"
-                name="updateOption"
-                value="single"
-                checked={updateOption === 'single'}
-                onChange={() => setUpdateOption('single')}
-                label={t('updateThisInstance')}
-                className="mb-2"
-              />
-              <Form.Check
-                type="radio"
-                id="update-following"
-                name="updateOption"
-                value="following"
-                checked={updateOption === 'following'}
-                onChange={() => setUpdateOption('following')}
-                label={t('updateThisAndFollowing')}
-                className="mb-2"
-              />
+              {/* Only show "update this instance" option if recurrence rule hasn't changed */}
+              {availableUpdateOptions.single && (
+                <Form.Check
+                  type="radio"
+                  id="update-single"
+                  name="updateOption"
+                  value="single"
+                  checked={updateOption === 'single'}
+                  onChange={() => setUpdateOption('single')}
+                  label={t('updateThisInstance')}
+                  className="mb-2"
+                />
+              )}
+              {availableUpdateOptions.following && (
+                <Form.Check
+                  type="radio"
+                  id="update-following"
+                  name="updateOption"
+                  value="following"
+                  checked={updateOption === 'following'}
+                  onChange={() => setUpdateOption('following')}
+                  label={t('updateThisAndFollowing')}
+                  className="mb-2"
+                />
+              )}
+              {/* Show "update entire series" option only when only name/description changed */}
+              {availableUpdateOptions.entireSeries && (
+                <Form.Check
+                  type="radio"
+                  id="update-entire-series"
+                  name="updateOption"
+                  value="entireSeries"
+                  checked={updateOption === 'entireSeries'}
+                  onChange={() => setUpdateOption('entireSeries')}
+                  label={t('updateEntireSeries')}
+                  className="mb-2"
+                />
+              )}
             </Form>
           </div>
         </Modal.Body>

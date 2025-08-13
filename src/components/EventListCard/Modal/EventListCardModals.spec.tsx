@@ -16,6 +16,7 @@ import EventListCardModals from './EventListCardModals';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import { UserRole } from 'types/Event/interface';
+import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
 import {
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -354,7 +355,7 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
-    expect(toast.info).toHaveBeenCalledWith('noChangesToUpdate');
+    expect(toast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
   });
 
   test('handles event registration', async () => {
@@ -590,5 +591,81 @@ describe('EventListCardModals', () => {
     });
 
     expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
+  });
+
+  describe('detects recurrence frequency from description', () => {
+    const testCases = [
+      {
+        description: 'Repeats weekly on Tuesday',
+        expectedFrequency: Frequency.WEEKLY,
+      },
+      { description: 'Occurs every week', expectedFrequency: Frequency.WEEKLY },
+      {
+        description: 'Monthly on the first Friday',
+        expectedFrequency: Frequency.MONTHLY,
+      },
+      {
+        description: 'Recurs every month',
+        expectedFrequency: Frequency.MONTHLY,
+      },
+      {
+        description: 'Annual event, every year on July 4th',
+        expectedFrequency: Frequency.YEARLY,
+      },
+      { description: 'Yearly meeting', expectedFrequency: Frequency.YEARLY },
+      { description: 'Happens daily', expectedFrequency: Frequency.DAILY },
+      { description: 'Repeats every day', expectedFrequency: Frequency.DAILY },
+      {
+        description: 'A random day event',
+        expectedFrequency: Frequency.DAILY,
+      },
+      { description: 'day by day', expectedFrequency: Frequency.DAILY },
+      { description: 'Starts with day', expectedFrequency: Frequency.DAILY },
+      { description: 'Ends with day', expectedFrequency: Frequency.DAILY },
+    ];
+
+    testCases.forEach(({ description, expectedFrequency }) => {
+      test(`should detect ${expectedFrequency} for "${description}"`, async () => {
+        renderComponent({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            isRecurringTemplate: false,
+            baseEventId: 'baseEvent1',
+            recurrenceDescription: description,
+          },
+        });
+
+        const previewProps = MockPreviewModal.mock.calls[0][0];
+        act(() => {
+          previewProps.setFormState({
+            ...previewProps.formState,
+            name: 'Updated Recurring Event',
+          });
+        });
+
+        await act(async () => {
+          await previewProps.handleEventUpdate();
+        });
+
+        // Select 'this and following events' to trigger the logic that uses frequency
+        const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+        await userEvent.click(followingRadio);
+
+        const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
+        await userEvent.click(confirmButton);
+
+        expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith(
+          expect.objectContaining({
+            variables: expect.objectContaining({
+              input: expect.objectContaining({
+                recurrence: expect.objectContaining({
+                  frequency: expectedFrequency,
+                }),
+              }),
+            }),
+          }),
+        );
+      });
+    });
   });
 });

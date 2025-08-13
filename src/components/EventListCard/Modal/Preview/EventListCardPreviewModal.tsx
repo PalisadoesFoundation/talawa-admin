@@ -182,17 +182,29 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   };
 
   const getCurrentRecurrenceLabel = (): string => {
+    // If no recurrence is set, show default message
     if (!recurrence) {
       return 'Select recurrence pattern';
     }
 
+    // First try to find a matching option based on current recurrence state
     const options = getRecurrenceOptions();
     const matchingOption = options.find((option) => {
       if (option.value === 'custom') return false;
       return JSON.stringify(option.value) === JSON.stringify(recurrence);
     });
 
-    return matchingOption ? matchingOption.label : 'Custom';
+    if (matchingOption) {
+      return matchingOption.label;
+    }
+
+    // If no match found and this is a recurring event, fall back to original description
+    if (isRecurringEvent && eventListCardProps.recurrenceDescription) {
+      return eventListCardProps.recurrenceDescription;
+    }
+
+    // Default to 'Custom' if no match and no description
+    return 'Custom';
   };
 
   // Check if this is a recurring event (either template or instance)

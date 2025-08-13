@@ -548,6 +548,8 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             totalCount
             hasExceptions
             progressLabel
+            # New recurrence description fields
+            recurrenceDescription
             # Attachments
             attachments {
               url

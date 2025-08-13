@@ -894,6 +894,9 @@ type Mutation {
   updateThisAndFollowingEvents(
     input: MutationUpdateThisAndFollowingEventsInput!
   ): EventPg
+  updateEntireRecurringEventSeries(
+    input: MutationUpdateEntireRecurringEventSeriesInput!
+  ): EventPg
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -1289,6 +1292,7 @@ type EventPg {
   progressLabel: String
   # Base event relationships
   baseEvent: EventPg
+  recurrenceDescription: String
   # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
@@ -2254,6 +2258,12 @@ input MutationUpdateThisAndFollowingEventsInput {
   name: String
   recurrence: RecurrenceInput
   startAt: DateTime
+}
+
+input MutationUpdateEntireRecurringEventSeriesInput {
+  description: String
+  id: ID!
+  name: String
 }
 
 input MutationDeleteEntireRecurringEventSeriesInput {

@@ -565,6 +565,7 @@
     "updateRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le mettre à jour :",
     "updateThisInstance": "Mettre à jour uniquement cette instance",
     "updateThisAndFollowing": "Mettre à jour cet événement et tous les suivants",
+    "updateEntireSeries": "Mettre à jour tous les événements de la série",
     "eventName": "Nom",
     "alreadyRegistered": "Déjà enregistré",
     "startTime": "Heure de début",

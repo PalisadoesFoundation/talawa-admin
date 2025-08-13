@@ -242,6 +242,7 @@ const Calendar: React.FC<
           totalCount={datas.totalCount}
           hasExceptions={datas.hasExceptions}
           progressLabel={datas.progressLabel}
+          recurrenceDescription={datas.recurrenceDescription}
         />
       ),
     );
@@ -418,6 +419,7 @@ const Calendar: React.FC<
               totalCount={datas.totalCount}
               hasExceptions={datas.hasExceptions}
               progressLabel={datas.progressLabel}
+              recurrenceDescription={datas.recurrenceDescription}
             />
           )) || [];
 

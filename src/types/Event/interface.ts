@@ -72,6 +72,8 @@ export interface IEvent {
   totalCount?: number | null;
   hasExceptions?: boolean;
   progressLabel?: string | null;
+  // New recurrence description field
+  recurrenceDescription?: string | null;
 }
 
 export interface IOrgList {

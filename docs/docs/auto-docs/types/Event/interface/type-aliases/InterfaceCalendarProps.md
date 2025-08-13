@@ -6,4 +6,4 @@
 
 > **InterfaceCalendarProps** = [`ICalendarProps`](../interfaces/ICalendarProps.md)
 
-Defined in: [src/types/Event/interface.ts:214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L214)
+Defined in: [src/types/Event/interface.ts:216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L216)

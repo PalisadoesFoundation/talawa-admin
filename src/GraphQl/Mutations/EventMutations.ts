@@ -161,6 +161,19 @@ export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
   }
 `;
 
+export const UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION = gql`
+  mutation UpdateEntireRecurringEventSeries(
+    $input: MutationUpdateEntireRecurringEventSeriesInput!
+  ) {
+    updateEntireRecurringEventSeries(input: $input) {
+      id
+      name
+      description
+      updatedAt
+    }
+  }
+`;
+
 export const REGISTER_EVENT = gql`
   mutation registerForEvent($eventId: ID!) {
     registerForEvent(id: $eventId) {
