@@ -198,6 +198,8 @@ function OrganizationDashboard(): JSX.Element {
             after: orgEventsData.organization.events.pageInfo.endCursor,
           },
         });
+      } else {
+        hasFetchedAllEvents.current = true;
       }
     }
   }, [orgEventsData, fetchMore, orgId]);

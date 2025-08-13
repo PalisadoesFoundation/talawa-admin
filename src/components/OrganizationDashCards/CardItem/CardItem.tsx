@@ -95,7 +95,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 {location}
               </span>
             )}
-            {type == 'Event' && startdate && (
+            {type == 'Event' && startdate && enddate && (
               <span className={`${styles.time} fst-normal fw-semibold`}>
                 {type === 'Event' && (
                   <DateIcon
