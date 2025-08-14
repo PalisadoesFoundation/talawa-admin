@@ -63,9 +63,10 @@ const VenueCard = ({
           {/* Venue image or default image if none provided */}
           <Card.Img
             variant="top"
-            src={venueItem.node.image || defaultImg}
+            src={venueItem.node.attachments?.[0]?.url || defaultImg}
             alt="image not found"
-            className={styles.novenueimage}
+            className={styles.venueimage}
+            crossOrigin="anonymous"
           />
           <Card.Body className="pb-0">
             <Card.Title className="d-flex justify-content-between">
@@ -85,8 +86,8 @@ const VenueCard = ({
             <Card.Text className={styles.text}>
               {/* Venue description with truncation if too long */}
               {venueItem.node.description &&
-              venueItem.node.description.length > 75
-                ? venueItem.node.description.slice(0, 75) + '...'
+              venueItem.node.description.length > 40
+                ? venueItem.node.description.slice(0, 40) + '...'
                 : venueItem.node.description}
             </Card.Text>
           </Card.Body>

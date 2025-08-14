@@ -15,12 +15,16 @@ export const CREATE_VENUE_MUTATION = gql`
     $name: String!
     $description: String
     $organizationId: ID!
+    $capacity: Int
+    $attachments: [Upload!]
   ) {
     createVenue(
       input: {
         name: $name
         description: $description
         organizationId: $organizationId
+        capacity: $capacity
+        attachments: $attachments
       }
     ) {
       id
@@ -37,17 +41,30 @@ export const CREATE_VENUE_MUTATION = gql`
  * @param description - Description of the venue.
  * @param name - Name of the venue.
  */
-
 export const UPDATE_VENUE_MUTATION = gql`
-  mutation updateVenue($id: ID!, $name: String, $description: String) {
-    updateVenue(input: { id: $id, name: $name, description: $description }) {
+  mutation updateVenue(
+    $id: ID!
+    $name: String
+    $description: String
+    $capacity: Int
+    $attachments: [Upload!]
+  ) {
+    updateVenue(
+      input: {
+        id: $id
+        name: $name
+        description: $description
+        capacity: $capacity
+        attachments: $attachments
+      }
+    ) {
       id
       name
       description
+      capacity
     }
   }
 `;
-
 /**
  * GraphQL mutation to delete a venue.
  *

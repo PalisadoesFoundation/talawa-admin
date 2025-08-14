@@ -26,7 +26,7 @@ describe('VenueCard Component', () => {
     );
     expect(screen.getByText('Grand Hall')).toBeInTheDocument();
     expect(
-      screen.getByText('A spacious venue for large events and gatherings.'),
+      screen.getByText('A spacious venue for large events.'),
     ).toBeInTheDocument();
   });
 
@@ -134,7 +134,7 @@ describe('VenueCard Component', () => {
 
     expect(screen.getByText('Grand Hall')).toBeInTheDocument();
     expect(
-      screen.getByText('A spacious venue for large events and gatherings.'),
+      screen.getByText('A spacious venue for large events.'),
     ).toBeInTheDocument();
   });
 });

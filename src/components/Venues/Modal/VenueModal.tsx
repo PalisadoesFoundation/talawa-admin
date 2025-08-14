@@ -55,6 +55,14 @@ export interface InterfaceVenueModalProps {
   edit: boolean;
 }
 
+interface InterfaceVenueFormState {
+  name: string;
+  description: string;
+  capacity: string;
+  objectName: string;
+  attachments?: File[];
+}
+
 const VenueModal = ({
   show,
   onHide,
@@ -73,7 +81,7 @@ const VenueModal = ({
 
   // State to manage image preview and form data
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<InterfaceVenueFormState>({
     name: venueData?.node.name || '',
     description: venueData?.node.description || '',
     capacity: venueData?.node.capacity?.toString() || '',
@@ -112,8 +120,10 @@ const VenueModal = ({
         id: venueData.node.id,
         capacity: parseInt(formState.capacity, 10),
         description: formState.description?.trim() || '',
-        file: formState.objectName || '',
-        // Don't include name if it hasn't changed
+        ...(formState.attachments &&
+          formState.attachments.length > 0 && {
+            attachments: formState.attachments,
+          }),
       };
       try {
         const result = await mutate({ variables });
@@ -145,7 +155,10 @@ const VenueModal = ({
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.objectName || '',
+          ...(formState.attachments &&
+            formState.attachments.length > 0 && {
+              attachments: formState.attachments,
+            }),
         };
 
         const result = await mutate({ variables });
@@ -156,13 +169,15 @@ const VenueModal = ({
           onHide();
         }
       } else {
-        // Create venue case
         const variables = {
           name: formState.name.trim(),
           capacity: capacityNum,
           description: formState.description?.trim() || '',
-          file: formState.objectName || '',
           organizationId: orgId,
+          ...(formState.attachments &&
+            formState.attachments.length > 0 && {
+              attachments: formState.attachments,
+            }),
         };
 
         const result = await mutate({ variables });
@@ -191,12 +206,21 @@ const VenueModal = ({
    * This function also clears the file input field.
    */
   const clearImageInput = useCallback(() => {
-    setFormState((prevState) => ({ ...prevState, objectName: '' }));
+    // Clean up the object URL to prevent memory leaks
+    if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(imagePreviewUrl);
+    }
+
+    setFormState((prevState) => ({
+      ...prevState,
+      objectName: '',
+      attachments: [], // Clear attachments too
+    }));
     setImagePreviewUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  }, []);
+  }, [imagePreviewUrl]);
 
   // Update form state when venueData changes
   useEffect(() => {
@@ -205,6 +229,7 @@ const VenueModal = ({
       description: venueData?.node.description || '', // Prefill description
       capacity: venueData?.node.capacity?.toString() || '', // Prefill capacity as a string
       objectName: venueData?.node.image || '', // Prefill image
+      attachments: [], // Reset attachments
     });
 
     if (venueData?.node.image) {
@@ -223,8 +248,50 @@ const VenueModal = ({
     }
   }, [venueData]);
 
-  const { name, description, capacity } = formState;
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreviewUrl);
+      }
+    };
+  }, [imagePreviewUrl]);
 
+  const { name, description, capacity } = formState;
+  // Handle file uploads
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0]; // Get the first file
+      const maxFileSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+
+      if (!allowedTypes.includes(file.type)) {
+        toast.error(`Invalid file type: ${file.name}`);
+        return;
+      }
+
+      if (file.size > maxFileSize) {
+        toast.error(`File too large: ${file.name}`);
+        return;
+      }
+
+      if (!file.size) {
+        toast.error('Empty file selected');
+        return;
+      }
+
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(previewUrl);
+
+      setFormState((prev) => ({
+        ...prev,
+        attachments: [file],
+      }));
+    }
+  };
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header className="d-flex align-items-start">
@@ -291,36 +358,7 @@ const VenueModal = ({
             placeholder={t('uploadVenueImage')}
             multiple={false}
             ref={fileInputRef}
-            onChange={async (e: React.ChangeEvent) => {
-              const target = e.target as HTMLInputElement;
-              const file = target.files?.[0];
-
-              if (file) {
-                if (!file.size) {
-                  toast.error('Empty file selected');
-                  return;
-                }
-                if (file.size > 5 * 1024 * 1024) {
-                  toast.error('File size exceeds the 5MB limit');
-                  return;
-                }
-                if (!file.type.startsWith('image/')) {
-                  toast.error('Only image files are allowed');
-                  return;
-                }
-                try {
-                  const { objectName } = await uploadFileToMinio(
-                    file,
-                    'organizations',
-                  );
-                  setFormState({ ...formState, objectName });
-                  const previewUrl = URL.createObjectURL(file);
-                  setImagePreviewUrl(previewUrl);
-                } catch {
-                  toast.error('Failed to upload image');
-                }
-              }
-            }}
+            onChange={handleFileUpload}
             className={styles.inputField}
           />
           {imagePreviewUrl && (

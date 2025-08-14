@@ -9340,4 +9340,8 @@ form {
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
 }
+.venueimage {
+  width: 100%;
+  aspect-ratio: 3/2;
+}
 /* ----------------------------------------------------- */

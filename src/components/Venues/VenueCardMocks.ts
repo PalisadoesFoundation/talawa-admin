@@ -6,7 +6,7 @@ export const MOCK_VENUE_ITEM = {
     name: 'Grand Hall',
     image: null,
     capacity: '500',
-    description: 'A spacious venue for large events and gatherings.',
+    description: 'A spacious venue for large events.',
   },
 };
 
@@ -14,7 +14,12 @@ export const MOCK_VENUE_ITEM_WITH_IMAGE = {
   node: {
     id: '2',
     name: 'Conference Room',
-    image: 'https://surl.li/odyiad',
+    attachments: [
+      {
+        id: 'attachment1',
+        url: 'https://surl.li/odyiad',
+      },
+    ],
     capacity: '200',
     description: 'A modern conference room with all amenities.',
   },

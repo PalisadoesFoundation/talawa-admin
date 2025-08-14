@@ -2022,6 +2022,11 @@ export interface InterfaceQueryVenueListItem {
     description: string | null;
     image?: string | null;
     capacity?: string;
+    attachments?: Array<{
+      url: string;
+      id: string;
+      name?: string;
+    }>;
   };
 }
 

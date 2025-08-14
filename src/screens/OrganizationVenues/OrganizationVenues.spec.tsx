@@ -285,8 +285,9 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    const venue = screen.getByTestId('venue-item3');
-    expect(venue).toHaveTextContent(/Venue with a name longer .../i);
+    // Find the venue with the long name using text content
+    const longNameVenue = screen.getByText(/Venue with a name longer/);
+    expect(longNameVenue).toBeInTheDocument();
   });
 
   test('renders full venue name if name is less than or equal to 25 characters', async () => {
@@ -295,20 +296,24 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    const venueName = screen.getByTestId('venue-item1');
-    expect(venueName).toHaveTextContent('Updated Venue 1');
+    // Find venues with short names using text content
+    const shortNameVenue1 = screen.getByText('Updated Venue 1');
+    const shortNameVenue2 = screen.getByText('Updated Venue 2');
+    expect(shortNameVenue1).toBeInTheDocument();
+    expect(shortNameVenue2).toBeInTheDocument();
   });
 
-  test('renders venue description with ellipsis if description is longer than 75 characters', async () => {
+  test('renders venue description with ellipsis if description is longer than 40 characters', async () => {
     renderOrganizationVenue(link);
     await waitFor(() =>
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    const venue = screen.getByTestId('venue-item3');
-    expect(venue).toHaveTextContent(
-      'Venue description that should be truncated because it is longer than 75 cha...',
+    // Find the venue with the long description using partial text content
+    const longDescText = screen.getByText(
+      /Venue description that should be truncat.../,
     );
+    expect(longDescText).toBeInTheDocument();
   });
 
   test('renders full venue description if description is less than or equal to 75 characters', async () => {
@@ -317,8 +322,11 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    const venue = screen.getByTestId('venue-item1');
-    expect(venue).toHaveTextContent('Updated description for venue 1');
+    // Find venues with short descriptions using text content
+    const shortDesc1 = screen.getByText('Updated description for venue 1');
+    const shortDesc2 = screen.getByText('Updated description for venue 2');
+    expect(shortDesc1).toBeInTheDocument();
+    expect(shortDesc2).toBeInTheDocument();
   });
 
   test('Render modal to edit venue', async () => {

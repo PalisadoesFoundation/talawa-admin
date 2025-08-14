@@ -330,6 +330,7 @@ export const VENUE_LIST = gql`
             name
             description
             createdAt
+            capacity
             attachments {
               url
               mimeType
