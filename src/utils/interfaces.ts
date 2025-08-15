@@ -2102,8 +2102,10 @@ export interface InterfacePostCard {
     id: string;
     name: string;
     email: string;
+    avatarURL?: string;
   };
   postedAt: string;
+  pinnedAt?: string | null;
   image: string | null;
   video: string | null;
   title: string;
@@ -2120,6 +2122,12 @@ export interface InterfacePostCard {
       };
     }[];
   };
+  attachments: {
+    fileHash: string;
+    mimeType: string;
+    name: string;
+    objectName: string;
+  }[];
   upVoteCount: number;
   downVoteCount: number;
   comments: {

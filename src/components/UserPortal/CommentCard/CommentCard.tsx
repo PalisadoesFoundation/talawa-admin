@@ -1,72 +1,83 @@
 /**
  * CommentCard Component
  *
- * This component represents a card displaying a comment with the ability to like or unlike it.
- * It shows the comment creator's details, the comment text, and the like count.
+ * This component represents a card displaying a comment with the ability to like or dislike it.
+ * It shows the comment creator's details, the comment text, and the like/dislike counts.
  *
  * @component
  * @param props - The properties required by the CommentCard component.
  * @param props.id - The unique identifier of the comment.
- * @param props.creator - The creator of the comment, including their ID, first name, last name, and email.
- * @param props.likeCount - The initial number of likes on the comment.
- * @param props.likedBy - An array of users who have liked the comment.
+ * @param props.creator - The creator of the comment, including their ID and name.
+ * @param props.upVoteCount - The number of upvotes (likes) on the comment.
+ * @param props.downVoteCount - The number of downvotes (dislikes) on the comment.
+ * @param props.upVoters - An array of users who have liked the comment.
+ * @param props.downVoters - An array of users who have disliked the comment.
  * @param props.text - The text content of the comment.
- * @param props.handleLikeComment - Callback function triggered when the comment is liked.
- * @param props.handleDislikeComment - Callback function triggered when the comment is unliked.
+ * @param props.onVote - Callback function triggered when the comment is voted on.
+ * @param props.fetchComments - Function to refresh comments after voting.
  *
  * @returns A JSX element representing the comment card.
- *
- * @remarks
- * - The component uses Apollo Client's `useMutation` hook to handle like and unlike operations.
- * - The `useLocalStorage` hook is used to retrieve the current user's ID from local storage.
- * - The like/unlike button displays a loading spinner while the mutation is in progress.
- *
- * @example
- * ```tsx
- * <CommentCard
- *   id="comment123"
- *   creator={{ id: "user1", firstName: "John", lastName: "Doe", email: "john.doe@example.com" }}
- *   likeCount={10}
- *   likedBy={[{ id: "user2" }]}
- *   text="This is a sample comment."
- *   handleLikeComment={(id) => console.log(`Liked comment with ID: ${id}`)}
- *   handleDislikeComment={(id) => console.log(`Disliked comment with ID: ${id}`)}
- * />
- * ```
  */
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import styles from './CommentCard.module.css';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {
+  Avatar,
+  IconButton,
+  Typography,
+  Stack,
+  Box,
+  CircularProgress
+} from '@mui/material';
+import {
+  ThumbUp,
+  ThumbDown,
+  ThumbUpOutlined,
+  ThumbDownOutlined
+} from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
+import { styled } from '@mui/material/styles';
+
+const CommentContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1.5),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  marginBottom: theme.spacing(1),
+}));
+
+const CommentContent = styled(Typography)({
+  margin: '8px 0',
+  whiteSpace: 'pre-line',
+});
+
+const VoteCount = styled(Typography)(({ theme }) => ({
+  fontSize: '0.75rem',
+  minWidth: 20,
+  textAlign: 'center',
+}));
 
 interface InterfaceCommentCardProps {
   id: string;
   creator: {
     id: string;
     name: string;
+    avatarURL?: string;
   };
   upVoteCount: number;
   downVoteCount: number;
   upVoters: {
-    edges: {
-      id: string;
+    edges: Array<{
       node: {
         id: string;
       };
-    }[];
+    }>;
   };
   text: string;
+  fetchComments?: () => void;
 }
 
 function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
-  const creatorName = props.creator.name;
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
@@ -78,14 +89,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
 
   React.useEffect(() => {
     if (!userId) return;
-
     const liked = props.upVoters?.edges?.some(
-      (edge) => edge.node.id === userId,
+      (edge) => edge.node.id === userId
     );
-    if (props.upVoteCount === 0) {
-      setIsLiked(false);
-      return;
-    }
     setIsLiked(Boolean(liked));
   }, [props.upVoters, userId]);
 
@@ -93,16 +99,14 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     setLikes(props.upVoteCount);
   }, [props.upVoteCount]);
 
+  
   const handleToggleLike = async (): Promise<void> => {
     try {
       if (isLiked) {
-        // 👎 Unlike
+        // Unlike
         const { data } = await unlikeComment({
           variables: {
-            input: {
-              commentId: props.id,
-              creatorId: userId,
-            },
+            input: { commentId: props.id, creatorId: userId },
           },
         });
 
@@ -113,13 +117,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           toast.warn('Could not find an existing like to remove.');
         }
       } else {
-        // 👍 Like
+        // Like
         const { data } = await likeComment({
           variables: {
-            input: {
-              commentId: props.id,
-              type: 'up_vote',
-            },
+            input: { commentId: props.id, type: 'up_vote' },
           },
         });
 
@@ -141,37 +142,44 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.personDetails}>
-        <div className="d-flex align-items-center gap-2">
-          <AccountCircleIcon className="my-2" />
-          <b>{creatorName}</b>
-        </div>
-        <span>{props.text}</span>
-        <div className={styles.cardActions}>
-          <Button
-            className={styles.cardActionBtn}
-            onClick={handleToggleLike}
-            data-testid="likeCommentBtn"
-            size="sm"
-            disabled={liking || unliking}
-          >
-            {liking || unliking ? (
-              <HourglassBottomIcon
-                data-testid="HourglassBottomIcon"
-                fontSize="small"
-              />
-            ) : isLiked ? (
-              <ThumbUpIcon data-testid="ThumbUpIcon" fontSize="small" />
-            ) : (
-              <ThumbUpOffAltIcon fontSize="small" />
-            )}
-          </Button>
-          {`${likes} Likes`}
-        </div>
-      </div>
-    </div>
+    <CommentContainer>
+      <Stack direction="row" spacing={2} alignItems="flex-start">
+        <Avatar
+          src={props.creator.avatarURL}
+          alt={props.creator.name}
+          sx={{ width: 32, height: 32 }}
+        />
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="subtitle2" fontWeight="bold">
+            {props.creator.name}
+          </Typography>
+          <CommentContent variant="body2">
+            {props.text}
+          </CommentContent>
+
+          <Stack direction="row" spacing={1} alignItems="center">
+            <IconButton
+              size="small"
+              onClick={handleToggleLike}
+              color={isLiked ? 'primary' : 'default'} // changes color when liked
+            >
+              {liking || unliking ? (
+                <CircularProgress size={20} />
+              ) : isLiked ? (
+                <ThumbUp fontSize="small" />
+              ) : (
+                <ThumbUpOutlined fontSize="small" />
+              )}
+            </IconButton>
+            <VoteCount>
+              {likes} {/* ✅ Now uses state */}
+            </VoteCount>
+          </Stack>
+        </Box>
+      </Stack>
+    </CommentContainer>
   );
 }
+
 
 export default CommentCard;

@@ -110,11 +110,24 @@ export type PostNode = {
     id: string;
     name: string;
     emailAddress: string;
+    avatarURL?: string | null;
   };
   upVotesCount: number;
   downVotesCount: number;
+  pinnedAt: string | null;
 
   upVoters: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
+    downVoters: {
     edges: {
       node: {
         id: string;
