@@ -2098,6 +2098,7 @@ export interface InterfaceCreateFund {
  */
 export interface InterfacePostCard {
   id: string;
+  isModalView?: boolean;
   creator: {
     id: string;
     name: string;
@@ -2122,12 +2123,6 @@ export interface InterfacePostCard {
       };
     }[];
   };
-  attachments: {
-    fileHash: string;
-    mimeType: string;
-    name: string;
-    objectName: string;
-  }[];
   upVoteCount: number;
   downVoteCount: number;
   comments: {

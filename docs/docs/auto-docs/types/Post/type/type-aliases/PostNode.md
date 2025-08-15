@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:104](https://github.com/PalisadoesFoundation
 
 > **attachments**: `object`[]
 
-Defined in: [src/types/Post/type.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L128)
+Defined in: [src/types/Post/type.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L141)
 
 #### fileHash
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/type.ts:108](https://github.com/PalisadoesFoundation
 
 > `optional` **comments**: `object`
 
-Defined in: [src/types/Post/type.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L137)
+Defined in: [src/types/Post/type.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L150)
 
 #### edges
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Post/type.ts:137](https://github.com/PalisadoesFoundation
 
 > **commentsCount**: `number`
 
-Defined in: [src/types/Post/type.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L135)
+Defined in: [src/types/Post/type.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L148)
 
 ***
 
@@ -84,6 +84,10 @@ Defined in: [src/types/Post/type.ts:107](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L109)
 
+#### avatarURL?
+
+> `optional` **avatarURL**: `string` \| `null`
+
 #### emailAddress
 
 > **emailAddress**: `string`
@@ -98,11 +102,23 @@ Defined in: [src/types/Post/type.ts:109](https://github.com/PalisadoesFoundation
 
 ***
 
+### downVoters
+
+> **downVoters**: `object`
+
+Defined in: [src/types/Post/type.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L130)
+
+#### edges
+
+> **edges**: `object`[]
+
+***
+
 ### downVotesCount
 
 > **downVotesCount**: `number`
 
-Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L115)
+Defined in: [src/types/Post/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L116)
 
 ***
 
@@ -114,11 +130,19 @@ Defined in: [src/types/Post/type.ts:105](https://github.com/PalisadoesFoundation
 
 ***
 
+### pinnedAt
+
+> **pinnedAt**: `string` \| `null`
+
+Defined in: [src/types/Post/type.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L117)
+
+***
+
 ### upVoters
 
 > **upVoters**: `object`
 
-Defined in: [src/types/Post/type.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L117)
+Defined in: [src/types/Post/type.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L119)
 
 #### edges
 
@@ -130,4 +154,4 @@ Defined in: [src/types/Post/type.ts:117](https://github.com/PalisadoesFoundation
 
 > **upVotesCount**: `number`
 
-Defined in: [src/types/Post/type.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L114)
+Defined in: [src/types/Post/type.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L115)

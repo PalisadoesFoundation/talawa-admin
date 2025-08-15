@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L67)
+Defined in: [src/components/UserPortal/PostCard/PostCard.tsx:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PostCard/PostCard.tsx#L160)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 [`InterfacePostCard`](../../../../../utils/interfaces/interfaces/InterfacePostCard.md)
 

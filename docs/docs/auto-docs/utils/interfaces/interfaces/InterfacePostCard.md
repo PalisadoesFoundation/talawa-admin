@@ -18,7 +18,7 @@ Defines the structure for a post card.
 
 > **commentCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2111)
+Defined in: [src/utils/interfaces.ts:2114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2114)
 
 The number of comments on the post.
 
@@ -28,7 +28,7 @@ The number of comments on the post.
 
 > **comments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2125)
+Defined in: [src/utils/interfaces.ts:2128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2128)
 
 An array of comments on the post.
 
@@ -78,9 +78,13 @@ An array of comments on the post.
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:2101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2101)
+Defined in: [src/utils/interfaces.ts:2102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2102)
 
 The creator of the post.
+
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
 
 #### email
 
@@ -100,7 +104,7 @@ The creator of the post.
 
 > **downVoteCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2124)
+Defined in: [src/utils/interfaces.ts:2127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2127)
 
 ***
 
@@ -108,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:2124](https://github.com/PalisadoesFoundati
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:2138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2138)
+Defined in: [src/utils/interfaces.ts:2141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2141)
 
 A function to fetch posts.
 
@@ -132,9 +136,25 @@ The unique identifier of the post.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:2107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2107)
+Defined in: [src/utils/interfaces.ts:2110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2110)
 
 The URL of the post's image, or null.
+
+***
+
+### isModalView?
+
+> `optional` **isModalView**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:2101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2101)
+
+***
+
+### pinnedAt?
+
+> `optional` **pinnedAt**: `string`
+
+Defined in: [src/utils/interfaces.ts:2109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2109)
 
 ***
 
@@ -142,7 +162,7 @@ The URL of the post's image, or null.
 
 > **postedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2106)
+Defined in: [src/utils/interfaces.ts:2108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2108)
 
 The date and time the post was created.
 
@@ -152,7 +172,7 @@ The date and time the post was created.
 
 > **text**: `string`
 
-Defined in: [src/utils/interfaces.ts:2110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2110)
+Defined in: [src/utils/interfaces.ts:2113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2113)
 
 The text content of the post.
 
@@ -162,7 +182,7 @@ The text content of the post.
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:2109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2109)
+Defined in: [src/utils/interfaces.ts:2112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2112)
 
 The title of the post.
 
@@ -172,7 +192,7 @@ The title of the post.
 
 > **upVoteCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2123)
+Defined in: [src/utils/interfaces.ts:2126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2126)
 
 ***
 
@@ -180,7 +200,7 @@ Defined in: [src/utils/interfaces.ts:2123](https://github.com/PalisadoesFoundati
 
 > **upVoters**: `object`
 
-Defined in: [src/utils/interfaces.ts:2112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2112)
+Defined in: [src/utils/interfaces.ts:2115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2115)
 
 An array of users who liked the post.
 
@@ -194,6 +214,6 @@ An array of users who liked the post.
 
 > **video**: `string`
 
-Defined in: [src/utils/interfaces.ts:2108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2108)
+Defined in: [src/utils/interfaces.ts:2111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2111)
 
 The URL of the post's video, or null.

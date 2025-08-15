@@ -25,13 +25,13 @@ import {
   Typography,
   Stack,
   Box,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import {
   ThumbUp,
   ThumbDown,
   ThumbUpOutlined,
-  ThumbDownOutlined
+  ThumbDownOutlined,
 } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
@@ -90,7 +90,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   React.useEffect(() => {
     if (!userId) return;
     const liked = props.upVoters?.edges?.some(
-      (edge) => edge.node.id === userId
+      (edge) => edge.node.id === userId,
     );
     setIsLiked(Boolean(liked));
   }, [props.upVoters, userId]);
@@ -99,7 +99,6 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     setLikes(props.upVoteCount);
   }, [props.upVoteCount]);
 
-  
   const handleToggleLike = async (): Promise<void> => {
     try {
       if (isLiked) {
@@ -153,9 +152,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
           </Typography>
-          <CommentContent variant="body2">
-            {props.text}
-          </CommentContent>
+          <CommentContent variant="body2">{props.text}</CommentContent>
 
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -180,6 +177,5 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     </CommentContainer>
   );
 }
-
 
 export default CommentCard;

@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_FUNDS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L346)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:339](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L339)
 
 GraphQL query to retrieve the list of members for a specific organization.
 

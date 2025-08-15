@@ -41,7 +41,14 @@
   height: 66px;
   border-radius: 50%;
   padding: 2px;
-  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  background: linear-gradient(
+    45deg,
+    #f09433,
+    #e6683c,
+    #dc2743,
+    #cc2366,
+    #bc1888
+  );
 }
 
 .storyAvatar {

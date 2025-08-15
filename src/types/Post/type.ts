@@ -127,7 +127,7 @@ export type PostNode = {
       };
     }[];
   };
-    downVoters: {
+  downVoters: {
     edges: {
       node: {
         id: string;

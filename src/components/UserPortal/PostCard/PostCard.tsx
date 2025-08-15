@@ -35,7 +35,7 @@ import {
   Box,
   Typography,
   Divider,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import {
   Favorite,
@@ -45,7 +45,7 @@ import {
   MoreHoriz,
   Send,
   DeleteOutline,
-  EditOutlined
+  EditOutlined,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import UserDefault from '../../../assets/images/defaultImg.png';
@@ -55,7 +55,6 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
-  
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -158,7 +157,10 @@ const RightModalActions = styled(Box)({
   gap: 8,
 });
 
-export default function PostCard(props: InterfacePostCard): JSX.Element {
+export default function PostCard({
+  isModalView = false,
+  ...props
+}: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
@@ -166,12 +168,11 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
   const isLikedByUser = props.upVoters?.edges.some(
     (edge) => edge.node.id === userId,
   );
-    const upVoters =
+  const upVoters =
     props.upVoters?.edges.map((edge) => ({
       id: edge.node.id,
       node: { id: edge.node.id },
     })) || [];
-  console.log('isLikedByUser:', isLikedByUser);
 
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
@@ -179,15 +180,17 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
   const [showComments, setShowComments] = React.useState(false);
   const commentCount = props.comments?.length ?? props.commentCount ?? 0;
 
-
-  const toggleComments = (): void => setShowComments(prev => !prev);
+  const toggleComments = (): void => setShowComments((prev) => !prev);
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
-  const [createComment, { loading: commentLoading }] = useMutation(CREATE_COMMENT_POST);
+  const [createComment, { loading: commentLoading }] =
+    useMutation(CREATE_COMMENT_POST);
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   let isPinned = false;
-  if(props.pinnedAt !== null){
+
+  // Check if the post is pinned
+  if (props.pinnedAt !== null) {
     isPinned = true;
   }
 
@@ -228,39 +231,37 @@ export default function PostCard(props: InterfacePostCard): JSX.Element {
       toast.error(t('unexpectedError'));
     }
   };
-    const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+  const toggleEditPost = (): void => setShowEditPost(!showEditPost);
 
-// Update the handleEditPost function to use isPinned instead of pinnedAt
-const handleEditPost = async (): Promise<void> => {
-  try {
-    const input: {
-      id: string;
-      caption: string;
-      isPinned?: boolean;
-    } = {
-      id: props.id,
-      caption: postContent,
-    };
+  // Update the handleEditPost function to use isPinned instead of pinnedAt
+  const handleEditPost = async (): Promise<void> => {
+    try {
+      const input: {
+        id: string;
+        caption: string;
+        isPinned?: boolean;
+      } = {
+        id: props.id,
+        caption: postContent,
+      };
 
-    // Only include isPinned if it's changed
-    if (isPinned !== !!props.pinnedAt) {
-      input.isPinned = isPinned;
+      // Only include isPinned if it's changed
+      if (isPinned !== !!props.pinnedAt) {
+        input.isPinned = isPinned;
+      }
+
+      await editPost({
+        variables: {
+          input,
+        },
+      });
+      props.fetchPosts();
+      toggleEditPost();
+      toast.success('Post updated successfully');
+    } catch (error) {
+      errorHandler(t, error);
     }
-
-    await editPost({
-      variables: {
-        input
-      },
-    });
-    props.fetchPosts();
-    toggleEditPost();
-    toast.success('Post updated successfully');
-  } catch (error) {
-    errorHandler(t, error);
-  }
-};
-
-  console.log('commentCount:', props.commentCount);
+  };
 
   const handleDeletePost = async (): Promise<void> => {
     try {
@@ -275,10 +276,11 @@ const handleEditPost = async (): Promise<void> => {
   return (
     <PostContainer>
       {/* Post Header */}
+
       <PostHeader>
         <UserInfo>
-          <Avatar 
-            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'} 
+          <Avatar
+            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
             alt={props.creator.name}
           />
           <Typography variant="subtitle2" fontWeight="bold">
@@ -292,9 +294,10 @@ const handleEditPost = async (): Promise<void> => {
 
       {/* Post Media */}
       <PostMedia>
-        {props.image || UserDefault && (
-          <img src={props.image || UserDefault} alt={props.title} />
-        )}
+        {props.image ||
+          (UserDefault && (
+            <img src={props.image || UserDefault} alt={props.title} />
+          ))}
         {props.video && (
           <video controls style={{ width: '100%' }}>
             <source src={props.video} type="video/mp4" />
@@ -321,14 +324,13 @@ const handleEditPost = async (): Promise<void> => {
             <Share fontSize="small" />
           </IconButton>
         </LeftActions>
-          {isPinned && (
-    <PushPinOutlined 
-      fontSize="small" 
-      color="primary" 
-      sx={{ marginLeft: 'auto' }}
-    />
-  )}
-
+        {isPinned && (
+          <PushPinOutlined
+            fontSize="small"
+            color="primary"
+            sx={{ marginLeft: 'auto' }}
+          />
+        )}
       </PostActions>
 
       {/* Post Content */}
@@ -344,7 +346,7 @@ const handleEditPost = async (): Promise<void> => {
         </Caption>
       </PostContent>
 
- {/* Comments Section */}
+      {/* Comments Section */}
       {showComments && props.comments?.length > 0 && (
         <>
           <Divider />
@@ -358,7 +360,7 @@ const handleEditPost = async (): Promise<void> => {
                 upVoteCount={comment.upVoteCount}
                 downVoteCount={comment.downVoteCount}
                 upVoters={{
-                      edges: upVoters,
+                  edges: upVoters,
                 }}
                 fetchComments={props.fetchPosts}
               />
@@ -369,27 +371,25 @@ const handleEditPost = async (): Promise<void> => {
 
       {/* View Comments Button */}
       {commentCount > 0 && (
-        <Button 
-          onClick={toggleComments} 
+        <Button
+          onClick={toggleComments}
           size="small"
-          sx={{ 
+          sx={{
             color: 'text.secondary',
             fontSize: '0.75rem',
             ml: 2,
             mb: 1,
-            textTransform: 'none'
+            textTransform: 'none',
           }}
         >
-          {showComments 
-            ? t('hideComments') 
+          {showComments
+            ? t('hideComments')
             : t('viewComments', { count: commentCount })}
         </Button>
       )}
 
       {/* Post Time */}
-      <TimeText>
-        {props.postedAt}
-      </TimeText>
+      <TimeText>{props.postedAt}</TimeText>
 
       {/* Add Comment */}
       <CommentForm fullWidth>
@@ -401,8 +401,8 @@ const handleEditPost = async (): Promise<void> => {
           disableUnderline
           endAdornment={
             <InputAdornment position="end">
-              <IconButton 
-                onClick={handleCreateComment} 
+              <IconButton
+                onClick={handleCreateComment}
                 disabled={commentLoading || !commentInput.trim()}
                 size="small"
                 color="primary"
@@ -426,54 +426,41 @@ const handleEditPost = async (): Promise<void> => {
 
       {/* Edit Post Modal */}
       <Modal open={showEditPost} onClose={toggleEditPost}>
-<EditModalContent>
-  <Typography variant="h6">{t('editPost')}</Typography>
-  <FormControl fullWidth sx={{ mb: 2 }}>
-    <Input
-      multiline
-      rows={4}
-      value={postContent}
-      onChange={handlePostInput}
-      fullWidth
-    />
-  </FormControl>
-  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-    <Typography variant="body2" sx={{ mr: 2 }}>
-      {t('pinPost')}
-    </Typography>
-    <Button
-      variant={isPinned ? 'contained' : 'outlined'}
-      size="small"
-    >
-      {isPinned ? t('unpin') : t('pin')}
-    </Button>
-  </Box>
-  <ModalActions>
-    <Button 
-      variant="outlined" 
-      color="error"
-      onClick={handleDeletePost}
-      startIcon={<DeleteOutline />}
-    >
-      {tCommon('delete')}
-    </Button>
-    <RightModalActions>
-      <Button 
-        variant="outlined" 
-        onClick={toggleEditPost}
-      >
-        {tCommon('cancel')}
-      </Button>
-      <Button 
-        variant="contained" 
-        onClick={handleEditPost}
-        startIcon={<EditOutlined />}
-      >
-        {tCommon('save')}
-      </Button>
-    </RightModalActions>
-  </ModalActions>
-</EditModalContent>
+        <EditModalContent>
+          <Typography variant="h6">{t('editPost')}</Typography>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <Input
+              multiline
+              rows={4}
+              value={postContent}
+              onChange={handlePostInput}
+              fullWidth
+            />
+          </FormControl>
+
+          <ModalActions>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleDeletePost}
+              startIcon={<DeleteOutline />}
+            >
+              {tCommon('delete')}
+            </Button>
+            <RightModalActions>
+              <Button variant="outlined" onClick={toggleEditPost}>
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={handleEditPost}
+                startIcon={<EditOutlined />}
+              >
+                {tCommon('save')}
+              </Button>
+            </RightModalActions>
+          </ModalActions>
+        </EditModalContent>
       </Modal>
     </PostContainer>
   );
