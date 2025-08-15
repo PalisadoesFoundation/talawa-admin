@@ -170,6 +170,7 @@
     "name": "name",
     "email": "email",
     "searchByName": "searchByName",
+    "searchOrganizations": "Search Organization",
     "description": "description",
     "location": "location",
     "address": "address",
