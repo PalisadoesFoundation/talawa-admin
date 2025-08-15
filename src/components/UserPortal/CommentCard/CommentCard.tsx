@@ -92,6 +92,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     const liked = props.upVoters?.edges?.some(
       (edge) => edge.node.id === userId,
     );
+    if (props.upVoteCount === 0) {
+      setIsLiked(false);
+      return;
+    }
     setIsLiked(Boolean(liked));
   }, [props.upVoters, userId]);
 

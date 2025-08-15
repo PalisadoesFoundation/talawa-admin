@@ -320,7 +320,7 @@ export default function Home(): JSX.Element {
     return (
       <div
         className={postStyles.instagramStory}
-        onClick={() => handleStoryClick(post)} // 👈 make clickable
+        onClick={() => handleStoryClick(post)} // make clickable
         style={{ cursor: 'pointer' }}
       >
         <div className={postStyles.storyBorder}>

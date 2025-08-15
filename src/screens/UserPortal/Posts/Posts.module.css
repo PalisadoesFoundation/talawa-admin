@@ -201,9 +201,8 @@
 .addButton {
   background-color: #0095f6;
   color: #fff;
-  border: black 1px solid;
   border-radius: 6px;
-  padding: 10px 18px;
+  padding: 5px 6px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
