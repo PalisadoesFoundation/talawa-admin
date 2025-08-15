@@ -74,6 +74,8 @@ import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
 import { PostComments, PostLikes, PostNode } from 'types/Post/type';
+import PostsRenderer from '../../OrgPost/Posts';
+import Loader from 'components/Loader/Loader';
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
   desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
@@ -99,9 +101,18 @@ export default function home(): JSX.Element {
   const { getItem } = useLocalStorage();
   const [posts, setPosts] = useState([]);
   const [pinnedPosts, setPinnedPosts] = useState([]);
-
+    const [after, setAfter] = useState<string | null | undefined>(null);
+    const [before, setBefore] = useState<string | null | undefined>(null);
+    const [first, setFirst] = useState<number | null>(5);
+    const [last, setLast] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5;
+  const [sortingOption, setSortingOption] = useState('None');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+  const [displayPosts, setDisplayPosts] = useState<InterfacePostCard[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+
 
   // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
@@ -124,13 +135,19 @@ export default function home(): JSX.Element {
   const {
     data,
     refetch,
+    error,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
       input: { id: orgId },
-      first: 10,
+      after: after ?? null,
+      before: before ?? null,
+      first: first,
+      last: last,
     },
   });
+
+
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const userId: string | null = getItem('userId');
   const { data: userData } = useQuery(USER_DETAILS, {
@@ -143,11 +160,18 @@ export default function home(): JSX.Element {
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
   // Effect hook to update posts state when data changes
-  useEffect(() => {
-    if (data && data.organization && data.organization.posts) {
-      setPosts(data.organization.posts.edges);
-    }
-  }, [data]);
+useEffect(() => {
+  if (data && data.organization && data.organization.posts) {
+    const edges = data.organization.posts.edges;
+    setPosts(edges);
+
+    // Compute total pages from edges length
+    const pages = Math.ceil(edges.length / postsPerPage);
+    setTotalPages(pages);
+  }
+}, [data, postsPerPage]);
+console.log('totalPages', totalPages);
+
 
   // Effect hook to update advertisements state when data changes
   useEffect(() => {
@@ -176,84 +200,73 @@ export default function home(): JSX.Element {
    * @returns The props for the `PostCard` component.
    */
 
-  const getCardProps = (node: PostNode): InterfacePostCard => {
-    const {
-      id,
-      caption,
-      createdAt,
-      creator,
-      upVoters,
-      upVotesCount,
-      downVotesCount,
-      comments,
-      attachments,
-    } = node;
-    if (upVotesCount > 0) {
-      const voters =
+const getCardProps = (node: PostNode): InterfacePostCard => {
+  const {
+    id,
+    caption,
+    createdAt,
+    creator,
+    upVoters,
+    upVotesCount,
+    downVotesCount,
+    comments,
+    attachments,
+  } = node;
+
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(createdAt));
+
+  const cardProps: InterfacePostCard = {
+    id,
+    creator: {
+      id: creator.id,
+      name: creator.name,
+      email: creator.emailAddress || '', 
+    },
+    postedAt: formattedDate,
+    image: null,
+    video: null,
+    title: caption ?? '',
+    text: '',
+    commentCount: node.commentsCount,
+    upVoters: {
+      edges:
         upVoters?.edges?.map((edge) => ({
           node: {
             id: edge.node.id,
-            creator: {
+            creator: edge.node.creator ? {
               id: edge.node.creator.id,
               name: edge.node.creator.name,
-            },
+            } : null, // Handle null creator
           },
-        })) || [];
-    }
-    const formattedDate = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }).format(new Date(createdAt));
-
-    const cardProps: InterfacePostCard = {
-      id,
-      creator: {
-        id: creator.id,
-        name: creator.name,
-        email: creator.emailAddress,
-      },
-      postedAt: formattedDate,
-      image: null,
-      video: null,
-      title: caption ?? '',
-      text: '',
-      commentCount: node.commentsCount,
-      upVoters: {
-        edges:
-          upVoters?.edges?.map((edge) => ({
-            node: {
-              id: edge.node.id,
-              creator: {
-                id: edge.node.creator.id,
-                name: edge.node.creator.name,
-              },
-            },
-          })) || [],
-      },
-      upVoteCount: upVotesCount,
-      downVoteCount: downVotesCount,
-      comments:
-        comments?.edges?.map(({ node: comment }) => ({
-          id: comment.id,
-          body: comment.body,
-          creator: {
-            id: comment.creator.id,
-            name: comment.creator.name,
-            email: comment.creator.emailAddress,
-          },
-          downVoteCount: comment.downVotesCount,
-          upVoteCount: comment.upVotesCount,
-          upVoters: comment?.upVoters?.map((like) => ({
-            id: like.id,
-          })),
-          text: comment.text,
-        })) ?? [],
-      fetchPosts: () => refetch(),
-    };
-
-    return cardProps;
+        })) || [],
+    },
+    upVoteCount: upVotesCount,
+    downVoteCount: downVotesCount,
+    comments:
+      comments?.edges?.map(({ node: comment }) => ({
+        id: comment.id,
+        body: comment.body,
+        creator: {
+          id: comment.creator.id,
+          name: comment.creator.name,
+          email: comment.creator.emailAddress || '',
+        },
+        downVoteCount: comment.downVotesCount,
+        upVoteCount: comment.upVotesCount,
+        upVoters: comment?.upVoters?.map((like) => ({
+          id: like.id,
+        })) || [],
+        text: comment.text || '',
+      })) ?? [],
+    fetchPosts: () => refetch(),
   };
+
+  return cardProps;
+};
 
   /**
    * Opens the post creation modal.
@@ -268,6 +281,60 @@ export default function home(): JSX.Element {
   const handleModalClose = (): void => {
     setShowModal(false);
   };
+
+const nextCursor = data?.organization?.posts?.pageInfo?.endCursor;
+const previousCursor = data?.organization?.posts?.pageInfo?.startCursor;
+
+const hasNextPage = data?.organization?.posts?.pageInfo?.hasNextPage || false;
+const hasPreviousPage = data?.organization?.posts?.pageInfo?.hasPreviousPage || false;
+
+  console.log('currentPage', currentPage);
+  console.log('hasNextPage', hasNextPage);
+  console.log('hasPreviousPage', hasPreviousPage);
+
+    // Update displayPosts when posts or currentPage changes
+  useEffect(() => {
+    if (posts.length > 0) {
+      const startIndex = (currentPage - 1) * postsPerPage;
+      const endIndex = startIndex + postsPerPage;
+      const currentPosts = posts
+        .slice(startIndex, endIndex)
+        .map(({ node }) => getCardProps(node));
+      setDisplayPosts(currentPosts);
+    }
+  }, [posts, currentPage]);
+
+  // Handle page navigation
+const handleNextPage = (): void => {
+  if (!hasNextPage) return;
+
+  const endCursor = data?.organization?.posts?.pageInfo?.endCursor;
+  if (endCursor) {
+    setAfter(endCursor);
+    setBefore(null);
+    setFirst(postsPerPage);
+    setLast(null);
+    setCurrentPage((prev) => prev + 1);
+  }
+};
+
+const handlePreviousPage = (): void => {
+  if (!hasPreviousPage) return;
+
+  const startCursor = data?.organization?.posts?.pageInfo?.startCursor;
+  if (startCursor) {
+    setBefore(startCursor);
+    setAfter(null);
+    setFirst(null);
+    setLast(postsPerPage);
+    setCurrentPage((prev) => prev - 1);
+  }
+};
+
+
+console.log('displayPosts', displayPosts);
+console.log('data?.organization?.posts', data?.organization?.posts);
+
 
   return (
     <>
@@ -341,6 +408,29 @@ export default function home(): JSX.Element {
             </div>
           )}
           <p className="fs-5 mt-5">{t(`yourFeed`)}</p>
+          {/* Pagination controls */}
+          <div className="d-flex justify-content-center my-3">
+            <Button
+              variant="outline-primary"
+              onClick={handlePreviousPage}
+              disabled={!hasPreviousPage}
+              className="mx-1"
+            >
+              {tCommon('Previous')}
+            </Button>
+            <span className="mx-2 align-self-center">
+              {tCommon('Page')} {currentPage} 
+            </span>
+            <Button
+              variant="outline-primary"
+              onClick={handleNextPage}
+              disabled={!hasNextPage}
+              className="mx-1"
+            >
+              {tCommon('Next')}
+            </Button>
+          </div>
+
           <div
             className={` ${styles.postsCardsContainer}`}
             data-testid="postCardContainer"
@@ -351,12 +441,11 @@ export default function home(): JSX.Element {
               </div>
             ) : (
               <>
-                {posts.length > 0 ? (
+                {displayPosts.length > 0 ? (
                   <Row className="my-2">
-                    {posts.map(({ node }: { node: PostNode }) => {
-                      const cardProps = getCardProps(node);
-                      return <PostCard key={node.id} {...cardProps} />;
-                    })}
+                    {displayPosts.map((cardProps) => (
+                      <PostCard key={cardProps.id} {...cardProps} />
+                    ))}
                   </Row>
                 ) : (
                   <p className="container flex justify-content-center my-4">

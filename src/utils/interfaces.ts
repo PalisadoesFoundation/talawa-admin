@@ -2116,7 +2116,7 @@ export interface InterfacePostCard {
         creator: {
           id: string;
           name: string;
-        };
+        } | null;
       };
     }[];
   };
