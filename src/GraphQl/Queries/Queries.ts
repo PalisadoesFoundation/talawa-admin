@@ -550,6 +550,17 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             progressLabel
             # New recurrence description fields
             recurrenceDescription
+            recurrenceRule {
+              id
+              frequency
+              interval
+              recurrenceStartDate
+              recurrenceEndDate
+              count
+              byDay
+              byMonth
+              byMonthDay
+            }
             # Attachments
             attachments {
               url

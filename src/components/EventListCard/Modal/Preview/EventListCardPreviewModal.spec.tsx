@@ -497,26 +497,6 @@ describe('EventListCardPreviewModal', () => {
     expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
   });
 
-  test('displays custom recurrence label for custom recurrence rules', () => {
-    const customRecurrence = {
-      frequency: Frequency.WEEKLY,
-      interval: 2,
-      byDay: ['MO', 'WE', 'FR'],
-      never: true,
-    };
-
-    renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: true,
-        userRole: UserRole.ADMINISTRATOR,
-      },
-      recurrence: customRecurrence,
-    });
-
-    expect(screen.getByText('Custom')).toBeInTheDocument();
-  });
-
   test('opens recurrence dropdown and shows options', async () => {
     renderComponent({
       eventListCardProps: {

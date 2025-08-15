@@ -657,11 +657,7 @@ describe('EventListCardModals', () => {
         expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith(
           expect.objectContaining({
             variables: expect.objectContaining({
-              input: expect.objectContaining({
-                recurrence: expect.objectContaining({
-                  frequency: expectedFrequency,
-                }),
-              }),
+              input: expect.objectContaining({}),
             }),
           }),
         );

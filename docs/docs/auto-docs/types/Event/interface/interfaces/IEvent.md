@@ -176,6 +176,14 @@ Defined in: [src/types/Event/interface.ts:76](https://github.com/PalisadoesFound
 
 ***
 
+### recurrenceRule?
+
+> `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
+
+Defined in: [src/types/Event/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L77)
+
+***
+
 ### recurringEventId?
 
 > `optional` **recurringEventId**: `string`

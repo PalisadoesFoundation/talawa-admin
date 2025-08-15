@@ -74,6 +74,7 @@ export interface IEvent {
   progressLabel?: string | null;
   // New recurrence description field
   recurrenceDescription?: string | null;
+  recurrenceRule?: InterfaceRecurrenceRule | null;
 }
 
 export interface IOrgList {

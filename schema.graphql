@@ -1293,6 +1293,10 @@ type EventPg {
   # Base event relationships
   baseEvent: EventPg
   recurrenceDescription: String
+  """
+  The recurrence rule object for recurring events.
+  """
+  recurrenceRule: RecurrenceRule
   # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
@@ -1321,6 +1325,25 @@ type EventPg {
     first: Int
     last: Int
   ): EventVenuesConnectionPg
+}
+
+type RecurrenceRule {
+  byDay: [String!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: Int
+  frequency: RecurrenceRuleFrequency
+  id: ID
+  interval: Int
+  recurrenceEndDate: DateTime
+  recurrenceStartDate: DateTime
+}
+
+enum RecurrenceRuleFrequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
 }
 
 type EventActionItemsConnectionPg {

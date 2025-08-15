@@ -34,6 +34,7 @@ import { useParams, useNavigate } from 'react-router';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
 
 // Define the type for an event edge
@@ -60,6 +61,7 @@ interface IEventEdge {
     progressLabel?: string | null;
     // New recurrence description fields
     recurrenceDescription?: string | null;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
     // Attachments
     attachments?: Array<{
       url: string;
@@ -159,14 +161,14 @@ function organizationEvents(): JSX.Element {
     _id: edge.node.id,
     name: edge.node.name,
     description: edge.node.description || '',
-    startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
-    endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
+    startDate: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+    endDate: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
     startTime: edge.node.allDay
       ? undefined
-      : dayjs(edge.node.startAt).format('HH:mm:ss'),
+      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
     endTime: edge.node.allDay
       ? undefined
-      : dayjs(edge.node.endAt).format('HH:mm:ss'),
+      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
     allDay: edge.node.allDay,
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
@@ -179,6 +181,7 @@ function organizationEvents(): JSX.Element {
     hasExceptions: edge.node.hasExceptions,
     progressLabel: edge.node.progressLabel,
     recurrenceDescription: edge.node.recurrenceDescription,
+    recurrenceRule: edge.node.recurrenceRule,
     creator: {
       _id: edge.node.creator.id,
       name: edge.node.creator.name,

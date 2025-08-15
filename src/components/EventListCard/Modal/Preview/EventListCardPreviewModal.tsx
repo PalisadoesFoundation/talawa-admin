@@ -182,29 +182,34 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   };
 
   const getCurrentRecurrenceLabel = (): string => {
-    // If no recurrence is set, show default message
-    if (!recurrence) {
-      return 'Select recurrence pattern';
+    // If the user has interacted with the dropdown, show the selected recurrence
+    if (recurrence) {
+      const options = getRecurrenceOptions();
+      const matchingOption = options.find((option) => {
+        if (option.value === 'custom') return false;
+        return JSON.stringify(option.value) === JSON.stringify(recurrence);
+      });
+
+      if (matchingOption) {
+        return matchingOption.label;
+      }
+
+      // If no standard option matches, display the frequency of the custom rule.
+      if (recurrence.frequency) {
+        return (
+          recurrence.frequency.charAt(0).toUpperCase() +
+          recurrence.frequency.slice(1).toLowerCase()
+        );
+      }
     }
 
-    // First try to find a matching option based on current recurrence state
-    const options = getRecurrenceOptions();
-    const matchingOption = options.find((option) => {
-      if (option.value === 'custom') return false;
-      return JSON.stringify(option.value) === JSON.stringify(recurrence);
-    });
-
-    if (matchingOption) {
-      return matchingOption.label;
-    }
-
-    // If no match found and this is a recurring event, fall back to original description
-    if (isRecurringEvent && eventListCardProps.recurrenceDescription) {
+    // If the user has not interacted with the dropdown, show the original description
+    if (eventListCardProps.recurrenceDescription) {
       return eventListCardProps.recurrenceDescription;
     }
 
-    // Default to 'Custom' if no match and no description
-    return 'Custom';
+    // Fallback for non-recurring events or events without a description
+    return 'Select recurrence pattern';
   };
 
   // Check if this is a recurring event (either template or instance)
