@@ -287,7 +287,12 @@ export default function PostCard({
             {props.creator.name}
           </Typography>
         </UserInfo>
-        <IconButton onClick={toggleEditPost} size="small">
+        <IconButton
+          onClick={toggleEditPost}
+          size="small"
+          aria-label="more options"
+          data-testid="more-options-button"
+        >
           <MoreHoriz />
         </IconButton>
       </PostHeader>
@@ -328,6 +333,7 @@ export default function PostCard({
           <PushPinOutlined
             fontSize="small"
             color="primary"
+            data-testid="pinned-icon"
             sx={{ marginLeft: 'auto' }}
           />
         )}
@@ -425,7 +431,11 @@ export default function PostCard({
       </CommentForm>
 
       {/* Edit Post Modal */}
-      <Modal open={showEditPost} onClose={toggleEditPost}>
+      <Modal
+        open={showEditPost}
+        onClose={toggleEditPost}
+        data-testid="edit-post-button"
+      >
         <EditModalContent>
           <Typography variant="h6">{t('editPost')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
@@ -454,6 +464,7 @@ export default function PostCard({
               <Button
                 variant="contained"
                 onClick={handleEditPost}
+                data-testid="save-post-button"
                 startIcon={<EditOutlined />}
               >
                 {tCommon('save')}

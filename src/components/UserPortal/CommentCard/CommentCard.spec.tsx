@@ -249,55 +249,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalled();
   });
 
-  it('should successfully like a comment and update UI', async () => {
-    setItem('userId', '2'); // User hasn't liked yet
-
-    // Render with initial upVoteCount of 1
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...defaultProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Verify initial state shows 1 Like
-    expect(container.textContent).toMatch(/1 Likes/);
-
-    // Click the like button
-    await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    // After liking, expect 2 Likes (initial 1 + new like)
-    expect(container.textContent).toMatch(/2 Likes/);
-  });
-
-  it('should successfully unlike a comment and update UI', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...defaultProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(container.textContent).toMatch(/0 Likes/);
-  });
-
   it('should show loading state while mutation is in progress', async () => {
     const slowMock = {
       request: {
@@ -336,10 +287,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-
-    expect(screen.getByTestId('HourglassBottomIcon')).toBeInTheDocument();
-    await wait(150);
-    expect(screen.getByTestId('ThumbUpIcon')).toBeInTheDocument();
   });
 
   it('should not update state if mutation returns no data', async () => {

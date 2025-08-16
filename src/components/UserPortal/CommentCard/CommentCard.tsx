@@ -162,7 +162,8 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             <IconButton
               size="small"
               onClick={handleToggleLike}
-              color={isLiked ? 'primary' : 'default'} // changes color when liked
+              color={isLiked ? 'primary' : 'default'}
+              data-testid="likeCommentBtn"
             >
               {liking || unliking ? (
                 <CircularProgress size={20} />
@@ -172,9 +173,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 <ThumbUpOutlined fontSize="small" />
               )}
             </IconButton>
-            <VoteCount>
-              {likes} {/* ✅ Now uses state */}
-            </VoteCount>
+            <VoteCount>{likes}</VoteCount>
           </Stack>
         </Box>
       </Stack>

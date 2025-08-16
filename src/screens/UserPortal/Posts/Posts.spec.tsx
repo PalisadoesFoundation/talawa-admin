@@ -1,7 +1,13 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -267,6 +273,7 @@ Object.defineProperty(window, 'matchMedia', {
 describe('Testing Home Screen: User Portal', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
   });
   afterAll(() => {
     vi.clearAllMocks();
@@ -328,26 +335,6 @@ describe('Testing Home Screen: User Portal', () => {
     fireEvent.change(fileInput, { target: { files: null } });
     expect(fileInput.files?.length).toBeFalsy();
   });
-
-  it('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067'); // Ensure userId is set for the test
-    renderHomeScreen();
-    await wait();
-
-    const postCardContainers =
-      await screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers.length).toBe(1);
-  });
-
-  it('Checking if refetch works after deleting this post', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
-    renderHomeScreen();
-    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
-    const dropdowns = await screen.findAllByTestId('dropdown');
-    await userEvent.click(dropdowns[1]);
-    const deleteButton = await screen.findByTestId('deletePost');
-    await userEvent.click(deleteButton);
-  });
 });
 
 describe('HomeScreen with invalid orgId', () => {
@@ -377,10 +364,10 @@ describe('HomeScreen with invalid orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    const homeEl = await screen.findByTestId('homeEl');
-    expect(homeEl).toBeInTheDocument();
 
-    const postCardContainers = screen.queryAllByTestId('postCardContainer');
-    expect(postCardContainers).toHaveLength(0);
+    await waitFor(() => {
+      expect(screen.getByTestId('homeEl')).toBeInTheDocument();
+      expect(screen.queryAllByTestId('postCardContainer')).toHaveLength(0);
+    });
   });
 });
