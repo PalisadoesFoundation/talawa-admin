@@ -170,6 +170,7 @@
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
     "lint-staged": "^15.3.0",
+    "markdown-toc": "^1.2.0",
     "postcss-modules": "^6.0.1",
     "prettier": "^3.5.3",
     "sass": "^1.80.7",
@@ -189,10 +190,10 @@
     "graphql": "^16.5.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2",
+    "@rollup/rollup-darwin-arm64": "^4.46.2",
     "@rollup/rollup-darwin-x64": "^4.46.2",
-    "@rollup/rollup-darwin-arm64": "^4.46.2"
+    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
   },
   "engines": {
     "node": ">=20.x"
