@@ -115,10 +115,16 @@ const VenueModal = ({
 
     // Only validate name uniqueness if it has changed
     if (edit && formState.name.trim() === venueData?.node.name) {
-      // If name hasn't changed, only update other fields
+      // If name hasn't changed, validate capacity and update other fields
+      const capacityNum = parseInt(formState.capacity, 10);
+      if (Number.isNaN(capacityNum) || capacityNum <= 0) {
+        toast.error(t('venueCapacityError') as string);
+        return;
+      }
+
       const variables = {
         id: venueData.node.id,
-        capacity: parseInt(formState.capacity, 10),
+        capacity: capacityNum,
         description: formState.description?.trim() || '',
         ...(formState.attachments &&
           formState.attachments.length > 0 && {
@@ -266,7 +272,7 @@ const VenueModal = ({
     if (files && files.length > 0) {
       const file = files[0]; // Get the first file
       const maxFileSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
       if (!allowedTypes.includes(file.type)) {
         toast.error(`Invalid file type: ${file.name}`);
@@ -283,6 +289,10 @@ const VenueModal = ({
         return;
       }
 
+      // Revoke any existing blob URL before creating a new one
+      if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(imagePreviewUrl);
+      }
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
 

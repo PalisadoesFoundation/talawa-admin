@@ -267,7 +267,7 @@ const editProps: InterfaceVenueModalProps = {
       id: 'venue1',
       name: 'Venue 1',
       description: 'Updated description for venue 1',
-      capacity: '100',
+      capacity: 100,
     },
   },
   refetchVenues: vi.fn(),
@@ -669,7 +669,7 @@ describe('VenueModal', () => {
                   id: '123',
                   name: 'Test Venue',
                   description: 'Test Description',
-                  capacity: '100',
+                  capacity: 100,
                   image: 'some-image.jpg',
                 },
               }}
@@ -1020,7 +1020,7 @@ describe('VenueModal', () => {
           node: {
             id: 'venue1', // Keep the required fields
             name: 'Venue 1',
-            capacity: '100',
+            capacity: 100,
             description: null, // Changed to null from undefined
             image: null, // Changed to null from undefined
           },
@@ -1628,7 +1628,7 @@ describe('VenueModal', () => {
                   name: 'Original Venue',
                   description: '',
                   image: '',
-                  capacity: '100',
+                  capacity: 100,
                 },
               },
             },

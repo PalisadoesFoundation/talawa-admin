@@ -2021,7 +2021,7 @@ export interface InterfaceQueryVenueListItem {
     name: string;
     description: string | null;
     image?: string | null;
-    capacity?: string;
+    capacity?: number;
     attachments?: Array<{
       url: string;
       id: string;

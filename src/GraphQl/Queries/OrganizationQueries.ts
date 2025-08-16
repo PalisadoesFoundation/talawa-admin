@@ -340,6 +340,8 @@ export const VENUE_LIST = gql`
         pageInfo {
           hasNextPage
           endCursor
+          startCursor
+          hasPreviousPage
         }
       }
     }

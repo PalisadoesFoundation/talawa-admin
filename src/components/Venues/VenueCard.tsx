@@ -78,10 +78,12 @@ const VenueCard = ({
               </div>
 
               {/* Venue capacity with icon */}
-              <div className={styles.capacityLabel}>
-                {tCommon('capacity')}: {venueItem.node.capacity}
-                <PeopleIcon className="ms-1" width={16} height={16} />
-              </div>
+              {venueItem.node.capacity != null && (
+                <div className={styles.capacityLabel}>
+                  {tCommon('capacity')}: {venueItem.node.capacity}
+                  <PeopleIcon className="ms-1" width={16} height={16} />
+                </div>
+              )}
             </Card.Title>
             <Card.Text className={styles.text}>
               {/* Venue description with truncation if too long */}
