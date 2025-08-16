@@ -11,10 +11,9 @@ import { vi, describe, expect, it } from 'vitest';
 import { nonEmptyProps, emptyProps } from '../../EventStatsMocks';
 // Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
 vi.mock('@mui/x-charts/PieChart', async () => ({
-  ...(await vi.importActual('@mui/x-charts/PieChart')),
-  pieArcLabelClasses: vi.fn(),
-  PieChart: vi.fn().mockImplementation(() => <>Test</>),
-  pieArcClasses: vi.fn(),
+  PieChart: () => <div data-testid="mocked-pie-chart">Test</div>,
+  pieArcClasses: { faded: 'faded-class' },
+  pieArcLabelClasses: { root: 'label-root-class', faded: 'label-faded-class' },
 }));
 
 describe('Testing Feedback Statistics Card', () => {
