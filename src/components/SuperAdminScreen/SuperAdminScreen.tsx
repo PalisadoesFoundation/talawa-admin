@@ -28,12 +28,17 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const superAdminScreen = (): React.ReactElement => {
   const location = useLocation();
+  const { getItem, setItem } = useLocalStorage();
   const titleKey = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   /**
    * Handles resizing of the window to show or hide the sidebar.
@@ -44,6 +49,7 @@ const superAdminScreen = (): React.ReactElement => {
     }
   };
 
+  // Set up event listener for window resize
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -52,9 +58,13 @@ const superAdminScreen = (): React.ReactElement => {
     };
   }, []);
 
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
+
   return (
     <>
-      {hideDrawer ? (
+      {/* {hideDrawer ? (
         <Button
           className={styles.opendrawer}
           onClick={(): void => {
@@ -74,23 +84,16 @@ const superAdminScreen = (): React.ReactElement => {
         >
           <i className="fa fa-angle-double-left" aria-hidden="true"></i>
         </Button>
-      )}
+      )} */}
 
       <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
+        className={`${styles.pageContainer} ${hideDrawer ? styles.expand : styles.contract} `}
         data-testid="mainpageright"
       >
         <div>
           <div className={`${styles.navContainer}`}>
             <h1>{t('title')}</h1>
-            <ProfileDropdown />
           </div>
         </div>
         <Outlet />

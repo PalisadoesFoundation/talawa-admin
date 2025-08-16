@@ -32,18 +32,20 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
-import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
-import SettingsIcon from 'assets/svgs/settings.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
+import useLocalStorage, { setItem } from 'utils/useLocalstorage';
+import { FaBars } from 'react-icons/fa';
+import ProfileCard from 'components/ProfileCard/ProfileCard';
+import SignOut from 'components/SignOut/SignOut';
+import IconComponent from 'components/IconComponent/IconComponent';
 
 export interface InterfaceUserSidebarProps {
-  hideDrawer: boolean | null;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
+  hideDrawer: boolean;
+  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const userSidebar = ({
@@ -58,6 +60,7 @@ const userSidebar = ({
   const userPermissions = React.useMemo(() => [], []);
   const isAdmin = React.useMemo(() => false, []);
   const isOrg = React.useMemo(() => false, []);
+  const { setItem } = useLocalStorage();
 
   // Get plugin drawer items for user global (no orgId required)
   const pluginDrawerItems = usePluginDrawerItems(
@@ -112,27 +115,68 @@ const userSidebar = ({
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${
-          hideDrawer === null
-            ? styles.hideElemByDefault
-            : hideDrawer
-              ? styles.inactiveDrawer
-              : styles.activeDrawer
-        }`}
+        className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
         data-testid="leftDrawerContainer"
       >
-        {/* Logo and title */}
-        <TalawaLogo className={styles.talawaLogo} />
-        <p className={styles.talawaText}>{t('talawaUserPortal')}</p>
+        <div
+          className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+        >
+          <button
+            className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+            data-testid="toggleBtn"
+            onClick={() => {
+              const newState = !hideDrawer;
+              setItem('sidebar', newState.toString());
+              setHideDrawer(newState);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const newState = !hideDrawer;
+                setItem('sidebar', newState.toString());
+                setHideDrawer(newState);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <FaBars
+              className={styles.hamburgerIcon}
+              aria-label="Toggle sidebar"
+              size={22}
+              style={{
+                cursor: 'pointer',
+                height: '38px',
+                marginLeft: hideDrawer ? '0px' : '10px',
+              }}
+            />
+          </button>
+          <div
+            style={{
+              display: hideDrawer ? 'none' : 'flex',
+              alignItems: 'center',
+              paddingRight: '40px',
+            }}
+          >
+            <TalawaLogo className={styles.talawaLogo} />
+            <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+              {t('talawaUserPortal')}
+            </div>
+          </div>
+        </div>
         <h5 className={`${styles.titleHeader} text-secondary`}>
-          {tCommon('menu')}
+          {!hideDrawer && tCommon('menu')}
         </h5>
         <div
-          className={`d-flex align-items  flex-column ${styles.leftbarcompheight}`}
+          className={`d-flex flex-column ${styles.leftbarcompheight}`}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
         >
           <div className={styles.optionList}>
             {/* Link to "My Organizations" page */}
-
             <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
               {({ isActive }) => (
                 <Button
@@ -147,15 +191,22 @@ const userSidebar = ({
                   data-testid="orgsBtn"
                 >
                   <div className={styles.iconWrapper}>
-                    <OrganizationsIcon
-                      stroke={`${
-                        isActive === true
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }`}
+                    <IconComponent
+                      data-testid="myOrgsIcon"
+                      name="My Organizations"
+                      fill={
+                        isActive === true ? '#000000' : 'var(--bs-secondary)'
+                      }
                     />
                   </div>
-                  {t('my organizations')}
+                  <div className={styles.sidebarText} data-testid="myOrgsText">
+                    <div
+                      style={{ display: hideDrawer ? 'none' : 'block' }}
+                      data-testid="myOrgText"
+                    >
+                      {t('my organizations')}
+                    </div>
+                  </div>
                 </Button>
               )}
             </NavLink>
@@ -175,15 +226,20 @@ const userSidebar = ({
                   data-testid="settingsBtn"
                 >
                   <div className={styles.iconWrapper}>
-                    <SettingsIcon
-                      stroke={`${
-                        isActive === true
-                          ? 'var(--sidebar-icon-stroke-active)'
-                          : 'var(--sidebar-icon-stroke-inactive)'
-                      }`}
+                    <IconComponent
+                      data-testid="settingsIcon"
+                      name="Settings"
+                      fill={
+                        isActive === true ? '#000000' : 'var(--bs-secondary)'
+                      }
                     />
                   </div>
-                  {tCommon('settings')}
+                  <div
+                    style={{ display: hideDrawer ? 'none' : 'block' }}
+                    data-testid="settingsText"
+                  >
+                    {tCommon('Settings')}
+                  </div>
                 </Button>
               )}
             </NavLink>
@@ -206,8 +262,11 @@ const userSidebar = ({
               </>
             )}
           </div>
-          <div className="mt-auto">
-            <ProfileDropdown />
+          <div className={styles.userSidebarOrgFooter}>
+            <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+              <ProfileCard />
+            </div>
+            <SignOut hideDrawer={hideDrawer} />
           </div>
         </div>
       </div>

@@ -14,11 +14,11 @@ describe('Admin People Tab', () => {
 
   it('should search a particular member and then reset to all members', () => {
     peoplePage
-      .searchMemberByName('Harve Lance')
-      .verifyMemberInList('Harve Lance');
+      .searchMemberByName('Wilt Shepherd')
+      .verifyMemberInList('Wilt Shepherd');
     peoplePage.resetSearch();
     peoplePage
-      .verifyMemberInList('Harve Lance')
+      .verifyMemberInList('Wilt Shepherd')
       .verifyMemberInList('administrator');
   });
 

@@ -52,11 +52,14 @@ export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const originalImageState = React.useRef<string>('');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const { setItem } = useLocalStorage();
+  const { getItem, setItem } = useLocalStorage();
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
 
   const [userDetails, setUserDetails] = useState({
     addressLine1: '',
@@ -85,15 +88,21 @@ export default function Settings(): React.JSX.Element {
   // Handle window resize
   useEffect(() => {
     const handleResize = (): void => {
-      setHideDrawer(window.innerWidth <= 820);
+      if (window.innerWidth <= 820) {
+        setHideDrawer(true);
+      }
     };
-
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Sync hideDrawer state changes to localStorage using the hook
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
 
   // Query and mutation setup
   const { data, loading, error } = useQuery(CURRENT_USER);

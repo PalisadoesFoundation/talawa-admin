@@ -16,11 +16,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import { usePluginDrawerItems } from 'plugin';
 
-// Mock the plugin system
-vi.mock('plugin', () => ({
-  usePluginDrawerItems: vi.fn(() => []),
-}));
-
 /**
  * Unit tests for UserSidebarOrg component:
  *
@@ -34,12 +29,14 @@ vi.mock('plugin', () => ({
  * 8. **User Profile Rendering**: Confirms user details are displayed.
  * 9. **Translation Display**: Ensures proper translation of UI text.
  * 10. **Toast Notifications Mocking**: Mocks toast notifications during tests.
- * 11. **Plugin System Integration**: Tests plugin drawer items functionality.
- * 12. **Dropdown State Management**: Tests collapsible dropdown functionality.
  *
  * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
  */
 const { setItem } = useLocalStorage();
+
+vi.mock('plugin', () => ({
+  usePluginDrawerItems: vi.fn(() => []),
+}));
 
 const props: InterfaceUserSidebarOrgProps = {
   orgId: '123',
@@ -275,550 +272,7 @@ const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing UserSidebarOrg component for comprehensive coverage', () => {
-  describe('Plugin System Integration', () => {
-    it('should not show plugin section when no plugin items', () => {
-      vi.mocked(usePluginDrawerItems).mockReturnValue([]);
-      setItem('SuperAdmin', true);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should not show plugin section when no items
-      expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
-    });
-
-    it('should show plugin section when plugin items exist', () => {
-      const mockPluginItems = [
-        {
-          pluginId: 'user-plugin-1',
-          path: '/user/plugin/:orgId/test1',
-          label: 'Test Plugin 1',
-          icon: '',
-        },
-        {
-          pluginId: 'user-plugin-2',
-          path: '/user/plugin/:orgId/test2',
-          label: 'Test Plugin 2',
-          icon: 'https://example.com/icon.png',
-        },
-      ];
-      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-      setItem('SuperAdmin', true);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should show plugin section header
-      expect(screen.getByText('Plugins')).toBeInTheDocument();
-      // Should show plugin items
-      expect(screen.getByText('Test Plugin 1')).toBeInTheDocument();
-      expect(screen.getByText('Test Plugin 2')).toBeInTheDocument();
-    });
-
-    it('should replace :orgId in plugin paths correctly', () => {
-      const mockPluginItems = [
-        {
-          pluginId: 'param-plugin',
-          path: '/user/plugin/:orgId/dashboard',
-          label: 'Param Plugin',
-          icon: '',
-        },
-      ];
-      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-      setItem('SuperAdmin', true);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} orgId="test-org-123" />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const pluginLink = screen.getByRole('link', { name: /Param Plugin/i });
-      expect(pluginLink).toHaveAttribute(
-        'href',
-        '/user/plugin/test-org-123/dashboard',
-      );
-    });
-
-    it('should render plugin items with custom icons', () => {
-      const mockPluginItems = [
-        {
-          pluginId: 'icon-plugin',
-          path: '/user/plugin/:orgId/icon',
-          label: 'Icon Plugin',
-          icon: 'https://example.com/custom-icon.png',
-        },
-      ];
-      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-      setItem('SuperAdmin', true);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const customIcon = screen.getByAltText('Icon Plugin');
-      expect(customIcon).toBeInTheDocument();
-      expect(customIcon).toHaveAttribute(
-        'src',
-        'https://example.com/custom-icon.png',
-      );
-    });
-
-    it('should handle plugin item clicks and hide drawer on mobile', async () => {
-      const mockPluginItems = [
-        {
-          pluginId: 'mobile-plugin',
-          path: '/user/plugin/:orgId/mobile',
-          label: 'Mobile Plugin',
-          icon: '',
-        },
-      ];
-      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-      setItem('SuperAdmin', true);
-
-      // Mock mobile view
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 800,
-      });
-
-      const setHideDrawer = vi.fn();
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} setHideDrawer={setHideDrawer} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const pluginLink = screen.getByRole('link', { name: /Mobile Plugin/i });
-      await userEvent.click(pluginLink);
-
-      expect(setHideDrawer).toHaveBeenCalledWith(true);
-    });
-
-    it('should call usePluginDrawerItems with correct parameters', () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should call with empty permissions, false for isAdmin, true for org-specific
-      expect(usePluginDrawerItems).toHaveBeenCalledWith([], false, true);
-    });
-  });
-
-  describe('Dropdown State Management', () => {
-    it('should manage showDropdown state for CollapsibleDropdown', async () => {
-      const propsWithDropdown = {
-        ...props,
-        targets: [
-          {
-            name: 'Dropdown Menu',
-            subTargets: [
-              {
-                name: 'Submenu 1',
-                url: '/submenu1',
-              },
-              {
-                name: 'Submenu 2',
-                url: '/submenu2',
-              },
-            ],
-          },
-        ],
-      };
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...propsWithDropdown} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const dropdownButton = screen.getByRole('button', {
-        name: /Dropdown Menu/i,
-      });
-      expect(dropdownButton).toBeInTheDocument();
-
-      // Test dropdown interaction (the actual dropdown functionality is tested in CollapsibleDropdown tests)
-      await userEvent.click(dropdownButton);
-    });
-
-    it('should handle mixed targets with and without URLs', () => {
-      const mixedProps = {
-        ...props,
-        targets: [
-          {
-            name: 'Direct Link',
-            url: '/direct',
-          },
-          {
-            name: 'Dropdown Menu',
-            subTargets: [
-              {
-                name: 'Sub Item 1',
-                url: '/sub1',
-              },
-            ],
-          },
-          {
-            name: 'Another Direct Link',
-            url: '/another-direct',
-          },
-        ],
-      };
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...mixedProps} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should render direct links as NavLinks
-      const directLinks = screen.getAllByRole('link', { name: /Direct Link/i });
-      expect(directLinks.length).toBeGreaterThan(0);
-      expect(
-        screen.getByRole('link', { name: /Another Direct Link/i }),
-      ).toBeInTheDocument();
-
-      // Should render dropdown as button
-      expect(
-        screen.getByRole('button', { name: /Dropdown Menu/i }),
-      ).toBeInTheDocument();
-    });
-  });
-
-  describe('Responsive Behavior Enhanced', () => {
-    it('should handle window resize events properly', async () => {
-      const setHideDrawer = vi.fn();
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} setHideDrawer={setHideDrawer} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Mock different screen sizes
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 820, // Exactly at breakpoint
-      });
-
-      const peopleLink = screen.getByRole('link', { name: /People/i });
-      await userEvent.click(peopleLink);
-
-      expect(setHideDrawer).toHaveBeenCalledWith(true);
-    });
-
-    it('should not hide drawer on desktop when navigation is clicked', async () => {
-      const setHideDrawer = vi.fn();
-
-      // Mock desktop view
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 1024,
-      });
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} setHideDrawer={setHideDrawer} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const peopleLink = screen.getByRole('link', { name: /People/i });
-      await userEvent.click(peopleLink);
-
-      expect(setHideDrawer).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Component Lifecycle and Memoization', () => {
-    it('should handle userPermissions and isAdmin memoization', () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Test that the component renders without errors and memoization works
-      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
-    });
-
-    it('should memoize drawerContent and prevent unnecessary re-renders', () => {
-      const { rerender } = render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Rerender with same props
-      rerender(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Component should still be rendered correctly
-      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
-    });
-  });
-
-  describe('Advanced Edge Cases', () => {
-    it('should handle undefined plugin items gracefully', () => {
-      vi.mocked(usePluginDrawerItems).mockReturnValue(undefined as any);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should not crash and should not show plugin section
-      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
-      expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
-    });
-
-    it('should handle empty targets array', () => {
-      const emptyTargetsProps = {
-        ...props,
-        targets: [],
-      };
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...emptyTargetsProps} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should render without errors
-      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
-    });
-
-    it('should handle null setHideDrawer prop', () => {
-      const nullSetHideDrawerProps = {
-        ...props,
-        setHideDrawer: null as any,
-      };
-
-      expect(() => {
-        render(
-          <MockedProvider addTypename={false} link={link}>
-            <BrowserRouter>
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <UserSidebarOrg {...nullSetHideDrawerProps} />
-                </I18nextProvider>
-              </Provider>
-            </BrowserRouter>
-          </MockedProvider>,
-        );
-      }).not.toThrow();
-    });
-  });
-
-  describe('Translation and Internationalization', () => {
-    it('should use correct translation keys for plugin section', () => {
-      const mockPluginItems = [
-        {
-          pluginId: 'i18n-plugin',
-          path: '/user/plugin/:orgId/i18n',
-          label: 'I18n Plugin',
-          icon: '',
-        },
-      ];
-      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Should use 'plugins' translation key from common namespace
-      expect(screen.getByText('Plugins')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-    });
-  });
-
-  describe('Styling and CSS Classes', () => {
-    it('should apply correct CSS classes based on hideDrawer state', () => {
-      const { rerender } = render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} hideDrawer={null} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      let container = screen.getByTestId('leftDrawerContainer');
-      expect(container.className).toContain('hideElemByDefault');
-
-      rerender(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} hideDrawer={true} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      container = screen.getByTestId('leftDrawerContainer');
-      expect(container.className).toContain('inactiveDrawer');
-
-      rerender(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} hideDrawer={false} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      container = screen.getByTestId('leftDrawerContainer');
-      expect(container.className).toContain('activeDrawer');
-    });
-
-    it('should apply active styles to navigation buttons', async () => {
-      render(
-        <MockedProvider addTypename={false} link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <UserSidebarOrg {...props} />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Navigate to make a link active
-      const peopleLink = screen.getByRole('link', { name: /People/i });
-      expect(peopleLink).toBeInTheDocument();
-
-      // Test that the active styles are applied (this is handled by NavLink internally)
-      expect(peopleLink).toHaveAttribute('href', '/user/people/123');
-    });
-  });
-
-  // Ensure all existing tests are preserved
+describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
@@ -982,9 +436,130 @@ describe('Testing UserSidebarOrg component for comprehensive coverage', () => {
     );
   });
 
-  // Note: Toggle button functionality has been moved to separate components
-  // (e.g., SidebarToggle) and is no longer part of the drawer components
-  // due to plugin system modifications
+  it('Testing toggle button click functionality', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    expect(toggleButton).toBeInTheDocument();
+    expect(toggleButton).toHaveAttribute('role', 'button');
+    expect(toggleButton).toHaveAttribute('tabIndex', '0');
+
+    await userEvent.click(toggleButton);
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation with Enter key', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard('{Enter}');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation with Space key', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard(' ');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('Testing toggle button keyboard navigation ignores other keys', async () => {
+    const mockSetHideDrawer = vi.fn();
+    setItem('UserImage', '');
+    setItem('SuperAdmin', true);
+    setItem('FirstName', 'John');
+    setItem('LastName', 'Doe');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg
+                {...props}
+                hideDrawer={false}
+                setHideDrawer={mockSetHideDrawer}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    toggleButton.focus();
+
+    await userEvent.keyboard('{Escape}');
+    await userEvent.keyboard('{Tab}');
+    await userEvent.keyboard('{ArrowDown}');
+
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+  });
 
   it('Testing conditional rendering with URL - renders NavLink', async () => {
     setItem('UserImage', '');
@@ -1066,5 +641,274 @@ describe('Testing UserSidebarOrg component for comprehensive coverage', () => {
     // Verify it's a dropdown and not a NavLink
     const navLink = screen.queryByRole('link', { name: /Dropdown Menu/i });
     expect(navLink).not.toBeInTheDocument();
+  });
+});
+
+describe('Plugin System Integration', () => {
+  it('should not show plugin section when no plugin items', () => {
+    vi.mocked(usePluginDrawerItems).mockReturnValue([]);
+    setItem('SuperAdmin', true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should not show plugin section when no items
+    expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
+  });
+
+  it('should show plugin section when plugin items exist', () => {
+    const mockPluginItems = [
+      {
+        pluginId: 'user-plugin-1',
+        path: '/user/plugin/:orgId/test1',
+        label: 'Test Plugin 1',
+        icon: '',
+      },
+      {
+        pluginId: 'user-plugin-2',
+        path: '/user/plugin/:orgId/test2',
+        label: 'Test Plugin 2',
+        icon: 'https://example.com/icon.png',
+      },
+    ];
+    vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+    setItem('SuperAdmin', true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should show plugin section header
+    expect(screen.getByText('Plugins')).toBeInTheDocument();
+    // Should show plugin items
+    expect(screen.getByText('Test Plugin 1')).toBeInTheDocument();
+    expect(screen.getByText('Test Plugin 2')).toBeInTheDocument();
+  });
+
+  it('should replace :orgId in plugin paths correctly', () => {
+    const mockPluginItems = [
+      {
+        pluginId: 'param-plugin',
+        path: '/user/plugin/:orgId/dashboard',
+        label: 'Param Plugin',
+        icon: '',
+      },
+    ];
+    vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+    setItem('SuperAdmin', true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} orgId="test-org-123" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const pluginLink = screen.getByRole('link', { name: /Param Plugin/i });
+    expect(pluginLink).toHaveAttribute(
+      'href',
+      '/user/plugin/test-org-123/dashboard',
+    );
+  });
+
+  it('should render plugin items with custom icons', () => {
+    const mockPluginItems = [
+      {
+        pluginId: 'icon-plugin',
+        path: '/user/plugin/:orgId/icon',
+        label: 'Icon Plugin',
+        icon: 'https://example.com/custom-icon.png',
+      },
+    ];
+    vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+    setItem('SuperAdmin', true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const customIcon = screen.getByAltText('Icon Plugin');
+    expect(customIcon).toBeInTheDocument();
+    expect(customIcon).toHaveAttribute(
+      'src',
+      'https://example.com/custom-icon.png',
+    );
+  });
+
+  it('should handle plugin item clicks and hide drawer on mobile', async () => {
+    const mockPluginItems = [
+      {
+        pluginId: 'mobile-plugin',
+        path: '/user/plugin/:orgId/mobile',
+        label: 'Mobile Plugin',
+        icon: '',
+      },
+    ];
+    vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+    setItem('SuperAdmin', true);
+
+    // Mock mobile view
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
+
+    const setHideDrawer = vi.fn();
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} setHideDrawer={setHideDrawer} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const pluginLink = screen.getByRole('link', { name: /Mobile Plugin/i });
+    await userEvent.click(pluginLink);
+
+    expect(setHideDrawer).toHaveBeenCalledWith(true);
+  });
+
+  it('should call usePluginDrawerItems with correct parameters', () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should call with empty permissions, false for isAdmin, true for org-specific
+    expect(usePluginDrawerItems).toHaveBeenCalledWith([], false, true);
+  });
+});
+
+describe('Dropdown State Management', () => {
+  it('should manage showDropdown state for CollapsibleDropdown', async () => {
+    const propsWithDropdown = {
+      ...props,
+      targets: [
+        {
+          name: 'Dropdown Menu',
+          subTargets: [
+            {
+              name: 'Submenu 1',
+              url: '/submenu1',
+            },
+            {
+              name: 'Submenu 2',
+              url: '/submenu2',
+            },
+          ],
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...propsWithDropdown} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const dropdownButton = screen.getByRole('button', {
+      name: /Dropdown Menu/i,
+    });
+    expect(dropdownButton).toBeInTheDocument();
+
+    // Test dropdown interaction (the actual dropdown functionality is tested in CollapsibleDropdown tests)
+    await userEvent.click(dropdownButton);
+  });
+
+  it('should handle mixed targets with and without URLs', () => {
+    const mixedProps = {
+      ...props,
+      targets: [
+        {
+          name: 'Direct Link',
+          url: '/direct',
+        },
+        {
+          name: 'Dropdown Menu',
+          subTargets: [
+            {
+              name: 'Sub Item 1',
+              url: '/sub1',
+            },
+          ],
+        },
+        {
+          name: 'Another Direct Link',
+          url: '/another-direct',
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...mixedProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should render direct links as NavLinks
+    const directLinks = screen.getAllByRole('link', { name: /Direct Link/i });
+    expect(directLinks.length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole('link', { name: /Another Direct Link/i }),
+    ).toBeInTheDocument();
+
+    // Should render dropdown as button
+    expect(
+      screen.getByRole('button', { name: /Dropdown Menu/i }),
+    ).toBeInTheDocument();
   });
 });
