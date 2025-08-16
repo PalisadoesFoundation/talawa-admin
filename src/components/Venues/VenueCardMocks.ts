@@ -16,7 +16,6 @@ export const MOCK_VENUE_ITEM_WITH_IMAGE = {
     name: 'Conference Room',
     attachments: [
       {
-        id: 'attachment1',
         url: 'https://surl.li/odyiad',
         mimeType: 'image/png',
       },

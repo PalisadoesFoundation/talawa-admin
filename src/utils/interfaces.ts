@@ -2024,7 +2024,6 @@ export interface InterfaceQueryVenueListItem {
     capacity?: number;
     attachments?: Array<{
       url: string;
-      id: string;
       name?: string;
     }>;
   };
