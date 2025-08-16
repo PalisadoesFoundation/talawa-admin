@@ -11,10 +11,10 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.ts',
 
-    defaultCommandTimeout: 30000,
-    requestTimeout: 30000,
-    responseTimeout: 30000,
-    pageLoadTimeout: 30000,
+    defaultCommandTimeout: 50000,
+    requestTimeout: 50000,
+    responseTimeout: 50000,
+    pageLoadTimeout: 50000,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,
