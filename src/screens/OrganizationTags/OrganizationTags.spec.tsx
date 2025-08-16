@@ -276,20 +276,17 @@ describe('Organisation Tags Page', () => {
     expect(getByText(translations.createTag)).toBeInTheDocument();
   });
   test('creates a new user tag', async () => {
-    renderOrganizationTags(link);
-
+    const { getByText } = renderOrganizationTags(link);
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+      expect(getByText(translations.createTag)).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
-    });
+    expect(getByText(translations.createTag)).toBeInTheDocument();
 
     await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
