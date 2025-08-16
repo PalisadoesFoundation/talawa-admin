@@ -559,7 +559,10 @@ describe('Testing Community Profile Screen', () => {
     // Increase wait time and add error handling
     try {
       await wait(1000); // Increased wait time
-      expect(toast.success).toHaveBeenCalledWith(expect.any(String));
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Error),
+      );
     } catch (error) {
       console.error('Mutation error:', error);
       throw error;

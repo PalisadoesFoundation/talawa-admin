@@ -1,12 +1,11 @@
+import React, { act } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
-import { act } from 'react-dom/test-utils';
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
