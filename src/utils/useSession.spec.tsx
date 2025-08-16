@@ -510,6 +510,7 @@ test('should extend session when called directly', async () => {
 
 test('should properly clean up on unmount', () => {
   // Mock window.removeEventListener
+  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
   const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
 
   const { result, unmount } = renderHook(() => useSession(), {
@@ -523,11 +524,11 @@ test('should properly clean up on unmount', () => {
   result.current.startSession();
   unmount();
 
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  expect(windowRemoveEventListener).toHaveBeenCalledWith(
     'mousemove',
     expect.any(Function),
   );
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  expect(windowRemoveEventListener).toHaveBeenCalledWith(
     'keydown',
     expect.any(Function),
   );
@@ -597,9 +598,7 @@ test('should handle missing community data', async () => {
 });
 
 test('should handle event listener errors gracefully', async () => {
-  const consoleErrorSpy = vi
-    .spyOn(console, 'error')
-    .mockImplementation(() => {});
+  const consoleErrorSpy = vi.spyOn(global, 'setTimeout');
   const mockError = new Error('Event listener error');
 
   // Mock addEventListener to throw an error

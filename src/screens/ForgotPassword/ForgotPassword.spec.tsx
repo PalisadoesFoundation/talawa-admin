@@ -360,6 +360,9 @@ describe('Testing Forgot Password screen', () => {
   });
 
   it('Testing forgot password functionality, when there is an error except unregistered email and api failure', async () => {
+    const formData = {
+      email: 'testuser@test.com',
+    };
     render(
       <MockedProvider addTypename={false} link={notWorkingLink}>
         <BrowserRouter>
@@ -370,6 +373,12 @@ describe('Testing Forgot Password screen', () => {
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.type(
+      screen.getByPlaceholderText(/Registered Email/i),
+      formData.email,
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {

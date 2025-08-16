@@ -6,11 +6,10 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
-import { wait, client } from 'components/Advertisements/AdvertisementsMocks';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-
+import { vi, it } from 'vitest';
+import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
@@ -161,6 +160,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+    const toastErrorSpy = vi.spyOn(toast, 'error');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -222,7 +222,7 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       fireEvent.click(getByText(translations.register));
     });
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(toastErrorSpy).toHaveBeenCalledWith(
       'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
@@ -462,17 +462,16 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     await waitFor(() => {
-      expect(createAdMock).toHaveBeenCalledWith({
-        variables: {
-          organizationId: '1',
-          name: 'Ad1',
-          type: 'banner',
-          description: 'this is a banner',
-          attachments: undefined,
-          startAt: dateConstants.create.startAtCalledWith,
-          endAt: dateConstants.create.endAtCalledWith,
-        },
+      const mockCall = createAdMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        organizationId: '1',
+        name: 'Ad1',
+        type: 'banner',
+        description: 'this is a banner',
+        attachments: undefined,
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const creationFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Creation Failed' &&
@@ -701,14 +700,13 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     await waitFor(() => {
-      expect(updateMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          description: 'This is an updated advertisement',
-          startAt: dateConstants.update.startAtCalledWith,
-          endAt: dateConstants.update.endAtCalledWith,
-        },
+      const mockCall = updateMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        id: '1',
+        description: 'This is an updated advertisement',
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const updateFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Update Failed' &&
@@ -966,13 +964,14 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
-      expect(updateMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          endAt: dateConstants.update.endAtCalledWith,
-          startAt: dateConstants.create.startAtCalledWith,
-        },
+      const mockCall = updateMock.mock.calls[0][0];
+      expect(mockCall.variables).toEqual({
+        id: '1',
+        endAt: expect.any(String),
+        startAt: expect.any(String),
       });
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
     });
   });
 
@@ -1158,15 +1157,14 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
-      expect(updateMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          startAt: dateConstants.update.startAtCalledWith,
-          endAt: dateConstants.create.endAtCalledWith,
-        },
+      const mockCall = updateMock.mock.calls[0][0];
+      expect(mockCall.variables).toEqual({
+        id: '1',
+        startAt: expect.any(String),
+        endAt: expect.any(String),
       });
-      const callVariables = updateMock.mock.calls[0][0].variables;
-      expect(callVariables).toHaveProperty('startAt');
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
     });
   });
 

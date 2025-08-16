@@ -818,7 +818,7 @@ describe('OrgPost Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
     });
   });
 
@@ -870,7 +870,7 @@ describe('OrgPost Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
     });
   });
 

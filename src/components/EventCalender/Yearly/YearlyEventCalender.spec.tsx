@@ -150,12 +150,12 @@ describe('Calendar Component', () => {
     expect(getByText('December')).toBeInTheDocument();
 
     const weekdayHeaders = container.querySelectorAll(
-      '._calendar__weekdays_d00707',
+      '._calendar__weekdays_d8535b',
     );
     expect(weekdayHeaders.length).toBe(12);
 
     weekdayHeaders.forEach((header) => {
-      const weekdaySlots = header.querySelectorAll('._weekday__yearly_d00707');
+      const weekdaySlots = header.querySelectorAll('._weekday__yearly_d8535b');
       expect(weekdaySlots.length).toBe(7);
     });
 
@@ -255,7 +255,7 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('._btn__more_d00707');
+    const expandButton = container.querySelector('._btn__more_d8535b');
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -265,7 +265,7 @@ describe('Calendar Component', () => {
 
     await waitFor(() => {
       const expandedList = container.querySelector(
-        '._expand_event_list_d00707',
+        '._expand_event_list_d8535b',
       );
       expect(expandedList).toBeInTheDocument();
     });
@@ -389,7 +389,7 @@ describe('Calendar Component', () => {
 
     // Wait a bit for all components to be fully mounted
     await waitFor(() => {
-      const buttons = container.querySelectorAll('._btn__more_d00707');
+      const buttons = container.querySelectorAll('._btn__more_d8535b');
       expect(buttons.length).toBeGreaterThan(0);
     });
 
@@ -399,23 +399,14 @@ describe('Calendar Component', () => {
     if (expandButtons.length > 0) {
       await act(async () => {
         fireEvent.click(expandButtons[0]);
-        // Wait for the expansion to complete
-        await waitFor(
-          () => {
-            const lists = container.querySelectorAll(
-              '._expand_event_list_d00707',
-            );
-            return lists.length > 0;
-          },
-          { timeout: 1000 },
-        );
+        await waitFor(() => {
+          const expandedList = container.querySelector(
+            '._expand_event_list_d8535b',
+          );
+          expect(expandedList).toBeInTheDocument();
+        });
       });
     }
-
-    const expandedLists = container.querySelectorAll(
-      '._expand_event_list_d00707',
-    );
-    expect(expandedLists.length).toBeGreaterThan(0);
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
@@ -468,7 +459,7 @@ describe('Calendar Component', () => {
       />,
     );
 
-    const expandButton = container.querySelector('._btn__more_d00707');
+    const expandButton = container.querySelector('._btn__more_d8535b');
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -477,7 +468,7 @@ describe('Calendar Component', () => {
     }
     await waitFor(() => {
       const expandedList = container.querySelector(
-        '._expand_event_list_d00707',
+        '._expand_event_list_d8535b',
       );
       expect(expandedList).toBeInTheDocument();
     });
@@ -488,7 +479,7 @@ describe('Calendar Component', () => {
       });
     }
     await waitFor(() => {
-      expect(container.querySelector('._expand_event_list_d00707')).toBeNull();
+      expect(container.querySelector('._expand_event_list_d8535b')).toBeNull();
     });
   });
 });

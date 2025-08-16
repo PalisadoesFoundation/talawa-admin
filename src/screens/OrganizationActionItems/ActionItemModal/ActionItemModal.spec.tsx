@@ -279,8 +279,17 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       // Submit without selecting category or assignee
-      const submitButton = screen.getByTestId('submitBtn');
-      fireEvent.click(submitButton);
+      // Wait for the form to load
+      await waitFor(() => {
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
+        expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+      });
+
+      // Get the form element and dispatch a submit event directly to bypass HTML5 validation
+      const form = document.querySelector('form');
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
@@ -342,9 +351,11 @@ describe('ItemModal - Additional Test Cases', () => {
       // Verify the component renders
       expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-      // Try to submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      fireEvent.click(submitButton);
+      // Get the form element and dispatch a submit event directly to bypass HTML5 validation
+      const form = document.querySelector('form');
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       // Should not throw an unhandled exception
       await waitFor(() => {
@@ -383,9 +394,11 @@ describe('ItemModal - Additional Test Cases', () => {
 
       expect(() => renderWithProviders(props)).not.toThrow();
 
-      // Try to submit - should show error about missing ID
-      const submitButton = screen.getByTestId('submitBtn');
-      fireEvent.click(submitButton);
+      // Get the form element and dispatch a submit event directly to bypass HTML5 validation
+      const form = document.querySelector('form');
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       // Add await here to properly wait for the toast error
       await waitFor(() => {
@@ -531,9 +544,17 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Submit without selecting category or assignee
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
+      // Wait for the form to load
+      await waitFor(() => {
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
+        expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+      });
+
+      // Get the form element and dispatch a submit event directly to bypass HTML5 validation
+      const form = document.querySelector('form');
+      if (form) {
+        fireEvent.submit(form);
+      }
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
