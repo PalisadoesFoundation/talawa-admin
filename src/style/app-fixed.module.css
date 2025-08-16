@@ -3180,11 +3180,6 @@ form label,
   }
 }
 
-.cardItem .time {
-  font-size: 0.9rem;
-  color: var(--cardItem-color);
-}
-
 .startTime,
 .endTime {
   display: flex;
@@ -3889,7 +3884,9 @@ form label,
 }
 
 .cardItem .time {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
   color: var(--cardItem-time-color);
 }
 
@@ -3932,12 +3929,13 @@ form label,
 
 .rightCard {
   display: flex;
+  width: fit-content;
   gap: 7px;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  min-width: 240px;
+  /* min-width: 240px; */
 }
 
 .creator {
