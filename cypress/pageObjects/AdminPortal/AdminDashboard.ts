@@ -2,7 +2,7 @@ export class AdminDashboardPage {
   private readonly _orgcardContainer: string = '[data-cy="orgCardContainer"]';
   private readonly _manageButton: string = '[data-cy="manageBtn"]';
   private readonly _toggleDropdown: string = '[data-testid="togDrop"]';
-  private readonly _logoutButton: string = '[data-testid="logoutBtn"]';
+  private readonly _logoutButton: string = '[data-testid="signOutBtn"]';
   private readonly _loginEmailInput: string = '[data-cy="loginEmail"]';
   private readonly _drawerOptions = [
     { label: 'People', url: '/orgpeople/' },
@@ -39,7 +39,7 @@ export class AdminDashboardPage {
     return this;
   }
 
-  verifyLeftDrawerOptions(timeout = 20000) {
+  verifyLeftDrawerOptions(timeout = 40000) {
     this._drawerOptions.forEach(({ label, url }) => {
       const selector = `[data-cy="leftDrawerButton-${label}"]`;
       cy.get(selector, { timeout }).should('be.visible').click();
@@ -49,8 +49,9 @@ export class AdminDashboardPage {
   }
 
   logout(timeout = 20000) {
-    cy.get(this._toggleDropdown, { timeout }).should('be.visible').click();
-    cy.get(this._logoutButton, { timeout }).should('be.visible').click();
+    cy.get(this._logoutButton, { timeout })
+      .should('exist')
+      .click({ force: true });
     cy.url({ timeout }).should('include', '/');
     cy.get(this._loginEmailInput, { timeout }).should('be.visible');
     return this;

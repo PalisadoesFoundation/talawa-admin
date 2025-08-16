@@ -8,7 +8,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import convertToBase64 from 'utils/convertToBase64';
@@ -107,10 +107,10 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }: {
     data?: { organization: InterfaceOrganization };
     loading: boolean;
-    refetch: (variables: { input: { id: string } }) => void;
+    refetch: (variables: { id: string }) => void;
     error?: ApolloError;
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { input: { id: orgId } },
+  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -155,25 +155,44 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
       setIsSaving(true);
 
+      // Function to remove empty string fields from the input object
+      const removeEmptyFields = (
+        obj: InterfaceMutationUpdateOrganizationInput,
+      ): Partial<InterfaceMutationUpdateOrganizationInput> => {
+        return Object.fromEntries(
+          Object.entries(obj).filter(
+            ([key, value]) =>
+              key === 'id' ||
+              (value != null && (typeof value !== 'string' || value.trim())),
+          ),
+        ) as Partial<InterfaceMutationUpdateOrganizationInput>;
+      };
+
+      // Build the input object with only non-empty values
+      const inputData = {
+        id: orgId,
+        name: formState.orgName,
+        description: formState.orgDescrip,
+        addressLine1: formState.address.line1,
+        addressLine2: formState.address.line2,
+        city: formState.address.city,
+        state: formState.address.state,
+        postalCode: formState.address.postalCode,
+        countryCode: formState.address?.countryCode,
+        ...(formState.orgImage ? { avatar: formState.orgImage } : {}),
+      };
+
+      // Filter out empty fields
+      const cleanedInput = removeEmptyFields(inputData);
+
       const { data } = await updateOrganization({
         variables: {
-          input: {
-            id: orgId,
-            name: formState.orgName,
-            description: formState.orgDescrip,
-            addressLine1: formState.address.line1,
-            addressLine2: formState.address.line2,
-            city: formState.address.city,
-            state: formState.address.state,
-            postalCode: formState.address.postalCode,
-            countryCode: formState.address.countryCode,
-            avatar: formState.orgImage,
-          },
+          input: cleanedInput as InterfaceMutationUpdateOrganizationInput,
         },
       });
 
       if (data) {
-        refetch({ input: { id: orgId } });
+        refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
       } else {
         toast.error('Failed to update organization');

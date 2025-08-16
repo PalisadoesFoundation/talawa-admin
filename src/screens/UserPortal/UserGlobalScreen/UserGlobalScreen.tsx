@@ -32,7 +32,7 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const UserGlobalScreen = (): JSX.Element => {
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(null);
+  const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
    * Handles window resize events to toggle the sidebar visibility

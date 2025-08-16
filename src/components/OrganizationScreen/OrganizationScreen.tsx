@@ -35,31 +35,29 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const OrganizationScreen = (): JSX.Element => {
+  const { getItem, setItem } = useLocalStorage();
+  // State to manage visibility of the side drawer
+  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
+    const stored = getItem('sidebar');
+    return stored === 'true';
+  });
   // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-
-  // State to manage visibility of the side drawer
-  const [hideDrawer, setHideDrawer] = useState<boolean | null>(false);
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
-
-  // If no organization ID is found, navigate back to the home page
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
@@ -69,14 +67,25 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  // Update targets whenever the organization ID changes
-  useEffect(() => {
-    dispatch(updateTargets(orgId));
-  }, [orgId]);
-
   const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
   });
+
+  // Update targets whenever the organization ID changes
+  useEffect(() => {
+    if (orgId) {
+      dispatch(updateTargets(orgId));
+    }
+  }, [orgId, dispatch]);
+
+  useEffect(() => {
+    setItem('sidebar', hideDrawer.toString());
+  }, [hideDrawer, setItem]);
+
+  // If no organization ID is found, navigate back to the home page
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   useEffect(() => {
     if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {
@@ -131,7 +140,6 @@ const OrganizationScreen = (): JSX.Element => {
             <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
-          <ProfileDropdown />
         </div>
         <Outlet />
       </div>
