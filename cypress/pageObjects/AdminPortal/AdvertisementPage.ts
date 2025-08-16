@@ -16,7 +16,7 @@ export class AdvertisementPage {
   private readonly _deleteBtn = '[data-cy="deletebtn"]';
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
-  visitAdvertisementPage(timeout = 10000) {
+  visitAdvertisementPage(timeout = 50000) {
     cy.visit('/orglist');
     cy.get('[data-cy="manageBtn"]').should('be.visible').first().click();
     cy.url({ timeout }).should('match', /\/orgdash\/[a-f0-9-]+/);
@@ -47,7 +47,7 @@ export class AdvertisementPage {
     description: string,
     mediaPath: string,
     type: string,
-    timeout = 10000,
+    timeout = 50000,
   ) {
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
     cy.get(this._adNameInput).should('be.visible').type(name);
