@@ -1031,10 +1031,13 @@
     "members": "Membres"
   },
   "postCard": {
-    "likes": "Aime",
-    "comments": "commentaires",
-    "viewPost": "Voir le message",
-    "editPost": "Modifier le message",
+    "likes": "J'aime",
+    "comments": "Commentaires",
+    "addComment": "Ajouter un commentaire",
+    "viewPost": "Voir la publication",
+    "editPost": "Modifier la publication",
+    "viewComments": "Voir les {{count}} commentaires",
+    "hideComments": "Masquer les commentaires",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
