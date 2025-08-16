@@ -15,15 +15,11 @@ Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => {},
 });
 
-import vitestPreviewConfigure from 'vitest-preview';
-
 // Global CSS here
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'flag-icons/css/flag-icons.min.css';
-
-vitestPreviewConfigure.debug();
 
 vi.useFakeTimers();
 vi.advanceTimersByTime(18000);

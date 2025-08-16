@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 const { setItem } = useLocalStorage();
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
@@ -161,10 +161,15 @@ describe('Event Management', () => {
       }
     });
 
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ tab: 'invalid' }), // simulate invalid tab
+      };
+    });
+
     it('returns dashboard tab for an invalid tab selection', async () => {
-      const setTab = vi.fn();
-      const useStateSpy = vi.spyOn(React, 'useState');
-      useStateSpy.mockReturnValueOnce(['invalid', setTab]);
       await act(async () => {
         renderEventManagement();
       });

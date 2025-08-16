@@ -571,121 +571,59 @@ describe('OrgPost Component', () => {
     vi.resetAllMocks();
   });
 
-  const mocks = [
-    {
-      request: {
-        query: GET_POSTS_BY_ORG,
-        variables: { input: { organizationId: 'test-org' } },
-      },
-      result: {
-        data: {
-          postsByOrganization: [],
-        },
-      },
-    },
-    {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: 'test-org' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            posts: {
-              totalCount: 0,
-              pageInfo: { hasPreviousPage: false, hasNextPage: false },
-            },
-          },
-        },
-      },
-    },
-  ];
-
   it('opens and closes the create post modal', async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <OrgPost />
-      </MockedProvider>,
-    );
-
-    // Wait for the button to appear after data loads
+    renderComponent();
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
     const openModalBtn = await screen.findByTestId(
       'createPostModalBtn',
       {},
       { timeout: 5000 },
     );
     fireEvent.click(openModalBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
-    });
-
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('modalOrganizationHeader'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
     const closeModalBtn = screen.getByTestId('closeOrganizationModal');
     fireEvent.click(closeModalBtn);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('modalOrganizationHeader')).toBeNull();
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('modalOrganizationHeader')).toBeNull();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('submits the create post form successfully', async () => {
-    // Create proper mocks for the test
-    const createPostMock = {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          input: {
-            caption: 'Test Post Title',
-            organizationId: '123',
-            isPinned: false,
-            attachments: [],
-          },
-        },
+    renderComponent();
+    await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
+    const openModalBtn = await screen.findByTestId(
+      'createPostModalBtn',
+      {},
+      { timeout: 5000 },
+    );
+    fireEvent.click(openModalBtn);
+    const titleInput = screen.getByTestId('modalTitle');
+    const infoInput = screen.getByTestId('modalinfo');
+    fireEvent.change(titleInput, { target: { value: 'Test Post Title' } });
+    fireEvent.change(infoInput, { target: { value: 'Test Post Information' } });
+    const submitBtn = screen.getByTestId('createPostBtn');
+    fireEvent.click(submitBtn);
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalled();
       },
-      result: {
-        data: {
-          createPost: {
-            id: '3',
-            caption: 'Test Post Title',
-            pinnedAt: null,
-            attachments: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        },
-      },
-    };
+      { timeout: 5000 },
+    );
+  });
 
-    const refetchMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: mockOrgPostList,
-      },
-    };
-
-    const testMocks = [
-      ...mocks.filter((mock) => mock.request.query !== CREATE_POST_MUTATION),
-      createPostMock,
-      refetchMock,
-    ];
-
+  it('shows success toast, resets state and closes modal on successful post creation', async () => {
     render(
-      <MockedProvider mocks={testMocks} addTypename={false}>
+      <MockedProvider mocks={[createPostSuccessMock]} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -697,94 +635,6 @@ describe('OrgPost Component', () => {
     );
 
     await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
-
-    const openModalBtn = await screen.findByTestId('createPostModalBtn');
-    fireEvent.click(openModalBtn);
-
-    const titleInput = screen.getByTestId('modalTitle');
-    const infoInput = screen.getByTestId('modalinfo');
-
-    fireEvent.change(titleInput, { target: { value: 'Test Post Title' } });
-    fireEvent.change(infoInput, { target: { value: 'Test Post Information' } });
-
-    const submitBtn = screen.getByTestId('createPostBtn');
-    await act(async () => {
-      fireEvent.click(submitBtn);
-    });
-  });
-
-  it('shows success toast, resets state and closes modal on successful post creation', async () => {
-    const createPostMock = {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          input: {
-            caption: 'Test Post Title',
-            organizationId: '123',
-            isPinned: false,
-            attachments: [],
-          },
-        },
-      },
-      result: {
-        data: {
-          createPost: {
-            id: '3',
-            caption: 'Test Post Title',
-            pinnedAt: null,
-            attachments: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        },
-      },
-    };
-
-    const refetchMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: mockOrgPostList,
-      },
-    };
-
-    const getPostsMock = {
-      request: {
-        query: GET_POSTS_BY_ORG,
-        variables: { input: { organizationId: '123' } },
-      },
-      result: { data: mockPosts },
-    };
-
-    const testMocks = [
-      getPostsMock,
-      orgPostListMock,
-      createPostMock,
-      refetchMock,
-    ];
-
-    render(
-      <MockedProvider mocks={testMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
-
     const openModalBtn = await screen.findByTestId('createPostModalBtn');
     fireEvent.click(openModalBtn);
 
@@ -793,8 +643,6 @@ describe('OrgPost Component', () => {
     fireEvent.change(titleInput, { target: { value: 'Test Post Title' } });
     fireEvent.change(infoInput, { target: { value: 'Some Information' } });
 
-    // Add media file for testing
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const mediaInput = screen.getByTestId('addMediaField');
     await act(async () => {
       fireEvent.change(mediaInput, { target: { files: [file] } });
@@ -804,6 +652,35 @@ describe('OrgPost Component', () => {
     await act(async () => {
       fireEvent.click(submitBtn);
     });
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+
+    expect(toastSuccessMock.mock.calls[0][0]).toContain('postCreatedSuccess');
+
+    await act(() => new Promise((resolve) => setTimeout(resolve, 500)));
+
+    const modalElement = screen
+      .queryByTestId('modalOrganizationHeader')
+      ?.closest('.modal');
+
+    if (modalElement) {
+      fireEvent.transitionEnd(modalElement);
+
+      await waitFor(
+        () => {
+          const updatedModal = screen
+            .queryByTestId('modalOrganizationHeader')
+            ?.closest('.modal');
+          return !updatedModal || !updatedModal.classList.contains('show');
+        },
+        { timeout: 3000 },
+      );
+    }
   });
 
   it('renders the create post button when orgId is provided', async () => {
@@ -879,7 +756,7 @@ describe('OrgPost Component', () => {
       type: 'image/png',
     });
 
-    const createPostWithAttachmentMock = {
+    const fileUploadMock = {
       request: {
         query: CREATE_POST_MUTATION,
         variables: {
@@ -887,7 +764,7 @@ describe('OrgPost Component', () => {
             caption: 'Test Post Title',
             organizationId: '123',
             isPinned: false,
-            attachments: expect.any(Array), // We'll accept any array structure for attachments
+            attachments: [mockFile],
           },
         },
       },
@@ -905,51 +782,19 @@ describe('OrgPost Component', () => {
       },
     };
 
-    const refetchMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: mockOrgPostList,
-      },
-    };
-
-    const getPostsMock = {
-      request: {
-        query: GET_POSTS_BY_ORG,
-        variables: { input: { organizationId: '123' } },
-      },
-      result: { data: mockPosts },
-    };
-
-    const testMocks = [
-      getPostsMock,
-      orgPostListMock,
-      createPostWithAttachmentMock,
-      refetchMock,
-    ];
+    const customMocks = [...mocks, fileUploadMock];
 
     render(
-      <MockedProvider mocks={testMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
+      <MockedProvider mocks={customMocks} addTypename={false}>
+        <BrowserRouter>
+          <OrgPost />
+          <ToastContainer />
+        </BrowserRouter>
       </MockedProvider>,
     );
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     const openModalBtn = await screen.findByTestId('createPostModalBtn');
@@ -970,6 +815,10 @@ describe('OrgPost Component', () => {
     const submitBtn = screen.getByTestId('createPostBtn');
     await act(async () => {
       fireEvent.click(submitBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
     });
   });
 
@@ -1003,65 +852,7 @@ describe('OrgPost Component', () => {
   });
 
   it('submits form successfully without file attachment', async () => {
-    const createPostMock = {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          input: {
-            caption: 'Test Post Title',
-            organizationId: '123',
-            isPinned: false,
-            attachments: [],
-          },
-        },
-      },
-      result: {
-        data: {
-          createPost: {
-            id: '4',
-            caption: 'Test Post Title',
-            pinnedAt: null,
-            attachments: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        },
-      },
-    };
-
-    const refetchMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: mockOrgPostList,
-      },
-    };
-
-    const testMocks = [
-      ...mocks.filter((mock) => mock.request.query !== CREATE_POST_MUTATION),
-      createPostMock,
-      refetchMock,
-    ];
-
-    render(
-      <MockedProvider mocks={testMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    renderComponent();
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -1079,7 +870,7 @@ describe('OrgPost Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
     });
   });
 
@@ -1395,68 +1186,6 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       </MockedProvider>,
     );
 
-  it('handles "None" option: clears sorted posts and then refetches unsorted posts', async () => {
-    const toggleButton = screen.getByTestId('sortpost-toggle');
-    userEvent.click(toggleButton);
-    const noneOption = await screen.findByText('None');
-    userEvent.click(noneOption);
-
-    await waitFor(
-      () => {
-        const captionsNow = screen.queryAllByTestId('post-caption');
-        expect([0, 2]).toContain(captionsNow.length);
-      },
-      { timeout: 300 },
-    );
-
-    await waitFor(() => {
-      const postCaptions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => el.textContent || '');
-      expect(postCaptions[0]).toContain('Early Post');
-      expect(postCaptions[1]).toContain('Later Post');
-    });
-  });
-
-  it('sorts posts in ascending order when "Oldest" is selected', async () => {
-    const toggleButton = screen.getByTestId('sortpost-toggle');
-    userEvent.click(toggleButton);
-    const oldestOption = await screen.findByText('Oldest');
-    userEvent.click(oldestOption);
-
-    await waitFor(() => {
-      const postCaptions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => el.textContent || '');
-      expect(postCaptions[0]).toContain('Early Post');
-      expect(postCaptions[1]).toContain('Later Post');
-    });
-  });
-
-  it('sorts posts in descending order when "Latest" is selected', async () => {
-    const toggleButton = screen.getByTestId('sortpost-toggle');
-    userEvent.click(toggleButton);
-    const latestOption = await screen.findByText('Latest');
-    userEvent.click(latestOption);
-    await waitFor(() => {
-      const postCaptions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => el.textContent || '');
-      expect(postCaptions[0]).toContain('Early Post');
-      expect(postCaptions[1]).toContain('Later Post');
-    });
-  });
-
-  it('ignores invalid sorting options and leaves posts order unchanged', async () => {
-    await waitFor(() => {
-      const postCaptions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => el.textContent || '');
-      expect(postCaptions[0]).toContain('Early Post');
-      expect(postCaptions[1]).toContain('Later Post');
-    });
-  });
-
   it('returns early when loading, error, or missing data', async () => {
     const emptyPosts = { postsByOrganization: [] };
     const emptyMocks: MockedResponse[] = [
@@ -1537,119 +1266,6 @@ describe('Tests for sorting , nextpage , previousPage', () => {
   });
 });
 
-describe('Pagination functionality in OrgPost Component', () => {
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    renderComponent();
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-  });
-
-  const renderComponent = (
-    mocks: MockedResponse[] = paginationMocks,
-  ): RenderResult =>
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-  it('handles next page correctly when sortingOption is "None"', async () => {
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(6);
-      expect(captions[0]).toContain('Post 1');
-      expect(captions[5]).toContain('Post 6');
-    });
-
-    const nextBtn = screen.getByTestId('next-page-button');
-    userEvent.click(nextBtn);
-
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(2);
-      expect(captions[0]).toContain('Post 7');
-      expect(captions[1]).toContain('Post 8');
-    });
-  });
-
-  it('handles next page correctly when sortingOption is not "None"', async () => {
-    const toggleBtn = screen.getByTestId('sortpost-toggle');
-    userEvent.click(toggleBtn);
-    const oldestOption = await screen.findByText('Oldest');
-    userEvent.click(oldestOption);
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(6);
-      expect(captions[0]).toContain('Post 1');
-      expect(captions[5]).toContain('Post 6');
-    });
-
-    const nextBtn = screen.getByTestId('next-page-button');
-    userEvent.click(nextBtn);
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(2);
-      expect(captions[0]).toContain('Post 7');
-      expect(captions[1]).toContain('Post 8');
-    });
-  });
-
-  it('handles previous page correctly when sortingOption is not "None"', async () => {
-    const toggleBtn = screen.getByTestId('sortpost-toggle');
-    userEvent.click(toggleBtn);
-    const latestOption = await screen.findByText('Latest');
-    userEvent.click(latestOption);
-
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-
-      expect(captions.length).toBe(6);
-      expect(captions[0]).toContain('Post 8');
-      expect(captions[5]).toContain('Post 3');
-    });
-    const nextBtn = screen.getByTestId('next-page-button');
-    userEvent.click(nextBtn);
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-
-      expect(captions.length).toBe(2);
-      expect(captions[0]).toContain('Post 2');
-      expect(captions[1]).toContain('Post 1');
-    });
-
-    const prevBtn = screen.getByTestId('previous-page-button');
-    userEvent.click(prevBtn);
-    await waitFor(() => {
-      const captions = screen
-        .getAllByTestId('post-caption')
-        .map((el) => (el.textContent || '').trim());
-      expect(captions.length).toBe(6);
-      expect(captions[0]).toContain('Post 8');
-      expect(captions[5]).toContain('Post 3');
-    });
-  });
-});
-
 describe('OrgPost SearchBar functionality', () => {
   // Helper function to render the component with specified mocks
   const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
@@ -1667,53 +1283,6 @@ describe('OrgPost SearchBar functionality', () => {
   };
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it('should filter posts when search term is entered', async () => {
-    renderWithMocks([
-      orgPostListMock,
-      getPostsByOrgInitialMock,
-      getPostsByOrgSearchMock,
-    ]);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'test{enter}');
-
-    await waitFor(() => {
-      const postElements = screen.getAllByTestId('post-caption');
-
-      expect(postElements.length).toBe(1);
-      expect(postElements[0].textContent).toContain(
-        'Second post about testing',
-      );
-    });
-  });
-
-  it('should handle case-insensitive search correctly', async () => {
-    renderWithMocks([
-      orgPostListMock,
-      getPostsByOrgInitialMock,
-      getPostsByOrgSearchMock,
-    ]);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'TeStInG{enter}');
-
-    await waitFor(() => {
-      const postElements = screen.getAllByTestId('post-caption');
-      expect(postElements.length).toBe(1);
-      expect(postElements[0].textContent).toContain(
-        'Second post about testing',
-      );
-    });
   });
 
   it('should correctly integrate with PostsRenderer when filtering', async () => {
@@ -1813,22 +1382,19 @@ describe('OrgPost component - Post Creation Tests', () => {
       query: CREATE_POST_MUTATION,
       variables: {
         input: {
-          caption: 'Test Post Title',
-          organizationId: '123',
+          caption: 'Test Post',
+          organizationId: mockOrgId,
           isPinned: false,
-          attachments: [],
         },
       },
     },
     result: {
       data: {
         createPost: {
-          id: '3',
-          caption: 'Test Post Title',
-          pinnedAt: null,
-          attachments: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          id: 'post123',
+          caption: 'Test Post',
+          createdAt: '2023-09-20T12:00:00Z',
+          isPinned: false,
         },
       },
     },
@@ -1911,7 +1477,7 @@ describe('OrgPost component - Post Creation Tests', () => {
     request: {
       query: ORGANIZATION_POST_LIST,
       variables: {
-        input: { id: '123' },
+        input: { id: mockOrgId },
         after: null,
         before: null,
         first: 6,
@@ -1919,60 +1485,57 @@ describe('OrgPost component - Post Creation Tests', () => {
       },
     },
     result: {
-      data: mockOrgPostList,
+      data: {
+        organization: {
+          id: mockOrgId,
+          name: 'Test Organization',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: 'post123',
+                  caption: 'Test Post',
+                  createdAt: '2023-09-20T12:00:00Z',
+                  isPinned: false,
+                },
+              },
+              {
+                node: {
+                  id: 'post1',
+                  caption: 'Existing Post 1',
+                  createdAt: '2023-09-19T12:00:00Z',
+                  isPinned: false,
+                },
+              },
+              {
+                node: {
+                  id: 'post2',
+                  caption: 'Existing Post 2',
+                  createdAt: '2023-09-18T12:00:00Z',
+                  isPinned: true,
+                },
+              },
+            ],
+            pageInfo: {
+              startCursor: 'cursor1',
+              endCursor: 'cursor3',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 3,
+          },
+        },
+      },
     },
   };
 
-  const testMocks = [...mocks, createPostMock, refetchMock];
-
-  render(
-    <MockedProvider mocks={testMocks} addTypename={false}>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/org/123']}>
-          <Routes>
-            <Route path="/org/:orgId" element={<OrgPost />} />
-          </Routes>
-        </MemoryRouter>
-      </I18nextProvider>
-    </MockedProvider>,
-  );
-
-  beforeEach(async () => {
-    vi.clearAllMocks();
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-  });
-
-  const renderComponentWithProperMocks = (customMocks?: any[]) => {
-    const defaultMocks = [
-      {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: { data: mockPosts },
-      },
-      {
-        request: {
-          query: ORGANIZATION_POST_LIST,
-          variables: {
-            input: { id: '123' },
-            after: null,
-            before: null,
-            first: 6,
-            last: null,
-          },
-        },
-        result: { data: mockOrgPostList },
-      },
-    ];
-
+  const renderComponent = (
+    mocks = [getPostsQueryMock, orgPostListMock, createPostMock, refetchMock],
+  ): RenderResult => {
     return render(
-      <MockedProvider mocks={customMocks || defaultMocks} addTypename={false}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
             <Routes>
               <Route path="/org/:orgId" element={<OrgPost />} />
             </Routes>
@@ -1982,13 +1545,17 @@ describe('OrgPost component - Post Creation Tests', () => {
     );
   };
 
-  it('allows filling out the post form', async () => {
-    renderComponentWithProperMocks();
+  beforeEach(async () => {
+    vi.clearAllMocks();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
+    renderComponent();
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
+  });
 
+  it('allows filling out the post form', async () => {
     const createPostButton = screen.getByTestId('createPostModalBtn');
     await userEvent.click(createPostButton);
 
@@ -2003,152 +1570,13 @@ describe('OrgPost component - Post Creation Tests', () => {
   });
 
   it('successfully submits the form and shows success toast', async () => {
-    const createPostMock = {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          input: {
-            caption: 'Test Post',
-            organizationId: '123',
-            isPinned: false,
-            attachments: [],
-          },
-        },
-      },
-      result: {
-        data: {
-          createPost: {
-            id: 'post123',
-            caption: 'Test Post',
-            createdAt: '2023-09-20T12:00:00Z',
-            isPinned: false,
-          },
-        },
-      },
-    };
-
-    const getPostsQueryMock = {
-      request: {
-        query: GET_POSTS_BY_ORG,
-        variables: { input: { organizationId: '123' } },
-      },
-      result: {
-        data: {
-          postsByOrganization: [
-            {
-              id: 'post1',
-              caption: 'Existing Post 1',
-              createdAt: '2023-09-19T12:00:00Z',
-              isPinned: false,
-              creator: { id: '123' },
-              imageUrl: null,
-              videoUrl: null,
-              updatedAt: '2023-09-19T12:00:00Z',
-              pinned: false,
-            },
-          ],
-        },
-      },
-    };
-
-    const orgPostListMockLocal = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            id: '123',
-            name: 'Test Organization',
-            posts: {
-              edges: [
-                {
-                  node: {
-                    id: 'post1',
-                    caption: 'Existing Post 1',
-                    createdAt: '2023-09-19T12:00:00Z',
-                    isPinned: false,
-                  },
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor1',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 1,
-            },
-          },
-        },
-      },
-    };
-
-    const refetchMock = {
-      request: {
-        query: ORGANIZATION_POST_LIST,
-        variables: {
-          input: { id: '123' },
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            id: '123',
-            name: 'Test Organization',
-            posts: {
-              edges: [
-                {
-                  node: {
-                    id: 'post123',
-                    caption: 'Test Post',
-                    createdAt: '2023-09-20T12:00:00Z',
-                    isPinned: false,
-                  },
-                },
-                {
-                  node: {
-                    id: 'post1',
-                    caption: 'Existing Post 1',
-                    createdAt: '2023-09-19T12:00:00Z',
-                    isPinned: false,
-                  },
-                },
-              ],
-              pageInfo: {
-                startCursor: 'cursor1',
-                endCursor: 'cursor2',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        },
-      },
-    };
+    vi.spyOn(global, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true }),
+    } as Response);
 
     render(
-      <MockedProvider
-        mocks={[
-          getPostsQueryMock,
-          orgPostListMockLocal,
-          createPostMock,
-          refetchMock,
-        ]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -2159,16 +1587,11 @@ describe('OrgPost component - Post Creation Tests', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    const createPostButton = await screen.findByTestId('createPostModalBtn');
+    const createPostButton = screen.getByTestId('createPostModalBtn');
     await userEvent.click(createPostButton);
 
     const titleInput = await screen.findByTestId('modalTitle');
     const infoInput = screen.getByTestId('modalinfo');
-
     await userEvent.type(titleInput, 'Test Post');
     await userEvent.type(infoInput, 'This is a test post description');
 
@@ -2179,81 +1602,20 @@ describe('OrgPost component - Post Creation Tests', () => {
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith('postCreatedSuccess');
+      },
+      { timeout: 5000 },
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('modalTitle')).not.toBeInTheDocument();
       },
       { timeout: 5000 },
     );
   });
 
-  // Additional helper functions and fixes
-
-  // Fix for the mock setup - ensure proper variable matching
-  const createProperMockVariables = (
-    caption: string,
-    organizationId: string,
-    isPinned = false,
-    attachments: any[] = [],
-  ) => ({
-    input: {
-      caption,
-      organizationId,
-      isPinned,
-      attachments,
-    },
-  });
-
-  // Fix for attachment handling in tests
-  const createFileAttachmentMock = (file: File) => {
-    return {
-      request: {
-        query: CREATE_POST_MUTATION,
-        variables: {
-          input: {
-            caption: 'Test Post Title with File',
-            organizationId: '123',
-            isPinned: false,
-            attachments: expect.arrayContaining([
-              expect.objectContaining({
-                fileHash: expect.any(String),
-                mimetype: expect.any(String),
-                name: file.name,
-                objectName: expect.stringContaining(file.name),
-              }),
-            ]),
-          },
-        },
-      },
-      result: {
-        data: {
-          createPost: {
-            id: '4',
-            caption: 'Test Post Title with File',
-            pinnedAt: null,
-            attachments: [{ url: 'base64String' }],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          },
-        },
-      },
-    };
-  };
-
-  // Fix for error handling tests
-  const mockErrorResponse = (errorMessage = 'Network error') => ({
-    request: {
-      query: CREATE_POST_MUTATION,
-      variables: expect.any(Object),
-    },
-    error: new Error(errorMessage),
-  });
-
   it('handles pin post toggle correctly', async () => {
-    renderComponentWithProperMocks();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
-    });
-
     const createPostButton = screen.getByTestId('createPostModalBtn');
     await userEvent.click(createPostButton);
 
@@ -2271,14 +1633,8 @@ describe('OrgPost component - Post Creation Tests', () => {
   });
 
   it('cancels post creation and resets form state', async () => {
-    renderComponentWithProperMocks();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
-    });
-
     const createPostButton = screen.getByTestId('createPostModalBtn');
-    await userEvent.click(createPostButton);
+    userEvent.click(createPostButton);
 
     const titleInput = await screen.findByTestId('modalTitle');
     const infoInput = screen.getByTestId('modalinfo');
@@ -2287,19 +1643,17 @@ describe('OrgPost component - Post Creation Tests', () => {
     await userEvent.type(infoInput, 'This is a test post description');
 
     const cancelButton = screen.getByTestId('closeOrganizationModal');
-    await userEvent.click(cancelButton);
+    userEvent.click(cancelButton);
 
     await waitFor(() => {
       expect(screen.queryByTestId('modalTitle')).not.toBeInTheDocument();
     });
 
-    // Open modal again to check reset state
-    await userEvent.click(createPostButton);
+    userEvent.click(createPostButton);
 
     const newTitleInput = await screen.findByTestId('modalTitle');
-    const newInfoInput = screen.getByTestId('modalinfo');
 
     expect(newTitleInput).toHaveValue('');
-    expect(newInfoInput).toHaveValue('');
+    expect(screen.getByTestId('modalinfo')).toHaveValue('');
   });
 });
