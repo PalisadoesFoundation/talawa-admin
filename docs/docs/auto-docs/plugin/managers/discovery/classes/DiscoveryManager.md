@@ -8,9 +8,9 @@ Defined in: [src/plugin/managers/discovery.ts:11](https://github.com/PalisadoesF
 
 ## Constructors
 
-### new DiscoveryManager()
+### Constructor
 
-> **new DiscoveryManager**(`graphqlService`?): `DiscoveryManager`
+> **new DiscoveryManager**(`graphqlService?`): `DiscoveryManager`
 
 Defined in: [src/plugin/managers/discovery.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L15)
 
@@ -88,7 +88,7 @@ Defined in: [src/plugin/managers/discovery.ts:35](https://github.com/PalisadoesF
 
 ### loadPluginComponents()
 
-> **loadPluginComponents**(`pluginId`, `manifest`): `Promise`\<`Record`\<`string`, `ComponentType`\<\{\}\>\>\>
+> **loadPluginComponents**(`pluginId`, `manifest`): `Promise`\<`Record`\<`string`, `ComponentType`\<\{ \}\>\>\>
 
 Defined in: [src/plugin/managers/discovery.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L106)
 
@@ -104,7 +104,7 @@ Defined in: [src/plugin/managers/discovery.ts:106](https://github.com/Palisadoes
 
 #### Returns
 
-`Promise`\<`Record`\<`string`, `ComponentType`\<\{\}\>\>\>
+`Promise`\<`Record`\<`string`, `ComponentType`\<\{ \}\>\>\>
 
 ***
 
