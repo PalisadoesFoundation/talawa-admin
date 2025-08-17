@@ -132,7 +132,7 @@
     "@graphql-tools/schema": "^10.0.16",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^15.0.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/inquirer": "^9.0.7",
@@ -230,12 +230,12 @@
     "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "rc-color-picker": {
-      "react": "^19.1.0",
-      "react-dom": "^19.1.0"
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
     },
     "virtualizedtableforantd4": {
-      "react": "^19.1.0",
-      "react-dom": "^19.1.0"
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
     },
     "gulp-header": "^2.0.9"
   },
