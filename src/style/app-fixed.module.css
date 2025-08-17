@@ -9338,7 +9338,7 @@ form {
   aspect-ratio: 3/2;
   object-fit: cover;
   display: block;
-
+}
 
 .CardItemMainDiv {
   width: 100%;
@@ -9352,6 +9352,5 @@ form {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-
 }
 /* ----------------------------------------------------- */
