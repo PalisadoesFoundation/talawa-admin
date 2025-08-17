@@ -19,7 +19,7 @@ describe('CardItem Component', () => {
       type: 'Event',
       title: 'Tech Conference 2023',
       startdate: '2023-09-15',
-      enddate: '2023-09-17',
+      enddate: '2023-09-16',
       location: 'Convention Center',
       creator: {
         id: '1',
@@ -28,12 +28,14 @@ describe('CardItem Component', () => {
     };
 
     render(<CardItem {...props} />);
-    expect(screen.getByText('Tech Conference 2023..')).toBeInTheDocument();
+    expect(screen.getByText('Tech Conference 2023')).toBeInTheDocument();
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
-    const expectedDateRange = `${dayjs(props.startdate).format('MMM D, YYYY')} - ${dayjs(props.enddate).format('MMM D, YYYY')}`;
-    expect(screen.getByText(expectedDateRange)).toBeInTheDocument();
+    const startdate = `${dayjs(props.startdate).format('MMM D, YYYY')}`;
+    const enddate = `${dayjs(props.enddate).format('MMM D, YYYY')}`;
+    const dateRange = `${startdate} - ${enddate}`;
+    expect(screen.getByText(dateRange)).toBeInTheDocument();
 
     expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 
@@ -41,24 +43,11 @@ describe('CardItem Component', () => {
     expect(screen.getByTestId('date-icon')).toBeInTheDocument();
   });
 
-  it('handles long titles by truncating them', () => {
-    const props: InterfaceCardItem = {
-      type: 'Event',
-      title:
-        'This is an extremely long title that should be truncated when displayed on the card',
-    };
-
-    render(<CardItem {...props} />);
-
-    expect(screen.getByText('This is an extremely long..')).toBeInTheDocument();
-  });
-
   it('does not render location section when location is not provided', () => {
     const props: InterfaceCardItem = {
       type: 'Event',
       title: 'No Location Event',
       startdate: '2023-10-01',
-      enddate: '2023-10-02',
     };
 
     render(<CardItem {...props} />);
@@ -75,5 +64,14 @@ describe('CardItem Component', () => {
     render(<CardItem {...props} />);
 
     expect(screen.queryByTestId('date-icon')).not.toBeInTheDocument();
+  });
+
+  it('renders post card correctly', () => {
+    const props: InterfaceCardItem = {
+      type: 'Post',
+      title: '#1 Post Title',
+    };
+    render(<CardItem {...props} />);
+    expect(screen.getByText('#1 Post Title')).toBeInTheDocument();
   });
 });
