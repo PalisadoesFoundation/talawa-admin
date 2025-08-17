@@ -14,89 +14,27 @@ Defines the structure for an organization list object returned from a query.
 
 ## Properties
 
-### \_id
+### addressLine1
 
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:1361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1361)
-
-The unique identifier of the organization.
-
-***
-
-### address
-
-> **address**: [`InterfaceAddress`](InterfaceAddress.md)
-
-Defined in: [src/utils/interfaces.ts:1375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1375)
-
-The address of the organization.
-
-***
-
-### admins
-
-> **admins**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:1371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1371)
-
-An array of administrators in the organization.
-
-#### \_id
-
-> **\_id**: `string`
-
-***
-
-### createdAt
-
-> **createdAt**: `string`
-
-Defined in: [src/utils/interfaces.ts:1374](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1374)
-
-The creation date of the organization.
-
-***
-
-### creator
-
-> **creator**: `object`
+> **addressLine1**: `string`
 
 Defined in: [src/utils/interfaces.ts:1363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1363)
 
-The creator of the organization.
+***
 
-#### firstName
+### description
 
-> **firstName**: `string`
+> **description**: `string`
 
-#### lastName
-
-> **lastName**: `string`
+Defined in: [src/utils/interfaces.ts:1364](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1364)
 
 ***
 
-### image
+### id
 
-> **image**: `string`
+> **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1362](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1362)
-
-The URL of the organization's image, or null.
-
-***
-
-### members
-
-> **members**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:1368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1368)
-
-An array of members in the organization.
-
-#### \_id
-
-> **\_id**: `string`
+Defined in: [src/utils/interfaces.ts:1361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1361)
 
 ***
 
@@ -104,6 +42,6 @@ An array of members in the organization.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1367)
+Defined in: [src/utils/interfaces.ts:1362](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1362)
 
 The name of the organization.
