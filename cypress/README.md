@@ -134,3 +134,4 @@ When adding new tests:
 5. Document any new custom commands
 
 For more information about Cypress testing, visit the [official Cypress documentation](https://docs.cypress.io/).
+
