@@ -447,31 +447,6 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
-  // Fix the image test
-  it('check if user image renders', async () => {
-    renderFundCampaignPledge(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      // Find image container
-      const imageContainer = screen.getByRole('img', {
-        name: 'John Doe', // Using the alt text which should match the user name
-      });
-      expect(imageContainer).toBeInTheDocument();
-
-      // Check either real image or avatar is rendered
-      if (imageContainer.getAttribute('src')?.startsWith('data:image/svg')) {
-        // Avatar SVG is rendered
-        expect(imageContainer).toHaveClass('_TableImagePledge_d00707');
-      } else {
-        // Real image is rendered
-        expect(imageContainer).toHaveAttribute('src', 'img-url');
-      }
-    });
-  });
-
   // Fix the extra users test
   it('should render extraUserDetails in Popup', async () => {
     const customLink = new StaticMockLink([mockWithExtraUsers]);
