@@ -3159,19 +3159,14 @@ form label,
 .time {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
-  padding-bottom: 0px;
-  width: 33%;
+  align-items: center;
+  padding: 12px;
+  width: fit-content;
   border: 1px solid var(--time-border);
   box-sizing: border-box;
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
-  border-radius: 20px;
-  background: var(--time-bg);
   border-radius: 8px;
-  margin-bottom: 0;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3183,11 +3178,6 @@ form label,
     -webkit-box-orient: vertical;
     white-space: initial;
   }
-}
-
-.cardItem .time {
-  font-size: 0.9rem;
-  color: var(--cardItem-color);
 }
 
 .startTime,
@@ -3894,7 +3884,9 @@ form label,
 }
 
 .cardItem .time {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
   color: var(--cardItem-time-color);
 }
 
@@ -3937,13 +3929,13 @@ form label,
 
 .rightCard {
   display: flex;
+  width: fit-content;
   gap: 7px;
-  min-width: 170px;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  width: 210px;
+  /* min-width: 240px; */
 }
 
 .creator {
@@ -9339,5 +9331,19 @@ form {
 }
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+}
+
+.CardItemMainDiv {
+  width: 100%;
+}
+.CardItemMainDivEvent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upcomingEventsTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 /* ----------------------------------------------------- */

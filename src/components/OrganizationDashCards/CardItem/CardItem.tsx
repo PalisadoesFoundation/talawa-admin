@@ -48,17 +48,26 @@ export interface InterfaceCardItem {
 }
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
-  const { creator, type, title, startdate, time, enddate, location } = props;
+  const { creator, type, title, startdate, enddate, time, location } = props;
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
-        <div className={`${styles.CardItemImage}`}>
-          <img src="" alt="" />
-        </div>
+        {type != 'Event' && (
+          <div className={`${styles.CardItemImage}`}>
+            <img src="" alt="" />
+          </div>
+        )}
 
-        <div className={`${styles.CardItemMainDiv}`}>
+        <div
+          className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
+        >
           {title && (
-            <div className={styles.cardItemtitle}>{title.slice(0, 25)}..</div>
+            <div
+              className={`${styles.cardItemtitle} ${styles.upcomingEventsTitle} `}
+              title={title}
+            >
+              {title}
+            </div>
           )}
 
           {type == 'Post' && time && (
@@ -86,7 +95,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 {location}
               </span>
             )}
-            {type == 'Event' && startdate && (
+            {type == 'Event' && startdate && enddate && (
               <span className={`${styles.time} fst-normal fw-semibold`}>
                 {type === 'Event' && (
                   <DateIcon
