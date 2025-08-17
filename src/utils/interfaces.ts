@@ -952,7 +952,7 @@ export interface InterfaceOrganizationEventsConnectionEdgePg {
 }
 
 export interface IEvent {
-  event: {
+  node: {
     id: ID;
     name: string;
     description: string;

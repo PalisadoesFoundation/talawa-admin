@@ -181,10 +181,10 @@ function OrganizationDashboard(): JSX.Element {
 
       const newTotalEventCount = allEvents.length;
 
-      const upcomingEvents = allEvents.filter(
-        (event: InterfaceOrganizationEventsConnectionEdgePg) =>
-          new Date(event?.node?.event?.startAt) > now,
-      );
+      const upcomingEvents = allEvents.filter((event: IEvent) => {
+        // Filter events that start after the current date
+        return new Date(event?.node?.startAt) > now;
+      });
 
       setEventCount((prevCount) => prevCount + newTotalEventCount);
 
@@ -198,6 +198,8 @@ function OrganizationDashboard(): JSX.Element {
             after: orgEventsData.organization.events.pageInfo.endCursor,
           },
         });
+      } else {
+        hasFetchedAllEvents.current = true;
       }
     }
   }, [orgEventsData, fetchMore, orgId]);
@@ -439,18 +441,25 @@ function OrganizationDashboard(): JSX.Element {
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents?.map((event) => {
-                      return (
-                        <CardItem
-                          data-testid="cardItem"
-                          type="Event"
-                          key={event.event.id}
-                          startdate={event?.event?.startAt}
-                          enddate={event?.event?.endAt}
-                          title={event.event?.name}
-                        />
-                      );
-                    })
+                    [...upcomingEvents]
+                      .sort(
+                        (a, b) =>
+                          new Date(a.node.startAt).getTime() -
+                          new Date(b.node.startAt).getTime(),
+                      )
+                      .slice(0, 10)
+                      .map((event) => {
+                        return (
+                          <CardItem
+                            data-testid="cardItem"
+                            type="Event"
+                            key={event.node.id}
+                            startdate={event?.node.startAt}
+                            enddate={event?.node.endAt}
+                            title={event?.node.name}
+                          />
+                        );
+                      })
                   )}
                 </Card.Body>
               </Card>
