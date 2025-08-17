@@ -1825,12 +1825,19 @@ export interface InterfaceCampaignInfo {
  */
 export interface InterfacePledgeInfo {
   id: string;
-  campaign?: { id: string; name: string; endDate: Date };
+  campaign?: {
+    id: string;
+    name: string;
+    endAt: Date;
+    currencyCode: string;
+    goalAmount: number;
+  };
   amount: number;
+  note?: string | null;
   currency: string;
   endDate: string;
   startDate: string;
-  users: InterfaceUserInfoPG[];
+  pledger: InterfaceUserInfoPG;
 }
 
 /**
@@ -1849,12 +1856,18 @@ export interface InterfacePledgeInfo {
  */
 export interface InterfacePledgeInfoPG {
   id: string;
-  campaign?: { id: string; name: string; endDate: Date };
+  campaign?: {
+    id: string;
+    name: string;
+    endDate: Date;
+    currencyCode: string;
+    goalAmount: number;
+  };
   amount: number;
   currencyCode: string;
   endAt: string;
   startAt: string;
-  pledges: InterfaceUserInfoPG[];
+  pledger: InterfaceUserInfoPG;
 }
 
 /**
@@ -1867,11 +1880,11 @@ export interface InterfacePledgeInfoPG {
  * @property {string | null} [image] - The URL of the user's image, or null if not available.
  */
 export interface InterfaceUserInfoPG {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   name: string;
   id: string;
-  image?: string | null;
+  avatarURL?: string | null;
 }
 
 /**
