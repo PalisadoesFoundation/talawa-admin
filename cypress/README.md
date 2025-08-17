@@ -96,6 +96,33 @@ cy.fixture('users').then((users) => {
 });
 ```
 
+### Test Coverage Report
+
+After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
+
+1. **Run Cypress tests** to collect coverage data:
+   ```bash
+   npm run cy:run
+   ```
+
+2. **Generate HTML coverage report** using nyc:
+   ```bash
+   npx nyc --reporter=html
+   ```
+
+3. **View the coverage report** in your browser:
+   ```bash
+   open coverage/index.html
+   ```
+
+The HTML report provides an interactive view of:
+- Overall coverage percentages (statements, branches, functions, lines)
+- File-by-file coverage breakdown
+- Detailed line-by-line coverage highlighting
+- Uncovered code sections for easy identification
+
+**Note**: Coverage data is collected during test execution and stored in the `.nyc_output` directory. The HTML report is generated in the `coverage/` directory.
+
 ## Contributing
 
 When adding new tests:

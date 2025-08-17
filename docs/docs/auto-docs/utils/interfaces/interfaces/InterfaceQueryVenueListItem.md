@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryVenueListItem
 
-Defined in: [src/utils/interfaces.ts:2029](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2029)
+Defined in: [src/utils/interfaces.ts:2018](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2018)
 
 InterfaceQueryVenueListItem
 
@@ -18,7 +18,7 @@ Defines the structure for a venue list item returned from a query.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2030](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2030)
+Defined in: [src/utils/interfaces.ts:2019](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2019)
 
 The unique identifier of the venue.
 
@@ -28,7 +28,7 @@ The unique identifier of the venue.
 
 > **capacity**: `string`
 
-Defined in: [src/utils/interfaces.ts:2034](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2034)
+Defined in: [src/utils/interfaces.ts:2023](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2023)
 
 The capacity of the venue.
 
@@ -38,7 +38,7 @@ The capacity of the venue.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2032](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2032)
+Defined in: [src/utils/interfaces.ts:2021](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2021)
 
 The description of the venue, or null.
 
@@ -48,7 +48,7 @@ The description of the venue, or null.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:2033](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2033)
+Defined in: [src/utils/interfaces.ts:2022](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2022)
 
 The URL of the venue's image, or null.
 
@@ -58,6 +58,6 @@ The URL of the venue's image, or null.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2031](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2031)
+Defined in: [src/utils/interfaces.ts:2020](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2020)
 
 The name of the venue.
