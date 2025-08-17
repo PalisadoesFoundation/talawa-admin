@@ -52,4 +52,4 @@ debug.log
 # Cypress related
 cypress/videos
 cypress/screenshots
-
+.nyc_output

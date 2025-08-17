@@ -48,78 +48,33 @@ export interface InterfaceCardItem {
 }
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
-  const { creator, type, title, startdate, time, enddate, location } = props;
+  const { creator, type, title, startdate, enddate, time, location } = props;
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
-        <div className={`${styles.CardItemImage}`}>
-          <img src="" alt="" />
-        </div>
+        {type != 'Event' && (
+          <div className={`${styles.CardItemImage}`}>
+            <img src="" alt="" />
+          </div>
+        )}
 
-        <div className={`${styles.CardItemMainDiv}`}>
+        <div
+          className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
+        >
           {title && (
-            <div className={styles.cardItemtitle}>{title.slice(0, 25)}..</div>
+            <div
+              className={`${styles.cardItemtitle} ${styles.upcomingEventsTitle} `}
+              title={title}
+            >
+              {title}
+            </div>
           )}
 
           {type == 'Post' && time && (
             <span className={`${styles.CardItemDate}`}>
-              Posted on: {dayjs(time).format('MMM D, YYYY')}
+              Posted on:
+              {dayjs(time).format('MMM D, YYYY')}
             </span>
-          )}
-
-          {type === 'Event' && (
-            <div className="d-flex flex-column mt-2">
-              {startdate && (
-                <div
-                  className="text-muted d-flex align-items-center mb-1"
-                  style={{ fontSize: '12px' }}
-                >
-                  <DateIcon
-                    title="Event Date"
-                    fill="var(--bs-gray-500)"
-                    width={14}
-                    height={14}
-                    className="me-2"
-                    data-testid="date-icon"
-                  />
-                  {dayjs(startdate).format('MMM D, YYYY')}
-                  {enddate && ` - ${dayjs(enddate).format('MMM D, YYYY')}`}
-                </div>
-              )}
-              {location && (
-                <div
-                  className="text-muted d-flex align-items-center"
-                  style={{ fontSize: '12px' }}
-                >
-                  <MarkerIcon
-                    title="Event Location"
-                    stroke="var(--bs-gray-500)"
-                    width={14}
-                    height={14}
-                    className="me-2"
-                    data-testid="marker-icon"
-                  />
-                  {location}
-                </div>
-              )}
-              {startdate && (
-                <div
-                  className="text-muted d-flex align-items-center mt-1"
-                  style={{ fontSize: '12px' }}
-                >
-                  <DateIcon
-                    title="Event Time"
-                    fill="var(--bs-gray-500)"
-                    width={14}
-                    height={14}
-                    className="me-2"
-                    data-testid="time-icon"
-                  />
-                  {dayjs(startdate).format('h:mm A')}
-                  {enddate && ` - ${dayjs(enddate).format('h:mm A')}`}
-                </div>
-              )}
-            </div>
           )}
 
           {creator && (
@@ -129,8 +84,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           )}
 
           <div className={styles.rightCard}>
-            {/* Keep original location/time for non-Event types */}
-            {type != 'Event' && location && (
+            {location && (
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
                   title="Event Location"
@@ -141,16 +95,18 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 {location}
               </span>
             )}
-            {type != 'Event' && startdate && (
+            {type == 'Event' && startdate && enddate && (
               <span className={`${styles.time} fst-normal fw-semibold`}>
-                <DateIcon
-                  title="Event Time"
-                  fill="var(--bs-gray-600)"
-                  width={20}
-                  height={20}
-                />{' '}
-                {dayjs(startdate).format('h:mm A')}
-                {enddate && ` - ${dayjs(enddate).format('h:mm A')}`}
+                {type === 'Event' && (
+                  <DateIcon
+                    title="Event Date"
+                    fill="var(--bs-gray-600)"
+                    width={20}
+                    height={20}
+                  />
+                )}{' '}
+                {dayjs(startdate).format('MMM D, YYYY')} -{' '}
+                {dayjs(enddate).format('MMM D, YYYY')}
               </span>
             )}
           </div>

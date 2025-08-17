@@ -12,22 +12,24 @@ import gql from 'graphql-tag';
 
 export const CREATE_VENUE_MUTATION = gql`
   mutation createVenue(
-    $capacity: Int!
-    $description: String
-    $file: String
     $name: String!
+    $description: String
     $organizationId: ID!
+    $capacity: Int
+    $attachments: [Upload!]
   ) {
     createVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
+      input: {
         name: $name
+        description: $description
         organizationId: $organizationId
+        capacity: $capacity
+        attachments: $attachments
       }
     ) {
-      _id
+      id
+      name
+      description
     }
   }
 `;
@@ -36,34 +38,33 @@ export const CREATE_VENUE_MUTATION = gql`
  * GraphQL mutation to update a venue.
  *
  * @param id - The id of the Venue to be updated.
- * @param capacity - Ineteger representing capacity of venue.
  * @param description - Description of the venue.
- * @param file - Image file for the venue.
  * @param name - Name of the venue.
  */
-
 export const UPDATE_VENUE_MUTATION = gql`
-  mutation editVenue(
-    $capacity: Int
-    $description: String
-    $file: String
+  mutation updateVenue(
     $id: ID!
     $name: String
+    $description: String
+    $capacity: Int
+    $attachments: [Upload!]
   ) {
-    editVenue(
-      data: {
-        capacity: $capacity
-        description: $description
-        file: $file
+    updateVenue(
+      input: {
         id: $id
         name: $name
+        description: $description
+        capacity: $capacity
+        attachments: $attachments
       }
     ) {
-      _id
+      id
+      name
+      description
+      capacity
     }
   }
 `;
-
 /**
  * GraphQL mutation to delete a venue.
  *
@@ -72,8 +73,8 @@ export const UPDATE_VENUE_MUTATION = gql`
 
 export const DELETE_VENUE_MUTATION = gql`
   mutation DeleteVenue($id: ID!) {
-    deleteVenue(id: $id) {
-      _id
+    deleteVenue(input: { id: $id }) {
+      id
     }
   }
 `;
