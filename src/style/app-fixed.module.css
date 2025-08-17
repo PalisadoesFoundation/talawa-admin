@@ -9333,6 +9333,13 @@ form {
   width: var(--sidebar-expanded-width);
 }
 
+.venueimage {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  display: block;
+}
+
 .CardItemMainDiv {
   width: 100%;
 }

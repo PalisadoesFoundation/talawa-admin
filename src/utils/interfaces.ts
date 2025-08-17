@@ -2016,11 +2016,17 @@ export interface InterfaceQueryUserListItem {
  * @property {string} capacity - The capacity of the venue.
  */
 export interface InterfaceQueryVenueListItem {
-  _id: string;
-  name: string;
-  description: string | null;
-  image: string | null;
-  capacity: string;
+  node: {
+    id: string;
+    name: string;
+    description: string | null;
+    image?: string | null;
+    capacity?: number;
+    attachments?: Array<{
+      url: string;
+      name?: string;
+    }>;
+  };
 }
 
 /**
