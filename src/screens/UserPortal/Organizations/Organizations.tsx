@@ -37,8 +37,8 @@ import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS_PG,
-  ORGANIZATION_LIST,
+  ORGANIZATION_FILTER_LIST,
+  USER_JOINED_ORGANIZATIONS_NO_MENBERS,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -140,6 +140,7 @@ interface IOrganization {
 }
 
 interface IOrgData {
+  isMember: string;
   addressLine1: string;
   avatarURL: string | null;
   id: string;
@@ -213,7 +214,7 @@ export default function organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_LIST, {
+  } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -226,8 +227,9 @@ export default function organizations(): React.JSX.Element {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MENBERS, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
+    skip: mode !== 1,
   });
 
   const {
@@ -236,6 +238,7 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchCreated,
   } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
+    skip: mode !== 2,
   });
   /**
    * 2) doSearch sets the filterName (triggering refetch)
@@ -280,11 +283,7 @@ export default function organizations(): React.JSX.Element {
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
           // Check if current user is a member
-          const memberEdges = org.members?.edges || [];
-          const isMember = memberEdges.some(
-            (edge: IOrgData['members']['edges'][number]) =>
-              edge.node.id === userId,
-          );
+          const isMember = org.isMember;
 
           return {
             id: org.id,

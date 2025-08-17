@@ -69,11 +69,39 @@ export const ORGANIZATION_LIST = gql`
   ${ORG_FIELDS}
 `;
 
+export const ORGANIZATION_FILTER_LIST = gql`
+  query OrganizationFilterList($filter: String) {
+    organizations(filter: $filter) {
+      ...OrgFields
+      isMember
+    }
+  }
+  ${ORG_FIELDS}
+`;
+
 // Lightweight version without members
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   query {
     organizations {
       ...OrgFields
+      isMember
+    }
+  }
+  ${ORG_FIELDS}
+`;
+export const USER_JOINED_ORGANIZATIONS_NO_MENBERS = gql`
+  query UserJoinedOrganizations($id: String!, $first: Int!, $filter: String) {
+    user(input: { id: $id }) {
+      organizationsWhereMember(first: $first, filter: $filter) {
+        pageInfo {
+          hasNextPage
+        }
+        edges {
+          node {
+            ...OrgFields
+          }
+        }
+      }
     }
   }
   ${ORG_FIELDS}
