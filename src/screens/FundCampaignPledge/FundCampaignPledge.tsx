@@ -262,9 +262,9 @@ const fundCampaignPledge = (): JSX.Element => {
                 key={`${params.row.id}-main-${index}`}
                 data-testid={`mainUser-${params.row.id}-${index}`}
               >
-                {user.image ? (
+                {user.avatarURL ? (
                   <img
-                    src={user.image}
+                    src={user.avatarURL}
                     alt={user.name}
                     className={styles.TableImagePledge}
                   />
@@ -602,9 +602,9 @@ const fundCampaignPledge = (): JSX.Element => {
             key={user.id}
             data-testid={`extraUser-${index}`}
           >
-            {user.image ? (
+            {user.avatarURL ? (
               <img
-                src={user.image}
+                src={user.avatarURL}
                 alt={user.name}
                 className={styles.TableImagePledge}
               />
