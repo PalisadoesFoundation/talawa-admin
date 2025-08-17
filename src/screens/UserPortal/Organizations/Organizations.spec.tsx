@@ -18,7 +18,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
-  ORGANIZATION_LIST_NO_MEMBERS,
+  ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
@@ -74,7 +74,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: {
         filter: '',
       },
@@ -168,7 +168,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: {
         filter: '2',
       },
@@ -471,7 +471,7 @@ test('Join Now button renders correctly', async () => {
 
   const organizationsMock = {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -713,7 +713,7 @@ test('setPage updates page state correctly when pagination controls are used', a
   const paginationMocks = [
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -857,7 +857,7 @@ test('should correctly map joined organizations data ', async () => {
 
   const allOrgsMock = {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -970,7 +970,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
     createdOrgsMock,
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: { data: { organizations: [] } },
@@ -1069,7 +1069,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
     },
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -1142,7 +1142,7 @@ test('should search organizations when pressing Enter key', async () => {
   const mocks = [
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -1161,7 +1161,7 @@ test('should search organizations when pressing Enter key', async () => {
     },
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: 'Search Term' },
       },
       result: {
@@ -1243,7 +1243,7 @@ test('should search organizations when clicking search button', async () => {
   const mocks = [
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -1262,7 +1262,7 @@ test('should search organizations when clicking search button', async () => {
     },
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: 'Button Search' },
       },
       result: {
@@ -1346,7 +1346,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
   const mocks = [
     {
       request: {
-        query: ORGANIZATION_LIST_NO_MEMBERS,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: searchValue },
       },
       result: {
@@ -1456,7 +1456,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
 test('should display loading spinner when data is loading', async () => {
   const loadingMock = {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     delay: 1000, // Simulate slow loading
@@ -1486,7 +1486,7 @@ test('should display loading spinner when data is loading', async () => {
 test('should display "no organizations" message when organizations list is empty', async () => {
   const emptyMock = {
     request: {
-      query: ORGANIZATION_LIST_NO_MEMBERS,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
