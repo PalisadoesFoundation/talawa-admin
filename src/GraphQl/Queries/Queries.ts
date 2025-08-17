@@ -89,7 +89,7 @@ export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   }
   ${ORG_FIELDS}
 `;
-export const USER_JOINED_ORGANIZATIONS_NO_MENBERS = gql`
+export const USER_JOINED_ORGANIZATIONS_NO_MEMBERS = gql`
   query UserJoinedOrganizations($id: String!, $first: Int!, $filter: String) {
     user(input: { id: $id }) {
       organizationsWhereMember(first: $first, filter: $filter) {

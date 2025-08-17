@@ -19,7 +19,7 @@ import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
-  USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+  USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import Organizations from './Organizations';
@@ -128,7 +128,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: {
         id: getItem('userId'),
         first: 5,
@@ -202,7 +202,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: {
         id: getItem('userId'),
         first: 5,
@@ -242,7 +242,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: {
         id: getItem('userId'),
         first: 5,
@@ -273,7 +273,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: {
         id: getItem('userId'),
         first: 5,
@@ -313,7 +313,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: {
         id: getItem('userId'),
         first: 5,
@@ -502,7 +502,7 @@ test('Join Now button renders correctly', async () => {
 
   const joinedOrgsMock = {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: { id: TEST_USER_ID, first: 5, filter: '' },
     },
     result: {
@@ -724,7 +724,7 @@ test('setPage updates page state correctly when pagination controls are used', a
     },
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: getItem('userId'), first: 5, filter: '' },
       },
       result: {
@@ -813,7 +813,7 @@ test('should correctly map joined organizations data ', async () => {
 
   const joinedOrgsMock = {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: { id: TEST_USER_ID, first: 5, filter: '' },
     },
     result: {
@@ -977,7 +977,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
     },
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: TEST_USER_ID, first: 5, filter: '' },
       },
       result: {
@@ -1033,7 +1033,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
   const mocks = [
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: TEST_USER_ID, first: 5, filter: '' },
       },
       result: {
@@ -1180,7 +1180,7 @@ test('should search organizations when pressing Enter key', async () => {
     },
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: TEST_USER_ID, first: 5, filter: '' },
       },
       result: {
@@ -1281,7 +1281,7 @@ test('should search organizations when clicking search button', async () => {
     },
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: TEST_USER_ID, first: 5, filter: '' },
       },
       result: {
@@ -1357,7 +1357,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     },
     {
       request: {
-        query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
         variables: { id: TEST_USER_ID, first: 5, filter: searchValue },
       },
       result: {
@@ -1498,7 +1498,7 @@ test('should display "no organizations" message when organizations list is empty
 
   const joinedOrgsMock = {
     request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
       variables: { id: getItem('userId'), first: 5, filter: '' },
     },
     result: {

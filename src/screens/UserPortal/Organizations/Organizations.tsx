@@ -38,7 +38,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   ORGANIZATION_FILTER_LIST,
-  USER_JOINED_ORGANIZATIONS_NO_MENBERS,
+  USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -140,7 +140,7 @@ interface IOrganization {
 }
 
 interface IOrgData {
-  isMember: string;
+  isMember: boolean;
   addressLine1: string;
   avatarURL: string | null;
   id: string;
@@ -218,7 +218,7 @@ export default function organizations(): React.JSX.Element {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
-    skip: mode !== 0,
+    skip: mode !== 0 || !userId,
     notifyOnNetworkStatusChange: true,
     onError: (error) => console.error('All orgs error:', error),
   });
@@ -227,9 +227,9 @@ export default function organizations(): React.JSX.Element {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MENBERS, {
+  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
-    skip: mode !== 1,
+    skip: mode !== 1 || !userId,
   });
 
   const {
@@ -238,7 +238,7 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchCreated,
   } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
-    skip: mode !== 2,
+    skip: mode !== 2 || !userId,
   });
   /**
    * 2) doSearch sets the filterName (triggering refetch)
@@ -248,9 +248,13 @@ export default function organizations(): React.JSX.Element {
     if (mode === 0) {
       refetchAll({ filter: value });
     } else if (mode === 1) {
-      refetchJoined({ filter: value });
+      if (userId) {
+        refetchJoined({ id: userId, first: rowsPerPage, filter: value });
+      }
     } else {
-      refetchCreated({ filter: value });
+      if (userId) {
+        refetchCreated({ id: userId, filter: value });
+      }
     }
   }
 
