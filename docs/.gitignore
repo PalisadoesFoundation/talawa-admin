@@ -7,9 +7,11 @@
 # Generated files
 .docusaurus
 .cache-loader
-.package-lock.json
+.docusaurus
+.cache-loader
 package-lock.json
-
+yarn.lock
+pnpm-lock.yaml
 # Misc
 .DS_Store
 .env.local
