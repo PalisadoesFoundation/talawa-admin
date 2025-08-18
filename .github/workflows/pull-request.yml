@@ -302,13 +302,13 @@ jobs:
           npm run test:coverage
 
       - name: Upload Coverage to Codecov
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           exclude: 'docs/'
           files: ./coverage/vitest/lcov.info
           fail_ci_if_error: true
-
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
