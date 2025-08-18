@@ -30,7 +30,7 @@ interface InterfaceMutationUpdateOrganizationInput {
   state?: string;
   postalCode?: string;
   countryCode?: string;
-  avatar?: string | null;
+  avatar?: File;
 }
 
 /**
@@ -51,6 +51,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     orgDescrip: string;
     address: InterfaceAddress;
     orgImage: string | null;
+    avatar?: File;
   }>({
     orgName: '',
     orgDescrip: '',
@@ -154,7 +155,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       }
 
       setIsSaving(true);
-
       // Function to remove empty string fields from the input object
       const removeEmptyFields = (
         obj: InterfaceMutationUpdateOrganizationInput,
@@ -179,7 +179,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         state: formState.address.state,
         postalCode: formState.address.postalCode,
         countryCode: formState.address?.countryCode,
-        ...(formState.orgImage ? { avatar: formState.orgImage } : {}),
+        ...(formState.avatar ? { avatar: formState.avatar } : {}),
       };
 
       // Filter out empty fields
@@ -282,7 +282,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               if (file)
                 setFormState({
                   ...formState,
-                  orgImage: await convertToBase64(file),
+                  avatar: file,
                 });
             }}
             data-testid="organisationImage"
