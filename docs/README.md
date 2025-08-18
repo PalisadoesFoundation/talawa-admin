@@ -121,12 +121,8 @@ $ brew install yarn
 
 Installing Yarn on Linux through NPM can be done via command line installer, this doesn't automatically install Node.js
 
-1. Run the following command in your terminal to install Node and NPM respectively. [Confirm your Linux distro and it's command prompt](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
+1. Run the following commands in your terminal to install Node.js and npm. [Confirm your Linux distro and its package manager](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
 
-```terminal
-$ sudo apt install nodejs
-$ sudo apt install npm
-```
 
 2. Verify installation
 
