@@ -18,15 +18,18 @@ jobs:
     name: Adding Issue Label
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - if: ${{ github.event.sender.type != 'Bot' }}
+        uses: actions/checkout@v4
         with:
           sparse-checkout: |
             .github/workflows/auto-label.json5
           sparse-checkout-cone-mode: false
-      - uses: Renato66/auto-label@v3
+      - if: ${{ github.event.sender.type != 'Bot' }}
+        uses: Renato66/auto-label@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/github-script@v7
+      - if: ${{ github.event.sender.type != 'Bot' }}
+        uses: actions/github-script@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
