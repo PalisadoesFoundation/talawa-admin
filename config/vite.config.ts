@@ -28,11 +28,12 @@ export default defineConfig({
     }),
   ],
   server: {
-    allowedHosts: true,
-    // this ensures that the browser opens upon server start
+  server: {
+    // do not auto-open the browser on server start
     open: false,
     host: '0.0.0.0',
     // this sets a default port to 4321
     port: 4321,
+  },
   },
 });
