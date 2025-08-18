@@ -137,11 +137,8 @@ $ npm -v
 npm install --global yarn
 ```
 
-Finally, after installing yarn and confirming that it is installed in your computer, run the command below to install the packages
+Finally, after installing Yarn and confirming that it is installed on your computer, run the command below to install the packages
 
-```terminal
-$ yarn install
-```
 
 # Running the Development Server
 
