@@ -274,6 +274,8 @@ const leftDrawerOrg = ({
                 {data.organization.avatarURL ? (
                   <img
                     crossOrigin="anonymous"
+                    loading="lazy"
+                    decoding="async"
                     src={data.organization.avatarURL}
                     alt={`${data.organization.name}`}
                   />

@@ -45,6 +45,7 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState<{
     orgName: string;
@@ -194,6 +195,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       if (data) {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
+        // Clear avatar from state and file input after successful upload
+        setFormState((prev) => ({ ...prev, avatar: undefined }));
+        if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
         toast.error('Failed to update organization');
       }
@@ -270,6 +274,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             {tCommon('displayImage')}:
           </Form.Label>
           <Form.Control
+            ref={fileInputRef}
             className={styles.customFileInput}
             accept="image/*"
             placeholder={tCommon('displayImage')}

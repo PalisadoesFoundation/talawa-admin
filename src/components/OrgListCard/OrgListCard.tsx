@@ -76,6 +76,8 @@ function OrgListCard({
                 src={avatarURL}
                 alt={`${name} image`}
                 crossOrigin="anonymous"
+                loading="lazy"
+                decoding="async"
               />
             ) : (
               <Avatar
