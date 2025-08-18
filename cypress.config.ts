@@ -46,9 +46,8 @@ export default defineConfig({
         // Chrome specific configurations
         if (browser.name === 'chrome') {
           if (browser.isHeadless) {
-            launchOptions.args.push('--max_old_space_size=4096');
+            launchOptions.args.push('--js-flags=--max-old-space-size=4096');
           }
-
           // Chrome performance optimizations
           launchOptions.args.push('--disable-dev-shm-usage');
           launchOptions.args.push('--no-sandbox');
