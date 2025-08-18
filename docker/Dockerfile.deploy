@@ -5,12 +5,23 @@
 # This file is used to deploy the https://test.talawa.io site
 #
 ###############################################################################
-FROM node:23.7.0 AS build
+FROM node:22-alpine AS build
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm install
+RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build
+
+FROM node:22-alpine AS runtime
 ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/package*.json ./
+# install only production deps if the app needs runtime deps
+RUN npm ci --omit=dev --no-audit --no-fund || true
+COPY --from=build /usr/src/app/dist ./dist
+# adjust if your build output is ./build or ./out; and match your serve script
 EXPOSE 4321
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4321', () => process.exit(0)).on('error', () => process.exit(1))"
+USER node
 CMD ["npm", "run", "serve"]
