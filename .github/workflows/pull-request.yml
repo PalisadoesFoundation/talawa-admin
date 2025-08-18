@@ -82,8 +82,13 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env: 
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES}
-        
+        run: |
+          if [ -n "${CHANGED_FILES:-}" ]; then
+            # shellcheck disable=SC2086
+            npx eslint -- ${CHANGED_FILES}
+          else
+            echo "No changed files to lint."
+          fi
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
 
