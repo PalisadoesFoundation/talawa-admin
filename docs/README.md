@@ -155,10 +155,9 @@ OR
 $ yarn start
 ```
 
-By default, a browser window will open at http://localhost:3000.
+By default, a browser window opens at http://localhost:3000.
 
-This command starts a local development server and open up a browser window. Most changes are reflected live without having to restart the server.
-
+This command starts a local development server and opens a browser window. Most changes are reflected live without restarting the server.
 # Building Static HTML Pages
 
 **In most cases, this is unnecessary.** Running the development server is sufficient.
