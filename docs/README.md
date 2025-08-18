@@ -165,12 +165,7 @@ This command starts a local development server and open up a browser window. Mos
 
 # Building Static HTML Pages
 
-**In most cases is unnecessary**. Running the `development server` will be sufficient.
+**In most cases, this is unnecessary.** Running the development server is sufficient.
 
 If you need to generate static HTML pages (unlikely), then follow these steps.
 
-```console
-$ yarn run build
-```
-
-This command generates static content into the `/build` directory and can be served using any static contents hosting service.
