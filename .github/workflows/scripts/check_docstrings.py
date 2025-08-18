@@ -257,11 +257,10 @@ def extract_function_arguments(start, lines):
     for line in possibles:
         if bool(line) is False:
             continue
-        elif ("'''" not in line) and ('"""' not in line):
+        if ("'''" not in line) and ('"""' not in line):
             func = f"{func}{line.strip()}"
         else:
             break
-
     # Get the arguments
     items = func.split("(")[1].split(",")
     name = func.split()[1].split("(")[0].strip()
