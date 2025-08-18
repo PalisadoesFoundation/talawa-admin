@@ -14,7 +14,7 @@ RUN npm run build
 #Step 2: Production
 FROM nginx:1.27.3-alpine AS production
 
-ENV NODE_ENV=production
+# NODE_ENV not used by nginx; safe to remove
 
 COPY config/docker/setup/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /talawa-admin/build /usr/share/nginx/html
