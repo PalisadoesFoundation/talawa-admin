@@ -50,10 +50,8 @@ def validate_docstring(file_path):
 
             # Skip if there are python decorator exceptions
             decorator = function_has_decorator(line_number, lines)
-            if bool(decorator):
-                if decorator_in_docstring_exception_list(decorator):
-                    continue
-
+            if decorator and decorator_in_docstring_exception_list(decorator):
+                continue
             # Get the docstring
             docstring = extract_docstring(function.name, line_number, lines)
             if bool(docstring.violations):
