@@ -31,7 +31,10 @@ export class PeoplePage {
   searchAndSelectUser(name: string) {
     cy.get(this._searchUserInput).should('be.visible').type(name);
     cy.get(this._submitSearchBtn).should('be.visible').click();
-    cy.contains(name).should('be.visible');
+    // Scope the match to the search results container to avoid false positives
+    cy.contains('[role="listbox"], [data-testid="searchResults"]', name)
+      .should('be.visible')
+      .click({ force: true });
     return this;
   }
 
