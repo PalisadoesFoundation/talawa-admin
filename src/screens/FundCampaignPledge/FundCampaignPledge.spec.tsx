@@ -464,7 +464,7 @@ describe('Testing Campaign Pledge Screen', () => {
       // Check either real image or avatar is rendered
       if (imageContainer.getAttribute('src')?.startsWith('data:image/svg')) {
         // Avatar SVG is rendered
-        expect(imageContainer).toHaveClass('_TableImagePledge_d00707');
+        expect(imageContainer).toHaveClass('_TableImagePledge_d8535b');
       } else {
         // Real image is rendered
         expect(imageContainer).toHaveAttribute('src', 'img-url');
