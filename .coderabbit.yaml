@@ -21,5 +21,4 @@ reviews:
     - '!**/docs/docs/**'
     - "!*.html"
     - "!*.md"
-    - "!*.svg" 
-
+    - "!*.svg"
