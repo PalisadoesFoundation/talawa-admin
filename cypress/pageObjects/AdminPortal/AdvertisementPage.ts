@@ -30,9 +30,9 @@ export class AdvertisementPage {
 
         if (isCollapsed) {
           cy.get('[data-testid="hamburgerMenuBtn"]').click();
-          cy.wait(500);
+          cy.get('[data-testid="leftDrawerContainer"]')
+            .should('not.have.class', '_collapsedDrawer_');
         }
-      }
     });
     cy.get(this._leftDrawerAdBtn, { timeout })
       .scrollIntoView()
