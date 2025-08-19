@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -16,6 +16,7 @@ import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
+import styles from 'style/app-fixed.module.css';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -464,7 +465,7 @@ describe('Testing Campaign Pledge Screen', () => {
       // Check either real image or avatar is rendered
       if (imageContainer.getAttribute('src')?.startsWith('data:image/svg')) {
         // Avatar SVG is rendered
-        expect(imageContainer).toHaveClass('_TableImagePledge_d00707');
+        expect(imageContainer).toHaveClass(styles.TableImagePledge);
       } else {
         // Real image is rendered
         expect(imageContainer).toHaveAttribute('src', 'img-url');
