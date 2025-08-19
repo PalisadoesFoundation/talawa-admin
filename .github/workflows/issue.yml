@@ -10,9 +10,9 @@
 ##############################################################################
 
 name: Issue Workflow
-on:
+"on":
   issues:
-      types: ['opened']
+    types: [opened]
 jobs:
   Opened-issue-label:
     name: Adding Issue Label
