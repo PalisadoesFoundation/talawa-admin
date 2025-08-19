@@ -273,8 +273,8 @@ const leftDrawerOrg = ({
               <div className={styles.imageContainer}>
                 {data.organization.avatarURL ? (
                   <img
-                    //To tackle cors issue
                     crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
                     loading="lazy"
                     decoding="async"
                     src={data.organization.avatarURL}
