@@ -172,6 +172,11 @@ export const useUpdateEventHandler = () => {
         return;
       }
 
+      if (updateInput.startAt === '' || updateInput.endAt === '') {
+        toast.error(t('invalidDate'));
+        return;
+      }
+
       if (!isRecurringInstance) {
         const result = await updateStandaloneEvent({
           variables: { input: updateInput },
