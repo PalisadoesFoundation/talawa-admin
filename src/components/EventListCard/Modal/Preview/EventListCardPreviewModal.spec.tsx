@@ -864,6 +864,64 @@ describe('EventListCardPreviewModal', () => {
     render(<TestComponent />);
   });
 
+  describe('getCurrentRecurrenceLabel', () => {
+    test('returns matching option label when recurrence is set', () => {
+      const recurrence = {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        never: true,
+      };
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: true,
+        },
+        recurrence,
+      });
+      expect(screen.getByText('Daily')).toBeInTheDocument();
+    });
+
+    test('returns frequency when no matching option is found', () => {
+      const recurrence = {
+        frequency: Frequency.MONTHLY,
+        interval: 2,
+        never: true,
+      };
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: true,
+        },
+        recurrence,
+      });
+      expect(screen.getByText('Monthly')).toBeInTheDocument();
+    });
+
+    test('returns recurrenceDescription when recurrence is not set', () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: true,
+          recurrenceDescription: 'Custom Rule',
+        },
+        recurrence: null,
+      });
+      expect(screen.getByText('Custom Rule')).toBeInTheDocument();
+    });
+
+    test('returns default label as a fallback', () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: true,
+          recurrenceDescription: undefined,
+        },
+        recurrence: null,
+      });
+      expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
+    });
+  });
+
   describe('CustomRecurrenceModal callbacks', () => {
     const renderWithRecurrenceModal = (props = {}) => {
       renderComponent({
