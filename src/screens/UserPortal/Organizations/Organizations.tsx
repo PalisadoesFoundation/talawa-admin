@@ -72,7 +72,6 @@ interface IOrganizationCardProps {
   image: string;
   description: string;
   admins: [];
-  members: InterfaceMemberNode[];
   address: {
     city: string;
     countryCode: string;
@@ -218,7 +217,7 @@ export default function organizations(): React.JSX.Element {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
-    skip: mode !== 0 || !userId,
+    skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
     onError: (error) => console.error('All orgs error:', error),
   });
@@ -229,7 +228,7 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchJoined,
   } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
-    skip: mode !== 1 || !userId,
+    skip: mode !== 1,
   });
 
   const {
@@ -238,7 +237,7 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchCreated,
   } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
-    skip: mode !== 2 || !userId,
+    skip: mode !== 2,
   });
   /**
    * 2) doSearch sets the filterName (triggering refetch)
@@ -248,13 +247,9 @@ export default function organizations(): React.JSX.Element {
     if (mode === 0) {
       refetchAll({ filter: value });
     } else if (mode === 1) {
-      if (userId) {
-        refetchJoined({ id: userId, first: rowsPerPage, filter: value });
-      }
+      refetchJoined({ id: userId, first: rowsPerPage, filter: value });
     } else {
-      if (userId) {
-        refetchCreated({ id: userId, filter: value });
-      }
+      refetchCreated({ id: userId, filter: value });
     }
   }
 
@@ -303,10 +298,6 @@ export default function organizations(): React.JSX.Element {
             adminsCount: org.adminsCount || 0,
             membersCount: org.membersCount || 0,
             admins: [],
-            members:
-              org.members?.edges?.map(
-                (e: IOrgData['members']['edges'][number]) => e.node,
-              ) || [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
@@ -493,9 +484,6 @@ export default function organizations(): React.JSX.Element {
                           id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
-                          members:
-                            organization.members?.edges?.map((e) => e.node) ??
-                            [],
                           address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,

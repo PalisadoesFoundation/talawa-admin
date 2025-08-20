@@ -1549,3 +1549,126 @@ test('should display "no organizations" message when organizations list is empty
   // Check that a "no organizations found" message is displayed
   expect(screen.getByText('Nothing to show here.')).toBeInTheDocument();
 });
+test('should set membershipRequestStatus to empty string when isMember is false', async () => {
+  const TEST_USER_ID = 'test-non-member-user';
+  setItem('userId', TEST_USER_ID);
+
+  const organizationsMock = {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'non-member-org-1',
+            name: 'Non Member Organization',
+            avatarURL: 'test.jpg',
+            description: 'Test Description',
+            addressLine1: '123 Test St',
+            adminsCount: 5,
+            membersCount: 100,
+            isMember: false, // Explicitly set to false
+          },
+          {
+            id: 'member-org-1',
+            name: 'Member Organization',
+            avatarURL: 'test.jpg',
+            description: 'Test Description',
+            addressLine1: '456 Test St',
+            adminsCount: 3,
+            membersCount: 50,
+            isMember: true, // Set to true for comparison
+          },
+        ],
+      },
+    },
+  };
+
+  const joinedOrgsMock = {
+    request: {
+      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+      variables: { id: TEST_USER_ID, first: 5, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            edges: [],
+            pageInfo: { hasNextPage: false },
+          },
+        },
+      },
+    },
+  };
+
+  const createdOrgsMock = {
+    request: {
+      query: USER_CREATED_ORGANIZATIONS,
+      variables: { id: TEST_USER_ID, filter: '' },
+    },
+    result: {
+      data: {
+        user: {
+          createdOrganizations: [],
+        },
+      },
+    },
+  };
+
+  const mocks = [organizationsMock, joinedOrgsMock, createdOrgsMock];
+  const link = new StaticMockLink(mocks, true);
+
+  render(
+    <MockedProvider addTypename={false} link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+  });
+
+  // Check that both organizations are rendered
+  const orgCards = screen.getAllByTestId('organization-card');
+  expect(orgCards.length).toBe(2);
+
+  // Get all organization cards and check their membership status attributes
+  const cards = screen.getAllByTestId('organization-card');
+
+  // Find the card with empty membership status (non-member)
+  const nonMemberCard = cards.find(
+    (card) => card.getAttribute('data-membership-status') === '',
+  );
+  expect(nonMemberCard).toBeTruthy();
+  expect(nonMemberCard?.getAttribute('data-membership-status')).toBe('');
+
+  // Find the card with 'accepted' membership status (member)
+  const memberCard = cards.find(
+    (card) => card.getAttribute('data-membership-status') === 'accepted',
+  );
+  expect(memberCard).toBeTruthy();
+  expect(memberCard?.getAttribute('data-membership-status')).toBe('accepted');
+
+  // Verify that we have one of each type
+  const emptyStatusCards = cards.filter(
+    (card) => card.getAttribute('data-membership-status') === '',
+  );
+  const acceptedStatusCards = cards.filter(
+    (card) => card.getAttribute('data-membership-status') === 'accepted',
+  );
+
+  expect(emptyStatusCards.length).toBe(1);
+  expect(acceptedStatusCards.length).toBe(1);
+});
