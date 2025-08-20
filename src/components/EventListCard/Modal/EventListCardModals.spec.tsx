@@ -593,6 +593,47 @@ describe('EventListCardModals', () => {
     expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
   });
 
+  describe('updateOption logic', () => {
+    test('switches to "following" when recurrence changes, making "single" invalid', async () => {
+      const recurringEventProps = {
+        ...mockEventListCardProps,
+        baseEventId: 'baseEvent1',
+        recurrenceRule: {
+          frequency: Frequency.WEEKLY,
+          interval: 1,
+          byDay: ['MO'],
+        },
+      };
+      renderComponent({ eventListCardProps: recurringEventProps });
+
+      // Initial state: updateOption is 'single'
+      // Simulate changing the recurrence rule, which is done via the preview modal
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setRecurrence({
+          ...recurringEventProps.recurrenceRule,
+          interval: 2, // Change the interval
+        });
+      });
+
+      // After the state update, the component re-renders.
+      // The `useEffect` should have switched the updateOption to 'following'.
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+
+      // Now, open the update modal to check the result
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+
+      // The 'single' option should be gone, and 'following' should be checked.
+      expect(
+        screen.queryByLabelText('updateThisInstance'),
+      ).not.toBeInTheDocument();
+      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      expect(followingRadio).toBeChecked();
+    });
+  });
+
   describe('detects recurrence frequency from description', () => {
     const testCases = [
       {
