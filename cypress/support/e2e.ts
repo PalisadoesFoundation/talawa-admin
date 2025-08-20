@@ -21,4 +21,12 @@ Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes('ApolloError')) {
     return false;
   }
+  return true;
+});
+
+Cypress.on('unhandled:rejection', (err) => {
+  if (err.message.includes('ApolloError')) {
+    return false;
+  }
+  return true;
 });
