@@ -431,7 +431,7 @@ function orgList(): JSX.Element {
               );
             })}
           </div>
-
+          {/* pagination */}
           <table style={{ width: '100%' }}>
             <tbody>
               <tr>
