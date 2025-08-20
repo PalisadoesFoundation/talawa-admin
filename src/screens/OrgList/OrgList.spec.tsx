@@ -74,7 +74,7 @@ const setupUser = (userType: keyof typeof mockUsers) => {
   if ('role' in user) setItem('role', user.role);
 };
 
-// Helper function to render component with common providers
+// Helper function to render component with common providers.
 const renderWithProviders = (link = mockLinks.superAdmin) => {
   return render(
     <MockedProvider addTypename={false} link={link}>
