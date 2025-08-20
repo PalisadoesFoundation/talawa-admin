@@ -2,7 +2,7 @@
 id: login
 title: Registration & Login
 slug: /login
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 This page outlines how to successfully operate the application
