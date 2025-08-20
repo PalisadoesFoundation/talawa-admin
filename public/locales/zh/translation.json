@@ -170,6 +170,7 @@
     "name": "名称",
     "email": "电子邮件",
     "searchByName": "按名称搜索",
+    "searchOrganizations": "搜索组织",
     "description": "描述",
     "location": "位置",
     "address": "地址",

@@ -145,6 +145,7 @@
     "designation": "Designacion",
     "email": "Correo electrónico",
     "searchByName": "Buscar por nombre",
+    "searchOrganizations": "Buscar organización",
     "my organizations": "Mis Organizaciones.",
     "createOrganization": "Crear organización",
     "createSampleOrganization": "Crear organización de muestra",

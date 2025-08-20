@@ -170,6 +170,7 @@
     "name": "नाम",
     "email": "ईमेल",
     "searchByName": "नाम से खोजें",
+    "searchOrganizations": "संगठन खोजें",
     "description": "विवरण",
     "location": "स्थान",
     "address": "पता",
