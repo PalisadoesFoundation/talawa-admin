@@ -44,7 +44,7 @@
     "i18next": "^24.2.2",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.2",
-    "inquirer": "^12.4.1",
+    "inquirer": "^12.9.3",
     "jest-environment-jsdom": "^29.7.0",
     "js-cookie": "^3.0.1",
     "jszip": "^3.10.1",
@@ -135,7 +135,7 @@
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
-    "@types/inquirer": "^9.0.7",
+    "@types/inquirer": "^9.0.9",
     "@types/jest": "^29.5.14",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.9.0",
@@ -218,10 +218,10 @@
     "graphql": "^16.5.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2",
+    "@rollup/rollup-darwin-arm64": "^4.46.2",
     "@rollup/rollup-darwin-x64": "^4.46.2",
-    "@rollup/rollup-darwin-arm64": "^4.46.2"
+    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
   },
   "engines": {
     "node": ">=20.x"
