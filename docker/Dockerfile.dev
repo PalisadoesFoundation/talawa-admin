@@ -10,6 +10,14 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 4321
+# … previous build steps …
 
+RUN npm run build
+
+# Ensure application files are owned by the non-root `node` user
+RUN chown -R node:node /usr/src/app
+# Switch to the safer, non-root user provided by the Node image
+USER node
+
+EXPOSE 4321
 CMD ["npm", "run", "serve"]
