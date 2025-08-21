@@ -16,3 +16,20 @@ updates:
     # Customize commit message prefix
     commit-message:
       prefix: "chore(deps):"
+    # Limit parallel PRs and run at a quiet time
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "monthly"
+      time: "05:00"
+      timezone: "Etc/UTC"
+    # Auto-request reviews (usernames or teams)
+    reviewers:
+      - "palisadoes"
+    # Optional grouping to batch routine bumps
+    groups:
+      tooling:
+        patterns:
+          - "eslint*"
+          - "prettier*"
+          - "husky"
+          - "lint-staged"
