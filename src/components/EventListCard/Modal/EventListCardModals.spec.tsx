@@ -579,7 +579,7 @@ describe('EventListCardModals', () => {
       });
     });
 
-    test('allows update of recurring instance when recurrenceRule is present', async () => {
+    test('allows update  of recurring instance when recurrenceRule is present', async () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
