@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+# For pure dev servers this build is unnecessary; remove if not needed.
 
 # … previous build steps …
 
