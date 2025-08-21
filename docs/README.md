@@ -165,7 +165,7 @@ This command starts a local development server and open up a browser window. Mos
 
 # Building Static HTML Pages
 
-**In most cases is unnecessary**. Running the `development server` will be sufficient.
+**In most cases, it is unnecessary.** Running the development server is sufficient.
 
 If you need to generate static HTML pages (unlikely), then follow these steps.
 
