@@ -1,3 +1,5 @@
 [flake8]
-ignore = E402,E722,E203,F401,W503
-max-line-length = 80
+max-line-length = 79
+extend-ignore = E203,W503
+per-file-ignores =
+  .github/workflows/scripts/*.py: E402,E722
