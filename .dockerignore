@@ -16,7 +16,15 @@ __tests__
 *.spec.*
 # Development files
 *.log
+# Keep ignoring all *.lock by default…
 *.lock
+# …but include our JS lockfiles so Docker can cache installs reproducibly
+!package-lock.json
+!yarn.lock
+!pnpm-lock.yaml
+
+# Rotate npm debug logs (catch npm-debug.log.1, .2, etc.)
+npm-debug.log*
 .DS_Store
 .idea
 .vscode
