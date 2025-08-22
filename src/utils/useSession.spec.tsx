@@ -509,7 +509,8 @@ test('should extend session when called directly', async () => {
 });
 
 test('should properly clean up on unmount', () => {
-  // Mock window.removeEventListener
+  // Mock window.removeEventListener and document.removeEventListener
+  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
   const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
 
   const { result, unmount } = renderHook(() => useSession(), {
@@ -523,11 +524,11 @@ test('should properly clean up on unmount', () => {
   result.current.startSession();
   unmount();
 
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  expect(windowRemoveEventListener).toHaveBeenCalledWith(
     'mousemove',
     expect.any(Function),
   );
-  expect(window.removeEventListener).toHaveBeenCalledWith(
+  expect(windowRemoveEventListener).toHaveBeenCalledWith(
     'keydown',
     expect.any(Function),
   );
@@ -536,6 +537,7 @@ test('should properly clean up on unmount', () => {
     expect.any(Function),
   );
 
+  windowRemoveEventListener.mockRestore();
   documentRemoveEventListener.mockRestore();
 });
 test('should handle missing community data', async () => {
