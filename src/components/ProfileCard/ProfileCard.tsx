@@ -74,6 +74,7 @@ const ProfileCard = (): React.JSX.Element => {
               src={userImage}
               alt={`profile picture`}
               data-testid="display-img"
+              crossOrigin="anonymous"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.style.display = 'none';
