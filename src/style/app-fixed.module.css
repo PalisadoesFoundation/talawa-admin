@@ -5530,6 +5530,13 @@ form {
   max-width: 70px;
 }
 
+.userAvatar {
+  border-radius: 50%;
+  margin-right: 25px;
+  width: 53px;
+  height: 53px;
+}
+
 .people_card_container {
   display: flex;
 }
