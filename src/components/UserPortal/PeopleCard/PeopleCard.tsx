@@ -57,12 +57,17 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
         <span style={{ flex: '1' }}>
           <img
             src={imageUrl}
-            alt="user avatar"
+            alt={props.name ? `${props.name}'s avatar` : ''}
             crossOrigin="anonymous"
-            width="80px"
-            height="auto"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              if (e.currentTarget.src !== aboutImg) {
+                e.currentTarget.src = aboutImg;
+              }
+            }}
             className={
-              imageUrl != aboutImg
+              imageUrl !== aboutImg
                 ? styles.userAvatar
                 : styles.personImage_peoplecard
             }
