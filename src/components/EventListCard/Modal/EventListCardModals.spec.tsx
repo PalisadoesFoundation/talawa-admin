@@ -548,6 +548,80 @@ describe('EventListCardModals', () => {
     });
   });
 
+  test('handles update of an entire recurring event series with only name change', async () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRecurringTemplate: false,
+        baseEventId: 'baseEvent1',
+      },
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+    act(() => {
+      previewProps.setFormState({
+        ...previewProps.formState,
+        name: 'Updated Series Name',
+      });
+    });
+
+    await act(async () => {
+      await previewProps.handleEventUpdate();
+    });
+
+    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    await userEvent.click(entireSeriesRadio);
+
+    const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
+    await userEvent.click(confirmButton);
+
+    expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          id: 'event1',
+          name: 'Updated Series Name',
+        },
+      },
+    });
+  });
+
+  test('handles update of an entire recurring event series with only description change', async () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRecurringTemplate: false,
+        baseEventId: 'baseEvent1',
+      },
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+    act(() => {
+      previewProps.setFormState({
+        ...previewProps.formState,
+        eventdescrip: 'Updated Series Event Description',
+      });
+    });
+
+    await act(async () => {
+      await previewProps.handleEventUpdate();
+    });
+
+    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    await userEvent.click(entireSeriesRadio);
+
+    const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
+    await userEvent.click(confirmButton);
+
+    expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          id: 'event1',
+          description: 'Updated Series Event Description',
+        },
+      },
+    });
+  });
+
   describe('date validation and handling', () => {
     test('correctly formats startAt and endAt for all-day events on date change', async () => {
       renderComponent({
@@ -660,6 +734,109 @@ describe('EventListCardModals', () => {
       });
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
         variables: { input: { id: 'event1', name: 'Updated Name' } },
+      });
+    });
+
+    test('shows error when start date is invalid and allDay is true', async () => {
+      renderComponent();
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setAllDayChecked(true);
+        initialPreviewProps.setEventStartDate(new Date('invalid date'));
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+    });
+
+    test('shows error when end date is invalid and allDay is true', async () => {
+      renderComponent();
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setAllDayChecked(true);
+        initialPreviewProps.setEventEndDate(new Date('invalid date'));
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+    });
+
+    test('shows error when start date is invalid and allDay is false', async () => {
+      renderComponent();
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setAllDayChecked(false);
+        initialPreviewProps.setEventStartDate(new Date('invalid date'));
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+    });
+
+    test('shows error when end date is invalid and allDay is false', async () => {
+      renderComponent();
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setAllDayChecked(false);
+        initialPreviewProps.setEventEndDate(new Date('invalid date'));
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+    });
+
+    test('handles invalid eventStartDate in hasOnlyNameOrDescriptionChanged', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          allDay: true,
+        },
+      });
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setEventStartDate(new Date('invalid date'));
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+    });
+
+    test('handles invalid startDate in hasOnlyNameOrDescriptionChanged', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          allDay: true,
+          startDate: 'invalid date',
+        },
+      });
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        initialPreviewProps.setFormState({
+          ...initialPreviewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
+        variables: {
+          input: {
+            id: 'event1',
+            name: 'Updated Name',
+          },
+        },
       });
     });
   });
