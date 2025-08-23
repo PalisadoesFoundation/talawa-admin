@@ -920,6 +920,18 @@ describe('EventListCardPreviewModal', () => {
       });
       expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
     });
+
+    test('returns custom recurrence description when recurrence is not defined', () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: true,
+          recurrenceDescription: 'My Custom Rule',
+        },
+        recurrence: null,
+      });
+      expect(screen.getByText('My Custom Rule')).toBeInTheDocument();
+    });
   });
 
   describe('CustomRecurrenceModal callbacks', () => {
@@ -1000,6 +1012,61 @@ describe('EventListCardPreviewModal', () => {
       customModalProps.setEndDate(newDate);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(newDate);
+    });
+  });
+
+  describe('Date and Time Picker onChange handlers', () => {
+    test('updates end date if new start date is later', () => {
+      const mockSetEventStartDate = vi.fn();
+      const mockSetEventEndDate = vi.fn();
+      renderComponent({
+        eventStartDate: new Date('2024-01-15'),
+        eventEndDate: new Date('2024-01-15'),
+        setEventStartDate: mockSetEventStartDate,
+        setEventEndDate: mockSetEventEndDate,
+      });
+
+      const datePicker = screen.getByLabelText('startDate').parentElement;
+      const calendarButton = within(datePicker as HTMLElement).getByLabelText(
+        /choose date/i,
+      );
+      fireEvent.click(calendarButton);
+
+      waitFor(() => {
+        const dateToSelect = screen.getByText('20');
+        fireEvent.click(dateToSelect);
+        expect(mockSetEventStartDate).toHaveBeenCalled();
+        expect(mockSetEventEndDate).toHaveBeenCalled();
+      });
+    });
+
+    test('updates end time if new start time is later', () => {
+      const mockSetFormState = vi.fn();
+      renderComponent({
+        formState: {
+          ...mockFormState,
+          startTime: '10:00:00',
+          endTime: '11:00:00',
+        },
+        setFormState: mockSetFormState,
+      });
+
+      const timePicker = screen.getByLabelText('startTime').parentElement;
+      const clockButton = within(timePicker as HTMLElement).getByLabelText(
+        /choose time/i,
+      );
+      fireEvent.click(clockButton);
+
+      waitFor(() => {
+        const timeToSelect = screen.getByText('12');
+        fireEvent.click(timeToSelect);
+        expect(mockSetFormState).toHaveBeenCalledWith(
+          expect.objectContaining({
+            startTime: '12:00:00',
+            endTime: '12:00:00',
+          }),
+        );
+      });
     });
   });
 });
