@@ -62,14 +62,17 @@ import type {
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
+import { toast } from 'react-toastify';
 import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
@@ -102,6 +105,11 @@ export default function home(): JSX.Element {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
 
   // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
@@ -271,8 +279,31 @@ export default function home(): JSX.Element {
                       setPostImg('');
                       const target = e.target as HTMLInputElement;
                       const file = target.files && target.files[0];
-                      const base64file = file && (await convertToBase64(file));
-                      setPostImg(base64file);
+
+                      if (file) {
+                        const validation = validateFile(file);
+
+                        if (!validation.isValid) {
+                          toast.error(validation.errorMessage);
+                          return;
+                        }
+
+                        try {
+                          const { objectName } = await uploadFileToMinio(
+                            file,
+                            orgId,
+                          );
+                          const presignedUrl = await getFileFromMinio(
+                            objectName,
+                            orgId!,
+                          );
+                          setPostImg(presignedUrl);
+                          toast.success('Image uploaded successfully');
+                        } catch (error) {
+                          console.error('Error uploading image:', error);
+                          toast.error('Image upload failed');
+                        }
+                      }
                     }}
                   />
                 </Col>

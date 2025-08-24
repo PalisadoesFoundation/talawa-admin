@@ -56,7 +56,8 @@ import {
   RedditLogo,
   SlackLogo,
 } from 'assets/svgs/social-icons';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { validateFile } from 'utils/fileValidation';
 import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../components/UpdateSession/UpdateSession';
@@ -86,6 +87,9 @@ const CommunityProfile = (): JSX.Element => {
     redditURL: string | undefined;
     slackURL: string | undefined;
   };
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   // State hook for managing profile variables
   const [profileVariable, setProfileVariable] = React.useState({
@@ -281,11 +285,31 @@ const CommunityProfile = (): JSX.Element => {
                   }));
                   const target = e.target as HTMLInputElement;
                   const file = target.files?.[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setProfileVariable({
-                    ...profileVariable,
-                    logo: base64file ?? '',
-                  });
+
+                  if (file) {
+                    // Validate file before upload
+                    const validation = validateFile(file);
+                    if (!validation.isValid) {
+                      toast.error(validation.errorMessage);
+                      return;
+                    }
+
+                    try {
+                      // Upload to MinIO and get object name
+                      const { objectName } = await uploadFileToMinio(
+                        file,
+                        'organization',
+                      );
+                      setProfileVariable({
+                        ...profileVariable,
+                        logo: objectName,
+                      });
+                      toast.success('Logo uploaded successfully');
+                    } catch (error) {
+                      console.error('Error uploading logo:', error);
+                      toast.error('Logo upload failed');
+                    }
+                  }
                 }}
                 className={`mb-3 ${styles.inputField}`}
                 autoComplete="off"

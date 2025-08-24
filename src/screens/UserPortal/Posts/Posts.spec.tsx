@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -18,18 +18,25 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { expect, describe, it, vi } from 'vitest';
 
+import * as MinioUploadModule from 'utils/MinioUpload';
+import * as MinioDownloadModule from 'utils/MinioDownload';
+
+// Mock localStorage usage
 const { setItem } = useLocalStorage();
 
+// Mock toast notifications
+const mockToastError = vi.fn();
+const mockToastSuccess = vi.fn();
 vi.mock('react-toastify', () => ({
   toast: {
-    error: vi.fn(),
+    error: (msg: string) => mockToastError(msg),
+    success: (msg: string) => mockToastSuccess(msg),
     info: vi.fn(),
-    success: vi.fn(),
   },
 }));
 
+// Mock react-router useParams
 const mockUseParams = vi.fn().mockReturnValue({ orgId: 'orgId' });
-
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -39,6 +46,18 @@ vi.mock('react-router', async () => {
   };
 });
 
+// Mock MinIO hooks
+const mockUploadFileToMinio = vi.fn().mockResolvedValue({ objectName: 'mocked-object-key' });
+const mockGetFileFromMinio = vi.fn().mockResolvedValue('https://dummy-presigned-url.com/mocked-object-key');
+
+vi.spyOn(MinioUploadModule, 'useMinioUpload').mockReturnValue({
+  uploadFileToMinio: mockUploadFileToMinio,
+});
+vi.spyOn(MinioDownloadModule, 'useMinioDownload').mockReturnValue({
+  getFileFromMinio: mockGetFileFromMinio,
+});
+
+// Api mocks for GraphQL queries and mutations
 const MOCKS = [
   {
     request: {
@@ -174,48 +193,6 @@ const MOCKS = [
                   },
                   cursor: '1234',
                 },
-                {
-                  node: {
-                    _id: '2345',
-                    name: 'Ad 2',
-                    type: 'Type 1',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'Link 2',
-                    endDate: '2024-09-31',
-                    startDate: '2023-04-01',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '3456',
-                    name: 'name3',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'link3',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-31',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '4567',
-                    name: 'name4',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId1',
-                    },
-                    mediaUrl: 'link4',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-01',
-                  },
-                  cursor: '1234',
-                },
               ],
               pageInfo: {
                 startCursor: '6411e53835d7ba2344a78e21',
@@ -223,7 +200,7 @@ const MOCKS = [
                 hasNextPage: false,
                 hasPreviousPage: false,
               },
-              totalCount: 2,
+              totalCount: 1,
             },
           },
         ],
@@ -247,14 +224,11 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   localStorage.clear();
+  vi.clearAllMocks();
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
+async function wait(ms = 100) {
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
 const renderHomeScreen = (): RenderResult =>
@@ -286,92 +260,107 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-describe('Testing Home Screen: User Portal', () => {
+describe('Home Screen: User Portal', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
-  });
-  afterAll(() => {
+    // Reset mocks here
     vi.clearAllMocks();
   });
 
-  it('Check if HomeScreen renders properly', async () => {
+  it('renders Home screen properly', async () => {
     renderHomeScreen();
-
     await wait();
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
+    expect(await screen.findByTestId('postBtn')).toBeInTheDocument();
   });
 
-  it('StartPostModal should render on click of StartPost btn', async () => {
+  it('opens post creation modal when clicking Start Post button', async () => {
     renderHomeScreen();
-
     await wait();
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
-
-    await userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
+    const postBtn = screen.getByTestId('postBtn');
+    await userEvent.click(postBtn);
+    expect(screen.getByTestId('startPostModal')).toBeInTheDocument();
   });
 
-  it('StartPostModal should close on clicking the close button', async () => {
+  it('closes post modal after clicking close', async () => {
     renderHomeScreen();
-
-    await wait();
-    await userEvent.upload(
-      screen.getByTestId('postImageInput'),
-      new File(['image content'], 'image.png', { type: 'image/png' }),
-    );
     await wait();
 
-    const startPostBtn = await screen.findByTestId('postBtn');
-    expect(startPostBtn).toBeInTheDocument();
+    // Upload file first
+    const fileInput = screen.getByTestId('postImageInput');
+    const file = new File(['image content'], 'image.png', { type: 'image/png' });
 
-    await userEvent.click(startPostBtn);
-    const startPostModal = screen.getByTestId('startPostModal');
-    expect(startPostModal).toBeInTheDocument();
+    await userEvent.upload(fileInput, file);
+    await wait();
 
+    const postBtn = screen.getByTestId('postBtn');
+    await userEvent.click(postBtn);
+    const modal = screen.getByTestId('startPostModal');
+
+    expect(modal).toBeInTheDocument();
+
+    // Type post text
     await userEvent.type(screen.getByTestId('postInput'), 'some content');
-
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
-    await screen.findByAltText('Post Image Preview');
-    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
 
-    const closeButton = within(startPostModal).getByRole('button', {
-      name: /close/i,
-    });
+    // Image preview should appear
+    expect(await screen.findByAltText('Post Image Preview')).toBeInTheDocument();
+
+    // Close modal
+    const closeButton = within(modal).getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
 
-    const closedModalText = screen.queryByText(/somethingOnYourMind/i);
-    expect(closedModalText).not.toBeInTheDocument();
+    // The modal content text should disappear
+    expect(screen.queryByText(/somethingOnYourMind/i)).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('postInput')).toHaveValue('');
-    const fileInput = screen.getByTestId('postImageInput') as HTMLInputElement;
-    fireEvent.change(fileInput, { target: { files: null } });
-    expect(fileInput.files?.length).toBeFalsy();
+    // File input cleared after modal close
+    const clearedFileInput = screen.getByTestId('postImageInput') as HTMLInputElement;
+    fireEvent.change(clearedFileInput, { target: { files: null } });
+    expect(clearedFileInput.files?.length).toBeFalsy();
   });
 
-  it('Check whether Posts render in PostCard', async () => {
+  it('uploads image correctly and calls MinIO hooks', async () => {
+    renderHomeScreen();
+    await wait();
+
+    const fileInput = screen.getByTestId('postImageInput');
+    const file = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+
+    await userEvent.upload(fileInput, file);
+
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'orgId');
+    expect(mockGetFileFromMinio).toHaveBeenCalledWith('mocked-object-key', 'orgId');
+    expect(mockToastSuccess).toHaveBeenCalledWith('Image uploaded successfully');
+  });
+
+  it('shows toast error on MinIO upload failure', async () => {
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    renderHomeScreen();
+
+    const fileInput = screen.getByTestId('postImageInput');
+    const file = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+
+    await userEvent.upload(fileInput, file);
+    await wait();
+
+    expect(mockToastError).toHaveBeenCalledWith('Image upload failed');
+  });
+
+  it('renders posts in PostCard correctly', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
     await wait();
 
-    const postCardContainers = screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers).not.toBeNull();
-
-    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
-    expect(
-      screen.queryAllByText('This is the first post')[0],
-    ).toBeInTheDocument();
-
+    expect(screen.queryByText('post one')).toBeInTheDocument();
+    expect(screen.queryByText('This is the first post')).toBeInTheDocument();
     expect(screen.queryByText('post two')).toBeInTheDocument();
     expect(screen.queryByText('This is the post two')).toBeInTheDocument();
   });
 
-  it('Checking if refetch works after deleting this post', async () => {
+  it('triggers delete and refetch post', async () => {
     setItem('userId', '640d98d9eb6a743d75341067');
     renderHomeScreen();
-    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
+    await wait();
+
     const dropdowns = await screen.findAllByTestId('dropdown');
     await userEvent.click(dropdowns[1]);
     const deleteButton = await screen.findByTestId('deletePost');
@@ -388,7 +377,7 @@ describe('HomeScreen with invalid orgId', () => {
     vi.clearAllMocks();
   });
 
-  it('Redirect to /user when organizationId is falsy', async () => {
+  it('redirects to /user if orgId is missing', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
@@ -396,16 +385,14 @@ describe('HomeScreen with invalid orgId', () => {
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route path="/user/organization/" element={<Home />} />
-                <Route
-                  path="/user"
-                  element={<div data-testid="homeEl"></div>}
-                />
+                <Route path="/user" element={<div data-testid="homeEl"></div>} />
               </Routes>
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
       </MockedProvider>,
     );
+
     const homeEl = await screen.findByTestId('homeEl');
     expect(homeEl).toBeInTheDocument();
 

@@ -42,7 +42,7 @@
  *   setAfter={setAfterCallback}
  * />
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -54,6 +54,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 
 // Extend dayjs with UTC plugin
@@ -80,7 +83,14 @@ function AdvertisementRegister({
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  // State to keep uploaded file info (file, presigned URL, object name)
+  const [uploadedFiles, setUploadedFiles] = useState<
+    { file: File; presignedUrl: string; objectName: string }[]
+  >([]);
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
 
@@ -151,20 +161,37 @@ function AdvertisementRegister({
     const files = e.target.files;
     if (files && files.length > 0) {
       const validFiles: File[] = [];
-      const maxFileSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
 
-      Array.from(files).forEach((file) => {
-        if (!allowedTypes.includes(file.type)) {
-          toast.error(`Invalid file type: ${file.name}`);
-        } else if (file.size > maxFileSize) {
-          toast.error(`File too large: ${file.name}`);
+      for (const file of Array.from(files)) {
+        const validation = validateFile(file);
+        if (!validation.isValid) {
+          toast.error(validation.errorMessage);
+          return;
         } else {
           validFiles.push(file);
         }
-      });
+      }
+      // Upload all valid files asynchronously
+      const uploaded: {
+        file: File;
+        presignedUrl: string;
+        objectName: string;
+      }[] = [];
+      for (const file of validFiles) {
+        try {
+          const { objectName } = await uploadFileToMinio(file, currentOrg!);
+          const presignedUrl = await getFileFromMinio(objectName, currentOrg!);
+
+          uploaded.push({ file, presignedUrl, objectName });
+          toast.success(`Uploaded successfully`);
+        } catch (error) {
+          console.error('MinIO upload error:', error);
+          toast.error(`Failed to upload`);
+        }
+      }
 
       if (validFiles.length > 0) {
+        setUploadedFiles((prev) => [...prev, ...uploaded]);
         setFormState((prev) => ({
           ...prev,
           attachments: [...(prev.attachments || []), ...validFiles],
@@ -179,6 +206,7 @@ function AdvertisementRegister({
       ...prev,
       attachments: (prev?.attachments || []).filter((_, i) => i !== index),
     }));
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   // Set form state if editing
@@ -429,13 +457,13 @@ function AdvertisementRegister({
                   data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
+                {(uploadedFiles || []).map(({ presignedUrl, file }, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
                       <video
                         data-testid="mediaPreview"
                         controls
-                        src={encodeURI(URL.createObjectURL(file))}
+                        src={presignedUrl}
                         className={styles.previewAdvertisementRegister}
                       >
                         <track
@@ -447,7 +475,7 @@ function AdvertisementRegister({
                     ) : (
                       <img
                         data-testid="mediaPreview"
-                        src={encodeURI(URL.createObjectURL(file))}
+                        src={presignedUrl}
                         alt="Preview"
                         className={styles.previewAdvertisementRegister}
                       />

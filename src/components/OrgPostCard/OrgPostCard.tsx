@@ -47,7 +47,8 @@ import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { validateFile } from 'utils/fileValidation';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -105,6 +106,9 @@ export default function OrgPostCard({
 
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   // Get media attachments
   const imageAttachment = post.attachments.find((a) =>
@@ -181,14 +185,28 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+      // Validate file before upload
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
+      try {
+        // Upload to MinIO and get object name
+        const { objectName } = await uploadFileToMinio(file, 'organization');
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            { url: objectName, mimeType: file.type },
+          ],
+        }));
+        toast.success('Image uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast.error('Image upload failed');
+      }
     }
   };
 
@@ -197,14 +215,28 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+      // Validate file before upload
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
+      try {
+        // Upload to MinIO and get object name
+        const { objectName } = await uploadFileToMinio(file, 'organization');
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            { url: objectName, mimeType: file.type },
+          ],
+        }));
+        toast.success('Video uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading video:', error);
+        toast.error('Video upload failed');
+      }
     }
   };
 

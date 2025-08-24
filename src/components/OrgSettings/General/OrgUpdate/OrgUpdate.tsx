@@ -11,7 +11,8 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { validateFile } from 'utils/fileValidation';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
@@ -45,7 +46,9 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   const [formState, setFormState] = useState<{
     orgName: string;
@@ -284,11 +287,28 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             onChange={async (e: React.ChangeEvent): Promise<void> => {
               const target = e.target as HTMLInputElement;
               const file = target.files && target.files[0];
-              if (file)
-                setFormState({
-                  ...formState,
-                  avatar: file,
-                });
+
+              if (file) {
+                // Validate file before upload
+                const validation = validateFile(file);
+                if (!validation.isValid) {
+                  toast.error(validation.errorMessage);
+                  return;
+                }
+
+                try {
+                  // Upload to MinIO and get object name
+                  const { objectName } = await uploadFileToMinio(file, orgId);
+                  setFormState({
+                    ...formState,
+                    orgImage: objectName,
+                  });
+                  toast.success('Image uploaded successfully');
+                } catch (error) {
+                  console.error('Error uploading image:', error);
+                  toast.error('Image upload failed');
+                }
+              }
             }}
             data-testid="organisationImage"
           />

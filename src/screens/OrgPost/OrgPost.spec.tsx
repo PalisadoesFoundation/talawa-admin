@@ -15,19 +15,30 @@ import {
   GET_POSTS_BY_ORG,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CREATE_POST_MUTATION, PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { ToastContainer, toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
-import * as convertToBase64Module from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 
 const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
 
-vi.mock('utils/convertToBase64');
+// Mock the MinIO hooks
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'test-object-name', fileHash: 'test-hash' }),
+  }),
+}));
+
+vi.mock('utils/MinioDownload', () => ({
+  useMinioDownload: () => ({
+    getFileFromMinio: vi.fn().mockResolvedValue('data:image/png;base64,test-base64'),
+  }),
+}));
+
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
   ToastContainer: ({ children }: { children: React.ReactNode }) => (
@@ -37,13 +48,7 @@ vi.mock('react-toastify', () => ({
 
 vi.mock('utils/errorHandler', () => ({ errorHandler: vi.fn() }));
 
-vi.mock('utils/convertToBase64', () => ({
-  __esModule: true,
-  default: vi.fn().mockResolvedValue('base64-encoded-string'),
-}));
-
 vi.mock('react-i18next', () => ({
-  // Include initReactI18next
   initReactI18next: { type: '3rdParty', init: () => {} },
   useTranslation: () => ({
     t: (key: string) => {
@@ -60,6 +65,8 @@ vi.mock('react-i18next', () => ({
         pinPost: 'Pin Post',
         addPost: 'Add Post',
         createPost: 'Create Post',
+        postCreatedSuccess: 'Post created successfully',
+        tag: 'Your browser does not support the video tag',
       };
       return translations[key] || key;
     },
@@ -69,14 +76,15 @@ vi.mock('react-i18next', () => ({
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-vi.mock('utils/convertToBase64', () => ({
-  default: vi.fn().mockResolvedValue('base64String'),
-}));
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return { ...actual, useParams: () => ({ orgId: '123' }) };
+});
 
 const eightPosts = Array.from({ length: 8 }, (_, i) => ({
   id: `${i + 1}`,
   caption: `Post ${i + 1}`,
-  createdAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(), // For ordering
+  createdAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(),
   updatedAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(),
   pinned: false,
   creator: { id: '123' },
@@ -152,7 +160,6 @@ const samplePosts = [
   },
 ];
 
-// Prepare mocks for GraphQL queries
 const orgPostListMock = {
   request: {
     query: ORGANIZATION_POST_LIST,
@@ -196,7 +203,6 @@ const getPostsByOrgInitialMock = {
   result: { data: { postsByOrganization: samplePosts } },
 };
 
-// Create mock for search query with "test" term
 const getPostsByOrgSearchMock = {
   request: {
     query: GET_POSTS_BY_ORG,
@@ -295,7 +301,7 @@ const createPostWithFileMock = {
         id: '4',
         caption: 'Test Post Title with File',
         pinnedAt: null,
-        attachments: [{ url: 'base64String' }],
+        attachments: [{ url: 'test-object-name' }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
@@ -403,6 +409,7 @@ const minimalMocks: MockedResponse[] = [
     },
   },
 ];
+
 const mockPosts1 = {
   postsByOrganization: [
     {
@@ -464,7 +471,6 @@ const mocks1 = [
     },
     result: { data: mockOrgPostList1 },
   },
-  // Additional mocks for create mutation if needed
   {
     request: {
       query: CREATE_POST_MUTATION,
@@ -515,6 +521,7 @@ const loadingMocks: MockedResponse[] = [
     delay: 5000,
   },
 ];
+
 const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
 
 const createPostSuccessMock: MockedResponse = {
@@ -535,17 +542,13 @@ const createPostSuccessMock: MockedResponse = {
         id: '3',
         caption: 'Test Post Title',
         pinnedAt: null,
-        attachments: [{ url: 'base64String' }],
+        attachments: [{ url: 'test-object-name' }],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
     },
   },
 };
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return { ...actual, useParams: () => ({ orgId: '123' }) };
-});
 
 describe('OrgPost Component', () => {
   const mockOrgId = '123';
@@ -660,7 +663,7 @@ describe('OrgPost Component', () => {
       { timeout: 3000 },
     );
 
-    expect(toastSuccessMock.mock.calls[0][0]).toContain('postCreatedSuccess');
+    expect(toastSuccessMock.mock.calls[0][0]).toContain('Image uploaded successfully');
 
     await act(() => new Promise((resolve) => setTimeout(resolve, 500)));
 
@@ -971,6 +974,7 @@ describe('OrgPost Component', () => {
       expect(toast.error).not.toHaveBeenCalled();
     });
   });
+
   const openModal = async (): Promise<void> => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -985,6 +989,7 @@ describe('OrgPost Component', () => {
       expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
     });
   };
+
   it('shows an error toast when a non-video file is selected in the video input', async () => {
     await openModal();
 
@@ -1002,11 +1007,6 @@ describe('OrgPost Component', () => {
   });
 
   it('sets video preview when a valid video file is selected', async () => {
-    const mockedConvertToBase64 = convertToBase64 as MockedFunction<
-      typeof convertToBase64
-    >;
-    mockedConvertToBase64.mockResolvedValue('data:video/mp4;base64,abc123');
-
     await openModal();
 
     const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
@@ -1046,11 +1046,6 @@ describe('OrgPost Component', () => {
   });
 
   it('clears video preview and resets file input when the close button is clicked', async () => {
-    const mockedConvertToBase64 = convertToBase64 as MockedFunction<
-      typeof convertToBase64
-    >;
-    mockedConvertToBase64.mockResolvedValue('data:video/mp4;base64,abc123');
-
     await openModal();
 
     const videoInput = screen.getByTestId('addVideoField') as HTMLInputElement;
@@ -1083,85 +1078,105 @@ describe('OrgPost Component', () => {
     expect(fileInputElement.value).toBe('');
   });
 
-  it('displays error toast when convertToBase64 fails', async () => {
-    const convertSpy = vi
-      .spyOn(convertToBase64Module, 'default')
-      .mockRejectedValue(new Error('Conversion failed'));
+  it('displays error toast when MinIO upload fails', async () => {
+  const toastErrorSpy = vi.spyOn(toast, 'error');
+  
+  // Mock the MinIO upload hook to reject
+  vi.mocked(useMinioUpload).mockImplementation(() => ({
+    uploadFileToMinio: vi.fn().mockRejectedValue(new Error('Upload failed'))
+  }));
 
-    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
+  render(
+    <MockedProvider mocks={minimalMocks} addTypename={false}>
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter initialEntries={['/org/123']}>
+          <Routes>
+            <Route path="/org/:orgId" element={<OrgPost />} />
+          </Routes>
+        </MemoryRouter>
+      </I18nextProvider>
+    </MockedProvider>,
+  );
 
-    render(
-      <MockedProvider mocks={minimalMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const createPostButton = screen.getByTestId('createPostModalBtn');
-    userEvent.click(createPostButton);
-    const fileInput = await screen.findByTestId('addMediaField');
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
-    await userEvent.upload(fileInput, file);
-
-    await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith('Could not generate preview');
-    });
-
-    convertSpy.mockRestore();
-    toastErrorSpy.mockRestore();
+  // Wait for component to load
+  await waitFor(() => {
+    expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
   });
 
-  it('displays error toast when convertToBase64 fails for video preview', async () => {
-    const convertSpy = vi
-      .spyOn(convertToBase64Module, 'default')
-      .mockRejectedValue(new Error('Conversion failed'));
+  // Open modal
+  const createPostButton = screen.getByTestId('createPostModalBtn');
+  await userEvent.click(createPostButton);
 
-    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
-
-    render(
-      <MockedProvider mocks={minimalMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const createPostButton = screen.getByTestId('createPostModalBtn');
-    userEvent.click(createPostButton);
-
-    const videoInput = await screen.findByTestId('addVideoField');
-
-    const videoFile = new File(['dummy video content'], 'video.mp4', {
-      type: 'video/mp4',
-    });
-
-    await userEvent.upload(videoInput, videoFile);
-
-    await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith(
-        'Could not generate video preview',
-      );
-    });
-
-    convertSpy.mockRestore();
-    toastErrorSpy.mockRestore();
+  // Wait for modal to open
+  await waitFor(() => {
+    expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
   });
+
+  // Upload file
+  const fileInput = screen.getByTestId('addMediaField');
+  const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+  
+  // Use fireEvent to trigger the change handler
+  fireEvent.change(fileInput, { target: { files: [file] } });
+
+  // Wait for the error toast to be called
+  await waitFor(() => {
+    expect(toastErrorSpy).toHaveBeenCalledWith('Image upload failed');
+  }, { timeout: 3000 });
+});
+
+it('displays error toast when MinIO download fails for video preview', async () => {
+  const toastErrorSpy = vi.spyOn(toast, 'error');
+  
+  // Mock upload to succeed but download to fail
+  vi.mocked(useMinioUpload).mockImplementation(() => ({
+    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'test-video', fileHash: 'test-hash' })
+  }));
+  
+  vi.mocked(useMinioDownload).mockImplementation(() => ({
+    getFileFromMinio: vi.fn().mockRejectedValue(new Error('Download failed'))
+  }));
+
+  render(
+    <MockedProvider mocks={minimalMocks} addTypename={false}>
+      <I18nextProvider i18n={i18n}>
+        <MemoryRouter initialEntries={['/org/123']}>
+          <Routes>
+            <Route path="/org/:orgId" element={<OrgPost />} />
+          </Routes>
+        </MemoryRouter>
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+
+  // Wait for component to load
+  await waitFor(() => {
+    expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+  });
+
+  // Open modal
+  const createPostButton = screen.getByTestId('createPostModalBtn');
+  await userEvent.click(createPostButton);
+
+  // Wait for modal to open
+  await waitFor(() => {
+    expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
+  });
+
+  // Upload video file
+  const videoInput = screen.getByTestId('addVideoField');
+  const videoFile = new File(['dummy video content'], 'video.mp4', {
+    type: 'video/mp4',
+  });
+
+  // Use fireEvent to trigger the change handler
+  fireEvent.change(videoInput, { target: { files: [videoFile] } });
+
+  // Wait for the error toast to be called
+  await waitFor(() => {
+    expect(toastErrorSpy).toHaveBeenCalledWith('Video upload failed');
+  }, { timeout: 3000 });
+});
 });
 
 describe('Tests for sorting , nextpage , previousPage', () => {
@@ -1442,7 +1457,6 @@ describe('Pagination functionality in OrgPost Component', () => {
 });
 
 describe('OrgPost SearchBar functionality', () => {
-  // Helper function to render the component with specified mocks
   const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
     return render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -1824,7 +1838,7 @@ describe('OrgPost component - Post Creation Tests', () => {
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith('postCreatedSuccess');
+        expect(toast.success).toHaveBeenCalledWith("Post created successfully");
       },
       { timeout: 5000 },
     );

@@ -37,7 +37,7 @@
  * />
  * ```
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 
@@ -45,8 +45,11 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+import { useParams } from 'react-router-dom';
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
@@ -58,7 +61,17 @@ const AgendaItemsCreateModal: React.FC<
   t,
   agendaItemCategories,
 }) => {
+  const { orgId: currentOrg } = useParams();
   const [newUrl, setNewUrl] = useState('');
+  // MinIO hooks must be called inside component
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+
+  // State to keep uploaded file info for preview and removal
+  const [uploadedFiles, setUploadedFiles] = useState<
+    { file: File; presignedUrl: string }[]
+  >([]);
 
   useEffect(() => {
     // Ensure URLs and attachments do not have empty or invalid entries
@@ -121,21 +134,44 @@ const AgendaItemsCreateModal: React.FC<
     const target = e.target as HTMLInputElement;
     if (target.files) {
       const files = Array.from(target.files);
+      // Validate files and accumulate total size
       let totalSize = 0;
-      files.forEach((file) => {
+      const validFiles: File[] = [];
+      for (const file of files) {
+        const validation = validateFile(file);
+        if (!validation.isValid) {
+          toast.error(validation.errorMessage);
+          continue;
+        }
         totalSize += file.size;
-      });
-      if (totalSize > 10 * 1024 * 1024) {
+        validFiles.push(file);
+      }
+
+      if (totalSize > 15 * 1024 * 1024) {
         toast.error(t('fileSizeExceedsLimit'));
         return;
       }
-      const base64Files = await Promise.all(
-        files.map(async (file) => await convertToBase64(file)),
-      );
-      setFormState({
-        ...formState,
-        attachments: [...formState.attachments, ...base64Files],
-      });
+      // Upload valid files to MinIO and get presigned URLs
+      const uploaded: { file: File; presignedUrl: string }[] = [];
+      for (const file of validFiles) {
+        try {
+          const { objectName } = await uploadFileToMinio(file, currentOrg!);
+          const presignedUrl = await getFileFromMinio(objectName, currentOrg!);
+          uploaded.push({ file, presignedUrl });
+          toast.success(t('Uploaded successfully'));
+        } catch {
+          toast.error(t('Failed to upload'));
+        }
+      }
+      // Update uploadedFiles state for preview
+      setUploadedFiles((prev) => [...prev, ...uploaded]);
+      setFormState((prev) => ({
+        ...prev,
+        attachments: [
+          ...prev.attachments,
+          ...uploaded.map((uf) => uf.presignedUrl),
+        ],
+      }));
     }
   };
 
@@ -144,11 +180,14 @@ const AgendaItemsCreateModal: React.FC<
    *
    * @param attachment - Attachment to remove.
    */
-  const handleRemoveAttachment = (attachment: string): void => {
-    setFormState({
-      ...formState,
-      attachments: formState.attachments.filter((item) => item !== attachment),
-    });
+  const handleRemoveAttachment = (presignedUrl: string): void => {
+    setUploadedFiles((prev) =>
+      prev.filter((uf) => uf.presignedUrl !== presignedUrl),
+    );
+    setFormState((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((att) => att !== presignedUrl),
+    }));
   };
 
   return (
@@ -289,11 +328,11 @@ const AgendaItemsCreateModal: React.FC<
             />
             <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>
-          {formState.attachments && (
+          {uploadedFiles.length > 0 && (
             <div className={styles.previewFile} data-testid="mediaPreview">
-              {formState.attachments.map((attachment, index) => (
+              {uploadedFiles.map(({ presignedUrl, file }, index) => (
                 <div key={index} className={styles.attachmentPreview}>
-                  {attachment.includes('video') ? (
+                  {file.type.startsWith('video/') ? (
                     <video
                       muted
                       autoPlay={true}
@@ -301,16 +340,16 @@ const AgendaItemsCreateModal: React.FC<
                       playsInline
                       crossOrigin="anonymous"
                     >
-                      <source src={attachment} type="video/mp4" />
+                      <source src={presignedUrl} type="video/mp4" />
                     </video>
                   ) : (
-                    <img src={attachment} alt="Attachment preview" />
+                    <img src={presignedUrl} alt="Attachment preview" />
                   )}
                   <button
                     className={styles.closeButtonFile}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleRemoveAttachment(attachment);
+                      handleRemoveAttachment(presignedUrl);
                     }}
                     data-testid="deleteAttachment"
                   >
