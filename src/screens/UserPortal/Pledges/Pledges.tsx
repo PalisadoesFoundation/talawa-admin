@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +45,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Popover } from '@base-ui-components/react/popover';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -95,6 +95,7 @@ const Pledges = (): JSX.Element => {
   }
   const userId: string = userIdFromStorage as string;
 
+  const anchorRef = useRef<HTMLDivElement>(null);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -165,7 +166,7 @@ const Pledges = (): JSX.Element => {
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : event.currentTarget);
+    setAnchor(anchor ? null : anchorRef.current);
   };
 
   useEffect(() => {
@@ -489,42 +490,44 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-      >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+      <Popover.Root open={open}>
+        <Popover.Trigger>
+          <div id={id} ref={anchorRef} />
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Positioner
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.avatarURL ? (
-              <img
-                src={user.avatarURL}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user.id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={user.name}
-                  alt={user.name}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
-            )}
-            <span key={user.id + '2'}>{user.name}</span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Popup>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={user.id}
+                  data-testid={`extraUser-${index}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt={user.name}
+                      className={styles.TableImagePledge}
+                    />
+                  ) : (
+                    <Avatar
+                      containerStyle={styles.imageContainerPledge}
+                      avatarStyle={styles.TableImagePledge}
+                      name={user.name}
+                      alt={user.name}
+                    />
+                  )}
+                  <span>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };

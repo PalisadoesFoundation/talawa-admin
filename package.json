@@ -8,6 +8,7 @@
     "@apollo/client": "^3.11.8",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
+    "@base-ui-components/react": "^1.0.0-beta.2",
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@emotion/react": "^11.13.3",
@@ -16,7 +17,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hello-pangea/dnd": "^18.0.1",
-    "@mui/base": "^5.0.0-beta.70",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/private-theming": "^6.3.0",
@@ -218,10 +218,10 @@
     "graphql": "^16.5.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2",
+    "@rollup/rollup-darwin-arm64": "^4.46.2",
     "@rollup/rollup-darwin-x64": "^4.46.2",
-    "@rollup/rollup-darwin-arm64": "^4.46.2"
+    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
   },
   "engines": {
     "node": ">=20.x"

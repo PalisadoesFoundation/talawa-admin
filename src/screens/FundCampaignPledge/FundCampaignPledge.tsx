@@ -2,9 +2,15 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Popover } from '@base-ui-components/react/popover';
 import dayjs from 'dayjs';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
@@ -66,6 +72,7 @@ const fundCampaignPledge = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
+  const anchorRef = useRef<HTMLDivElement>(null);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
@@ -210,7 +217,7 @@ const fundCampaignPledge = (): JSX.Element => {
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : event.currentTarget);
+    setAnchor(anchor ? null : anchorRef.current);
   };
 
   const isWithinCampaignDates = useMemo(() => {
@@ -588,38 +595,44 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-        data-testid="extra-users-popup"
-      >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={user.id}
-            data-testid={`extraUser-${index}`}
+      <Popover.Root open={open}>
+        <Popover.Trigger>
+          <div id={id} ref={anchorRef} />
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Positioner
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.avatarURL ? (
-              <img
-                src={user.avatarURL}
-                alt={user.name}
-                className={styles.TableImagePledge}
-              />
-            ) : (
-              <Avatar
-                containerStyle={styles.imageContainerPledge}
-                avatarStyle={styles.TableImagePledge}
-                name={user.name}
-                alt={user.name}
-              />
-            )}
-            <span>{user.name}</span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Popup>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={user.id}
+                  data-testid={`extraUser-${index}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt={user.name}
+                      className={styles.TableImagePledge}
+                    />
+                  ) : (
+                    <Avatar
+                      containerStyle={styles.imageContainerPledge}
+                      avatarStyle={styles.TableImagePledge}
+                      name={user.name}
+                      alt={user.name}
+                    />
+                  )}
+                  <span>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };
