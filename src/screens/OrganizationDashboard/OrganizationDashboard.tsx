@@ -184,7 +184,7 @@ function OrganizationDashboard(): JSX.Element {
   });
 
   useEffect(() => {
-    if (orgEventsData && !hasFetchedAllEvents.current) {
+    if (orgEventsData) {
       const now = new Date();
       const allEvents = orgEventsData.organization.events.edges;
 
@@ -195,22 +195,8 @@ function OrganizationDashboard(): JSX.Element {
       });
 
       setUpcomingEvents(upcomingEvents);
-      hasFetchedAllEvents.current = true; // Set to true since we're getting all upcoming events in date range
-
-      if (orgEventsData.organization.events.pageInfo.hasNextPage) {
-        fetchMore({
-          variables: {
-            id: orgId,
-            first: 32,
-            after: orgEventsData.organization.events.pageInfo.endCursor,
-            startDate: dayjs().startOf('day').toISOString(),
-            endDate: dayjs().add(3, 'months').endOf('day').toISOString(),
-            includeRecurring: true,
-          },
-        });
-      }
     }
-  }, [orgEventsData, fetchMore, orgId]);
+  }, [orgEventsData, orgId]);
 
   useEffect(() => {
     if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
