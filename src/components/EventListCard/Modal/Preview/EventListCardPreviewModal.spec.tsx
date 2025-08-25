@@ -559,6 +559,59 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
+  test('sets default recurrence when custom is selected and no recurrence is set', async () => {
+    const mockSetRecurrence = vi.fn();
+    const mockSetCustomRecurrenceModalIsOpen = vi.fn();
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRecurringTemplate: true,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+      recurrence: null,
+      setRecurrence: mockSetRecurrence,
+      setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
+    });
+
+    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    await userEvent.click(dropdownToggle);
+
+    const customOption = screen.getByTestId('recurrenceOption-5');
+    await userEvent.click(customOption);
+
+    expect(mockSetRecurrence).toHaveBeenCalled();
+    expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
+  });
+
+  test('does not set recurrence when custom is selected and recurrence is already set', async () => {
+    const mockSetRecurrence = vi.fn();
+    const mockSetCustomRecurrenceModalIsOpen = vi.fn();
+    const existingRecurrence = {
+      frequency: Frequency.DAILY,
+      interval: 1,
+      never: true,
+    };
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRecurringTemplate: true,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+      recurrence: existingRecurrence,
+      setRecurrence: mockSetRecurrence,
+      setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
+    });
+
+    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    await userEvent.click(dropdownToggle);
+
+    const customOption = screen.getByTestId('recurrenceOption-5');
+    await userEvent.click(customOption);
+
+    expect(mockSetRecurrence).not.toHaveBeenCalled();
+    expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
+  });
+
   test('updates start date and adjusts end date when start date changes', async () => {
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
