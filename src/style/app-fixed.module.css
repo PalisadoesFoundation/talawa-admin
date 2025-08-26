@@ -4749,7 +4749,7 @@ form label,
   }
 
   .profileContainer {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
