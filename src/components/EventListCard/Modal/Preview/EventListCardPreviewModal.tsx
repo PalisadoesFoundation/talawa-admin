@@ -300,12 +300,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   value={dayjs(eventStartDate)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setEventStartDate(date?.toDate());
-                      setEventEndDate(
-                        eventEndDate < date?.toDate()
-                          ? date?.toDate()
-                          : eventEndDate,
-                      );
+                      const newStartDate = date.toDate();
+                      setEventStartDate(newStartDate);
+                      // Auto-adjust end date if it's before the new start date
+                      if (eventEndDate < newStartDate) {
+                        setEventEndDate(newStartDate);
+                      }
                     }
                   }}
                   disabled={!canEditEvent}

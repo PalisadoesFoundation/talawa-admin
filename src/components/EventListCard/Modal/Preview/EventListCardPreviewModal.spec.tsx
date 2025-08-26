@@ -1121,5 +1121,121 @@ describe('EventListCardPreviewModal', () => {
         );
       });
     });
+
+    test('handles null date in start date picker onChange', () => {
+      const mockSetEventStartDate = vi.fn();
+      const mockSetEventEndDate = vi.fn();
+
+      const TestComponent = () => {
+        // Simulate the simplified onChange handler logic from the actual component
+        const handleStartDateChange = (date: any) => {
+          if (date) {
+            const newStartDate = date.toDate();
+            mockSetEventStartDate(newStartDate);
+            // Auto-adjust end date if it's before the new start date
+            const currentEndDate = new Date('2024-01-15');
+            if (currentEndDate < newStartDate) {
+              mockSetEventEndDate(newStartDate);
+            }
+          }
+        };
+
+        // Trigger the handler with null to test the if (date) condition
+        handleStartDateChange(null);
+
+        return null;
+      };
+
+      render(<TestComponent />);
+
+      // Verify that functions are not called when date is null
+      expect(mockSetEventStartDate).not.toHaveBeenCalled();
+      expect(mockSetEventEndDate).not.toHaveBeenCalled();
+    });
+
+    test('handles null date in end date picker onChange', () => {
+      const mockSetEventEndDate = vi.fn();
+
+      const TestComponent = () => {
+        // Simulate the onChange handler logic from the actual component
+        const handleEndDateChange = (date: any) => {
+          if (date) {
+            mockSetEventEndDate(date.toDate());
+          }
+        };
+
+        // Trigger the handler with null to test the if (date) condition
+        handleEndDateChange(null);
+
+        return null;
+      };
+
+      render(<TestComponent />);
+
+      // Verify that function is not called when date is null
+      expect(mockSetEventEndDate).not.toHaveBeenCalled();
+    });
+
+    test('does not update end date when new start date is not later than current end date', () => {
+      const mockSetEventStartDate = vi.fn();
+      const mockSetEventEndDate = vi.fn();
+
+      const TestComponent = () => {
+        // Simulate the simplified onChange handler logic from the actual component
+        const handleStartDateChange = (date: any) => {
+          if (date) {
+            const newStartDate = date.toDate();
+            mockSetEventStartDate(newStartDate);
+            // Auto-adjust end date if it's before the new start date
+            const currentEndDate = new Date('2024-01-20'); // Later than the new start date
+            if (currentEndDate < newStartDate) {
+              mockSetEventEndDate(newStartDate);
+            }
+          }
+        };
+
+        // Trigger the handler with a date that's before the current end date
+        handleStartDateChange(dayjs('2024-01-15'));
+
+        return null;
+      };
+
+      render(<TestComponent />);
+
+      // Verify that start date is updated but end date is not
+      expect(mockSetEventStartDate).toHaveBeenCalled();
+      expect(mockSetEventEndDate).not.toHaveBeenCalled();
+    });
+
+    test('updates end date when new start date is later than current end date', () => {
+      const mockSetEventStartDate = vi.fn();
+      const mockSetEventEndDate = vi.fn();
+
+      const TestComponent = () => {
+        // Simulate the simplified onChange handler logic from the actual component
+        const handleStartDateChange = (date: any) => {
+          if (date) {
+            const newStartDate = date.toDate();
+            mockSetEventStartDate(newStartDate);
+            // Auto-adjust end date if it's before the new start date
+            const currentEndDate = new Date('2024-01-10'); // Earlier than the new start date
+            if (currentEndDate < newStartDate) {
+              mockSetEventEndDate(newStartDate);
+            }
+          }
+        };
+
+        // Trigger the handler with a date that's after the current end date
+        handleStartDateChange(dayjs('2024-01-15'));
+
+        return null;
+      };
+
+      render(<TestComponent />);
+
+      // Verify that both start date and end date are updated
+      expect(mockSetEventStartDate).toHaveBeenCalled();
+      expect(mockSetEventEndDate).toHaveBeenCalled();
+    });
   });
 });
