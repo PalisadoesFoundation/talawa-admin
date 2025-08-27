@@ -39,7 +39,6 @@ import {
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
-// import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
 import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
 import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
@@ -54,7 +53,6 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 import type {
   IEvent,
   InterfaceOrganizationMembersConnectionEdgePg,
@@ -65,13 +63,7 @@ import type {
 import styles from '../../style/app-fixed.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
-interface OrganizationDashboardProps {
-  currentDate?: Date;
-}
-
-function OrganizationDashboard({
-  currentDate = new Date(),
-}: OrganizationDashboardProps): JSX.Element {
+function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -80,6 +72,7 @@ function OrganizationDashboard({
   const navigate = useNavigate();
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
+  const [eventCount, setEventCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
@@ -167,16 +160,7 @@ function OrganizationDashboard({
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
-      id: orgId,
-      first: 10,
-      after: null,
-      startDate: dayjs(currentDate).startOf('day').toISOString(),
-      endDate: dayjs(currentDate).add(3, 'months').endOf('day').toISOString(),
-      includeRecurring: true,
-    },
-    errorPolicy: 'all',
-    fetchPolicy: 'cache-first',
+    variables: { id: orgId, first: 50, after: null },
   });
 
   const {
@@ -190,19 +174,35 @@ function OrganizationDashboard({
   });
 
   useEffect(() => {
-    if (orgEventsData) {
-      const now = currentDate;
+    if (orgEventsData && !hasFetchedAllEvents.current) {
+      const now = new Date();
+
       const allEvents = orgEventsData.organization.events.edges;
 
-      // Use the correct data structure: edge.node.startAt (not edge.node.event.startAt)
-      const upcomingEvents = allEvents.filter((edge: any) => {
-        const eventStartDate = edge?.node?.startAt;
-        return eventStartDate && new Date(eventStartDate) > now;
+      const newTotalEventCount = allEvents.length;
+
+      const upcomingEvents = allEvents.filter((event: IEvent) => {
+        // Filter events that start after the current date
+        return new Date(event?.node?.startAt) > now;
       });
 
-      setUpcomingEvents(upcomingEvents);
+      setEventCount((prevCount) => prevCount + newTotalEventCount);
+
+      setUpcomingEvents((prevEvents) => [...prevEvents, ...upcomingEvents]);
+
+      if (orgEventsData.organization.events.pageInfo.hasNextPage) {
+        fetchMore({
+          variables: {
+            id: orgId,
+            first: 32,
+            after: orgEventsData.organization.events.pageInfo.endCursor,
+          },
+        });
+      } else {
+        hasFetchedAllEvents.current = true;
+      }
     }
-  }, [orgEventsData, orgId]);
+  }, [orgEventsData, fetchMore, orgId]);
 
   useEffect(() => {
     if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
@@ -297,7 +297,7 @@ function OrganizationDashboard({
           orgEventsLoading ||
           orgBlockedUsersLoading ? (
             <Row style={{ display: 'flex' }}>
-              {[...Array(5)].map((_, index) => {
+              {[...Array(6)].map((_, index) => {
                 return (
                   <Col
                     xs={6}
@@ -366,6 +366,22 @@ function OrganizationDashboard({
                 sm={4}
                 role="button"
                 className="mb-4"
+                data-testid="eventsCount"
+                onClick={async (): Promise<void> => {
+                  await navigate(eventsLink);
+                }}
+              >
+                <DashBoardCard
+                  count={eventCount}
+                  title={t('events')}
+                  icon={<EventsIcon fill="#555555" />}
+                />
+              </Col>
+              <Col
+                xs={6}
+                sm={4}
+                role="button"
+                className="mb-4"
                 data-testid="blockedUsersCount"
                 onClick={async (): Promise<void> => {
                   await navigate(blockUserLink);
@@ -425,18 +441,25 @@ function OrganizationDashboard({
                       <h6>{t('noUpcomingEvents')}</h6>
                     </div>
                   ) : (
-                    upcomingEvents?.slice(0, 10).map((edge: any) => {
-                      return (
-                        <CardItem
-                          key={edge.node.id}
-                          type="Event"
-                          title={edge.node.name || 'Untitled Event'}
-                          startdate={edge.node.startAt}
-                          enddate={edge.node.endAt}
-                          location={edge.node.location}
-                        />
-                      );
-                    })
+                    [...upcomingEvents]
+                      .sort(
+                        (a, b) =>
+                          new Date(a.node.startAt).getTime() -
+                          new Date(b.node.startAt).getTime(),
+                      )
+                      .slice(0, 10)
+                      .map((event) => {
+                        return (
+                          <CardItem
+                            data-testid="cardItem"
+                            type="Event"
+                            key={event.node.id}
+                            startdate={event?.node.startAt}
+                            enddate={event?.node.endAt}
+                            title={event?.node.name}
+                          />
+                        );
+                      })
                   )}
                 </Card.Body>
               </Card>

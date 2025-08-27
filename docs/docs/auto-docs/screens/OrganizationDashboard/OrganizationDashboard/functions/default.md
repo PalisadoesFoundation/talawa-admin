@@ -4,15 +4,9 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(): `Element`
 
-Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L72)
-
-## Parameters
-
-### \_\_namedParameters
-
-`OrganizationDashboardProps`
+Defined in: [src/screens/OrganizationDashboard/OrganizationDashboard.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/OrganizationDashboard.tsx#L66)
 
 ## Returns
 
