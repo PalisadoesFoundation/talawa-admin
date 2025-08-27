@@ -23,7 +23,6 @@ import {
 import {
   MEMBERSHIP_REQUEST,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
-  GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
 
 vi.mock('react-i18next', () => ({
@@ -53,17 +52,22 @@ vi.mock('react-toastify', () => ({
 interface InterfaceRenderOptions {
   mocks: MockedResponse[];
   initialRoute?: string;
+  currentDate?: Date;
 }
 
 function renderWithProviders({
   mocks,
   initialRoute = '/orgdash/orgId',
+  currentDate,
 }: InterfaceRenderOptions): RenderResult {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <MemoryRouter initialEntries={[initialRoute]}>
         <Routes>
-          <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
+          <Route
+            path="/orgdash/:orgId"
+            element={<OrganizationDashboard currentDate={currentDate} />}
+          />
           <Route path="/orglist" element={<div>Home Page</div>} />
         </Routes>
       </MemoryRouter>
@@ -126,7 +130,10 @@ describe('OrganizationDashboard', () => {
   });
 
   it('renders empty states when no data is returned', async () => {
-    renderWithProviders({ mocks: EMPTY_MOCKS });
+    renderWithProviders({
+      mocks: EMPTY_MOCKS,
+      currentDate: new Date('2025-08-27T12:00:00.000Z'),
+    });
 
     await waitFor(() => {
       expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
@@ -142,7 +149,10 @@ describe('OrganizationDashboard', () => {
   });
 
   it('navigates to "/" and shows error toast when GraphQL errors occur', async () => {
-    renderWithProviders({ mocks: ERROR_MOCKS });
+    renderWithProviders({
+      mocks: ERROR_MOCKS,
+      currentDate: new Date('2025-08-27T12:00:00.000Z'),
+    });
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('errorLoading');
@@ -503,6 +513,27 @@ describe('OrganizationDashboard', () => {
           screen.queryAllByTestId('fallback-ui').length,
         ).toBeLessThanOrEqual(5);
       });
+    });
+    it('should display only upcoming events', async () => {
+      renderWithProviders({
+        mocks: MOCKS,
+        currentDate: new Date('2025-08-27T12:00:00.000Z'),
+      });
+
+      // Wait for the section to appear and find the card element
+      const upcomingEventsSection = await screen.findByText('upcomingEvents');
+      const card = upcomingEventsSection.closest('.card');
+      expect(card).not.toBeNull();
+
+      // Check for events within the card
+      if (card) {
+        expect(
+          within(card as HTMLElement).getByText('Upcoming Event'),
+        ).toBeInTheDocument();
+        expect(
+          within(card as HTMLElement).queryByText('Past Event'),
+        ).not.toBeInTheDocument();
+      }
     });
   });
 });

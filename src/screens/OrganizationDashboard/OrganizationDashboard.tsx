@@ -65,7 +65,13 @@ import type {
 import styles from '../../style/app-fixed.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
-function OrganizationDashboard(): JSX.Element {
+interface OrganizationDashboardProps {
+  currentDate?: Date;
+}
+
+function OrganizationDashboard({
+  currentDate = new Date(),
+}: OrganizationDashboardProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -165,8 +171,8 @@ function OrganizationDashboard(): JSX.Element {
       id: orgId,
       first: 10,
       after: null,
-      startDate: dayjs().startOf('day').toISOString(),
-      endDate: dayjs().add(3, 'months').endOf('day').toISOString(),
+      startDate: dayjs(currentDate).startOf('day').toISOString(),
+      endDate: dayjs(currentDate).add(3, 'months').endOf('day').toISOString(),
       includeRecurring: true,
     },
     errorPolicy: 'all',
@@ -185,7 +191,7 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgEventsData) {
-      const now = new Date();
+      const now = currentDate;
       const allEvents = orgEventsData.organization.events.edges;
 
       // Use the correct data structure: edge.node.startAt (not edge.node.event.startAt)
