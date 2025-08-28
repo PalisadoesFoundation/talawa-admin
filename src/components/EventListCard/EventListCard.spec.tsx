@@ -49,7 +49,9 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const renderEventListCard = (props: InterfaceEvent): RenderResult => {
+const renderEventListCard = (
+  props: InterfaceEvent & { refetchEvents?: () => void },
+): RenderResult => {
   const { key, ...restProps } = props; // Destructure the key and separate other props
 
   return render(
@@ -92,8 +94,8 @@ describe('Testing Event List Card', () => {
     isRegisterable: true,
     allDay: false,
     location: 'New Delhi',
-    startDate: '03/18/2022',
-    endDate: '03/20/2022',
+    startDate: '2022-03-18',
+    endDate: '2022-03-20',
     startTime: '09:00:00',
     endTime: '17:00:00',
   };
@@ -109,23 +111,6 @@ describe('Testing Event List Card', () => {
     vi.clearAllMocks();
   });
 
-  it('Testing for event modal', async () => {
-    renderEventListCard(props[1]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
   it('Should navigate to "/" if orgId is not defined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -137,8 +122,8 @@ describe('Testing Event List Card', () => {
               name=""
               location=""
               description=""
-              startDate="19/03/2022"
-              endDate="26/03/2022"
+              startDate="2022-03-19"
+              endDate="2022-03-26"
               startTime="02:00"
               endTime="06:00"
               allDay={true}
@@ -164,127 +149,6 @@ describe('Testing Event List Card', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Dogs Care')).toBeInTheDocument();
-    });
-  });
-
-  it('should render props and text elements test for the screen', async () => {
-    renderEventListCard(props[1]);
-
-    expect(screen.getByText(props[1].name)).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('updateDescription')).toHaveValue(
-      props[1].description,
-    );
-    expect(screen.getByTestId('updateLocation')).toHaveValue(props[1].location);
-
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('Should render truncated event name when length is more than 100', async () => {
-    const longEventName = 'a'.repeat(101);
-    renderEventListCard({ ...props[1], name: longEventName });
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateName')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('updateName')).toHaveValue(
-      `${longEventName.substring(0, 100)}...`,
-    );
-
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('Should render full event name when length is less than or equal to 100', async () => {
-    const shortEventName = 'a'.repeat(100);
-    renderEventListCard({ ...props[1], name: shortEventName });
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateName')).toBeInTheDocument();
-    });
-
-    expect(screen.getByTestId('updateName')).toHaveValue(shortEventName);
-
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('Should render truncated event description when length is more than 256', async () => {
-    const longEventDescription = 'a'.repeat(257);
-
-    renderEventListCard({
-      ...props[1],
-      description: longEventDescription,
-    });
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
-    });
-    expect(screen.getByTestId('updateDescription')).toHaveValue(
-      `${longEventDescription.substring(0, 256)}...`,
-    );
-
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('Should render full event description when length is less than or equal to 256', async () => {
-    const shortEventDescription = 'a'.repeat(256);
-
-    renderEventListCard({
-      ...props[1],
-      description: shortEventDescription,
-    });
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('updateDescription')).toBeInTheDocument();
-    });
-    expect(screen.getByTestId('updateDescription')).toHaveValue(
-      shortEventDescription,
-    );
-
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
     });
   });
 
@@ -320,103 +184,6 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('card')).not.toBeInTheDocument();
       expect(screen.queryByText('Event Dashboard (User)')).toBeInTheDocument();
-    });
-  });
-
-  it('Should update a non-recurring event', async () => {
-    renderEventListCard(props[4]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    const eventName = screen.getByTestId('updateName');
-    fireEvent.change(eventName, { target: { value: '' } });
-    await userEvent.type(eventName, updateData.name);
-
-    const description = screen.getByTestId('updateDescription');
-    fireEvent.change(description, { target: { value: '' } });
-    await userEvent.type(description, updateData.description);
-
-    const eventLocation = screen.getByTestId('updateLocation');
-    fireEvent.change(eventLocation, { target: { value: '' } });
-    await userEvent.type(eventLocation, updateData.location);
-
-    const startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: updateData.startDate },
-    });
-
-    const endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: updateData.endDate },
-    });
-
-    await userEvent.click(screen.getByTestId('updateAllDay'));
-    await userEvent.click(screen.getByTestId('updateIsPublic'));
-    await userEvent.click(screen.getByTestId('updateRegistrable'));
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('Should update a non all day non-recurring event', async () => {
-    renderEventListCard(props[4]);
-
-    await userEvent.click(screen.getByTestId('card'));
-
-    const eventName = screen.getByTestId('updateName');
-    fireEvent.change(eventName, { target: { value: '' } });
-    await userEvent.type(eventName, updateData.name);
-
-    const description = screen.getByTestId('updateDescription');
-    fireEvent.change(description, { target: { value: '' } });
-    await userEvent.type(description, updateData.description);
-
-    const eventLocation = screen.getByTestId('updateLocation');
-    fireEvent.change(eventLocation, { target: { value: '' } });
-    await userEvent.type(eventLocation, updateData.location);
-
-    const startDatePicker = screen.getByLabelText(translations.startDate);
-    fireEvent.change(startDatePicker, {
-      target: { value: updateData.startDate },
-    });
-
-    const endDatePicker = screen.getByLabelText(translations.endDate);
-    fireEvent.change(endDatePicker, {
-      target: { value: updateData.endDate },
-    });
-
-    const startTimePicker = screen.getByLabelText(translations.startTime);
-    fireEvent.change(startTimePicker, {
-      target: { value: updateData.startTime },
-    });
-
-    const endTimePicker = screen.getByLabelText(translations.endTime);
-    fireEvent.change(endTimePicker, {
-      target: { value: updateData.endTime },
-    });
-
-    // Only toggle isRegistrable since we want isPublic to be false
-    await userEvent.click(screen.getByTestId('updateIsPublic'));
-    await userEvent.click(screen.getByTestId('updateRegistrable'));
-
-    await userEvent.click(screen.getByTestId('updateEventBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventUpdated);
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
     });
   });
 

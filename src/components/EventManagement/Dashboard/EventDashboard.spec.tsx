@@ -63,6 +63,12 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
+  beforeAll(() => {
+    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
+      __esModule: true,
+      default: () => <div data-testid="event-list-card-modals" />,
+    }));
+  });
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();

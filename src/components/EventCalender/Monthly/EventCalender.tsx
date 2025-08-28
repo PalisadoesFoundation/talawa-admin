@@ -242,6 +242,7 @@ const Calendar: React.FC<
           totalCount={datas.totalCount}
           hasExceptions={datas.hasExceptions}
           progressLabel={datas.progressLabel}
+          recurrenceDescription={datas.recurrenceDescription}
         />
       ),
     );
@@ -418,6 +419,7 @@ const Calendar: React.FC<
               totalCount={datas.totalCount}
               hasExceptions={datas.hasExceptions}
               progressLabel={datas.progressLabel}
+              recurrenceDescription={datas.recurrenceDescription}
             />
           )) || [];
 
@@ -477,34 +479,36 @@ const Calendar: React.FC<
       {viewType !== ViewType.YEAR && (
         <div className={styles.calendar__header}>
           <div className={styles.calender_month}>
-            <Button
-              variant="outlined"
-              className={styles.buttonEventCalendar}
-              onClick={
-                viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
-              }
-              data-testid="prevmonthordate"
-            >
-              <ChevronLeft />
-            </Button>
+            <div className={styles.navigation_buttons}>
+              <Button
+                variant="outlined"
+                className={styles.buttonEventCalendar}
+                onClick={
+                  viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                }
+                data-testid="prevmonthordate"
+              >
+                <ChevronLeft />
+              </Button>
 
-            <div
-              className={styles.calendar__header_month}
-              data-testid="current-date"
-            >
-              {viewType === ViewType.DAY ? `${currentDate}` : ''} {currentYear}{' '}
-              <div>{months[currentMonth]}</div>
+              <Button
+                variant="outlined"
+                className={styles.buttonEventCalendar}
+                onClick={
+                  viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                }
+                data-testid="nextmonthordate"
+              >
+                <ChevronRight />
+              </Button>
+              <div
+                className={styles.calendar__header_month}
+                data-testid="current-date"
+              >
+                {viewType === ViewType.DAY ? `${currentDate} ` : ''}
+                {currentYear} {months[currentMonth]}
+              </div>
             </div>
-            <Button
-              variant="outlined"
-              className={styles.buttonEventCalendar}
-              onClick={
-                viewType === ViewType.DAY ? handleNextDate : handleNextMonth
-              }
-              data-testid="nextmonthordate"
-            >
-              <ChevronRight />
-            </Button>
           </div>
           <div>
             <Button
