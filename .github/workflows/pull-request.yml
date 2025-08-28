@@ -307,6 +307,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           exclude: 'docs/'
           files: ./coverage/vitest/lcov.info
+          flags: vitest
           fail_ci_if_error: true
 
       - name: Test acceptable level of code coverage

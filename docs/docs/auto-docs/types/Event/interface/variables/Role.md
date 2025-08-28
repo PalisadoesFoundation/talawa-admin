@@ -6,7 +6,7 @@
 
 > `const` **Role**: `object`
 
-Defined in: [src/types/Event/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L6)
+Defined in: [src/types/Event/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L7)
 
 ## Type declaration
 

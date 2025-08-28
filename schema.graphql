@@ -887,7 +887,16 @@ type Mutation {
     input: UpdateAgendaCategoryInput!
   ): AgendaCategory
   updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateEvent(input: MutationUpdateEventInput!): EventPg
+  updateStandaloneEvent(input: MutationUpdateEventInput!): EventPg
+  updateSingleRecurringEventInstance(
+    input: MutationUpdateSingleRecurringEventInstanceInput!
+  ): EventPg
+  updateThisAndFollowingEvents(
+    input: MutationUpdateThisAndFollowingEventsInput!
+  ): EventPg
+  updateEntireRecurringEventSeries(
+    input: MutationUpdateEntireRecurringEventSeriesInput!
+  ): EventPg
   updateEventVolunteer(
     data: UpdateEventVolunteerInput
     id: ID!
@@ -1283,6 +1292,11 @@ type EventPg {
   progressLabel: String
   # Base event relationships
   baseEvent: EventPg
+  recurrenceDescription: String
+  """
+  The recurrence rule object for recurring events.
+  """
+  recurrenceRule: RecurrenceRule
   # Standard fields
   createdAt: DateTime
   updatedAt: DateTime
@@ -1311,6 +1325,25 @@ type EventPg {
     first: Int
     last: Int
   ): EventVenuesConnectionPg
+}
+
+type RecurrenceRule {
+  byDay: [String!]
+  byMonth: [Int!]
+  byMonthDay: [Int!]
+  count: Int
+  frequency: RecurrenceRuleFrequency
+  id: ID
+  interval: Int
+  recurrenceEndDate: DateTime
+  recurrenceStartDate: DateTime
+}
+
+enum RecurrenceRuleFrequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
 }
 
 type EventActionItemsConnectionPg {
@@ -2224,6 +2257,38 @@ input MutationUpdateEventInput {
   isPublic: Boolean
   isRegisterable: Boolean
 }
+
+input MutationUpdateSingleRecurringEventInstanceInput {
+  allDay: Boolean
+  description: String
+  endAt: DateTime
+  id: ID!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String
+  startAt: DateTime
+}
+
+input MutationUpdateThisAndFollowingEventsInput {
+  allDay: Boolean
+  description: String
+  endAt: DateTime
+  id: ID!
+  isPublic: Boolean
+  isRegisterable: Boolean
+  location: String
+  name: String
+  recurrence: RecurrenceInput
+  startAt: DateTime
+}
+
+input MutationUpdateEntireRecurringEventSeriesInput {
+  description: String
+  id: ID!
+  name: String
+}
+
 input MutationDeleteEntireRecurringEventSeriesInput {
   id: ID!
 }
