@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Transactions/Transactions.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Transactions/Transactions.tsx#L49)
+Defined in: [src/screens/UserPortal/Transactions/Transactions.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Transactions/Transactions.tsx#L27)
 
 ## Returns
 
