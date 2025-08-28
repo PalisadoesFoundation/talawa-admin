@@ -8453,6 +8453,25 @@ form {
   --bs-gutter-x: 0;
 }
 
+.transactionsContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentTransactions {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.transactionCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
 /* -- Events.tsx -- */
 
 .justifyspOrganizationEvents {
