@@ -4,13 +4,7 @@ import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import { Popover } from '@base-ui-components/react/popover';
 import dayjs from 'dayjs';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
@@ -72,13 +66,12 @@ const fundCampaignPledge = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
-  const anchorRef = useRef<HTMLDivElement>(null);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
-  const open = Boolean(anchor);
+  const [open, setOpen] = useState(false);
   const id = open ? 'simple-popup' : undefined;
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -212,12 +205,9 @@ const fundCampaignPledge = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
+  const handleClick = (users: InterfaceUserInfoPG[]): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : anchorRef.current);
+    setOpen(true);
   };
 
   const isWithinCampaignDates = useMemo(() => {
@@ -290,7 +280,7 @@ const fundCampaignPledge = (): JSX.Element => {
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                onClick={(e) => handleClick(e, extraUsers)}
+                onClick={() => handleClick(extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
                 +{extraUsers.length} more...
@@ -595,9 +585,9 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <Popover.Root open={open}>
+      <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger>
-          <div id={id} ref={anchorRef} />
+          <div id={id} />
         </Popover.Trigger>
 
         <Popover.Portal>

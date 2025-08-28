@@ -95,8 +95,6 @@ const Pledges = (): JSX.Element => {
   }
   const userId: string = userIdFromStorage as string;
 
-  const anchorRef = useRef<HTMLDivElement>(null);
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
@@ -111,7 +109,7 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  const open = Boolean(anchor);
+  const [open, setOpen] = useState(false);
   const id = open ? 'simple-popup' : undefined;
 
   const {
@@ -161,12 +159,9 @@ const Pledges = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
+  const handleClick = (users: InterfaceUserInfoPG[]): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : anchorRef.current);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -239,8 +234,8 @@ const Pledges = (): JSX.Element => {
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, users.slice(2))}
+                data-testid={`moreContainer-${params.row.id}`}
+                onClick={() => handleClick(users.slice(2))}
               >
                 +{users.length - 2} more...
               </div>
@@ -490,9 +485,9 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <Popover.Root open={open}>
+      <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger>
-          <div id={id} ref={anchorRef} />
+          <div id={id} />
         </Popover.Trigger>
 
         <Popover.Portal>
