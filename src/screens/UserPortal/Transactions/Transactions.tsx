@@ -17,24 +17,18 @@
  * ```
  */
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useLocalStorage } from 'utils/useLocalstorage';
 import { PluginInjector } from 'plugin';
 
 export default function Transactions(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'transactions' });
 
-  document.title = t('title');
-
-  const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
-  const { orgId: organizationId } = useParams();
-  const [organizationDetails, setOrganizationDetails] = useState<{
-    name: string;
-  }>({ name: '' });
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   return (
     <>

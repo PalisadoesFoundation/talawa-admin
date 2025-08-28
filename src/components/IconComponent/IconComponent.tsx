@@ -135,23 +135,17 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
         />
       );
     case 'Funds':
+    case 'Donate':
+    case 'Transactions':
       return (
-        <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
+        <FundsIcon
+          data-testid={`Icon-Component-${props.name}`}
+          stroke={props.fill}
+        />
       );
     case 'Venues':
       return (
         <VenueIcon data-testid="Icon-Component-Venues" stroke={props.fill} />
-      );
-    case 'Donate':
-      return (
-        <FundsIcon data-testid="Icon-Component-Donate" stroke={props.fill} />
-      );
-    case 'Transactions':
-      return (
-        <FundsIcon
-          data-testid="Icon-Component-Transactions"
-          stroke={props.fill}
-        />
       );
     case 'Campaigns':
       return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -14,7 +14,7 @@ vi.mock('plugin', () => ({
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
-  default: () => ({
+  useLocalStorage: () => ({
     getItem: (_key: string) => 'test-user-id',
     setItem: (_key: string, _value: string) => undefined,
     removeItem: (_key: string) => undefined,
@@ -26,12 +26,15 @@ describe('UserPortal Transactions', () => {
     document.title = '';
   });
 
-  const renderWithRouter = (initialEntry = '/org/123/transactions') => {
+  const renderWithRouter = (initialEntry = '/user/transactions/123') => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
         <MemoryRouter initialEntries={[initialEntry]}>
           <Routes>
-            <Route path="/org/:orgId/transactions" element={<Transactions />} />
+            <Route
+              path="/user/transactions/:orgId"
+              element={<Transactions />}
+            />
           </Routes>
         </MemoryRouter>
       </I18nextProvider>,
