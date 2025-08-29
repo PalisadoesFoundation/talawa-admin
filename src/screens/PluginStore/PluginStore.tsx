@@ -169,8 +169,7 @@ export default function PluginStore() {
         }
       }
 
-      console.log('All plugins for display:', allPluginsForDisplay);
-      console.log('GraphQL plugins:', graphqlPlugins);
+
 
       if (!searchTerm) {
         if (filterState.option === 'all') {
@@ -304,6 +303,7 @@ export default function PluginStore() {
   const handleInstallPlugin = async (plugin: IPluginMeta) => {
     setLoading(true);
     try {
+      // First, call the API to mark the plugin as installed
       await installPlugin({
         variables: {
           input: {
@@ -311,6 +311,12 @@ export default function PluginStore() {
           },
         },
       });
+
+      // Then, call the admin plugin manager to handle the installation lifecycle
+      const success = await getPluginManager().installPlugin(plugin.id);
+      if (!success) {
+        throw new Error('Failed to install plugin in admin plugin manager');
+      }
 
       // Refetch plugin data to update UI
       await refetch();
@@ -399,11 +405,7 @@ export default function PluginStore() {
           const success = await adminPluginFileService.removePlugin(
             pluginToUninstall.id,
           );
-          if (success) {
-            console.log(
-              `Admin plugin directory removed for: ${pluginToUninstall.id}`,
-            );
-          } else {
+          if (!success) {
             console.error(
               `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
             );
@@ -417,8 +419,8 @@ export default function PluginStore() {
         }
       }
 
-      // Unload from plugin manager
-      const success = await getPluginManager().unloadPlugin(
+      // Call admin plugin manager uninstall lifecycle
+      const success = await getPluginManager().uninstallPlugin(
         pluginToUninstall.id,
       );
       if (!success) {

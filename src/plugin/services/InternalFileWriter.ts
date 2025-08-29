@@ -104,10 +104,7 @@ export class InternalFileWriter {
         writtenFiles.push(filePath);
       }
 
-      console.log(
-        `Plugin ${pluginId} installed successfully (${writtenFiles.length} files)`,
-      );
-      console.log(`Files written to: ${pluginPath}`);
+
 
       return {
         success: true,
@@ -235,7 +232,7 @@ export class InternalFileWriter {
 
       await this.removeDirectory(pluginPath);
 
-      console.log(`Plugin ${pluginId} removed successfully`);
+
 
       return {
         success: true,
