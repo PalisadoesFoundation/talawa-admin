@@ -1,3 +1,47 @@
+/**
+ * AdvertisementRegister Component
+ *
+ * This component handles the creation and editing of advertisements for an organization.
+ * It provides a modal-based form to input advertisement details such as name, media, type,
+ * start date, and end date. The component supports both "register" and "edit" modes.
+ *
+ * @component
+ * @param {InterfaceAddOnRegisterProps} props - The properties for the component.
+ * @param {string} [props.formStatus='register'] - Determines whether the form is in "register" or "edit" mode.
+ * @param {string} [props.idEdit] - The ID of the advertisement being edited (used in "edit" mode).
+ * @param {string} [props.nameEdit=''] - The name of the advertisement being edited.
+ * @param {string} [props.typeEdit='BANNER'] - The type of the advertisement being edited.
+ * @param {string} [props.advertisementMediaEdit=''] - The media file of the advertisement being edited.
+ * @param {Date} [props.startDateEdit=new Date()] - The start date of the advertisement being edited.
+ * @param {Date} [props.endDateEdit=new Date()] - The end date of the advertisement being edited.
+ * @param {Function} props.setAfter - Callback to reset pagination or refetch data after mutation.
+ *
+ * @returns {JSX.Element} The AdvertisementRegister component.
+ *
+ * @remarks
+ * - Uses `react-bootstrap` for modal and form components.
+ * - Integrates with Apollo Client for GraphQL mutations and queries.
+ * - Validates date ranges to ensure the end date is not earlier than the start date.
+ * - Converts uploaded media files to Base64 format for preview and submission.
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="register"
+ *   setAfter={setAfterCallback}
+ * />
+ *
+ * @example
+ * <AdvertisementRegister
+ *   formStatus="edit"
+ *   idEdit="123"
+ *   nameEdit="Sample Ad"
+ *   typeEdit="POPUP"
+ *   advertisementMediaEdit="base64string"
+ *   startDateEdit={new Date()}
+ *   endDateEdit={new Date()}
+ *   setAfter={setAfterCallback}
+ * />
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
