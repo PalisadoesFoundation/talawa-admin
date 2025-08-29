@@ -24,14 +24,20 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  let reloadSpy: ReturnType<typeof vi.spyOn>;
+  const originalLocation = window.location;
   beforeEach(() => {
-    reloadSpy = vi
-      .spyOn(window.location, 'reload')
-      .mockImplementation(() => {});
+    // @ts-expect-error: Overriding window.location for test
+    delete window.location;
+    // @ts-expect-error: Overriding window.location for test
+    window.location = { ...originalLocation, reload: vi.fn() };
   });
   afterEach(() => {
     vi.restoreAllMocks();
+    // Restore window.location to its original value
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
   // Create storage mock
