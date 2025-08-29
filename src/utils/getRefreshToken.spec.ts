@@ -26,7 +26,9 @@ vi.mock('@apollo/client', async () => {
 describe('refreshToken', () => {
   let reloadSpy: ReturnType<typeof vi.spyOn>;
   beforeEach(() => {
-    reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => {});
+    reloadSpy = vi
+      .spyOn(window.location, 'reload')
+      .mockImplementation(() => {});
   });
   afterEach(() => {
     reloadSpy.mockRestore();
@@ -61,8 +63,8 @@ describe('refreshToken', () => {
       'Talawa-admin_refreshToken',
       JSON.stringify('newRefreshToken'),
     );
-  expect(result).toBe(true);
-  expect(window.location.reload).toHaveBeenCalled();
+    expect(result).toBe(true);
+    expect(window.location.reload).toHaveBeenCalled();
   });
 
   it('returns false and logs error when token refresh fails', async () => {
