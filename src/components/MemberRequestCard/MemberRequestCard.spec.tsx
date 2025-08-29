@@ -84,6 +84,6 @@ describe('Testing Member Request Card', () => {
     expect(screen.queryByText(props.memberName)).not.toBeInTheDocument();
     expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
-// (Lines 87–88 removed: placeholder comments deleted)
+    // (Lines 87–88 removed: placeholder comments deleted)
   });
 });
