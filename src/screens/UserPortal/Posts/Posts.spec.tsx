@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, within, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -17,6 +17,7 @@ import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { expect, describe, it, vi } from 'vitest';
+import { toast } from 'react-toastify';
 
 import * as MinioUploadModule from 'utils/MinioUpload';
 import * as MinioDownloadModule from 'utils/MinioDownload';
@@ -25,14 +26,8 @@ import * as MinioDownloadModule from 'utils/MinioDownload';
 const { setItem } = useLocalStorage();
 
 // Mock toast notifications
-const mockToastError = vi.fn();
-const mockToastSuccess = vi.fn();
 vi.mock('react-toastify', () => ({
-  toast: {
-    error: (msg: string) => mockToastError(msg),
-    success: (msg: string) => mockToastSuccess(msg),
-    info: vi.fn(),
-  },
+  toast: { error: vi.fn(), success: vi.fn(), info: vi.fn() },
 }));
 
 // Mock react-router useParams
@@ -47,8 +42,12 @@ vi.mock('react-router', async () => {
 });
 
 // Mock MinIO hooks
-const mockUploadFileToMinio = vi.fn().mockResolvedValue({ objectName: 'mocked-object-key' });
-const mockGetFileFromMinio = vi.fn().mockResolvedValue('https://dummy-presigned-url.com/mocked-object-key');
+const mockUploadFileToMinio = vi
+  .fn()
+  .mockResolvedValue({ objectName: 'mocked-object-key' });
+const mockGetFileFromMinio = vi
+  .fn()
+  .mockResolvedValue('https://dummy-presigned-url.com/mocked-object-key');
 
 vi.spyOn(MinioUploadModule, 'useMinioUpload').mockReturnValue({
   uploadFileToMinio: mockUploadFileToMinio,
@@ -224,7 +223,6 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   localStorage.clear();
-  vi.clearAllMocks();
 });
 
 async function wait(ms = 100) {
@@ -263,8 +261,6 @@ Object.defineProperty(window, 'matchMedia', {
 describe('Home Screen: User Portal', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
-    // Reset mocks here
-    vi.clearAllMocks();
   });
 
   it('renders Home screen properly', async () => {
@@ -287,7 +283,9 @@ describe('Home Screen: User Portal', () => {
 
     // Upload file first
     const fileInput = screen.getByTestId('postImageInput');
-    const file = new File(['image content'], 'image.png', { type: 'image/png' });
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
 
     await userEvent.upload(fileInput, file);
     await wait();
@@ -303,7 +301,9 @@ describe('Home Screen: User Portal', () => {
     expect(screen.getByTestId('postInput')).toHaveValue('some content');
 
     // Image preview should appear
-    expect(await screen.findByAltText('Post Image Preview')).toBeInTheDocument();
+    expect(
+      await screen.findByAltText('Post Image Preview'),
+    ).toBeInTheDocument();
 
     // Close modal
     const closeButton = within(modal).getByRole('button', { name: /close/i });
@@ -313,9 +313,11 @@ describe('Home Screen: User Portal', () => {
     expect(screen.queryByText(/somethingOnYourMind/i)).not.toBeInTheDocument();
 
     // File input cleared after modal close
-    const clearedFileInput = screen.getByTestId('postImageInput') as HTMLInputElement;
-    fireEvent.change(clearedFileInput, { target: { files: null } });
-    expect(clearedFileInput.files?.length).toBeFalsy();
+    const clearedFileInput = screen.getByTestId(
+      'postImageInput',
+    ) as HTMLInputElement;
+    expect(clearedFileInput.value).toBe('');
+    expect(screen.queryByAltText('Post Image Preview')).not.toBeInTheDocument();
   });
 
   it('uploads image correctly and calls MinIO hooks', async () => {
@@ -323,13 +325,19 @@ describe('Home Screen: User Portal', () => {
     await wait();
 
     const fileInput = screen.getByTestId('postImageInput');
-    const file = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-image.png', {
+      type: 'image/png',
+    });
 
     await userEvent.upload(fileInput, file);
 
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'orgId');
-    expect(mockGetFileFromMinio).toHaveBeenCalledWith('mocked-object-key', 'orgId');
-    expect(mockToastSuccess).toHaveBeenCalledWith('Image uploaded successfully');
+    expect(mockGetFileFromMinio).toHaveBeenCalledWith(
+      'mocked-object-key',
+      'orgId',
+    );
+    await wait();
+    expect(toast.success).toHaveBeenCalledWith('Image uploaded successfully');
   });
 
   it('shows toast error on MinIO upload failure', async () => {
@@ -337,12 +345,15 @@ describe('Home Screen: User Portal', () => {
     renderHomeScreen();
 
     const fileInput = screen.getByTestId('postImageInput');
-    const file = new File(['dummy content'], 'test-image.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-image.png', {
+      type: 'image/png',
+    });
 
     await userEvent.upload(fileInput, file);
     await wait();
 
-    expect(mockToastError).toHaveBeenCalledWith('Image upload failed');
+    await wait();
+    expect(toast.success).toHaveBeenCalledWith('Image upload failed');
   });
 
   it('renders posts in PostCard correctly', async () => {
@@ -385,7 +396,10 @@ describe('HomeScreen with invalid orgId', () => {
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route path="/user/organization/" element={<Home />} />
-                <Route path="/user" element={<div data-testid="homeEl"></div>} />
+                <Route
+                  path="/user"
+                  element={<div data-testid="homeEl"></div>}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>

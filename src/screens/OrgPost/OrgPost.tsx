@@ -54,8 +54,7 @@ function OrgPost(): JSX.Element {
 
   // Initialize MinIO upload hook
   const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  const { getFileFromMinio } = useMinioDownload();
   const [sortingOption, setSortingOption] = useState('None');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -206,7 +205,11 @@ function OrgPost(): JSX.Element {
           currentUrl!,
         );
         const presignedUrl = await getFileFromMinio(objectName, currentUrl!);
-        setPostFormState((prev) => ({ ...prev, addMedia: presignedUrl }));
+        setPostFormState((prev) => ({
+          ...prev,
+          addMedia: presignedUrl,
+          postImage: objectName,
+        }));
         toast.success('Image uploaded successfully');
       } catch (error) {
         console.error('Error uploading image:', error);

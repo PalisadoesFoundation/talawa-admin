@@ -1,54 +1,14 @@
-/**
- * OrgPostCard Component
- *
- * This component represents a card for displaying organizational posts. It includes
- * functionalities for viewing, editing, deleting, and pinning/unpinning posts. The card
- * supports media attachments such as images and videos, and displays metadata like
- * creation date and author information.
- *
- * @param {InterfaceOrgPostCardProps} props - The props for the component.
- * @param {InterfacePost} props.post - The post data to be displayed in the card.
- *
- * @returns {JSX.Element} A React component that renders the organizational post card.
- *
- * @component
- *
- * @example
- * ```tsx
- * <OrgPostCard post={post} />
- * ```
- *
- * @remarks
- * - The component uses Apollo Client for GraphQL mutations and queries.
- * - It supports localization using the `react-i18next` library.
- * - Media attachments are displayed based on their MIME type (image or video).
- * - Includes modals for editing and deleting posts.
- *
- * @features
- * - View post details in a modal.
- * - Edit post caption and attachments.
- * - Delete a post with confirmation.
- * - Pin or unpin a post.
- * - Display author information fetched via GraphQL query.
- *
- * @dependencies
- * - `@apollo/client` for GraphQL operations.
- * - `react-bootstrap` for UI components.
- * - `react-toastify` for notifications.
- * - `react-i18next` for localization.
- * - `utils/convertToBase64` for file conversion.
- * - `utils/errorHandler` for error handling.
- *
- */
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
 import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import { validateFile } from 'utils/fileValidation';
+import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -89,6 +49,12 @@ interface InterfacePostFormState {
   attachments: { url: string; mimeType: string }[];
 }
 
+interface InterfacePreviewAttachment {
+  url: string; // presigned URL for preview
+  mimeType: string;
+  objectName: string; // objectName for submission
+}
+
 export default function OrgPostCard({
   post,
 }: InterfaceOrgPostCardProps): JSX.Element {
@@ -97,6 +63,9 @@ export default function OrgPostCard({
     attachments: [],
   });
 
+  const [localPreviews, setLocalPreviews] = useState<
+    InterfacePreviewAttachment[]
+  >([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -107,8 +76,10 @@ export default function OrgPostCard({
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
 
-  // Initialize MinIO upload hook
+  // Initialize MinIO hooks
   const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+  const { orgId } = useParams();
 
   // Get media attachments
   const imageAttachment = post.attachments.find((a) =>
@@ -123,6 +94,17 @@ export default function OrgPostCard({
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [togglePinMutation] = useMutation(TOGGLE_PINNED_POST);
+
+  // Clean up object URLs when component unmounts or previews change
+  useEffect(() => {
+    return () => {
+      localPreviews.forEach((preview) => {
+        if (preview.url.startsWith('blob:')) {
+          URL.revokeObjectURL(preview.url);
+        }
+      });
+    };
+  }, [localPreviews]);
 
   const togglePostPin = async (): Promise<void> => {
     try {
@@ -153,7 +135,22 @@ export default function OrgPostCard({
 
   const handleCardClick = (): void => setModalVisible(true);
   const handleMoreOptionsClick = (): void => setMenuVisible(true);
-  const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
+  const toggleShowEditModal = (): void => {
+    setShowEditModal((prev) => !prev);
+    // Reset previews when closing edit modal
+    if (showEditModal) {
+      localPreviews.forEach((preview) => {
+        if (preview.url.startsWith('blob:')) {
+          URL.revokeObjectURL(preview.url);
+        }
+      });
+      setLocalPreviews([]);
+      setPostFormState({
+        caption: post.caption,
+        attachments: [],
+      });
+    }
+  };
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
   const handleVideoPlay = (): void => {
@@ -193,8 +190,19 @@ export default function OrgPostCard({
       }
 
       try {
+        // Create local preview URL
+        const previewUrl = URL.createObjectURL(file);
+
         // Upload to MinIO and get object name
-        const { objectName } = await uploadFileToMinio(file, 'organization');
+        const { objectName } = await uploadFileToMinio(file, orgId!);
+
+        // Add to local previews for UI
+        setLocalPreviews((prev) => [
+          ...prev,
+          { url: previewUrl, mimeType: file.type, objectName },
+        ]);
+
+        // Add to form state for submission (using objectName)
         setPostFormState((prev) => ({
           ...prev,
           attachments: [
@@ -202,6 +210,7 @@ export default function OrgPostCard({
             { url: objectName, mimeType: file.type },
           ],
         }));
+
         toast.success('Image uploaded successfully');
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -223,8 +232,19 @@ export default function OrgPostCard({
       }
 
       try {
+        // Create local preview URL
+        const previewUrl = URL.createObjectURL(file);
+
         // Upload to MinIO and get object name
-        const { objectName } = await uploadFileToMinio(file, 'organization');
+        const { objectName } = await uploadFileToMinio(file, orgId!);
+
+        // Add to local previews for UI
+        setLocalPreviews((prev) => [
+          ...prev,
+          { url: previewUrl, mimeType: file.type, objectName },
+        ]);
+
+        // Add to form state for submission (using objectName)
         setPostFormState((prev) => ({
           ...prev,
           attachments: [
@@ -232,6 +252,7 @@ export default function OrgPostCard({
             { url: objectName, mimeType: file.type },
           ],
         }));
+
         toast.success('Video uploaded successfully');
       } catch (error) {
         console.error('Error uploading video:', error);
@@ -240,17 +261,24 @@ export default function OrgPostCard({
     }
   };
 
-  const clearImage = (url: string): void => {
-    setPostFormState((prev) => ({
-      ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
-    }));
-  };
+  const clearAttachment = (objectName: string): void => {
+    // Find the preview to clean up
+    const previewToRemove = localPreviews.find(
+      (preview) => preview.objectName === objectName,
+    );
+    if (previewToRemove && previewToRemove.url.startsWith('blob:')) {
+      URL.revokeObjectURL(previewToRemove.url);
+    }
 
-  const clearVideo = (url: string): void => {
+    // Remove from previews
+    setLocalPreviews((prev) =>
+      prev.filter((preview) => preview.objectName !== objectName),
+    );
+
+    // Remove from form state
     setPostFormState((prev) => ({
       ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
+      attachments: prev.attachments.filter((a) => a.url !== objectName),
     }));
   };
 
@@ -298,6 +326,18 @@ export default function OrgPostCard({
     }
   };
 
+  // Function to get presigned URL for existing attachments (from the post)
+  const getPresignedUrlForAttachment = async (
+    attachmentName: string,
+  ): Promise<string> => {
+    try {
+      return await getFileFromMinio(attachmentName, orgId!);
+    } catch (error) {
+      console.error('Error getting presigned URL:', error);
+      return AboutImg; // fallback to default image
+    }
+  };
+
   return (
     <>
       <div
@@ -320,7 +360,7 @@ export default function OrgPostCard({
                 onMouseLeave={handleVideoPause}
               >
                 <source
-                  src={videoAttachment.name}
+                  src={videoAttachment.name} // This should be a presigned URL from the server
                   type={videoAttachment.mimeType}
                 />
               </video>
@@ -328,7 +368,7 @@ export default function OrgPostCard({
               <Card.Img
                 className={styles.postimageOrgPostCard}
                 variant="top"
-                src={imageAttachment.name}
+                src={imageAttachment.name} // This should be a presigned URL from the server
                 alt="Post image"
               />
             ) : (
@@ -361,13 +401,13 @@ export default function OrgPostCard({
                 {videoAttachment ? (
                   <video controls autoPlay loop muted>
                     <source
-                      src={videoAttachment.name}
+                      src={videoAttachment.name} // This should be a presigned URL from the server
                       type={videoAttachment.mimeType}
                     />
                   </video>
                 ) : (
                   <img
-                    src={imageAttachment?.name || AboutImg}
+                    src={imageAttachment?.name || AboutImg} // This should be a presigned URL from the server
                     alt="Post content"
                   />
                 )}
@@ -487,15 +527,15 @@ export default function OrgPostCard({
                   onChange={handleImageUpload}
                   className={styles.inputField}
                 />
-                {postFormState.attachments
-                  .filter((a) => a.mimeType.startsWith('image/'))
-                  .map((attachment, index) => (
+                {localPreviews
+                  .filter((preview) => preview.mimeType.startsWith('image/'))
+                  .map((preview, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
-                      <img src={attachment.url} alt="Preview" />
+                      <img src={preview.url} alt="Preview" />
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearImage(attachment.url)}
+                        onClick={() => clearAttachment(preview.objectName)}
                       >
                         ×
                       </button>
@@ -513,21 +553,18 @@ export default function OrgPostCard({
                   data-testid="video-upload"
                 />
 
-                {postFormState.attachments
-                  .filter((a) => a.mimeType.startsWith('video/'))
-                  .map((attachment, index) => (
+                {localPreviews
+                  .filter((preview) => preview.mimeType.startsWith('video/'))
+                  .map((preview, index) => (
                     <div key={index} className={styles.previewOrgPostCard}>
                       <video controls data-testid="video-preview">
-                        <source
-                          src={attachment.url}
-                          type={attachment.mimeType}
-                        />
+                        <source src={preview.url} type={preview.mimeType} />
                         {t('videoNotSupported')}
                       </video>
                       <button
                         type="button"
                         className={styles.closeButtonP}
-                        onClick={() => clearVideo(attachment.url)}
+                        onClick={() => clearAttachment(preview.objectName)}
                       >
                         ×
                       </button>

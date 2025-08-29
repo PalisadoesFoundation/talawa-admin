@@ -191,14 +191,19 @@ export default function groupChatDetails({
         const organizationId = chat.organization?._id || 'organization';
         const { objectName } = await uploadFileToMinio(file, organizationId);
         setSelectedImage(objectName);
-        await updateChat();
-        await chatRefetch();
-        setSelectedImage('');
+        await updateChat({
+          variables: {
+            input: {
+              _id: chat._id,
+              image: objectName,
+            },
+          },
+        });
+        await chatRefetch({ id: chat._id });
         toast.success('Image uploaded successfully');
       } catch (error) {
         console.error('Error uploading image:', error);
         toast.error('Image upload failed');
-        setSelectedImage('');
       }
     } else {
       setSelectedImage('');
@@ -257,7 +262,7 @@ export default function groupChatDetails({
                       variables: {
                         input: {
                           _id: chat._id,
-                          image: selectedImage ? selectedImage : '',
+                          ...(selectedImage ? { image: selectedImage } : {}),
                           name: chatName,
                         },
                       },

@@ -105,11 +105,11 @@ export default function home(): JSX.Element {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+  const [postImgFile, setPostImgFile] = useState<File | null>(null);
 
   // Initialize MinIO upload hook
   const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  const { getFileFromMinio } = useMinioDownload();
 
   // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
@@ -173,6 +173,15 @@ export default function home(): JSX.Element {
       }),
     );
   }, [posts]);
+
+  // Clean up object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      if (postImg && postImg.startsWith('blob:')) {
+        URL.revokeObjectURL(postImg);
+      }
+    };
+  }, [postImg]);
 
   /**
    * Converts a post node into props for the `PostCard` component.
@@ -251,10 +260,53 @@ export default function home(): JSX.Element {
   };
 
   /**
-   * Closes the post creation modal.
+   * Closes the post creation modal and cleans up local resources.
    */
   const handleModalClose = (): void => {
+    // Clean up the object URL if it exists
+    if (postImg && postImg.startsWith('blob:')) {
+      URL.revokeObjectURL(postImg);
+    }
+    setPostImg('');
+    setPostImgFile(null);
     setShowModal(false);
+  };
+
+  /**
+   * Handles file selection and creates local preview.
+   */
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files && target.files[0];
+
+    if (!file) return;
+
+    // Clean up previous object URL if it exists
+    if (postImg && postImg.startsWith('blob:')) {
+      URL.revokeObjectURL(postImg);
+    }
+
+    const validation = validateFile(file);
+
+    if (!validation.isValid) {
+      toast.error(validation.errorMessage);
+      setPostImg('');
+      setPostImgFile(null);
+      return;
+    }
+
+    try {
+      // Create local preview URL for immediate UI feedback
+      const previewUrl = URL.createObjectURL(file);
+      setPostImg(previewUrl);
+      setPostImgFile(file);
+      toast.success('Image selected successfully');
+    } catch (error) {
+      console.error('Error creating preview:', error);
+      toast.error('Failed to create preview');
+      setPostImg('');
+      setPostImgFile(null);
+    }
   };
 
   return (
@@ -273,38 +325,7 @@ export default function home(): JSX.Element {
                     className={styles.inputField}
                     data-testid="postImageInput"
                     autoComplete="off"
-                    onChange={async (
-                      e: React.ChangeEvent<HTMLInputElement>,
-                    ): Promise<void> => {
-                      setPostImg('');
-                      const target = e.target as HTMLInputElement;
-                      const file = target.files && target.files[0];
-
-                      if (file) {
-                        const validation = validateFile(file);
-
-                        if (!validation.isValid) {
-                          toast.error(validation.errorMessage);
-                          return;
-                        }
-
-                        try {
-                          const { objectName } = await uploadFileToMinio(
-                            file,
-                            orgId,
-                          );
-                          const presignedUrl = await getFileFromMinio(
-                            objectName,
-                            orgId!,
-                          );
-                          setPostImg(presignedUrl);
-                          toast.success('Image uploaded successfully');
-                        } catch (error) {
-                          console.error('Error uploading image:', error);
-                          toast.error('Image upload failed');
-                        }
-                      }
-                    }}
+                    onChange={handleFileChange}
                   />
                 </Col>
               </Row>
@@ -381,6 +402,7 @@ export default function home(): JSX.Element {
             userData={user}
             organizationId={orgId}
             img={postImg}
+            imgFile={postImgFile}
           />
         </div>
       </div>

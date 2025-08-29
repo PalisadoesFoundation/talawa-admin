@@ -15,7 +15,7 @@ import {
   GET_POSTS_BY_ORG,
   ORGANIZATION_POST_LIST,
 } from 'GraphQl/Queries/Queries';
-import { CREATE_POST_MUTATION, PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
+import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer, toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18n';
@@ -29,13 +29,20 @@ const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
 // Mock the MinIO hooks
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({
-    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'test-object-name', fileHash: 'test-hash' }),
+    uploadFileToMinio: vi.fn().mockResolvedValue({
+      objectName: 'test-object-name',
+      fileHash: 'test-hash',
+    }),
   }),
 }));
 
 vi.mock('utils/MinioDownload', () => ({
   useMinioDownload: () => ({
-    getFileFromMinio: vi.fn().mockResolvedValue('data:image/png;base64,test-base64'),
+    getFileFromMinio: vi
+      .fn()
+      .mockResolvedValue(
+        'https://minio.example.com/bucket/test-object-name?presigned',
+      ),
   }),
 }));
 
@@ -663,7 +670,7 @@ describe('OrgPost Component', () => {
       { timeout: 3000 },
     );
 
-    expect(toastSuccessMock.mock.calls[0][0]).toContain('Image uploaded successfully');
+    expect(toastSuccessMock.mock.calls[0][0]).toContain('postCreatedSuccess');
 
     await act(() => new Promise((resolve) => setTimeout(resolve, 500)));
 
@@ -1079,104 +1086,112 @@ describe('OrgPost Component', () => {
   });
 
   it('displays error toast when MinIO upload fails', async () => {
-  const toastErrorSpy = vi.spyOn(toast, 'error');
-  
-  // Mock the MinIO upload hook to reject
-  vi.mocked(useMinioUpload).mockImplementation(() => ({
-    uploadFileToMinio: vi.fn().mockRejectedValue(new Error('Upload failed'))
-  }));
+    const toastErrorSpy = vi.spyOn(toast, 'error');
 
-  render(
-    <MockedProvider mocks={minimalMocks} addTypename={false}>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/org/123']}>
-          <Routes>
-            <Route path="/org/:orgId" element={<OrgPost />} />
-          </Routes>
-        </MemoryRouter>
-      </I18nextProvider>
-    </MockedProvider>,
-  );
+    // Mock the MinIO upload hook to reject
+    vi.mocked(useMinioUpload).mockImplementation(() => ({
+      uploadFileToMinio: vi.fn().mockRejectedValue(new Error('Upload failed')),
+    }));
 
-  // Wait for component to load
-  await waitFor(() => {
-    expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    render(
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Open modal
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    await userEvent.click(createPostButton);
+
+    // Wait for modal to open
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
+    });
+
+    // Upload file
+    const fileInput = screen.getByTestId('addMediaField');
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+
+    // Use fireEvent to trigger the change handler
+    fireEvent.change(fileInput, { target: { files: [file] } });
+
+    // Wait for the error toast to be called
+    await waitFor(
+      () => {
+        expect(toastErrorSpy).toHaveBeenCalledWith('Image upload failed');
+      },
+      { timeout: 3000 },
+    );
   });
 
-  // Open modal
-  const createPostButton = screen.getByTestId('createPostModalBtn');
-  await userEvent.click(createPostButton);
+  it('displays error toast when MinIO download fails for video preview', async () => {
+    const toastErrorSpy = vi.spyOn(toast, 'error');
 
-  // Wait for modal to open
-  await waitFor(() => {
-    expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
+    // Mock upload to succeed but download to fail
+    vi.mocked(useMinioUpload).mockImplementation(() => ({
+      uploadFileToMinio: vi
+        .fn()
+        .mockResolvedValue({ objectName: 'test-video', fileHash: 'test-hash' }),
+    }));
+
+    vi.mocked(useMinioDownload).mockImplementation(() => ({
+      getFileFromMinio: vi.fn().mockRejectedValue(new Error('Download failed')),
+    }));
+
+    render(
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Open modal
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    await userEvent.click(createPostButton);
+
+    // Wait for modal to open
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
+    });
+
+    // Upload video file
+    const videoInput = screen.getByTestId('addVideoField');
+    const videoFile = new File(['dummy video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+
+    // Use fireEvent to trigger the change handler
+    fireEvent.change(videoInput, { target: { files: [videoFile] } });
+
+    // Wait for the error toast to be called
+    await waitFor(
+      () => {
+        expect(toastErrorSpy).toHaveBeenCalledWith('Video upload failed');
+      },
+      { timeout: 3000 },
+    );
   });
-
-  // Upload file
-  const fileInput = screen.getByTestId('addMediaField');
-  const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
-  
-  // Use fireEvent to trigger the change handler
-  fireEvent.change(fileInput, { target: { files: [file] } });
-
-  // Wait for the error toast to be called
-  await waitFor(() => {
-    expect(toastErrorSpy).toHaveBeenCalledWith('Image upload failed');
-  }, { timeout: 3000 });
-});
-
-it('displays error toast when MinIO download fails for video preview', async () => {
-  const toastErrorSpy = vi.spyOn(toast, 'error');
-  
-  // Mock upload to succeed but download to fail
-  vi.mocked(useMinioUpload).mockImplementation(() => ({
-    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'test-video', fileHash: 'test-hash' })
-  }));
-  
-  vi.mocked(useMinioDownload).mockImplementation(() => ({
-    getFileFromMinio: vi.fn().mockRejectedValue(new Error('Download failed'))
-  }));
-
-  render(
-    <MockedProvider mocks={minimalMocks} addTypename={false}>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter initialEntries={['/org/123']}>
-          <Routes>
-            <Route path="/org/:orgId" element={<OrgPost />} />
-          </Routes>
-        </MemoryRouter>
-      </I18nextProvider>
-    </MockedProvider>,
-  );
-
-  // Wait for component to load
-  await waitFor(() => {
-    expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-  });
-
-  // Open modal
-  const createPostButton = screen.getByTestId('createPostModalBtn');
-  await userEvent.click(createPostButton);
-
-  // Wait for modal to open
-  await waitFor(() => {
-    expect(screen.getByTestId('modalOrganizationUpload')).toBeInTheDocument();
-  });
-
-  // Upload video file
-  const videoInput = screen.getByTestId('addVideoField');
-  const videoFile = new File(['dummy video content'], 'video.mp4', {
-    type: 'video/mp4',
-  });
-
-  // Use fireEvent to trigger the change handler
-  fireEvent.change(videoInput, { target: { files: [videoFile] } });
-
-  // Wait for the error toast to be called
-  await waitFor(() => {
-    expect(toastErrorSpy).toHaveBeenCalledWith('Video upload failed');
-  }, { timeout: 3000 });
-});
 });
 
 describe('Tests for sorting , nextpage , previousPage', () => {
@@ -1838,7 +1853,7 @@ describe('OrgPost component - Post Creation Tests', () => {
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith("Post created successfully");
+        expect(toast.success).toHaveBeenCalledWith('Post created successfully');
       },
       { timeout: 5000 },
     );

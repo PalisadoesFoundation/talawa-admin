@@ -473,6 +473,7 @@ export const UPDATE_COMMUNITY_PG = gql`
     $websiteURL: String
     $xURL: String
     $youtubeURL: String
+    $logo: String
   ) {
     updateCommunity(
       input: {
@@ -487,6 +488,7 @@ export const UPDATE_COMMUNITY_PG = gql`
         websiteURL: $websiteURL
         xURL: $xURL
         youtubeURL: $youtubeURL
+        logo: $logo
       }
     ) {
       id

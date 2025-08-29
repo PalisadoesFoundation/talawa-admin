@@ -167,6 +167,7 @@ const CommunityProfile = (): JSX.Element => {
           youtubeURL: profileVariable.youtubeURL || undefined,
           redditURL: profileVariable.redditURL || undefined,
           slackURL: profileVariable.slackURL || undefined,
+          logo: profileVariable.logo || undefined,
         },
       });
       toast.success(t('profileChangedMsg') as string);
@@ -300,10 +301,10 @@ const CommunityProfile = (): JSX.Element => {
                         file,
                         'organization',
                       );
-                      setProfileVariable({
-                        ...profileVariable,
+                      setProfileVariable((prev) => ({
+                        ...prev,
                         logo: objectName,
-                      });
+                      }));
                       toast.success('Logo uploaded successfully');
                     } catch (error) {
                       console.error('Error uploading logo:', error);
