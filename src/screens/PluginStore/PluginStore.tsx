@@ -137,35 +137,48 @@ export default function PluginStore() {
         );
 
         if (!isAlreadyLoaded) {
-                     // Check if we have cached details
-           let pluginDetails = pluginDetailsCache[gqlPlugin.pluginId];
-           
-           if (!pluginDetails) {
-             // Load details from files
-             const loadedDetails = await loadPluginDetails(gqlPlugin.pluginId);
-             
-             if (loadedDetails) {
-               // Cache the details
-               setPluginDetailsCache(prev => ({
-                 ...prev,
-                 [gqlPlugin.pluginId]: loadedDetails
-               }));
-               pluginDetails = loadedDetails;
-             }
-           }
+          // Only try to load details for plugins that are actually installed
+          // This prevents trying to read files for plugins that are still being uploaded
+          if (gqlPlugin.isInstalled) {
+            // Check if we have cached details
+            let pluginDetails = pluginDetailsCache[gqlPlugin.pluginId];
+            
+            if (!pluginDetails) {
+              // Load details from files
+              const loadedDetails = await loadPluginDetails(gqlPlugin.pluginId);
+              
+              if (loadedDetails) {
+                // Cache the details
+                setPluginDetailsCache(prev => ({
+                  ...prev,
+                  [gqlPlugin.pluginId]: loadedDetails
+                }));
+                pluginDetails = loadedDetails;
+              }
+            }
 
-           // Use loaded details or fallback to basic info
-           if (pluginDetails) {
-             allPluginsForDisplay.push(pluginDetails);
-           } else {
-             allPluginsForDisplay.push({
-               id: gqlPlugin.pluginId,
-               name: gqlPlugin.pluginId,
-               description: `Plugin ${gqlPlugin.pluginId}`,
-               author: 'Unknown',
-               icon: '/images/logo512.png',
-             });
-           }
+            // Use loaded details or fallback to basic info
+            if (pluginDetails) {
+              allPluginsForDisplay.push(pluginDetails);
+            } else {
+              allPluginsForDisplay.push({
+                id: gqlPlugin.pluginId,
+                name: gqlPlugin.pluginId,
+                description: `Plugin ${gqlPlugin.pluginId}`,
+                author: 'Unknown',
+                icon: '/images/logo512.png',
+              });
+            }
+          } else {
+            // For non-installed plugins, just use basic info from GraphQL
+            allPluginsForDisplay.push({
+              id: gqlPlugin.pluginId,
+              name: gqlPlugin.pluginId,
+              description: `Plugin ${gqlPlugin.pluginId}`,
+              author: 'Unknown',
+              icon: '/images/logo512.png',
+            });
+          }
         }
       }
 
