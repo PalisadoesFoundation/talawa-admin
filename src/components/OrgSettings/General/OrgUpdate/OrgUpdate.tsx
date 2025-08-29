@@ -46,6 +46,7 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Initialize MinIO upload hook
   const { uploadFileToMinio } = useMinioUpload();
