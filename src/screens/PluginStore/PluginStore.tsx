@@ -29,6 +29,7 @@ import {
   useDeletePlugin,
   useInstallPlugin,
 } from 'plugin/graphql-service';
+import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 // Removed PLUGIN_STORE_URL - now using GraphQL for plugin data
 
@@ -67,6 +68,7 @@ export default function PluginStore() {
   const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
+  const [pluginDetailsCache, setPluginDetailsCache] = useState<Record<string, IPluginMeta>>({});
 
   // GraphQL hooks
   const {
@@ -94,61 +96,108 @@ export default function PluginStore() {
     setSearchTerm(value);
   }, 300);
 
+  // Load plugin details for uploaded but not installed plugins
+  const loadPluginDetails = useCallback(async (pluginId: string): Promise<IPluginMeta | null> => {
+    try {
+      const details = await AdminPluginFileService.getPluginDetails(pluginId);
+      if (details) {
+        return {
+          id: details.id,
+          name: details.name,
+          description: details.description,
+          author: details.author,
+          icon: details.icon,
+        };
+      }
+    } catch (error) {
+      console.error(`Failed to load plugin details for ${pluginId}:`, error);
+    }
+    return null;
+  }, []);
+
   useEffect(() => {
     // Combine GraphQL plugins and loaded plugins
     const graphqlPlugins = pluginData?.getPlugins || [];
 
-    const allPluginsForDisplay = [
-      ...loadedPlugins.map((plugin) => ({
-        id: plugin.id,
-        name: plugin.manifest.name,
-        description: plugin.manifest.description,
-        author: plugin.manifest.author,
-        icon: plugin.manifest.icon || '/images/logo512.png',
-      })),
-      // Add GraphQL plugins that aren't already loaded
-      ...graphqlPlugins
-        .filter(
-          (gqlPlugin: any) =>
-            !loadedPlugins.some(
-              (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
-            ),
-        )
-        .map((gqlPlugin: any) => ({
-          id: gqlPlugin.pluginId,
-          name: gqlPlugin.pluginId,
-          description: `Plugin ${gqlPlugin.pluginId}`,
-          author: 'Unknown',
-          icon: '/images/logo512.png',
+    const processPlugins = async () => {
+      const allPluginsForDisplay = [
+        ...loadedPlugins.map((plugin) => ({
+          id: plugin.id,
+          name: plugin.manifest.name,
+          description: plugin.manifest.description,
+          author: plugin.manifest.author,
+          icon: plugin.manifest.icon || '/images/logo512.png',
         })),
-    ];
+      ];
 
-    console.log('All plugins for display:', allPluginsForDisplay);
-    console.log('GraphQL plugins:', graphqlPlugins);
+      // Process GraphQL plugins that aren't already loaded
+      for (const gqlPlugin of graphqlPlugins) {
+        const isAlreadyLoaded = loadedPlugins.some(
+          (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
+        );
 
-    if (!searchTerm) {
-      if (filterState.option === 'all') {
-        setFilteredPlugins(allPluginsForDisplay);
-      } else {
-        setFilteredPlugins(
-          allPluginsForDisplay.filter((plugin) => isInstalled(plugin.name)),
-        );
+        if (!isAlreadyLoaded) {
+                     // Check if we have cached details
+           let pluginDetails = pluginDetailsCache[gqlPlugin.pluginId];
+           
+           if (!pluginDetails) {
+             // Load details from files
+             const loadedDetails = await loadPluginDetails(gqlPlugin.pluginId);
+             
+             if (loadedDetails) {
+               // Cache the details
+               setPluginDetailsCache(prev => ({
+                 ...prev,
+                 [gqlPlugin.pluginId]: loadedDetails
+               }));
+               pluginDetails = loadedDetails;
+             }
+           }
+
+           // Use loaded details or fallback to basic info
+           if (pluginDetails) {
+             allPluginsForDisplay.push(pluginDetails);
+           } else {
+             allPluginsForDisplay.push({
+               id: gqlPlugin.pluginId,
+               name: gqlPlugin.pluginId,
+               description: `Plugin ${gqlPlugin.pluginId}`,
+               author: 'Unknown',
+               icon: '/images/logo512.png',
+             });
+           }
+        }
       }
-    } else {
-      const searchFiltered = allPluginsForDisplay.filter(
-        (plugin) =>
-          plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          plugin.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      if (filterState.option === 'all') {
-        setFilteredPlugins(searchFiltered);
+
+      console.log('All plugins for display:', allPluginsForDisplay);
+      console.log('GraphQL plugins:', graphqlPlugins);
+
+      if (!searchTerm) {
+        if (filterState.option === 'all') {
+          setFilteredPlugins(allPluginsForDisplay);
+        } else {
+          setFilteredPlugins(
+            allPluginsForDisplay.filter((plugin) => isInstalled(plugin.name)),
+          );
+        }
       } else {
-        setFilteredPlugins(
-          searchFiltered.filter((plugin) => isInstalled(plugin.name)),
+        const searchFiltered = allPluginsForDisplay.filter(
+          (plugin) =>
+            plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            plugin.description.toLowerCase().includes(searchTerm.toLowerCase()),
         );
+        if (filterState.option === 'all') {
+          setFilteredPlugins(searchFiltered);
+        } else {
+          setFilteredPlugins(
+            searchFiltered.filter((plugin) => isInstalled(plugin.name)),
+          );
+        }
       }
-    }
-  }, [searchTerm, filterState.option, loadedPlugins, pluginData]);
+    };
+
+    processPlugins();
+  }, [searchTerm, filterState.option, loadedPlugins, pluginData, pluginDetailsCache, loadPluginDetails]);
 
   // Reset to first page if search/filter changes
   useEffect(() => {
