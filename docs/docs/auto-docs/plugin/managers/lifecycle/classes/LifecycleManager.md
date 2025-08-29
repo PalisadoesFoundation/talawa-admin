@@ -132,7 +132,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:58](https://github.com/PalisadoesF
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L124)
+Defined in: [src/plugin/managers/lifecycle.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L130)
 
 #### Parameters
 
@@ -154,7 +154,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:124](https://github.com/Palisadoes
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L96)
+Defined in: [src/plugin/managers/lifecycle.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L102)
 
 #### Parameters
 

@@ -61,6 +61,12 @@ export class LifecycleManager {
       return false;
     }
 
+    // Check if plugin is installed before loading
+    if (!this.discoveryManager.isPluginInstalled(pluginId)) {
+      console.warn(`Plugin ${pluginId} is not installed, skipping load`);
+      return false;
+    }
+
     try {
       const manifest = await this.discoveryManager.loadPluginManifest(pluginId);
       const components = await this.discoveryManager.loadPluginComponents(
@@ -168,6 +174,12 @@ export class LifecycleManager {
   }
 
   private determineInitialPluginStatus(pluginId: string): PluginStatus {
+    // Check if plugin is installed first
+    if (!this.discoveryManager.isPluginInstalled(pluginId)) {
+      return PluginStatus.INACTIVE;
+    }
+
+    // Then check if it's activated
     const isActive = this.discoveryManager.isPluginActivated(pluginId);
     return isActive ? PluginStatus.ACTIVE : PluginStatus.INACTIVE;
   }

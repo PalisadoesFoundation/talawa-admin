@@ -21,6 +21,26 @@ export const CREATE_PLUGIN_MUTATION = gql`
 `;
 
 /**
+ * GraphQL mutation to install a plugin.
+ *
+ * @param pluginId - The ID of the plugin to install.
+ * @returns The installed plugin object with id, pluginId, isActivated, isInstalled, and backup status.
+ */
+export const INSTALL_PLUGIN_MUTATION = gql`
+  mutation InstallPlugin($input: InstallPluginInput!) {
+    installPlugin(input: $input) {
+      id
+      pluginId
+      isActivated
+      isInstalled
+      backup
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
  * GraphQL mutation to update a plugin.
  *
  * @param id - The ID of the plugin to update.

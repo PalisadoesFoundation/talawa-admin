@@ -27,6 +27,7 @@ import {
   useCreatePlugin,
   useUpdatePlugin,
   useDeletePlugin,
+  useInstallPlugin,
 } from 'plugin/graphql-service';
 
 // Removed PLUGIN_STORE_URL - now using GraphQL for plugin data
@@ -77,6 +78,7 @@ export default function PluginStore() {
   const [createPlugin] = useCreatePlugin();
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
+  const [installPlugin] = useInstallPlugin();
 
   // Plugin data now comes entirely from GraphQL - no local file fetching needed
 
@@ -249,41 +251,17 @@ export default function PluginStore() {
     return undefined;
   };
 
-  // Install plugin (load through plugin manager and create in GraphQL)
-  const installPlugin = async (plugin: IPluginMeta) => {
+  // Install plugin (separate from upload - handles manifest validation and plugin manager)
+  const handleInstallPlugin = async (plugin: IPluginMeta) => {
     setLoading(true);
     try {
-      // Create plugin in GraphQL first
-      const existingPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === plugin.id,
-      );
-      if (!existingPlugin) {
-        await createPlugin({
-          variables: {
-            input: {
-              pluginId: plugin.id,
-              isInstalled: true,
-              isActivated: false,
-            },
+      await installPlugin({
+        variables: {
+          input: {
+            pluginId: plugin.id,
           },
-        });
-      } else {
-        // Update to installed status
-        await updatePlugin({
-          variables: {
-            input: {
-              id: existingPlugin.id,
-              isInstalled: true,
-            },
-          },
-        });
-      }
-
-      // Use plugin manager to load the plugin
-      const success = await getPluginManager().loadPlugin(plugin.id);
-      if (!success) {
-        throw new Error('Failed to load plugin');
-      }
+        },
+      });
 
       // Refetch plugin data to update UI
       await refetch();
@@ -509,6 +487,7 @@ export default function PluginStore() {
         ) : (
           paginatedPlugins.map((plugin, idx) => {
             const installed = isInstalled(plugin.name);
+
             return (
               <div
                 key={plugin.id}
@@ -574,7 +553,7 @@ export default function PluginStore() {
                     {plugin.author}
                   </div>
                 </div>
-                {/* View/Manage Button */}
+                {/* Manage Button */}
                 <div style={{ marginLeft: 24, minWidth: 120 }}>
                   <Button
                     variant="contained"
@@ -583,7 +562,7 @@ export default function PluginStore() {
                     className="w-100 mb-2"
                     data-testid={`plugin-action-btn-${plugin.id}`}
                   >
-                    {installed ? 'Manage' : 'View'}
+                    Manage
                   </Button>
                 </div>
               </div>
@@ -611,7 +590,7 @@ export default function PluginStore() {
         loading={loading || pluginLoading}
         isInstalled={isInstalled}
         getInstalledPlugin={getInstalledPlugin}
-        installPlugin={installPlugin}
+        installPlugin={handleInstallPlugin}
         togglePluginStatus={togglePluginStatus}
         uninstallPlugin={uninstallPlugin}
         data-testid="plugin-modal"

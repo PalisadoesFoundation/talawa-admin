@@ -246,7 +246,7 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
 
 /**
  * Installs a plugin from a zip file (supports both admin and API)
- * Flow: 1) Create plugin in DB, 2) Install files, 3) Let API handle table creation
+ * Flow: 1) Create plugin in DB, 2) Install files, 3) Installation is handled separately
  */
 export async function installAdminPluginFromZip({
   zipFile,
@@ -272,7 +272,7 @@ export async function installAdminPluginFromZip({
     const manifest = structure.adminManifest || structure.apiManifest!;
     const installedComponents: string[] = [];
 
-    // STEP 1: Create plugin in database first (simplified - just creates DB entry)
+    // STEP 1: Create plugin in database first (basic entry with isInstalled: false)
     if (apolloClient) {
       try {
         console.log(`Creating plugin in database: ${pluginId}`);
@@ -281,8 +281,6 @@ export async function installAdminPluginFromZip({
           variables: {
             input: {
               pluginId: pluginId,
-              isInstalled: false, // Will be set to true after successful file installation
-              isActivated: false, // Will be activated later if needed
             },
           },
         });
@@ -301,7 +299,7 @@ export async function installAdminPluginFromZip({
       }
     }
 
-    // STEP 2: Install API component if present (this will handle table creation)
+    // STEP 2: Install API component if present (this will handle file upload)
     if (structure.hasApiFolder && apolloClient) {
       try {
         console.log(`Installing API component: ${pluginId}`);
@@ -364,7 +362,7 @@ export async function installAdminPluginFromZip({
     }
 
     console.log(
-      `Plugin installation completed: ${pluginId}, Components: ${installedComponents.join(', ')}`,
+      `Plugin upload completed: ${pluginId}, Components: ${installedComponents.join(', ')}`,
     );
 
     return {
@@ -374,14 +372,13 @@ export async function installAdminPluginFromZip({
       installedComponents,
     };
   } catch (error) {
-    console.error('Plugin installation failed:', error);
+    console.error('Plugin upload failed:', error);
     return {
       success: false,
       pluginId: '',
       manifest: {} as AdminPluginManifest,
       installedComponents: [],
-      error:
-        error instanceof Error ? error.message : 'Failed to install plugin',
+      error: error instanceof Error ? error.message : 'Failed to upload plugin',
     };
   }
 }
