@@ -24,14 +24,13 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  const { location } = window;
-
-  interface TestInterfacePartialWindow {
-    location?: Partial<Location>;
-  }
-
-  delete (window as TestInterfacePartialWindow).location;
-  global.window.location = { ...location, reload: vi.fn() };
+  let reloadSpy: ReturnType<typeof vi.spyOn>;
+  beforeEach(() => {
+    reloadSpy = vi.spyOn(window.location, 'reload').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    reloadSpy.mockRestore();
+  });
 
   // Create storage mock
   const localStorageMock = {
@@ -62,8 +61,8 @@ describe('refreshToken', () => {
       'Talawa-admin_refreshToken',
       JSON.stringify('newRefreshToken'),
     );
-    expect(result).toBe(true);
-    expect(window.location.reload).toHaveBeenCalled();
+  expect(result).toBe(true);
+  expect(window.location.reload).toHaveBeenCalled();
   });
 
   it('returns false and logs error when token refresh fails', async () => {
