@@ -314,6 +314,9 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
+      
+      // Reload the page to ensure all plugin states are properly updated
+      window.location.reload();
     } catch (error) {
       console.error('Failed to install plugin:', error);
     } finally {
@@ -354,6 +357,9 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
+      
+      // Reload the page to ensure all plugin states are properly updated
+      window.location.reload();
     } catch (error) {
       console.error('Failed to toggle plugin status:', error);
     } finally {
@@ -367,7 +373,7 @@ export default function PluginStore() {
     setShowUninstallModal(true);
   };
 
-  const handleUninstallConfirm = async (keepData: boolean) => {
+  const handleUninstallConfirm = async () => {
     if (!pluginToUninstall) return;
 
     setLoading(true);
@@ -376,51 +382,38 @@ export default function PluginStore() {
         (p: any) => p.pluginId === pluginToUninstall.id,
       );
       if (existingPlugin) {
-        if (keepData) {
-          // Keep data - update plugin status
-          await updatePlugin({
-            variables: {
-              input: {
-                id: existingPlugin.id,
-                isInstalled: false,
-                isActivated: false,
-              },
+        // Remove permanently - delete from database
+        await deletePlugin({
+          variables: {
+            input: {
+              id: existingPlugin.id,
             },
-          });
-        } else {
-          // Remove permanently - delete from database
-          await deletePlugin({
-            variables: {
-              input: {
-                id: existingPlugin.id,
-              },
-            },
-          });
+          },
+        });
 
-          // Remove plugin folder from admin filesystem
-          try {
-            const { adminPluginFileService } = await import(
-              '../../plugin/services/AdminPluginFileService'
+        // Remove plugin folder from admin filesystem
+        try {
+          const { adminPluginFileService } = await import(
+            '../../plugin/services/AdminPluginFileService'
+          );
+          const success = await adminPluginFileService.removePlugin(
+            pluginToUninstall.id,
+          );
+          if (success) {
+            console.log(
+              `Admin plugin directory removed for: ${pluginToUninstall.id}`,
             );
-            const success = await adminPluginFileService.removePlugin(
-              pluginToUninstall.id,
-            );
-            if (success) {
-              console.log(
-                `Admin plugin directory removed for: ${pluginToUninstall.id}`,
-              );
-            } else {
-              console.error(
-                `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
-              );
-            }
-          } catch (error) {
+          } else {
             console.error(
-              `Failed to remove admin plugin directory for ${pluginToUninstall.id}:`,
-              error,
+              `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
             );
-            // Don't throw error - plugin is already deleted from database
           }
+        } catch (error) {
+          console.error(
+            `Failed to remove admin plugin directory for ${pluginToUninstall.id}:`,
+            error,
+          );
+          // Don't throw error - plugin is already deleted from database
         }
       }
 
@@ -434,6 +427,9 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
+      
+      // Reload the page to ensure all plugin states are properly updated
+      window.location.reload();
     } catch (error) {
       console.error('Failed to uninstall plugin:', error);
     } finally {
@@ -456,6 +452,8 @@ export default function PluginStore() {
     setShowUploadModal(false);
     // Refresh plugin data after upload
     await refetch();
+    // Reload the page to ensure all plugin states are properly updated
+    window.location.reload();
   };
 
   return (
@@ -665,13 +663,10 @@ export default function PluginStore() {
             sx={{ mb: 2 }}
             data-testid="uninstall-modal-title"
           >
-            How would you like to uninstall {pluginToUninstall?.name}?
+            Are you sure you want to uninstall {pluginToUninstall?.name}?
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            • Keep data: The plugin will be removed but its data will be
-            preserved for future use
-            <br />• Remove permanently: The plugin and all its data will be
-            permanently removed
+            This action will permanently remove the plugin and all its data. This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
@@ -684,21 +679,12 @@ export default function PluginStore() {
             Cancel
           </Button>
           <Button
-            onClick={() => handleUninstallConfirm(false)}
+            onClick={handleUninstallConfirm}
             color="error"
-            variant="outlined"
-            sx={{ mr: 1 }}
+            variant="contained"
             data-testid="uninstall-remove-btn"
           >
             Remove Permanently
-          </Button>
-          <Button
-            onClick={() => handleUninstallConfirm(true)}
-            color="primary"
-            variant="contained"
-            data-testid="uninstall-keepdata-btn"
-          >
-            Keep Data
           </Button>
         </DialogActions>
       </Dialog>
