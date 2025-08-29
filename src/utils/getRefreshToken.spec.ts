@@ -24,7 +24,7 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  let reloadSpy: ReturnType<typeof vi.spyOn>;
+  let reloadSpy: vi.SpyInstance;
   beforeEach(() => {
     reloadSpy = vi
       .spyOn(window.location, 'reload')
