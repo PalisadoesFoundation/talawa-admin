@@ -31,7 +31,7 @@ describe('refreshToken', () => {
       .mockImplementation(() => {});
   });
   afterEach(() => {
-    reloadSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 
   // Create storage mock
