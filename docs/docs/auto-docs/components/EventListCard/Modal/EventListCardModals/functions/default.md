@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L55)
+Defined in: [src/components/EventListCard/Modal/EventListCardModals.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardModals.tsx#L64)
 
 ## Parameters
 
