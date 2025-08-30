@@ -174,7 +174,7 @@
     "nyc": "^17.1.0",
     "postcss-modules": "^6.0.1",
     "prettier": "^3.5.3",
-    "sass": "^1.80.7",
+    "sass": "^1.91.0",
     "start-server-and-test": "^2.0.12",
     "tsx": "^4.19.1",
     "typedoc": "^0.28.1",
