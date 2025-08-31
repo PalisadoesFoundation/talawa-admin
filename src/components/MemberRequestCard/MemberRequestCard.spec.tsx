@@ -84,7 +84,7 @@ describe('Testing Member Request Card', () => {
     expect(screen.queryByText(props.memberName)).not.toBeInTheDocument();
     expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
-    expect(screen.getByText("johndoe@gmail.com")).toBeInTheDocument();
+    expect(screen.getByText('johndoe@gmail.com')).toBeInTheDocument();
   });
 
   describe('window reload and mutation tests', () => {
@@ -96,9 +96,9 @@ describe('Testing Member Request Card', () => {
       memberImage: 'image',
       email: 'johndoe@gmail.com',
     };
-  let originalLocation: Location;
-  let reloadSpy: jest.Mock;
-  let confirmSpy: any;
+    let originalLocation: Location;
+    let reloadSpy: jest.Mock;
+    let confirmSpy: any;
 
     beforeEach(() => {
       originalLocation = window.location;
@@ -148,8 +148,8 @@ describe('Testing Member Request Card', () => {
     });
 
     it('should reload window if rejectMember is clicked', async () => {
-  global.confirm = (): boolean => true;
-  confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      global.confirm = (): boolean => true;
+      confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
       render(
         <MockedProvider addTypename={false} link={link2}>
           <I18nextProvider i18n={i18nForTest}>
@@ -165,8 +165,8 @@ describe('Testing Member Request Card', () => {
     });
 
     it('should not reload window if rejectMutation fails', async () => {
-  global.confirm = (): boolean => true;
-  confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      global.confirm = (): boolean => true;
+      confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
       render(
         <MockedProvider addTypename={false} link={link3}>
           <I18nextProvider i18n={i18nForTest}>
