@@ -84,6 +84,101 @@ describe('Testing Member Request Card', () => {
     expect(screen.queryByText(props.memberName)).not.toBeInTheDocument();
     expect(screen.getByText(props.memberLocation)).toBeInTheDocument();
     expect(screen.getByText(props.joinDate)).toBeInTheDocument();
-    // (Lines 87–88 removed: placeholder comments deleted)
+    expect(screen.getByText("johndoe@gmail.com")).toBeInTheDocument();
+  });
+
+  describe('window reload and mutation tests', () => {
+    const testProps = {
+      id: '1',
+      memberName: 'John Doe',
+      memberLocation: 'India',
+      joinDate: '18/03/2022',
+      memberImage: 'image',
+      email: 'johndoe@gmail.com',
+    };
+  let originalLocation: Location;
+  let reloadSpy: jest.Mock;
+  let confirmSpy: any;
+
+    beforeEach(() => {
+      originalLocation = window.location;
+      // @ts-expect-error - Mocking window.location for testing
+      delete window.location;
+      // @ts-expect-error - Mocking window.location for testing
+      window.location = { ...originalLocation, reload: vi.fn() };
+      reloadSpy = window.location.reload as any;
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
+    });
+
+    it('should reload window after 2 seconds if addMember is clicked', async () => {
+      global.confirm = (): boolean => true;
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...testProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+      await wait();
+      await userEvent.click(screen.getByText(/Accept/i));
+      await wait(2100);
+      expect(reloadSpy).toHaveBeenCalled();
+    });
+
+    it('should not reload window if acceptMutation fails', async () => {
+      global.confirm = (): boolean => true;
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...testProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+      await wait();
+      await userEvent.click(screen.getByText(/Accept/i));
+      await wait(2100);
+      expect(reloadSpy).not.toHaveBeenCalled();
+    });
+
+    it('should reload window if rejectMember is clicked', async () => {
+  global.confirm = (): boolean => true;
+  confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      render(
+        <MockedProvider addTypename={false} link={link2}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...testProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+      await wait();
+      await userEvent.click(screen.getByText(/Reject/i));
+      await wait();
+      expect(confirmSpy).toHaveBeenCalled();
+      expect(reloadSpy).toHaveBeenCalled();
+    });
+
+    it('should not reload window if rejectMutation fails', async () => {
+  global.confirm = (): boolean => true;
+  confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+      render(
+        <MockedProvider addTypename={false} link={link3}>
+          <I18nextProvider i18n={i18nForTest}>
+            <MemberRequestCard {...testProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+      await wait();
+      await userEvent.click(screen.getByText(/Reject/i));
+      await wait();
+      expect(confirmSpy).toHaveBeenCalled();
+      expect(reloadSpy).not.toHaveBeenCalled();
+    });
   });
 });
