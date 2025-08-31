@@ -53,7 +53,7 @@ import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
-import styles from 'style/app-fixed.module.css';
+import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
@@ -219,14 +219,14 @@ export default function People(): React.JSX.Element {
 
   return (
     <>
-      <div className={`${styles.mainContainer_people}`}>
-        <div className={styles.people__header}>
-          <div className={styles.input}>
+      <div className={styles.mainContainer}>
+        <div className={styles.header}>
+          <div className={styles.searchContainer}>
             <Form.Control
               placeholder={t('searchUsers')}
               id="searchPeople"
               type="text"
-              className={styles.inputField}
+              className={styles.searchInput}
               onKeyUp={handleSearchByEnter}
               data-testid="searchInput"
             />
@@ -234,7 +234,6 @@ export default function People(): React.JSX.Element {
             <Button
               className={styles.searchButton}
               data-testid="searchBtn"
-              style={{ cursor: 'pointer' }}
               onClick={handleSearchByBtnClick}
             >
               <SearchOutlinedIcon />
@@ -243,15 +242,14 @@ export default function People(): React.JSX.Element {
 
           <Dropdown drop="down-centered">
             <Dropdown.Toggle
-              className={styles.dropdown}
+              className={styles.filterDropdown}
               id="dropdown-basic"
               data-testid={`modeChangeBtn`}
             >
               <FilterAltOutlined
                 sx={{
-                  fontSize: '25px',
-                  marginBottom: '2px',
-                  marginRight: '2px',
+                  fontSize: '20px',
+                  marginRight: '4px',
                 }}
               />
               {tCommon('filter')}
@@ -271,20 +269,31 @@ export default function People(): React.JSX.Element {
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <div className={styles.people_content}>
-          <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>S.No</span>
-              <span style={{ flex: '1' }}>Avatar</span>
+
+        <div className={styles.content}>
+          <div className={styles.cardHeader}>
+            <span
+              className={`${styles.headerItem} ${styles.serialNumberHeader}`}
+            >
+              S.No
             </span>
-            <span style={{ flex: '2' }}>Name</span>
-            <span style={{ flex: '2' }}>Email</span>
-            <span style={{ flex: '2' }}>Role</span>
+            <span className={`${styles.headerItem} ${styles.avatarHeader}`}>
+              Avatar
+            </span>
+            <span className={`${styles.headerItem} ${styles.nameHeader}`}>
+              Name
+            </span>
+            <span className={`${styles.headerItem} ${styles.emailHeader}`}>
+              Email
+            </span>
+            <span className={`${styles.headerItem} ${styles.roleHeader}`}>
+              Role
+            </span>
           </div>
 
-          <div className={styles.people_card_main_container}>
+          <div className={styles.cardContainer}>
             {loading ? (
-              <div className={styles.custom_row_center}>
+              <div className={styles.loadingContainer}>
                 <HourglassBottomIcon /> <span>Loading...</span>
               </div>
             ) : (
@@ -304,11 +313,14 @@ export default function People(): React.JSX.Element {
                     return <PeopleCard key={index} {...cardProps} />;
                   })
                 ) : (
-                  <span>{t('nothingToShow')}</span>
+                  <span className={styles.noDataMessage}>
+                    {t('nothingToShow')}
+                  </span>
                 )}
               </>
             )}
           </div>
+
           <PaginationList
             count={
               pageInfo?.hasNextPage

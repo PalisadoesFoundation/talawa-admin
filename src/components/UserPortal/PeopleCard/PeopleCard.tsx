@@ -30,7 +30,7 @@
  */
 import React from 'react';
 import aboutImg from 'assets/images/defaultImg.png';
-import styles from 'style/app-fixed.module.css';
+import styles from './PeopleCard.module.css';
 
 interface InterfaceOrganizationCardProps {
   id: string;
@@ -46,39 +46,31 @@ function peopleCard(props: InterfaceOrganizationCardProps): JSX.Element {
   const imageUrl = props.image ? props.image : aboutImg;
 
   return (
-    <div className={styles.people_card_container}>
+    <div className={styles.cardContainer}>
       {/* Container for serial number and image */}
-      <span style={{ flex: '1' }} className={styles.display_flex}>
-        {/* Serial number */}
-        <span style={{ flex: '1' }} className={styles.align_center}>
-          {props.sno}
-        </span>
-        {/* Person's image */}
-        <span style={{ flex: '1' }}>
-          <img
-            src={imageUrl}
-            crossOrigin="anonymous"
-            loading="lazy"
-            decoding="async"
-            className={
-              imageUrl !== aboutImg
-                ? styles.userAvatar
-                : styles.personImage_peoplecard
-            }
-          />
-        </span>
+      <span className={styles.serialNumberSection}>{props.sno}</span>
+      {/* Person's image */}
+      <span className={styles.avatarSection}>
+        <img
+          src={imageUrl}
+          crossOrigin="anonymous"
+          loading="lazy"
+          decoding="async"
+          className={
+            imageUrl !== aboutImg ? styles.avatar : styles.defaultAvatar
+          }
+          alt={`${props.name}'s avatar`}
+        />
       </span>
       {/* Person's name */}
-      <b style={{ flex: '2' }} className={styles.align_center}>
-        {props.name}
-      </b>
+      <div className={styles.nameSection}>{props.name}</div>
       {/* Person's email */}
-      <span style={{ flex: '2' }} className={styles.align_center}>
-        {props.email}
-      </span>
+      <span className={styles.emailSection}>{props.email}</span>
       {/* Person's role with additional styling */}
-      <div style={{ flex: '2' }} className={styles.align_center}>
-        <div className={styles.people_role}>
+      <div className={styles.roleSection}>
+        <div
+          className={`${styles.roleBadge} ${props.role.toLowerCase() === 'admin' ? styles.admin : styles.member}`}
+        >
           <span>{props.role}</span>
         </div>
       </div>

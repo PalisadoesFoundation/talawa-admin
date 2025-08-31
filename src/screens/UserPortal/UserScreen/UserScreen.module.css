@@ -153,7 +153,15 @@
 /* For tablets */
 @media (max-width: 820px) {
   .pageContainer {
-    padding-left: 2.5rem;
+    padding-left: 1rem;
+  }
+
+  .contract {
+    padding-left: 1rem;
+  }
+
+  .expand {
+    padding-left: 1rem;
   }
 
   .opendrawer {
@@ -169,5 +177,39 @@
     width: 100%;
     left: 0;
     right: 0;
+  }
+}
+
+/* For mobile screens - remove sidebar gap completely */
+@media (max-width: 576px) {
+  .pageContainer {
+    padding: 1rem 0.5rem 0 0.5rem !important;
+  }
+
+  .contract {
+    padding: 1rem 0.5rem 0 0.5rem !important;
+  }
+
+  .expand {
+    padding: 1rem 0.5rem 0 0.5rem !important;
+  }
+}
+
+/* For mobile phones */
+@media (max-width: 576px) {
+  .pageContainer {
+    padding: 0.75rem 0.5rem 0 0.5rem;
+  }
+
+  .contract {
+    padding-left: 0.5rem;
+  }
+
+  .expand {
+    padding-left: 0.5rem;
+  }
+
+  .opendrawer {
+    width: 20px;
   }
 }

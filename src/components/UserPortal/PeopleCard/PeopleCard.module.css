@@ -1,0 +1,227 @@
+/* PeopleCard Component Styles */
+
+.cardContainer {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.cardContainer:hover {
+  background-color: #f8f9fa;
+}
+
+.cardContainer:last-child {
+  border-bottom: none;
+}
+
+.serialNumberSection {
+  flex: 0 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.avatarSection {
+  flex: 0 0 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #dee2e6;
+}
+
+.defaultAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.nameSection {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  font-weight: 600;
+  color: #212529;
+  font-size: 0.9rem;
+}
+
+.emailSection {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  color: #6c757d;
+  font-size: 0.875rem;
+  word-break: break-word;
+}
+
+.roleSection {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roleBadge {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #495057;
+  text-transform: capitalize;
+}
+
+.roleBadge.admin {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.roleBadge.member {
+  background-color: #e2e3e5;
+  border-color: #d6d8db;
+  color: #383d41;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .cardContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .cardContainer:last-child {
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .serialNumberSection {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    flex: none;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .avatarSection {
+    flex: none;
+    margin-bottom: 0.75rem;
+    align-self: center;
+  }
+
+  .avatar,
+  .defaultAvatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .nameSection {
+    flex: none;
+    width: 100%;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .emailSection {
+    flex: none;
+    width: 100%;
+    margin-bottom: 0.75rem;
+    justify-content: center;
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .roleSection {
+    flex: none;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .roleBadge {
+    padding: 0.375rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 25px;
+  }
+}
+
+@media (max-width: 576px) {
+  .cardContainer {
+    padding: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .serialNumberSection {
+    top: 0.625rem;
+    right: 0.625rem;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+
+  .avatarSection {
+    margin-bottom: 0.625rem;
+  }
+
+  .avatar,
+  .defaultAvatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .nameSection {
+    margin-bottom: 0.375rem;
+    font-size: 0.95rem;
+  }
+
+  .emailSection {
+    margin-bottom: 0.625rem;
+    font-size: 0.8rem;
+  }
+
+  .roleBadge {
+    padding: 0.3rem 0.875rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Tablet specific adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .emailSection {
+    flex: 2.5;
+  }
+
+  .nameSection {
+    flex: 1.8;
+  }
+}
