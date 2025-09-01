@@ -24,25 +24,6 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  let reloadSpy: ReturnType<typeof vi.fn>;
-  let originalLocation: Location;
-  beforeEach(() => {
-    reloadSpy = vi.fn();
-    originalLocation = window.location;
-    // @ts-ignore
-    delete window.location;
-    // @ts-ignore
-    window.location = {
-      ...originalLocation,
-      reload: reloadSpy,
-    };
-  });
-  afterEach(() => {
-    // @ts-ignore
-    window.location = originalLocation;
-    vi.restoreAllMocks();
-  });
-
   // Create storage mock
   const localStorageMock = {
     getItem: vi.fn(),
@@ -52,6 +33,19 @@ describe('refreshToken', () => {
     length: 0,
     key: vi.fn(),
   };
+
+  beforeEach(() => {
+    vi.spyOn(window.location, 'reload').mockImplementation(() => {});
+    vi.clearAllMocks();
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -75,17 +69,16 @@ describe('refreshToken', () => {
     expect(result).toBe(true);
     expect(window.location.reload).toHaveBeenCalled();
   });
-
-  it('returns false and logs error when token refresh fails', async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    const errorMock = new Error('Failed to refresh token');
-    mockApolloClient.mutate.mockRejectedValueOnce(errorMock);
-
-    const result = await refreshToken();
-
+        let reloadSpy: ReturnType<typeof vi.fn>;
+        let originalLocation: Location;
+        beforeEach(() => {
+          reloadSpy = vi.fn();
+        });
+        afterEach(() => {
+          // @ts-ignore
+          window.location = originalLocation;
+          vi.restoreAllMocks();
+        });
     expect(result).toBe(false);
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to refresh token',
