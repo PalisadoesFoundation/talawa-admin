@@ -75,7 +75,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-              endDate: '2099-12-31',
+            endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -84,7 +84,7 @@ export const MOCKS = [
           {
             _id: 'campaignId2',
             startDate: '2024-07-28',
-              endDate: '2022-08-30',
+            endDate: '2022-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
             currency: 'USD',
@@ -111,7 +111,7 @@ export const MOCKS = [
           {
             _id: 'campaignId2',
             startDate: '2024-07-28',
-              endDate: '2022-08-30',
+            endDate: '2022-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
             currency: 'USD',
@@ -120,7 +120,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-              endDate: '2099-12-31',
+            endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -147,7 +147,7 @@ export const MOCKS = [
           {
             _id: 'campaignId2',
             startDate: '2024-07-28',
-              endDate: '2022-08-30',
+            endDate: '2022-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
             currency: 'USD',
@@ -156,7 +156,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-              endDate: '2099-12-31',
+            endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -183,7 +183,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-              endDate: '2099-12-31',
+            endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -192,7 +192,7 @@ export const MOCKS = [
           {
             _id: 'campaignId2',
             startDate: '2024-07-28',
-              endDate: '2022-08-30',
+            endDate: '2022-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
             currency: 'USD',
