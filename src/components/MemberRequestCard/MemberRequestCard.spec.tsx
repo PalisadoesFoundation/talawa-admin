@@ -103,7 +103,7 @@ describe('Testing Member Request Card', () => {
 
     beforeEach(() => {
       mockReload = vi.fn();
-      
+
       // Use Object.defineProperty for TypeScript compatibility
       Object.defineProperty(window, 'location', {
         value: {
