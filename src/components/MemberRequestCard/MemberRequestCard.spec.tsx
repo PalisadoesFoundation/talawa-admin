@@ -32,10 +32,12 @@ describe('Testing Member Request Card', () => {
     email: 'johndoe@gmail.com',
   };
 
-  global.alert = vi.fn();
+  beforeAll(() => {
+    vi.spyOn(window, 'alert').mockImplementation(() => {});
+  });
 
   it('should render props and text elements test for the page component', async () => {
-    global.confirm = (): boolean => true;
+  vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -58,7 +60,7 @@ describe('Testing Member Request Card', () => {
   });
 
   it('should render text elements when props value is not passed', async () => {
-    global.confirm = (): boolean => false;
+  vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -99,10 +101,10 @@ describe('Testing Member Request Card', () => {
     let reloadSpy: ReturnType<typeof vi.fn>;
     beforeEach(() => {
       reloadSpy = vi.fn();
-      Object.defineProperty(window, 'location', {
-        value: { reload: reloadSpy },
-        writable: true,
-      });
+      vi.spyOn(window.location, 'reload').mockImplementation(reloadSpy);
+    });
+    afterEach(() => {
+      vi.restoreAllMocks();
     });
     let confirmSpy: any;
 
