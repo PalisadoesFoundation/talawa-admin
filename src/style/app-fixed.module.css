@@ -1132,7 +1132,7 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 /* Table Header */
@@ -1157,10 +1157,11 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .btnsContainer .btnsBlock {
+  padding-right: 30px;
   display: flex;
   width: max-content;
 }
@@ -1223,6 +1224,7 @@ form label,
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
+    max-width: 800px;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1231,7 +1233,7 @@ form label,
 }
 
 .btnsContainer .btnsBlock button {
-  margin-left: 1rem;
+  /* margin-right: 1rem; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1424,7 +1426,7 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  margin-left: 8px;
+  padding-right: 30px;
   /* margin-right: 180px; */
   width: 425px;
 }
