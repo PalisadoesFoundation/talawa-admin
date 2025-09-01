@@ -118,7 +118,8 @@ describe('Testing Member Request Card', () => {
     });
 
     it('should reload window after 2 seconds if addMember is clicked', async () => {
-      global.confirm = (): boolean => true;
+      vi.useFakeTimers();
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
       render(
         <MockedProvider addTypename={false} link={link2}>
           <I18nextProvider i18n={i18nForTest}>
@@ -128,8 +129,9 @@ describe('Testing Member Request Card', () => {
       );
       await wait();
       await userEvent.click(screen.getByText(/Accept/i));
-      await wait(2100);
+      vi.advanceTimersByTime(2100);
       expect(reloadSpy).toHaveBeenCalled();
+      vi.useRealTimers();
     });
 
     it('should not reload window if acceptMutation fails', async () => {
