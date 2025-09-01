@@ -37,7 +37,7 @@ describe('Testing Member Request Card', () => {
   });
 
   it('should render props and text elements test for the page component', async () => {
-  vi.spyOn(window, 'confirm').mockReturnValue(true);
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -60,7 +60,7 @@ describe('Testing Member Request Card', () => {
   });
 
   it('should render text elements when props value is not passed', async () => {
-  vi.spyOn(window, 'confirm').mockReturnValue(false);
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
 
     render(
       <MockedProvider addTypename={false} link={link}>
