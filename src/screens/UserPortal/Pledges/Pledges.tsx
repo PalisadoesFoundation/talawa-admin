@@ -499,24 +499,29 @@ const Pledges = (): JSX.Element => {
               {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
                 <div
                   className={styles.pledgerContainer}
-                  key={user.id}
-                  data-testid={`extraUser-${index}`}
+                  key={index}
+                  data-testid={`extra${index + 1}`}
                 >
                   {user.avatarURL ? (
                     <img
                       src={user.avatarURL}
-                      alt={user.name}
-                      className={styles.TableImagePledge}
+                      alt="pledger"
+                      data-testid={`extraImage${index + 1}`}
+                      className={styles.TableImage}
                     />
                   ) : (
-                    <Avatar
-                      containerStyle={styles.imageContainerPledge}
-                      avatarStyle={styles.TableImagePledge}
-                      name={user.name}
-                      alt={user.name}
-                    />
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={user.id + '1'}
+                        containerStyle={styles.imageContainer}
+                        avatarStyle={styles.TableImage}
+                        name={user.name}
+                        alt={user.name}
+                        dataTestId={`extraAvatar${index + 1}`}
+                      />
+                    </div>
                   )}
-                  <span>{user.name}</span>
+                  <span key={user.id + '2'}>{user.name}</span>
                 </div>
               ))}
             </Popover.Popup>
