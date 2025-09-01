@@ -99,11 +99,21 @@ describe('Testing Member Request Card', () => {
       email: 'johndoe@gmail.com',
     };
     let reloadSpy: ReturnType<typeof vi.fn>;
+    let originalLocation: Location;
     beforeEach(() => {
       reloadSpy = vi.fn();
-      vi.spyOn(window.location, 'reload').mockImplementation(reloadSpy);
+      originalLocation = window.location;
+      // @ts-ignore
+      delete window.location;
+      // @ts-ignore
+      window.location = {
+        ...originalLocation,
+        reload: reloadSpy,
+      };
     });
     afterEach(() => {
+      // @ts-ignore
+      window.location = originalLocation;
       vi.restoreAllMocks();
     });
     let confirmSpy: any;
