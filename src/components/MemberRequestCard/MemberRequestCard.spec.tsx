@@ -96,7 +96,14 @@ describe('Testing Member Request Card', () => {
       memberImage: 'image',
       email: 'johndoe@gmail.com',
     };
-    let reloadSpy;
+    let reloadSpy: ReturnType<typeof vi.fn>;
+    beforeEach(() => {
+      reloadSpy = vi.fn();
+      Object.defineProperty(window, 'location', {
+        value: { reload: reloadSpy },
+        writable: true,
+      });
+    });
     let confirmSpy: any;
 
     it('should reload window after 2 seconds if addMember is clicked', async () => {
@@ -113,9 +120,8 @@ describe('Testing Member Request Card', () => {
       const buttons = screen.queryAllByRole('button');
       console.log(
         'Button texts:',
-        buttons.map((b) => b.textContent),
+        buttons.map((b: HTMLElement) => b.textContent),
       );
-      const reloadSpy = window.location.reload;
       await act(async () => {
         await userEvent.click(screen.getByText(acceptText));
       });
@@ -137,9 +143,8 @@ describe('Testing Member Request Card', () => {
       const buttonsAccept = screen.queryAllByRole('button');
       console.log(
         'Button texts:',
-        buttonsAccept.map((b) => b.textContent),
+        buttonsAccept.map((b: HTMLElement) => b.textContent),
       );
-      const reloadSpy = window.location.reload;
       await act(async () => {
         await userEvent.click(screen.getByText(acceptText));
       });
