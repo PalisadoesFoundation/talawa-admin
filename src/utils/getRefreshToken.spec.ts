@@ -24,10 +24,22 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
+  let reloadSpy: ReturnType<typeof vi.fn>;
+  let originalLocation: Location;
   beforeEach(() => {
-    vi.spyOn(window.location, 'reload').mockImplementation(() => {});
+    reloadSpy = vi.fn();
+    originalLocation = window.location;
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = {
+      ...originalLocation,
+      reload: reloadSpy,
+    };
   });
   afterEach(() => {
+    // @ts-ignore
+    window.location = originalLocation;
     vi.restoreAllMocks();
   });
 
