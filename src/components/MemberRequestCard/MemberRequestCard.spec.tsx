@@ -1,12 +1,12 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { describe, vi, expect } from 'vitest';
+import { describe, vi, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -98,25 +98,25 @@ describe('Testing Member Request Card', () => {
       memberImage: 'image',
       email: 'johndoe@gmail.com',
     };
-    let reloadSpy: ReturnType<typeof vi.fn>;
-    let originalLocation: Location;
+
+    let mockReload: any;
+
     beforeEach(() => {
-      reloadSpy = vi.fn();
-      originalLocation = window.location;
-      // @ts-ignore
-      delete window.location;
-      // @ts-ignore
-      window.location = {
-        ...originalLocation,
-        reload: reloadSpy,
-      };
+      mockReload = vi.fn();
+      
+      // Use Object.defineProperty for TypeScript compatibility
+      Object.defineProperty(window, 'location', {
+        value: {
+          ...window.location,
+          reload: mockReload,
+        },
+        writable: true,
+      });
     });
+
     afterEach(() => {
-      // @ts-ignore
-      window.location = originalLocation;
       vi.restoreAllMocks();
     });
-    let confirmSpy: any;
 
     it('should reload window after 2 seconds if addMember is clicked', async () => {
       const acceptText = /Accept/i;
@@ -138,7 +138,7 @@ describe('Testing Member Request Card', () => {
         await userEvent.click(screen.getByText(acceptText));
       });
       await new Promise((r) => setTimeout(r, 2100));
-      expect(reloadSpy).toHaveBeenCalled();
+      expect(mockReload).toHaveBeenCalled();
     });
 
     it('should not reload window if acceptMutation fails', async () => {
@@ -161,7 +161,7 @@ describe('Testing Member Request Card', () => {
         await userEvent.click(screen.getByText(acceptText));
       });
       await new Promise((r) => setTimeout(r, 2100));
-      expect(reloadSpy).not.toHaveBeenCalled();
+      expect(mockReload).not.toHaveBeenCalled();
     });
   });
 });

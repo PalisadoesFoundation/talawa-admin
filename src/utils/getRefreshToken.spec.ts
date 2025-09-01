@@ -33,8 +33,20 @@ describe('refreshToken', () => {
     key: vi.fn(),
   };
 
+  let mockReload: any;
+
   beforeEach(() => {
-    vi.spyOn(window.location, 'reload').mockImplementation(() => {});
+    mockReload = vi.fn();
+    
+    // Use Object.defineProperty for TypeScript compatibility
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        reload: mockReload,
+      },
+      writable: true,
+    });
+
     vi.clearAllMocks();
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
@@ -58,7 +70,7 @@ describe('refreshToken', () => {
       JSON.stringify('newRefreshToken'),
     );
     expect(result).toBe(true);
-    expect(window.location.reload).toHaveBeenCalled();
+    expect(mockReload).toHaveBeenCalled();
   });
 
   it('returns false and logs error when token refresh fails', async () => {
