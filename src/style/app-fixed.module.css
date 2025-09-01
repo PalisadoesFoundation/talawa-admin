@@ -1425,7 +1425,7 @@ form label,
   flex: 1;
   position: relative;
   margin-left: 8px;
-  margin-right: 180px;
+  /* margin-right: 180px; */
   width: 425px;
 }
 
@@ -8771,9 +8771,9 @@ form {
 }
 
 @media (max-width: 1120px) {
-  .contract {
+  /* .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
-  }
+  } */
 
   .collapseSidebarButton {
     width: calc(250px + 2rem);
@@ -9018,9 +9018,9 @@ form {
 }
 
 @media (max-width: 1120px) {
-  .contract {
+  /* .contract {
     padding-left: calc(250px + 2rem + 1.5rem);
-  }
+  } */
 
   .collapseSidebarButton {
     width: calc(250px + 2rem);
