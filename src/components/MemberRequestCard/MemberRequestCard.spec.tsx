@@ -95,69 +95,50 @@ describe('Testing Member Request Card', () => {
       joinDate: '18/03/2022',
       memberImage: 'image',
       email: 'johndoe@gmail.com',
-    };
-    let originalLocation: Location;
-    let reloadSpy: jest.Mock;
-    let confirmSpy: any;
+  }
+  let reloadSpy;
+  let confirmSpy: any;
 
-    beforeEach(() => {
-      originalLocation = window.location;
-      // @ts-expect-error - Mocking window.location for testing
-      delete window.location;
-      // @ts-expect-error - Mocking window.location for testing
-      window.location = { ...originalLocation, reload: vi.fn() };
-      reloadSpy = window.location.reload as any;
-    });
-
-    afterEach(() => {
-      vi.restoreAllMocks();
-      Object.defineProperty(window, 'location', {
-        value: originalLocation,
-        writable: true,
+      it('should reload window after 2 seconds if addMember is clicked', async () => {
+        const acceptText = /Accept/i;
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+        render(
+          <MockedProvider addTypename={false} mocks={MOCKS2}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberRequestCard {...testProps} />
+            </I18nextProvider>
+          </MockedProvider>
+        );
+        await wait();
+        const buttons = screen.queryAllByRole('button');
+        console.log('Button texts:', buttons.map((b) => b.textContent));
+        const reloadSpy = window.location.reload;
+        await act(async () => {
+          await userEvent.click(screen.getByText(acceptText));
+        });
+        await new Promise((r) => setTimeout(r, 2100));
+        expect(reloadSpy).toHaveBeenCalled();
       });
-    });
 
-    it('should reload window after 2 seconds if addMember is clicked', async () => {
-  const acceptText = /Accept/i;
-  vi.spyOn(window, 'confirm').mockReturnValue(true);
-  render(
-        <MockedProvider addTypename={false} mocks={MOCKS2}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...testProps} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-      await wait();
-      const buttons = screen.queryAllByRole('button');
-      // eslint-disable-next-line no-console
-      console.log('Button texts:', buttons.map(b => b.textContent));
-      await act(async () => {
-        await userEvent.click(screen.getByText(acceptText));
+      it('should not reload window if acceptMutation fails', async () => {
+        const acceptText = /Accept/i;
+        vi.spyOn(window, 'confirm').mockReturnValue(true);
+        render(
+          <MockedProvider addTypename={false} mocks={MOCKS3}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberRequestCard {...testProps} />
+            </I18nextProvider>
+          </MockedProvider>
+        );
+        await wait();
+        const buttonsAccept = screen.queryAllByRole('button');
+        console.log('Button texts:', buttonsAccept.map((b) => b.textContent));
+        const reloadSpy = window.location.reload;
+        await act(async () => {
+          await userEvent.click(screen.getByText(acceptText));
+        });
+        await new Promise((r) => setTimeout(r, 2100));
+        expect(reloadSpy).not.toHaveBeenCalled();
       });
-      await new Promise(r => setTimeout(r, 2100));
-      expect(reloadSpy).toHaveBeenCalled();
-    });
-
-    it('should not reload window if acceptMutation fails', async () => {
-      const acceptText = /Accept/i;
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
-      render(
-        <MockedProvider addTypename={false} mocks={MOCKS3}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...testProps} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-      await wait();
-      // Debug: print all button texts before clicking
-      const buttonsAccept = screen.queryAllByRole('button');
-      // eslint-disable-next-line no-console
-      console.log('Button texts:', buttonsAccept.map(b => b.textContent));
-      await act(async () => {
-        await userEvent.click(screen.getByText(acceptText));
-      });
-      await new Promise(r => setTimeout(r, 2100));
-      expect(reloadSpy).not.toHaveBeenCalled();
     });
   });
-});
