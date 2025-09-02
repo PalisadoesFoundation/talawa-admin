@@ -152,16 +152,10 @@ describe('Testing Member Request Card', () => {
         </MockedProvider>,
       );
       await wait();
-      const buttonsAccept = screen.queryAllByRole('button');
-      console.log(
-        'Button texts:',
-        buttonsAccept.map((b: HTMLElement) => b.textContent),
-      );
-      await act(async () => {
-        await userEvent.click(screen.getByText(acceptText));
-      });
-      await new Promise((r) => setTimeout(r, 2100));
+      vi.useFakeTimers();
+      await userEvent.click(screen.getByText(acceptText));
+      vi.advanceTimersByTime(2100);
+      vi.useRealTimers();
       expect(mockReload).not.toHaveBeenCalled();
-    });
   });
 });
