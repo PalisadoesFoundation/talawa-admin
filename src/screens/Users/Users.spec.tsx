@@ -270,7 +270,10 @@ describe('Testing Users screen', () => {
       prev: { users: IUserData[] } | undefined,
       { fetchMoreResult }: { fetchMoreResult?: { users: IUserData[] } },
     ) => {
-      if (!fetchMoreResult) return prev || { users: [] };
+      if (!fetchMoreResult) {
+        console.log('No fetchMoreResult available');
+        return prev || { users: [] };
+      }
 
       const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
 
@@ -279,6 +282,8 @@ describe('Testing Users screen', () => {
           mergedUsers.map((user: IUserData) => [user.user._id, user]),
         ).values(),
       );
+      console.log('Merged users:', mergedUsers.length);
+      console.log('Unique users:', uniqueUsers.length);
 
       return { users: uniqueUsers };
     };

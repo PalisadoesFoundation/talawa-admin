@@ -297,6 +297,7 @@ function OrgPost(): JSX.Element {
       data-is-filtering={String(isFiltering)}
       data-sorting-option={sortingOption}
     >
+      {error && <div data-testid="not-found">Error loading post</div>}
       <PostsRenderer
         loading={loading}
         error={error}
