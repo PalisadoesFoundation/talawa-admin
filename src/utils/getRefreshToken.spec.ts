@@ -1,5 +1,5 @@
 // SKIP_LOCALSTORAGE_CHECK
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { refreshToken } from './getRefreshToken';
 
 const mockApolloClient = {
@@ -24,16 +24,6 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  const { location } = window;
-
-  interface TestInterfacePartialWindow {
-    location?: Partial<Location>;
-  }
-
-  delete (window as TestInterfacePartialWindow).location;
-  global.window.location = { ...location, reload: vi.fn() };
-
-  // Create storage mock
   const localStorageMock = {
     getItem: vi.fn(),
     setItem: vi.fn(),
@@ -43,12 +33,29 @@ describe('refreshToken', () => {
     key: vi.fn(),
   };
 
+  let mockReload: any;
+
   beforeEach(() => {
+    mockReload = vi.fn();
+
+    // Use Object.defineProperty for TypeScript compatibility
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        reload: mockReload,
+      },
+      writable: true,
+    });
+
     vi.clearAllMocks();
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
       writable: true,
     });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('returns true when the token is refreshed successfully', async () => {
@@ -63,7 +70,7 @@ describe('refreshToken', () => {
       JSON.stringify('newRefreshToken'),
     );
     expect(result).toBe(true);
-    expect(window.location.reload).toHaveBeenCalled();
+    expect(mockReload).toHaveBeenCalled();
   });
 
   it('returns false and logs error when token refresh fails', async () => {
