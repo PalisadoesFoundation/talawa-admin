@@ -37,6 +37,31 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+// Mock 'react-router' to satisfy hooks used inside EventListCard and its modals
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  const MockNavigate = () => null;
+  return {
+    ...actual,
+    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
+    useNavigate: vi.fn().mockReturnValue(vi.fn()),
+    Navigate: MockNavigate,
+  } as unknown as typeof import('react-router');
+});
+
+// Mock Apollo useMutation to avoid needing an ApolloProvider context
+vi.mock('@apollo/client', async () => {
+  const actual =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+  return {
+    ...actual,
+    useMutation: vi
+      .fn()
+      .mockReturnValue([vi.fn().mockResolvedValue({ data: {} })]),
+  } as unknown as typeof import('@apollo/client');
+});
+
 const renderWithRouterAndPath = (
   ui: React.ReactElement,
   { route = '/organization/org1' } = {},
@@ -480,6 +505,185 @@ describe('Calendar Component', () => {
     }
     await waitFor(() => {
       expect(container.querySelector('._expand_event_list_d8535b')).toBeNull();
+    });
+  });
+
+  it('includes private events for REGULAR users who are org members', async () => {
+    const todayDate = new Date();
+    const privateEventToday = {
+      ...mockEventData[1],
+      name: 'Member Private Event',
+      isPublic: false,
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+    };
+
+    const memberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'member1',
+              name: 'Member User',
+              emailAddress: 'member1@example.com',
+              role: 'MEMBER',
+            },
+            cursor: 'cursorM1',
+          },
+        ],
+      },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEventToday]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="member1"
+        orgData={memberOrgData}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeInTheDocument();
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('Member Private Event')).toBeInTheDocument();
+    });
+  });
+
+  it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
+    const todayDate = new Date();
+    const privateEventToday = {
+      ...mockEventData[1],
+      name: 'NonMember Private Event',
+      isPublic: false,
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+    };
+
+    const nonMemberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'someoneElse',
+              name: 'Another User',
+              emailAddress: 'someone@example.com',
+              role: 'MEMBER',
+            },
+            cursor: 'cursorX',
+          },
+        ],
+      },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEventToday]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="nonmember1"
+        orgData={nonMemberOrgData}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    // There should be no expand button for events since the private event is excluded
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeNull();
+
+    // Click a no-events button to exercise the toggleExpand(onClick) path
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+    });
+  });
+
+  it('handles undefined eventData by rendering with no events', async () => {
+    const { findAllByTestId, container } = renderWithRouterAndPath(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      <Calendar
+        eventData={undefined as any}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+  });
+
+  it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
+    const todayDate = new Date();
+    const eventWithoutAttendees = {
+      _id: 'no-attendees',
+      location: 'Loc',
+      name: 'No Attendees Event',
+      description: 'Desc',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '09:00:00',
+      endTime: '10:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      creator: { firstName: 'A', lastName: 'B', _id: 'creator-x' },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[eventWithoutAttendees as never]}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeInTheDocument();
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Attendees Event')).toBeInTheDocument();
     });
   });
 });
