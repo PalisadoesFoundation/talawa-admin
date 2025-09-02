@@ -221,7 +221,7 @@
     "@rollup/rollup-darwin-arm64": "^4.46.2",
     "@rollup/rollup-darwin-x64": "^4.46.2",
     "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
+    "@rollup/rollup-win32-x64-msvc": "^4.50.0"
   },
   "engines": {
     "node": ">=20.x"
