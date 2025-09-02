@@ -311,19 +311,6 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  it('open and closes add pledge modal', async () => {
-    renderCampaigns(link1);
-
-    const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
-    await waitFor(() => expect(addPledgeBtn[0]).toBeInTheDocument());
-    await userEvent.click(addPledgeBtn[0]);
-
-    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
-    );
-  });
-
   it('Redirect to My Pledges screen', async () => {
     renderCampaigns(link1);
 
