@@ -51,11 +51,11 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    
+
     // Performance: Batch user interactions
     await Promise.all([
       userEvent.click(screen.getByText(/Accept/i)),
-      userEvent.click(screen.getByText(/Reject/i))
+      userEvent.click(screen.getByText(/Reject/i)),
     ]);
 
     // Performance: Group assertions for single DOM query
@@ -88,11 +88,11 @@ describe('Testing Member Request Card', () => {
     );
 
     await wait();
-    
+
     // Performance: Batch interactions
     await Promise.all([
       userEvent.click(screen.getByText(/Accept/i)),
-      userEvent.click(screen.getByText(/Reject/i))
+      userEvent.click(screen.getByText(/Reject/i)),
     ]);
 
     // Efficient assertions
@@ -113,7 +113,7 @@ describe('Testing Member Request Card', () => {
     // Performance: Minimal setup in beforeEach
     beforeEach(() => {
       mockReload = vi.fn();
-      
+
       // TypeScript-safe, performance-optimized window.location mock
       Object.defineProperty(window, 'location', {
         value: {
@@ -133,7 +133,7 @@ describe('Testing Member Request Card', () => {
     it('should reload window after 2 seconds if addMember is clicked', async () => {
       const acceptText = /Accept/i;
       vi.spyOn(window, 'confirm').mockReturnValue(true);
-      
+
       render(
         <MockedProvider addTypename={false} mocks={MOCKS2}>
           <I18nextProvider i18n={i18nForTest}>
@@ -141,24 +141,24 @@ describe('Testing Member Request Card', () => {
           </I18nextProvider>
         </MockedProvider>,
       );
-      
+
       await wait();
-      
+
       // Performance: Direct button query and click
       await act(async () => {
         await userEvent.click(screen.getByText(acceptText));
       });
-      
+
       // Performance: Optimized timeout for real-world timing
       await new Promise((resolve) => setTimeout(resolve, 2100));
-      
+
       expect(mockReload).toHaveBeenCalledTimes(1);
     });
 
     it('should not reload window if acceptMutation fails', async () => {
       const acceptText = /Accept/i;
       vi.spyOn(window, 'confirm').mockReturnValue(true);
-      
+
       render(
         <MockedProvider addTypename={false} mocks={MOCKS3}>
           <I18nextProvider i18n={i18nForTest}>
@@ -166,17 +166,17 @@ describe('Testing Member Request Card', () => {
           </I18nextProvider>
         </MockedProvider>,
       );
-      
+
       await wait();
-      
+
       // Performance: Streamlined interaction
       await act(async () => {
         await userEvent.click(screen.getByText(acceptText));
       });
-      
+
       // Performance: Same timeout for consistency
       await new Promise((resolve) => setTimeout(resolve, 2100));
-      
+
       expect(mockReload).not.toHaveBeenCalled();
     });
   });
