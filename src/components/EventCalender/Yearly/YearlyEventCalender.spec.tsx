@@ -528,12 +528,13 @@ describe('Calendar Component', () => {
 
   it('includes private events for REGULAR users who are org members', async () => {
     // Use a date format that matches the component's date filtering
+    const currentYear = new Date().getFullYear();
     const privateEventToday = {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
-      startDate: '2025-01-15', // Simple date format
-      endDate: '2025-01-15',
+      startDate: `${currentYear}-01-15`, // Dynamic date format
+      endDate: `${currentYear}-01-15`,
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
@@ -683,13 +684,14 @@ describe('Calendar Component', () => {
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
     // Use a date format that matches the component's date filtering
+    const currentYear = new Date().getFullYear();
     const eventWithoutAttendees: CalendarEventItem = {
       _id: 'no-attendees',
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
-      startDate: '2025-01-20', // Simple date format
-      endDate: '2025-01-20',
+      startDate: `${currentYear}-01-20`, // Dynamic date format
+      endDate: `${currentYear}-01-20`,
       startTime: '09:00:00',
       endTime: '10:00:00',
       allDay: false,
@@ -776,8 +778,9 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
+    const currentYear = new Date().getFullYear();
     await waitFor(() => {
-      expect(screen.getByText('2025')).toBeInTheDocument();
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
     // Look for expand buttons that may contain events
@@ -855,8 +858,9 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
+    const currentYear = new Date().getFullYear();
     await waitFor(() => {
-      expect(screen.getByText('2025')).toBeInTheDocument();
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
     // Look for expand buttons that may contain events
@@ -918,8 +922,9 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
+    const currentYear = new Date().getFullYear();
     await waitFor(() => {
-      expect(screen.getByText('2025')).toBeInTheDocument();
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
     // Since orgData is undefined, private events should be filtered out
@@ -972,8 +977,9 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
+    const currentYear = new Date().getFullYear();
     await waitFor(() => {
-      expect(screen.getByText('2025')).toBeInTheDocument();
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
     // Since user is not in the members list (empty edges), private events should be filtered out
@@ -1071,8 +1077,9 @@ describe('Calendar Component', () => {
     await findAllByTestId('day');
 
     // Verify component renders successfully with events
+    const currentYear = new Date().getFullYear();
     await waitFor(() => {
-      expect(screen.getByText('2025')).toBeInTheDocument();
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
   });
 
