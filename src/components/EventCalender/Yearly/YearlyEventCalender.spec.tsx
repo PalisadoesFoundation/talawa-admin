@@ -16,16 +16,23 @@ type CalendarEventItem = NonNullable<
   InterfaceCalendarProps['eventData']
 >[number];
 
+const setMockOrgId = (orgId: string) => {
+  vi.mocked(useParams).mockReturnValue({ orgId });
+  const rr = require('react-router') as { useParams: ReturnType<typeof vi.fn> };
+  rr.useParams.mockReturnValue({ orgId });
+};
+
+const mockOrgId = 'org1';
+
 // Mock the react-router-dom module
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
 
-  // Create a proper React component that returns null
   const MockNavigate = () => null;
 
   return {
     ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
+    useParams: vi.fn().mockReturnValue({ orgId: mockOrgId }),
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     useLocation: vi.fn().mockReturnValue({
       pathname: '/organization/org1',
@@ -34,9 +41,7 @@ vi.mock('react-router-dom', async () => {
       state: null,
       key: 'default',
     }),
-    // Replace the Navigate component with our React component
     Navigate: MockNavigate,
-    // Make sure to preserve the actual routers
     MemoryRouter: actual.MemoryRouter,
     BrowserRouter: actual.BrowserRouter,
   };
@@ -49,7 +54,7 @@ vi.mock('react-router', async () => {
   const MockNavigate = () => null;
   return {
     ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
+    useParams: vi.fn().mockReturnValue({ orgId: mockOrgId }),
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     Navigate: MockNavigate,
   } as unknown as typeof import('react-router');
@@ -70,7 +75,7 @@ vi.mock('@apollo/client', async () => {
         called: false,
         reset: vi.fn(),
       };
-      return [mutate, result];
+      return [mutate, result] as const;
     }),
   } as unknown as typeof import('@apollo/client');
 });
@@ -169,8 +174,7 @@ describe('Calendar Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset the mock implementation for useParams before each test
-    vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
+    setMockOrgId(mockOrgId);
   });
 
   it('renders correctly with basic props', async () => {
