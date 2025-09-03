@@ -588,6 +588,11 @@ describe('Calendar Component', () => {
       );
       expect(expandedList).toBeInTheDocument();
     });
+
+    // Stronger assertion: the private event title should be visible to a REGULAR member
+    await waitFor(() => {
+      expect(screen.getByText('Member Private Event')).toBeInTheDocument();
+    });
   });
 
   it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
@@ -765,16 +770,14 @@ describe('Calendar Component', () => {
     };
 
     // Test with undefined userRole - should only show public events
-    const { container } = render(
-      <BrowserRouter>
-        <Calendar
-          eventData={[publicEvent, privateEvent]}
-          refetchEvents={vi.fn()}
-          orgData={mockOrgData}
-          userRole={undefined}
-          userId="user1"
-        />
-      </BrowserRouter>,
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[publicEvent, privateEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={undefined}
+        userId="user1"
+      />,
     );
 
     // Wait for component to render
@@ -1186,9 +1189,26 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       const dayElements = container.querySelectorAll('[data-testid="day"]');
       expect(dayElements.length).toBeGreaterThan(0);
+      // Stronger check: no expand buttons should be rendered when there are no events
+      const expandButtons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
+      expect(expandButtons.length).toBe(0);
+    });
 
-      // Check that no events are rendered
-      expect(container.textContent).not.toContain('Event');
+    // Optionally interact with the explicit no-events button to validate empty-state UI
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
   });
 });
