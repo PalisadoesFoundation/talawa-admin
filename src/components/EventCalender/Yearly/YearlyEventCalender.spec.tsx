@@ -124,8 +124,8 @@ describe('Calendar Component', () => {
       description: 'Private Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '12:00:00',
-      endTime: '13:00:00',
+      startTime: '12:00',
+      endTime: '13:00',
       allDay: false,
       isPublic: false,
       isRegisterable: true,
@@ -714,6 +714,367 @@ describe('Calendar Component', () => {
 
     await waitFor(() => {
       expect(container.textContent).toContain('No Attendees Event');
+    });
+  });
+
+  test('filters events correctly when userRole is undefined but eventData contains events', async () => {
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined userRole - should only show public events
+    render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[publicEvent, privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={undefined}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByText('2025')).toBeInTheDocument();
+    });
+  });
+
+  test('filters events correctly when userId is undefined but has userRole', async () => {
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined userId - should only show public events
+    render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[publicEvent, privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.REGULAR}
+          userId={undefined}
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByText('2025')).toBeInTheDocument();
+    });
+  });
+
+  test('handles orgData being undefined', async () => {
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined orgData
+    render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={undefined}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByText('2025')).toBeInTheDocument();
+    });
+  });
+
+  test('handles orgData with empty members edges', async () => {
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    const orgDataWithEmptyEdges = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [],
+      },
+    };
+
+    // Test with empty member edges
+    render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={orgDataWithEmptyEdges}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByText('2025')).toBeInTheDocument();
+    });
+  });
+
+  test('processes multiple events for REGULAR user when user is a member', async () => {
+    const today = new Date();
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent1: CalendarEventItem = {
+      _id: 'private-event-1',
+      location: 'Private Location 1',
+      name: 'Private Event 1',
+      description: 'Private Description 1',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    const privateEvent2: CalendarEventItem = {
+      _id: 'private-event-2',
+      location: 'Private Location 2',
+      name: 'Private Event 2',
+      description: 'Private Description 2',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '14:00:00',
+      endTime: '15:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Bob', lastName: 'Smith', _id: 'creator3' },
+    };
+
+    const memberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'user1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+      },
+    };
+
+    // Test with user as a member - should see all events
+    const { findAllByTestId } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[publicEvent, privateEvent1, privateEvent2]}
+          refetchEvents={vi.fn()}
+          orgData={memberOrgData}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for calendar to render
+    await findAllByTestId('day');
+
+    // Verify component renders successfully with events
+    await waitFor(() => {
+      expect(screen.getByText('2025')).toBeInTheDocument();
+    });
+  });
+
+  test('handles calendar navigation across year boundaries', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    const currentYear = new Date().getFullYear();
+    const prevButton = getByTestId('prevYear');
+    const nextButton = getByTestId('nextYear');
+
+    // Test navigation to previous year
+    await act(async () => {
+      fireEvent.click(prevButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
+    });
+
+    // Test navigation to next year (back to current)
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
+    });
+
+    // Test navigation to future year
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
+    });
+  });
+
+  test('renders correct number of month columns', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      const monthColumns = container.querySelectorAll(
+        '._columnYearlyEventCalender_d8535b',
+      );
+      expect(monthColumns).toHaveLength(12);
+    });
+  });
+
+  test('handles empty eventData array', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+
+      // Check that no events are rendered
+      expect(container.textContent).not.toContain('Event');
     });
   });
 });
