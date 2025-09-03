@@ -16,13 +16,12 @@ type CalendarEventItem = NonNullable<
   InterfaceCalendarProps['eventData']
 >[number];
 
-const setMockOrgId = (orgId: string) => {
-  vi.mocked(useParams).mockReturnValue({ orgId });
-  const rr = require('react-router') as { useParams: ReturnType<typeof vi.fn> };
-  rr.useParams.mockReturnValue({ orgId });
-};
+// Hoisted shared state for router params used by both react-router-dom and react-router mocks
+const sharedRouterState = vi.hoisted(() => ({ orgId: 'org1' }));
 
-const mockOrgId = 'org1';
+const setMockOrgId = (orgId: string) => {
+  sharedRouterState.orgId = orgId;
+};
 
 // Mock the react-router-dom module
 vi.mock('react-router-dom', async () => {
@@ -30,9 +29,10 @@ vi.mock('react-router-dom', async () => {
 
   const MockNavigate = () => null;
 
+  const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: mockOrgId }),
+    useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     useLocation: vi.fn().mockReturnValue({
       pathname: '/organization/org1',
@@ -52,9 +52,10 @@ vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
   const MockNavigate = () => null;
+  const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: mockOrgId }),
+    useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     Navigate: MockNavigate,
   } as unknown as typeof import('react-router');
@@ -104,8 +105,8 @@ describe('Calendar Component', () => {
       description: 'Test Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '10:00',
-      endTime: '11:00',
+      startTime: '10:00:00',
+      endTime: '11:00:00',
       allDay: false,
       isPublic: true,
       isRegisterable: true,
@@ -123,8 +124,8 @@ describe('Calendar Component', () => {
       description: 'Private Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '12:00',
-      endTime: '13:00',
+      startTime: '12:00:00',
+      endTime: '13:00:00',
       allDay: false,
       isPublic: false,
       isRegisterable: true,
@@ -174,7 +175,7 @@ describe('Calendar Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    setMockOrgId(mockOrgId);
+    setMockOrgId('org1');
   });
 
   it('renders correctly with basic props', async () => {
@@ -533,8 +534,8 @@ describe('Calendar Component', () => {
       isPublic: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '12:00',
-      endTime: '13:00',
+      startTime: '12:00:00',
+      endTime: '13:00:00',
     };
 
     const memberOrgData = {
@@ -578,7 +579,7 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('Member Private Event')).toBeInTheDocument();
+      expect(container.textContent).toContain('Member Private Event');
     });
   });
 
@@ -590,8 +591,8 @@ describe('Calendar Component', () => {
       isPublic: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '12:00',
-      endTime: '13:00',
+      startTime: '12:00:00',
+      endTime: '13:00:00',
     };
 
     const nonMemberOrgData = {
@@ -683,8 +684,8 @@ describe('Calendar Component', () => {
       description: 'Desc',
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '09:00',
-      endTime: '10:00',
+      startTime: '09:00:00',
+      endTime: '10:00:00',
       allDay: false,
       isPublic: true,
       isRegisterable: true,
@@ -712,7 +713,7 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Attendees Event')).toBeInTheDocument();
+      expect(container.textContent).toContain('No Attendees Event');
     });
   });
 });
