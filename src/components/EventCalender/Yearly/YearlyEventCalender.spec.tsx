@@ -664,7 +664,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
-      attendees: [],
+      attendees: undefined as unknown as CalendarEventItem['attendees'],
       creator: { firstName: 'A', lastName: 'B', _id: 'creator-x' },
     };
 
