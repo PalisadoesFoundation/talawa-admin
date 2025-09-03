@@ -258,21 +258,48 @@ function organizationActionItems(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const assignee = params.row.assignee;
         const displayName = assignee?.name || 'No assignee';
-
+        console.log(assignee);
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
             data-testid="assigneeName"
-            style={{ height: '100%' }}
+            style={{
+              height: '100%',
+              width: '100%',
+              maxWidth: '100%',
+              overflow: 'hidden',
+            }}
           >
-            <div className={styles.TableImage}>
-              <Avatar
-                key={assignee?.id || 'no-assignee'}
-                name={displayName}
-                alt={displayName}
-              />
+            <div
+              className={styles.TableImage}
+              style={{ flexShrink: 0, marginRight: '8px' }}
+            >
+              {assignee?.avatarURL ? (
+                <img
+                  src={assignee.avatarURL}
+                  crossOrigin="anonymous"
+                  className={styles.TableImage}
+                />
+              ) : (
+                <Avatar
+                  key={assignee?.id || 'no-assignee'}
+                  name={displayName}
+                  alt={displayName}
+                />
+              )}
             </div>
-            <span className={!assignee ? 'text-muted' : ''}>{displayName}</span>
+            <span
+              className={!assignee ? 'text-muted' : ''}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {displayName}
+            </span>
           </div>
         );
       },
