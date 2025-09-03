@@ -61,16 +61,17 @@ vi.mock('@apollo/client', async () => {
     await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
   return {
     ...actual,
-    useMutation: vi.fn().mockReturnValue([
-      vi.fn().mockResolvedValue({ data: {} }),
-      {
+    useMutation: vi.fn().mockImplementation(() => {
+      const mutate = vi.fn().mockResolvedValue({ data: {} });
+      const result = {
         data: undefined,
         loading: false,
         error: undefined,
         called: false,
         reset: vi.fn(),
-      },
-    ]),
+      };
+      return [mutate, result];
+    }),
   } as unknown as typeof import('@apollo/client');
 });
 
@@ -640,7 +641,6 @@ describe('Calendar Component', () => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
 
-    // Assert that the private event title is not present to make exclusion explicit
     expect(screen.queryByText('NonMember Private Event')).toBeNull();
   });
 
@@ -658,6 +658,16 @@ describe('Calendar Component', () => {
       '[data-testid^="no-events-btn-"]',
     );
     expect(noEventsButton).toBeInTheDocument();
+
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+    });
   });
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
