@@ -436,8 +436,10 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
-    await wait();
+    await waitFor(
+      () => expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument(),
+      { timeout: 1000 },
+    );
   });
 
   it('pagination working', async () => {
@@ -599,8 +601,9 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
   });
 
   it('should handle search with empty input value', async () => {
@@ -622,7 +625,9 @@ describe('People Component Mode Switch and Search Coverage', () => {
     searchInput.remove();
 
     await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+    });
   });
 });
 

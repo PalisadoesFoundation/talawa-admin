@@ -5,7 +5,7 @@
  * under various scenarios.
  */
 import React, { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
@@ -381,10 +381,10 @@ describe('Testing Donate Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    // Find loading text within the specific container
+    // Find loading state and assert Loader via RTL queries
     const loadingElement = screen.getByTestId('loading-state');
     expect(
-      loadingElement.querySelector('[data-testid="spinner-wrapper"]'),
+      within(loadingElement).getByTestId('spinner-wrapper'),
     ).toBeInTheDocument();
 
     await wait();

@@ -44,7 +44,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   if (loading)
     return (
       <TableRow data-testid="loading-state">
-        <TableCell colSpan={4} align="center">
+        <TableCell colSpan={4} align="center" aria-busy="true">
           <Loader size="lg" />
         </TableCell>
       </TableRow>

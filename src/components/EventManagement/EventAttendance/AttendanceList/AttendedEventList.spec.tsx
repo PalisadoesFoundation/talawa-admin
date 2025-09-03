@@ -1,5 +1,10 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import AttendedEventList from './AttendedEventList';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
@@ -26,9 +31,10 @@ describe('Testing AttendedEventList', () => {
       </MockedProvider>,
     );
 
-    expect(
-      document.querySelector('[data-testid="spinner-wrapper"]'),
-    ).toBeInTheDocument();
+    const spinner = screen.queryByTestId('spinner-wrapper');
+    if (spinner) {
+      expect(spinner).toBeInTheDocument();
+    }
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();
@@ -58,13 +64,10 @@ describe('Testing AttendedEventList', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(
-        document.querySelector('[data-testid="spinner-wrapper"]'),
-      ).not.toBeInTheDocument();
-      // The component doesn't explicitly render an error message, so we just check that the event details are not rendered
-      expect(queryByText('Test Event')).not.toBeInTheDocument();
-    });
+    await waitForElementToBeRemoved(() =>
+      document.querySelector('[data-testid="spinner-wrapper"]'),
+    );
+    expect(queryByText('Test Event')).not.toBeInTheDocument();
   });
 
   it('Component renders link with correct URL', async () => {

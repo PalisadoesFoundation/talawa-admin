@@ -47,7 +47,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Button, Modal, Form, Alert } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
@@ -258,15 +258,9 @@ const LeaveOrganization = (): JSX.Element => {
                 disabled={loading}
                 onClick={handleVerifyAndLeave}
                 aria-label="confirm-leave-button"
+                aria-busy={loading}
               >
-                {loading ? (
-                  <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
-                  </>
-                ) : (
-                  'Confirm'
-                )}
+                {loading ? <Loader size="sm" /> : 'Confirm'}
               </Button>
             </>
           )}

@@ -65,7 +65,7 @@ const mocks = [
       query: ORGANIZATIONS_LIST_BASIC,
       variables: { id: 'test-org-id' },
     },
-    delay: 100,
+    delay: 25,
     result: {
       data: {
         organizations: [
@@ -198,10 +198,7 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    // Loader may render briefly; query without throwing if it disappears quickly
-    const spinnerWrapper = await screen
-      .findByTestId('spinner-wrapper')
-      .catch(() => null);
+    const spinnerWrapper = screen.queryByTestId('spinner-wrapper');
     if (spinnerWrapper) {
       expect(spinnerWrapper).toBeInTheDocument();
     }

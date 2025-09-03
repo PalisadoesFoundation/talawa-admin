@@ -197,7 +197,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
   });
 
-  it('Should show Loading state initially', () => {
+  it('Should show Loading state initially', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -209,10 +209,8 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const spinners = document.querySelectorAll(
-      '[data-testid="spinner-wrapper"]',
-    );
-    expect(spinners.length).toBe(2);
+    const spinners = await screen.findAllByTestId('spinner-wrapper');
+    expect(spinners).toHaveLength(2);
   });
 
   it('Should render Member images properly', async () => {

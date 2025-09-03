@@ -1417,7 +1417,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn1 = screen.getByTestId('modeBtn1');
+  const modeBtn1 = await screen.findByTestId('modeBtn1');
   expect(modeBtn1).toBeInTheDocument();
 
   await act(async () => {
@@ -1436,7 +1436,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn2 = screen.getByTestId('modeBtn2');
+  const modeBtn2 = await screen.findByTestId('modeBtn2');
   expect(modeBtn2).toBeInTheDocument();
 
   await act(async () => {

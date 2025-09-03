@@ -285,7 +285,17 @@ export default function People(): React.JSX.Element {
 
           <div className={styles.people_card_main_container}>
             {loading ? (
-              <Loader size="xl" />
+              <div
+                style={{
+                  minHeight: '240px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                data-testid="people-loader-placeholder"
+              >
+                <Loader size="xl" />
+              </div>
             ) : (
               <>
                 {members && members.length > 0 ? (

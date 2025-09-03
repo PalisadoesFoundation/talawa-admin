@@ -39,7 +39,6 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Loader from 'components/Loader/Loader';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
