@@ -220,7 +220,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<Loader size="xl" />}
                     />
                   }
                 />
@@ -285,7 +285,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<Loader size="xl" />}
                     />
                   }
                 />
@@ -306,7 +306,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<Loader size="xl" />}
                     />
                   }
                 />
@@ -337,7 +337,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<Loader size="xl" />}
                     />
                   }
                 />

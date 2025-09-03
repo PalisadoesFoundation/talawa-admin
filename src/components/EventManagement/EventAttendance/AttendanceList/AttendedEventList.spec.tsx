@@ -31,10 +31,9 @@ describe('Testing AttendedEventList', () => {
       </MockedProvider>,
     );
 
-    const spinner = screen.queryByTestId('spinner-wrapper');
-    if (spinner) {
-      expect(spinner).toBeInTheDocument();
-    }
+    await waitFor(() =>
+      expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument(),
+    );
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();

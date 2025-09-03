@@ -54,7 +54,13 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
 
   const event = data?.event ?? null;
 
-  if (loading) return <Loader size="xl" />;
+  if (loading)
+    return (
+      <div data-testid="loading-state">
+        <Loader size="xl" />
+      </div>
+    );
+
   return (
     <React.Fragment>
       <Table className="bg-primary" aria-label="Attended events list">

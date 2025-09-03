@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import EventsAttendedByMember from './EventsAttendedByMember';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { mocks, errorMocks } from './MemberActivityMocks';
 
 describe('EventsAttendedByMember', () => {
@@ -36,11 +36,11 @@ describe('EventsAttendedByMember', () => {
 
   test('renders event card with correct data when query succeeds', async () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <MockedProvider mocks={mocks}>
           <EventsAttendedByMember eventsId="event123" />
         </MockedProvider>
-      </BrowserRouter>,
+      </MemoryRouter>,
     );
 
     await screen.findByTestId('EventsAttendedCard');
