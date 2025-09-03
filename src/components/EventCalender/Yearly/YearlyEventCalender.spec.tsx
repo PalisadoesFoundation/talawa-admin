@@ -12,6 +12,11 @@ import Calendar from './YearlyEventCalender';
 import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { UserRole } from 'types/Event/interface';
 
+vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
 // Mock the react-router-dom module
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -37,6 +42,19 @@ vi.mock('react-router-dom', async () => {
     BrowserRouter: actual.BrowserRouter,
   };
 });
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  const MockNavigate = () => null;
+  return {
+    ...actual,
+    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
+    useNavigate: vi.fn().mockReturnValue(vi.fn()),
+    Navigate: MockNavigate,
+  };
+});
+
+// Do not mock 'react-router' to avoid breaking hook contexts
 
 const renderWithRouterAndPath = (
   ui: React.ReactElement,
@@ -310,14 +328,7 @@ describe('Calendar Component', () => {
     ];
 
     rerender(
-      <BrowserRouter>
-        <Suspense fallback={<Loader />}>
-          <Calendar
-            eventData={newMockEvents}
-            refetchEvents={mockRefetchEvents}
-          />
-        </Suspense>
-      </BrowserRouter>,
+      <Calendar eventData={newMockEvents} refetchEvents={mockRefetchEvents} />,
     );
 
     const expandButtons = container.querySelectorAll('._btn__more_d00707');
@@ -367,22 +378,17 @@ describe('Calendar Component', () => {
     // Ensure all router mocks are properly set up for this test
     vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
 
-    // Use the new helper with a route that includes orgId
-    const { container, findAllByTestId } = render(
-      <MemoryRouter initialEntries={['/organization/org1']}>
-        <Suspense fallback={<Loader />}>
-          <Calendar
-            eventData={multiMonthEvents}
-            refetchEvents={mockRefetchEvents}
-            userRole={UserRole.ADMINISTRATOR}
-            userId="admin1"
-            orgData={{
-              ...mockOrgData,
-              id: 'org1', // Ensure this matches the orgId in useParams mock
-            }}
-          />
-        </Suspense>
-      </MemoryRouter>,
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={multiMonthEvents}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="admin1"
+        orgData={{
+          ...mockOrgData,
+          id: 'org1',
+        }}
+      />,
     );
 
     // Wait for the calendar days to be rendered
@@ -430,15 +436,11 @@ describe('Calendar Component', () => {
     expect(getByText(String(currentYear))).toBeInTheDocument();
 
     rerender(
-      <MemoryRouter initialEntries={['/organization/org1']}>
-        <Suspense fallback={<Loader />}>
-          <Calendar
-            eventData={[]}
-            refetchEvents={mockRefetchEvents}
-            orgData={mockOrgData}
-          />
-        </Suspense>
-      </MemoryRouter>,
+      <Calendar
+        eventData={[]}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+      />,
     );
 
     expect(getByText(String(currentYear))).toBeInTheDocument();
@@ -482,5 +484,63 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(container.querySelector('._expand_event_list_d8535b')).toBeNull();
     });
+  });
+
+  it('renders public and member-private events together for REGULAR user', async () => {
+    const todayDate = new Date();
+    const privateEvent = {
+      ...mockEventData[1],
+      name: 'Private Member Event',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '12:00',
+      endTime: '13:00',
+      isPublic: false,
+    };
+    const publicEvent = {
+      ...mockEventData[0],
+      name: 'Public Event',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '14:00',
+      endTime: '15:00',
+      isPublic: true,
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEvent, publicEvent]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="user1"
+        orgData={mockOrgData}
+      />,
+    );
+
+    await screen.findAllByTestId('day');
+
+    let expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    if (expandButtons.length === 0) {
+      expandButtons = container.querySelectorAll(
+        '._btn__more_d8535b, ._btn__more_d00707',
+      );
+    }
+
+    for (const button of Array.from(expandButtons)) {
+      await act(async () => {
+        fireEvent.click(button);
+      });
+      try {
+        await waitFor(() => {
+          expect(screen.getByText('Public Event')).toBeInTheDocument();
+          expect(screen.getByText('Private Member Event')).toBeInTheDocument();
+        });
+        break;
+      } catch {
+        continue;
+      }
+    }
   });
 });

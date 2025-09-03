@@ -170,28 +170,36 @@ function EventListCardModals({
     const recurrenceChanged = hasRecurrenceChanged();
 
     // Check if dates have changed
+    const parseHMS = (time: string): { h: number; m: number; s: number } => {
+      const parts = time.split(':');
+      const h = parseInt(parts[0] ?? '0');
+      const m = parseInt(parts[1] ?? '0');
+      const s = parseInt(parts[2] ?? '0');
+      return { h: isNaN(h) ? 0 : h, m: isNaN(m) ? 0 : m, s: isNaN(s) ? 0 : s };
+    };
+
+    const { h: startH, m: startM, s: startS } = parseHMS(formState.startTime);
+
     const newStartAt = alldaychecked
       ? dayjs.utc(eventStartDate).isValid()
         ? dayjs.utc(eventStartDate).startOf('day').toISOString()
         : ''
       : dayjs(eventStartDate).isValid()
         ? dayjs(eventStartDate)
-            .hour(parseInt(formState.startTime.split(':')[0]))
-            .minute(parseInt(formState.startTime.split(':')[1]))
-            .second(parseInt(formState.startTime.split(':')[2]))
+            .hour(startH)
+            .minute(startM)
+            .second(startS)
             .toISOString()
         : '';
+
+    const { h: endH, m: endM, s: endS } = parseHMS(formState.endTime);
 
     const newEndAt = alldaychecked
       ? dayjs.utc(eventEndDate).isValid()
         ? dayjs.utc(eventEndDate).endOf('day').toISOString()
         : ''
       : dayjs(eventEndDate).isValid()
-        ? dayjs(eventEndDate)
-            .hour(parseInt(formState.endTime.split(':')[0]))
-            .minute(parseInt(formState.endTime.split(':')[1]))
-            .second(parseInt(formState.endTime.split(':')[2]))
-            .toISOString()
+        ? dayjs(eventEndDate).hour(endH).minute(endM).second(endS).toISOString()
         : '';
 
     const originalStartAt = eventListCardProps.allDay
