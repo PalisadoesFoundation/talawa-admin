@@ -61,9 +61,16 @@ vi.mock('@apollo/client', async () => {
     await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
   return {
     ...actual,
-    useMutation: vi
-      .fn()
-      .mockReturnValue([vi.fn().mockResolvedValue({ data: {} })]),
+    useMutation: vi.fn().mockReturnValue([
+      vi.fn().mockResolvedValue({ data: {} }),
+      {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      },
+    ]),
   } as unknown as typeof import('@apollo/client');
 });
 
@@ -632,6 +639,9 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
+
+    // Assert that the private event title is not present to make exclusion explicit
+    expect(screen.queryByText('NonMember Private Event')).toBeNull();
   });
 
   it('handles undefined eventData by rendering with no events', async () => {
