@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +45,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Popover } from '@base-ui-components/react/popover';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -95,7 +95,6 @@ const Pledges = (): JSX.Element => {
   }
   const userId: string = userIdFromStorage as string;
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
@@ -110,7 +109,7 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  const open = Boolean(anchor);
+  const [open, setOpen] = useState(false);
   const id = open ? 'simple-popup' : undefined;
 
   const {
@@ -160,12 +159,9 @@ const Pledges = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
+  const handleClick = (users: InterfaceUserInfoPG[]): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : event.currentTarget);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -238,8 +234,8 @@ const Pledges = (): JSX.Element => {
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, users.slice(2))}
+                data-testid={`moreContainer-${params.row.id}`}
+                onClick={() => handleClick(users.slice(2))}
               >
                 +{users.length - 2} more...
               </div>
@@ -489,42 +485,49 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-      >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Trigger>
+          <div id={id} />
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Positioner
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.avatarURL ? (
-              <img
-                src={user.avatarURL}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user.id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={user.name}
-                  alt={user.name}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
-            )}
-            <span key={user.id + '2'}>{user.name}</span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Popup>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={index}
+                  data-testid={`extra${index + 1}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt="pledger"
+                      data-testid={`extraImage${index + 1}`}
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={user.id + '1'}
+                        containerStyle={styles.imageContainer}
+                        avatarStyle={styles.TableImage}
+                        name={user.name}
+                        alt={user.name}
+                        dataTestId={`extraAvatar${index + 1}`}
+                      />
+                    </div>
+                  )}
+                  <span key={user.id + '2'}>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };
