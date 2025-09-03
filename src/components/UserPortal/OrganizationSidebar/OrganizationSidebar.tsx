@@ -40,6 +40,7 @@ import {
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import Loader from 'components/Loader/Loader';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -119,9 +120,7 @@ export default function organizationSidebar(): JSX.Element {
         <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
-        </div>
+        <Loader size="xl" />
       ) : (
         <ListGroup variant="flush">
           {members && members.length ? (
@@ -164,9 +163,7 @@ export default function organizationSidebar(): JSX.Element {
         <b>{t('events')}</b>
       </div>
       {eventsLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
-        </div>
+        <Loader size="xl" />
       ) : (
         <ListGroup variant="flush">
           {events && events.length ? (

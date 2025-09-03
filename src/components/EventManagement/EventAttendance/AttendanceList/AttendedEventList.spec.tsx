@@ -26,7 +26,9 @@ describe('Testing AttendedEventList', () => {
       </MockedProvider>,
     );
 
-    expect(queryByText('Loading...')).toBeInTheDocument();
+    expect(
+      document.querySelector('[data-testid="spinner-wrapper"]'),
+    ).toBeInTheDocument();
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();
@@ -57,7 +59,9 @@ describe('Testing AttendedEventList', () => {
     );
 
     await waitFor(() => {
-      expect(queryByText('Loading...')).not.toBeInTheDocument();
+      expect(
+        document.querySelector('[data-testid="spinner-wrapper"]'),
+      ).not.toBeInTheDocument();
       // The component doesn't explicitly render an error message, so we just check that the event details are not rendered
       expect(queryByText('Test Event')).not.toBeInTheDocument();
     });

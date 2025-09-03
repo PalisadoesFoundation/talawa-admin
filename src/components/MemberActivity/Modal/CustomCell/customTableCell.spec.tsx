@@ -58,7 +58,7 @@ describe('CustomTableCell', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
   it('displays error state', async () => {

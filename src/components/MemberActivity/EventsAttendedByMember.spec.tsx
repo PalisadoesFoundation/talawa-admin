@@ -15,8 +15,7 @@ describe('EventsAttendedByMember', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-    expect(screen.getByText('Loading event details...')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
   test('renders error state when query fails', async () => {

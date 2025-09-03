@@ -38,6 +38,7 @@ import { Link, useParams } from 'react-router';
 import { formatDate } from 'utils/dateFormatter';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import type { InterfaceEvent } from 'types/Event/interface';
+import Loader from 'components/Loader/Loader';
 
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
   const { orgId: currentOrg } = useParams();
@@ -53,7 +54,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
 
   const event = data?.event ?? null;
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader size="xl" />;
   return (
     <React.Fragment>
       <Table className="bg-primary" aria-label="Attended events list">

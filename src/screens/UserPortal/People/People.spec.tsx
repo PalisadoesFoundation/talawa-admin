@@ -436,7 +436,7 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
     await wait();
   });
 
@@ -554,7 +554,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
     // Verify the component still renders valid fallback data (e.g., Admin/User list)
     await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
       // Fallback to 'All Members' or default view
       expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
@@ -600,7 +600,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
   });
 
   it('should handle search with empty input value', async () => {

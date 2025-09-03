@@ -47,6 +47,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
+import Loader from 'components/Loader/Loader';
 
 export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
@@ -117,7 +118,7 @@ export default function Settings(): React.JSX.Element {
   }, [data]);
 
   // wait for the query to complete
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader size="xl" />;
   if (error) return <p>Error: {error.message}</p>;
 
   const handleUpdateUserDetails = async (): Promise<void> => {

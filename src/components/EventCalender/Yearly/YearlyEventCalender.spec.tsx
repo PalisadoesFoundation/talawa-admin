@@ -44,7 +44,7 @@ const renderWithRouterAndPath = (
   // Use MemoryRouter with initialEntries to set the path in the router context
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <Suspense fallback={<div>Loading...</div>}>{ui}</Suspense>
+      <Suspense fallback={<div data-testid="spinner-wrapper" />}>{ui}</Suspense>
     </MemoryRouter>,
   );
 };
@@ -310,7 +310,7 @@ describe('Calendar Component', () => {
 
     rerender(
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div data-testid="spinner-wrapper" />}>
           <Calendar
             eventData={newMockEvents}
             refetchEvents={mockRefetchEvents}
@@ -369,7 +369,7 @@ describe('Calendar Component', () => {
     // Use the new helper with a route that includes orgId
     const { container, findAllByTestId } = render(
       <MemoryRouter initialEntries={['/organization/org1']}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div data-testid="spinner-wrapper" />}>
           <Calendar
             eventData={multiMonthEvents}
             refetchEvents={mockRefetchEvents}
@@ -430,7 +430,7 @@ describe('Calendar Component', () => {
 
     rerender(
       <MemoryRouter initialEntries={['/organization/org1']}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div data-testid="spinner-wrapper" />}>
           <Calendar
             eventData={[]}
             refetchEvents={mockRefetchEvents}

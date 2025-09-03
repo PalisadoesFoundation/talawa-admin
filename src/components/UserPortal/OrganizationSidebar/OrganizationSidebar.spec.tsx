@@ -209,7 +209,10 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(screen.getAllByText('Loading...').length).toBe(2);
+    const spinners = document.querySelectorAll(
+      '[data-testid="spinner-wrapper"]',
+    );
+    expect(spinners.length).toBe(2);
   });
 
   it('Should render Member images properly', async () => {

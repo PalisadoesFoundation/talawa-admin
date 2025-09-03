@@ -26,7 +26,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
-import { Spinner } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -43,13 +43,7 @@ function EventsAttendedByMember({
     variables: { id: eventsId },
   });
 
-  if (loading)
-    return (
-      <div data-testid="loading" className="loading-state">
-        <Spinner />
-        <p>Loading event details...</p>
-      </div>
-    );
+  if (loading) return <Loader size="xl" />;
   if (error)
     return (
       <div data-testid="error" className="error-state">

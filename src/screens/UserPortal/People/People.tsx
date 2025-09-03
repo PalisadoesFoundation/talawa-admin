@@ -56,6 +56,7 @@ import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router';
 
 interface IMemberNode {
@@ -284,9 +285,7 @@ export default function People(): React.JSX.Element {
 
           <div className={styles.people_card_main_container}>
             {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>Loading...</span>
-              </div>
+              <Loader size="xl" />
             ) : (
               <>
                 {members && members.length > 0 ? (

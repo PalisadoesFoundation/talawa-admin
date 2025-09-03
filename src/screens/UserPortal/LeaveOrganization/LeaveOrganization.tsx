@@ -48,6 +48,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -155,12 +156,7 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   if (orgLoading) {
-    return (
-      <div className="text-center mt-4" role="status">
-        <Spinner animation="border" />
-        <p>Loading organization details...</p>
-      </div>
-    );
+    return <Loader size="xl" />;
   }
   if (orgError)
     return <Alert variant="danger">Error: {orgError.message}</Alert>;

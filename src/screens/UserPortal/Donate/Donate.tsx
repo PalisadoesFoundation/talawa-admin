@@ -51,6 +51,7 @@ import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import Loader from 'components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -248,11 +249,8 @@ export default function donate(): JSX.Element {
             >
               <div className={` ${styles.donationCardsContainer}`}>
                 {loading ? (
-                  <div
-                    className={`d-flex flex-row justify-content-center`}
-                    data-testid="loading-state"
-                  >
-                    <HourglassBottomIcon /> <span>Loading...</span>
+                  <div data-testid="loading-state">
+                    <Loader size="xl" />
                   </div>
                 ) : (
                   <>
