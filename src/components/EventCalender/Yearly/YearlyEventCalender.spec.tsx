@@ -763,7 +763,7 @@ describe('Calendar Component', () => {
     };
 
     // Test with undefined userRole - should only show public events
-    render(
+    const { container } = render(
       <BrowserRouter>
         <Calendar
           eventData={[publicEvent, privateEvent]}
@@ -779,6 +779,33 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(screen.getByText('2025')).toBeInTheDocument();
     });
+
+    // Look for expand buttons that may contain events
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+
+    // Check if there are events by clicking expand buttons and checking content
+    for (const button of Array.from(expandButtons)) {
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      // Wait for potential event list to appear
+      await waitFor(
+        () => {
+          const eventList = container.querySelector(
+            '._expand_event_list_d8535b',
+          );
+          if (eventList) {
+            // Assert public event is present and private event is not
+            expect(screen.getByText('Public Event')).toBeInTheDocument();
+            expect(screen.queryByText('Private Event')).toBeNull();
+          }
+        },
+        { timeout: 1000 },
+      );
+    }
   });
 
   test('filters events correctly when userId is undefined but has userRole', async () => {
@@ -815,7 +842,7 @@ describe('Calendar Component', () => {
     };
 
     // Test with undefined userId - should only show public events
-    render(
+    const { container } = render(
       <BrowserRouter>
         <Calendar
           eventData={[publicEvent, privateEvent]}
@@ -831,6 +858,33 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(screen.getByText('2025')).toBeInTheDocument();
     });
+
+    // Look for expand buttons that may contain events
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+
+    // Check if there are events by clicking expand buttons and checking content
+    for (const button of Array.from(expandButtons)) {
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      // Wait for potential event list to appear
+      await waitFor(
+        () => {
+          const eventList = container.querySelector(
+            '._expand_event_list_d8535b',
+          );
+          if (eventList) {
+            // Assert public event is present and private event is not
+            expect(screen.getByText('Public Event')).toBeInTheDocument();
+            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
+          }
+        },
+        { timeout: 1000 },
+      );
+    }
   });
 
   test('handles orgData being undefined', async () => {
@@ -851,7 +905,7 @@ describe('Calendar Component', () => {
     };
 
     // Test with undefined orgData
-    render(
+    const { container } = render(
       <BrowserRouter>
         <Calendar
           eventData={[privateEvent]}
@@ -867,6 +921,16 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(screen.getByText('2025')).toBeInTheDocument();
     });
+
+    // Since orgData is undefined, private events should be filtered out
+    // Assert that the private event is not present
+    expect(screen.queryByText('Private Event')).toBeNull();
+
+    // There should be no expand buttons since no events are visible
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButtons).toHaveLength(0);
   });
 
   test('handles orgData with empty members edges', async () => {
@@ -895,7 +959,7 @@ describe('Calendar Component', () => {
     };
 
     // Test with empty member edges
-    render(
+    const { container } = render(
       <BrowserRouter>
         <Calendar
           eventData={[privateEvent]}
@@ -911,6 +975,16 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       expect(screen.getByText('2025')).toBeInTheDocument();
     });
+
+    // Since user is not in the members list (empty edges), private events should be filtered out
+    // Assert that the private event is not present
+    expect(screen.queryByText('Private Event')).toBeNull();
+
+    // There should be no expand buttons since no events are visible to this user
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButtons).toHaveLength(0);
   });
 
   test('processes multiple events for REGULAR user when user is a member', async () => {
@@ -1048,7 +1122,7 @@ describe('Calendar Component', () => {
   });
 
   test('renders correct number of month columns', async () => {
-    const { container } = render(
+    render(
       <BrowserRouter>
         <Calendar
           eventData={[]}
@@ -1061,10 +1135,31 @@ describe('Calendar Component', () => {
     );
 
     await waitFor(() => {
-      const monthColumns = container.querySelectorAll(
-        '._columnYearlyEventCalender_d8535b',
+      // Check for all 12 month names instead of CSS classes
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+
+      monthNames.forEach((monthName) => {
+        expect(screen.getByText(monthName)).toBeInTheDocument();
+      });
+
+      // Alternative: count all month headers
+      const allMonthHeaders = screen.getAllByText(
+        /(January|February|March|April|May|June|July|August|September|October|November|December)/,
       );
-      expect(monthColumns).toHaveLength(12);
+      expect(allMonthHeaders).toHaveLength(12);
     });
   });
 
