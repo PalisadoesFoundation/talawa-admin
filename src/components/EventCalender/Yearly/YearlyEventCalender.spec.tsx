@@ -9,7 +9,12 @@ import {
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
-import { UserRole } from 'types/Event/interface';
+import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
+
+// Helper type for Calendar event items
+type CalendarEventItem = NonNullable<
+  InterfaceCalendarProps['eventData']
+>[number];
 
 // Mock the react-router-dom module
 vi.mock('react-router-dom', async () => {
@@ -516,8 +521,8 @@ describe('Calendar Component', () => {
       isPublic: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '12:00:00',
-      endTime: '13:00:00',
+      startTime: '12:00',
+      endTime: '13:00',
     };
 
     const memberOrgData = {
@@ -573,8 +578,8 @@ describe('Calendar Component', () => {
       isPublic: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '12:00:00',
-      endTime: '13:00:00',
+      startTime: '12:00',
+      endTime: '13:00',
     };
 
     const nonMemberOrgData = {
@@ -631,9 +636,8 @@ describe('Calendar Component', () => {
 
   it('handles undefined eventData by rendering with no events', async () => {
     const { findAllByTestId, container } = renderWithRouterAndPath(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       <Calendar
-        eventData={undefined as any}
+        eventData={undefined as unknown as InterfaceCalendarProps['eventData']}
         refetchEvents={mockRefetchEvents}
       />,
     );
@@ -648,24 +652,25 @@ describe('Calendar Component', () => {
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
     const todayDate = new Date();
-    const eventWithoutAttendees = {
+    const eventWithoutAttendees: CalendarEventItem = {
       _id: 'no-attendees',
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
-      startTime: '09:00:00',
-      endTime: '10:00:00',
+      startTime: '09:00',
+      endTime: '10:00',
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      attendees: [],
       creator: { firstName: 'A', lastName: 'B', _id: 'creator-x' },
     };
 
     const { container, findAllByTestId } = renderWithRouterAndPath(
       <Calendar
-        eventData={[eventWithoutAttendees as never]}
+        eventData={[eventWithoutAttendees]}
         refetchEvents={mockRefetchEvents}
       />,
     );
