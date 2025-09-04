@@ -475,25 +475,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Row>
             </Card.Body>
           </Card>
-          <Col>
-            <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-              <Card.Header
-                className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              >
-                <h3
-                  className="text-white m-0"
-                  data-testid="eventsAttended-title"
-                >
-                  {t('tagsAssigned')}
-                </h3>
-              </Card.Header>
-              <Card.Body
-                id="tagsAssignedScrollableDiv"
-                data-testid="tagsAssignedScrollableDiv"
-                className={`${styles.cardBody} pe-0`}
-              ></Card.Body>
-            </Card>
-          </Col>
+          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+            <Card.Header
+              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="text-white m-0" data-testid="tagsAssigned-title">
+                {t('tagsAssigned')}
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            ></Card.Body>
+          </Card>
         </Col>
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
@@ -696,7 +691,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
               <Button
                 variant="outline-success"
-                active={true}
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >
