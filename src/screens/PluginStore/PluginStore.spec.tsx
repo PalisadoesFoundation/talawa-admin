@@ -390,8 +390,6 @@ describe('PluginStore', () => {
       });
     });
 
-
-
     it('should uninstall plugin permanently', async () => {
       mockDeletePlugin.mockResolvedValue({
         data: { deletePlugin: { id: '1' } },

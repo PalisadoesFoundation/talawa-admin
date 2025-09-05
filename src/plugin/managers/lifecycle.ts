@@ -155,11 +155,14 @@ export class LifecycleManager {
       await this.callOnActivateHook(pluginId, plugin.components);
 
       // Update database status
-      await this.discoveryManager.updatePluginStatusInGraphQL(pluginId, 'active');
-      
+      await this.discoveryManager.updatePluginStatusInGraphQL(
+        pluginId,
+        'active',
+      );
+
       // Update local status
       this.updateLocalPluginStatus(plugin, pluginId, 'active');
-      
+
       // Register extension points
       await this.updateExtensionPoints(pluginId, 'active', plugin);
 
@@ -188,11 +191,14 @@ export class LifecycleManager {
       await this.callOnDeactivateHook(pluginId, plugin.components);
 
       // Update database status
-      await this.discoveryManager.updatePluginStatusInGraphQL(pluginId, 'inactive');
-      
+      await this.discoveryManager.updatePluginStatusInGraphQL(
+        pluginId,
+        'inactive',
+      );
+
       // Update local status
       this.updateLocalPluginStatus(plugin, pluginId, 'inactive');
-      
+
       // Unregister extension points
       await this.updateExtensionPoints(pluginId, 'inactive', plugin);
 
@@ -223,7 +229,7 @@ export class LifecycleManager {
       // Load the plugin directly without checking installation status
       let manifest;
       let components;
-      
+
       try {
         manifest = await this.discoveryManager.loadPluginManifest(pluginId);
         components = await this.discoveryManager.loadPluginComponents(
@@ -231,7 +237,10 @@ export class LifecycleManager {
           manifest,
         );
       } catch (loadError) {
-        console.error(`Failed to load plugin files for ${pluginId}:`, loadError);
+        console.error(
+          `Failed to load plugin files for ${pluginId}:`,
+          loadError,
+        );
         throw loadError;
       }
 
@@ -388,18 +397,25 @@ export class LifecycleManager {
     components: Record<string, React.ComponentType> | undefined,
   ): Promise<void> {
     if (!components) return;
-    
+
     try {
       // Look for the default export which should contain the lifecycle hooks
       const defaultExport = components.default;
-      if (defaultExport && typeof defaultExport === 'object' && 'onInstall' in defaultExport) {
+      if (
+        defaultExport &&
+        typeof defaultExport === 'object' &&
+        'onInstall' in defaultExport
+      ) {
         const lifecycle = defaultExport as any;
         if (typeof lifecycle.onInstall === 'function') {
           await lifecycle.onInstall();
         }
       }
     } catch (error) {
-      console.error(`Error calling onInstall lifecycle hook for plugin ${pluginId}:`, error);
+      console.error(
+        `Error calling onInstall lifecycle hook for plugin ${pluginId}:`,
+        error,
+      );
       // Don't throw error - this shouldn't prevent the plugin from loading
     }
   }
@@ -412,18 +428,25 @@ export class LifecycleManager {
     components: Record<string, React.ComponentType> | undefined,
   ): Promise<void> {
     if (!components) return;
-    
+
     try {
       // Look for the default export which should contain the lifecycle hooks
       const defaultExport = components.default;
-      if (defaultExport && typeof defaultExport === 'object' && 'onActivate' in defaultExport) {
+      if (
+        defaultExport &&
+        typeof defaultExport === 'object' &&
+        'onActivate' in defaultExport
+      ) {
         const lifecycle = defaultExport as any;
         if (typeof lifecycle.onActivate === 'function') {
           await lifecycle.onActivate();
         }
       }
     } catch (error) {
-      console.error(`Error calling onActivate lifecycle hook for plugin ${pluginId}:`, error);
+      console.error(
+        `Error calling onActivate lifecycle hook for plugin ${pluginId}:`,
+        error,
+      );
       // Don't throw error - this shouldn't prevent the plugin from activating
     }
   }
@@ -436,18 +459,25 @@ export class LifecycleManager {
     components: Record<string, React.ComponentType> | undefined,
   ): Promise<void> {
     if (!components) return;
-    
+
     try {
       // Look for the default export which should contain the lifecycle hooks
       const defaultExport = components.default;
-      if (defaultExport && typeof defaultExport === 'object' && 'onDeactivate' in defaultExport) {
+      if (
+        defaultExport &&
+        typeof defaultExport === 'object' &&
+        'onDeactivate' in defaultExport
+      ) {
         const lifecycle = defaultExport as any;
         if (typeof lifecycle.onDeactivate === 'function') {
           await lifecycle.onDeactivate();
         }
       }
     } catch (error) {
-      console.error(`Error calling onDeactivate lifecycle hook for plugin ${pluginId}:`, error);
+      console.error(
+        `Error calling onDeactivate lifecycle hook for plugin ${pluginId}:`,
+        error,
+      );
       // Don't throw error - this shouldn't prevent the plugin from deactivating
     }
   }
@@ -460,18 +490,25 @@ export class LifecycleManager {
     components: Record<string, React.ComponentType> | undefined,
   ): Promise<void> {
     if (!components) return;
-    
+
     try {
       // Look for the default export which should contain the lifecycle hooks
       const defaultExport = components.default;
-      if (defaultExport && typeof defaultExport === 'object' && 'onUninstall' in defaultExport) {
+      if (
+        defaultExport &&
+        typeof defaultExport === 'object' &&
+        'onUninstall' in defaultExport
+      ) {
         const lifecycle = defaultExport as any;
         if (typeof lifecycle.onUninstall === 'function') {
           await lifecycle.onUninstall();
         }
       }
     } catch (error) {
-      console.error(`Error calling onUninstall lifecycle hook for plugin ${pluginId}:`, error);
+      console.error(
+        `Error calling onUninstall lifecycle hook for plugin ${pluginId}:`,
+        error,
+      );
       // Don't throw error - this shouldn't prevent the plugin from uninstalling
     }
   }

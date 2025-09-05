@@ -104,8 +104,6 @@ export class InternalFileWriter {
         writtenFiles.push(filePath);
       }
 
-
-
       return {
         success: true,
         path: pluginPath,
@@ -231,8 +229,6 @@ export class InternalFileWriter {
       }
 
       await this.removeDirectory(pluginPath);
-
-
 
       return {
         success: true,

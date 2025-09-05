@@ -68,7 +68,9 @@ export default function PluginStore() {
   const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
-  const [pluginDetailsCache, setPluginDetailsCache] = useState<Record<string, IPluginMeta>>({});
+  const [pluginDetailsCache, setPluginDetailsCache] = useState<
+    Record<string, IPluginMeta>
+  >({});
 
   // GraphQL hooks
   const {
@@ -97,23 +99,26 @@ export default function PluginStore() {
   }, 300);
 
   // Load plugin details for uploaded but not installed plugins
-  const loadPluginDetails = useCallback(async (pluginId: string): Promise<IPluginMeta | null> => {
-    try {
-      const details = await AdminPluginFileService.getPluginDetails(pluginId);
-      if (details) {
-        return {
-          id: details.id,
-          name: details.name,
-          description: details.description,
-          author: details.author,
-          icon: details.icon,
-        };
+  const loadPluginDetails = useCallback(
+    async (pluginId: string): Promise<IPluginMeta | null> => {
+      try {
+        const details = await AdminPluginFileService.getPluginDetails(pluginId);
+        if (details) {
+          return {
+            id: details.id,
+            name: details.name,
+            description: details.description,
+            author: details.author,
+            icon: details.icon,
+          };
+        }
+      } catch (error) {
+        console.error(`Failed to load plugin details for ${pluginId}:`, error);
       }
-    } catch (error) {
-      console.error(`Failed to load plugin details for ${pluginId}:`, error);
-    }
-    return null;
-  }, []);
+      return null;
+    },
+    [],
+  );
 
   useEffect(() => {
     // Combine GraphQL plugins and loaded plugins
@@ -140,16 +145,16 @@ export default function PluginStore() {
           // Try to load details for all plugins that have files available
           // This includes both installed and uploaded but not installed plugins
           let pluginDetails = pluginDetailsCache[gqlPlugin.pluginId];
-          
+
           if (!pluginDetails) {
             // Load details from files
             const loadedDetails = await loadPluginDetails(gqlPlugin.pluginId);
-            
+
             if (loadedDetails) {
               // Cache the details
-              setPluginDetailsCache(prev => ({
+              setPluginDetailsCache((prev) => ({
                 ...prev,
-                [gqlPlugin.pluginId]: loadedDetails
+                [gqlPlugin.pluginId]: loadedDetails,
               }));
               pluginDetails = loadedDetails;
             }
@@ -169,8 +174,6 @@ export default function PluginStore() {
           }
         }
       }
-
-
 
       if (!searchTerm) {
         if (filterState.option === 'all') {
@@ -197,7 +200,14 @@ export default function PluginStore() {
     };
 
     processPlugins();
-  }, [searchTerm, filterState.option, loadedPlugins, pluginData, pluginDetailsCache, loadPluginDetails]);
+  }, [
+    searchTerm,
+    filterState.option,
+    loadedPlugins,
+    pluginData,
+    pluginDetailsCache,
+    loadPluginDetails,
+  ]);
 
   // Reset to first page if search/filter changes
   useEffect(() => {
@@ -321,7 +331,7 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
-      
+
       // Reload the page to ensure all plugin states are properly updated
       window.location.reload();
     } catch (error) {
@@ -364,7 +374,7 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
-      
+
       // Reload the page to ensure all plugin states are properly updated
       window.location.reload();
     } catch (error) {
@@ -430,7 +440,7 @@ export default function PluginStore() {
 
       // Refetch plugin data to update UI
       await refetch();
-      
+
       // Reload the page to ensure all plugin states are properly updated
       window.location.reload();
     } catch (error) {
@@ -675,7 +685,8 @@ export default function PluginStore() {
             Are you sure you want to uninstall {pluginToUninstall?.name}?
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            This action will permanently remove the plugin and all its data. This action cannot be undone.
+            This action will permanently remove the plugin and all its data.
+            This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>

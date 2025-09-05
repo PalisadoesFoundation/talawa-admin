@@ -52,7 +52,6 @@ export function createInternalFileWriterPlugin(
 
     configResolved(config) {
       if (debug) {
-        
       }
     },
 
@@ -192,8 +191,6 @@ async function handleFileOperation(
         await fs.writeFile(fullPath, content, 'utf8');
       }
 
-
-
       return { path: fullPath };
     }
 
@@ -229,8 +226,6 @@ async function ensureDirectory(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-
-
   await fs.mkdir(resolvedPath, { recursive: true });
 }
 
@@ -246,8 +241,6 @@ async function writeFile(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
-
-
 
   // Ensure directory exists
   await fs.mkdir(dirname(resolvedPath), { recursive: true });
@@ -267,8 +260,6 @@ async function readFile(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
-
-
 
   return await fs.readFile(resolvedPath, 'utf8');
 }
@@ -309,8 +300,6 @@ async function listDirectories(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-
-
   const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
   return entries
     .filter((entry) => entry.isDirectory())
@@ -328,8 +317,6 @@ async function readDirectoryRecursive(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
-
-
 
   const files: Record<string, string> = {};
 
@@ -369,8 +356,6 @@ async function removeDirectory(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-
-
   await fs.rm(resolvedPath, { recursive: true, force: true });
 }
 
@@ -389,8 +374,6 @@ async function copyDirectory(
   const resolvedDestination = destination.startsWith('/')
     ? join(process.cwd(), destination.substring(1))
     : join(basePath, destination);
-
-
 
   await fs.mkdir(resolvedDestination, { recursive: true });
 

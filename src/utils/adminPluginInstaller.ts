@@ -351,8 +351,6 @@ export async function installAdminPluginFromZip({
       }
     }
 
-
-
     return {
       success: true,
       pluginId,
@@ -402,7 +400,6 @@ export async function removeAdminPlugin(pluginId: string): Promise<boolean> {
     const success = await adminPluginFileService.removePlugin(pluginId);
 
     if (success) {
-
       return true;
     } else {
       console.error(`Failed to remove admin plugin ${pluginId}`);
