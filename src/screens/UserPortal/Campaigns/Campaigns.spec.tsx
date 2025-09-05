@@ -339,9 +339,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('2024-07-28');
 <<<<<<< HEAD
       expect(detailContainer).toHaveTextContent('2099-12-31');
-=======
-  expect(detailContainer).toHaveTextContent('2099-12-31');
->>>>>>> 5521b81692 (WIP: changes for myissue-8)
     });
   });
 
