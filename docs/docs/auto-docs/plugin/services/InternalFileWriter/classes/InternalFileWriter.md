@@ -29,7 +29,7 @@ Initialize the file writer
 
 > **listInstalledPlugins**(): `Promise`\<\{ `error`: `string`; `plugins`: `object`[]; `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L176)
+Defined in: [src/plugin/services/InternalFileWriter.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L174)
 
 List all installed plugins
 
@@ -43,7 +43,7 @@ List all installed plugins
 
 > **readPluginFiles**(`pluginId`): `Promise`\<\{ `error`: `string`; `files`: `Record`\<`string`, `string`\>; `manifest`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L130)
+Defined in: [src/plugin/services/InternalFileWriter.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L128)
 
 Read plugin files from filesystem
 
@@ -63,7 +63,7 @@ Read plugin files from filesystem
 
 > **removePlugin**(`pluginId`): `Promise`\<[`FileOperationResult`](../interfaces/FileOperationResult.md)\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L222)
+Defined in: [src/plugin/services/InternalFileWriter.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L220)
 
 Remove plugin from filesystem
 
