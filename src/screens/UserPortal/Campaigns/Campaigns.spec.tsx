@@ -96,13 +96,16 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
     </MockedProvider>,
   );
 };
-
 /**
  * Test suite for the User Campaigns screen.
  */
 describe('Testing User Campaigns Screen', () => {
   beforeEach(() => {
     setItem('userId', 'userId');
+    // Mock current date to 2024-08-01 so that
+    // 'School Campaign' (ends 2025-08-31) is Active
+    // 'Hospital Campaign' (ends 2022-08-30) is Ended
+    vi.setSystemTime(new Date('2024-08-01T12:00:00Z'));
   });
 
   beforeAll(() => {
@@ -121,9 +124,9 @@ describe('Testing User Campaigns Screen', () => {
   afterAll(() => {
     vi.clearAllMocks();
   });
-
   afterEach(() => {
     cleanup();
+    vi.useRealTimers();
   });
 
   /**
