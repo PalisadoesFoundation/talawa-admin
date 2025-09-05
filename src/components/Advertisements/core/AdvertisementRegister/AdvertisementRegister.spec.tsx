@@ -227,6 +227,7 @@ describe('Testing Advertisement Register Component', () => {
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
     vi.useRealTimers();
+    toastErrorSpy.mockRestore();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {

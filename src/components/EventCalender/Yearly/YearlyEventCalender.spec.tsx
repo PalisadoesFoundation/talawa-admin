@@ -149,13 +149,24 @@ describe('Calendar Component', () => {
     expect(getByText('January')).toBeInTheDocument();
     expect(getByText('December')).toBeInTheDocument();
 
+<<<<<<< HEAD
     const weekdayHeaders = container.querySelectorAll(
       '._calendar__weekdays_d8535b',
+=======
+    const weekdayHeaders = Array.from(container.querySelectorAll('[class]')).filter(el =>
+      Array.from(el.classList).some(cls => cls.includes('calendar__weekdays'))
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
     );
     expect(weekdayHeaders.length).toBe(12);
 
     weekdayHeaders.forEach((header) => {
+<<<<<<< HEAD
       const weekdaySlots = header.querySelectorAll('._weekday__yearly_d8535b');
+=======
+      const weekdaySlots = Array.from(header.querySelectorAll('[class]')).filter(el =>
+        Array.from(el.classList).some(cls => cls.includes('weekday__yearly'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(weekdaySlots.length).toBe(7);
     });
 
@@ -255,7 +266,13 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
+<<<<<<< HEAD
     const expandButton = container.querySelector('._btn__more_d8535b');
+=======
+    const expandButton = Array.from(container.querySelectorAll('[class]')).find(el =>
+      Array.from(el.classList).some(cls => cls.includes('btn__more'))
+    );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -264,8 +281,13 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
+<<<<<<< HEAD
       const expandedList = container.querySelector(
         '._expand_event_list_d8535b',
+=======
+      const expandedList = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('expand_event_list'))
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       );
       expect(expandedList).toBeInTheDocument();
     });
@@ -319,12 +341,14 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    const expandButtons = container.querySelectorAll('._btn__more_d00707');
-
-    for (const button of Array.from(expandButtons)) {
+    const expandButtons = Array.from(container.querySelectorAll('[class]')).filter(el =>
+      Array.from(el.classList).some(cls => cls.includes('btn__more'))
+    );
+    for (const button of expandButtons) {
       fireEvent.click(button);
-
-      const eventList = container.querySelector('._event_list_d00707');
+      const eventList = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('event_list'))
+      );
       if (eventList) {
         expect(eventList).toBeInTheDocument();
         break;
@@ -389,16 +413,25 @@ describe('Calendar Component', () => {
 
     // Wait a bit for all components to be fully mounted
     await waitFor(() => {
+<<<<<<< HEAD
       const buttons = container.querySelectorAll('._btn__more_d8535b');
+=======
+      const buttons = Array.from(container.querySelectorAll('[class]')).filter(el =>
+        Array.from(el.classList).some(cls => cls.includes('btn__more'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    const expandButtons = container.querySelectorAll('._btn__more_d00707');
+    const expandButtons = Array.from(container.querySelectorAll('[class]')).filter(el =>
+      Array.from(el.classList).some(cls => cls.includes('btn__more'))
+    );
 
     // Test with only the first button to avoid potential navigation issues
     if (expandButtons.length > 0) {
       await act(async () => {
         fireEvent.click(expandButtons[0]);
+<<<<<<< HEAD
         await waitFor(() => {
           const expandedList = container.querySelector(
             '._expand_event_list_d8535b',
@@ -407,6 +440,25 @@ describe('Calendar Component', () => {
         });
       });
     }
+=======
+        // Wait for the expansion to complete
+        await waitFor(
+          () => {
+            const lists = Array.from(container.querySelectorAll('[class]')).filter(el =>
+              Array.from(el.classList).some(cls => cls.includes('expand_event_list'))
+            );
+            return lists.length > 0;
+          },
+          { timeout: 1000 },
+        );
+      });
+    }
+
+    const expandedLists = Array.from(container.querySelectorAll('[class]')).filter(el =>
+      Array.from(el.classList).some(cls => cls.includes('expand_event_list'))
+    );
+    expect(expandedLists.length).toBeGreaterThan(0);
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
@@ -459,7 +511,13 @@ describe('Calendar Component', () => {
       />,
     );
 
+<<<<<<< HEAD
     const expandButton = container.querySelector('._btn__more_d8535b');
+=======
+    const expandButton = Array.from(container.querySelectorAll('[class]')).find(el =>
+      Array.from(el.classList).some(cls => cls.includes('btn__more'))
+    );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -467,8 +525,13 @@ describe('Calendar Component', () => {
       });
     }
     await waitFor(() => {
+<<<<<<< HEAD
       const expandedList = container.querySelector(
         '._expand_event_list_d8535b',
+=======
+      const expandedList = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('expand_event_list'))
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       );
       expect(expandedList).toBeInTheDocument();
     });

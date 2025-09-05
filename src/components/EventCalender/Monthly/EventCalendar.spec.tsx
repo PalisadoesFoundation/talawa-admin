@@ -844,7 +844,14 @@ describe('Calendar', () => {
 
       // Administrator should see all events (public and private)
       // Check that the day with events has the correct class indicating events are present
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      // Find element with class containing 'day__events'
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are available
@@ -910,7 +917,13 @@ describe('Calendar', () => {
       await wait();
 
       // Regular user who is a member should see both public and private events
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
 
       const viewAllButton = screen.queryByTestId('more');
@@ -1106,7 +1119,13 @@ describe('Calendar', () => {
       await wait();
 
       // When userRole is not provided, should see only public events (single event, no View all button)
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1192,7 +1211,13 @@ describe('Calendar', () => {
       await wait();
 
       // When userId is not provided, should see only public events
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1278,7 +1303,13 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData is not provided, should see only public events
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1376,7 +1407,13 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData has no members, should see only public events
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1452,7 +1489,13 @@ describe('Calendar', () => {
       await wait();
 
       // Check that the day with events has the correct class indicating events are present
+<<<<<<< HEAD
       const dayWithEvents = container.querySelector('._day__events_d8535b');
+=======
+      const dayWithEvents = Array.from(container.querySelectorAll('[class]')).find(el =>
+        Array.from(el.classList).some(cls => cls.includes('day__events'))
+      );
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are filtered and available

@@ -88,6 +88,7 @@ describe('Testing CollapsibleDropdown component', () => {
       fireEvent.click(activeDropdownBtn);
     });
     expect(parentDropdownBtn).toBeInTheDocument();
+<<<<<<< HEAD
     expect(parentDropdownBtn.className).toMatch(/^_leftDrawerActiveButton_/);
 
     // Check if active dropdown is rendered with correct classes
@@ -101,6 +102,32 @@ describe('Testing CollapsibleDropdown component', () => {
     expect(nonActiveDropdownBtn.className).toMatch(
       /^_leftDrawerInactiveButton_/,
     );
+=======
+    // Check for class containing 'leftDrawerActiveButton' (ignore hash)
+    expect(
+      Array.from(parentDropdownBtn.classList).some((cls) =>
+        cls.includes('leftDrawerActiveButton')
+      )
+    ).toBe(true);
+
+    // Check if active dropdown is rendered with correct classes
+    expect(activeDropdownBtn).toBeInTheDocument();
+    // Check for class containing 'leftDrawerCollapseActiveButton' (ignore hash)
+    expect(
+      Array.from(activeDropdownBtn.classList).some((cls) =>
+        cls.includes('leftDrawerCollapseActiveButton')
+      )
+    ).toBe(true);
+
+    // Check if inactive dropdown is rendered with correct classes
+    expect(nonActiveDropdownBtn).toBeInTheDocument();
+    // Check for class containing 'leftDrawerInactiveButton' (ignore hash)
+    expect(
+      Array.from(nonActiveDropdownBtn.classList).some((cls) =>
+        cls.includes('leftDrawerInactiveButton')
+      )
+    ).toBe(true);
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
 
     // Check if dropdown is collapsed after clicking on it
     act(() => {

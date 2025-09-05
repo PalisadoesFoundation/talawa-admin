@@ -39,8 +39,8 @@
  */
 import React, { useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
-import IconComponent from 'components/IconComponent/IconComponent';
+import styles from '../../style/app-fixed.module.css';
+import IconComponent from '../IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';

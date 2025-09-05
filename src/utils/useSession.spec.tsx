@@ -509,9 +509,15 @@ test('should extend session when called directly', async () => {
 });
 
 test('should properly clean up on unmount', () => {
+<<<<<<< HEAD
   // Mock window.removeEventListener
   const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener');
   const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener');
+=======
+  // Mock window.removeEventListener and document.removeEventListener
+  const windowRemoveEventListener = vi.spyOn(window, 'removeEventListener').mockImplementation(() => {});
+  const documentRemoveEventListener = vi.spyOn(document, 'removeEventListener').mockImplementation(() => {});
+>>>>>>> 5521b81692 (WIP: changes for myissue-8)
 
   const { result, unmount } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
@@ -537,6 +543,7 @@ test('should properly clean up on unmount', () => {
     expect.any(Function),
   );
 
+  windowRemoveEventListener.mockRestore();
   documentRemoveEventListener.mockRestore();
 });
 test('should handle missing community data', async () => {
