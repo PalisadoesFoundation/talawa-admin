@@ -149,13 +149,9 @@ describe('Calendar Component', () => {
     expect(getByText('January')).toBeInTheDocument();
     expect(getByText('December')).toBeInTheDocument();
 
-<<<<<<< HEAD
-    const weekdayHeaders = container.querySelectorAll(
-      '._calendar__weekdays_d8535b',
-=======
+    // Select all elements whose class list contains "calendar__weekdays", avoiding brittle hashes
     const weekdayHeaders = Array.from(container.querySelectorAll('[class]')).filter(el =>
       Array.from(el.classList).some(cls => cls.includes('calendar__weekdays'))
->>>>>>> 5521b81692 (WIP: changes for myissue-8)
     );
     expect(weekdayHeaders.length).toBe(12);
 
