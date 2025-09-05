@@ -1528,4 +1528,94 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
   });
+
+  it('should display popover with extra users when more than 2 users exist', async () => {
+    const usersArr = [
+      { id: '1', name: 'Main User 1', avatarURL: null, __typename: 'User' },
+      {
+        id: '2',
+        name: 'Extra User 1',
+        avatarURL: 'https://example.com/avatar1.jpg',
+        __typename: 'User',
+      },
+      {
+        id: '3',
+        name: 'Extra User 2',
+        avatarURL: 'https://example.com/avatar2.jpg',
+        __typename: 'User',
+      },
+      { id: '4', name: 'Extra User 3', avatarURL: null, __typename: 'User' },
+      { id: '5', name: 'Extra User 4', avatarURL: null, __typename: 'User' },
+      { id: '6', name: 'Extra User 5', avatarURL: null, __typename: 'User' },
+      { id: '7', name: 'Extra User 6', avatarURL: null, __typename: 'User' },
+    ];
+
+    const popoverTestMock = {
+      request: {
+        query: USER_PLEDGES,
+        variables: {
+          input: { userId: 'userId' },
+          where: {
+            firstName_contains: '',
+            name_contains: undefined,
+          },
+          orderBy: 'endDate_DESC',
+        },
+      },
+      result: {
+        data: {
+          getPledgesByUserId: [
+            {
+              id: '1',
+              amount: 100,
+              note: 'Test note',
+              updatedAt: '2024-01-01T00:00:00Z',
+              campaign: {
+                id: '1',
+                name: 'Test Campaign',
+                startAt: '2023-01-01T00:00:00Z',
+                endAt: '2024-12-31T23:59:59Z',
+                currencyCode: 'USD',
+                goalAmount: 1000,
+                __typename: 'FundraisingCampaign',
+              },
+              pledger: usersArr[0],
+              users: usersArr,
+              updater: {
+                id: '1',
+                __typename: 'User',
+              },
+              startDate: '2023-01-01T00:00:00Z',
+              endDate: '2024-12-31T23:59:59Z',
+              currency: 'USD',
+              goalAmount: 1000,
+              __typename: 'FundraisingCampaignPledge',
+            },
+          ],
+        },
+      },
+    };
+
+    const popoverTestLink = new StaticMockLink([popoverTestMock]);
+    renderMyPledges(popoverTestLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('amountCell')).toBeInTheDocument();
+    });
+
+    const moreContainer = screen.getByTestId('moreContainer-1');
+    expect(moreContainer).toBeInTheDocument();
+    expect(moreContainer).toHaveTextContent('+5 more...');
+
+    await userEvent.click(moreContainer);
+
+    const popover = await screen.findByTestId('extra-users-popup');
+    expect(popover).toBeInTheDocument();
+
+    expect(popover.className).toContain('popupExtra');
+
+    for (let i = 1; i <= 6; i++) {
+      expect(screen.getByText(`Extra User ${i}`)).toBeInTheDocument();
+    }
+  });
 });

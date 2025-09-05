@@ -8,6 +8,7 @@ export interface InterfaceRecurrenceRule {
   frequency: Frequency;
   interval?: number;
   endDate?: Date;
+  recurrenceEndDate?: Date;
   count?: number;
   never?: boolean;
   byDay?: WeekDays[];
