@@ -226,7 +226,7 @@ describe('Testing Advertisement Register Component', () => {
       'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
-    vi.useRealTimers();
+    // Remove unnecessary real-timer restore since this test never switches to fake timers
     toastErrorSpy.mockRestore();
   });
 
