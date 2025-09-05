@@ -368,17 +368,13 @@ describe('Testing User Campaigns Screen', () => {
     const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
     await waitFor(() => expect(addPledgeBtn[0]).toBeInTheDocument());
     await userEvent.click(addPledgeBtn[0]);
-    // Debug: print the DOM after clicking Add Pledge
-    // eslint-disable-next-line no-console
-    console.log(document.body.innerHTML);
-
-     // Wait for the modal to appear by looking for the modal header text
-     // The modal may be rendered in a portal, so we use document.body
-     await waitFor(() => {
-       const header = Array.from(document.body.querySelectorAll('.modal-header, [data-testid="modal-header"]'))
-         .find(h => h.textContent && h.textContent.replace(/\s+/g, ' ').toLowerCase().includes('create pledge'));
-       expect(header).toBeTruthy();
-     });
+    // Wait for the modal to appear by looking for the modal header text
+    // The modal may be rendered in a portal, so we use document.body
+      await waitFor(() => {
+        const header = Array.from(document.body.querySelectorAll('.modal-header, [data-testid="modal-header"]'))
+          .find(h => h.textContent && h.textContent.replace(/\s+/g, ' ').toLowerCase().includes('create pledge'));
+        expect(header).toBeTruthy();
+      });
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
