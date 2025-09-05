@@ -182,13 +182,9 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-istanbul": "^7.1.0",
-    "vite-plugin-svgr": "^4.3.0",
-<<<<<<< HEAD
-    "vitest": "^3.2.3",
-=======
-    "vitest": "^3.2.4",
-    "vitest-preview": "^0.0.1",
->>>>>>> 5521b81692 (WIP: changes for myissue-8)
+  "vite-plugin-svgr": "^4.3.0",
+  "vitest": "^3.2.4",
+  "vitest-preview": "^0.0.1",
     "whatwg-fetch": "^3.6.20"
   },
   "nyc": {
