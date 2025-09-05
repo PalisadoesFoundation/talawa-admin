@@ -301,17 +301,10 @@ describe('Testing User Campaigns Screen', () => {
 
     await waitFor(() => {
       const detailContainer = screen.getByTestId('detailContainer2');
-<<<<<<< HEAD
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
       expect(detailContainer).toHaveTextContent('2099-12-31');
-=======
-  expect(detailContainer).toHaveTextContent('School Campaign');
-  expect(detailContainer).toHaveTextContent('$22000');
-  expect(detailContainer).toHaveTextContent('2024-07-28');
-  expect(detailContainer).toHaveTextContent('2099-12-31');
->>>>>>> 5521b81692 (WIP: changes for myissue-8)
     });
   });
 
