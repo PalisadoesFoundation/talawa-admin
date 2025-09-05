@@ -75,7 +75,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-            endDate: '2025-08-31',
+            endDate: '2026-08-31', // Set to a future date to ensure campaign is active
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
