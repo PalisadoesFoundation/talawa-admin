@@ -30,9 +30,12 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Link } from 'react-router';
-import Loader from 'components/Loader/Loader';
+import Loader from 'components/Loader/index';
 
-export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
+export const CustomTableCell: React.FC<{
+  eventId: string;
+  colSpan?: number;
+}> = ({ eventId, colSpan = 4 }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
     variables: { id: eventId },
     errorPolicy: 'all',
@@ -44,20 +47,18 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   if (loading)
     return (
       <TableRow data-testid="loading-state">
-        <TableCell
-          colSpan={4}
-          align="center"
-          aria-busy="true"
-          aria-live="polite"
-        >
-          <Loader size="lg" />
+        <TableCell colSpan={colSpan} align="center" aria-busy="true">
+          <span role="status" aria-live="polite">
+            <span className="visually-hidden">Loading event details</span>
+            <Loader size="lg" />
+          </span>
         </TableCell>
       </TableRow>
     );
   if (error) {
     return (
       <TableRow data-testid="error-state">
-        <TableCell colSpan={4} align="center">
+        <TableCell colSpan={colSpan} align="center">
           {`Unable to load event details. Please try again later.`}
         </TableCell>
       </TableRow>
@@ -67,7 +68,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   if (!event) {
     return (
       <TableRow data-testid="no-event-state">
-        <TableCell colSpan={4} align="center">
+        <TableCell colSpan={colSpan} align="center">
           Event not found or has been deleted
         </TableCell>
       </TableRow>

@@ -56,7 +56,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
 
   if (loading)
     return (
-      <div data-testid="loading-state">
+      <div data-testid="loading-state" role="status" aria-busy="true">
         <Loader size="xl" />
       </div>
     );

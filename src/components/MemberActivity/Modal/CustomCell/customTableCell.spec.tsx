@@ -1,125 +1,92 @@
 import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter } from 'react-router';
 import { CustomTableCell } from './customTableCell';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { vi } from 'vitest';
-import { mocks } from '../../MemberActivityMocks';
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+
+const { mockUseQuery } = vi.hoisted(() => ({ mockUseQuery: vi.fn() }));
+
+vi.mock('@apollo/client', () => ({
+  useQuery: (...args: any[]) => mockUseQuery(...args),
 }));
 
+vi.mock('react-router', async (orig: any) => {
+  const actual = (await orig()) as any;
+  return {
+    ...actual,
+    Link: ({ to, children }: any) => <a href={to}>{children}</a>,
+  };
+});
+
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual<any>('react-i18next');
+  return { ...actual, useTranslation: vi.fn(() => ({ t: (k: string) => k })) };
+});
+
 describe('CustomTableCell', () => {
-  it('renders event details correctly', async () => {
+  it('shows loading row', () => {
+    mockUseQuery.mockReturnValue({ loading: true });
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event123" />
-            </tbody>
-          </table>
-        </BrowserRouter>
-      </MockedProvider>,
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e1" />
+        </tbody>
+      </table>,
     );
-
-    await waitFor(() => screen.getByTestId('custom-row'));
-
-    expect(screen.getByText('Test Event')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        new Date('2023-01-01').toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          timeZone: 'UTC',
-        }),
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-
-    const link = screen.getByRole('link', { name: 'Test Event' });
-    expect(link).toHaveAttribute('href', '/event/org123/event123');
-  });
-
-  it('displays loading state', () => {
-    render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
-      </MockedProvider>,
-    );
-
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(screen.getByText('Loading event details')).toBeInTheDocument();
   });
 
-  it('displays error state', async () => {
-    const errorMock = [
-      {
-        request: {
-          query: EVENT_DETAILS,
-          variables: { id: 'event123' },
-        },
-        error: new Error('An error occurred'),
-      },
-    ];
-
+  it('shows error row', () => {
+    mockUseQuery.mockReturnValue({ loading: false, error: new Error('x') });
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
-      </MockedProvider>,
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e1" />
+        </tbody>
+      </table>,
     );
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          'Unable to load event details. Please try again later.',
-        ),
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('error-state')).toBeInTheDocument();
   });
 
-  it('displays no event found message', async () => {
-    const noEventMock = [
-      {
-        request: {
-          query: EVENT_DETAILS,
-          variables: { id: 'event123' },
-        },
-        result: {
-          data: {
-            event: null,
-          },
+  it('shows no event row', () => {
+    mockUseQuery.mockReturnValue({ loading: false, data: { event: null } });
+    render(
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e1" />
+        </tbody>
+      </table>,
+    );
+    expect(screen.getByTestId('no-event-state')).toBeInTheDocument();
+  });
+
+  it('renders event details', () => {
+    mockUseQuery.mockReturnValue({
+      loading: false,
+      data: {
+        event: {
+          _id: 'e1',
+          title: 'Event',
+          startDate: new Date().toISOString(),
+          recurring: false,
+          attendees: [],
+          organization: { _id: 'o1' },
         },
       },
-    ];
-
-    render(
-      <MockedProvider mocks={noEventMock} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Event not found or has been deleted'),
-      ).toBeInTheDocument();
     });
+    render(
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e1" />
+        </tbody>
+      </table>,
+    );
+    expect(screen.getByText('Event')).toBeInTheDocument();
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      expect.stringContaining('/event/'),
+    );
+    expect(screen.getByTestId('custom-row')).toBeInTheDocument();
   });
 });

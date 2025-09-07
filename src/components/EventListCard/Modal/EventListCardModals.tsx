@@ -172,12 +172,11 @@ function EventListCardModals({
     // Check if dates have changed
     const parseHMS = (time: string): { h: number; m: number; s: number } => {
       const parts = time.split(':');
-      const h = parseInt(parts[0] ?? '0');
-      const m = parseInt(parts[1] ?? '0');
-      const s = parseInt(parts[2] ?? '0');
+      const h = parseInt(parts[0] ?? '0', 10);
+      const m = parseInt(parts[1] ?? '0', 10);
+      const s = parseInt(parts[2] ?? '0', 10);
       return { h: isNaN(h) ? 0 : h, m: isNaN(m) ? 0 : m, s: isNaN(s) ? 0 : s };
     };
-
     const { h: startH, m: startM, s: startS } = parseHMS(formState.startTime);
 
     const newStartAt = alldaychecked

@@ -63,7 +63,7 @@ const renderWithRouterAndPath = (
   // Use MemoryRouter with initialEntries to set the path in the router context
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <Suspense fallback={<Loader />}>{ui}</Suspense>
+      <Suspense fallback={<Loader size="xl" />}>{ui}</Suspense>
     </MemoryRouter>,
   );
 };
@@ -519,14 +519,9 @@ describe('Calendar Component', () => {
 
     await screen.findAllByTestId('day');
 
-    let expandButtons = container.querySelectorAll(
+    const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
-    if (expandButtons.length === 0) {
-      expandButtons = container.querySelectorAll(
-        '._btn__more_d8535b, ._btn__more_d00707',
-      );
-    }
 
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
