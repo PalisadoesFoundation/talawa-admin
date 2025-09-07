@@ -349,8 +349,8 @@ describe('Testing User Campaigns Screen', () => {
       await userEvent.click(option);
     }
 
-    const createPledgeButton = await screen.findByTestId('submitPledgeBtn');
-    expect(createPledgeButton).toBeInTheDocument();
+    // Inline the lookup since findByTestId already asserts presence
+    await screen.findByTestId('submitPledgeBtn');
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     // Wait for the modal close button to be removed
    await waitForElementToBeRemoved(() => screen.queryByTestId('pledgeModalCloseBtn'));
