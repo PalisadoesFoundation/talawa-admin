@@ -353,7 +353,15 @@ describe('Testing User Campaigns Screen', () => {
     await screen.findByTestId('submitPledgeBtn');
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     // Wait for the modal close button to be removed
-   await waitForElementToBeRemoved(() => screen.queryByTestId('pledgeModalCloseBtn'));
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+  within,
+} from '@testing-library/react';
   });
 
   it('Redirect to My Pledges screen', async () => {
