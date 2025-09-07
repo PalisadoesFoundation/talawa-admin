@@ -9,6 +9,8 @@ import {
   render,
   screen,
   waitFor,
+  waitForElementToBeRemoved,
+  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -336,7 +338,9 @@ describe('Testing User Campaigns Screen', () => {
     renderCampaigns(link1);
 
     const addPledgeBtns = await screen.findAllByTestId('addPledgeBtn');
-    const enabledBtn = addPledgeBtns.find((btn) => !btn.hasAttribute('disabled'));
+    const enabledBtn = addPledgeBtns.find(
+      (btn) => !btn.hasAttribute('disabled'),
+    );
     expect(enabledBtn).toBeDefined();
     await userEvent.click(enabledBtn!);
 
@@ -353,15 +357,6 @@ describe('Testing User Campaigns Screen', () => {
     await screen.findByTestId('submitPledgeBtn');
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     // Wait for the modal close button to be removed
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-  within,
-} from '@testing-library/react';
   });
 
   it('Redirect to My Pledges screen', async () => {
