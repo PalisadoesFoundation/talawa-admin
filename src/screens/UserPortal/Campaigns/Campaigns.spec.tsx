@@ -352,7 +352,8 @@ describe('Testing User Campaigns Screen', () => {
     const createPledgeButton = await screen.findByTestId('submitPledgeBtn');
     expect(createPledgeButton).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
-    await waitFor(() => expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull());
+    // Wait for the modal close button to be removed
+   await waitForElementToBeRemoved(() => screen.queryByTestId('pledgeModalCloseBtn'));
   });
 
   it('Redirect to My Pledges screen', async () => {
