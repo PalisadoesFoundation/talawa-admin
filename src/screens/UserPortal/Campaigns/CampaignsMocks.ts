@@ -75,7 +75,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-            endDate: '2099-12-31',
+            endDate: '2099-12-31', // far future to ensure always active
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -120,7 +120,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-            endDate: '2099-12-31',
+            endDate: '2099-12-31', // far future to ensure always active
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -156,7 +156,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-            endDate: '2099-12-31',
+            endDate: '2099-12-31', // match other mocks for test consistency
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',
@@ -183,7 +183,7 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
-            endDate: '2099-12-31',
+            endDate: '2099-12-31', // far future to ensure always active
             name: 'School Campaign',
             fundingGoal: 22000,
             currency: 'USD',

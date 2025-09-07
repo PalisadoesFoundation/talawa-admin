@@ -335,17 +335,34 @@ describe('Testing User Campaigns Screen', () => {
   it('open and closes add pledge modal', async () => {
     renderCampaigns(link1);
 
-    const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
-    await waitFor(() => expect(addPledgeBtn[0]).toBeInTheDocument());
-    await userEvent.click(addPledgeBtn[0]);
+    const addPledgeBtns = await screen.findAllByTestId('addPledgeBtn');
+    // Find the first enabled button (not disabled)
+    const enabledBtn = addPledgeBtns.find(
+      (btn) => !btn.hasAttribute('disabled'),
+    );
+    expect(enabledBtn).toBeDefined();
+    if (enabledBtn) {
+      await userEvent.click(enabledBtn);
 
-    await waitFor(() =>
-      expect(screen.getAllByText(pTranslations.createPledge)).toHaveLength(2),
-    );
-    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
-    );
+      // Wait for the modal to appear and select a pledger
+      const pledgerSelect = await screen.findByTestId('pledgerSelect');
+      const input = pledgerSelect.querySelector('input');
+      if (input) {
+        await userEvent.click(input);
+        const option = await screen.findByText(/harve lance/i);
+        await userEvent.click(option);
+      }
+
+      // Now the submit button should be present
+      await waitFor(() => {
+        const createPledgeButton = screen.getByTestId('submitPledgeBtn');
+        expect(createPledgeButton).toBeInTheDocument();
+      });
+      await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+      await waitFor(() =>
+        expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
+      );
+    }
   });
 
   it('Redirect to My Pledges screen', async () => {
