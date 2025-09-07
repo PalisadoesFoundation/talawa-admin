@@ -475,6 +475,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Row>
             </Card.Body>
           </Card>
+          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+            <Card.Header
+              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+            >
+              <h3 className="text-white m-0" data-testid="tagsAssigned-title">
+                {t('tagsAssigned')}
+              </h3>
+            </Card.Header>
+            <Card.Body
+              id="tagsAssignedScrollableDiv"
+              data-testid="tagsAssignedScrollableDiv"
+              className={`${styles.cardBody} pe-0`}
+            ></Card.Body>
+          </Card>
         </Col>
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
@@ -667,7 +681,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         </Col>
         {isUpdated && (
           <Col md={12}>
-            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+            <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
               <Button
                 variant="outline-secondary"
                 onClick={resetChanges}
@@ -676,7 +690,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 {tCommon('resetChanges')}
               </Button>
               <Button
-                variant="success"
+                variant="outline-success"
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >
@@ -685,25 +699,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             </Card.Footer>
           </Col>
         )}
-      </Row>
-
-      <Row className="mb-4">
-        <Col xs={12} lg={6}>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-            <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-            >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
-                {t('tagsAssigned')}
-              </h3>
-            </Card.Header>
-            <Card.Body
-              id="tagsAssignedScrollableDiv"
-              data-testid="tagsAssignedScrollableDiv"
-              className={`${styles.cardBody} pe-0`}
-            ></Card.Body>
-          </Card>
-        </Col>
       </Row>
     </LocalizationProvider>
   );
