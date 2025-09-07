@@ -217,6 +217,8 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            _id: 'campaignId2',
+            startDate: '2024-07-28',
             endDate: '2024-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
