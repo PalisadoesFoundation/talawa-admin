@@ -51,6 +51,19 @@ describe('CustomTableCell', () => {
     expect(busyCell).not.toBeNull();
   });
 
+  it('respects a custom colSpan in loading state', () => {
+    mockUseQuery.mockReturnValue({ loading: true });
+    render(
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e2" colSpan={7} />
+        </tbody>
+      </table>,
+    );
+    const cell = screen.getByRole('cell');
+    expect(cell).toHaveAttribute('colspan', '7');
+  });
+
   it('shows error row', () => {
     mockUseQuery.mockReturnValue({ loading: false, error: new Error('x') });
     render(
@@ -61,6 +74,9 @@ describe('CustomTableCell', () => {
       </table>,
     );
     expect(screen.getByTestId('error-state')).toBeInTheDocument();
+    expect(
+      screen.getByText('Unable to load event details. Please try again later.'),
+    ).toBeInTheDocument();
   });
 
   it('shows no event row', () => {
@@ -107,5 +123,44 @@ describe('CustomTableCell', () => {
     });
     expect(screen.getByText(expectedDateText)).toBeInTheDocument();
     expect(screen.getByTestId('custom-row')).toBeInTheDocument();
+    // useQuery option verification
+    const call = mockUseQuery.mock.calls[0];
+    expect(call[1]).toMatchObject({
+      variables: { id: 'e1' },
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-first',
+      nextFetchPolicy: 'cache-and-network',
+      pollInterval: 30000,
+    });
+    // Attendees length 0 displayed (explicit array path)
+    expect(screen.getByTitle('Number of attendees').textContent).toBe('0');
+  });
+
+  it('renders recurring event and attendees fallback when undefined', () => {
+    mockUseQuery.mockReturnValue({
+      loading: false,
+      data: {
+        event: {
+          _id: 'e5',
+          title: 'Recurring Event',
+          startDate: '2025-05-20T00:00:00.000Z',
+          recurring: true,
+          // attendees intentionally omitted to trigger fallback (undefined)
+          organization: { _id: 'org5' },
+        },
+      },
+    });
+    render(
+      <table>
+        <tbody>
+          <CustomTableCell eventId="e5" />
+        </tbody>
+      </table>,
+    );
+    expect(screen.getByText('Recurring Event')).toBeInTheDocument();
+    // Recurring flag 'Yes'
+    expect(screen.getAllByText('Yes').length).toBeGreaterThan(0);
+    // Fallback attendee count 0 (undefined -> 0)
+    expect(screen.getByTitle('Number of attendees').textContent).toBe('0');
   });
 });

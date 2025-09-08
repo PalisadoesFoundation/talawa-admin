@@ -30,7 +30,7 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Link } from 'react-router';
-import Loader from 'components/Loader/index';
+import Loader from 'components/Loader/Loader';
 
 export const CustomTableCell: React.FC<{
   eventId: string;

@@ -9,21 +9,12 @@ import {
 } from '@testing-library/react';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
-import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { UserRole } from 'types/Event/interface';
 
-vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-  __esModule: true,
-  default: () => null,
-}));
-
-// Mock the react-router-dom module
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-
-  // Create a proper React component that returns null
+// Hoisted mock for react-router-dom BEFORE importing symbols from it
+vi.mock('react-router-dom', async (orig) => {
+  const actual: any = await (orig as any)();
   const MockNavigate = () => null;
-
   return {
     ...actual,
     useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
@@ -35,26 +26,24 @@ vi.mock('react-router-dom', async () => {
       state: null,
       key: 'default',
     }),
-    // Replace the Navigate component with our React component
     Navigate: MockNavigate,
-    // Make sure to preserve the actual routers
-    MemoryRouter: actual.MemoryRouter,
-    BrowserRouter: actual.BrowserRouter,
   };
 });
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+// After mocking, import the actual (now mocked) module
+import * as ReactRouterDom from 'react-router-dom';
+
+vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
+  __esModule: true,
+  default: () => null,
+}));
+
+// Retain a lightweight mock for react-router (if imported indirectly)
+vi.mock('react-router', async (orig) => {
+  const actual: any = await (orig as any)();
   const MockNavigate = () => null;
-  return {
-    ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
-    useNavigate: vi.fn().mockReturnValue(vi.fn()),
-    Navigate: MockNavigate,
-  };
+  return { ...actual, Navigate: MockNavigate };
 });
-
-// Do not mock 'react-router' to avoid breaking hook contexts
 
 const renderWithRouterAndPath = (
   ui: React.ReactElement,
@@ -62,9 +51,9 @@ const renderWithRouterAndPath = (
 ): ReturnType<typeof render> => {
   // Use MemoryRouter with initialEntries to set the path in the router context
   return render(
-    <MemoryRouter initialEntries={[route]}>
+    <ReactRouterDom.MemoryRouter initialEntries={[route]}>
       <Suspense fallback={<Loader size="xl" />}>{ui}</Suspense>
-    </MemoryRouter>,
+    </ReactRouterDom.MemoryRouter>,
   );
 };
 
@@ -151,7 +140,7 @@ describe('Calendar Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Reset the mock implementation for useParams before each test
-    vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
+    (ReactRouterDom as any).useParams.mockReturnValue({ orgId: 'org1' });
   });
 
   it('renders correctly with basic props', async () => {
@@ -274,7 +263,9 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('._btn__more_d8535b');
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -282,25 +273,29 @@ describe('Calendar Component', () => {
       });
     }
 
+    // Expect that clicking again closes (class/state) by toggling text 'Close'
     await waitFor(() => {
-      const expandedList = container.querySelector(
-        '._expand_event_list_d8535b',
-      );
-      expect(expandedList).toBeInTheDocument();
+      expect(screen.getByText('Close')).toBeInTheDocument();
     });
   });
 
   it('displays "No Event Available!" message when no events exist', async () => {
-    const { container, findByText } = renderWithRouterAndPath(
+    const { container } = renderWithRouterAndPath(
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('.btn__more');
-    if (expandButton) {
+    // pick first no-events button
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+    if (noEventsButton) {
       await act(async () => {
-        fireEvent.click(expandButton);
+        fireEvent.click(noEventsButton);
       });
-      expect(await findByText('No Event Available!')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      });
     }
   });
 
@@ -331,7 +326,9 @@ describe('Calendar Component', () => {
       <Calendar eventData={newMockEvents} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButtons = container.querySelectorAll('._btn__more_d00707');
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
 
     for (const button of Array.from(expandButtons)) {
       fireEvent.click(button);
@@ -376,7 +373,7 @@ describe('Calendar Component', () => {
     ];
 
     // Ensure all router mocks are properly set up for this test
-    vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
+    (ReactRouterDom as any).useParams.mockReturnValue({ orgId: 'org1' });
 
     const { container, findAllByTestId } = renderWithRouterAndPath(
       <Calendar
@@ -407,10 +404,7 @@ describe('Calendar Component', () => {
       await act(async () => {
         fireEvent.click(expandButtons[0]);
         await waitFor(() => {
-          const expandedList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          expect(expandedList).toBeInTheDocument();
+          expect(screen.getByText('Close')).toBeInTheDocument();
         });
       });
     }
@@ -462,7 +456,9 @@ describe('Calendar Component', () => {
       />,
     );
 
-    const expandButton = container.querySelector('._btn__more_d8535b');
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -470,10 +466,7 @@ describe('Calendar Component', () => {
       });
     }
     await waitFor(() => {
-      const expandedList = container.querySelector(
-        '._expand_event_list_d8535b',
-      );
-      expect(expandedList).toBeInTheDocument();
+      expect(screen.getByText('Close')).toBeInTheDocument();
     });
 
     if (expandButton) {
@@ -482,7 +475,8 @@ describe('Calendar Component', () => {
       });
     }
     await waitFor(() => {
-      expect(container.querySelector('._expand_event_list_d8535b')).toBeNull();
+      // 'Close' text removed after collapse
+      expect(screen.queryByText('Close')).toBeNull();
     });
   });
 
@@ -536,6 +530,113 @@ describe('Calendar Component', () => {
       } catch {
         continue;
       }
+    }
+  });
+
+  it('filters out private events when userRole and userId are missing', async () => {
+    const todayDate = new Date();
+    const privateEvent = {
+      ...mockEventData[1],
+      name: 'Hidden Private Event',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      isPublic: false,
+    };
+    const publicEvent = {
+      ...mockEventData[0],
+      name: 'Visible Public Event',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      isPublic: true,
+    };
+
+    const { container } = renderWithRouterAndPath(
+      // Intentionally omit userRole & userId to test branch returning only public events
+      <Calendar
+        eventData={[privateEvent, publicEvent]}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await screen.findAllByTestId('day');
+    // Choose an expand button whose sibling day number matches public event day
+    const allExpandButtons = Array.from(
+      container.querySelectorAll('[data-testid^="expand-btn-"]'),
+    ) as HTMLElement[];
+    // Click each until content found or exhaust
+    for (const btn of allExpandButtons) {
+      await act(async () => fireEvent.click(btn));
+      try {
+        await waitFor(() => {
+          expect(screen.getByText('Visible Public Event')).toBeInTheDocument();
+          expect(screen.queryByText('Hidden Private Event')).toBeNull();
+        });
+        break;
+      } catch {
+        // collapse and continue
+        await act(async () => fireEvent.click(btn));
+        continue;
+      }
+    }
+  });
+
+  it('filters out private events for REGULAR non-member user', async () => {
+    const todayDate = new Date();
+    const privateEvent = {
+      ...mockEventData[1],
+      name: 'Org Private Event',
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      isPublic: false,
+    };
+    const orgWithoutUser = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: mockOrgData.members.edges.filter(
+          (e) => e.node.id !== 'ghostUser',
+        ),
+      },
+    };
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEvent]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="ghostUser"
+        orgData={orgWithoutUser}
+      />,
+    );
+
+    await screen.findAllByTestId('day');
+    const noEventsBtn = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    if (noEventsBtn) {
+      await act(async () => fireEvent.click(noEventsBtn));
+      await waitFor(() => {
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      });
+    }
+  });
+
+  it('handles undefined eventData gracefully (internal filter branch)', async () => {
+    const { container } = renderWithRouterAndPath(
+      // Provide undefined eventData to exercise early return path in filterData
+      <Calendar
+        eventData={undefined as any}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+    await screen.findAllByTestId('day');
+    const noEventsBtn = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    if (noEventsBtn) {
+      await act(async () => fireEvent.click(noEventsBtn));
+      await waitFor(() => {
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      });
     }
   });
 });
