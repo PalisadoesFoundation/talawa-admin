@@ -313,7 +313,11 @@ export default function PostCard({
       {/* Post Actions */}
       <PostActions>
         <LeftActions>
-          <IconButton onClick={handleToggleLike} size="small">
+          <IconButton
+            onClick={handleToggleLike}
+            size="small"
+            data-testid="like-btn"
+          >
             {likeLoading ? (
               <CircularProgress size={20} />
             ) : isLikedByUser ? (
@@ -379,6 +383,7 @@ export default function PostCard({
       {commentCount > 0 && (
         <Button
           onClick={toggleComments}
+          data-testid="comment-card"
           size="small"
           sx={{
             color: 'text.secondary',
@@ -410,6 +415,7 @@ export default function PostCard({
               <IconButton
                 onClick={handleCreateComment}
                 disabled={commentLoading || !commentInput.trim()}
+                data-testid="comment-send"
                 size="small"
                 color="primary"
               >

@@ -266,3 +266,56 @@ describe('PostCard Component', () => {
     expect(screen.queryByTestId('pinned-icon')).not.toBeInTheDocument();
   });
 });
+
+// Mock toast
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+// Mock apollo useMutation
+vi.mock('@apollo/client', () => ({
+  useMutation: () => [
+    vi.fn().mockResolvedValue({}), // mock mutation function
+    { loading: false },
+  ],
+}));
+
+describe('PostCard', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('creates comment and clears input', async () => {
+    renderPostCard();
+    const input = screen.getByPlaceholderText(/add comment/i);
+    fireEvent.change(input, { target: { value: 'My comment' } });
+    const sendButton = screen.getByTestId('comment-send');
+    fireEvent.click(sendButton);
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+      expect(input).toHaveValue(''); // cleared by setCommentInput('')
+    });
+  });
+
+  it('edits post successfully and shows success toast', async () => {
+    renderPostCard();
+    // open edit modal
+    fireEvent.click(screen.getByTestId('more-options-button'));
+    // save post
+    fireEvent.click(screen.getByTestId('save-post-button'));
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith('Post updated successfully');
+    });
+  });
+
+  it('renders CommentCard when comments exist', () => {
+    renderPostCard();
+    // reveal comments
+    fireEvent.click(screen.getByText(/view/i));
+    expect(screen.getByTestId('comment-card')).toBeInTheDocument();
+  });
+});
