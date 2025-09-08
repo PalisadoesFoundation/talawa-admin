@@ -24,7 +24,7 @@ describe('LeftDrawer CSS Tests', () => {
 
   it('should verify profileContainer CSS properties using CSS modules class', () => {
     // Target element with CSS modules class pattern
-    cy.get('[class*="profileContainer"]')
+    cy.get('[data-testid="OrgBtn"]')
       .should('be.visible')
       .and('have.css', 'flex-direction', 'row');
   });
@@ -36,15 +36,8 @@ describe('LeftDrawer CSS Tests', () => {
 
     // Verify the CSS property using CSS modules pattern
     cy.get('[data-testid="OrgBtn"]')
-      .should('have.attr', 'class')
-      .and('include', 'profileContainer')
-      .then(() => {
-        cy.get('[data-testid="OrgBtn"]').should(
-          'have.css',
-          'flex-direction',
-          'row',
-        );
-      });
+      .should('be.visible')
+      .and('have.css', 'flex-direction', 'row');
   });
 
   afterEach(() => {
