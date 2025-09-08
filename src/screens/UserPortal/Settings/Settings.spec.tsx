@@ -22,7 +22,6 @@ vi.mock('react-toastify', () => ({
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn((t: unknown, error: unknown) => {
     // forward to toast.error so we can assert visual feedback
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { toast } = require('react-toastify');
     toast.error(String((error as Error)?.message || error));
   }),
