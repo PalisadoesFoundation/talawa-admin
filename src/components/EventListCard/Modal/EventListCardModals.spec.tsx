@@ -1046,4 +1046,91 @@ describe('EventListCardModals', () => {
       });
     });
   });
+
+  describe('Additional coverage for error and edge branches', () => {
+    test('does not register again if already registered', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          attendees: [{ _id: 'user1' }],
+        },
+      });
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+      // mutation not called because user already registered
+      expect(mockRegisterEvent).not.toHaveBeenCalled();
+    });
+
+    test('navigates to regular user dashboard path', () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          userRole: UserRole.REGULAR,
+        },
+      });
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.openEventDashboard();
+      });
+      expect(mockNavigate).toHaveBeenCalledWith('/user/event/org1/event1');
+    });
+
+    test('registerEventHandler error path triggers errorHandler', async () => {
+      mockRegisterEvent.mockRejectedValueOnce(new Error('Register failed'));
+      renderComponent();
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+      expect(errorHandler).toHaveBeenCalled();
+    });
+
+    test('deleteEventHandler error path triggers errorHandler', async () => {
+      mockDeleteStandaloneEvent.mockRejectedValueOnce(
+        new Error('Delete failed'),
+      );
+      renderComponent();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+      expect(errorHandler).toHaveBeenCalled();
+    });
+
+    test('recurrence change from null triggers update mutation when other field changed', async () => {
+      // No initial recurrence rule (originalRecurrence null)
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          recurrenceRule: null,
+        },
+      });
+      const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+      // Simulate user defining a new recurrence
+      act(() => {
+        initialPreviewProps.setRecurrence({
+          frequency: Frequency.WEEKLY,
+          interval: 1,
+          byDay: ['MO'],
+          byMonth: [],
+          byMonthDay: [],
+          count: null,
+          endDate: undefined,
+          never: true,
+        });
+        initialPreviewProps.setFormState({
+          ...initialPreviewProps.formState,
+          name: 'Changed Name',
+        });
+      });
+      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      await act(async () => {
+        await updatedPreviewProps.handleEventUpdate();
+      });
+      // open modal not expected (standalone) -> update mutation invoked instead
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalled();
+    });
+  });
 });

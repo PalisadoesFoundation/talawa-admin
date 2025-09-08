@@ -180,3 +180,35 @@ export const errorMock = [
   },
   ...MOCKS1,
 ];
+
+// Full variable error mock matching the complete userDetails object after change
+export const errorMockFull = [
+  ...MOCKS1,
+  {
+    request: {
+      query: UPDATE_CURRENT_USER_MUTATION,
+      variables: {
+        input: {
+          addressLine1: 'Line 1',
+          addressLine2: 'Line 2',
+          birthDate: '2000-01-01',
+          city: 'nyc',
+          countryCode: 'in',
+          description: 'This is a description',
+          educationGrade: 'grade_8',
+          employmentStatus: 'employed',
+          homePhoneNumber: '+9999999998',
+          maritalStatus: 'engaged',
+          mobilePhoneNumber: '1200', // changed
+          name: 'Bandhan', // changed (shortened)
+          natalSex: 'male',
+          naturalLanguageCode: 'en',
+          postalCode: '11111111f',
+          state: 'State1',
+          workPhoneNumber: '+9999999998',
+        },
+      },
+    },
+    error: new Error('Please enter a valid phone number'),
+  },
+];
