@@ -1425,7 +1425,6 @@ form label,
   flex: 1;
   position: relative;
   margin-left: 8px;
-  background-color: var(--input-bg);
   margin-right: 180px;
   width: 425px;
 }
@@ -1787,6 +1786,17 @@ form label,
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
   width: auto;
+  margin-inline-start: 12px;
+}
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 24px;
 }
 
 .justifyspAdvertisements {
@@ -1809,7 +1819,7 @@ form label,
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: repeat(2, 1fr); */
   grid-gap: 0.8rem 0.4rem;
   overflow: hidden;
 }
