@@ -258,7 +258,6 @@ function organizationActionItems(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const assignee = params.row.assignee;
         const displayName = assignee?.name || 'No assignee';
-        console.log(assignee);
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
