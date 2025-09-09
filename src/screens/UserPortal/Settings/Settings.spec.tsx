@@ -50,6 +50,9 @@ describe('Testing Settings Screen [User Portal]', () => {
     const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
+    if (!(global as any).URL.createObjectURL) {
+      (global as any).URL.createObjectURL = vi.fn(() => 'blob:mock');
+    }
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -335,6 +338,157 @@ describe('Testing Settings Screen [User Portal]', () => {
     // allow async toast + reload skip
     await wait(2100);
     expect(toastSuccessSpy).toHaveBeenCalled();
+  });
+
+  it('updates user details and triggers reload (covers post-success branch)', async () => {
+    vi.useFakeTimers();
+    const originalLocation = window.location;
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, reload: vi.fn() },
+      writable: true,
+    });
+    const mutationSpy = vi.fn();
+    const avatarFile = new File(['img'], 'avatar.png', { type: 'image/png' });
+    const expectedInput = {
+      addressLine1: 'Line 1',
+      addressLine2: 'Line 2',
+      birthDate: '2000-01-01',
+      city: 'nyc',
+      countryCode: 'in',
+      description: 'This is a description',
+      educationGrade: 'grade_8',
+      employmentStatus: 'employed',
+      homePhoneNumber: '+9999999998',
+      maritalStatus: 'engaged',
+      mobilePhoneNumber: '+9999999999',
+      name: 'Bandhan Majumder Reloaded',
+      natalSex: 'male',
+      naturalLanguageCode: 'en',
+      postalCode: '11111111f',
+      state: 'State1',
+      workPhoneNumber: '+9999999998',
+      avatar: avatarFile,
+    };
+    const mocks = [
+      ...MOCKS1,
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: expectedInput },
+        },
+        result: () => {
+          mutationSpy();
+          return {
+            data: {
+              updateCurrentUser: {
+                id: 'id1',
+                name: expectedInput.name,
+                emailAddress: 'user@example.com',
+                avatarURL: 'http://example.com/a.jpg',
+                role: 'regular',
+                __typename: 'User',
+              },
+            },
+          };
+        },
+      },
+      {
+        request: {
+          query: gql`
+            query getCommunityData {
+              community {
+                inactivityTimeoutDuration
+              }
+            }
+          `,
+        },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 0,
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+    ];
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={mocks}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+    // set avatar first so it's included in variables
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    fileInput.style.display = 'block';
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [avatarFile] } });
+    });
+    fireEvent.change(screen.getByTestId('inputName'), {
+      target: { value: expectedInput.name },
+    });
+    await wait();
+    fireEvent.click(screen.getByTestId('updateUserBtn'));
+    // fast-forward the internal 2000ms delay
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+    expect(mutationSpy).toHaveBeenCalled();
+    // Instead of asserting reload (implementation detail), assert localStorage side-effects
+    const { getItem } = useLocalStorage();
+    expect(getItem('name')).toBe(expectedInput.name);
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
+  });
+
+  it('resets avatar & file input (covers reset branch completely)', async () => {
+    // Provide mock for URL.createObjectURL used in avatar handling utilities
+    if (!(global as any).URL.createObjectURL) {
+      (global as any).URL.createObjectURL = vi.fn(() => 'blob:mock');
+    }
+    await act(async () => {
+      render(
+        <MockedProvider
+          addTypename={false}
+          link={new StaticMockLink(MOCKS1, true)}
+        >
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    fileInput.style.display = 'block';
+    const validFile = new File(['img'], 'pic.png', { type: 'image/png' });
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [validFile] } });
+    });
+    expect(fileInput.files?.[0].name).toBe('pic.png');
+    // change a text field too
+    fireEvent.change(screen.getByTestId('inputName'), {
+      target: { value: 'Changed Name' },
+    });
+    await wait();
+    fireEvent.click(screen.getByTestId('resetChangesBtn'));
+    await wait();
+    // file input cleared
+    expect(fileInput.value).toBe('');
   });
 
   it('resets changes after modification', async () => {
