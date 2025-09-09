@@ -229,7 +229,11 @@ export default function Advertisements(): JSX.Element {
               className="pt-4 m-2"
             >
               {activeAdvertisements.length === 0 ? (
-                <div className={styles.pMessageAdvertisement}>
+                <div
+                  className={styles.pMessageAdvertisement}
+                  role="status"
+                  aria-live="polite"
+                >
                   {t('pMessage')}
                 </div>
               ) : (
@@ -265,7 +269,11 @@ export default function Advertisements(): JSX.Element {
               className="pt-4 m-2"
             >
               {completedAdvertisements.length === 0 ? (
-                <div className={styles.pMessageAdvertisement}>
+                <div
+                  className={styles.pMessageAdvertisement}
+                  role="status"
+                  aria-live="polite"
+                >
                   {t('pMessage')}
                 </div>
               ) : (

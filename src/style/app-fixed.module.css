@@ -1786,7 +1786,7 @@ form label,
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
   width: auto;
-  margin-left: 12px;
+  margin-inline-start: 12px;
 }
 .pMessageAdvertisement {
   width: 100%;
