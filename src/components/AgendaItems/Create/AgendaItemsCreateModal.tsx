@@ -1,43 +1,4 @@
-/**
- * AgendaItemsCreateModal Component
- *
- * This component renders a modal for creating agenda items. It includes
- * form fields for entering details such as title, duration, description,
- * categories, URLs, and attachments. The modal also provides functionality
- * for validating URLs, managing attachments, and submitting the form.
- *
- * @component
- * @param {InterfaceAgendaItemsCreateModalProps} props - The props for the component.
- * @param {boolean} props.agendaItemCreateModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideCreateModal - Function to close the modal.
- * @param {object} props.formState - The current state of the form.
- * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
- * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
- * @param {(key: string) => string} props.t - Translation function for localization.
- * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
- *
- * @returns {JSX.Element} The rendered modal component.
- *
- * @remarks
- * - The component uses `react-bootstrap` for modal and form styling.
- * - `@mui/material` is used for the Autocomplete component.
- * - Attachments are converted to base64 format before being added to the form state.
- * - URLs are validated using a regular expression before being added.
- *
- * @example
- * ```tsx
- * <AgendaItemsCreateModal
- *   agendaItemCreateModalIsOpen={true}
- *   hideCreateModal={handleClose}
- *   formState={formState}
- *   setFormState={setFormState}
- *   createAgendaItemHandler={handleSubmit}
- *   t={translate}
- *   agendaItemCategories={categories}
- * />
- * ```
- */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 
@@ -45,8 +6,12 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+import { useParams } from 'react-router-dom';
+
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
@@ -58,7 +23,17 @@ const AgendaItemsCreateModal: React.FC<
   t,
   agendaItemCategories,
 }) => {
+  const { orgId: currentOrg } = useParams();
   const [newUrl, setNewUrl] = useState('');
+  // MinIO hooks must be called inside component
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+
+  // State to keep files for upload and local preview URLs
+  const [filesForUpload, setFilesForUpload] = useState<File[]>([]);
+  const [localPreviews, setLocalPreviews] = useState<
+    { url: string; file: File }[]
+  >([]);
 
   useEffect(() => {
     // Ensure URLs and attachments do not have empty or invalid entries
@@ -68,6 +43,15 @@ const AgendaItemsCreateModal: React.FC<
       attachments: prevState.attachments.filter((att) => att !== ''),
     }));
   }, []);
+
+  // Clean up object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      localPreviews.forEach((preview) => {
+        URL.revokeObjectURL(preview.url);
+      });
+    };
+  }, [localPreviews]);
 
   /**
    * Validates if a given URL is in a correct format.
@@ -111,44 +95,135 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   /**
-   * Handles file selection and converts files to base64 before updating the form state.
+   * Handles file selection and creates local previews.
    *
    * @param e - File input change event.
    */
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const target = e.target as HTMLInputElement;
     if (target.files) {
       const files = Array.from(target.files);
+
+      // Validate files and accumulate total size
       let totalSize = 0;
-      files.forEach((file) => {
+      const validFiles: File[] = [];
+      const newPreviews: { url: string; file: File }[] = [];
+
+      for (const file of files) {
+        const validation = validateFile(file);
+        if (!validation.isValid) {
+          toast.error(validation.errorMessage);
+          continue;
+        }
+
         totalSize += file.size;
-      });
-      if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('fileSizeExceedsLimit'));
-        return;
+        if (totalSize > 15 * 1024 * 1024) {
+          toast.error(t('fileSizeExceedsLimit'));
+          return;
+        }
+
+        validFiles.push(file);
+        // Create local preview URL
+        const previewUrl = URL.createObjectURL(file);
+        newPreviews.push({ url: previewUrl, file });
       }
-      const base64Files = await Promise.all(
-        files.map(async (file) => await convertToBase64(file)),
-      );
-      setFormState({
-        ...formState,
-        attachments: [...formState.attachments, ...base64Files],
-      });
+
+      if (validFiles.length > 0) {
+        setFilesForUpload((prev) => [...prev, ...validFiles]);
+        setLocalPreviews((prev) => [...prev, ...newPreviews]);
+      }
     }
   };
 
   /**
-   * Handles removing an attachment from the form state.
+   * Handles removing an attachment from preview and upload queue.
    *
-   * @param attachment - Attachment to remove.
+   * @param previewUrl - Preview URL to remove.
    */
-  const handleRemoveAttachment = (attachment: string): void => {
-    setFormState({
-      ...formState,
-      attachments: formState.attachments.filter((item) => item !== attachment),
-    });
+  const handleRemoveAttachment = (previewUrl: string): void => {
+    // Revoke the object URL
+    URL.revokeObjectURL(previewUrl);
+
+    // Remove from previews
+    const previewToRemove = localPreviews.find(
+      (preview) => preview.url === previewUrl,
+    );
+    setLocalPreviews((prev) =>
+      prev.filter((preview) => preview.url !== previewUrl),
+    );
+
+    // Remove from upload queue
+    if (previewToRemove) {
+      setFilesForUpload((prev) =>
+        prev.filter((file) => file !== previewToRemove.file),
+      );
+    }
+  };
+
+  /**
+   * Modified form submission handler that uploads files before creating agenda item
+   */
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+
+    try {
+      // Upload all queued files
+      if (filesForUpload.length > 0) {
+        const results = await Promise.allSettled(
+          filesForUpload.map(async (file) => {
+            const { objectName } = await uploadFileToMinio(file, currentOrg!);
+            const presignedUrl = await getFileFromMinio(
+              objectName,
+              currentOrg!,
+            );
+            return { objectName, presignedUrl };
+          }),
+        );
+
+        const uploaded = results
+          .filter(
+            (
+              r,
+            ): r is PromiseFulfilledResult<{
+              objectName: string;
+              presignedUrl: string;
+            }> => r.status === 'fulfilled',
+          )
+          .map((r) => r.value);
+
+        const failed = results.filter((r) => r.status === 'rejected').length;
+
+        if (uploaded.length) toast.success(t('mediaUploadSuccess') as string);
+        if (failed) toast.error(t('mediaUploadPartialFailure') as string);
+
+        // Update form state with uploaded attachments
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            ...uploaded.map((uf) => uf.objectName),
+          ],
+        }));
+
+        // Clear the upload queue
+        setFilesForUpload([]);
+      }
+
+      // Create a synthetic event that matches what createAgendaItemHandler expects
+      // We need to cast the event to match the expected type
+      const syntheticEvent = {
+        ...e,
+        target: e.target as HTMLFormElement,
+      } as unknown as React.ChangeEvent<HTMLFormElement>;
+
+      // Call the original create handler with the properly typed event
+      await createAgendaItemHandler(syntheticEvent);
+    } catch (error) {
+      toast.error(t('mediaUploadError') as string);
+      console.error('File upload error:', error);
+    }
   };
 
   return (
@@ -168,7 +243,7 @@ const AgendaItemsCreateModal: React.FC<
         </Button>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={createAgendaItemHandler}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
@@ -289,11 +364,11 @@ const AgendaItemsCreateModal: React.FC<
             />
             <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>
-          {formState.attachments && (
+          {localPreviews.length > 0 && (
             <div className={styles.previewFile} data-testid="mediaPreview">
-              {formState.attachments.map((attachment, index) => (
+              {localPreviews.map(({ url, file }, index) => (
                 <div key={index} className={styles.attachmentPreview}>
-                  {attachment.includes('video') ? (
+                  {file.type.startsWith('video/') ? (
                     <video
                       muted
                       autoPlay={true}
@@ -301,16 +376,16 @@ const AgendaItemsCreateModal: React.FC<
                       playsInline
                       crossOrigin="anonymous"
                     >
-                      <source src={attachment} type="video/mp4" />
+                      <source src={url} type={file.type} />
                     </video>
                   ) : (
-                    <img src={attachment} alt="Attachment preview" />
+                    <img src={url} alt="Attachment preview" />
                   )}
                   <button
                     className={styles.closeButtonFile}
                     onClick={(e) => {
                       e.preventDefault();
-                      handleRemoveAttachment(attachment);
+                      handleRemoveAttachment(url);
                     }}
                     data-testid="deleteAttachment"
                   >

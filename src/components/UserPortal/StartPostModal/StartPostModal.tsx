@@ -39,6 +39,7 @@ import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from '../../../style/app-fixed.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 interface InterfaceStartPostModalProps {
   show: boolean;
@@ -47,6 +48,7 @@ interface InterfaceStartPostModalProps {
   userData: InterfaceQueryUserListItem | undefined;
   organizationId: string;
   img: string | null;
+  imgFile: File | null;
 }
 
 const startPostModal = ({
@@ -56,15 +58,20 @@ const startPostModal = ({
   userData,
   organizationId,
   img,
+  imgFile,
 }: InterfaceStartPostModalProps): JSX.Element => {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
 
   // State to manage the content of the post
   const [postContent, setPostContent] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Mutation hook for creating a new post
   const [createPost] = useMutation(CREATE_POST_MUTATION);
+
+  // MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   /**
    * Updates the state with the content of the post as the user types.
@@ -92,14 +99,34 @@ const startPostModal = ({
       if (!postContent) {
         throw new Error("Can't create a post with an empty body.");
       }
+
+      setIsSubmitting(true);
       toast.info('Processing your post. Please wait.');
+
+      let imageUrl = null;
+
+      // Upload image to MinIO if provided
+      if (imgFile) {
+        try {
+          const { objectName } = await uploadFileToMinio(
+            imgFile,
+            organizationId,
+          );
+          imageUrl = objectName;
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          toast.error('Failed to upload image');
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
       const { data } = await createPost({
         variables: {
           title: '',
           text: postContent,
           organizationId: organizationId,
-          file: img,
+          file: imageUrl, // Use the objectName from MinIO upload
         },
       });
 
@@ -111,6 +138,8 @@ const startPostModal = ({
       }
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -172,8 +201,9 @@ const startPostModal = ({
             value="invite"
             data-testid="createPostBtn"
             onClick={handlePost}
+            disabled={isSubmitting || !postContent.trim()}
           >
-            {t('addPost')}
+            {isSubmitting ? t('posting') : t('addPost')}
           </Button>
         </Modal.Footer>
       </Form>

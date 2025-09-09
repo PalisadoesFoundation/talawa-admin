@@ -8,4 +8,7 @@ export const FILE_UPLOAD_ALLOWED_TYPES = [
   'image/jpeg',
   'image/png',
   'image/gif',
+  'video/mp4',
+  'video/x-msvideo', // AVI
+  'video/webm',
 ] as const;

@@ -473,6 +473,7 @@ export const UPDATE_COMMUNITY_PG = gql`
     $websiteURL: String
     $xURL: String
     $youtubeURL: String
+    $logo: String
   ) {
     updateCommunity(
       input: {
@@ -487,6 +488,7 @@ export const UPDATE_COMMUNITY_PG = gql`
         websiteURL: $websiteURL
         xURL: $xURL
         youtubeURL: $youtubeURL
+        logo: $logo
       }
     ) {
       id
@@ -610,7 +612,6 @@ export {
 export const PRESIGNED_URL = gql`
   mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
     createPresignedUrl(input: $input) {
-      fileUrl
       presignedUrl
       objectName
       requiresUpload
@@ -619,7 +620,7 @@ export const PRESIGNED_URL = gql`
 `;
 
 export const GET_FILE_PRESIGNEDURL = gql`
-  mutation CreateGetfileUrl($input: CreateGetfileUrlInput!) {
+  mutation CreateGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
     }

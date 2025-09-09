@@ -65,7 +65,8 @@ import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { validateFile } from 'utils/fileValidation';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
@@ -89,6 +90,9 @@ export default function groupChatDetails({
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   //storage
 
@@ -175,11 +179,32 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
-      await updateChat();
-      await chatRefetch();
-      setSelectedImage('');
+      // Validate file before upload
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
+      try {
+        // Upload to MinIO and get object name
+        const organizationId = chat.organization?._id || 'organization';
+        const { objectName } = await uploadFileToMinio(file, organizationId);
+        setSelectedImage(objectName);
+        await updateChat({
+          variables: {
+            input: {
+              _id: chat._id,
+              image: objectName,
+            },
+          },
+        });
+        await chatRefetch({ id: chat._id });
+        toast.success('Image uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast.error('Image upload failed');
+      }
     } else {
       setSelectedImage('');
     }
@@ -237,7 +262,7 @@ export default function groupChatDetails({
                       variables: {
                         input: {
                           _id: chat._id,
-                          image: selectedImage ? selectedImage : '',
+                          ...(selectedImage ? { image: selectedImage } : {}),
                           name: chatName,
                         },
                       },

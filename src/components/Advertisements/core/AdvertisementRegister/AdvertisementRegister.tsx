@@ -42,7 +42,7 @@
  *   setAfter={setAfterCallback}
  * />
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -54,6 +54,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 
 // Extend dayjs with UTC plugin
@@ -80,6 +83,16 @@ function AdvertisementRegister({
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+
+  // State to keep files for upload and local preview URLs
+  const [filesForUpload, setFilesForUpload] = useState<File[]>([]);
+  const [localPreviews, setLocalPreviews] = useState<
+    { url: string; file: File }[]
+  >([]);
 
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
@@ -120,7 +133,7 @@ function AdvertisementRegister({
    */
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
 
-  // Set Initial Form State While Creating an Advertisemnt
+  // Set Initial Form State While Creating an Advertisement
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     description: null,
@@ -130,7 +143,21 @@ function AdvertisementRegister({
     attachments: undefined,
   });
 
+  // Clean up object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      localPreviews.forEach((preview) => {
+        URL.revokeObjectURL(preview.url);
+      });
+    };
+  }, [localPreviews]);
+
   const handleClose = (): void => {
+    // Clean up all object URLs
+    localPreviews.forEach((preview) => {
+      URL.revokeObjectURL(preview.url);
+    });
+
     setFormState({
       name: '',
       type: 'banner',
@@ -139,46 +166,50 @@ function AdvertisementRegister({
       endAt: dayjs().add(1, 'day').toDate(),
       attachments: undefined,
     });
+    setFilesForUpload([]);
+    setLocalPreviews([]);
     setShow(false);
   };
 
   const handleShow = (): void => setShow(true); // Shows the modal
 
-  // Handle file uploads
-  const handleFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
+  // Handle file selection and create local previews
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = e.target.files;
     if (files && files.length > 0) {
       const validFiles: File[] = [];
-      const maxFileSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
+      const newPreviews: { url: string; file: File }[] = [];
 
-      Array.from(files).forEach((file) => {
-        if (!allowedTypes.includes(file.type)) {
-          toast.error(`Invalid file type: ${file.name}`);
-        } else if (file.size > maxFileSize) {
-          toast.error(`File too large: ${file.name}`);
+      for (const file of Array.from(files)) {
+        const validation = validateFile(file);
+        if (!validation.isValid) {
+          toast.error(validation.errorMessage);
+          continue;
         } else {
           validFiles.push(file);
+          // Create local preview URL
+          const previewUrl = URL.createObjectURL(file);
+          newPreviews.push({ url: previewUrl, file });
         }
-      });
-
-      if (validFiles.length > 0) {
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...(prev.attachments || []), ...validFiles],
-        }));
       }
+
+      if (validFiles.length === 0) return;
+
+      setFilesForUpload((prev) => [...prev, ...validFiles]);
+      setLocalPreviews((prev) => [...prev, ...newPreviews]);
     }
   };
 
-  // Handle file removal
+  // Handle file removal with proper cleanup
   const removeFile = (index: number): void => {
-    setFormState((prev) => ({
-      ...prev,
-      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
-    }));
+    // Revoke the object URL to prevent memory leaks
+    const previewToRemove = localPreviews[index];
+    if (previewToRemove) {
+      URL.revokeObjectURL(previewToRemove.url);
+    }
+
+    setLocalPreviews((prev) => prev.filter((_, i) => i !== index));
+    setFilesForUpload((prev) => prev.filter((_, i) => i !== index));
   };
 
   // Set form state if editing
@@ -204,6 +235,31 @@ function AdvertisementRegister({
     currentOrg,
   ]);
 
+  // Upload files to MinIO and return object names
+  const uploadFilesToMinio = async (): Promise<string[]> => {
+    if (filesForUpload.length === 0) return [];
+
+    const results = await Promise.allSettled(
+      filesForUpload.map(async (file) => {
+        const { objectName } = await uploadFileToMinio(file, currentOrg!);
+        return objectName;
+      }),
+    );
+
+    const uploaded = results
+      .filter(
+        (r): r is PromiseFulfilledResult<string> => r.status === 'fulfilled',
+      )
+      .map((r) => r.value);
+
+    const failed = results.filter((r) => r.status === 'rejected').length;
+
+    if (uploaded.length) toast.success(t('mediaUploadSuccess') as string);
+    if (failed) toast.error(t('mediaUploadPartialFailure') as string);
+
+    return uploaded;
+  };
+
   // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
     try {
@@ -220,13 +276,16 @@ function AdvertisementRegister({
         return;
       }
 
+      // Upload files and get object names
+      const uploadedObjectNames = await uploadFilesToMinio();
+
       let variables: {
         organizationId: string;
         name: string;
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[] | undefined;
+        attachments: string[];
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -234,7 +293,7 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
+        attachments: uploadedObjectNames,
       };
 
       if (formState.description !== null) {
@@ -247,19 +306,10 @@ function AdvertisementRegister({
       const { data } = await createAdvertisement({
         variables,
       });
+
       if (data) {
         toast.success(t('advertisementCreated') as string);
         handleClose();
-        setFormState({
-          name: '',
-          type: 'banner',
-          description: null,
-          startAt: new Date(formState.startAt || new Date()),
-          endAt: new Date(),
-          organizationId: currentOrg,
-          attachments: undefined,
-          existingAttachments: undefined,
-        });
         setAfterActive(null);
         setAfterCompleted(null);
       }
@@ -307,6 +357,9 @@ function AdvertisementRegister({
         }
       }
 
+      // Upload new files if any
+      const uploadedObjectNames = await uploadFilesToMinio();
+
       const startAt = formState.startAt
         ? dayjs.utc(formState.startAt).startOf('day').toISOString()
         : null;
@@ -317,8 +370,8 @@ function AdvertisementRegister({
       const mutationVariables = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
-        ...(updatedFields.attachments && {
-          attachments: updatedFields.attachments,
+        ...(uploadedObjectNames.length > 0 && {
+          attachments: uploadedObjectNames,
         }),
         ...(updatedFields.description && {
           description: updatedFields.description,
@@ -429,13 +482,13 @@ function AdvertisementRegister({
                   data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
+                {localPreviews.map(({ url, file }, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
                       <video
                         data-testid="mediaPreview"
                         controls
-                        src={encodeURI(URL.createObjectURL(file))}
+                        src={url}
                         className={styles.previewAdvertisementRegister}
                       >
                         <track
@@ -447,7 +500,7 @@ function AdvertisementRegister({
                     ) : (
                       <img
                         data-testid="mediaPreview"
-                        src={encodeURI(URL.createObjectURL(file))}
+                        src={url}
                         alt="Preview"
                         className={styles.previewAdvertisementRegister}
                       />

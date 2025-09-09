@@ -8,14 +8,16 @@ import {
 import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
@@ -49,6 +51,10 @@ function OrgPost(): JSX.Element {
     addMedia: '',
     pinPost: false,
   });
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
   const [sortingOption, setSortingOption] = useState('None');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -185,11 +191,29 @@ function OrgPost(): JSX.Element {
 
       setFile(selectedFile);
 
+      // Validate file before upload
+      const validation = validateFile(selectedFile);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
       try {
-        const base64 = await convertToBase64(selectedFile);
-        setPostFormState((prev) => ({ ...prev, addMedia: base64 }));
-      } catch {
-        toast.error('Could not generate preview');
+        // Upload to MinIO and get object name
+        const { objectName } = await uploadFileToMinio(
+          selectedFile,
+          currentUrl!,
+        );
+        const presignedUrl = await getFileFromMinio(objectName, currentUrl!);
+        setPostFormState((prev) => ({
+          ...prev,
+          addMedia: presignedUrl,
+          postImage: objectName,
+        }));
+        toast.success('Image uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast.error('Image upload failed');
       }
     } else {
       setFile(null);
@@ -207,11 +231,27 @@ function OrgPost(): JSX.Element {
         return;
       }
       setVideoFile(selectedFile);
+
+      // Validate file before upload
+      const validation = validateFile(selectedFile);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
       try {
-        const base64 = await convertToBase64(selectedFile);
-        setVideoPreview(base64);
-      } catch {
-        toast.error('Could not generate video preview');
+        // Upload to MinIO and get object name
+        const { objectName } = await uploadFileToMinio(
+          selectedFile,
+          currentUrl!,
+        );
+        setPostFormState((prev) => ({ ...prev, postVideo: objectName }));
+        const presignedUrl = await getFileFromMinio(objectName, currentUrl!);
+        setVideoPreview(presignedUrl);
+        toast.success('Video uploaded successfully');
+      } catch (error) {
+        console.error('Error uploading video:', error);
+        toast.error('Video upload failed');
       }
     } else {
       setVideoFile(null);

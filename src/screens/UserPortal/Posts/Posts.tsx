@@ -62,14 +62,17 @@ import type {
 } from 'utils/interfaces';
 import PromotedPost from 'components/UserPortal/PromotedPost/PromotedPost';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
+import { toast } from 'react-toastify';
 import Carousel from 'react-multi-carousel';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import 'react-multi-carousel/lib/styles.css';
@@ -102,6 +105,11 @@ export default function home(): JSX.Element {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postImg, setPostImg] = useState<string | null>('');
+  const [postImgFile, setPostImgFile] = useState<File | null>(null);
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   // Fetching the organization ID from URL parameters
   const { orgId } = useParams();
@@ -165,6 +173,15 @@ export default function home(): JSX.Element {
       }),
     );
   }, [posts]);
+
+  // Clean up object URLs when component unmounts
+  useEffect(() => {
+    return () => {
+      if (postImg && postImg.startsWith('blob:')) {
+        URL.revokeObjectURL(postImg);
+      }
+    };
+  }, [postImg]);
 
   /**
    * Converts a post node into props for the `PostCard` component.
@@ -243,10 +260,53 @@ export default function home(): JSX.Element {
   };
 
   /**
-   * Closes the post creation modal.
+   * Closes the post creation modal and cleans up local resources.
    */
   const handleModalClose = (): void => {
+    // Clean up the object URL if it exists
+    if (postImg && postImg.startsWith('blob:')) {
+      URL.revokeObjectURL(postImg);
+    }
+    setPostImg('');
+    setPostImgFile(null);
     setShowModal(false);
+  };
+
+  /**
+   * Handles file selection and creates local preview.
+   */
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files && target.files[0];
+
+    if (!file) return;
+
+    // Clean up previous object URL if it exists
+    if (postImg && postImg.startsWith('blob:')) {
+      URL.revokeObjectURL(postImg);
+    }
+
+    const validation = validateFile(file);
+
+    if (!validation.isValid) {
+      toast.error(validation.errorMessage);
+      setPostImg('');
+      setPostImgFile(null);
+      return;
+    }
+
+    try {
+      // Create local preview URL for immediate UI feedback
+      const previewUrl = URL.createObjectURL(file);
+      setPostImg(previewUrl);
+      setPostImgFile(file);
+      toast.success('Image selected successfully');
+    } catch (error) {
+      console.error('Error creating preview:', error);
+      toast.error('Failed to create preview');
+      setPostImg('');
+      setPostImgFile(null);
+    }
   };
 
   return (
@@ -265,15 +325,7 @@ export default function home(): JSX.Element {
                     className={styles.inputField}
                     data-testid="postImageInput"
                     autoComplete="off"
-                    onChange={async (
-                      e: React.ChangeEvent<HTMLInputElement>,
-                    ): Promise<void> => {
-                      setPostImg('');
-                      const target = e.target as HTMLInputElement;
-                      const file = target.files && target.files[0];
-                      const base64file = file && (await convertToBase64(file));
-                      setPostImg(base64file);
-                    }}
+                    onChange={handleFileChange}
                   />
                 </Col>
               </Row>
@@ -350,6 +402,7 @@ export default function home(): JSX.Element {
             userData={user}
             organizationId={orgId}
             img={postImg}
+            imgFile={postImgFile}
           />
         </div>
       </div>

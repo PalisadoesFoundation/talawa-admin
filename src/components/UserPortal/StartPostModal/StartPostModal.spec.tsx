@@ -23,6 +23,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const mockFile = new File(['dummy content'], 'test.png', { type: 'image/png' });
+
 const MOCKS = [
   {
     request: {
@@ -66,6 +68,7 @@ const renderStartPostModal = (
   onHide: () => void = vi.fn(),
   fetchPosts: () => void = vi.fn(),
   customLink: StaticMockLink = link,
+  imgFile: File | null = mockFile,
 ): RenderResult => {
   const cardProps = {
     show: visibility,
@@ -102,6 +105,7 @@ const renderStartPostModal = (
     },
     organizationId: '123',
     img,
+    imgFile,
   };
 
   return render(
