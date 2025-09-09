@@ -501,7 +501,10 @@
     "groups": "Groupes",
     "assignTo": "Attribuer à",
     "volunteers": "Bénévoles",
-    "volunteerGroups": "Groupes de Bénévoles"
+    "volunteerGroups": "Groupes de Bénévoles",
+    "applyTo": "Appliquer à",
+    "entireSeries": "Série entière",
+    "thisEventOnly": "Cet événement uniquement"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",

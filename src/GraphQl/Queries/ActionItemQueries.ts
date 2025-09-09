@@ -29,6 +29,10 @@ export const ACTION_ITEM_LIST = gql`
         id
         name
       }
+      recurringEventInstance {
+        id
+        name
+      }
       organization {
         id
         name
@@ -47,6 +51,56 @@ export const ACTION_ITEM_LIST = gql`
       isCompleted
       preCompletionNotes
       postCompletionNotes
+    }
+  }
+`;
+
+export const GET_EVENT_ACTION_ITEMS = gql`
+  query GetEventActionItems($input: QueryEventInput!) {
+    event(input: $input) {
+      id
+      recurrenceRule {
+        id
+      }
+      baseEvent {
+        id
+      }
+      actionItems(first: 10) {
+        edges {
+          node {
+            id
+            isCompleted
+            assignedAt
+            preCompletionNotes
+            postCompletionNotes
+            recurringEventInstanceId
+            creator {
+              id
+              name
+            }
+            event {
+              id
+              name
+            }
+            recurringEventInstance {
+              id
+              name
+            }
+            assignee {
+              id
+              name
+            }
+            category {
+              id
+              name
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
     }
   }
 `;

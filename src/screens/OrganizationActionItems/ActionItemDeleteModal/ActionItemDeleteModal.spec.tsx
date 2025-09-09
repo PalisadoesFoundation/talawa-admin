@@ -49,6 +49,7 @@ const itemProps: IItemDeleteModalProps = {
     assigneeId: null,
     categoryId: 'categoryId1',
     eventId: null,
+    recurringEventInstanceId: null,
     organizationId: 'orgId1',
     creatorId: 'userId2',
     updaterId: null,
@@ -69,6 +70,7 @@ const itemProps: IItemDeleteModalProps = {
       avatarURL: '',
     },
     event: null,
+    recurringEventInstance: null,
     category: {
       id: 'categoryId1',
       name: 'Category 1',

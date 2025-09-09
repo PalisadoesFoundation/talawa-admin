@@ -501,7 +501,10 @@
     "groups": "Groups",
     "assignTo": "Assign To",
     "volunteers": "Volunteers",
-    "volunteerGroups": "Volunteer Groups"
+    "volunteerGroups": "Volunteer Groups",
+    "applyTo": "Apply to",
+    "entireSeries": "Entire series",
+    "thisEventOnly": "This event only"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",

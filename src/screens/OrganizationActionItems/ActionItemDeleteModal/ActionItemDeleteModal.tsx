@@ -58,7 +58,9 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
     keyPrefix: 'organizationActionItems',
   });
 
-  const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+  const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
 
   const handleDelete = async (): Promise<void> => {
     try {

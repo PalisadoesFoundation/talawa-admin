@@ -1,31 +1,3 @@
-/**
- * A modal component for creating and editing action items.
- *
- * This component provides a form interface for:
- * - Creating new action items with category, assignee, date, and notes
- * - Editing existing action items with validation
- * - Handling both pre-completion and post-completion notes
- * - Integration with GraphQL mutations for data persistence
- *
- * The modal adapts its interface based on whether it's in create or edit mode,
- * and whether the action item is completed or not.
- *
- * @param props - Component props containing modal state and configuration
- * @returns JSX element representing the modal dialog
- *
- * @example
- * ```tsx
- * <ItemModal
- *   isOpen={showModal}
- *   hide={() => setShowModal(false)}
- *   orgId="org123"
- *   eventId="event456"
- *   actionItem={selectedItem}
- *   editMode={true}
- *   actionItemsRefetch={refetchData}
- * />
- * ```
- */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
@@ -53,53 +25,29 @@ import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQue
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
-/**
- * Interface for the form state used in the `ItemModal` component.
- * Contains all form fields required for creating or updating an action item.
- */
 interface IFormStateType {
-  /** Date when the action item was assigned */
   assignedAt: Date;
-  /** ID of the category this action item belongs to */
   categoryId: string;
-  /** ID of the user assigned to this action item */
   assigneeId: string;
-  /** Optional ID of the event this action item is associated with */
   eventId?: string;
-  /** Notes added before completion of the action item */
   preCompletionNotes: string;
-  /** Notes added after completion of the action item */
   postCompletionNotes: string | null;
-  /** Whether the action item has been completed */
   isCompleted: boolean;
 }
 
-/**
- * Props for the `ItemModal` component.
- */
 export interface IItemModalProps {
-  /** Whether the modal is currently open/visible */
   isOpen: boolean;
-  /** Function to hide/close the modal */
   hide: () => void;
-  /** Organization ID for which the action item belongs */
   orgId: string;
-  /** Optional event ID if the action item is associated with an event */
   eventId: string | undefined;
-  /** Function to refetch action items data after mutation */
   actionItemsRefetch: () => void;
-  /** Existing action item data (null for create mode) */
+  orgActionItemsRefetch?: () => void;
   actionItem: IActionItemInfo | null;
-  /** Whether the modal is in edit mode (true) or create mode (false) */
   editMode: boolean;
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
 }
 
-/**
- * Initializes the form state for the `ItemModal` component.
- *
- * @param actionItem - The existing action item data or null for new items
- * @returns Initial form state with default or existing values
- */
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
 ): IFormStateType => ({
@@ -122,22 +70,24 @@ const ItemModal: FC<IItemModalProps> = ({
   actionItem,
   editMode,
   actionItemsRefetch,
+  isRecurring,
+  baseEvent,
+  orgActionItemsRefetch,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
 
-  /** Currently selected action item category for the autocomplete */
   const [actionItemCategory, setActionItemCategory] =
     useState<IActionItemCategoryInfo | null>(null);
 
-  /** Currently selected assignee user for the autocomplete */
   const [assigneeUser, setAssigneeUser] = useState<InterfaceUser | null>(null);
 
-  /** Form state containing all input values */
   const [formState, setFormState] = useState<IFormStateType>(
     initializeFormState(actionItem),
   );
+
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
 
   const {
     assignedAt,
@@ -148,10 +98,6 @@ const ItemModal: FC<IItemModalProps> = ({
     isCompleted,
   } = formState;
 
-  /**
-   * Query to fetch action item categories for the organization.
-   * Used to populate the category dropdown.
-   */
   const { data: actionItemCategoriesData } = useQuery(
     ACTION_ITEM_CATEGORY_LIST,
     {
@@ -163,38 +109,27 @@ const ItemModal: FC<IItemModalProps> = ({
     },
   );
 
-  /**
-   * Query to fetch members of the organization.
-   * Used to populate the assignee dropdown.
-   */
   const { data: membersData } = useQuery(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 
-  /** Memoized list of organization members */
   const members = useMemo(
     () => membersData?.usersByOrganizationId || [],
     [membersData],
   );
 
-  /** Memoized list of action item categories */
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
     [actionItemCategoriesData],
   );
 
-  /**
-   * GraphQL mutations for creating and updating action items
-   */
-  const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION);
-  const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
+  const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
+  const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
 
-  /**
-   * Handler function to update the form state.
-   *
-   * @param field - The form field to update
-   * @param value - The new value for the field
-   */
   const handleFormChange = (
     field: keyof IFormStateType,
     value: string | boolean | Date | undefined | null,
@@ -202,12 +137,6 @@ const ItemModal: FC<IItemModalProps> = ({
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  /**
-   * Handler function to create a new action item.
-   * Validates required fields and calls the GraphQL mutation.
-   *
-   * @param e - Form submission event
-   */
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     try {
@@ -222,19 +151,26 @@ const ItemModal: FC<IItemModalProps> = ({
         organizationId: orgId,
         preCompletionNotes: preCompletionNotes || undefined,
         assignedAt: dayjs(assignedAt).toISOString(),
-        ...(eventId && { eventId }),
+        ...(eventId &&
+          (isRecurring
+            ? applyTo === 'series'
+              ? { eventId: baseEvent?.id }
+              : { recurringEventInstanceId: eventId }
+            : { eventId })),
       };
 
       await createActionItem({
         variables: { input },
       });
 
-      // Reset form after successful creation
       setFormState(initializeFormState(null));
       setActionItemCategory(null);
       setAssigneeUser(null);
 
       actionItemsRefetch();
+      if (orgActionItemsRefetch) {
+        orgActionItemsRefetch();
+      }
       hide();
       toast.success(t('successfulCreation'));
     } catch (error: unknown) {
@@ -242,12 +178,6 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   };
 
-  /**
-   * Handles the form submission for updating an action item.
-   * Only sends changed fields to optimize the mutation payload.
-   *
-   * @param e - Form submission event
-   */
   const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     try {
@@ -271,6 +201,9 @@ const ItemModal: FC<IItemModalProps> = ({
 
       setFormState(initializeFormState(null));
       actionItemsRefetch();
+      if (orgActionItemsRefetch) {
+        orgActionItemsRefetch();
+      }
       hide();
       toast.success(t('successfulUpdation'));
     } catch (error: unknown) {
@@ -278,14 +211,9 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   };
 
-  /**
-   * Effect to initialize form state and selections when actionItem or related data changes.
-   * Sets up the category and assignee selections based on the current action item.
-   */
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
 
-    // Set category based on nested object
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
@@ -297,7 +225,6 @@ const ItemModal: FC<IItemModalProps> = ({
       setActionItemCategory(null);
     }
 
-    // Set assignee user based on nested object
     if (actionItem?.assignee?.id) {
       const foundUser: InterfaceUser | undefined = members.find(
         (member: InterfaceUser): boolean =>
@@ -331,6 +258,27 @@ const ItemModal: FC<IItemModalProps> = ({
           }
           className="p-2"
         >
+          {eventId && isRecurring && (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          )}
           <Form.Group className="d-flex gap-3 mb-3">
             <Autocomplete
               className={`${styles.noOutline} w-100`}
@@ -383,7 +331,6 @@ const ItemModal: FC<IItemModalProps> = ({
               </Form.Group>
 
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
-                {/* Date Calendar Component to select assigned date of an action item */}
                 <DatePicker
                   format="DD/MM/YYYY"
                   label={t('assignmentDate')}
@@ -398,7 +345,6 @@ const ItemModal: FC<IItemModalProps> = ({
                 />
               </Form.Group>
 
-              {/* Input text Component to add notes for action item */}
               <FormControl fullWidth className="mb-2">
                 <TextField
                   label={t('preCompletionNotes')}

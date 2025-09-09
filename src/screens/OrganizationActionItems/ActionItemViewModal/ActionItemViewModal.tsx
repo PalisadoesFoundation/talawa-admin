@@ -175,7 +175,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               label={t('event')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={getEventDisplayName(event)}
+              value={getEventDisplayName(item.recurringEventInstance || event)}
               disabled
             />
           </Form.Group>

@@ -501,7 +501,10 @@
     "groups": "समूहों",
     "assignTo": "सौंपें",
     "volunteers": "स्वयंसेवक",
-    "volunteerGroups": "स्वयंसेवक समूह"
+    "volunteerGroups": "स्वयंसेवक समूह",
+    "applyTo": "लागू करें",
+    "entireSeries": "पूरी श्रृंखला",
+    "thisEventOnly": "केवल यह घटना"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",

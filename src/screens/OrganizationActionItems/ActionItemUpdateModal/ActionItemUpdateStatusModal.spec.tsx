@@ -45,6 +45,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       assigneeId: 'userId1',
       categoryId: 'actionItemCategoryId1',
       eventId: null,
+      recurringEventInstanceId: null,
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
@@ -70,6 +71,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         emailAddress: 'wilt.shepherd@example.com',
       },
       event: null,
+      recurringEventInstance: null,
       category: {
         id: 'actionItemCategoryId1',
         name: 'Category 1',
@@ -89,6 +91,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       assigneeId: 'userId1',
       categoryId: 'actionItemCategoryId1',
       eventId: null,
+      recurringEventInstanceId: null,
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
@@ -114,6 +117,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         emailAddress: 'wilt.shepherd@example.com',
       },
       event: null,
+      recurringEventInstance: null,
       category: {
         id: 'actionItemCategoryId1',
         name: 'Category 1',
@@ -133,6 +137,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       assigneeId: 'userId1',
       categoryId: 'actionItemCategoryId1',
       eventId: null,
+      recurringEventInstanceId: null,
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
@@ -158,6 +163,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         emailAddress: 'wilt.shepherd@example.com',
       },
       event: null,
+      recurringEventInstance: null,
       category: {
         id: 'actionItemCategoryId1',
         name: 'Category 1',

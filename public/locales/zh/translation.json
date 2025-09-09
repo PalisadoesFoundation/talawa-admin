@@ -501,7 +501,10 @@
     "groups": "小组",
     "assignTo": "分配给",
     "volunteers": "志愿者",
-    "volunteerGroups": "志愿者小组"
+    "volunteerGroups": "志愿者团体",
+    "applyTo": "适用于",
+    "entireSeries": "整个系列",
+    "thisEventOnly": "仅限本次活动"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",

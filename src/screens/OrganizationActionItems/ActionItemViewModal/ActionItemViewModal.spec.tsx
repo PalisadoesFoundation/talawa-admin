@@ -132,6 +132,7 @@ const createActionItem = (
   assigneeId: 'userId1',
   categoryId: 'categoryId1',
   eventId: 'eventId1',
+  recurringEventInstanceId: null,
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
@@ -155,6 +156,7 @@ const createActionItem = (
     avatarURL: 'https://example.com/avatar1.jpg',
   },
   event: mockEvent,
+  recurringEventInstance: null,
   category: {
     id: 'categoryId1',
     name: 'Test Category',

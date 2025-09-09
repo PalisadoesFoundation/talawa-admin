@@ -12,7 +12,7 @@ Defined in: [src/types/Actions/interface.ts:25](https://github.com/PalisadoesFou
 
 > **assignedAt**: `Date`
 
-Defined in: [src/types/Actions/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L33)
+Defined in: [src/types/Actions/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L34)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Actions/interface.ts:33](https://github.com/PalisadoesFou
 
 > **assignee**: `IActionUserInfo`
 
-Defined in: [src/types/Actions/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L42)
+Defined in: [src/types/Actions/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L43)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Actions/interface.ts:27](https://github.com/PalisadoesFou
 
 > **category**: [`IActionItemCategoryInfo`](IActionItemCategoryInfo.md)
 
-Defined in: [src/types/Actions/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L45)
+Defined in: [src/types/Actions/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L47)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Actions/interface.ts:28](https://github.com/PalisadoesFou
 
 > **completionAt**: `Date`
 
-Defined in: [src/types/Actions/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L34)
+Defined in: [src/types/Actions/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L35)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Actions/interface.ts:34](https://github.com/PalisadoesFou
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Actions/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L35)
+Defined in: [src/types/Actions/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L36)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Actions/interface.ts:35](https://github.com/PalisadoesFou
 
 > **creator**: `IActionUserInfo`
 
-Defined in: [src/types/Actions/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L43)
+Defined in: [src/types/Actions/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L44)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Actions/interface.ts:43](https://github.com/PalisadoesFou
 
 > **creatorId**: `string`
 
-Defined in: [src/types/Actions/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L31)
+Defined in: [src/types/Actions/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L32)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/Actions/interface.ts:31](https://github.com/PalisadoesFou
 
 > **event**: [`IEvent`](../../../Event/interface/interfaces/IEvent.md)
 
-Defined in: [src/types/Actions/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L44)
+Defined in: [src/types/Actions/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L45)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/Actions/interface.ts:26](https://github.com/PalisadoesFou
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/types/Actions/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L37)
+Defined in: [src/types/Actions/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L38)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/types/Actions/interface.ts:37](https://github.com/PalisadoesFou
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Actions/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L30)
+Defined in: [src/types/Actions/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L31)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/types/Actions/interface.ts:30](https://github.com/PalisadoesFou
 
 > **postCompletionNotes**: `string`
 
-Defined in: [src/types/Actions/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L39)
+Defined in: [src/types/Actions/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L40)
 
 ***
 
@@ -132,7 +132,23 @@ Defined in: [src/types/Actions/interface.ts:39](https://github.com/PalisadoesFou
 
 > **preCompletionNotes**: `string`
 
-Defined in: [src/types/Actions/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L38)
+Defined in: [src/types/Actions/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L39)
+
+***
+
+### recurringEventInstance
+
+> **recurringEventInstance**: [`IEvent`](../../../Event/interface/interfaces/IEvent.md)
+
+Defined in: [src/types/Actions/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L46)
+
+***
+
+### recurringEventInstanceId
+
+> **recurringEventInstanceId**: `string`
+
+Defined in: [src/types/Actions/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L30)
 
 ***
 
@@ -140,7 +156,7 @@ Defined in: [src/types/Actions/interface.ts:38](https://github.com/PalisadoesFou
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Actions/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L36)
+Defined in: [src/types/Actions/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L37)
 
 ***
 
@@ -148,4 +164,4 @@ Defined in: [src/types/Actions/interface.ts:36](https://github.com/PalisadoesFou
 
 > **updaterId**: `string`
 
-Defined in: [src/types/Actions/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L32)
+Defined in: [src/types/Actions/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Actions/interface.ts#L33)

@@ -107,8 +107,6 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     markActionItemAsPending(input: $input) {
       id
       isCompleted
-      postCompletionNotes
-      updatedAt
     }
   }
 `;

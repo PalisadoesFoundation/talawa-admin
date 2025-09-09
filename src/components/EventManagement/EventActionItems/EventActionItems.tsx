@@ -13,11 +13,11 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
+import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
-import type { IActionItemInfo, IActionItemList } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/Actions/interface';
 
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -25,11 +25,11 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from './ActionItemViewModal/ActionItemViewModal';
-import ItemModal from './ActionItemModal/ActionItemModal';
-import ItemDeleteModal from './ActionItemDeleteModal/ActionItemDeleteModal';
+import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
+import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
+import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from './ActionItemUpdateModal/ActionItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -46,14 +46,22 @@ enum ModalState {
   STATUS = 'status',
 }
 
-function OrganizationActionItems(): JSX.Element {
+interface EventActionItemsProps {
+  eventId: string;
+  orgActionItemsRefetch?: () => void;
+}
+
+const EventActionItems: React.FC<EventActionItemsProps> = ({
+  eventId,
+  orgActionItemsRefetch,
+}) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { orgId, eventId } = useParams();
+  const { orgId } = useParams();
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -68,6 +76,8 @@ function OrganizationActionItems(): JSX.Element {
   const [status, setStatus] = useState<ItemStatus | null>(null);
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -95,19 +105,14 @@ function OrganizationActionItems(): JSX.Element {
   );
 
   const {
-    data: actionItemsData,
-    loading: actionItemsLoading,
-    error: actionItemsError,
-    refetch: actionItemsRefetch,
-  }: {
-    data: IActionItemList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+    data: eventData,
+    loading: eventInfoLoading,
+    error: eventInfoError,
+    refetch: eventActionItemsRefetch,
+  } = useQuery(GET_EVENT_ACTION_ITEMS, {
     variables: {
       input: {
-        organizationId: orgId,
+        id: eventId,
       },
     },
   });
@@ -118,18 +123,21 @@ function OrganizationActionItems(): JSX.Element {
   );
 
   useEffect(() => {
-    if (actionItemsData && actionItemsData.actionItemsByOrganization) {
-      let filteredItems = actionItemsData.actionItemsByOrganization;
+    if (eventData && eventData.event) {
+      const items = eventData.event.actionItems.edges.map(
+        (edge: { node: IActionItemInfo }) => edge.node,
+      );
+      let filteredItems = items;
 
       if (status !== null) {
         const isCompleted = status === ItemStatus.Completed;
         filteredItems = filteredItems.filter(
-          (item) => item.isCompleted === isCompleted,
+          (item: IActionItemInfo) => item.isCompleted === isCompleted,
         );
       }
 
       if (searchTerm) {
-        filteredItems = filteredItems.filter((item) => {
+        filteredItems = filteredItems.filter((item: IActionItemInfo) => {
           if (searchBy === 'assignee') {
             const assigneeName = item.assignee?.name || '';
             return assigneeName
@@ -145,27 +153,31 @@ function OrganizationActionItems(): JSX.Element {
       }
 
       if (sortBy) {
-        filteredItems = [...filteredItems].sort((a, b) => {
-          const dateA = new Date(a.assignedAt);
-          const dateB = new Date(b.assignedAt);
+        filteredItems = [...filteredItems].sort(
+          (a: IActionItemInfo, b: IActionItemInfo) => {
+            const dateA = new Date(a.assignedAt);
+            const dateB = new Date(b.assignedAt);
 
-          if (sortBy === 'assignedAt_DESC') {
-            return dateB.getTime() - dateA.getTime();
-          } else {
-            return dateA.getTime() - dateB.getTime();
-          }
-        });
+            if (sortBy === 'assignedAt_DESC') {
+              return dateB.getTime() - dateA.getTime();
+            } else {
+              return dateA.getTime() - dateB.getTime();
+            }
+          },
+        );
       }
 
       setActionItems(filteredItems);
+      setIsRecurring(!!eventData.event.recurrenceRule);
+      setBaseEvent(eventData.event.baseEvent);
     }
-  }, [actionItemsData, eventId, status, searchTerm, searchBy, sortBy]);
+  }, [eventData, status, searchTerm, searchBy, sortBy]);
 
-  if (actionItemsLoading) {
+  if (eventInfoLoading) {
     return <Loader size="xl" />;
   }
 
-  if (actionItemsError) {
+  if (eventInfoError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
@@ -224,28 +236,6 @@ function OrganizationActionItems(): JSX.Element {
             data-testid="categoryName"
           >
             {params.row.category?.name || 'No category'}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'event',
-      headerName: 'Event',
-      flex: 1,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="eventName"
-          >
-            {params.row.recurringEventInstance?.name ||
-              params.row.event?.name ||
-              'No event'}
           </div>
         );
       },
@@ -472,10 +462,12 @@ function OrganizationActionItems(): JSX.Element {
         hide={() => closeModal(ModalState.SAME)}
         orgId={orgId}
         eventId={eventId}
-        actionItemsRefetch={actionItemsRefetch}
-        orgActionItemsRefetch={actionItemsRefetch}
+        actionItemsRefetch={eventActionItemsRefetch}
+        orgActionItemsRefetch={orgActionItemsRefetch}
         actionItem={actionItem}
         editMode={modalMode === 'edit'}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
       />
 
       {actionItem && (
@@ -490,19 +482,19 @@ function OrganizationActionItems(): JSX.Element {
             actionItem={actionItem}
             isOpen={modalState[ModalState.STATUS]}
             hide={() => closeModal(ModalState.STATUS)}
-            actionItemsRefetch={actionItemsRefetch}
+            actionItemsRefetch={eventActionItemsRefetch}
           />
 
           <ItemDeleteModal
             isOpen={modalState[ModalState.DELETE]}
             hide={() => closeModal(ModalState.DELETE)}
             actionItem={actionItem}
-            actionItemsRefetch={actionItemsRefetch}
+            actionItemsRefetch={eventActionItemsRefetch}
           />
         </>
       )}
     </div>
   );
-}
+};
 
-export default OrganizationActionItems;
+export default EventActionItems;

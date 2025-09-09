@@ -70,13 +70,18 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   /**
    * Mutation to update an action item.
    */
-  const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION);
+  const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
 
   /**
    * Mutation to mark an action item as pending.
    */
   const [markActionItemAsPending] = useMutation(
     MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+    {
+      refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+    },
   );
 
   /**

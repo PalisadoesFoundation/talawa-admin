@@ -4,9 +4,7 @@
 
 # Interface: IItemModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L80)
-
-Props for the `ItemModal` component.
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L38)
 
 ## Properties
 
@@ -14,9 +12,7 @@ Props for the `ItemModal` component.
 
 > **actionItem**: [`IActionItemInfo`](../../../../../types/Actions/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L92)
-
-Existing action item data (null for create mode)
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L45)
 
 ***
 
@@ -24,9 +20,7 @@ Existing action item data (null for create mode)
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L90)
-
-Function to refetch action items data after mutation
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L43)
 
 #### Returns
 
@@ -34,13 +28,23 @@ Function to refetch action items data after mutation
 
 ***
 
+### baseEvent?
+
+> `optional` **baseEvent**: `object`
+
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L48)
+
+#### id
+
+> **id**: `string`
+
+***
+
 ### editMode
 
 > **editMode**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L94)
-
-Whether the modal is in edit mode (true) or create mode (false)
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L46)
 
 ***
 
@@ -48,9 +52,7 @@ Whether the modal is in edit mode (true) or create mode (false)
 
 > **eventId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L88)
-
-Optional event ID if the action item is associated with an event
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L42)
 
 ***
 
@@ -58,9 +60,7 @@ Optional event ID if the action item is associated with an event
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L84)
-
-Function to hide/close the modal
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L40)
 
 #### Returns
 
@@ -72,9 +72,27 @@ Function to hide/close the modal
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L82)
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L39)
 
-Whether the modal is currently open/visible
+***
+
+### isRecurring?
+
+> `optional` **isRecurring**: `boolean`
+
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L47)
+
+***
+
+### orgActionItemsRefetch()?
+
+> `optional` **orgActionItemsRefetch**: () => `void`
+
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L44)
+
+#### Returns
+
+`void`
 
 ***
 
@@ -82,6 +100,4 @@ Whether the modal is currently open/visible
 
 > **orgId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L86)
-
-Organization ID for which the action item belongs
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L41)

@@ -781,6 +781,10 @@ type Mutation {
   checkIn(data: CheckInInput!): CheckIn!
   createActionItem(input: CreateActionItemInput!): ActionItem
 
+  createAssociationException(
+    input: CreateAssociationExceptionInput!
+  ): AssociationException
+
   createActionItemCategory(
     input: MutationCreateActionItemCategoryInput!
   ): ActionItemCategory!
@@ -838,6 +842,7 @@ type Mutation {
   registerForEvent(id: ID!): Event!
   rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
   deleteActionItem(input: MutationDeleteActionItemInput!): ActionItem
+  deleteAssociationException(id: ID!): AssociationException
   removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
   removeAdvertisement(id: ID!): Advertisement
   removeComment(id: ID!): Comment
@@ -878,6 +883,10 @@ type Mutation {
   unlikePost(id: ID!): Post
   unregisterForEventByUser(id: ID!): Event!
   updateActionItem(input: MutationUpdateActionItemInput!): ActionItem
+  updateAssociationException(
+    id: ID!
+    input: UpdateAssociationExceptionInput!
+  ): AssociationException
   updateActionItemCategory(
     input: MutationUpdateActionItemCategoryInput!
   ): ActionItemCategory
@@ -2198,6 +2207,14 @@ input MutationDeleteActionItemInput {
   id: ID!
 }
 
+input CreateAssociationExceptionInput {
+  associationId: String!
+  associationType: String!
+  overriddenData: String
+  recurringEventInstanceId: String!
+  status: String!
+}
+
 input MutationUpdateActionItemInput {
   assigneeId: ID
   categoryId: ID
@@ -3184,4 +3201,9 @@ type FundraisingCampaign {
   refrenceNumber: String
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+input UpdateAssociationExceptionInput {
+  overriddenData: String
+  status: String
 }

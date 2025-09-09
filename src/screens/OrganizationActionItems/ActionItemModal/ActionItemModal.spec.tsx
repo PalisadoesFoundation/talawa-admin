@@ -117,6 +117,7 @@ const mockActionItem = {
   assigneeId: 'user1',
   categoryId: 'cat1',
   eventId: null,
+  recurringEventInstanceId: null,
   organizationId: 'org1',
   creatorId: 'creator1',
   updaterId: null,
@@ -141,6 +142,7 @@ const mockActionItem = {
   },
   updater: null,
   event: null,
+  recurringEventInstance: null,
   category: {
     id: 'cat1',
     name: 'Category 1',
