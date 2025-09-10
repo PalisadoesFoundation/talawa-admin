@@ -9,12 +9,35 @@ type AcceptMembershipResponse {
   """
   success: Boolean
 }
+type AcceptMembershipResponse {
+  """
+  Success or error message
+  """
+  message: String
+
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+}
 
 type ActionItem {
   """
   Timestamp when the action item was assigned.
   """
+  """
+  Timestamp when the action item was assigned.
+  """
   assignedAt: DateTime
+
+  """
+  The user assigned to this action item.
+  """
+  assignee: User
+
+  """
+  The category this action item belongs to.
+  """
 
   """
   The user assigned to this action item.
@@ -29,7 +52,15 @@ type ActionItem {
   """
   Timestamp when the action item was completed.
   """
+
+  """
+  Timestamp when the action item was completed.
+  """
   completionAt: DateTime
+
+  """
+  Date time at the time the action item was created.
+  """
 
   """
   Date time at the time the action item was created.
@@ -44,7 +75,20 @@ type ActionItem {
   """
   Fetch the event associated with this action item, including attachments if available.
   """
+
+  """
+  User who created the action item.
+  """
+  creator: User
+
+  """
+  Fetch the event associated with this action item, including attachments if available.
+  """
   event: Event
+
+  """
+  Unique identifier for the action item.
+  """
 
   """
   Unique identifier for the action item.
@@ -54,7 +98,15 @@ type ActionItem {
   """
   Indicates whether the action item is completed.
   """
+
+  """
+  Indicates whether the action item is completed.
+  """
   isCompleted: Boolean
+
+  """
+  The organization the action item belongs to.
+  """
 
   """
   The organization the action item belongs to.
@@ -64,7 +116,15 @@ type ActionItem {
   """
   Notes added after completing the action item.
   """
+
+  """
+  Notes added after completing the action item.
+  """
   postCompletionNotes: String
+
+  """
+  Notes added before completing the action item.
+  """
 
   """
   Notes added before completing the action item.
@@ -127,15 +187,6 @@ type ActionItemCategory {
   User who last updated the action item category.
   """
   updater: User
-}
-
-type Address {
-  id: ID!
-  street: String!
-  city: String!
-  state: String!
-  zip: String!
-  country: String!
 }
 
 type Advertisement {
@@ -229,14 +280,6 @@ input AdvertisementWhereInput {
   Filter advertisements by completion status
   """
   isCompleted: Boolean
-}
-
-type AgendaCategory {
-  id: ID!
-  name: String!
-  organization: Organization!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type AgendaFolder {
@@ -622,7 +665,72 @@ type Comment {
   """
   User who created the comment.
   """
+  """
+  Body of the comment.
+  """
+  body: String
+
+  """
+  Date time at the time the comment was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the comment.
+  """
   creator: User
+
+  """
+  GraphQL connection to traverse through the users that down voted the comment.
+  """
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentDownVotersConnection
+
+  """
+  Total number of down votes on the comment.
+  """
+  downVotesCount: Int
+
+  """
+  Global identifier of the comment.
+  """
+  id: ID!
+
+  """
+  Post which the comment belongs to.
+  """
+  post: Post
+
+  """
+  GraphQL connection to traverse through the users that up voted the comment.
+  """
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): CommentUpVotersConnection
+
+  """
+  Total number of up votes on the comment.
+  """
+  upVotesCount: Int
+
+  """
+  Date time at the time the comment was last updated.
+  """
+  updatedAt: DateTime
+}
+
+"""
+"""
+type CommentDownVotersConnection {
+  edges: [CommentDownVotersConnectionEdge]
+  pageInfo: PageInfo!
 
   """
   GraphQL connection to traverse through the users that down voted the comment.
@@ -704,8 +812,44 @@ Possible variants of the type of of a vote on a comment.
 enum CommentVoteType {
   down_vote
   up_vote
+"""
+"""
+type CommentDownVotersConnectionEdge {
+  cursor: String!
+  node: User
 }
 
+"""
+"""
+type CommentUpVotersConnection {
+  edges: [CommentUpVotersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type CommentUpVotersConnectionEdge {
+  cursor: String!
+  node: User
+}
+
+"""
+Possible variants of the type of of a vote on a comment.
+"""
+enum CommentVoteType {
+  down_vote
+  up_vote
+}
+
+type Community {
+  """
+  Date time at the time the community was created.
+  """
+  createdAt: DateTime
+
+  """
+  URL to the facebook account of the community.
+  """
 type Community {
   """
   Date time at the time the community was created.
@@ -720,7 +864,15 @@ type Community {
   """
   URL to the gitGub account of the community.
   """
+
+  """
+  URL to the gitGub account of the community.
+  """
   githubURL: String
+
+  """
+  Global identifier of the community.
+  """
 
   """
   Global identifier of the community.
@@ -730,7 +882,15 @@ type Community {
   """
   Duration in seconds it should take for inactive clients to get timed out of their authenticated session within client-side talawa applications.
   """
+
+  """
+  Duration in seconds it should take for inactive clients to get timed out of their authenticated session within client-side talawa applications.
+  """
   inactivityTimeoutDuration: Int
+
+  """
+  URL to the instagram account of the community.
+  """
 
   """
   URL to the instagram account of the community.
@@ -745,7 +905,20 @@ type Community {
   """
   Mime type of the avatar of the community.
   """
+
+  """
+  URL to the linkedin account of the community.
+  """
+  linkedinURL: String
+
+  """
+  Mime type of the avatar of the community.
+  """
   logoMimeType: String
+
+  """
+  URL to the logo of the community.
+  """
 
   """
   URL to the logo of the community.
@@ -755,12 +928,24 @@ type Community {
   """
   Name of the community.
   """
+
+  """
+  Name of the community.
+  """
   name: String
 
   """
   URL to the reddit account of the community.
   """
+
+  """
+  URL to the reddit account of the community.
+  """
   redditURL: String
+
+  """
+  URL to the slack account of the community.
+  """
 
   """
   URL to the slack account of the community.
@@ -775,7 +960,20 @@ type Community {
   """
   User who last updated the community.
   """
+
+  """
+  Date time at the time the community was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the community.
+  """
   updater: User
+
+  """
+  URL to the website of the community.
+  """
 
   """
   URL to the website of the community.
@@ -785,7 +983,15 @@ type Community {
   """
   URL to the x account of the community.
   """
+
+  """
+  URL to the x account of the community.
+  """
   xURL: String
+
+  """
+  URL to the youtube account of the community.
+  """
 
   """
   URL to the youtube account of the community.
@@ -807,8 +1013,16 @@ input CreatePluginInput {
   isActivated: Boolean
   isInstalled: Boolean
   pluginId: String!
+input CreatePluginInput {
+  backup: Boolean
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String!
 }
 
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
 """
 A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -817,12 +1031,29 @@ scalar Date
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
 scalar DateTime
 
 input DeletePluginInput {
   id: String!
+input DeletePluginInput {
+  id: String!
 }
 
+"""
+Possible statuses for a membership request.
+"""
+enum DrizzleMembershipRequestStatus {
+  approved
+  pending
+  rejected
+}
+
+"""
+A field whose value conforms to the standard internet email address format as specified in HTML Spec: https://html.spec.whatwg.org/multipage/input.html#valid-e-mail-address.
+"""
 """
 Possible statuses for a membership request.
 """
@@ -851,17 +1082,48 @@ type Event {
   """
   GraphQL connection to traverse through the agenda folders that contain agenda items constituting a part of the agenda for the event.
   """
+  """
+  GraphQL connection to traverse through the action items associated with this event.
+  """
+  actionItems(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): EventActionItemsConnection
+
+  """
+  GraphQL connection to traverse through the agenda folders that contain agenda items constituting a part of the agenda for the event.
+  """
   agendaFolders(
     after: String
     before: String
     first: Int
     last: Int
   ): EventAgendaFoldersConnection
+  ): EventAgendaFoldersConnection
 
   """
   A boolean flag indicating if the event lasts for the entire day.
   """
+  """
+  A boolean flag indicating if the event lasts for the entire day.
+  """
   allDay: Boolean
+
+  """
+  A list of attachments associated with the event, such as images or documents.
+  """
+  attachments: [EventAttachment!]
+
+  """
+  The base event from which this materialized instance was generated.
+  """
+  baseEvent: Event
+
+  """
+  Date time at the time the event was created.
+  """
 
   """
   A list of attachments associated with the event, such as images or documents.
@@ -881,7 +1143,15 @@ type Event {
   """
   User who created the event.
   """
+
+  """
+  User who created the event.
+  """
   creator: User
+
+  """
+  A detailed description of the event, providing custom information and context.
+  """
 
   """
   A detailed description of the event, providing custom information and context.
@@ -891,7 +1161,20 @@ type Event {
   """
   The date and time when the event is scheduled to end. For materialized instances, this reflects the actual end time if modified.
   """
+
+  """
+  The date and time when the event is scheduled to end. For materialized instances, this reflects the actual end time if modified.
+  """
   endAt: DateTime
+
+  """
+  A boolean flag indicating if this materialized instance has any exceptions applied to it.
+  """
+  hasExceptions: Boolean
+
+  """
+  The unique global identifier for the event. For recurring instances, this ID refers to the specific materialized instance.
+  """
 
   """
   A boolean flag indicating if this materialized instance has any exceptions applied to it.
@@ -921,12 +1204,39 @@ type Event {
   """
   The physical or virtual location where the event will take place.
   """
+
+  """
+  A boolean flag indicating if the event is visible to the public.
+  """
+  isPublic: Boolean
+
+  """
+  A boolean flag indicating if this event serves as a template for a recurring series.
+  """
+  isRecurringEventTemplate: Boolean
+
+  """
+  A boolean flag indicating if users can register for this event.
+  """
+  isRegisterable: Boolean
+
+  """
+  The physical or virtual location where the event will take place.
+  """
   location: String
 
   """
   The name or title of the event.
   """
+
+  """
+  The name or title of the event.
+  """
   name: String
+
+  """
+  Organization the event belongs to.
+  """
 
   """
   Organization the event belongs to.
@@ -956,7 +1266,35 @@ type Event {
   """
   Date time at the time the event was last updated.
   """
+
+  """
+  A human-readable label indicating the progress of this instance in the series, such as '5 of 12' or 'Episode #7'.
+  """
+  progressLabel: String
+
+  """
+  The sequence number of this instance within its recurring series (e.g., 1, 2, 3, ...).
+  """
+  sequenceNumber: Int
+
+  """
+  The date and time when the event is scheduled to start. For materialized instances, this reflects the actual start time if modified.
+  """
+  startAt: DateTime!
+
+  """
+  The total number of instances in the complete recurring series. This will be null for infinite series.
+  """
+  totalCount: Int
+
+  """
+  Date time at the time the event was last updated.
+  """
   updatedAt: DateTime
+
+  """
+  User who last updated the event.
+  """
 
   """
   User who last updated the event.
@@ -966,11 +1304,44 @@ type Event {
   """
   GraphQL connection to traverse through the venues that are booked for the event.
   """
+
+  """
+  GraphQL connection to traverse through the venues that are booked for the event.
+  """
   venues(
     after: String
     before: String
     first: Int
     last: Int
+  ): EventVenuesConnection
+}
+
+"""
+"""
+type EventActionItemsConnection {
+  edges: [EventActionItemsConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type EventActionItemsConnectionEdge {
+  cursor: String!
+  node: ActionItem
+}
+
+"""
+"""
+type EventAgendaFoldersConnection {
+  edges: [EventAgendaFoldersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type EventAgendaFoldersConnectionEdge {
+  cursor: String!
+  node: AgendaFolder
   ): EventVenuesConnection
 }
 
@@ -1060,6 +1431,64 @@ input FileMetadataInput {
 """
 Possible variants of the frequency of a recurring event.
 """
+type EventAttachment {
+  """
+  Mime type of the attachment.
+  """
+  mimeType: String
+
+  """
+  URL to the attachment.
+  """
+  url: String
+}
+
+"""
+"""
+type EventVenuesConnection {
+  edges: [EventVenuesConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type EventVenuesConnectionEdge {
+  cursor: String!
+  node: Venue
+}
+
+input EventsByOrganizationIdInput {
+  organizationId: ID!
+}
+
+"""
+Metadata for files uploaded via presigned URL
+"""
+input FileMetadataInput {
+  """
+  Hash of the file for deduplication
+  """
+  fileHash: String!
+
+  """
+  MIME type of the file
+  """
+  mimetype: PostAttachmentMimeType!
+
+  """
+  Name of the file
+  """
+  name: String!
+
+  """
+  Object name used in storage
+  """
+  objectName: String!
+}
+
+"""
+Possible variants of the frequency of a recurring event.
+"""
 enum Frequency {
   DAILY
   MONTHLY
@@ -1067,6 +1496,682 @@ enum Frequency {
   YEARLY
 }
 
+type Fund {
+  """
+  GraphQL connection to traverse through the campaigns for the fund.
+  """
+  campaigns(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignsConnection
+
+  """
+  Date time at the time the fund was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the Fund.
+  """
+  creator: User
+
+  """
+  Global identifier of the fund.
+  """
+  id: ID!
+
+  """
+  Boolean to tell if the fund is tax deductible.
+  """
+  isTaxDeductible: Boolean
+
+  """
+  Name of the fund.
+  """
+  name: String
+
+  """
+  Organization which the fund belongs to.
+  """
+  organization: Organization
+
+  """
+  Date time at the time the fund was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the fund.
+  """
+  updater: User
+}
+
+type FundCampaign {
+  """
+  Date time at the time the fund campaign was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the fund campaign.
+  """
+  creator: User
+
+  """
+  Currency code of the fund campaign.
+  """
+  currencyCode: Iso4217CurrencyCode
+
+  """
+  Date time at the time the fund campaign ends at.
+  """
+  endAt: DateTime
+
+  """
+  Fund which the fund campaign belongs to.
+  """
+  fund: Fund
+
+  """
+  Minimum amount of money that is set as the goal for the fund campaign.
+  """
+  goalAmount: Int
+
+  """
+  Global identifier of the fund campaign.
+  """
+  id: ID!
+
+  """
+  Name of the fund campaign.
+  """
+  name: String
+
+  """
+  Total amount of money pledged under the fund campaign.
+  """
+  pledgedAmount: BigInt
+
+  """
+  GraphQL connection to traverse through the pledges made under the fund campaign.
+  """
+  pledges(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): FundCampaignPledgesConnection
+
+  """
+  Date time at the time the fund campaign starts at.
+  """
+  startAt: DateTime
+
+  """
+  Date time at the time the fund campaign was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the fund campaign.
+  """
+  updater: User
+}
+
+type FundCampaignPledge {
+  """
+  The amount of pledged money.
+  """
+  amount: Int
+
+  """
+  Fund campaign which the fund campaign pledge is associated to.
+  """
+  campaign: FundCampaign
+
+  """
+  Date time at the time the fund campaign pledge was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the fund campaign pledge.
+  """
+  creator: User
+
+  """
+  Global identifier of the fund campaign pledge.
+  """
+  id: ID!
+
+  """
+  Custom information about the fund campaign pledge.
+  """
+  note: String
+
+  """
+  User on whose behalf the fund campaign pledge is created.
+  """
+  pledger: User
+
+  """
+  Date time at the time the fund campaign pledge was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the fund campaign pledge.
+  """
+  updater: User
+}
+
+"""
+"""
+type FundCampaignPledgesConnection {
+  edges: [FundCampaignPledgesConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type FundCampaignPledgesConnectionEdge {
+  cursor: String!
+  node: FundCampaignPledge
+}
+
+"""
+"""
+type FundCampaignsConnection {
+  edges: [FundCampaignsConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type FundCampaignsConnectionEdge {
+  cursor: String!
+  node: FundCampaign
+}
+
+input GetPostsByOrgInput {
+  organizationId: String!
+  sortOrder: String
+}
+
+"""
+GetUrlResponse
+"""
+type GetUrlResponse {
+  presignedUrl: String
+}
+
+type HasUserVoted {
+  """
+  Indicates if the user has voted
+  """
+  hasVoted: Boolean!
+
+  """
+  Type of the post vote, null if no vote exists
+  """
+  voteType: PostVoteType
+}
+
+enum InviteStatus {
+  accepted
+  declined
+  no_response
+}
+
+"""
+Possible variants of the two-letter language code defined in ISO 639-1, part of the ISO 639 standard published by the International Organization for Standardization (ISO), to represent natural languages.
+"""
+enum Iso639Set1LanguageCode {
+  aa
+  ab
+  ae
+  af
+  ak
+  am
+  an
+  ar
+  as
+  av
+  ay
+  az
+  ba
+  be
+  bg
+  bi
+  bm
+  bn
+  bo
+  br
+  bs
+  ca
+  ce
+  ch
+  co
+  cr
+  cs
+  cu
+  cv
+  cy
+  da
+  de
+  dv
+  dz
+  ee
+  el
+  en
+  eo
+  es
+  et
+  eu
+  fa
+  ff
+  fi
+  fj
+  fo
+  fr
+  fy
+  ga
+  gd
+  gl
+  gn
+  gu
+  gv
+  ha
+  he
+  hi
+  ho
+  hr
+  ht
+  hu
+  hy
+  hz
+  ia
+  id
+  ie
+  ig
+  ii
+  ik
+  io
+  is
+  it
+  iu
+  ja
+  jv
+  ka
+  kg
+  ki
+  kj
+  kk
+  kl
+  km
+  kn
+  ko
+  kr
+  ks
+  ku
+  kv
+  kw
+  ky
+  la
+  lb
+  lg
+  li
+  ln
+  lo
+  lt
+  lu
+  lv
+  mg
+  mh
+  mi
+  mk
+  ml
+  mn
+  mr
+  ms
+  mt
+  my
+  na
+  nb
+  nd
+  ne
+  ng
+  nl
+  nn
+  no
+  nr
+  nv
+  ny
+  oc
+  oj
+  om
+  or
+  os
+  pa
+  pi
+  pl
+  ps
+  pt
+  qu
+  rm
+  rn
+  ro
+  ru
+  rw
+  sa
+  sc
+  sd
+  se
+  sg
+  si
+  sk
+  sl
+  sm
+  sn
+  so
+  sq
+  sr
+  ss
+  st
+  su
+  sv
+  sw
+  ta
+  te
+  tg
+  th
+  ti
+  tk
+  tl
+  tn
+  to
+  tr
+  ts
+  tt
+  tw
+  ty
+  ug
+  uk
+  ur
+  uz
+  ve
+  vi
+  vo
+  wa
+  wo
+  xh
+  yi
+  yo
+  za
+  zh
+  zu
+}
+
+"""
+Possible variants of the two-letter country code defined in ISO 3166-1, part of the ISO 3166 standard published by the International Organization for Standardization (ISO), to represent countries, dependent territories, and special areas of geographical interest.
+"""
+enum Iso3166Alpha2CountryCode {
+  ad
+  ae
+  af
+  ag
+  ai
+  al
+  am
+  ao
+  aq
+  ar
+  as
+  at
+  au
+  aw
+  ax
+  az
+  ba
+  bb
+  bd
+  be
+  bf
+  bg
+  bh
+  bi
+  bj
+  bl
+  bm
+  bn
+  bo
+  bq
+  br
+  bs
+  bt
+  bv
+  bw
+  by
+  bz
+  ca
+  cc
+  cd
+  cf
+  cg
+  ch
+  ci
+  ck
+  cl
+  cm
+  cn
+  co
+  cr
+  cu
+  cv
+  cw
+  cx
+  cy
+  cz
+  de
+  dj
+  dk
+  dm
+  do
+  dz
+  ec
+  ee
+  eg
+  eh
+  er
+  es
+  et
+  fi
+  fj
+  fk
+  fm
+  fo
+  fr
+  ga
+  gb
+  gd
+  ge
+  gf
+  gg
+  gh
+  gi
+  gl
+  gm
+  gn
+  gp
+  gq
+  gr
+  gs
+  gt
+  gu
+  gw
+  gy
+  hk
+  hm
+  hn
+  hr
+  ht
+  hu
+  id
+  ie
+  il
+  im
+  in
+  io
+  iq
+  ir
+  is
+  it
+  je
+  jm
+  jo
+  jp
+  ke
+  kg
+  kh
+  ki
+  km
+  kn
+  kp
+  kr
+  kw
+  ky
+  kz
+  la
+  lb
+  lc
+  li
+  lk
+  lr
+  ls
+  lt
+  lu
+  lv
+  ly
+  ma
+  mc
+  md
+  me
+  mf
+  mg
+  mh
+  mk
+  ml
+  mm
+  mn
+  mo
+  mp
+  mq
+  mr
+  ms
+  mt
+  mu
+  mv
+  mw
+  mx
+  my
+  mz
+  na
+  nc
+  ne
+  nf
+  ng
+  ni
+  nl
+  no
+  np
+  nr
+  nu
+  nz
+  om
+  pa
+  pe
+  pf
+  pg
+  ph
+  pk
+  pl
+  pm
+  pn
+  pr
+  ps
+  pt
+  pw
+  py
+  qa
+  re
+  ro
+  rs
+  ru
+  rw
+  sa
+  sb
+  sc
+  sd
+  se
+  sg
+  sh
+  si
+  sj
+  sk
+  sl
+  sm
+  sn
+  so
+  sr
+  ss
+  st
+  sv
+  sx
+  sy
+  sz
+  tc
+  td
+  tf
+  tg
+  th
+  tj
+  tk
+  tl
+  tm
+  tn
+  to
+  tr
+  tt
+  tv
+  tw
+  tz
+  ua
+  ug
+  um
+  us
+  uy
+  uz
+  va
+  vc
+  ve
+  vg
+  vi
+  vn
+  vu
+  wf
+  ws
+  ye
+  yt
+  za
+  zm
+  zw
+}
+
+"""
+Possible variants of the currency code defined in ISO 4217 standard published by the International Organization for Standardization (ISO) which defines alpha codes and numeric codes for the representation of currencies and provides information about the relationships between individual currencies and their minor units.
+"""
 type Fund {
   """
   GraphQL connection to traverse through the campaigns for the fund.
@@ -2036,16 +3141,6 @@ type Mutation {
   ): CancelMembershipResponse
 
   """
-  Mutation to complete an action item for a single instance
-  """
-  completeActionItemForInstance(
-    """
-    Complete an action item for a single instance
-    """
-    input: MutationCompleteActionItemForInstanceInput!
-  ): ActionItem
-
-  """
   Mutation field to create an action item.
   """
   createActionItem(input: CreateActionItemInput!): ActionItem
@@ -2207,16 +3302,6 @@ type Mutation {
   deleteActionItemCategory(
     input: MutationDeleteActionItemCategoryInput!
   ): ActionItemCategory
-
-  """
-  Mutation to delete an action item for a single instance
-  """
-  deleteActionItemForInstance(
-    """
-    Delete an action item for a single instance
-    """
-    input: MutationDeleteActionItemForInstanceInput!
-  ): ActionItem
 
   """
   Mutation field to delete an advertisement.
@@ -2391,16 +3476,6 @@ type Mutation {
   markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
 
   """
-  Mutation to mark an action item as pending for a single instance
-  """
-  markActionItemAsPendingForInstance(
-    """
-    Mark an action item as pending for a single instance
-    """
-    input: MutationMarkActionAsPendingForInstanceInput!
-  ): ActionItem
-
-  """
   Mutation field to reject a membership request by an admin.
   """
   rejectMembershipRequest(
@@ -2451,16 +3526,6 @@ type Mutation {
   updateActionItemCategory(
     input: MutationUpdateActionItemCategoryInput!
   ): ActionItemCategory
-
-  """
-  Mutation to update an action item for a single instance
-  """
-  updateActionItemForInstance(
-    """
-    Update an action item for a single instance
-    """
-    input: MutationUpdateActionItemForInstanceInput!
-  ): ActionItem
 
   """
   Mutation field to update an advertisement.
@@ -2629,12 +3694,6 @@ input MutationCancelMembershipRequestInput {
   membershipRequestId: ID!
 }
 
-input MutationCompleteActionItemForInstanceInput {
-  actionId: ID!
-  eventId: ID!
-  postCompletionNotes: String!
-}
-
 """
 Input for creating a new action item category.
 """
@@ -2681,7 +3740,32 @@ input MutationCreateAdvertisementInput {
   """
   Name of the advertisement.
   """
+"""
+"""
+input MutationCreateAdvertisementInput {
+  """
+  Attachments of the advertisement.
+  """
+  attachments: [Upload!]
+
+  """
+  Custom information about the advertisement.
+  """
+  description: String
+
+  """
+  Date time at which the advertised event ends.
+  """
+  endAt: DateTime!
+
+  """
+  Name of the advertisement.
+  """
   name: String!
+
+  """
+  Global identifier of the associated organization.
+  """
 
   """
   Global identifier of the associated organization.
@@ -2696,7 +3780,48 @@ input MutationCreateAdvertisementInput {
   """
   Type of the advertisement.
   """
+
+  """
+  Date time at which the advertised event starts.
+  """
+  startAt: DateTime!
+
+  """
+  Type of the advertisement.
+  """
   type: AdvertisementType!
+}
+
+"""
+"""
+input MutationCreateAgendaFolderInput {
+  """
+  Global identifier of the event the agenda folder is associated to.
+  """
+  eventId: ID!
+
+  """
+  Boolean to tell if the agenda folder is meant to be a folder for agenda items or a parent folder for other agenda folders.
+  """
+  isAgendaItemFolder: Boolean!
+
+  """
+  Name of the agenda folder.
+  """
+  name: String!
+
+  """
+  Global identifier of the agenda folder the agenda folder is contained within.
+  """
+  parentFolderId: ID
+}
+
+"""
+"""
+input MutationCreateAgendaItemInput {
+  """
+  Custom information about the agenda item.
+  """
 }
 
 """
@@ -2858,12 +3983,148 @@ input MutationCreateEventInput {
   """
   Attachments of the event.
   """
+
+  """
+  Duration of the agenda item.
+  """
+  duration: String
+
+  """
+  Global identifier of the agenda folder the agenda item is associated to.
+  """
+  folderId: ID!
+
+  """
+  Key of the agenda item if it's of a "song" type. More information at [this](https://en.wikipedia.org/wiki/Key_(music)) link.
+  """
+  key: String
+
+  """
+  Name of the agenda item.
+  """
+  name: String!
+
+  """
+  Type of the agenda item.
+  """
+  type: AgendaItemType!
+}
+
+"""
+"""
+input MutationCreateChatInput {
+  """
+  Avatar of the chat.
+  """
+  avatar: Upload
+
+  """
+  Custom information about the chat.
+  """
+  description: String
+
+  """
+  Name of the chat.
+  """
+  name: String!
+
+  """
+  Global identifier of the associated organization.
+  """
+  organizationId: ID!
+}
+
+"""
+"""
+input MutationCreateChatMembershipInput {
+  """
+  Global identifier of the associated chat.
+  """
+  chatId: ID!
+
+  """
+  Global identifier of the associated user.
+  """
+  memberId: ID!
+
+  """
+  Role assigned to the user within the chat.
+  """
+  role: ChatMembershipRole
+}
+
+"""
+"""
+input MutationCreateChatMessageInput {
+  """
+  Body of the chat message.
+  """
+  body: String!
+
+  """
+  Global identifier of the associated chat.
+  """
+  chatId: ID!
+
+  """
+  Global identifier of the associated parent message.
+  """
+  parentMessageId: ID
+}
+
+"""
+"""
+input MutationCreateCommentInput {
+  """
+  Body of the comment.
+  """
+  body: String!
+
+  """
+  Global identifier of the post on which the comment is made.
+  """
+  postId: ID!
+}
+
+"""
+"""
+input MutationCreateCommentVoteInput {
+  """
+  Global identifier of the comment that is voted.
+  """
+  commentId: ID!
+
+  """
+  Type of the vote.
+  """
+  type: CommentVoteType!
+}
+
+"""
+"""
+input MutationCreateEventInput {
+  """
+  Indicates if the event spans the entire day
+  """
+  allDay: Boolean
+
+  """
+  Attachments of the event.
+  """
   attachments: [Upload!]
 
   """
   Custom information about the event.
   """
+
+  """
+  Custom information about the event.
+  """
   description: String
+
+  """
+  Date time at the time the event ends at.
+  """
 
   """
   Date time at the time the event ends at.
@@ -2888,12 +4149,44 @@ input MutationCreateEventInput {
   """
   Name of the event.
   """
+
+  """
+  Indicates if the event is publicly visible
+  """
+  isPublic: Boolean
+
+  """
+  Indicates if users can register for this event
+  """
+  isRegisterable: Boolean
+
+  """
+  Physical or virtual location of the event
+  """
+  location: String
+
+  """
+  Name of the event.
+  """
   name: String!
 
   """
   Global identifier of the associated organization.
   """
+
+  """
+  Global identifier of the associated organization.
+  """
   organizationId: ID!
+
+  """
+  Recurrence pattern for the event. If provided, creates a recurring event.
+  """
+  recurrence: RecurrenceInput
+
+  """
+  Date time at the time the event starts at.
+  """
 
   """
   Recurrence pattern for the event. If provided, creates a recurring event.
@@ -3165,52 +4458,6 @@ input MutationCreateTagFolderInput {
   """
   Name of the tag.
   """
-  type: AdvertisementType!
-}
-
-input QueryOrganizationInput {
-  id: String!
-}
-
-input OTPInput {
-  email: EmailAddress!
-}
-
-input AdvertisementWhereInput {
-  isCompleted: Boolean!
-}
-
-type Organization {
-  id: ID!
-  actionItemCategories(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationActionItemCategoriesConnection
-  address: Address
-  admins(adminId: ID): [User!]
-  agendaCategories: [AgendaCategory]
-  apiUrl: URL!
-  blockedUsers(
-    after: String
-    before: String
-    first: Int
-    last: Int
-  ): OrganizationBlockedUsersConnection
-  createdAt: DateTime!
-  creator: User
-  customFields: [OrganizationCustomField!]!
-  description: String!
-  image: String
-  members(
-    after: String
-    before: String
-    first: Int
-    last: Int
-    where: MembersWhereInput
-  ): OrganizationMembersConnection
-  membershipRequests: [MembershipRequest]
   name: String!
 
   """
@@ -3254,6 +4501,10 @@ input MutationCreateUserInput {
   """
   Address line 2 of the user's address.
   """
+
+  """
+  Address line 2 of the user's address.
+  """
   addressLine2: String
 
   """
@@ -3269,7 +4520,25 @@ input MutationCreateUserInput {
   """
   Name of the city where the user resides in.
   """
+
+  """
+  Avatar of the user.
+  """
+  avatar: Upload
+
+  """
+  Date of birth of the user.
+  """
+  birthDate: Date
+
+  """
+  Name of the city where the user resides in.
+  """
   city: String
+
+  """
+  Country code of the country the user is a citizen of.
+  """
 
   """
   Country code of the country the user is a citizen of.
@@ -3422,11 +4691,153 @@ input MutationDeleteActionItemCategoryInput {
   ID of the action item category to delete.
   """
   id: ID!
+
+  """
+  Custom information about the user.
+  """
+  description: String
+
+  """
+  Primary education grade of the user.
+  """
+  educationGrade: UserEducationGrade
+
+  """
+  Email address of the user.
+  """
+  emailAddress: EmailAddress!
+
+  """
+  Employment status of the user.
+  """
+  employmentStatus: UserEmploymentStatus
+
+  """
+  The phone number to use to communicate with the user at their home.
+  """
+  homePhoneNumber: PhoneNumber
+
+  """
+  Boolean to tell whether the user has verified their email address.
+  """
+  isEmailAddressVerified: Boolean!
+
+  """
+  Marital status of the user.
+  """
+  maritalStatus: UserMaritalStatus
+
+  """
+  The phone number to use to communicate with the user on their mobile phone.
+  """
+  mobilePhoneNumber: PhoneNumber
+
+  """
+  Name of the user.
+  """
+  name: String!
+
+  """
+  The sex assigned to the user at their birth.
+  """
+  natalSex: UserNatalSex
+
+  """
+  Language code of the user's preferred natural language.
+  """
+  naturalLanguageCode: Iso639Set1LanguageCode
+
+  """
+  Password of the user to sign in to the application.
+  """
+  password: String!
+
+  """
+  Postal code of the user.
+  """
+  postalCode: String
+
+  """
+  Role assigned to the user in the application.
+  """
+  role: UserRole!
+
+  """
+  Name of the state the user resides in.
+  """
+  state: String
+
+  """
+  The phone number to use to communicate with the user while they're at work.
+  """
+  workPhoneNumber: PhoneNumber
 }
 
-input MutationDeleteActionItemForInstanceInput {
-  actionId: ID!
+"""
+"""
+input MutationCreateVenueBookingInput {
+  """
+  Global identifier of the event that the venue is to be booked for.
+  """
   eventId: ID!
+
+  """
+  Global identifier of the venue to be booked.
+  """
+  venueId: ID!
+}
+
+"""
+"""
+input MutationCreateVenueInput {
+  """
+  Attachments of the venue.
+  """
+  attachments: [Upload!]
+
+  """
+  Custom information about the venue.
+  """
+  description: String
+
+  """
+  Name of the venue.
+  """
+  name: String!
+
+  """
+  Global identifier of the associated organization.
+  """
+  organizationId: ID!
+}
+
+"""
+"""
+input MutationCreateVolunteerGroupAssignmentsInput {
+  """
+  Global identifier of the user.
+  """
+  assigneeId: ID!
+
+  """
+  Global identifier of the group.
+  """
+  groupId: ID!
+
+  """
+  Invitation Status.
+  """
+  inviteStatus: InviteStatus!
+}
+
+"""
+Input for deleting an action item category.
+"""
+input MutationDeleteActionItemCategoryInput {
+  """
+  ID of the action item category to delete.
+  """
+  id: ID!
 }
 
 """
@@ -3475,6 +4886,27 @@ input MutationDeleteChatInput {
   id: ID!
 }
 
+"""
+"""
+input MutationDeleteChatMembershipInput {
+  """
+  Global identifier of the associated chat.
+  """
+  chatId: ID!
+
+  """
+  Global identifier of the associated user.
+  """
+  memberId: ID!
+}
+
+"""
+"""
+input MutationDeleteChatMessageInput {
+  """
+  Global identifier of the chat message.
+  """
+  id: ID!
 """
 """
 input MutationDeleteChatMembershipInput {
@@ -3712,11 +5144,6 @@ input MutationJoinPublicOrganizationInput {
   organizationId: ID!
 }
 
-input MutationMarkActionAsPendingForInstanceInput {
-  actionId: ID!
-  eventId: ID!
-}
-
 input MutationRejectMembershipRequestInput {
   """
   ID of the membership request to reject
@@ -3878,15 +5305,6 @@ input MutationUpdateActionItemCategoryInput {
   name: String
 }
 
-input MutationUpdateActionItemForInstanceInput {
-  actionId: ID!
-  assignedAt: String
-  assigneeId: ID
-  categoryId: ID
-  eventId: ID!
-  preCompletionNotes: String
-}
-
 input MutationUpdateActionItemInput {
   """
   Identifier for the assignee of the action item.
@@ -3959,12 +5377,77 @@ input MutationUpdateAgendaFolderInput {
   """
   Global identifier of the agenda folder.
   """
+
+  """
+  Date time at which the advertised event ends.
+  """
+  endAt: DateTime
+
+  """
+  Global identifier of the associated organization.
+  """
+  id: ID!
+
+  """
+  Name of the advertisement.
+  """
+  name: String
+
+  """
+  Date time at which the advertised event starts.
+  """
+  startAt: DateTime
+
+  """
+  Type of the advertisement.
+  """
+  type: AdvertisementType
+}
+
+"""
+"""
+input MutationUpdateAgendaFolderInput {
+  """
+  Global identifier of the agenda folder.
+  """
   id: ID!
 
   """
   Name of the agenda folder.
   """
+
+  """
+  Name of the agenda folder.
+  """
   name: String
+
+  """
+  Global identifier of the agenda folder the agenda folder is contained within.
+  """
+  parentFolderId: ID
+}
+
+"""
+"""
+input MutationUpdateAgendaItemInput {
+  """
+  Custom information about the agenda item.
+  """
+  description: String
+
+  """
+  Duration of the agenda item.
+  """
+  duration: String
+
+  """
+  Global identifier of the associated agenda folder.
+  """
+  folderId: ID
+
+  """
+  Global identifier of the agenda item.
+  """
 
   """
   Global identifier of the agenda folder the agenda folder is contained within.
@@ -4003,7 +5486,29 @@ input MutationUpdateAgendaItemInput {
   """
   Name of the agenda item.
   """
+
+  """
+  Key of the agenda item if it's of a "song" type. More information at [this](https://en.wikipedia.org/wiki/Key_(music)) link.
+  """
+  key: String
+
+  """
+  Name of the agenda item.
+  """
   name: String
+}
+
+"""
+"""
+input MutationUpdateChatInput {
+  """
+  Avatar of the chat.
+  """
+  avatar: Upload
+
+  """
+  Custom information about the chat.
+  """
 }
 
 """
@@ -4073,6 +5578,301 @@ input MutationUpdateCommentInput {
 
   """
   Global identifier of the comment.
+
+  """
+  Global identifier of the chat.
+  """
+  id: ID!
+
+  """
+  Name of the chat.
+  """
+  name: String
+}
+
+"""
+"""
+input MutationUpdateChatMembershipInput {
+  """
+  Global identifier of the associated chat.
+  """
+  chatId: ID!
+
+  """
+  Global identifier of the associated user.
+  """
+  memberId: ID!
+
+  """
+  Role assigned to the user within the chat.
+  """
+  role: ChatMembershipRole!
+}
+
+"""
+"""
+input MutationUpdateChatMessageInput {
+  """
+  Body of the chat message.
+  """
+  body: String!
+
+  """
+  Global identifier of the chat message.
+  """
+  id: ID!
+}
+
+"""
+"""
+input MutationUpdateCommentInput {
+  """
+  Body of the comment.
+  """
+  body: String
+
+  """
+  Global identifier of the comment.
+  """
+  id: ID!
+}
+
+"""
+"""
+input MutationUpdateCommentVoteInput {
+  """
+  Global identifier of the comment that is voted.
+  """
+  commentId: ID!
+
+  """
+  Type of the vote.
+  """
+  type: CommentVoteType!
+}
+
+"""
+"""
+input MutationUpdateCommunityInput {
+  """
+  URL to the facebook account of the community.
+  """
+  facebookURL: String
+
+  """
+  URL to the gitGub account of the community.
+  """
+  githubURL: String
+
+  """
+  Duration in seconds it should take for inactive clients to get timed out of their authenticated session within client-side talawa applications.
+  """
+  inactivityTimeoutDuration: Int
+
+  """
+  URL to the instagram account of the community.
+  """
+  instagramURL: String
+
+  """
+  URL to the linkedin account of the community.
+  """
+  linkedinURL: String
+
+  """
+  Mime type of the logo of the community.
+  """
+  logo: Upload
+
+  """
+  Name of the community.
+  """
+  name: String
+
+  """
+  URL to the reddit account of the community.
+  """
+  redditURL: String
+
+  """
+  URL to the slack account of the community.
+  """
+  slackURL: String
+
+  """
+  URL to the website of the community.
+  """
+  websiteURL: String
+
+  """
+  URL to the x account of the community.
+  """
+  xURL: String
+
+  """
+  URL to the youtube account of the community.
+  """
+  youtubeURL: String
+}
+
+"""
+"""
+input MutationUpdateCurrentUserInput {
+  """
+  Address line 1 of the user's address.
+  """
+  addressLine1: String
+
+  """
+  Address line 2 of the user's address.
+  """
+  addressLine2: String
+
+  """
+  Avatar of the user.
+  """
+  avatar: Upload
+
+  """
+  Date of birth of the user.
+  """
+  birthDate: Date
+
+  """
+  Name of the city where the user resides in.
+  """
+  city: String
+
+  """
+  Country code of the country the user is a citizen of.
+  """
+  countryCode: Iso3166Alpha2CountryCode
+
+  """
+  Custom information about the user.
+  """
+  description: String
+
+  """
+  Primary education grade of the user.
+  """
+  educationGrade: UserEducationGrade
+
+  """
+  Email address of the user.
+  """
+  emailAddress: EmailAddress
+
+  """
+  Employment status of the user.
+  """
+  employmentStatus: UserEmploymentStatus
+
+  """
+  The phone number to use to communicate with the user at their home.
+  """
+  homePhoneNumber: PhoneNumber
+
+  """
+  Marital status of the user.
+  """
+  maritalStatus: UserMaritalStatus
+
+  """
+  The phone number to use to communicate with the user on their mobile phone.
+  """
+  mobilePhoneNumber: PhoneNumber
+
+  """
+  Name of the user.
+  """
+  name: String
+
+  """
+  The sex assigned to the user at their birth.
+  """
+  natalSex: UserNatalSex
+
+  """
+  Language code of the user's preferred natural language.
+  """
+  naturalLanguageCode: Iso639Set1LanguageCode
+
+  """
+  Password of the user to sign in to the application.
+  """
+  password: String
+
+  """
+  Postal code of the user.
+  """
+  postalCode: String
+
+  """
+  Name of the state the user resides in.
+  """
+  state: String
+
+  """
+  The phone number to use to communicate with the user while they're at work.
+  """
+  workPhoneNumber: PhoneNumber
+}
+
+"""
+"""
+input MutationUpdateEventInput {
+  """
+  Indicates if the event spans the entire day.
+  """
+  allDay: Boolean
+
+  """
+  Custom information about the event.
+  """
+  description: String
+
+  """
+  Date time at the time the event ends at.
+  """
+  endAt: DateTime
+
+  """
+  Global identifier of the event.
+  """
+  id: ID!
+
+  """
+  Indicates if the event is publicly visible.
+  """
+  isPublic: Boolean
+
+  """
+  Indicates if users can register for this event.
+  """
+  isRegisterable: Boolean
+
+  """
+  Physical or virtual location of the event.
+  """
+  location: String
+
+  """
+  Name of the event.
+  """
+  name: String
+
+  """
+  Date time at the time the event starts at.
+  """
+  startAt: DateTime
+}
+
+"""
+"""
+input MutationUpdateEventVolunteerGroupInput {
+  """
+  Global identifier of the group.
   """
   id: ID!
 }
@@ -4386,7 +6186,82 @@ input MutationUpdateFundInput {
   """
   Global identifier of the associated organization.
   """
+
+  """
+  Global identifier of the user that is assigned leader of the group.
+  """
+  leaderId: ID
+
+  """
+  Max volunteers count
+  """
+  maxVolunteerCount: Int!
+
+  """
+  Name of the Group.
+  """
+  name: String
+}
+
+"""
+"""
+input MutationUpdateFundCampaignInput {
+  """
+  Date time at the time the fund campaign ends at.
+  """
+  endAt: DateTime
+
+  """
+  Minimum amount of money that is set as the goal for the fund campaign.
+  """
+  goalAmount: Int
+
+  """
+  Global identifier of the associated fund campaign.
+  """
   id: ID!
+
+  """
+  Name of the fundCampaign.
+  """
+  name: String
+
+  """
+  Date time at the time the fund campaign starts at.
+  """
+  startAt: DateTime
+}
+
+"""
+"""
+input MutationUpdateFundCampaignPledgeInput {
+  """
+  The amount of pledged money.
+  """
+  amount: Int
+
+  """
+  Global identifier of the associated fund campaign pledge.
+  """
+  id: ID!
+
+  """
+  Custom information about the fund campaign pledge.
+  """
+  note: String
+}
+
+"""
+"""
+input MutationUpdateFundInput {
+  """
+  Global identifier of the associated organization.
+  """
+  id: ID!
+
+  """
+  Boolean to tell if the fund is tax deductible.
+  """
 
   """
   Boolean to tell if the fund is tax deductible.
@@ -4396,7 +6271,103 @@ input MutationUpdateFundInput {
   """
   Name of the fund.
   """
+
+  """
+  Name of the fund.
+  """
   name: String
+}
+
+"""
+"""
+input MutationUpdateOrganizationInput {
+  """
+  Address line 1 of the organization's address.
+  """
+  addressLine1: String
+
+  """
+  Address line 2 of the organization's address.
+  """
+  addressLine2: String
+
+  """
+  Avatar of the organization.
+  """
+  avatar: Upload
+
+  """
+  Name of the city where the organization resides in.
+  """
+  city: String
+
+  """
+  Country code of the country the organization is a citizen of.
+  """
+  countryCode: Iso3166Alpha2CountryCode
+
+  """
+  Custom information about the organization.
+  """
+  description: String
+
+  """
+  Global identifier of the organization.
+  """
+  id: ID!
+
+  """
+  Name of the organization.
+  """
+  name: String
+
+  """
+  Postal code of the organization.
+  """
+  postalCode: String
+
+  """
+  Name of the state the organization resides in.
+  """
+  state: String
+}
+
+"""
+"""
+input MutationUpdateOrganizationMembershipInput {
+  """
+  Global identifier of the associated user.
+  """
+  memberId: ID!
+
+  """
+  Global identifier of the associated organization.
+  """
+  organizationId: ID!
+
+  """
+  Role assigned to the user within the organization.
+  """
+  role: OrganizationMembershipRole
+}
+
+"""
+Input for updating a post.
+"""
+input MutationUpdatePostInput {
+  """
+  Metadata for files already uploaded via presigned URL
+  """
+  attachments: [FileMetadataInput!]
+
+  """
+  Caption about the post.
+  """
+  caption: String
+
+  """
+  Global identifier of the post.
+  """
 }
 
 """
@@ -4509,6 +6480,25 @@ input MutationUpdatePostVoteInput {
   Type of the vote.
   """
   type: PostVoteType!
+
+  """
+  Boolean to tell if the post is pinned
+  """
+  isPinned: Boolean
+}
+
+"""
+"""
+input MutationUpdatePostVoteInput {
+  """
+  Global identifier of the voted post.
+  """
+  postId: ID!
+
+  """
+  Type of the vote.
+  """
+  type: PostVoteType!
 }
 
 """
@@ -4517,7 +6507,206 @@ input MutationUpdateTagFolderInput {
   """
   Global identifier of the tag folder.
   """
+"""
+"""
+input MutationUpdateTagFolderInput {
+  """
+  Global identifier of the tag folder.
+  """
   id: ID!
+
+  """
+  Name of the tag folder.
+  """
+  name: String
+
+  """
+  Global identifier of associated parent tag folder.
+  """
+  parentFolderId: ID
+}
+
+"""
+"""
+input MutationUpdateTagInput {
+  """
+  Global identifier of associated tag folder.
+  """
+  folderId: ID
+
+  """
+  Global identifier of the tag.
+  """
+  id: ID!
+
+  """
+  Name of the tag.
+  """
+  name: String
+}
+
+"""
+"""
+input MutationUpdateUserInput {
+  """
+  Address line 1 of the user's address.
+  """
+  addressLine1: String
+
+  """
+  Address line 2 of the user's address.
+  """
+  addressLine2: String
+
+  """
+  Avatar of the user.
+  """
+  avatar: Upload
+
+  """
+  Date of birth of the user.
+  """
+  birthDate: Date
+
+  """
+  Name of the city where the user resides in.
+  """
+  city: String
+
+  """
+  Country code of the country the user is a citizen of.
+  """
+  countryCode: Iso3166Alpha2CountryCode
+
+  """
+  Custom information about the user.
+  """
+  description: String
+
+  """
+  Primary education grade of the user.
+  """
+  educationGrade: UserEducationGrade
+
+  """
+  Email address of the user.
+  """
+  emailAddress: EmailAddress
+
+  """
+  Employment status of the user.
+  """
+  employmentStatus: UserEmploymentStatus
+
+  """
+  The phone number to use to communicate with the user at their home.
+  """
+  homePhoneNumber: PhoneNumber
+
+  """
+  Global identifier of the user.
+  """
+  id: ID!
+
+  """
+  Boolean to tell whether the user has verified their email address.
+  """
+  isEmailAddressVerified: Boolean
+
+  """
+  Marital status of the user.
+  """
+  maritalStatus: UserMaritalStatus
+
+  """
+  The phone number to use to communicate with the user on their mobile phone.
+  """
+  mobilePhoneNumber: PhoneNumber
+
+  """
+  Name of the user.
+  """
+  name: String
+
+  """
+  The sex assigned to the user at their birth.
+  """
+  natalSex: UserNatalSex
+
+  """
+  Language code of the user's preferred natural language.
+  """
+  naturalLanguageCode: Iso639Set1LanguageCode
+
+  """
+  Password of the user to sign in to the application.
+  """
+  password: String
+
+  """
+  Postal code of the user.
+  """
+  postalCode: String
+
+  """
+  Role assigned to the user in the application.
+  """
+  role: UserRole
+
+  """
+  Name of the state the user resides in.
+  """
+  state: String
+
+  """
+  The phone number to use to communicate with the user while they're at work.
+  """
+  workPhoneNumber: PhoneNumber
+}
+
+"""
+"""
+input MutationUpdateVenueInput {
+  """
+  Custom information about the venue.
+  """
+  description: String
+
+  """
+  Global identifier of the venue.
+  """
+  id: ID!
+
+  """
+  Name of the venue.
+  """
+  name: String
+}
+
+"""
+"""
+input MutationUpdateVolunteerGroupAssignmentsInput {
+  """
+  Global identifier of the user.
+  """
+  assigneeId: ID!
+
+  """
+  Global identifier of the group.
+  """
+  groupId: ID!
+
+  """
+  Invitation Status.
+  """
+  inviteStatus: UpdateInviteStatus!
+}
+
+type Organization {
+  """
+  GraphQL connection to traverse through the action item categories belonging to the organization.
+  """
+  actionItemCategories(
 
   """
   Name of the tag folder.
@@ -4790,7 +6979,97 @@ type Organization {
   """
   Date time at the time the organization was created.
   """
+  ): OrganizationActionItemCategoriesConnection
+
+  """
+  Address line 1 of the organization's address.
+  """
+  addressLine1: String
+
+  """
+  Address line 2 of the organization's address.
+  """
+  addressLine2: String
+
+  """
+  Total number of admins in the organization.
+  """
+  adminsCount: Int
+
+  """
+  GraphQL connection to traverse through the advertisements belonging to the organization.
+  """
+  advertisements(
+    after: String
+    before: String
+    first: Int
+    last: Int
+
+    """
+    Filter criteria for advertisements
+    """
+    where: AdvertisementWhereInput
+  ): OrganizationAdvertisementsConnection
+
+  """
+  Mime type of the avatar of the organization.
+  """
+  avatarMimeType: String
+
+  """
+  URL to the avatar of the organization.
+  """
+  avatarURL: String
+
+  """
+  GraphQL connection to retrieve blocked users of the organization.
+  """
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnection
+
+  """
+  GraphQL connection to traverse through the chats belonging to the organization.
+  """
+  chats(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationChatsConnection
+
+  """
+  Name of the city where the organization exists in.
+  """
+  city: String
+
+  """
+  Country code of the country the organization exists in.
+  """
+  countryCode: Iso3166Alpha2CountryCode
+
+  """
+  Date time at the time the organization was created.
+  """
   createdAt: DateTime
+
+  """
+  User who created the organization.
+  """
+  creator: User
+
+  """
+  Custom information about the organization.
+  """
+  description: String
+
+  """
+  GraphQL connection to traverse through the events belonging to the organization. Includes both standalone events and materialized instances from recurring events. Uses pure materialized approach - no virtual instances.
+  """
+  events(
 
   """
   User who created the organization.
@@ -4813,7 +7092,17 @@ type Organization {
     End date for filtering events (defaults to 3 months from now)
     """
     endDate: DateTime
+
+    """
+    End date for filtering events (defaults to 3 months from now)
+    """
+    endDate: DateTime
     first: Int
+
+    """
+    Whether to include materialized instances from recurring events (default: true)
+    """
+    includeRecurring: Boolean
 
     """
     Whether to include materialized instances from recurring events (default: true)
@@ -4840,7 +7129,42 @@ type Organization {
   """
   Global identifier of the organization.
   """
+
+    """
+    Start date for filtering events (defaults to today)
+    """
+    startDate: DateTime
+  ): OrganizationEventsConnection
+
+  """
+  GraphQL connection to traverse through the funds belonging to the organization.
+  """
+  funds(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationFundsConnection
+
+  """
+  Global identifier of the organization.
+  """
   id: ID!
+
+  """
+  Indicates whether the current user is a member of this organization.
+  """
+  isMember: Boolean
+
+  """
+  Flag to indicate if user registration is required to join the organization.
+  """
+  isUserRegistrationRequired: Boolean
+
+  """
+  GraphQL connection to traverse through the users that are members of the organization.
+  """
+  members(
 
   """
   Indicates whether the current user is a member of this organization.
@@ -4901,10 +7225,67 @@ type Organization {
   GraphQL connection to traverse through the pinned posts belonging to the organization.
   """
   pinnedPosts(
+
+    """
+    Filter criteria for organization members
+    """
+    where: MembersWhereInput
+  ): OrganizationMembersConnection
+
+  """
+  Total number of members in the organization.
+  """
+  membersCount: Int
+
+  """
+  Membership requests for this organization
+  """
+  membershipRequests(
+    """
+    Number of items to return
+    """
+    first: Int
+
+    """
+    Number of items to skip
+    """
+    skip: Int
+
+    """
+    Filter criteria for membership requests
+    """
+    where: MembershipRequestWhereInput
+  ): [MembershipRequest!]
+
+  """
+  Name of the organization.
+  """
+  name: String
+
+  """
+  GraphQL connection to traverse through the pinned posts belonging to the organization.
+  """
+  pinnedPosts(
     after: String
     before: String
     first: Int
     last: Int
+  ): OrganizationPinnedPostsConnection
+
+  """
+  Total number of pinned posts belonging to the organization.
+  """
+  pinnedPostsCount: Int
+
+  """
+  Postal code of the organization.
+  """
+  postalCode: String
+
+  """
+  GraphQL connection to traverse through the posts belonging to the organization.
+  """
+  posts(
   ): OrganizationPinnedPostsConnection
 
   """
@@ -4983,15 +7364,82 @@ type Organization {
 type OrganizationActionItemCategoriesConnection {
   edges: [OrganizationActionItemCategoriesConnectionEdge]
   pageInfo: PageInfo!
+  ): OrganizationPostsConnection
+
+  """
+  Total number of posts belonging to the organization.
+  """
+  postsCount: Int
+
+  """
+  Name of the state the organization exists in.
+  """
+  state: String
+
+  """
+  GraphQL connection to traverse through the tag folders belonging to the organization.
+  """
+  tagFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagFoldersConnection
+
+  """
+  GraphQL connection to traverse through the tags belonging to the organization.
+  """
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationTagsConnection
+
+  """
+  Date time at the time the organization was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the organization.
+  """
+  updater: User
+
+  """
+  GraphQL connection to traverse through the venues belonging to the organization.
+  """
+  venues(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationVenuesConnection
+}
+
+"""
+"""
+type OrganizationActionItemCategoriesConnection {
+  edges: [OrganizationActionItemCategoriesConnectionEdge]
+  pageInfo: PageInfo!
 }
 
 """
 """
 type OrganizationActionItemCategoriesConnectionEdge {
+"""
+"""
+type OrganizationActionItemCategoriesConnectionEdge {
   cursor: String!
+  node: ActionItemCategory
   node: ActionItemCategory
 }
 
+"""
+"""
+type OrganizationAdvertisementsConnection {
+  edges: [OrganizationAdvertisementsConnectionEdge]
+  pageInfo: PageInfo!
 """
 """
 type OrganizationAdvertisementsConnection {
@@ -5002,27 +7450,27 @@ type OrganizationAdvertisementsConnection {
 """
 """
 type OrganizationAdvertisementsConnectionEdge {
+"""
+"""
+type OrganizationAdvertisementsConnectionEdge {
   cursor: String!
+  node: Advertisement
   node: Advertisement
 }
 
 type OrganizationBlockedUsersConnection {
   edges: [OrganizationBlockedUsersConnectionEdge]
   pageInfo: PageInfo!
+type OrganizationBlockedUsersConnection {
+  edges: [OrganizationBlockedUsersConnectionEdge]
+  pageInfo: PageInfo!
 }
 
 type OrganizationBlockedUsersConnectionEdge {
+type OrganizationBlockedUsersConnectionEdge {
   cursor: String!
   node: User
-}
-
-type OrganizationCustomField {
-  id: ID!
-  name: String!
-  type: String!
-  organization: Organization!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  node: User
 }
 
 """
@@ -5035,7 +7483,18 @@ type OrganizationChatsConnection {
 """
 """
 type OrganizationChatsConnectionEdge {
+"""
+"""
+type OrganizationChatsConnectionEdge {
   cursor: String!
+  node: Chat
+}
+
+"""
+"""
+type OrganizationEventsConnection {
+  edges: [OrganizationEventsConnectionEdge]
+  pageInfo: PageInfo!
   node: Chat
 }
 
@@ -5049,10 +7508,19 @@ type OrganizationEventsConnection {
 """
 """
 type OrganizationEventsConnectionEdge {
+"""
+"""
+type OrganizationEventsConnectionEdge {
   cursor: String!
+  node: Event
   node: Event
 }
 
+"""
+"""
+type OrganizationFundsConnection {
+  edges: [OrganizationFundsConnectionEdge]
+  pageInfo: PageInfo!
 """
 """
 type OrganizationFundsConnection {
@@ -5063,10 +7531,19 @@ type OrganizationFundsConnection {
 """
 """
 type OrganizationFundsConnectionEdge {
+"""
+"""
+type OrganizationFundsConnectionEdge {
   cursor: String!
+  node: Fund
   node: Fund
 }
 
+"""
+"""
+type OrganizationMembersConnection {
+  edges: [OrganizationMembersConnectionEdge]
+  pageInfo: PageInfo!
 """
 """
 type OrganizationMembersConnection {
@@ -5077,7 +7554,51 @@ type OrganizationMembersConnection {
 """
 """
 type OrganizationMembersConnectionEdge {
+"""
+"""
+type OrganizationMembersConnectionEdge {
   cursor: String!
+  node: User
+}
+
+"""
+Represents a user's membership in an organization.
+"""
+type OrganizationMembershipObject {
+  """
+  User ID who created the membership.
+  """
+  creatorId: String
+
+  """
+  ID of the member.
+  """
+  memberId: String
+
+  """
+  ID of the organization.
+  """
+  organizationId: String
+
+  """
+  Role of the member in the organization.
+  """
+  role: String
+}
+
+"""
+Possible variants of the role assigned to a user within an organization.
+"""
+enum OrganizationMembershipRole {
+  administrator
+  regular
+}
+
+"""
+"""
+type OrganizationPinnedPostsConnection {
+  edges: [OrganizationPinnedPostsConnectionEdge]
+  pageInfo: PageInfo!
   node: User
 }
 
@@ -5124,10 +7645,19 @@ type OrganizationPinnedPostsConnection {
 """
 """
 type OrganizationPinnedPostsConnectionEdge {
+"""
+"""
+type OrganizationPinnedPostsConnectionEdge {
   cursor: String!
+  node: Post
   node: Post
 }
 
+"""
+"""
+type OrganizationPostsConnection {
+  edges: [OrganizationPostsConnectionEdge]
+  pageInfo: PageInfo!
 """
 """
 type OrganizationPostsConnection {
@@ -5138,7 +7668,32 @@ type OrganizationPostsConnection {
 """
 """
 type OrganizationPostsConnectionEdge {
+"""
+"""
+type OrganizationPostsConnectionEdge {
   cursor: String!
+  node: Post
+}
+
+"""
+"""
+type OrganizationTagFoldersConnection {
+  edges: [OrganizationTagFoldersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type OrganizationTagFoldersConnectionEdge {
+  cursor: String!
+  node: TagFolder
+}
+
+"""
+"""
+type OrganizationTagsConnection {
+  edges: [OrganizationTagsConnectionEdge]
+  pageInfo: PageInfo!
   node: Post
 }
 
@@ -5166,7 +7721,18 @@ type OrganizationTagsConnection {
 """
 """
 type OrganizationTagsConnectionEdge {
+"""
+"""
+type OrganizationTagsConnectionEdge {
   cursor: String!
+  node: Tag
+}
+
+"""
+"""
+type OrganizationVenuesConnection {
+  edges: [OrganizationVenuesConnectionEdge]
+  pageInfo: PageInfo!
   node: Tag
 }
 
@@ -5180,10 +7746,43 @@ type OrganizationVenuesConnection {
 """
 """
 type OrganizationVenuesConnectionEdge {
+"""
+"""
+type OrganizationVenuesConnectionEdge {
   cursor: String!
+  node: Venue
   node: Venue
 }
 
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+"""
+A field whose value conforms to the standard E.164 format as specified in: https://en.wikipedia.org/wiki/E.164. Basically this is +17895551234.
+"""
+scalar PhoneNumber
+
+"""
+Represents a plugin in the system with its installation and activation status
+"""
+type Plugin {
+  """
+  Whether the plugin has an existing backup
+  """
+  backup: Boolean
+
+  """
+  Timestamp when the plugin record was created
+  """
+  createdAt: DateTime
+
+  """
+  Unique identifier for the plugin record
+  """
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -5234,8 +7833,62 @@ type Plugin {
   Timestamp when the plugin record was last updated
   """
   updatedAt: DateTime
+
+  """
+  Whether the plugin is currently activated
+  """
+  isActivated: Boolean
+
+  """
+  Whether the plugin is installed in the system
+  """
+  isInstalled: Boolean
+
+  """
+  The unique identifier/name of the plugin
+  """
+  pluginId: String
+
+  """
+  Timestamp when the plugin record was last updated
+  """
+  updatedAt: DateTime
 }
 
+type Post {
+  """
+  Array of attachments.
+  """
+  attachments: [PostAttachment!]
+
+  """
+  Caption for the post.
+  """
+  caption: String
+
+  """
+  GraphQL connection to traverse through the comments created under the post.
+  """
+  comments(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostCommentsConnection
+
+  """
+  Total number of comments created under the post.
+  """
+  commentsCount: Int
+
+  """
+  Date time at the time the post was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the post.
+  """
 type Post {
   """
   Array of attachments.
@@ -5326,11 +7979,77 @@ type Post {
   User who last updated the post.
   """
   updater: User
+
+  """
+  GraphQL connection to traverse through the users that down voted the post.
+  """
+  downVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostDownVotersConnection
+
+  """
+  Total number of down votes on the post.
+  """
+  downVotesCount: Int
+
+  """
+  Global identifier of the post.
+  """
+  id: ID!
+
+  """
+  Organization which the post belongs to.
+  """
+  organization: Organization
+
+  """
+  Date time at the time the post was pinned.
+  """
+  pinnedAt: DateTime
+
+  """
+  GraphQL connection to traverse through the user that up voted the post.
+  """
+  upVoters(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): PostUpVotersConnection
+
+  """
+  Total number of up votes on the post.
+  """
+  upVotesCount: Int
+
+  """
+  Date time at the time the post was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the post.
+  """
+  updater: User
 }
 
 """
 Attachment of the post.
+Attachment of the post.
 """
+type PostAttachment {
+  """
+  File hash for deduplication purposes.
+  """
+  fileHash: String
+
+  """
+  Global identifier of the attachment.
+  """
+  id: ID!
 type PostAttachment {
   """
   File hash for deduplication purposes.
@@ -5344,7 +8063,37 @@ type PostAttachment {
 
   """
   Mime type of the attachment.
+  Mime type of the attachment.
   """
+  mimeType: String
+
+  """
+  Identifier name of the attachment.
+  """
+  name: String
+
+  """
+  Object name used when creating presigned URLs.
+  """
+  objectName: String
+}
+
+"""
+MIME types supported for post attachments
+"""
+enum PostAttachmentMimeType {
+  IMAGE_AVIF
+  IMAGE_JPEG
+  IMAGE_PNG
+  IMAGE_WEBP
+  VIDEO_MP4
+  VIDEO_WEBM
+}
+
+"""
+"""
+type PostCommentsConnection {
+  edges: [PostCommentsConnectionEdge]
   mimeType: String
 
   """
@@ -5418,13 +8167,60 @@ Possible variants of the type of a vote on a post.
 enum PostVoteType {
   down_vote
   up_vote
+"""
+"""
+type PostCommentsConnectionEdge {
+  cursor: String!
+  node: Comment
+}
+
+"""
+"""
+type PostDownVotersConnection {
+  edges: [PostDownVotersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type PostDownVotersConnectionEdge {
+  cursor: String!
+  node: User
+}
+
+"""
+"""
+type PostUpVotersConnection {
+  edges: [PostUpVotersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type PostUpVotersConnectionEdge {
+  cursor: String!
+  node: User
+}
+
+"""
+Possible variants of the type of a vote on a post.
+"""
+enum PostVoteType {
+  down_vote
+  up_vote
 }
 
 type Query {
   """
   Query field to fetch all action item categories linked to a specific organization.
   """
+  """
+  Query field to fetch all action item categories linked to a specific organization.
+  """
   actionCategoriesByOrganization(
+    """
+    Input parameters to fetch action item categories by organizationId.
+    """
     """
     Input parameters to fetch action item categories by organizationId.
     """
@@ -5439,12 +8235,54 @@ type Query {
   """
   Query field to fetch all action items linked to a specific organization.
   """
+
+  """
+  Query field to fetch a single action item category by ID.
+  """
+  actionItemCategory(input: QueryActionItemCategoryInput!): ActionItemCategory
+
+  """
+  Query field to fetch all action items linked to a specific organization.
+  """
   actionItemsByOrganization(
+    """
+    Input parameters to fetch action items by organizationId.
+    """
     """
     Input parameters to fetch action items by organizationId.
     """
     input: QueryActionItemsByOrganizationInput!
   ): [ActionItem!]
+
+  """
+  Query field to fetch all action items assigned to a specific user.
+  """
+  actionItemsByUser(
+    """
+    Input parameters to fetch action items by userId.
+    """
+    input: QueryActionItemsByUserInput!
+  ): [ActionItem!]
+
+  """
+  Query field to read an advertisement.
+  """
+  advertisement(input: QueryAdvertisementInput!): Advertisement
+
+  """
+  Query field to read an agenda folder.
+  """
+  agendaFolder(input: QueryAgendaFolderInput!): AgendaFolder
+
+  """
+  Query field to read an agenda item.
+  """
+  agendaItem(input: QueryAgendaItemInput!): AgendaItem
+
+  """
+  Query field to read all Users.
+  """
+  allUsers(
 
   """
   Query field to fetch all action items assigned to a specific user.
@@ -5676,12 +8514,248 @@ type Query {
   Query field to read a venue.
   """
   venue(input: QueryVenueInput!): Venue
+    last: Int
+    where: QueryAllUsersWhereInput
+  ): QueryAllUsersConnection
+
+  """
+  Fetch multiple action item categories by their IDs.
+  """
+  categoriesByIds(input: CategoriesByIdsInput!): [ActionItemCategory!]
+
+  """
+  Query field to read a chat.
+  """
+  chat(input: QueryChatInput!): Chat
+
+  """
+  Query field to read a chat message.
+  """
+  chatMessage(input: QueryChatMessageInput!): ChatMessage
+
+  """
+  Query field to read all chats the current user is a member of.
+  """
+  chatsByUser: [Chat!]
+
+  """
+  Query field to read a comment.
+  """
+  comment(input: QueryCommentInput!): Comment
+
+  """
+  Query field to read the community.
+  """
+  community: Community
+
+  """
+  Query field to read a user.
+  """
+  currentUser: User
+
+  """
+  Retrieves a single event by its ID, supporting both standalone events and materialized recurring instances.
+  """
+  event(
+    """
+    Input containing the ID of the event to query.
+    """
+    input: QueryEventInput!
+  ): Event
+
+  """
+  Fetches multiple events by their IDs, supporting both standalone events and materialized recurring instances.
+  """
+  eventsByIds(input: QueryEventsByIdsInput!): [Event!]
+
+  """
+  Fetch all events that belong to a given organization.
+  """
+  eventsByOrganizationId(input: EventsByOrganizationIdInput!): [Event!]
+
+  """
+  Query field to read a fund.
+  """
+  fund(input: QueryFundInput!): Fund
+
+  """
+  Query field to read a fund campaign.
+  """
+  fundCampaign(input: QueryFundCampaignInput!): FundCampaign
+
+  """
+  Query field to read a fund campaign pledge.
+  """
+  fundCampaignPledge(input: QueryFundCampaignPledgeInput!): FundCampaignPledge
+
+  """
+  Query field to get all volunteer of a group.
+  """
+  getEventVolunteerGroupAssignments(
+    input: QueryVolunteerGroupAssignmentsInput!
+  ): [VolunteerGroupAssignments!]
+
+  """
+  Query field to get all volunteer groups for an event.
+  """
+  getEventVolunteerGroups(
+    input: QueryEventVolunteerGroupsInput!
+  ): [VolunteerGroups!]
+
+  """
+  Query field to get fund campaign pledge associated to a user.
+  """
+  getPledgesByUserId(
+    """
+    Maximum number of results to return.
+    """
+    limit: Int
+
+    """
+    Number of results to skip.
+    """
+    offset: Int
+
+    """
+    Sorting criteria, e.g., 'amount_ASC', 'amount_DESC', 'endDate_ASC', 'endDate_DESC'
+    """
+    orderBy: QueryPledgeOrderByInput
+
+    """
+    Global id of the user.
+    """
+    userId: QueryUserInput!
+
+    """
+    Filter criteria for pledges
+    """
+    where: QueryPledgeWhereInput
+  ): [FundCampaignPledge!]
+
+  """
+  Query field to fetch a single plugin by ID.
+  """
+  getPluginById(
+    """
+    Input parameters to fetch a plugin by ID.
+    """
+    input: QueryPluginInput!
+  ): Plugin
+
+  """
+  Query field to fetch multiple plugins with optional filtering.
+  """
+  getPlugins(
+    """
+    Input parameters to fetch plugins with optional filtering.
+    """
+    input: QueryPluginsInput
+  ): [Plugin!]
+
+  """
+  Query field to read a post vote.
+  """
+  hasUserVoted(input: QueryHasUserVotedInput!): HasUserVoted
+
+  """
+  Query field to read an organization.
+  """
+  organization(input: QueryOrganizationInput!): Organization
+
+  """
+  Query to fetch all organizations with optional filtering. If limit and offset are not provided, returns all organizations.
+  """
+  organizations(filter: String, limit: Int, offset: Int): [Organization!]
+
+  """
+  Query field to read a post.
+  """
+  post(input: QueryPostInput!): Post
+  postsByOrganization(input: GetPostsByOrgInput!): [Post!]
+
+  """
+  Query field to renew the authentication token of an authenticated client for signing in to talawa.
+  """
+  renewAuthenticationToken: String
+
+  """
+  Query field for a client to sign in to talawa.
+  """
+  signIn(input: QuerySignInInput!): AuthenticationPayload
+
+  """
+  Query field to read a tag.
+  """
+  tag(input: QueryTagInput!): Tag
+
+  """
+  Query field to read a tag folder.
+  """
+  tagFolder(input: QueryTagFolderInput!): TagFolder
+
+  """
+  Query field to read a user.
+  """
+  user(input: QueryUserInput!): User
+
+  """
+  Fetch multiple users by their IDs.
+  """
+  usersByIds(input: UsersByIdsInput!): [User!]
+
+  """
+  Fetch all users that belong to a given organization.
+  """
+  usersByOrganizationId(organizationId: ID!): [User!]
+
+  """
+  Query field to read a venue.
+  """
+  venue(input: QueryVenueInput!): Venue
 }
 
 input QueryActionCategoriesByOrganizationInput {
   organizationId: String!
+input QueryActionCategoriesByOrganizationInput {
+  organizationId: String!
 }
 
+input QueryActionItemCategoryInput {
+  id: String!
+}
+
+"""
+Input schema for querying ActionItems by organizationId.
+"""
+input QueryActionItemsByOrganizationInput {
+  """
+  ID of the organization to fetch associated action items.
+  """
+  organizationId: String!
+}
+
+"""
+Input schema for querying ActionItems assigned to a user.
+"""
+input QueryActionItemsByUserInput {
+  """
+  Optional ID of organization to filter action items by.
+  """
+  organizationId: String
+
+  """
+  ID of the user to fetch assigned action items for.
+  """
+  userId: String!
+}
+
+"""
+"""
+input QueryAdvertisementInput {
+  """
+  Global id of the advertisement.
+  """
+  id: String!
 input QueryActionItemCategoryInput {
   id: String!
 }
@@ -5743,8 +8817,36 @@ input QueryAgendaItemInput {
 type QueryAllUsersConnection {
   edges: [QueryAllUsersConnectionEdge]
   pageInfo: PageInfo!
+"""
+"""
+input QueryAgendaFolderInput {
+  """
+  Global id of the agenda folder.
+  """
+  id: String!
 }
 
+"""
+"""
+input QueryAgendaItemInput {
+  """
+  Global id of the agenda item.
+  """
+  id: String!
+}
+
+"""
+"""
+type QueryAllUsersConnection {
+  edges: [QueryAllUsersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type QueryAllUsersConnectionEdge {
+  cursor: String!
+  node: User
 """
 """
 type QueryAllUsersConnectionEdge {
@@ -5753,9 +8855,53 @@ type QueryAllUsersConnectionEdge {
 }
 
 input QueryAllUsersWhereInput {
+input QueryAllUsersWhereInput {
   name: String
 }
 
+"""
+"""
+input QueryChatInput {
+  """
+  Global id of the chat.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryChatMessageInput {
+  """
+  Global id of the chat message.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryCommentInput {
+  """
+  Global id of the comment.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryEventInput {
+  """
+  Global id of the event.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryEventVolunteerGroupsInput {
+  """
+  Global id of the event.
+  """
+  eventId: String!
 """
 """
 input QueryChatInput {
@@ -5874,8 +9020,83 @@ input QueryPledgeWhereInput {
   Filter pledges by the name of the campaign
   """
   name_contains: String
+input QueryEventsByIdsInput {
+  ids: [ID!]!
 }
 
+"""
+"""
+input QueryFundCampaignInput {
+  """
+  Global id of the fund campaign.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryFundCampaignPledgeInput {
+  """
+  Global id of the fund campaign pledge.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryFundInput {
+  """
+  Global id of the fund.
+  """
+  id: String!
+}
+
+"""
+Input type for checking if a user has voted on a specific post
+"""
+input QueryHasUserVotedInput {
+  """
+  ID of the post that is voted.
+  """
+  postId: String!
+}
+
+"""
+"""
+input QueryOrganizationInput {
+  """
+  Global id of the organization.
+  """
+  id: String!
+}
+
+"""
+Sorting criteria, e.g., 'amount_ASC', 'amount_DESC', 'endDate_ASC', 'endDate_DESC'
+"""
+enum QueryPledgeOrderByInput {
+  amount_ASC
+  amount_DESC
+  endDate_ASC
+  endDate_DESC
+}
+
+"""
+Filter criteria for Pledges
+"""
+input QueryPledgeWhereInput {
+  """
+  Filter pledges by the name of the creator
+  """
+  firstName_contains: String
+
+  """
+  Filter pledges by the name of the campaign
+  """
+  name_contains: String
+}
+
+input QueryPluginInput {
+  id: String!
 input QueryPluginInput {
   id: String!
 }
@@ -5884,8 +9105,19 @@ input QueryPluginsInput {
   isActivated: Boolean
   isInstalled: Boolean
   pluginId: String
+input QueryPluginsInput {
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String
 }
 
+"""
+"""
+input QueryPostInput {
+  """
+  Global id of the post.
+  """
+  id: String!
 """
 """
 input QueryPostInput {
@@ -5916,8 +9148,36 @@ input QueryTagFolderInput {
   Global id of the tag folder.
   """
   id: String!
+"""
+"""
+input QuerySignInInput {
+  """
+  Email address of the user.
+  """
+  emailAddress: EmailAddress!
+
+  """
+  Password of the user to sign in to talawa.
+  """
+  password: String!
 }
 
+"""
+"""
+input QueryTagFolderInput {
+  """
+  Global id of the tag folder.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryTagInput {
+  """
+  Global id of the tag.
+  """
+  id: String!
 """
 """
 input QueryTagInput {
@@ -6056,12 +9316,200 @@ type Tag {
   """
   Global identifier of the tag.
   """
+"""
+"""
+input QueryUserInput {
+  """
+  Global id of the user.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryVenueInput {
+  """
+  Global id of the venue.
+  """
+  id: String!
+}
+
+"""
+"""
+input QueryVolunteerGroupAssignmentsInput {
+  """
+  Global id of the group.
+  """
+  groupId: String!
+}
+
+"""
+Input type for defining recurrence rules for events. Must specify exactly one end condition: endDate, count, or never.
+"""
+input RecurrenceInput {
+  """
+  Days of the week (e.g., ['MO', 'WE', 'FR']).
+  """
+  byDay: [String!]
+
+  """
+  Months of the year (1-12).
+  """
+  byMonth: [Int!]
+
+  """
+  Days of the month (-31 to 31, excluding 0).
+  """
+  byMonthDay: [Int!]
+
+  """
+  Number of occurrences.
+  """
+  count: Int
+
+  """
+  Date when the recurrence ends.
+  """
+  endDate: DateTime
+
+  """
+  Frequency of recurrence (DAILY, WEEKLY, MONTHLY, YEARLY).
+  """
+  frequency: Frequency!
+
+  """
+  Interval between recurrences (e.g., 2 for every 2 weeks). Defaults to 1.
+  """
+  interval: Int
+
+  """
+  Indicates if the event recurs indefinitely (never ends).
+  """
+  never: Boolean
+}
+
+type RejectMembershipResponse {
+  """
+  Success or error message
+  """
+  message: String
+
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+}
+
+type Subscription {
+  """
+  Subscription field to subscribe to the event of creation of a message in a chat.
+  """
+  chatMessageCreate(input: SubscriptionChatMessageCreateInput!): ChatMessage
+}
+
+"""
+"""
+input SubscriptionChatMessageCreateInput {
+  """
+  Global identifier of the chat.
+  """
+  id: String!
+}
+
+type Tag {
+  """
+  GraphQL connection to traverse through the users that are assignees of the tag.
+  """
+  assignees(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagAssigneesConnection
+
+  """
+  Date time at the time the tag was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the tag.
+  """
+  creator: User
+
+  """
+  Tag folder the tag is contained within.
+  """
+  folder: TagFolder
+
+  """
+  Global identifier of the tag.
+  """
   id: ID!
 
   """
   Name of the tag.
   """
+
+  """
+  Name of the tag.
+  """
   name: String
+
+  """
+  Organization the tag belong to.
+  """
+  organization: Organization
+
+  """
+  Date time at the time the tag was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the tag.
+  """
+  updater: User
+}
+
+"""
+"""
+type TagAssigneesConnection {
+  edges: [TagAssigneesConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type TagAssigneesConnectionEdge {
+  cursor: String!
+  node: User
+}
+
+type TagFolder {
+  """
+  GraphQL connection to traverse through the tag folders contained within the tag folder.
+  """
+  childFolders(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderChildFoldersConnection
+
+  """
+  Date time at the time the tag folder was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the tag folder.
+  """
+  creator: User
+
+  """
+  Global identifier of the tag folder.
+  """
 
   """
   Organization the tag belong to.
@@ -6187,6 +9635,75 @@ enum UpdateInviteStatus {
   accepted
   declined
   no_response
+
+  """
+  Name of the tag folder.
+  """
+  name: String
+
+  """
+  Organization which the tag folder belongs to.
+  """
+  organization: Organization
+
+  """
+  Tag folder the tag folder is contained within.
+  """
+  parentFolder: TagFolder
+
+  """
+  GraphQL connection to traverse through the tags contained within the tag folder.
+  """
+  tags(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): TagFolderTagsConnection
+
+  """
+  Date time at the time the tag folder was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the tag folder.
+  """
+  updater: User
+}
+
+"""
+"""
+type TagFolderChildFoldersConnection {
+  edges: [TagFolderChildFoldersConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type TagFolderChildFoldersConnectionEdge {
+  cursor: String!
+  node: TagFolder
+}
+
+"""
+"""
+type TagFolderTagsConnection {
+  edges: [TagFolderTagsConnectionEdge]
+  pageInfo: PageInfo!
+}
+
+"""
+"""
+type TagFolderTagsConnectionEdge {
+  cursor: String!
+  node: Tag
+}
+
+enum UpdateInviteStatus {
+  accepted
+  declined
+  no_response
 }
 
 input UpdatePluginInput {
@@ -6195,8 +9712,17 @@ input UpdatePluginInput {
   isActivated: Boolean
   isInstalled: Boolean
   pluginId: String
+input UpdatePluginInput {
+  backup: Boolean
+  id: String!
+  isActivated: Boolean
+  isInstalled: Boolean
+  pluginId: String
 }
 
+"""
+The `Upload` scalar type represents a file upload.
+"""
 """
 The `Upload` scalar type represents a file upload.
 """
@@ -6230,7 +9756,39 @@ type User {
   """
   Address line 1 of the user's address.
   """
+"""
+Input for uploading a plugin zip file
+"""
+input UploadPluginZipInput {
+  """
+  Whether to activate the plugin after installation
+  """
+  activate: Boolean
+
+  """
+  The plugin zip file to upload
+  """
+  pluginZip: Upload!
+}
+
+"""
+UploadUrlResponse
+"""
+type UploadUrlResponse {
+  objectName: String
+  presignedUrl: String
+  requiresUpload: Boolean
+}
+
+type User {
+  """
+  Address line 1 of the user's address.
+  """
   addressLine1: String
+
+  """
+  Address line 2 of the user's address.
+  """
 
   """
   Address line 2 of the user's address.
@@ -6240,7 +9798,15 @@ type User {
   """
   Mime type of the avatar of the user.
   """
+
+  """
+  Mime type of the avatar of the user.
+  """
   avatarMimeType: String
+
+  """
+  URL to the avatar of the user.
+  """
 
   """
   URL to the avatar of the user.
@@ -6250,7 +9816,15 @@ type User {
   """
   Date of birth of the user.
   """
+
+  """
+  Date of birth of the user.
+  """
   birthDate: Date
+
+  """
+  Name of the city where the user resides in.
+  """
 
   """
   Name of the city where the user resides in.
@@ -6260,7 +9834,15 @@ type User {
   """
   Country code of the country the user is a citizen of.
   """
+
+  """
+  Country code of the country the user is a citizen of.
+  """
   countryCode: Iso3166Alpha2CountryCode
+
+  """
+  Date time at the time the user was created.
+  """
 
   """
   Date time at the time the user was created.
@@ -6280,7 +9862,25 @@ type User {
   """
   Custom information about the user.
   """
+
+  """
+  Organizations created by the user
+  """
+  createdOrganizations(filter: String): [Organization!]
+
+  """
+  User who created the user.
+  """
+  creator: User
+
+  """
+  Custom information about the user.
+  """
   description: String
+
+  """
+  Primary education grade of the user.
+  """
 
   """
   Primary education grade of the user.
@@ -6295,7 +9895,20 @@ type User {
   """
   Employment status of the user.
   """
+
+  """
+  Email address of the user.
+  """
+  emailAddress: EmailAddress
+
+  """
+  Employment status of the user.
+  """
   employmentStatus: UserEmploymentStatus
+
+  """
+  The phone number to use to communicate with the user at their home.
+  """
 
   """
   The phone number to use to communicate with the user at their home.
@@ -6305,7 +9918,15 @@ type User {
   """
   Global identifier of the user.
   """
+
+  """
+  Global identifier of the user.
+  """
   id: ID!
+
+  """
+  Boolean to tell whether the user has verified their email address.
+  """
 
   """
   Boolean to tell whether the user has verified their email address.
@@ -6315,7 +9936,15 @@ type User {
   """
   Marital status of the user.
   """
+
+  """
+  Marital status of the user.
+  """
   maritalStatus: UserMaritalStatus
+
+  """
+  The phone number to use to communicate with the user on their mobile phone.
+  """
 
   """
   The phone number to use to communicate with the user on their mobile phone.
@@ -6325,7 +9954,15 @@ type User {
   """
   Name of the user.
   """
+
+  """
+  Name of the user.
+  """
   name: String
+
+  """
+  The sex assigned to the user at their birth.
+  """
 
   """
   The sex assigned to the user at their birth.
@@ -6340,13 +9977,27 @@ type User {
   """
   GraphQL connection to traverse through the organizations the user is a member of.
   """
+
+  """
+  Language code of the user's preferred natural language.
+  """
+  naturalLanguageCode: Iso639Set1LanguageCode
+
+  """
+  GraphQL connection to traverse through the organizations the user is a member of.
+  """
   organizationsWhereMember(
     after: String
     before: String
     filter: String
+    filter: String
     first: Int
     last: Int
   ): UserOrganizationsWhereMemberConnection
+
+  """
+  Postal code of the user.
+  """
 
   """
   Postal code of the user.
@@ -6356,7 +10007,15 @@ type User {
   """
   Role assigned to the user in the application.
   """
+
+  """
+  Role assigned to the user in the application.
+  """
   role: UserRole
+
+  """
+  Name of the state the user resides in.
+  """
 
   """
   Name of the state the user resides in.
@@ -6366,7 +10025,15 @@ type User {
   """
   Date time at the time the user was last updated.
   """
+
+  """
+  Date time at the time the user was last updated.
+  """
   updatedAt: DateTime
+
+  """
+  User who last updated the user.
+  """
 
   """
   User who last updated the user.
@@ -6376,9 +10043,16 @@ type User {
   """
   The phone number to use to communicate with the user while they're at work.
   """
+
+  """
+  The phone number to use to communicate with the user while they're at work.
+  """
   workPhoneNumber: PhoneNumber
 }
 
+"""
+Possible variants of the education grade(if applicable) of a user.
+"""
 """
 Possible variants of the education grade(if applicable) of a user.
 """
@@ -6404,12 +10078,18 @@ enum UserEducationGrade {
 """
 Possible variants of the employment status(if applicable) of a user.
 """
+"""
+Possible variants of the employment status(if applicable) of a user.
+"""
 enum UserEmploymentStatus {
   full_time
   part_time
   unemployed
 }
 
+"""
+Possible variants of the martial status(if applicable) of a user.
+"""
 """
 Possible variants of the martial status(if applicable) of a user.
 """
@@ -6425,12 +10105,17 @@ enum UserMaritalStatus {
 """
 Possible variants of the sex assigned to a user at birth.
 """
+"""
+Possible variants of the sex assigned to a user at birth.
+"""
 enum UserNatalSex {
   female
   intersex
   male
 }
 
+"""
+"""
 """
 """
 type UserOrganizationsWhereMemberConnection {
@@ -6440,11 +10125,16 @@ type UserOrganizationsWhereMemberConnection {
 
 """
 """
+"""
+"""
 type UserOrganizationsWhereMemberConnectionEdge {
   cursor: String!
   node: Organization
 }
 
+"""
+Possible variants of the role assigned to a user.
+"""
 """
 Possible variants of the role assigned to a user.
 """
@@ -6457,13 +10147,93 @@ input UserWhereInput {
   """
   Filter by first name containing this string
   """
+input UserWhereInput {
+  """
+  Filter by first name containing this string
+  """
   name_contains: String
 }
 
 input UsersByIdsInput {
   ids: [ID!]!
+input UsersByIdsInput {
+  ids: [ID!]!
 }
 
+type Venue {
+  """
+  Array of attachments.
+  """
+  attachments: [VenueAttachment!]
+
+  """
+  Date time at the time the venue was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who created the venue.
+  """
+  creator: User
+
+  """
+  Custom information about the venue.
+  """
+  description: String
+
+  """
+  GraphQL connection to traverse through the events the venue has been booked for.
+  """
+  events(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): VenueEventsConnection
+
+  """
+  Global identifier of the venue.
+  """
+  id: ID!
+
+  """
+  Name of the venue.
+  """
+  name: String
+
+  """
+  Organization the venue belongs to.
+  """
+  organization: Organization
+
+  """
+  Date time at the time the venue was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who last updated the venue.
+  """
+  updater: User
+}
+
+type VenueAttachment {
+  """
+  Mime type of the attachment.
+  """
+  mimeType: String
+
+  """
+  URL to the attachment.
+  """
+  url: String
+}
+
+"""
+"""
+type VenueEventsConnection {
+  edges: [VenueEventsConnectionEdge]
+  pageInfo: PageInfo!
 type Venue {
   """
   Array of attachments.
@@ -6543,10 +10313,49 @@ type VenueEventsConnection {
 """
 """
 type VenueEventsConnectionEdge {
+"""
+"""
+type VenueEventsConnectionEdge {
   cursor: String!
+  node: Event
   node: Event
 }
 
+type VolunteerGroupAssignments {
+  """
+  Volunteer group assignee.
+  """
+  assignee: User
+
+  """
+  Date time at the time the Group Assignment was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who has created the Assignment.
+  """
+  creator: User
+
+  """
+  Volunteer group.
+  """
+  group: VolunteerGroups
+
+  """
+  Invitation status.
+  """
+  inviteStatus: String
+
+  """
+  Date time at the time the Group Assignment was last updated.
+  """
+  updatedAt: DateTime
+
+  """
+  User who has last updated the Assignment.
+  """
+  updator: User
 type VolunteerGroupAssignments {
   """
   Volunteer group assignee.
@@ -6618,6 +10427,40 @@ type VolunteerGroups {
   """
   Name of the Group.
   """
+type VolunteerGroups {
+  """
+  Date time at the time the Group was created.
+  """
+  createdAt: DateTime
+
+  """
+  User who has created the Group.
+  """
+  creator: User
+
+  """
+  Event for which Group was made.
+  """
+  event: Event
+
+  """
+  Global identifier of the group.
+  """
+  id: ID!
+
+  """
+  Leader assigned for the group.
+  """
+  leader: User
+
+  """
+  Maximum number of volunteers for this group.
+  """
+  maxVolunteerCount: Int
+
+  """
+  Name of the Group.
+  """
   name: String
 
   """
@@ -6630,5 +10473,3 @@ type VolunteerGroups {
   """
   updater: User
 }
-
-scalar URL
