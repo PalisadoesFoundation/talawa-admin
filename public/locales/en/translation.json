@@ -1085,8 +1085,11 @@
   "postCard": {
     "likes": "Likes",
     "comments": "Comments",
+    "addComment": "Add Comment",
     "viewPost": "View Post",
     "editPost": "Edit Post",
+    "viewComments": "View {{count}} comments",
+    "hideComments": "Hide comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again."

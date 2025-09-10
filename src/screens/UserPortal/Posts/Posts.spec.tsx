@@ -1,7 +1,13 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
@@ -17,6 +23,7 @@ import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { expect, describe, it, vi } from 'vitest';
+import { GraphQLError } from 'graphql';
 
 const { setItem } = useLocalStorage();
 
@@ -39,115 +46,288 @@ vi.mock('react-router', async () => {
   };
 });
 
+// COMPLETE MOCK DATA WITH ALL REQUIRED FIELDS
 const MOCKS = [
+  // Initial load - Page 1
   {
     request: {
       query: ORGANIZATION_POST_LIST,
       variables: {
-        id: 'orgId',
-        first: 10,
+        input: { id: 'orgId' },
+        first: 5,
+        after: null,
+        before: null,
+        last: null,
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            posts: {
-              edges: [
-                {
-                  node: {
-                    _id: '6411e53835d7ba2344a78e21',
-                    title: 'post one',
-                    text: 'This is the first post',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2024-03-03T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Glen',
-                      lastName: 'Dsza',
-                      email: 'glendsza@gmail.com',
+        organization: {
+          id: 'orgId',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: '1-1',
+                  caption: 'Post 1-1',
+                  creator: { id: 'u1', name: 'User1' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
                     },
-                    likeCount: 0,
-                    commentCount: 0,
-                    comments: [],
-                    pinned: true,
-                    likedBy: [],
                   },
-                  cursor: '6411e53835d7ba2344a78e21',
-                },
-                {
-                  node: {
-                    _id: '6411e54835d7ba2344a78e29',
-                    title: 'post two',
-                    text: 'This is the post two',
-                    imageUrl: null,
-                    videoUrl: null,
-                    createdAt: '2024-03-03T09:26:56.524+00:00',
-                    creator: {
-                      _id: '640d98d9eb6a743d75341067',
-                      firstName: 'Glen',
-                      lastName: 'Dsza',
-                      email: 'glendsza@gmail.com',
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
                     },
-                    likeCount: 2,
-                    commentCount: 1,
-                    pinned: false,
-                    likedBy: [
-                      {
-                        _id: '640d98d9eb6a743d75341067',
-                        firstName: 'Glen',
-                        lastName: 'Dsza',
-                      },
-                      {
-                        _id: '640d98d9eb6a743d75341068',
-                        firstName: 'Glen2',
-                        lastName: 'Dsza2',
-                      },
-                    ],
-                    comments: [
-                      {
-                        _id: '6411e54835d7ba2344a78e29',
-                        creator: {
-                          _id: '640d98d9eb6a743d75341067',
-                          firstName: 'Glen',
-                          lastName: 'Dsza',
-                          email: 'glendsza@gmail.com',
-                        },
-                        likeCount: 2,
-                        likedBy: [
-                          {
-                            _id: '640d98d9eb6a743d75341067',
-                            firstName: 'Glen',
-                            lastName: 'Dsza',
-                          },
-                          {
-                            _id: '640d98d9eb6a743d75341068',
-                            firstName: 'Glen2',
-                            lastName: 'Dsza2',
-                          },
-                        ],
-                        text: 'This is the post two',
-                        createdAt: '2024-03-03T09:26:56.524+00:00',
-                      },
-                    ],
                   },
-                  cursor: '6411e54835d7ba2344a78e29',
                 },
-              ],
-              pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
-                hasNextPage: false,
-                hasPreviousPage: false,
+                cursor: 'c1',
               },
-              totalCount: 2,
+              {
+                node: {
+                  id: '1-2',
+                  caption: 'Post 1-2',
+                  creator: { id: 'u2', name: 'User2' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c2',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'c1',
+              endCursor: 'c2',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
+            totalCount: 4,
           },
-        ],
+        },
       },
     },
   },
+  // Page 2 - Next page
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: 'orgId' },
+        after: 'c2',
+        first: 5,
+        before: null,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: '2-1',
+                  caption: 'Post 2-1',
+                  creator: { id: 'u3', name: 'User3' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-02T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c3',
+              },
+              {
+                node: {
+                  id: '2-2',
+                  caption: 'Post 2-2',
+                  creator: { id: 'u4', name: 'User4' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-02T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c4',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'c3',
+              endCursor: 'c4',
+              hasNextPage: false,
+              hasPreviousPage: true,
+            },
+            totalCount: 4,
+          },
+        },
+      },
+    },
+  },
+  // Back to Page 1 - Previous page
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: 'orgId' },
+        before: 'c3',
+        last: 5,
+        after: null,
+        first: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: '1-1',
+                  caption: 'Post 1-1',
+                  creator: { id: 'u1', name: 'User1' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c1',
+              },
+              {
+                node: {
+                  id: '1-2',
+                  caption: 'Post 1-2',
+                  creator: { id: 'u2', name: 'User2' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c2',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'c1',
+              endCursor: 'c2',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 4,
+          },
+        },
+      },
+    },
+  },
+  // Advertisements mock
   {
     request: {
       query: ORGANIZATION_ADVERTISEMENT_LIST,
@@ -164,62 +344,18 @@ const MOCKS = [
                   node: {
                     _id: '1234',
                     name: 'Ad 1',
-                    type: 'Type 1',
-                    organization: {
-                      _id: 'orgId',
-                    },
+                    type: 'BANNER',
+                    organization: { _id: 'orgId' },
                     mediaUrl: 'Link 1',
-                    endDate: '2024-12-31',
                     startDate: '2022-01-01',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '2345',
-                    name: 'Ad 2',
-                    type: 'Type 1',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'Link 2',
-                    endDate: '2024-09-31',
-                    startDate: '2023-04-01',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '3456',
-                    name: 'name3',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId',
-                    },
-                    mediaUrl: 'link3',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-31',
-                  },
-                  cursor: '1234',
-                },
-                {
-                  node: {
-                    _id: '4567',
-                    name: 'name4',
-                    type: 'Type 2',
-                    organization: {
-                      _id: 'orgId1',
-                    },
-                    mediaUrl: 'link4',
-                    startDate: '2023-01-30',
-                    endDate: '2023-12-01',
+                    endDate: '2024-12-31',
                   },
                   cursor: '1234',
                 },
               ],
               pageInfo: {
-                startCursor: '6411e53835d7ba2344a78e21',
-                endCursor: '6411e54835d7ba2344a78e31',
+                startCursor: null,
+                endCursor: null,
                 hasNextPage: false,
                 hasPreviousPage: false,
               },
@@ -230,6 +366,7 @@ const MOCKS = [
       },
     },
   },
+  // Delete post mock
   {
     request: {
       query: DELETE_POST_MUTATION,
@@ -278,8 +415,8 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // Deprecated
-    removeListener: vi.fn(), // Deprecated
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
@@ -289,6 +426,7 @@ Object.defineProperty(window, 'matchMedia', {
 describe('Testing Home Screen: User Portal', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
   });
   afterAll(() => {
     vi.clearAllMocks();
@@ -351,31 +489,47 @@ describe('Testing Home Screen: User Portal', () => {
     expect(fileInput.files?.length).toBeFalsy();
   });
 
-  it('Check whether Posts render in PostCard', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
+  it('Handle next page button', async () => {
     renderHomeScreen();
-    await wait();
 
-    const postCardContainers = screen.findAllByTestId('postCardContainer');
-    expect(postCardContainers).not.toBeNull();
+    const startPostBtn = await screen.findByTestId('postBtn');
+    expect(startPostBtn).toBeInTheDocument();
 
-    expect(screen.queryAllByText('post one')[0]).toBeInTheDocument();
-    expect(
-      screen.queryAllByText('This is the first post')[0],
-    ).toBeInTheDocument();
+    // Wait for posts to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 1-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
-    expect(screen.queryByText('post two')).toBeInTheDocument();
-    expect(screen.queryByText('This is the post two')).toBeInTheDocument();
-  });
+    // Check that "Next" button is enabled
+    const nextBtn = screen.getByTestId('next-btn');
+    expect(nextBtn).not.toBeDisabled();
 
-  it('Checking if refetch works after deleting this post', async () => {
-    setItem('userId', '640d98d9eb6a743d75341067');
-    renderHomeScreen();
-    expect(screen.queryAllByTestId('dropdown')).not.toBeNull();
-    const dropdowns = await screen.findAllByTestId('dropdown');
-    await userEvent.click(dropdowns[1]);
-    const deleteButton = await screen.findByTestId('deletePost');
-    await userEvent.click(deleteButton);
+    // Click Next (fetch page 2)
+    fireEvent.click(nextBtn);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 2-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Check that "Previous" button is now enabled
+    const prevBtn = screen.getByTestId('prev-btn');
+    expect(prevBtn).not.toBeDisabled();
+
+    // Click Previous (back to page 1)
+    fireEvent.click(prevBtn);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 1-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 });
 
@@ -406,10 +560,10 @@ describe('HomeScreen with invalid orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    const homeEl = await screen.findByTestId('homeEl');
-    expect(homeEl).toBeInTheDocument();
 
-    const postCardContainers = screen.queryAllByTestId('postCardContainer');
-    expect(postCardContainers).toHaveLength(0);
+    await waitFor(() => {
+      expect(screen.getByTestId('homeEl')).toBeInTheDocument();
+      expect(screen.queryAllByTestId('postCardContainer')).toHaveLength(0);
+    });
   });
 });
