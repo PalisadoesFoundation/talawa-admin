@@ -144,6 +144,8 @@ export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
   ) {
     deleteActionItemForInstance(input: $input) {
       id
+      postCompletionNotes
+      createdAt
     }
   }
 `;
