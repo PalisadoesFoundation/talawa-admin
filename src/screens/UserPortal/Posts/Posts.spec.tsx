@@ -23,6 +23,7 @@ import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { expect, describe, it, vi } from 'vitest';
+import { GraphQLError } from 'graphql';
 
 const { setItem } = useLocalStorage();
 
@@ -45,13 +46,18 @@ vi.mock('react-router', async () => {
   };
 });
 
+// COMPLETE MOCK DATA WITH ALL REQUIRED FIELDS
 const MOCKS = [
+  // Initial load - Page 1
   {
     request: {
       query: ORGANIZATION_POST_LIST,
       variables: {
         input: { id: 'orgId' },
-        first: 10,
+        first: 5,
+        after: null,
+        before: null,
+        last: null,
       },
     },
     result: {
@@ -62,11 +68,13 @@ const MOCKS = [
             edges: [
               {
                 node: {
-                  id: '6411e53835d7ba2344a78e21',
-                  caption: 'post one',
+                  id: '1-1',
+                  caption: 'Post 1-1',
+                  creator: { id: 'u1', name: 'User1' },
                   commentsCount: 0,
-                  pinnedAt: '2024-03-05T00:00:00.000Z',
+                  pinnedAt: null,
                   downVotesCount: 0,
+                  upVotesCount: 0,
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -76,12 +84,7 @@ const MOCKS = [
                       hasPreviousPage: false,
                     },
                   },
-                  upVotesCount: 0,
-                  creator: {
-                    id: '640d98d9eb6a743d75341067',
-                    name: 'Glen Dsza',
-                  },
-                  createdAt: '2024-03-03T09:26:56.524Z',
+                  createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {
                     edges: [],
                     pageInfo: {
@@ -92,36 +95,19 @@ const MOCKS = [
                     },
                   },
                 },
-                cursor: '6411e53835d7ba2344a78e21',
+                cursor: 'c1',
               },
               {
                 node: {
-                  id: '6411e54835d7ba2344a78e29',
-                  caption: 'post two',
-                  commentsCount: 1,
+                  id: '1-2',
+                  caption: 'Post 1-2',
+                  creator: { id: 'u2', name: 'User2' },
+                  commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
+                  upVotesCount: 0,
                   upVoters: {
-                    edges: [
-                      {
-                        node: {
-                          id: '640d98d9eb6a743d75341067',
-                          creator: {
-                            id: '640d98d9eb6a743d75341067',
-                            name: 'Glen Dsza',
-                          },
-                        },
-                      },
-                      {
-                        node: {
-                          id: '640d98d9eb6a743d75341068',
-                          creator: {
-                            id: '640d98d9eb6a743d75341068',
-                            name: 'Glen2 Dsza2',
-                          },
-                        },
-                      },
-                    ],
+                    edges: [],
                     pageInfo: {
                       startCursor: null,
                       endCursor: null,
@@ -129,27 +115,9 @@ const MOCKS = [
                       hasPreviousPage: false,
                     },
                   },
-                  upVotesCount: 2,
-                  creator: {
-                    id: '640d98d9eb6a743d75341067',
-                    name: 'Glen Dsza',
-                  },
-                  createdAt: '2024-03-03T09:26:56.524Z',
+                  createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {
-                    edges: [
-                      {
-                        node: {
-                          id: 'comment-6411e54835d7ba2344a78e29',
-                          body: 'This is the post two',
-                          creator: {
-                            id: '640d98d9eb6a743d75341067',
-                            name: 'Glen Dsza',
-                          },
-                          downVotesCount: 0,
-                          upVotesCount: 2,
-                        },
-                      },
-                    ],
+                    edges: [],
                     pageInfo: {
                       startCursor: null,
                       endCursor: null,
@@ -158,23 +126,208 @@ const MOCKS = [
                     },
                   },
                 },
-                cursor: '6411e54835d7ba2344a78e29',
+                cursor: 'c2',
               },
             ],
             pageInfo: {
-              startCursor: '6411e53835d7ba2344a78e21',
-              endCursor: '6411e54835d7ba2344a78e29',
-              hasNextPage: false,
+              startCursor: 'c1',
+              endCursor: 'c2',
+              hasNextPage: true,
               hasPreviousPage: false,
             },
-            totalCount: 2,
+            totalCount: 4,
           },
         },
       },
     },
   },
-  // Continue with your advertisements and DELETE_POST_MUTATION mocks as before,
-  // but ensure `type` of ads is one of 'BANNER' | 'MENU' | 'POPUP', e.g.:
+  // Page 2 - Next page
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: 'orgId' },
+        after: 'c2',
+        first: 5,
+        before: null,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: '2-1',
+                  caption: 'Post 2-1',
+                  creator: { id: 'u3', name: 'User3' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-02T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c3',
+              },
+              {
+                node: {
+                  id: '2-2',
+                  caption: 'Post 2-2',
+                  creator: { id: 'u4', name: 'User4' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-02T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c4',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'c3',
+              endCursor: 'c4',
+              hasNextPage: false,
+              hasPreviousPage: true,
+            },
+            totalCount: 4,
+          },
+        },
+      },
+    },
+  },
+  // Back to Page 1 - Previous page
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: 'orgId' },
+        before: 'c3',
+        last: 5,
+        after: null,
+        first: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: '1-1',
+                  caption: 'Post 1-1',
+                  creator: { id: 'u1', name: 'User1' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c1',
+              },
+              {
+                node: {
+                  id: '1-2',
+                  caption: 'Post 1-2',
+                  creator: { id: 'u2', name: 'User2' },
+                  commentsCount: 0,
+                  pinnedAt: null,
+                  downVotesCount: 0,
+                  upVotesCount: 0,
+                  upVoters: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  comments: {
+                    edges: [],
+                    pageInfo: {
+                      startCursor: null,
+                      endCursor: null,
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    },
+                  },
+                },
+                cursor: 'c2',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'c1',
+              endCursor: 'c2',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 4,
+          },
+        },
+      },
+    },
+  },
+  // Advertisements mock
   {
     request: {
       query: ORGANIZATION_ADVERTISEMENT_LIST,
@@ -199,7 +352,6 @@ const MOCKS = [
                   },
                   cursor: '1234',
                 },
-                // other ads...
               ],
               pageInfo: {
                 startCursor: null,
@@ -214,6 +366,7 @@ const MOCKS = [
       },
     },
   },
+  // Delete post mock
   {
     request: {
       query: DELETE_POST_MUTATION,
@@ -262,8 +415,8 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // Deprecated
-    removeListener: vi.fn(), // Deprecated
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
@@ -334,6 +487,49 @@ describe('Testing Home Screen: User Portal', () => {
     const fileInput = screen.getByTestId('postImageInput') as HTMLInputElement;
     fireEvent.change(fileInput, { target: { files: null } });
     expect(fileInput.files?.length).toBeFalsy();
+  });
+
+  it('Handle next page button', async () => {
+    renderHomeScreen();
+
+    const startPostBtn = await screen.findByTestId('postBtn');
+    expect(startPostBtn).toBeInTheDocument();
+
+    // Wait for posts to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 1-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Check that "Next" button is enabled
+    const nextBtn = screen.getByTestId('next-btn');
+    expect(nextBtn).not.toBeDisabled();
+
+    // Click Next (fetch page 2)
+    fireEvent.click(nextBtn);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 2-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Check that "Previous" button is now enabled
+    const prevBtn = screen.getByTestId('prev-btn');
+    expect(prevBtn).not.toBeDisabled();
+
+    // Click Previous (back to page 1)
+    fireEvent.click(prevBtn);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Post 1-1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 });
 

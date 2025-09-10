@@ -117,7 +117,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           setLikes((prev) => Math.max(prev - 1, 0));
           setIsLiked(false);
         } else {
-          toast.warn('Could not find an existing like to remove.');
+          toast.error('Could not find an existing like to remove.');
         }
       } else {
         // Like

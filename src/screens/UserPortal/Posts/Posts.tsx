@@ -94,7 +94,7 @@ const storiesResponsive = {
 };
 
 // Instagram-like posts settings
-const POSTS_PER_PAGE = 5;
+export const POSTS_PER_PAGE = 5;
 
 type Ad = {
   _id: string;
@@ -354,7 +354,13 @@ export default function Home(): JSX.Element {
             >
               {pinnedPosts.map((node) => {
                 const cardProps = getCardProps(node);
-                return <InstagramStory key={node.id} post={cardProps} />;
+                return (
+                  <InstagramStory
+                    key={node.id}
+                    post={cardProps}
+                    data-testid="pinned-post"
+                  />
+                );
               })}
             </Carousel>
           </div>
@@ -416,7 +422,9 @@ export default function Home(): JSX.Element {
                   <PostCard key={post.id} {...post} data-testid="post-card" />
                 ))
               ) : (
-                <p className={postStyles.noPosts}>{t('nothingToShowHere')}</p>
+                <p className={postStyles.noPosts} data-testid="no-post">
+                  {t('nothingToShowHere')}
+                </p>
               )}
             </>
           )}
@@ -428,6 +436,7 @@ export default function Home(): JSX.Element {
             variant="outlined"
             onClick={handlePreviousPage}
             disabled={!hasPreviousPage || currentPage === 1}
+            data-testid="prev-btn"
             className={postStyles.paginationButton}
           >
             {tCommon('Previous')}
@@ -439,6 +448,7 @@ export default function Home(): JSX.Element {
             variant="outlined"
             onClick={handleNextPage}
             disabled={!hasNextPage}
+            data-testid="next-btn"
             className={postStyles.paginationButton}
           >
             {tCommon('Next')}
