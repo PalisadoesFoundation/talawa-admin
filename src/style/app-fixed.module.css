@@ -7768,6 +7768,14 @@ form {
   border-radius: 100% !important;
 }
 
+.tableImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
 /* -- OrganizationActionItems.tsx -- */
 
 .infoButton {
