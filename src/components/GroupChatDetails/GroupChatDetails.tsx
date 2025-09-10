@@ -177,7 +177,16 @@ export default function groupChatDetails({
     if (file) {
       const base64 = await convertToBase64(file);
       setSelectedImage(base64);
-      await updateChat();
+      // Add variables to updateChat call
+      await updateChat({
+        variables: {
+          input: {
+            _id: chat._id,
+            image: base64,
+            name: chatName,
+          },
+        },
+      });
       await chatRefetch();
       setSelectedImage('');
     } else {
@@ -384,24 +393,20 @@ export default function groupChatDetails({
                         ) => (
                           <StyledTableRow
                             data-testid="user"
-                            key={userDetails.user._id}
+                            key={userDetails.id}
                           >
                             <StyledTableCell component="th" scope="row">
                               {index + 1}
                             </StyledTableCell>
                             <StyledTableCell align="center">
-                              {userDetails.user.firstName +
-                                ' ' +
-                                userDetails.user.lastName}
+                              {userDetails.name}
                               <br />
-                              {userDetails.user.email}
+                              {userDetails.emailAddress}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               <Button
                                 onClick={async () => {
-                                  await addUserToGroupChat(
-                                    userDetails.user._id,
-                                  );
+                                  await addUserToGroupChat(userDetails.id);
                                   toggleAddUserModal();
                                   chatRefetch({ id: chat._id });
                                 }}

@@ -68,14 +68,6 @@ Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFounda
 
 ***
 
-### likedBy
-
-> **likedBy**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
-
-Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
-
-***
-
 ### postedAt
 
 > **postedAt**: `string`
@@ -97,6 +89,14 @@ Defined in: [src/types/Post/interface.ts:9](https://github.com/PalisadoesFoundat
 > **title**: `string`
 
 Defined in: [src/types/Post/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L10)
+
+***
+
+### upVoters
+
+> **upVoters**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
+
+Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 
 ***
 

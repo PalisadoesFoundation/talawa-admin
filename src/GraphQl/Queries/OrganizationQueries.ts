@@ -28,10 +28,48 @@ export const ORGANIZATION_POST_LIST = gql`
           node {
             id
             caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVoters(first: 10) {
+              edges {
+                node {
+                  id
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
+            upVotesCount
             creator {
               id
+              name
             }
             createdAt
+            comments(first: 10) {
+              edges {
+                node {
+                  id
+                  body
+                  creator {
+                    id
+                    name
+                  }
+                  downVotesCount
+                  upVotesCount
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
           }
           cursor
         }
