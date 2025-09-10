@@ -117,7 +117,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     const createdAt = new Date(post.createdAt);
     const attachments = createAttachments(post, createdAt);
     return (
-      <div data-testid="post-caption" key={post.id}>
+      <div data-testid="postCardContainer" key={post.id}>
         <OrgPostCard
           key={post.id}
           post={{
@@ -166,7 +166,11 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       return <NotFound title="post" keyPrefix="postNotFound" />;
     }
 
-    return <>{displayPosts.map((post) => renderPostCard(post))}</>;
+    return (
+      <div data-testid="dropdown">
+        {displayPosts.map((post) => renderPostCard(post))}
+      </div>
+    );
   }
 
   if (!data?.organization?.posts?.edges?.length) {
