@@ -1690,3 +1690,111 @@ describe('OrganizationActionItems Component', () => {
     });
   });
 });
+
+/*
+  Additional coverage notes:
+  - Test runner: Vitest
+  - UI testing: @testing-library/react with @testing-library/user-event
+  - GraphQL mocking: @apollo/react-testing (MockedProvider) + StaticMockLink
+  This block adds edge-case, accessibility, and resilience tests for OrganizationActionItems.
+*/
+
+describe('OrganizationActionItems - Additional edge cases', () => {
+  it('hides loader after data loads', async () => {
+    renderComponent();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+  });
+
+  it('shows error without spinner when GraphQL query fails', async () => {
+    renderComponent(link2);
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+  });
+
+  it('create modal is accessible (role="dialog")', async () => {
+    renderComponent();
+    const createBtn = await screen.findByTestId('createActionItemBtn');
+    await userEvent.click(createBtn);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    const closeBtn = screen.queryByTestId('modalCloseBtn');
+    if (closeBtn) {
+      await userEvent.click(closeBtn);
+      await waitFor(() => {
+        expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
+      });
+    }
+  });
+
+  it('closes searchBy menu with Escape without altering input', async () => {
+    renderComponent();
+
+    const searchInput = await screen.findByTestId('searchBy');
+    await userEvent.type(searchInput, 'John');
+
+    const searchByToggle = await screen.findByTestId('searchByToggle');
+    await userEvent.click(searchByToggle); // open
+    await userEvent.keyboard('{Escape}');  // close
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+    expect(searchInput).toHaveValue('John');
+  });
+
+  it('handles very long search input strings safely', async () => {
+    renderComponent();
+
+    const searchInput = await screen.findByTestId('searchBy');
+    const longText = 'a'.repeat(1000);
+    await userEvent.type(searchInput, longText);
+    await debounceWait();
+
+    expect(searchInput).toHaveValue(longText);
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  it('renders correctly for desktop viewport and after resize', async () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1440 });
+    window.dispatchEvent(new Event('resize'));
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+  });
+
+  it('renders when eventId is undefined (no event filter applied)', async () => {
+    // Explicitly pass undefined for eventId
+    renderComponent(link1, 'orgId', undefined as any);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+  });
+
+  it('allows clearing search via keyboard (Select-All + Backspace)', async () => {
+    renderComponent();
+
+    const searchInput = await screen.findByTestId('searchBy');
+    await userEvent.type(searchInput, 'to-clear');
+    await debounceWait();
+
+    // Select all and backspace via keyboard
+    await userEvent.keyboard('{Control>}a{/Control}{Backspace}');
+    await debounceWait();
+
+    expect(searchInput).toHaveValue('');
+  });
+});
