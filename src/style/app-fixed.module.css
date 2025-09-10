@@ -7764,9 +7764,14 @@ form {
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
+}
+
+.tableImageWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 /* -- OrganizationActionItems.tsx -- */

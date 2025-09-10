@@ -269,22 +269,22 @@ function organizationActionItems(): JSX.Element {
               overflow: 'hidden',
             }}
           >
-            <div
-              className={styles.TableImage}
-              style={{ flexShrink: 0, marginRight: '8px' }}
-            >
+            <div className={styles.tableImageWrapper}>
               {assignee?.avatarURL ? (
                 <img
                   src={assignee.avatarURL}
                   crossOrigin="anonymous"
                   className={styles.TableImage}
-                />
-              ) : (
-                <Avatar
-                  key={assignee?.id || 'no-assignee'}
-                  name={displayName}
                   alt={displayName}
                 />
+              ) : (
+                <div className={styles.TableImage}>
+                  <Avatar
+                    key={assignee?.id || 'no-assignee'}
+                    name={displayName}
+                    alt={displayName}
+                  />
+                </div>
               )}
             </div>
             <span
