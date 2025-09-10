@@ -108,7 +108,7 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
       id
       isCompleted
       postCompletionNotes
-      updatedAt
+      createdAt
     }
   }
 `;
