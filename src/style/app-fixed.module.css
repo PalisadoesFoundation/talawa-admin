@@ -1161,7 +1161,7 @@ form label,
 }
 
 .btnsContainer .btnsBlock {
-  padding-right: 30px;
+  padding-inline-end: 30px;
   display: flex;
   width: max-content;
 }
@@ -1426,7 +1426,7 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  padding-right: 30px;
+  padding-inline-end: 30px;
   /* margin-right: 180px; */
   width: 425px;
 }

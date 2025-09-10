@@ -342,7 +342,7 @@ function orgList(): JSX.Element {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div className={styles.btnsBlockSearchBar}>
             <SortingButton
-              title="Sort organizations"
+              title={t('sortOrganizations')}
               sortingOptions={[
                 { label: t('Latest'), value: 'Latest' },
                 { label: t('Earliest'), value: 'Earliest' },
