@@ -9,18 +9,30 @@ import {
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
-import { UserRole } from 'types/Event/interface';
+import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
+
+// Helper type for Calendar event items
+type CalendarEventItem = NonNullable<
+  InterfaceCalendarProps['eventData']
+>[number];
+
+// Hoisted shared state for router params used by both react-router-dom and react-router mocks
+const sharedRouterState = vi.hoisted(() => ({ orgId: 'org1' }));
+
+const setMockOrgId = (orgId: string) => {
+  sharedRouterState.orgId = orgId;
+};
 
 // Mock the react-router-dom module
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
 
-  // Create a proper React component that returns null
   const MockNavigate = () => null;
 
+  const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
-    useParams: vi.fn().mockReturnValue({ orgId: 'org1' }),
+    useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     useLocation: vi.fn().mockReturnValue({
       pathname: '/organization/org1',
@@ -29,12 +41,44 @@ vi.mock('react-router-dom', async () => {
       state: null,
       key: 'default',
     }),
-    // Replace the Navigate component with our React component
     Navigate: MockNavigate,
-    // Make sure to preserve the actual routers
     MemoryRouter: actual.MemoryRouter,
     BrowserRouter: actual.BrowserRouter,
   };
+});
+
+// Mock 'react-router' to satisfy hooks used inside EventListCard and its modals
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  const MockNavigate = () => null;
+  const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
+  return {
+    ...actual,
+    useParams: useParamsMock,
+    useNavigate: vi.fn().mockReturnValue(vi.fn()),
+    Navigate: MockNavigate,
+  } as unknown as typeof import('react-router');
+});
+
+// Mock Apollo useMutation to avoid needing an ApolloProvider context
+vi.mock('@apollo/client', async () => {
+  const actual =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+  return {
+    ...actual,
+    useMutation: vi.fn().mockImplementation(() => {
+      const mutate = vi.fn().mockResolvedValue({ data: {} });
+      const result = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+      return [mutate, result] as const;
+    }),
+  } as unknown as typeof import('@apollo/client');
 });
 
 const renderWithRouterAndPath = (
@@ -61,8 +105,8 @@ describe('Calendar Component', () => {
       description: 'Test Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '10:00',
-      endTime: '11:00',
+      startTime: '10:00:00',
+      endTime: '11:00:00',
       allDay: false,
       isPublic: true,
       isRegisterable: true,
@@ -131,8 +175,7 @@ describe('Calendar Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset the mock implementation for useParams before each test
-    vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
+    setMockOrgId('org1');
   });
 
   it('renders correctly with basic props', async () => {
@@ -480,6 +523,692 @@ describe('Calendar Component', () => {
     }
     await waitFor(() => {
       expect(container.querySelector('._expand_event_list_d8535b')).toBeNull();
+    });
+  });
+
+  it('includes private events for REGULAR users who are org members', async () => {
+    // Use a date format that matches the component's date filtering
+    const currentYear = new Date().getFullYear();
+    const privateEventToday = {
+      ...mockEventData[1],
+      name: 'Member Private Event',
+      isPublic: false,
+      startDate: `${currentYear}-01-15`, // Dynamic date format
+      endDate: `${currentYear}-01-15`,
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+    };
+
+    const memberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'member1',
+              name: 'Member User',
+              emailAddress: 'member1@example.com',
+              role: 'MEMBER',
+            },
+            cursor: 'cursorM1',
+          },
+        ],
+      },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEventToday]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="member1"
+        orgData={memberOrgData}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    // Look specifically for an expand button (events are present)
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeInTheDocument();
+
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+    }
+
+    // Check that the component renders and the test data structure is correct
+    await waitFor(() => {
+      const expandedList = container.querySelector(
+        '._expand_event_list_d8535b',
+      );
+      expect(expandedList).toBeInTheDocument();
+    });
+
+    // Stronger assertion: the private event title should be visible to a REGULAR member
+    await waitFor(() => {
+      expect(screen.getByText('Member Private Event')).toBeInTheDocument();
+    });
+  });
+
+  it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
+    const todayDate = new Date();
+    const privateEventToday = {
+      ...mockEventData[1],
+      name: 'NonMember Private Event',
+      isPublic: false,
+      startDate: todayDate.toISOString(),
+      endDate: todayDate.toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+    };
+
+    const nonMemberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'someoneElse',
+              name: 'Another User',
+              emailAddress: 'someone@example.com',
+              role: 'MEMBER',
+            },
+            cursor: 'cursorX',
+          },
+        ],
+      },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[privateEventToday]}
+        refetchEvents={mockRefetchEvents}
+        userRole={UserRole.REGULAR}
+        userId="nonmember1"
+        orgData={nonMemberOrgData}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    // There should be no expand button for events since the private event is excluded
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeNull();
+
+    // Click a no-events button to exercise the toggleExpand(onClick) path
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('NonMember Private Event')).toBeNull();
+  });
+
+  it('handles undefined eventData by rendering with no events', async () => {
+    const { findAllByTestId, container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={undefined as unknown as InterfaceCalendarProps['eventData']}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+    });
+  });
+
+  it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
+    // Use a date format that matches the component's date filtering
+    const currentYear = new Date().getFullYear();
+    const eventWithoutAttendees: CalendarEventItem = {
+      _id: 'no-attendees',
+      location: 'Loc',
+      name: 'No Attendees Event',
+      description: 'Desc',
+      startDate: `${currentYear}-01-20`, // Dynamic date format
+      endDate: `${currentYear}-01-20`,
+      startTime: '09:00:00',
+      endTime: '10:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: undefined as unknown as CalendarEventItem['attendees'],
+      creator: { firstName: 'A', lastName: 'B', _id: 'creator-x' },
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[eventWithoutAttendees]}
+        refetchEvents={mockRefetchEvents}
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    // Look specifically for an expand button (events are present)
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButton).toBeInTheDocument();
+
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+    }
+
+    // Check that the component renders and the test data structure is correct
+    await waitFor(() => {
+      const expandedList = container.querySelector(
+        '._expand_event_list_d8535b',
+      );
+      expect(expandedList).toBeInTheDocument();
+    });
+  });
+
+  test('filters events correctly when userRole is undefined but eventData contains events', async () => {
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined userRole - should only show public events
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[publicEvent, privateEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={undefined}
+        userId="user1"
+      />,
+    );
+
+    // Wait for component to render
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+
+    // Look for expand buttons that may contain events
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+
+    // Check if there are events by clicking expand buttons and checking content
+    for (const button of Array.from(expandButtons)) {
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      // Wait for potential event list to appear
+      await waitFor(
+        () => {
+          const eventList = container.querySelector(
+            '._expand_event_list_d8535b',
+          );
+          if (eventList) {
+            // Assert public event is present and private event is not
+            expect(screen.getByText('Public Event')).toBeInTheDocument();
+            expect(screen.queryByText('Private Event')).toBeNull();
+          }
+        },
+        { timeout: 1000 },
+      );
+    }
+  });
+
+  test('filters events correctly when userId is undefined but has userRole', async () => {
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined userId - should only show public events
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[publicEvent, privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.REGULAR}
+          userId={undefined}
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+
+    // Look for expand buttons that may contain events
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+
+    // Check if there are events by clicking expand buttons and checking content
+    for (const button of Array.from(expandButtons)) {
+      await act(async () => {
+        fireEvent.click(button);
+      });
+
+      // Wait for potential event list to appear
+      await waitFor(
+        () => {
+          const eventList = container.querySelector(
+            '._expand_event_list_d8535b',
+          );
+          if (eventList) {
+            // Assert public event is present and private event is not
+            expect(screen.getByText('Public Event')).toBeInTheDocument();
+            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
+          }
+        },
+        { timeout: 1000 },
+      );
+    }
+  });
+
+  test('handles orgData being undefined', async () => {
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    // Test with undefined orgData
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={undefined}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+
+    // Since orgData is undefined, private events should be filtered out
+    // Assert that the private event is not present
+    expect(screen.queryByText('Private Event')).toBeNull();
+
+    // There should be no expand buttons since no events are visible
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButtons).toHaveLength(0);
+  });
+
+  test('handles orgData with empty members edges', async () => {
+    const privateEvent: CalendarEventItem = {
+      _id: 'private-event',
+      location: 'Private Location',
+      name: 'Private Event',
+      description: 'Private Description',
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    const orgDataWithEmptyEdges = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [],
+      },
+    };
+
+    // Test with empty member edges
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[privateEvent]}
+          refetchEvents={vi.fn()}
+          orgData={orgDataWithEmptyEdges}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for component to render
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+
+    // Since user is not in the members list (empty edges), private events should be filtered out
+    // Assert that the private event is not present
+    expect(screen.queryByText('Private Event')).toBeNull();
+
+    // There should be no expand buttons since no events are visible to this user
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButtons).toHaveLength(0);
+  });
+
+  test('processes multiple events for REGULAR user when user is a member', async () => {
+    const today = new Date();
+    const publicEvent: CalendarEventItem = {
+      _id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+    };
+
+    const privateEvent1: CalendarEventItem = {
+      _id: 'private-event-1',
+      location: 'Private Location 1',
+      name: 'Private Event 1',
+      description: 'Private Description 1',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '12:00:00',
+      endTime: '13:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+    };
+
+    const privateEvent2: CalendarEventItem = {
+      _id: 'private-event-2',
+      location: 'Private Location 2',
+      name: 'Private Event 2',
+      description: 'Private Description 2',
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
+      startTime: '14:00:00',
+      endTime: '15:00:00',
+      allDay: false,
+      isPublic: false,
+      isRegisterable: true,
+      attendees: [],
+      creator: { firstName: 'Bob', lastName: 'Smith', _id: 'creator3' },
+    };
+
+    const memberOrgData = {
+      ...mockOrgData,
+      members: {
+        ...mockOrgData.members,
+        edges: [
+          {
+            node: {
+              id: 'user1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+      },
+    };
+
+    // Test with user as a member - should see all events
+    const { findAllByTestId } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[publicEvent, privateEvent1, privateEvent2]}
+          refetchEvents={vi.fn()}
+          orgData={memberOrgData}
+          userRole={UserRole.REGULAR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    // Wait for calendar to render
+    await findAllByTestId('day');
+
+    // Verify component renders successfully with events
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+  });
+
+  test('handles calendar navigation across year boundaries', async () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    const currentYear = new Date().getFullYear();
+    const prevButton = getByTestId('prevYear');
+    const nextButton = getByTestId('nextYear');
+
+    // Test navigation to previous year
+    await act(async () => {
+      fireEvent.click(prevButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
+    });
+
+    // Test navigation to next year (back to current)
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
+    });
+
+    // Test navigation to future year
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
+    });
+  });
+
+  test('renders correct number of month columns', async () => {
+    render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      // Check for all 12 month names instead of CSS classes
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+
+      monthNames.forEach((monthName) => {
+        expect(screen.getByText(monthName)).toBeInTheDocument();
+      });
+
+      // Alternative: count all month headers
+      const allMonthHeaders = screen.getAllByText(
+        /(January|February|March|April|May|June|July|August|September|October|November|December)/,
+      );
+      expect(allMonthHeaders).toHaveLength(12);
+    });
+  });
+
+  test('handles empty eventData array', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <Calendar
+          eventData={[]}
+          refetchEvents={vi.fn()}
+          orgData={mockOrgData}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="user1"
+        />
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+      // Stronger check: no expand buttons should be rendered when there are no events
+      const expandButtons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
+      expect(expandButtons.length).toBe(0);
+    });
+
+    // Optionally interact with the explicit no-events button to validate empty-state UI
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
   });
 });
