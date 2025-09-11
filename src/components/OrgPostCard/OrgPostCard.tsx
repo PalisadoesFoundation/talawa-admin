@@ -142,7 +142,6 @@ export default function OrgPostCard({
         toast.error('Failed to toggle pin');
       }
     } catch (error: unknown) {
-      console.error('Mutation Error:', error);
       errorHandler(t, error);
     }
   };
@@ -304,14 +303,9 @@ export default function OrgPostCard({
         postFormState.attachments[0].url.split('/').pop() || 'defaultFileName';
       const mimeType = postFormState.attachments[0].mimeType;
       const objectName = 'uploads/' + fileName;
-      console.log('fileHash: ', postFormState.attachments[0].url);
       const fileHash = await getFileHashFromBase64(
         postFormState.attachments[0].url,
       );
-
-      console.log('mimeType:', mimeType);
-      console.log('fileHash:', fileHash);
-      console.log('objectName:', objectName);
 
       attachment = {
         fileHash,

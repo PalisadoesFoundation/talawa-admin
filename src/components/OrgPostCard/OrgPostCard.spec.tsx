@@ -687,7 +687,6 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.spyOn(console, 'error').mockImplementation(() => {});
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: { reload: vi.fn() },
@@ -809,7 +808,6 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
     await userEvent.click(pinButton);
     await waitFor(() => {
       expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
-      expect(console.error).toHaveBeenCalled();
     });
   });
 

@@ -117,8 +117,7 @@ function OrgPost(): JSX.Element {
     return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
-  function getMimeTypeEnumFromType(mime: string): string {
-    console.log('Mime type:', mime);
+  function getMimeTypeEnum(mime: string): string {
     switch (mime) {
       case 'image/jpeg':
         return 'IMAGE_JPEG';
@@ -155,19 +154,13 @@ function OrgPost(): JSX.Element {
         const objectName = 'uploads/' + fileName;
         const fileHash = await getFileHashFromFile(file);
 
-        console.log('mimeType:', mimeType);
-        console.log('fileHash:', fileHash);
-        console.log('objectName:', objectName);
-
         attachment = {
           fileHash,
-          mimetype: getMimeTypeEnumFromType(file.type),
+          mimetype: getMimeTypeEnum(file.type),
           name: fileName,
           objectName,
         };
       }
-      console.log('Attachment:', attachment);
-
       const { data } = await create({
         variables: {
           input: {
@@ -199,7 +192,6 @@ function OrgPost(): JSX.Element {
     }
   };
 
-  console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -216,7 +208,7 @@ function OrgPost(): JSX.Element {
       }
 
       if (filteredPosts.length === 0) {
-        console.log('No filtered posts found');
+        toast.error('No filtered posts found');
       }
 
       setFile(selectedFile);
@@ -266,8 +258,7 @@ function OrgPost(): JSX.Element {
 
   useEffect(() => {
     if (orgPostListError) {
-      console.error('Organization post list error:', orgPostListError);
-      // Add proper error handling here
+      toast.error('Organization post list error:');
     }
   }, [orgPostListError]);
 
@@ -360,7 +351,6 @@ function OrgPost(): JSX.Element {
         setFilteredPosts(filtered);
       }
     } catch (error) {
-      console.error('Search error:', error);
       toast.error('Error searching posts');
       setIsFiltering(false);
     }
