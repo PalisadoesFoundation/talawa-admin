@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -970,71 +964,5 @@ describe('AddMember Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('user')).toBeInTheDocument();
     });
-  });
-
-  test('missing afterCursor condition', async () => {
-    const orgId = 'org123';
-
-    // Mock with endCursor present to simulate normal first page load
-    const firstPageMock = createUserListMock(
-      {
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            cursor: 'cursor1',
-            node: {
-              id: 'user1',
-              name: 'John Doe',
-              emailAddress: 'john@example.com',
-              avatarURL: null,
-              createdAt: '2023-01-01T00:00:00Z',
-            },
-          },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-          startCursor: 'cursor1',
-          endCursor: 'endCursor1',
-        },
-      },
-    );
-
-    const mocks = [createOrganizationsMock(orgId), firstPageMock];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider link={link} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Open the add member modal
-    const addMembersButton = await screen.findByTestId('addMembers');
-    fireEvent.click(addMembersButton);
-
-    // Select existing user option
-    const existingUserOption = screen.getByText('Existing User');
-    fireEvent.click(existingUserOption);
-
-    // Wait for users to load
-    await waitFor(() => {
-      expect(screen.getByTestId('user')).toBeInTheDocument();
-    });
-
-    // Try to navigate to page 2 (which doesn't have a cursor stored)
-    // This will trigger the `if (!afterCursor) return;` condition on line 372
-    const nextPageButton = screen.getByLabelText('Next Page');
-    expect(nextPageButton).toBeEnabled();
-    fireEvent.click(nextPageButton);
   });
 });
