@@ -6,7 +6,7 @@ export type Comment = {
   createdAt: Date;
   creator: Partial<User>; // Optional
   likeCount?: number; // Optional
-  likedBy?: User[]; // Optional
+  upVoters?: User[]; // Optional
   post: Post;
   text: string;
   updatedAt: Date;

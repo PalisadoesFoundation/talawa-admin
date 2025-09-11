@@ -391,10 +391,11 @@ export const CREATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -432,29 +433,92 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($input: MutationUpdatePostInput!) {
+  mutation updatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {
       id
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
+      }
+    }
+  }
+`;
+
+export const UPDATE_EVENT_MUTATION = gql`
+  mutation UpdateEvent($input: MutationUpdateEventInput!) {
+    updateEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const UPDATE_POST_VOTE = gql`
+  mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
+    updatePostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }
 `;
 
 export const LIKE_POST = gql`
-  mutation likePost($postId: ID!) {
-    likePost(id: $postId) {
-      _id
+  mutation createPostVote($input: MutationCreatePostVoteInput!) {
+    createPostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;
 
 export const UNLIKE_POST = gql`
-  mutation unlikePost($postId: ID!) {
-    unlikePost(id: $postId) {
+  mutation deletePostVote($input: MutationDeletePostVoteInput!) {
+    deletePostVote(input: $input) {
+      id
+    }
+  }
+`;
+
+export const REGISTER_EVENT = gql`
+  mutation registerForEvent($eventId: ID!) {
+    registerForEvent(id: $eventId) {
       _id
     }
   }
@@ -599,12 +663,10 @@ export {
 // Create, Update and Delete Events
 export {
   CREATE_EVENT_MUTATION,
-  UPDATE_EVENT_MUTATION,
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
   DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
-  REGISTER_EVENT,
 } from './EventMutations';
 
 export const PRESIGNED_URL = gql`
