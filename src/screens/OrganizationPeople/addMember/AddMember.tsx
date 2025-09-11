@@ -333,7 +333,7 @@ function AddMember(): JSX.Element {
       if (pageInfo.endCursor) {
         mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
       }
-      if (pageInfo.startCursor) {
+      if (pageIndex > 0 && pageInfo.startCursor) {
         backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
 
