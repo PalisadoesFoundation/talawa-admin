@@ -80,7 +80,7 @@ const CommunityProfile = (): JSX.Element => {
     facebookURL: string | undefined;
     instagramURL: string | undefined;
     xURL: string | undefined;
-    linkedInURL: string | undefined;
+    linkedinURL: string | undefined;
     githubURL: string | undefined;
     youtubeURL: string | undefined;
     redditURL: string | undefined;
@@ -122,7 +122,7 @@ const CommunityProfile = (): JSX.Element => {
         inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
         instagramURL: preLoginData.instagramURL ?? '',
         xURL: preLoginData.xURL ?? '',
-        linkedInURL: preLoginData.linkedInURL ?? '',
+        linkedInURL: preLoginData.linkedinURL ?? '',
         githubURL: preLoginData.githubURL ?? '',
         youtubeURL: preLoginData.youtubeURL ?? '',
         redditURL: preLoginData.redditURL ?? '',
