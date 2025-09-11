@@ -61,7 +61,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
@@ -139,6 +139,14 @@ function AddMember(): JSX.Element {
   const mapPageToCursor = useRef<Record<number, string>>({});
   const backwardMapPageToCursor = useRef<Record<number, string>>({});
   const responsePageRef = useRef<number>(0);
+
+  const resetPagination = useCallback(() => {
+    mapPageToCursor.current = {};
+    backwardMapPageToCursor.current = {};
+    setPage(0);
+    responsePageRef.current = 0;
+    setPaginationMeta({ hasNextPage: false, hasPreviousPage: false });
+  }, []);
 
   // Query for fetching users with pagination
   const [
@@ -294,7 +302,7 @@ function AddMember(): JSX.Element {
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-
+    resetPagination();
     const variables = {
       first: PAGE_SIZE,
       where: userName ? { name: userName } : null,
@@ -317,6 +325,7 @@ function AddMember(): JSX.Element {
   // Initial data fetch
   useEffect(() => {
     if (addUserModalisOpen) {
+      resetPagination();
       fetchUsers({
         variables: { first: PAGE_SIZE, after: null, last: null, before: null },
       });
