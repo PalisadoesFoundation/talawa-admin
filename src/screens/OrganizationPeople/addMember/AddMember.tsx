@@ -327,15 +327,15 @@ function AddMember(): JSX.Element {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
 
-      // Store cursors for navigation
-      if (pageInfo.startCursor) {
-        mapPageToCursor.current[page] = pageInfo.startCursor;
-      }
+      // Store the endCursor for the NEXT page
       if (pageInfo.endCursor) {
-        backwardMapPageToCursor.current[page] = pageInfo.endCursor;
+        mapPageToCursor.current[page + 1] = pageInfo.endCursor;
+      }
+      // Store the startCursor for the PREVIOUS page
+      if (pageInfo.startCursor) {
+        backwardMapPageToCursor.current[page - 1] = pageInfo.startCursor;
       }
 
-      // Update pagination meta information
       setPaginationMeta({
         hasNextPage: pageInfo.hasNextPage,
         hasPreviousPage: pageInfo.hasPreviousPage,
@@ -359,20 +359,17 @@ function AddMember(): JSX.Element {
 
     if (isForwardNavigation) {
       variables.first = PAGE_SIZE;
-      variables.after = mapPageToCursor.current[page];
+      variables.after = mapPageToCursor.current[newPage];
       variables.last = null;
       variables.before = null;
     } else {
       variables.last = PAGE_SIZE;
-      variables.before = backwardMapPageToCursor.current[page];
+      variables.before = backwardMapPageToCursor.current[newPage];
       variables.first = null;
       variables.after = null;
     }
 
-    // Execute the query with updated variables
     fetchUsers({ variables });
-
-    // Update the page state
     setPage(newPage);
   };
 
