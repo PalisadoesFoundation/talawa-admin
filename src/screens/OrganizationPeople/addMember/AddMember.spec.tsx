@@ -485,7 +485,7 @@ describe('AddMember Component', () => {
     });
 
     const page2Mock = createUserListMock(
-      { first: 10, after: 'cursor2', last: null, before: null },
+      { first: 10, after: 'cursor1', last: null, before: null },
       {
         edges: [
           {
@@ -520,6 +520,13 @@ describe('AddMember Component', () => {
       page1Mock,
       page2Mock,
       page1RevisitedMock,
+      // Add additional mock for potential edge case queries
+      createUserListMock({
+        first: 10,
+        after: 'cursor2',
+        last: null,
+        before: null,
+      }),
     ];
 
     const link = new StaticMockLink(mocks, true);

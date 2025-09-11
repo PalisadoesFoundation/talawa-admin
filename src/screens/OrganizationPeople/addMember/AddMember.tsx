@@ -138,6 +138,7 @@ function AddMember(): JSX.Element {
   // Refs to store cursors for navigation
   const mapPageToCursor = useRef<Record<number, string>>({});
   const backwardMapPageToCursor = useRef<Record<number, string>>({});
+  const responsePageRef = useRef<number>(0);
 
   // Query for fetching users with pagination
   const [
@@ -327,13 +328,13 @@ function AddMember(): JSX.Element {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
 
-      // Store the endCursor for the NEXT page
+      // Store cursors relative to the page for which this response was requested
+      const pageIndex = responsePageRef.current;
       if (pageInfo.endCursor) {
-        mapPageToCursor.current[page + 1] = pageInfo.endCursor;
+        mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
       }
-      // Store the startCursor for the PREVIOUS page
       if (pageInfo.startCursor) {
-        backwardMapPageToCursor.current[page - 1] = pageInfo.startCursor;
+        backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
 
       setPaginationMeta({
@@ -341,7 +342,7 @@ function AddMember(): JSX.Element {
         hasPreviousPage: pageInfo.hasPreviousPage,
       });
     }
-  }, [userData, page]);
+  }, [userData]);
 
   // Handle page change
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -358,19 +359,24 @@ function AddMember(): JSX.Element {
     const variables: IQueryVariable = {};
 
     if (isForwardNavigation) {
+      const afterCursor = mapPageToCursor.current[newPage];
+      if (!afterCursor) return;
       variables.first = PAGE_SIZE;
-      variables.after = mapPageToCursor.current[newPage];
+      variables.after = afterCursor;
       variables.last = null;
       variables.before = null;
     } else {
+      const beforeCursor = backwardMapPageToCursor.current[newPage];
+      if (!beforeCursor) return;
       variables.last = PAGE_SIZE;
-      variables.before = backwardMapPageToCursor.current[newPage];
+      variables.before = beforeCursor;
       variables.first = null;
       variables.after = null;
     }
 
-    fetchUsers({ variables });
     setPage(newPage);
+    responsePageRef.current = newPage;
+    fetchUsers({ variables });
   };
 
   // Extract user data from the query result
@@ -482,9 +488,10 @@ function AddMember(): JSX.Element {
                               {userDetails.avatarURL ? (
                                 <img
                                   src={userDetails.avatarURL}
-                                  alt="avatar"
+                                  alt={`${userDetails.name} avatar`}
                                   className={styles.TableImage}
                                   crossOrigin="anonymous"
+                                  loading="lazy"
                                 />
                               ) : (
                                 <Avatar
