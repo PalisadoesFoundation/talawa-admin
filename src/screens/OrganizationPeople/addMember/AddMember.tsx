@@ -484,6 +484,7 @@ function AddMember(): JSX.Element {
                                   src={userDetails.avatarURL}
                                   alt="avatar"
                                   className={styles.TableImage}
+                                  crossOrigin="anonymous"
                                 />
                               ) : (
                                 <Avatar
