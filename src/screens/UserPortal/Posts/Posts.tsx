@@ -137,6 +137,7 @@ export default function Home(): JSX.Element {
       variables: { id: orgId, first: 6 },
     },
   );
+  const userId: string | null = getItem('userId');
 
   const {
     data,
@@ -146,6 +147,7 @@ export default function Home(): JSX.Element {
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
       input: { id: orgId },
+      userId: userId,
       after,
       before,
       first: after || !before ? POSTS_PER_PAGE : null,
@@ -153,7 +155,6 @@ export default function Home(): JSX.Element {
     },
   });
 
-  const userId: string | null = getItem('userId');
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
@@ -203,6 +204,7 @@ export default function Home(): JSX.Element {
       comments,
       attachments,
       pinnedAt,
+      hasUserVoted,
     } = node;
 
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -226,6 +228,7 @@ export default function Home(): JSX.Element {
       text: '',
       pinnedAt: pinnedAt || null,
       commentCount: node.commentsCount,
+      hasUserVoted: hasUserVoted,
 
       upVoters: {
         edges:
@@ -262,6 +265,7 @@ export default function Home(): JSX.Element {
               id: like.id,
             })) || [],
           text: comment.text || '',
+          hasUserVoted: comment.hasUserVoted,
         })) ?? [],
 
       fetchPosts: refetch,

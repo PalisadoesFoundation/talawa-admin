@@ -145,6 +145,10 @@ const defaultProps = {
     email: 'john@example.com',
     avatarURL: 'avatar.jpg',
   },
+  hasUserVoted: {
+    hasVoted: true,
+    voteType: 'up_vote' as 'up_vote',
+  },
   title: 'Test Post',
   text: 'This is a test post',
   image: 'test-image.jpg',
@@ -161,6 +165,10 @@ const defaultProps = {
         id: '2',
         name: 'Jane Smith',
         email: 'jane@example.com',
+      },
+      hasUserVoted: {
+        hasVoted: false,
+        voteType: 'up_vote' as 'up_vote',
       },
       upVoteCount: 2,
       downVoteCount: 0,

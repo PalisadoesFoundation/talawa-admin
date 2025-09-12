@@ -167,9 +167,8 @@ export default function PostCard({
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const userId: string | null = getItem('userId');
-  const isLikedByUser = props.upVoters?.edges.some(
-    (edge) => edge.node.id === userId,
-  );
+  const isLikedByUser = props.hasUserVoted.voteType == 'up_vote';
+
   const upVoters =
     props.upVoters?.edges.map((edge) => ({
       id: edge.node.id,
@@ -377,6 +376,7 @@ export default function PostCard({
                 upVoters={{
                   edges: upVoters,
                 }}
+                hasUserVoted={comment.hasUserVoted}
                 fetchComments={props.fetchPosts}
               />
             ))}

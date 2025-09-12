@@ -20,12 +20,17 @@ export const ORGANIZATION_POST_LIST = gql`
     $before: String
     $first: Int
     $last: Int
+    $userId: ID!
   ) {
     organization(input: $input) {
       id
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
+            hasUserVoted(userId: $userId) {
+              hasVoted
+              voteType
+            }
             id
             caption
             commentsCount
@@ -54,6 +59,10 @@ export const ORGANIZATION_POST_LIST = gql`
             comments(first: 10) {
               edges {
                 node {
+                  hasUserVoted(userId: $userId) {
+                    hasVoted
+                    voteType
+                  }
                   id
                   body
                   creator {

@@ -2124,6 +2124,10 @@ export interface InterfacePostCard {
     email: string;
     avatarURL?: string;
   };
+  hasUserVoted: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  };
   postedAt: string;
   pinnedAt?: string | null;
   image: string | null;
@@ -2152,6 +2156,10 @@ export interface InterfacePostCard {
       name: string;
       email: string;
       avatarURL?: string;
+    };
+    hasUserVoted: {
+      hasVoted: boolean;
+      voteType: 'up_vote' | 'down_vote' | null;
     };
     downVoteCount: number;
     upVoteCount: number;

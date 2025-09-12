@@ -89,6 +89,10 @@ const defaultProps = {
     ],
   },
   text: 'testComment',
+  hasUserVoted: {
+    hasVoted: true,
+    voteType: 'up_vote' as 'up_vote',
+  },
 };
 
 const link = new StaticMockLink(MOCKS, true);

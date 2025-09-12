@@ -66,6 +66,10 @@ interface InterfaceCommentCardProps {
     name: string;
     avatarURL?: string;
   };
+  hasUserVoted: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  };
   upVoteCount: number;
   downVoteCount: number;
   upVoters: {
@@ -91,14 +95,8 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
 
   React.useEffect(() => {
     if (!userId) return;
-    const liked = props.upVoters?.edges?.some(
-      (edge) => edge.node.id === userId,
-    );
-    if (props.upVoteCount === 0) {
-      setIsLiked(false);
-      return;
-    }
-    setIsLiked(Boolean(liked));
+    const liked = props.hasUserVoted.voteType == 'up_vote';
+    setIsLiked(liked);
   }, [props.upVoters, userId]);
 
   React.useEffect(() => {

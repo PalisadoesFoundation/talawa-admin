@@ -112,6 +112,10 @@ export type PostNode = {
     emailAddress: string;
     avatarURL?: string;
   };
+  hasUserVoted: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  };
   upVotesCount: number;
   downVotesCount: number;
   pinnedAt: string | null;
@@ -157,6 +161,10 @@ export type PostNode = {
           name: string;
           emailAddress: string;
           avatarURL?: string;
+        };
+        hasUserVoted: {
+          hasVoted: boolean;
+          voteType: 'up_vote' | 'down_vote' | null;
         };
         downVotesCount: number;
         upVotesCount: number;
