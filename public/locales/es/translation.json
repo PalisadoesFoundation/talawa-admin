@@ -509,7 +509,8 @@
     "pendingForInstance": "Pendiente para esta instancia",
     "pendingForSeries": "Pendiente para la serie",
     "completeForInstance": "Completo para esta instancia",
-    "completeForSeries": "Completo para la serie"
+    "completeForSeries": "Completo para la serie",
+    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",

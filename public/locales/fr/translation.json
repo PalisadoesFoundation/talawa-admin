@@ -508,7 +508,9 @@
     "pendingForInstance": "En attente pour cette instance",
     "pendingForSeries": "En attente pour la série",
     "completeForInstance": "Terminé pour cette instance",
-    "completeForSeries": "Terminé pour la série"
+    "completeForSeries": "Terminé pour la série",
+    "postCompletionNotesRequired": "Notes post-achèvement requises",
+    "updateThisInstance": "Mettre à jour cette instance"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",

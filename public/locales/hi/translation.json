@@ -509,7 +509,8 @@
     "pendingForInstance": "इस उदाहरण के लिए लंबित",
     "pendingForSeries": "श्रृंखला के लिए लंबित",
     "completeForInstance": "इस उदाहरण के लिए पूर्ण",
-    "completeForSeries": "श्रृंखला के लिए पूर्ण"
+    "completeForSeries": "श्रृंखला के लिए पूर्ण",
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",

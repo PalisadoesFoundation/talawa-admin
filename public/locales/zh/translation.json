@@ -508,7 +508,9 @@
     "pendingForInstance": "此实例待定",
     "pendingForSeries": "系列待定",
     "completeForInstance": "此实例完成",
-    "completeForSeries": "系列完成"
+    "completeForSeries": "系列完成",
+    "postCompletionNotesRequired": "需要完成后的备注",
+    "updateThisInstance": "更新此实例"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
