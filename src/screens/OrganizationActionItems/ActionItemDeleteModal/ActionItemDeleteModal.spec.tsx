@@ -60,6 +60,7 @@ const itemProps: IItemDeleteModalProps = {
     isCompleted: true,
     preCompletionNotes: 'Notes 1',
     postCompletionNotes: 'Cmp Notes 1',
+    isInstanceException: false,
 
     // Related entities updated according to the new interfaces
     assignee: null,
@@ -164,6 +165,10 @@ describe('Testing ItemDeleteModal', () => {
     it('should render applyTo radio buttons when eventId and isRecurring are provided', () => {
       const propsWithRecurring: IItemDeleteModalProps = {
         ...itemProps,
+        actionItem: {
+          ...itemProps.actionItem,
+          isTemplate: true,
+        },
         eventId: 'event123',
         isRecurring: true,
       };
@@ -182,6 +187,10 @@ describe('Testing ItemDeleteModal', () => {
     it('should allow switching between series and instance options', () => {
       const propsWithRecurring: IItemDeleteModalProps = {
         ...itemProps,
+        actionItem: {
+          ...itemProps.actionItem,
+          isTemplate: true,
+        },
         eventId: 'event123',
         isRecurring: true,
       };
@@ -209,6 +218,10 @@ describe('Testing ItemDeleteModal', () => {
     it('should use DELETE_ACTION_ITEM_MUTATION when applyTo is series', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
         ...itemProps,
+        actionItem: {
+          ...itemProps.actionItem,
+          isTemplate: true,
+        },
         eventId: 'event123',
         isRecurring: true,
       };
@@ -234,6 +247,10 @@ describe('Testing ItemDeleteModal', () => {
     it('should use DELETE_ACTION_FOR_INSTANCE when applyTo is instance', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
         ...itemProps,
+        actionItem: {
+          ...itemProps.actionItem,
+          isTemplate: true,
+        },
         eventId: 'event123',
         isRecurring: true,
       };
@@ -308,6 +325,10 @@ describe('Testing ItemDeleteModal', () => {
     it('should handle error when deleting instance fails', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
         ...itemProps,
+        actionItem: {
+          ...itemProps.actionItem,
+          isTemplate: true,
+        },
         eventId: 'event123',
         isRecurring: true,
       };

@@ -282,6 +282,7 @@ describe('Testing ItemUpdateStatusModal', () => {
         isCompleted: false,
         preCompletionNotes: 'Notes 1',
         postCompletionNotes: null,
+        isTemplate: true,
         assignee: {
           id: 'userId1',
           name: 'John Doe',
@@ -388,6 +389,7 @@ describe('Testing ItemUpdateStatusModal', () => {
         isCompleted: true,
         preCompletionNotes: 'Notes 1',
         postCompletionNotes: 'Completion notes',
+        isTemplate: true,
         assignee: {
           id: 'userId1',
           name: 'John Doe',

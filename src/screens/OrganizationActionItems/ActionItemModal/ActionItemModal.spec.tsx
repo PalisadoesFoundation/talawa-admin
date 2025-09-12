@@ -129,7 +129,8 @@ const mockActionItem = {
   isCompleted: false,
   preCompletionNotes: 'Test notes',
   postCompletionNotes: null,
-  isInstanceException: true, // This will set applyTo to 'instance'
+  isTemplate: true,
+  isInstanceException: false,
   assignee: {
     id: 'user1',
     name: 'John Doe',
@@ -1083,9 +1084,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Updated notes');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
@@ -1180,9 +1185,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Error test notes');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Network error occurred');
@@ -1253,9 +1262,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Refetch test notes');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(mockRefetch).toHaveBeenCalledTimes(1);
@@ -1325,9 +1338,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Hide test notes');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(mockHide).toHaveBeenCalledTimes(1);
@@ -1396,9 +1413,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Partial update notes');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
@@ -1467,9 +1488,13 @@ describe('updateActionForInstanceHandler', () => {
       await userEvent.type(notesInput, 'Prevent default test');
     }
 
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
+    fireEvent.submit(submitButton);
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
