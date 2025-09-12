@@ -1132,6 +1132,42 @@ describe('updateActionForInstanceHandler', () => {
     });
   });
 
+  it('should show error toast when actionItem ID is missing for a recurring item', async () => {
+    const actionItemWithoutId = {
+      ...mockActionItem,
+      id: undefined,
+    };
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true,
+      actionItem: actionItemWithoutId as unknown as IActionItemInfo,
+      isRecurring: true,
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Select "This event only" to target updateActionForInstanceHandler
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+    });
+  });
+
   it('should handle mutation error and show error toast', async () => {
     const errorUpdateMock = {
       request: {
@@ -1498,6 +1534,92 @@ describe('updateActionForInstanceHandler', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
+    });
+  });
+});
+
+describe('ItemModal › updateActionForInstanceHandler', () => {
+  it('should call updateActionForInstance with all fields', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.eventId === 'event123' &&
+          variables.input.assigneeId === 'user2' &&
+          variables.input.categoryId === 'cat2' &&
+          variables.input.preCompletionNotes === 'Updated notes for instance' &&
+          typeof variables.input.assignedAt === 'string'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Change category
+    const categoryInput = screen.getByLabelText('actionItemCategory *');
+    fireEvent.change(categoryInput, { target: { value: 'Category 2' } });
+    const categoryOption = await screen.findByText('Category 2');
+    fireEvent.click(categoryOption);
+
+    // Change assignee
+    const assigneeInput = screen.getByLabelText('assignee *');
+    fireEvent.change(assigneeInput, { target: { value: 'Jane Smith' } });
+    const assigneeOption = await screen.findByText('Jane Smith');
+    fireEvent.click(assigneeOption);
+
+    // Change pre-completion notes
+    const notesInput = screen.getByDisplayValue('Test notes');
+    await userEvent.clear(notesInput);
+    await userEvent.type(notesInput, 'Updated notes for instance');
+
+    // Select "This event only"
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalled();
+      expect(mockHide).toHaveBeenCalled();
     });
   });
 });
