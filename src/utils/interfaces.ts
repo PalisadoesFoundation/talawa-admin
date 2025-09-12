@@ -2151,6 +2151,7 @@ export interface InterfacePostCard {
       id: string;
       name: string;
       email: string;
+      avatarURL?: string;
     };
     downVoteCount: number;
     upVoteCount: number;

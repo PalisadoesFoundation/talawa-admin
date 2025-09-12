@@ -59,6 +59,8 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import CommentCard from '../CommentCard/CommentCard';
+import { Image } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -279,10 +281,13 @@ export default function PostCard({
 
       <PostHeader>
         <UserInfo>
-          <Avatar
-            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
-            alt={props.creator.name}
-          />
+          <span className={styles.userImageUserPost}>
+            <Image
+              crossOrigin="anonymous"
+              src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
+              alt={props.creator.name}
+            />
+          </span>
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
           </Typography>

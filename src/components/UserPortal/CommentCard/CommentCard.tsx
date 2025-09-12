@@ -38,6 +38,8 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import { styled } from '@mui/material/styles';
+import { Image } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -147,11 +149,13 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   return (
     <CommentContainer>
       <Stack direction="row" spacing={2} alignItems="flex-start">
-        <Avatar
-          src={props.creator.avatarURL}
-          alt={props.creator.name}
-          sx={{ width: 32, height: 32 }}
-        />
+        <span className={styles.userImageUserComment}>
+          <Image
+            crossOrigin="anonymous"
+            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
+            alt={props.creator.name}
+          />
+        </span>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}

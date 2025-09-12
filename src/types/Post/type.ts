@@ -110,7 +110,7 @@ export type PostNode = {
     id: string;
     name: string;
     emailAddress: string;
-    avatarURL?: string | null;
+    avatarURL?: string;
   };
   upVotesCount: number;
   downVotesCount: number;
@@ -156,6 +156,7 @@ export type PostNode = {
           id: string;
           name: string;
           emailAddress: string;
+          avatarURL?: string;
         };
         downVotesCount: number;
         upVotesCount: number;

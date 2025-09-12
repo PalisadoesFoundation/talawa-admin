@@ -48,6 +48,7 @@ export const ORGANIZATION_POST_LIST = gql`
             creator {
               id
               name
+              avatarURL
             }
             createdAt
             comments(first: 10) {
@@ -58,6 +59,7 @@ export const ORGANIZATION_POST_LIST = gql`
                   creator {
                     id
                     name
+                    avatarURL
                   }
                   downVotesCount
                   upVotesCount
