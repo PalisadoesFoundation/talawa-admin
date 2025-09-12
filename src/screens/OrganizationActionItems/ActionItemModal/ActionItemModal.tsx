@@ -20,6 +20,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
@@ -130,6 +131,10 @@ const ItemModal: FC<IItemModalProps> = ({
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
 
+  const [updateActionForInstance] = useMutation(UPDATE_ACTION_FOR_INSTANCE, {
+    refetchQueries: ['GetEventActionItems'],
+  });
+
   const handleFormChange = (
     field: keyof IFormStateType,
     value: string | boolean | Date | undefined | null,
@@ -151,6 +156,7 @@ const ItemModal: FC<IItemModalProps> = ({
         organizationId: orgId,
         preCompletionNotes: preCompletionNotes || undefined,
         assignedAt: dayjs(assignedAt).toISOString(),
+        isTemplate: applyTo === 'series',
         ...(eventId &&
           (isRecurring
             ? applyTo === 'series'
@@ -211,8 +217,53 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   };
 
+  const updateActionForInstanceHandler = async (
+    e: FormEvent,
+  ): Promise<void> => {
+    e.preventDefault();
+    try {
+      if (!actionItem?.id) {
+        toast.error('Action item ID is missing');
+        return;
+      }
+
+      const input: any = {
+        actionId: actionItem.id,
+        eventId: eventId,
+      };
+
+      // Include all fields that might have changed
+      if (assigneeId) input.assigneeId = assigneeId;
+      if (categoryId) input.categoryId = categoryId;
+      if (assignedAt) input.assignedAt = dayjs(assignedAt).toISOString();
+      if (preCompletionNotes !== undefined)
+        input.preCompletionNotes = preCompletionNotes;
+
+      await updateActionForInstance({
+        variables: { input },
+      });
+
+      setFormState(initializeFormState(null));
+      actionItemsRefetch();
+      if (orgActionItemsRefetch) {
+        orgActionItemsRefetch();
+      }
+      hide();
+      toast.success(t('successfulUpdation'));
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
+
+    // If this action item is showing instance exception data, default to 'instance' since 'series' option is hidden
+    if (actionItem?.isInstanceException) {
+      setApplyTo('instance');
+    } else {
+      setApplyTo('series');
+    }
 
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
@@ -254,24 +305,37 @@ const ItemModal: FC<IItemModalProps> = ({
       <Modal.Body>
         <Form
           onSubmitCapture={
-            editMode ? updateActionItemHandler : createActionItemHandler
+            editMode
+              ? actionItem?.isTemplate
+                ? applyTo === 'series'
+                  ? updateActionItemHandler
+                  : updateActionForInstanceHandler
+                : updateActionItemHandler
+              : createActionItemHandler
           }
           className="p-2"
         >
-          {eventId && isRecurring && (
+          {actionItem?.isTemplate && !actionItem.isInstanceException && (
             <Form.Group className="mb-3">
               <Form.Label>{t('applyTo')}</Form.Label>
+              {/* Only show 'entire series' option if this action item is not showing instance exception data */}
+              {!actionItem?.isInstanceException && (
+                <Form.Check
+                  type="radio"
+                  label={t('entireSeries')}
+                  name="applyTo"
+                  id="applyToSeries"
+                  checked={applyTo === 'series'}
+                  onChange={() => setApplyTo('series')}
+                />
+              )}
               <Form.Check
                 type="radio"
-                label={t('entireSeries')}
-                name="applyTo"
-                id="applyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
-              />
-              <Form.Check
-                type="radio"
-                label={t('thisEventOnly')}
+                label={
+                  actionItem?.isInstanceException
+                    ? t('updateThisInstance')
+                    : t('thisEventOnly')
+                }
                 name="applyTo"
                 id="applyToInstance"
                 checked={applyTo === 'instance'}

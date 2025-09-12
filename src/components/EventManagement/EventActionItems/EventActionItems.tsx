@@ -115,6 +115,12 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
         id: eventId,
       },
     },
+    // Use cache-first but ensure fresh data for recurring event instances
+    // This prevents cached action items from showing template data instead of instance exception data
+    fetchPolicy: 'cache-first',
+    notifyOnNetworkStatusChange: true,
+    // Force refetch when eventId changes to ensure exception logic is applied
+    nextFetchPolicy: 'cache-and-network',
   });
 
   const debouncedSearch = useMemo(
@@ -172,6 +178,12 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       setBaseEvent(eventData.event.baseEvent);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
+
+  // Force refetch when eventId changes to ensure exception logic is applied
+  // This fixes the caching issue where template data is shown instead of exception data
+  useEffect(() => {
+    eventActionItemsRefetch();
+  }, [eventId, eventActionItemsRefetch]);
 
   if (eventInfoLoading) {
     return <Loader size="xl" />;
@@ -483,6 +495,8 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             isOpen={modalState[ModalState.STATUS]}
             hide={() => closeModal(ModalState.STATUS)}
             actionItemsRefetch={eventActionItemsRefetch}
+            isRecurring={isRecurring}
+            eventId={eventId}
           />
 
           <ItemDeleteModal
@@ -490,6 +504,8 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             hide={() => closeModal(ModalState.DELETE)}
             actionItem={actionItem}
             actionItemsRefetch={eventActionItemsRefetch}
+            eventId={eventId}
+            isRecurring={isRecurring}
           />
         </>
       )}

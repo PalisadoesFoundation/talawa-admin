@@ -479,6 +479,7 @@
     "markCompletion": "Mark Completion",
     "actionItemStatus": "Action Item Status",
     "postCompletionNotes": "Completion Notes",
+    "postCompletionNotesRequired": "Post completion notes are required",
     "selectActionItemCategory": "Select an action item category",
     "selectAssignee": "Select an assignee",
     "status": "Status",
@@ -504,7 +505,12 @@
     "volunteerGroups": "Volunteer Groups",
     "applyTo": "Apply to",
     "entireSeries": "Entire series",
-    "thisEventOnly": "This event only"
+    "thisEventOnly": "This event only",
+    "updateThisInstance": "Update this instance",
+    "pendingForInstance": "Pending for this instance",
+    "pendingForSeries": "Pending for series",
+    "completeForInstance": "Complete for this instance",
+    "completeForSeries": "Complete for series"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",
@@ -775,6 +781,7 @@
   },
   "eventManagement": {
     "name": "Event Management Dashboard",
+    "title": "Event Management Dashboard",
     "dashboard": "Dashboard",
     "registrants": "Registrants",
     "attendance": "Attendance",

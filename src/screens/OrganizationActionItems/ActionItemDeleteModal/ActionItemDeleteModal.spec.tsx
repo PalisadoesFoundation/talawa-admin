@@ -131,4 +131,199 @@ describe('Testing ItemDeleteModal', () => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
+
+  describe('Conditional Logic for Recurring Events', () => {
+    it('should not render applyTo radio buttons when eventId is not provided', () => {
+      const propsWithoutEventId: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: undefined,
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithoutEventId);
+
+      // Radio buttons should not be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+      expect(screen.queryByText(t.thisEventOnly)).not.toBeInTheDocument();
+    });
+
+    it('should not render applyTo radio buttons when isRecurring is false', () => {
+      const propsNotRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: false,
+      };
+
+      renderItemDeleteModal(link1, propsNotRecurring);
+
+      // Radio buttons should not be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+      expect(screen.queryByText(t.thisEventOnly)).not.toBeInTheDocument();
+    });
+
+    it('should render applyTo radio buttons when eventId and isRecurring are provided', () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithRecurring);
+
+      // Radio buttons should be present
+      expect(screen.getByText(t.entireSeries)).toBeInTheDocument();
+      expect(screen.getByText(t.thisEventOnly)).toBeInTheDocument();
+
+      // Series should be selected by default
+      expect(screen.getByTestId('deleteApplyToSeries')).toBeChecked();
+      expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
+    });
+
+    it('should allow switching between series and instance options', () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithRecurring);
+
+      const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+
+      // Initially series should be selected
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+
+      // Click instance radio
+      fireEvent.click(instanceRadio);
+      expect(seriesRadio).not.toBeChecked();
+      expect(instanceRadio).toBeChecked();
+
+      // Click series radio again
+      fireEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION when applyTo is series', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithRecurring);
+
+      // Ensure series is selected (default)
+      const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+      expect(seriesRadio).toBeChecked();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(itemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_FOR_INSTANCE when applyTo is instance', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithRecurring);
+
+      // Switch to instance
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+      fireEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(itemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION for non-recurring events', async () => {
+      const propsNonRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: false,
+      };
+
+      renderItemDeleteModal(link1, propsNonRecurring);
+
+      // No radio buttons should be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(itemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION when eventId is not provided', async () => {
+      const propsWithoutEventId: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: undefined,
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link1, propsWithoutEventId);
+
+      // No radio buttons should be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(itemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should handle error when deleting instance fails', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...itemProps,
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(link2, propsWithRecurring);
+
+      // Switch to instance
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+      fireEvent.click(instanceRadio);
+
+      // Click delete button
+      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
+    });
+  });
 });

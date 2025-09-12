@@ -110,3 +110,40 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     }
   }
 `;
+export const COMPLETE_ACTION_FOR_INSTANCE = gql`
+  mutation CompleteActionForInstance(
+    $input: MutationCompleteActionForInstanceInput!
+  ) {
+    completeActionForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const MARK_ACTION_AS_PENDING_FOR_INSTANCE = gql`
+  mutation MarkActionAsPendingForInstance(
+    $input: MutationMarkActionAsPendingForInstanceInput!
+  ) {
+    markActionAsPendingForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const UPDATE_ACTION_FOR_INSTANCE = gql`
+  mutation UpdateActionForInstance(
+    $input: MutationUpdateActionForInstanceInput!
+  ) {
+    updateActionForInstance(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_ACTION_FOR_INSTANCE = gql`
+  mutation DeleteActionForInstance(
+    $input: MutationDeleteActionForInstanceInput!
+  ) {
+    deleteActionForInstance(input: $input) {
+      id
+    }
+  }
+`;

@@ -38,6 +38,9 @@ export interface IActionItemInfo {
   isCompleted: boolean;
   preCompletionNotes: string | null;
   postCompletionNotes: string | null;
+  hasExceptions?: boolean;
+  isInstanceException?: boolean;
+  isTemplate?: boolean;
 
   // Related entities (populated via GraphQL)
   assignee: IActionUserInfo | null;
@@ -59,6 +62,7 @@ export interface ICreateActionItemInput {
   organizationId: string;
   preCompletionNotes?: string;
   assignedAt?: string;
+  isTemplate?: boolean;
 }
 
 export interface IUpdateActionItemInput {

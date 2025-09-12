@@ -504,7 +504,11 @@
     "volunteerGroups": "Groupes de Bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "pendingForInstance": "En attente pour cette instance",
+    "pendingForSeries": "En attente pour la série",
+    "completeForInstance": "Terminé pour cette instance",
+    "completeForSeries": "Terminé pour la série"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -775,6 +779,7 @@
   },
   "eventManagement": {
     "name": "Gestion d'événements",
+    "title": "Gestion d'événements",
     "dashboard": "Tableau de bord",
     "registrants": "Inscrits",
     "attendance": "Présence",

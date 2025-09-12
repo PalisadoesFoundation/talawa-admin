@@ -504,7 +504,12 @@
     "volunteerGroups": "स्वयंसेवक समूह",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "updateThisInstance": "इस इंस्टेंस को अपडेट करें",
+    "pendingForInstance": "इस उदाहरण के लिए लंबित",
+    "pendingForSeries": "श्रृंखला के लिए लंबित",
+    "completeForInstance": "इस उदाहरण के लिए पूर्ण",
+    "completeForSeries": "श्रृंखला के लिए पूर्ण"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -775,6 +780,7 @@
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
+    "title": "इवेंट मैनेजमेंट",
     "dashboard": "डैशबोर्ड",
     "registrants": "कुलसचिव",
     "attendance": "उपस्थिति",

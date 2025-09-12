@@ -51,6 +51,9 @@ export const ACTION_ITEM_LIST = gql`
       isCompleted
       preCompletionNotes
       postCompletionNotes
+      hasExceptions
+      isInstanceException
+      isTemplate
     }
   }
 `;
@@ -74,6 +77,9 @@ export const GET_EVENT_ACTION_ITEMS = gql`
             preCompletionNotes
             postCompletionNotes
             recurringEventInstanceId
+            hasExceptions
+            isInstanceException
+            isTemplate
             creator {
               id
               name

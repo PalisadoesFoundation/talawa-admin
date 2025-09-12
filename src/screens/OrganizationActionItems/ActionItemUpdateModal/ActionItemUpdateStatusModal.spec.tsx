@@ -260,4 +260,189 @@ describe('Testing ItemUpdateStatusModal', () => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
     });
   });
+
+  describe('Testing completeActionForInstanceHandler', () => {
+    const recurringProps: IItemUpdateStatusModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      actionItemsRefetch: vi.fn(),
+      actionItem: {
+        id: 'actionItemId1',
+        assigneeId: 'userId1',
+        categoryId: 'actionItemCategoryId1',
+        eventId: 'eventId1',
+        recurringEventInstanceId: 'instanceId1',
+        organizationId: 'orgId1',
+        creatorId: 'userId2',
+        updaterId: null,
+        assignedAt: new Date('2024-08-27'),
+        completionAt: null,
+        createdAt: new Date('2024-08-27'),
+        updatedAt: null,
+        isCompleted: false,
+        preCompletionNotes: 'Notes 1',
+        postCompletionNotes: null,
+        assignee: {
+          id: 'userId1',
+          name: 'John Doe',
+          avatarURL: '',
+          emailAddress: 'john.doe@example.com',
+        },
+        creator: {
+          id: 'userId2',
+          name: 'Wilt Shepherd',
+          avatarURL: '',
+          emailAddress: 'wilt.shepherd@example.com',
+        },
+        event: null,
+        recurringEventInstance: null,
+        category: {
+          id: 'actionItemCategoryId1',
+          name: 'Category 1',
+          description: null,
+          isDisabled: false,
+          createdAt: '2024-08-27',
+          organizationId: 'orgId1',
+        },
+      },
+      isRecurring: true,
+      eventId: 'instanceId1',
+    };
+
+    it('should show error when post completion notes are empty', async () => {
+      renderItemUpdateStatusModal(link1, recurringProps);
+
+      // Find the completion notes input and set it to empty
+      const notesInput = screen.getByLabelText(/completion notes/i);
+      fireEvent.change(notesInput, { target: { value: '' } });
+
+      // Find the Complete for Instance button and click it
+      const completeBtn = screen.getByText(t.completeForInstance);
+      fireEvent.click(completeBtn);
+
+      // Check that error toast is shown
+      expect(toast.error).toHaveBeenCalledWith(
+        'Post completion notes are required',
+      );
+    });
+
+    it('should successfully complete action for instance with valid notes', async () => {
+      renderItemUpdateStatusModal(link1, recurringProps);
+
+      // Find the completion notes input and set valid notes
+      const notesInput = screen.getByLabelText(/completion notes/i);
+      fireEvent.change(notesInput, {
+        target: { value: 'Valid completion notes' },
+      });
+
+      // Find the Complete for Instance button and click it
+      const completeBtn = screen.getByText(t.completeForInstance);
+      fireEvent.click(completeBtn);
+
+      // Wait for success
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('Completed');
+        expect(recurringProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(recurringProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle error when completing action for instance fails', async () => {
+      renderItemUpdateStatusModal(link2, recurringProps);
+
+      // Find the completion notes input and set valid notes
+      const notesInput = screen.getByLabelText(/completion notes/i);
+      fireEvent.change(notesInput, {
+        target: { value: 'Valid completion notes' },
+      });
+
+      // Find the Complete for Instance button and click it
+      const completeBtn = screen.getByText(t.completeForInstance);
+      fireEvent.click(completeBtn);
+
+      // Wait for error
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
+    });
+  });
+
+  describe('Testing markActionAsPendingForInstanceHandler', () => {
+    const completedRecurringProps: IItemUpdateStatusModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      actionItemsRefetch: vi.fn(),
+      actionItem: {
+        id: 'actionItemId1',
+        assigneeId: 'userId1',
+        categoryId: 'actionItemCategoryId1',
+        eventId: 'eventId1',
+        recurringEventInstanceId: 'instanceId1',
+        organizationId: 'orgId1',
+        creatorId: 'userId2',
+        updaterId: null,
+        assignedAt: new Date('2024-08-27'),
+        completionAt: new Date('2044-09-03'),
+        createdAt: new Date('2024-08-27'),
+        updatedAt: null,
+        isCompleted: true,
+        preCompletionNotes: 'Notes 1',
+        postCompletionNotes: 'Completion notes',
+        assignee: {
+          id: 'userId1',
+          name: 'John Doe',
+          avatarURL: '',
+          emailAddress: 'john.doe@example.com',
+        },
+        creator: {
+          id: 'userId2',
+          name: 'Wilt Shepherd',
+          avatarURL: '',
+          emailAddress: 'wilt.shepherd@example.com',
+        },
+        event: null,
+        recurringEventInstance: null,
+        category: {
+          id: 'actionItemCategoryId1',
+          name: 'Category 1',
+          description: null,
+          isDisabled: false,
+          createdAt: '2024-08-27',
+          organizationId: 'orgId1',
+        },
+      },
+      isRecurring: true,
+      eventId: 'instanceId1',
+    };
+
+    it('should successfully mark action as pending for instance', async () => {
+      renderItemUpdateStatusModal(link1, completedRecurringProps);
+
+      // Find the Pending for Instance button and click it
+      const pendingBtn = screen.getByText(t.pendingForInstance);
+      fireEvent.click(pendingBtn);
+
+      // Wait for success
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'organizationActionItems.isPending',
+        );
+        expect(completedRecurringProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(completedRecurringProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle error when marking action as pending for instance fails', async () => {
+      renderItemUpdateStatusModal(link2, completedRecurringProps);
+
+      // Find the Pending for Instance button and click it
+      const pendingBtn = screen.getByText(t.pendingForInstance);
+      fireEvent.click(pendingBtn);
+
+      // Wait for error
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
+    });
+  });
 });

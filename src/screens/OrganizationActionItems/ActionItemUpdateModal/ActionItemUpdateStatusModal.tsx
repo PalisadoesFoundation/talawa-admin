@@ -35,6 +35,8 @@ import { useMutation } from '@apollo/client';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+  COMPLETE_ACTION_FOR_INSTANCE,
+  MARK_ACTION_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type {
@@ -48,6 +50,8 @@ export interface IItemUpdateStatusModalProps {
   hide: () => void;
   actionItemsRefetch: () => void;
   actionItem: IActionItemInfo;
+  isRecurring?: boolean;
+  eventId?: string;
 }
 
 const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
@@ -55,6 +59,8 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   isOpen,
   actionItemsRefetch,
   actionItem,
+  isRecurring,
+  eventId,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -81,6 +87,20 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
     MARK_ACTION_ITEM_AS_PENDING_MUTATION,
     {
       refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+    },
+  );
+
+  const [completeActionForInstance] = useMutation(
+    COMPLETE_ACTION_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
+
+  const [markActionAsPendingForInstance] = useMutation(
+    MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
     },
   );
 
@@ -129,6 +149,50 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
     }
   };
 
+  const completeActionForInstanceHandler = async (): Promise<void> => {
+    try {
+      if (!postCompletionNotes.trim()) {
+        toast.error(t('postCompletionNotesRequired'));
+        return;
+      }
+
+      await completeActionForInstance({
+        variables: {
+          input: {
+            actionId: id,
+            eventId,
+            postCompletionNotes: postCompletionNotes.trim(),
+          },
+        },
+      });
+
+      toast.success(t('isCompleted'));
+      actionItemsRefetch();
+      hide();
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const markActionAsPendingForInstanceHandler = async (): Promise<void> => {
+    try {
+      await markActionAsPendingForInstance({
+        variables: {
+          input: {
+            actionId: id,
+            eventId,
+          },
+        },
+      });
+
+      toast.success(t('isPending'));
+      actionItemsRefetch();
+      hide();
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
   useEffect(() => {
     setPostCompletionNotes(actionItem.postCompletionNotes ?? '');
   }, [actionItem]);
@@ -166,29 +230,67 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           )}
 
           {isCompleted ? (
-            <div className="d-flex gap-3 justify-content-end">
-              <Button
-                type="submit"
-                className={styles.addButton}
-                data-testid="yesBtn"
-              >
-                {tCommon('yes')}
-              </Button>
-              <Button
-                className={`btn btn-danger ${styles.removeButton}`}
-                onClick={hide}
-              >
-                {tCommon('no')}
-              </Button>
-            </div>
+            <>
+              {actionItem.isTemplate ? (
+                <div className="d-flex gap-3 justify-content-end">
+                  <Button
+                    onClick={markActionAsPendingForInstanceHandler}
+                    className={styles.addButton}
+                  >
+                    {t('pendingForInstance')}
+                  </Button>
+                  {/* Only show 'pending for series' if this action item is not showing instance exception data */}
+                  {!actionItem.isInstanceException && (
+                    <Button type="submit" className={styles.addButton}>
+                      {t('pendingForSeries')}
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <div className="d-flex gap-3 justify-content-end">
+                  <Button
+                    type="submit"
+                    className={styles.addButton}
+                    data-testid="yesBtn"
+                  >
+                    {tCommon('yes')}
+                  </Button>
+                  <Button
+                    className={`btn btn-danger ${styles.removeButton}`}
+                    onClick={hide}
+                  >
+                    {tCommon('no')}
+                  </Button>
+                </div>
+              )}
+            </>
           ) : (
-            <Button
-              type="submit"
-              className={`${styles.addButton}`}
-              data-testid="createBtn"
-            >
-              {t('markCompletion')}
-            </Button>
+            <>
+              {actionItem.isTemplate ? (
+                <div className="d-flex gap-3 justify-content-end">
+                  <Button
+                    onClick={completeActionForInstanceHandler}
+                    className={styles.addButton}
+                  >
+                    {t('completeForInstance')}
+                  </Button>
+                  {/* Only show 'complete for series' if this action item is not showing instance exception data */}
+                  {!actionItem.isInstanceException && (
+                    <Button type="submit" className={styles.addButton}>
+                      {t('completeForSeries')}
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  type="submit"
+                  className={`${styles.addButton}`}
+                  data-testid="createBtn"
+                >
+                  {t('markCompletion')}
+                </Button>
+              )}
+            </>
           )}
         </Form>
       </Modal.Body>

@@ -12,6 +12,7 @@ import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/Actions/interface';
@@ -128,6 +129,7 @@ const mockActionItem = {
   isCompleted: false,
   preCompletionNotes: 'Test notes',
   postCompletionNotes: null,
+  isInstanceException: true, // This will set applyTo to 'instance'
   assignee: {
     id: 'user1',
     name: 'John Doe',
@@ -1009,6 +1011,469 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
 
     // Should fallback to empty array and not crash
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+});
+
+describe('updateActionForInstanceHandler', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should successfully update action item with all fields', async () => {
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Updated notes'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Updated notes');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalled();
+      expect(mockOrgRefetch).toHaveBeenCalled();
+      expect(mockHide).toHaveBeenCalled();
+    });
+  });
+
+  it('should show error toast when actionItem ID is missing', async () => {
+    const actionItemWithoutId = {
+      ...mockActionItem,
+      id: undefined,
+    };
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true,
+      actionItem: actionItemWithoutId as unknown as IActionItemInfo,
+      isRecurring: true,
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+    });
+  });
+
+  it('should handle mutation error and show error toast', async () => {
+    const errorUpdateMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Error test notes'
+        );
+      },
+      error: new Error('Network error occurred'),
+    };
+
+    const mutationMocks = [errorUpdateMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Error test notes');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Network error occurred');
+    });
+  });
+
+  it('should call actionItemsRefetch and orgActionItemsRefetch on successful update', async () => {
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Refetch test notes'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Refetch test notes');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockRefetch).toHaveBeenCalledTimes(1);
+      expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should call hide function on successful update', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Hide test notes'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Hide test notes');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockHide).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should handle partial input fields correctly', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Partial update notes'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Partial update notes');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('should prevent default form submission', async () => {
+    const mockRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.preCompletionNotes === 'Prevent default test'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Prevent default test');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+    });
   });
 });
 
