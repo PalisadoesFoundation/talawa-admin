@@ -16,18 +16,24 @@ import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { expect, describe, it, vi } from 'vitest';
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 
 import * as MinioUploadModule from 'utils/MinioUpload';
 import * as MinioDownloadModule from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 
 // Mock localStorage usage
 const { setItem } = useLocalStorage();
 
 // Mock toast notifications
 vi.mock('react-toastify', () => ({
-  toast: { error: vi.fn(), success: vi.fn(), info: vi.fn() },
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+  },
 }));
 
 // Mock react-router useParams
@@ -40,6 +46,13 @@ vi.mock('react-router', async () => {
     useNavigate: () => vi.fn(),
   };
 });
+
+// Mock URL.createObjectURL and URL.revokeObjectURL
+const mockCreateObjectURL = vi.fn().mockReturnValue('blob:mock-url');
+const mockRevokeObjectURL = vi.fn();
+
+global.URL.createObjectURL = mockCreateObjectURL;
+global.URL.revokeObjectURL = mockRevokeObjectURL;
 
 // Mock MinIO hooks
 const mockUploadFileToMinio = vi
@@ -223,6 +236,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   localStorage.clear();
+  vi.clearAllMocks();
 });
 
 async function wait(ms = 100) {
@@ -269,15 +283,72 @@ describe('Home Screen: User Portal', () => {
     expect(await screen.findByTestId('postBtn')).toBeInTheDocument();
   });
 
-  it('opens post creation modal when clicking Start Post button', async () => {
+  it('creates local object URL for image preview instead of uploading to MinIO immediately', async () => {
     renderHomeScreen();
     await wait();
-    const postBtn = screen.getByTestId('postBtn');
-    await userEvent.click(postBtn);
-    expect(screen.getByTestId('startPostModal')).toBeInTheDocument();
+
+    const fileInput = screen.getByTestId('postImageInput');
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+
+    await userEvent.upload(fileInput, file);
+    await wait();
+
+    // Should create local object URL, not upload to MinIO
+    expect(mockCreateObjectURL).toHaveBeenCalledWith(file);
+    expect(mockUploadFileToMinio).not.toHaveBeenCalled(); // No immediate upload
+
+    // Check that success toast was called (with translation key)
+    expect(toast.success).toHaveBeenCalled();
   });
 
-  it('closes post modal after clicking close', async () => {
+  it('cleans up object URL when modal is closed', async () => {
+    renderHomeScreen();
+    await wait();
+
+    const fileInput = screen.getByTestId('postImageInput');
+    const file = new File(['image content'], 'image.png', {
+      type: 'image/png',
+    });
+
+    await userEvent.upload(fileInput, file);
+    await wait();
+
+    // Open modal
+    const postBtn = screen.getByTestId('postBtn');
+    await userEvent.click(postBtn);
+
+    // Close modal
+    const modal = screen.getByTestId('startPostModal');
+    const closeButton = within(modal).getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    // Should revoke the object URL
+    expect(mockRevokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+  });
+
+  it('cleans up previous object URL when selecting new file', async () => {
+    renderHomeScreen();
+    await wait();
+
+    const fileInput = screen.getByTestId('postImageInput');
+
+    // First file
+    const file1 = new File(['content1'], 'image1.png', { type: 'image/png' });
+    await userEvent.upload(fileInput, file1);
+    await wait();
+
+    // Second file - should revoke first URL
+    const file2 = new File(['content2'], 'image2.png', { type: 'image/png' });
+    await userEvent.upload(fileInput, file2);
+    await wait();
+
+    expect(mockRevokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+    expect(mockCreateObjectURL).toHaveBeenCalledTimes(2);
+  });
+
+  it('opens post creation modal with preview when image is selected', async () => {
     renderHomeScreen();
     await wait();
 
@@ -290,70 +361,13 @@ describe('Home Screen: User Portal', () => {
     await userEvent.upload(fileInput, file);
     await wait();
 
+    // Open modal
     const postBtn = screen.getByTestId('postBtn');
     await userEvent.click(postBtn);
-    const modal = screen.getByTestId('startPostModal');
 
-    expect(modal).toBeInTheDocument();
-
-    // Type post text
-    await userEvent.type(screen.getByTestId('postInput'), 'some content');
-    expect(screen.getByTestId('postInput')).toHaveValue('some content');
-
-    // Image preview should appear
-    expect(
-      await screen.findByAltText('Post Image Preview'),
-    ).toBeInTheDocument();
-
-    // Close modal
-    const closeButton = within(modal).getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-
-    // The modal content text should disappear
-    expect(screen.queryByText(/somethingOnYourMind/i)).not.toBeInTheDocument();
-
-    // File input cleared after modal close
-    const clearedFileInput = screen.getByTestId(
-      'postImageInput',
-    ) as HTMLInputElement;
-    expect(clearedFileInput.value).toBe('');
-    expect(screen.queryByAltText('Post Image Preview')).not.toBeInTheDocument();
-  });
-
-  it('uploads image correctly and calls MinIO hooks', async () => {
-    renderHomeScreen();
-    await wait();
-
-    const fileInput = screen.getByTestId('postImageInput');
-    const file = new File(['dummy content'], 'test-image.png', {
-      type: 'image/png',
-    });
-
-    await userEvent.upload(fileInput, file);
-
-    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'orgId');
-    expect(mockGetFileFromMinio).toHaveBeenCalledWith(
-      'mocked-object-key',
-      'orgId',
-    );
-    await wait();
-    expect(toast.success).toHaveBeenCalledWith('Image uploaded successfully');
-  });
-
-  it('shows toast error on MinIO upload failure', async () => {
-    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
-    renderHomeScreen();
-
-    const fileInput = screen.getByTestId('postImageInput');
-    const file = new File(['dummy content'], 'test-image.png', {
-      type: 'image/png',
-    });
-
-    await userEvent.upload(fileInput, file);
-    await wait();
-
-    await wait();
-    expect(toast.success).toHaveBeenCalledWith('Image upload failed');
+    // Modal should show with preview
+    expect(screen.getByTestId('startPostModal')).toBeInTheDocument();
+    expect(screen.getByAltText('Post Image Preview')).toBeInTheDocument();
   });
 
   it('renders posts in PostCard correctly', async () => {

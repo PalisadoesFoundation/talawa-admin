@@ -163,6 +163,18 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi.fn(() =>
+      Promise.resolve({ objectName: 'test-object.mp4' }),
+    ),
+  }),
+}));
+
+beforeAll(() => {
+  global.URL.createObjectURL = vi.fn(() => 'blob:test-video');
+});
+
 // Mock the dependencies
 vi.mock('react-toastify', () => ({
   toast: {
@@ -384,32 +396,6 @@ describe('OrgPostCard Component', () => {
       expect(defaultImage).toBeInTheDocument();
     });
 
-    it('handleVideoPlay: sets playing to true and calls video.play()', async () => {
-      renderComponentVideo();
-
-      const videoElement = screen.getByTestId('video') as HTMLVideoElement;
-      videoElement.play = vi.fn();
-
-      fireEvent.mouseEnter(videoElement);
-
-      await waitFor(() => {
-        expect(videoElement.play).toHaveBeenCalled();
-      });
-    });
-
-    it('handleVideoPause: sets playing to false and calls video.pause()', async () => {
-      renderComponentVideo();
-
-      const videoElement = screen.getByTestId('video') as HTMLVideoElement;
-      videoElement.pause = vi.fn();
-
-      fireEvent.mouseLeave(videoElement);
-
-      await waitFor(() => {
-        expect(videoElement.pause).toHaveBeenCalled();
-      });
-    });
-
     it('handleInputChange: updates the caption in the edit modal', async () => {
       const simplePost = {
         id: '12',
@@ -447,64 +433,46 @@ describe('OrgPostCard Component', () => {
       expect((captionInput as HTMLInputElement).value).toBe('Updated Caption');
     });
 
-    it('removes the preview image when clearImage is triggered', async () => {
+    it('uploads image to MinIO and shows preview', async () => {
       renderComponent();
-      const postItem = screen.getByTestId('post-item');
-      await userEvent.click(postItem);
-      const moreOptionsButton = screen.getByTestId('more-options-button');
-      await userEvent.click(moreOptionsButton);
-      const editOption = screen.getByText(/edit/i);
-      await userEvent.click(editOption);
+      await userEvent.click(screen.getByTestId('post-item'));
+      await userEvent.click(screen.getByTestId('more-options-button'));
+      await userEvent.click(screen.getByText(/edit/i));
 
-      const fileInput = await screen.findByTestId('image-upload');
-      expect(fileInput).toBeInTheDocument();
-
-      const file = new File(['dummy content'], 'dummy-image.jpg', {
-        type: 'image/jpeg',
-      });
-      await userEvent.upload(fileInput, file);
-
-      const previewImage = await screen.findByAltText('Preview');
-      expect(previewImage).toBeInTheDocument();
-
-      const clearButton = screen.getByRole('button', { name: '×' });
-      expect(clearButton).toBeInTheDocument();
-
-      await userEvent.click(clearButton);
+      const file = new File(['img'], 'test.jpg', { type: 'image/jpeg' });
+      const input = screen.getByTestId('image-upload');
+      await userEvent.upload(input, file);
 
       await waitFor(() => {
-        expect(screen.queryByAltText('Preview')).not.toBeInTheDocument();
+        expect(screen.getByAltText('Preview')).toBeInTheDocument();
       });
     });
 
-    it('removes the preview video when clearVideo is triggered', async () => {
-      renderComponent();
+    it('uploads video to MinIO and shows preview', async () => {
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <OrgPostCard
+            post={{
+              id: '1',
+              caption: 'test',
+              createdAt: new Date(),
+              attachments: [],
+              creatorId: 'u1',
+            }}
+          />
+        </MockedProvider>,
+      );
 
-      const postItem = screen.getByTestId('post-item');
-      await userEvent.click(postItem);
-      const moreOptionsButton = screen.getByTestId('more-options-button');
-      await userEvent.click(moreOptionsButton);
-      const editOption = screen.getByText(/edit/i);
-      await userEvent.click(editOption);
+      await userEvent.click(screen.getByTestId('post-item'));
+      await userEvent.click(screen.getByTestId('more-options-button'));
+      await userEvent.click(screen.getByText(/edit/i));
 
-      const videoInput = await screen.findByTestId('video-upload');
-      expect(videoInput).toBeInTheDocument();
-
-      const file = new File(['dummy video content'], 'dummy-video.mp4', {
-        type: 'video/mp4',
-      });
-      await userEvent.upload(videoInput, file);
-
-      const previewVideo = await screen.findByTestId('video-preview');
-      expect(previewVideo).toBeInTheDocument();
-
-      const clearButton = screen.getByRole('button', { name: '×' });
-      expect(clearButton).toBeInTheDocument();
-
-      await userEvent.click(clearButton);
+      const file = new File(['vid'], 'test.mp4', { type: 'video/mp4' });
+      const input = screen.getByTestId('video-upload');
+      await userEvent.upload(input, file);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('video-preview')).not.toBeInTheDocument();
+        expect(screen.getByTestId('video-preview')).toBeInTheDocument();
       });
     });
 

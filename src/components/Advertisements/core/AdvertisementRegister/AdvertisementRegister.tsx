@@ -143,14 +143,15 @@ function AdvertisementRegister({
     attachments: undefined,
   });
 
-  // Clean up object URLs to prevent memory leaks
+  // Clean up object URLs on unmount
   useEffect(() => {
     return () => {
       localPreviews.forEach((preview) => {
         URL.revokeObjectURL(preview.url);
       });
     };
-  }, [localPreviews]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClose = (): void => {
     // Clean up all object URLs
@@ -197,6 +198,8 @@ function AdvertisementRegister({
 
       setFilesForUpload((prev) => [...prev, ...validFiles]);
       setLocalPreviews((prev) => [...prev, ...newPreviews]);
+      // Allow re-selecting the same file to retrigger onChange
+      e.target.value = '';
     }
   };
 
@@ -255,7 +258,8 @@ function AdvertisementRegister({
     const failed = results.filter((r) => r.status === 'rejected').length;
 
     if (uploaded.length) toast.success(t('mediaUploadSuccess') as string);
-    if (failed) toast.error(t('mediaUploadPartialFailure') as string);
+    if (failed)
+      toast.error(t('mediaUploadPartialFailure', { count: failed }) as string);
 
     return uploaded;
   };
@@ -285,7 +289,6 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: string[];
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -293,8 +296,10 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: uploadedObjectNames,
       };
+      if (uploadedObjectNames.length > 0) {
+        (variables as any).attachments = uploadedObjectNames;
+      }
 
       if (formState.description !== null) {
         variables = {

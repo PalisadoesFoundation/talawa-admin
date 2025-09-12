@@ -240,6 +240,10 @@ function OrgPost(): JSX.Element {
       }
 
       try {
+        if (!currentUrl) {
+          toast.error(t('orgIdRequired') as string);
+          return;
+        }
         // Upload to MinIO and get object name
         const { objectName } = await uploadFileToMinio(
           selectedFile,

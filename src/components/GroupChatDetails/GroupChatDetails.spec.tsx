@@ -38,6 +38,18 @@ i18n.use(initReactI18next).init({
   },
 });
 
+const mockUploadFileToMinio = vi.fn();
+
+vi.mock('utils/fileValidation', () => ({
+  validateFile: vi.fn(() => ({ isValid: true })),
+}));
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  }),
+}));
+
 describe('GroupChatDetails', () => {
   beforeEach(() => {
     vi.resetAllMocks();
@@ -206,6 +218,107 @@ describe('GroupChatDetails', () => {
       },
       { timeout: 5000 },
     );
+  });
+
+  it('handles successful image upload to MinIO', async () => {
+    // Mock successful upload
+    mockUploadFileToMinio.mockResolvedValueOnce({
+      objectName: 'uploaded-object.jpg',
+    });
+
+    useLocalStorage().setItem('userId', 'user1');
+    const chatRefetchMock = vi.fn();
+    const toastSpy = vi.spyOn(toast, 'success');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={filledMockChat}
+            chatRefetch={chatRefetchMock}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await wait();
+
+    // Click edit image button
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('editImageBtn'));
+    });
+
+    const fileInput = screen.getByTestId('fileInput');
+    const validImage = new File(['image-content'], 'test.jpg', {
+      type: 'image/jpeg',
+    });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [validImage],
+    });
+
+    // Trigger file upload
+    await act(async () => {
+      fireEvent.change(fileInput);
+    });
+
+    await wait();
+
+    // Verify upload function was called with correct parameters
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(
+      validImage,
+      filledMockChat.organization?._id || 'organization',
+    );
+
+    // Verify success toast was shown
+    expect(toastSpy).toHaveBeenCalledWith('userChat.imageUploadSuccess');
+
+    // Verify chat was refetched after successful upload
+    expect(chatRefetchMock).toHaveBeenCalled();
+  });
+
+  it('handles image upload failure to MinIO', async () => {
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    useLocalStorage().setItem('userId', 'user1');
+    const toastSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={filledMockChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await wait();
+
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('editImageBtn'));
+    });
+
+    const fileInput = screen.getByTestId('fileInput');
+    const validImage = new File(['image-content'], 'test.jpg', {
+      type: 'image/jpeg',
+    });
+    Object.defineProperty(fileInput, 'files', { value: [validImage] });
+
+    await act(async () => {
+      fireEvent.change(fileInput);
+    });
+
+    await wait();
+
+    // wait until toast is actually fired
+    await waitFor(() => {
+      expect(toastSpy).toHaveBeenCalledWith('userChat.imageUploadFailed');
+    });
   });
 
   it('edit chat title', async () => {

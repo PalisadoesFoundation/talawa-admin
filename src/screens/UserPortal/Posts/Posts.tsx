@@ -303,7 +303,7 @@ export default function home(): JSX.Element {
       toast.success('Image selected successfully');
     } catch (error) {
       console.error('Error creating preview:', error);
-      toast.error('Failed to create preview');
+      toast.error(t('previewCreateFailed') as string);
       setPostImg('');
       setPostImgFile(null);
     }

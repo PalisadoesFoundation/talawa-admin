@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -21,6 +21,14 @@ vi.mock('react-toastify', () => ({
     success: vi.fn(),
     dismiss: vi.fn(),
   },
+}));
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi
+      .fn()
+      .mockResolvedValue({ objectName: 'uploaded.png' }),
+  }),
 }));
 
 const mockFile = new File(['dummy content'], 'test.png', { type: 'image/png' });
@@ -128,15 +136,12 @@ describe('Testing StartPostModal Component: User Portal', () => {
     expect(modal).toBeInTheDocument();
   });
 
-  it('On invalid post submission with empty body Error toast should be shown', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+  it('On empty body, the Create Post button should be disabled', async () => {
     renderStartPostModal(true, null);
     await wait();
 
-    await userEvent.click(screen.getByTestId('createPostBtn'));
-    expect(toastSpy).toHaveBeenCalledWith(
-      "Can't create a post with an empty body.",
-    );
+    const btn = screen.getByTestId('createPostBtn');
+    expect(btn).toBeDisabled();
   });
 
   it('On valid post submission Info toast should be shown', async () => {
@@ -206,7 +211,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
             title: '',
             text: 'Test content',
             organizationId: '123',
-            file: null,
+            file: 'uploaded.png',
           },
         },
         result: {
@@ -233,12 +238,12 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.type(screen.getByTestId('postInput'), 'Test content');
     await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
-
-    expect(toast.dismiss).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalled();
-    expect(fetchPostsMock).toHaveBeenCalled();
-    expect(onHideMock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.dismiss).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalled();
+      expect(fetchPostsMock).toHaveBeenCalled();
+      expect(onHideMock).toHaveBeenCalled();
+    });
   });
 
   it('should handle failed post creation', async () => {

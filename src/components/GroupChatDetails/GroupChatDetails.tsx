@@ -83,7 +83,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': { border: 0 },
 }));
 
-export default function groupChatDetails({
+export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
@@ -179,6 +179,7 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
+      // if (isUploading) return;
       // Validate file before upload
       const validation = validateFile(file);
       if (!validation.isValid) {
@@ -190,7 +191,7 @@ export default function groupChatDetails({
         // Upload to MinIO and get object name
         const organizationId = chat.organization?._id || 'organization';
         const { objectName } = await uploadFileToMinio(file, organizationId);
-        setSelectedImage(objectName);
+        setSelectedImage(() => objectName);
         await updateChat({
           variables: {
             input: {
@@ -200,10 +201,10 @@ export default function groupChatDetails({
           },
         });
         await chatRefetch({ id: chat._id });
-        toast.success('Image uploaded successfully');
+        toast.success(t('imageUploadSuccess'));
       } catch (error) {
         console.error('Error uploading image:', error);
-        toast.error('Image upload failed');
+        toast.error(t('imageUploadFailed'));
       }
     } else {
       setSelectedImage('');

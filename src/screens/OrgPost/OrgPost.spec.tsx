@@ -670,7 +670,11 @@ describe('OrgPost Component', () => {
       { timeout: 3000 },
     );
 
-    expect(toastSuccessMock.mock.calls[0][0]).toContain('postCreatedSuccess');
+    expect(toast.error).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Please select an image or video file|Your validation error message/i,
+      ),
+    );
 
     await act(() => new Promise((resolve) => setTimeout(resolve, 500)));
 

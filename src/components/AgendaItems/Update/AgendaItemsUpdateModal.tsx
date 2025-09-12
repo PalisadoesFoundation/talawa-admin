@@ -68,8 +68,7 @@ const AgendaItemsUpdateModal: React.FC<
   const { orgId: currentOrg } = useParams();
   // MinIO hooks must be called inside component
   const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  const { getFileFromMinio } = useMinioDownload();
   // State to keep uploaded file info for preview and removal
   const [uploadedFiles, setUploadedFiles] = useState<
     { file: File; presignedUrl: string }[]
@@ -153,17 +152,27 @@ const AgendaItemsUpdateModal: React.FC<
         return;
       }
       // Upload valid files to MinIO and get presigned URLs
-      const uploaded: { file: File; presignedUrl: string }[] = [];
-      for (const file of validFiles) {
-        try {
+      const results = await Promise.allSettled(
+        validFiles.map(async (file) => {
           const { objectName } = await uploadFileToMinio(file, currentOrg!);
           const presignedUrl = await getFileFromMinio(objectName, currentOrg!);
-          uploaded.push({ file, presignedUrl });
-          toast.success(t('Uploaded successfully'));
-        } catch {
-          toast.error(t('Failed to upload'));
-        }
-      }
+          return { file, objectName, presignedUrl };
+        }),
+      );
+      const uploaded = results
+        .filter(
+          (
+            r,
+          ): r is PromiseFulfilledResult<{
+            file: File;
+            objectName: string;
+            presignedUrl: string;
+          }> => r.status === 'fulfilled',
+        )
+        .map((r) => r.value);
+      const failed = results.filter((r) => r.status === 'rejected').length;
+      if (uploaded.length) toast.success(t('mediaUploadSuccess') as string);
+      if (failed) toast.error(t('mediaUploadPartialFailure') as string);
       // Update uploadedFiles state for preview
       setUploadedFiles((prev) => [...prev, ...uploaded]);
       setFormState((prev) => ({
@@ -340,7 +349,7 @@ const AgendaItemsUpdateModal: React.FC<
                       playsInline
                       crossOrigin="anonymous"
                     >
-                      <source src={presignedUrl} type="video/mp4" />
+                      <source src={presignedUrl} type={file.type} />
                     </video>
                   ) : (
                     <img src={presignedUrl} alt="Attachment preview" />

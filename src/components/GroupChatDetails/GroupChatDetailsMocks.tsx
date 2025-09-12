@@ -4,6 +4,7 @@ import {
   UPDATE_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+
 /**
  * Mocks for the GroupChatDetails component
  */
@@ -98,6 +99,7 @@ export const filledMockChat = createGroupChat(
   [alice, bob],
   [MockDirectMessageNR, MockDirectMessage],
 );
+
 export const incompleteMockChat = createGroupChat(
   'chat1',
   '',
@@ -107,6 +109,7 @@ export const incompleteMockChat = createGroupChat(
 );
 
 export const mocks = [
+  // Users query
   {
     request: {
       query: USERS_CONNECTION_LIST,
@@ -127,6 +130,7 @@ export const mocks = [
       },
     },
   },
+  // Add user to group chat
   {
     request: {
       query: ADD_USER_TO_GROUP_CHAT,
@@ -134,6 +138,15 @@ export const mocks = [
     },
     result: { data: { addUserToGroupChat: { _id: 'chat1', success: true } } },
   },
+  // Update chat name only
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: { input: { _id: 'chat1', name: 'Group name' } },
+    },
+    result: { data: { updateChat: { _id: 'chat1', success: true } } },
+  },
+  // Update chat name + empty image
   {
     request: {
       query: UPDATE_CHAT,
@@ -141,6 +154,7 @@ export const mocks = [
     },
     result: { data: { updateChat: { _id: 'chat1', success: true } } },
   },
+  // Update chat name + existing image
   {
     request: {
       query: UPDATE_CHAT,
@@ -152,10 +166,19 @@ export const mocks = [
         },
       },
     },
-    result: { data: { updateChat: { _id: 'chat2', success: true } } },
+    result: { data: { updateChat: { _id: 'chat1', success: true } } },
   },
+  // Update chat image only (upload case)
   {
-    request: { query: UPDATE_CHAT, variables: {} },
-    result: { data: { updateChat: { _id: 'chat3', success: true } } },
+    request: {
+      query: UPDATE_CHAT,
+      variables: {
+        input: {
+          _id: 'chat1',
+          image: 'uploaded-object.jpg',
+        },
+      },
+    },
+    result: { data: { updateChat: { _id: 'chat1', success: true } } },
   },
 ];

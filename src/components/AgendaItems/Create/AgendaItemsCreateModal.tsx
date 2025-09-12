@@ -1,3 +1,42 @@
+/**
+ * AgendaItemsCreateModal Component
+ *
+ * This component renders a modal for creating agenda items. It includes
+ * form fields for entering details such as title, duration, description,
+ * categories, URLs, and attachments. The modal also provides functionality
+ * for validating URLs, managing attachments, and submitting the form.
+ *
+ * @component
+ * @param {InterfaceAgendaItemsCreateModalProps} props - The props for the component.
+ * @param {boolean} props.agendaItemCreateModalIsOpen - Determines if the modal is open.
+ * @param {() => void} props.hideCreateModal - Function to close the modal.
+ * @param {object} props.formState - The current state of the form.
+ * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
+ * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
+ * @param {(key: string) => string} props.t - Translation function for localization.
+ * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for modal and form styling.
+ * - `@mui/material` is used for the Autocomplete component.
+ * - Attachments are converted to base64 format before being added to the form state.
+ * - URLs are validated using a regular expression before being added.
+ *
+ * @example
+ * ```tsx
+ * <AgendaItemsCreateModal
+ *   agendaItemCreateModalIsOpen={true}
+ *   hideCreateModal={handleClose}
+ *   formState={formState}
+ *   setFormState={setFormState}
+ *   createAgendaItemHandler={handleSubmit}
+ *   t={translate}
+ *   agendaItemCategories={categories}
+ * />
+ * ```
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
@@ -44,14 +83,15 @@ const AgendaItemsCreateModal: React.FC<
     }));
   }, []);
 
-  // Clean up object URLs to prevent memory leaks
+  // Clean up object URLs on unmount
   useEffect(() => {
     return () => {
       localPreviews.forEach((preview) => {
         URL.revokeObjectURL(preview.url);
       });
     };
-  }, [localPreviews]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * Validates if a given URL is in a correct format.
@@ -104,8 +144,8 @@ const AgendaItemsCreateModal: React.FC<
     if (target.files) {
       const files = Array.from(target.files);
 
-      // Validate files and accumulate total size
-      let totalSize = 0;
+      // Validate files and accumulate total size (include already queued files)
+      let totalSize = filesForUpload.reduce((sum, f) => sum + f.size, 0);
       const validFiles: File[] = [];
       const newPreviews: { url: string; file: File }[] = [];
 

@@ -249,7 +249,9 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(toast.error).toHaveBeenCalledWith(
+        'File is too large. Maximum size is 5MB.',
+      );
     });
   });
 

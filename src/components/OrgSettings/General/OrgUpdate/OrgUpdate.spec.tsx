@@ -11,6 +11,14 @@ import OrgUpdate from './OrgUpdate';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
+const uploadFileToMinioMock = vi.fn();
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: uploadFileToMinioMock,
+  }),
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -277,9 +285,11 @@ describe('OrgUpdate Component', () => {
     default: vi.fn().mockResolvedValue('base64String'),
   }));
 
-  it('handles file upload', async () => {
-    const convertToBase64 = (await import('utils/convertToBase64')).default;
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+  it('handles file upload with MinIO and shows success toast', async () => {
+    const file = new File(['hello'], 'logo.png', { type: 'image/png' });
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'uploaded-logo.png',
+    });
 
     render(
       <MockedProvider mocks={mocks} addTypename={true}>
@@ -296,15 +306,38 @@ describe('OrgUpdate Component', () => {
     const fileInput = screen.getByTestId(
       'organisationImage',
     ) as HTMLInputElement;
-
     await userEvent.upload(fileInput, file);
 
-    expect(fileInput.files).toHaveLength(1);
-    expect(fileInput.files?.[0]).toBe(file);
+    expect(uploadFileToMinioMock).toHaveBeenCalledWith(file, '1');
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Image uploaded successfully');
+    });
+  });
+
+  it('handles failed file upload with MinIO', async () => {
+    const file = new File(['oops'], 'logo.png', { type: 'image/png' });
+    uploadFileToMinioMock.mockRejectedValue(new Error('Upload failed'));
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={true}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
     await waitFor(() => {
-      const saveButton = screen.getByTestId('save-org-changes-btn');
-      expect(saveButton).toBeEnabled();
+      expect(screen.getByTestId('organisationImage')).toBeInTheDocument();
+    });
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+    await userEvent.upload(fileInput, file);
+
+    expect(uploadFileToMinioMock).toHaveBeenCalledWith(file, '1');
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Image upload failed');
     });
   });
 

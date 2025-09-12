@@ -20,6 +20,27 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
+// 🔹 Mock error handler
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
+// Mock MinIO hook
+const uploadFileToMinioMock = vi.fn();
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: uploadFileToMinioMock,
+  }),
+}));
+
 const MOCKS1 = [
   {
     request: {
@@ -531,6 +552,60 @@ describe('Testing Community Profile Screen', () => {
 
     // Ensure no success toast is shown for null conversion
     expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  test('Should upload logo using MinIO and show success toast', async () => {
+    // Mock MinIO upload success
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'uploaded-logo.png',
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput');
+    const file = new File(['logo'], 'logo.png', { type: 'image/png' });
+
+    await userEvent.upload(fileInput, file);
+    await wait();
+
+    expect(uploadFileToMinioMock).toHaveBeenCalledWith(file, 'organization');
+    expect(toast.success).toHaveBeenCalledWith('Logo uploaded successfully');
+  });
+
+  test('Should handle MinIO upload error and show error toast', async () => {
+    // Mock MinIO upload failure
+    uploadFileToMinioMock.mockRejectedValue(new Error('Upload failed'));
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput');
+    const file = new File(['logo'], 'logo.png', { type: 'image/png' });
+
+    await userEvent.upload(fileInput, file);
+    await wait();
+
+    expect(uploadFileToMinioMock).toHaveBeenCalledWith(file, 'organization');
+    expect(toast.error).toHaveBeenCalledWith('Logo upload failed');
   });
 
   test('should show success toast when profile is updated successfully', async () => {

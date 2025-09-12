@@ -32,7 +32,27 @@ vi.mock('react-router', async () => {
   };
 });
 
-global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+// Mock the MinIO hooks and validation
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi.fn(),
+  }),
+}));
+
+vi.mock('utils/MinioDownload', () => ({
+  useMinioDownload: () => ({
+    getFileFromMinio: vi.fn(),
+  }),
+}));
+
+vi.mock('utils/fileValidation', () => ({
+  validateFile: vi.fn(),
+}));
+
+beforeAll(() => {
+  global.URL.createObjectURL = vi.fn(() => 'mock-url');
+  global.URL.revokeObjectURL = vi.fn();
+});
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -396,6 +416,7 @@ describe('Testing Advertisement Register Component', () => {
   it('create advertisement', async () => {
     const createAdMock = vi.fn();
     mockUseMutation.mockReturnValue([createAdMock]);
+
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -428,9 +449,7 @@ describe('Testing Advertisement Register Component', () => {
       fireEvent.change(screen.getByLabelText(translations.Rname), {
         target: { value: 'Ad1' },
       });
-    });
 
-    await act(async () => {
       fireEvent.change(screen.getByLabelText(translations.Rtype), {
         target: { value: 'banner' },
       });
@@ -463,15 +482,29 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       const mockCall = createAdMock.mock.calls[0][0];
-      expect(mockCall.variables).toMatchObject({
-        organizationId: '1',
-        name: 'Ad1',
-        type: 'banner',
-        description: 'this is a banner',
-        attachments: undefined,
-      });
-      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
-      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
+
+      // Match the main fields
+      expect(mockCall.variables).toEqual(
+        expect.objectContaining({
+          organizationId: '1',
+          name: 'Ad1',
+          type: 'banner',
+          description: 'this is a banner',
+        }),
+      );
+
+      // Check startAt and endAt explicitly
+      expect(mockCall.variables.startAt).toBe(
+        dateConstants.create.startAtCalledWith,
+      );
+      expect(mockCall.variables.endAt).toBe(
+        dateConstants.create.endAtCalledWith,
+      );
+
+      // Optional attachments
+      expect(mockCall.variables.attachments).toBeUndefined();
+
+      // Check if Creation Failed text is absent
       const creationFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Creation Failed' &&
@@ -480,6 +513,7 @@ describe('Testing Advertisement Register Component', () => {
       });
       expect(creationFailedText).toBeNull();
     });
+
     vi.useRealTimers();
   });
 
@@ -763,7 +797,9 @@ describe('Testing Advertisement Register Component', () => {
     const mediaInput = screen.getByTestId('advertisementMedia');
     await userEvent.upload(mediaInput, mockBigFile);
 
-    expect(toastErrorSpy).toHaveBeenCalledWith('File too large: test.jpg');
+    expect(toastErrorSpy).toHaveBeenCalledWith(
+      'File is too large. Maximum size is 5MB.',
+    );
     expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
     vi.useRealTimers();
   });
@@ -847,7 +883,9 @@ describe('Testing Advertisement Register Component', () => {
     await userEvent.upload(mediaInput, invalidFile);
 
     await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith('Invalid file type: test.pdf');
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF, MP4, X-MSVIDEO, WEBM.',
+      );
     });
   });
 

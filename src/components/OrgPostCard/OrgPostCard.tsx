@@ -1,3 +1,45 @@
+/**
+ * OrgPostCard Component
+ *
+ * This component represents a card for displaying organizational posts. It includes
+ * functionalities for viewing, editing, deleting, and pinning/unpinning posts. The card
+ * supports media attachments such as images and videos, and displays metadata like
+ * creation date and author information.
+ *
+ * @param {InterfaceOrgPostCardProps} props - The props for the component.
+ * @param {InterfacePost} props.post - The post data to be displayed in the card.
+ *
+ * @returns {JSX.Element} A React component that renders the organizational post card.
+ *
+ * @component
+ *
+ * @example
+ * ```tsx
+ * <OrgPostCard post={post} />
+ * ```
+ *
+ * @remarks
+ * - The component uses Apollo Client for GraphQL mutations and queries.
+ * - It supports localization using the `react-i18next` library.
+ * - Media attachments are displayed based on their MIME type (image or video).
+ * - Includes modals for editing and deleting posts.
+ *
+ * @features
+ * - View post details in a modal.
+ * - Edit post caption and attachments.
+ * - Delete a post with confirmation.
+ * - Pin or unpin a post.
+ * - Display author information fetched via GraphQL query.
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL operations.
+ * - `react-bootstrap` for UI components.
+ * - `react-toastify` for notifications.
+ * - `react-i18next` for localization.
+ * - `utils/convertToBase64` for file conversion.
+ * - `utils/errorHandler` for error handling.
+ *
+ */
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef, useEffect } from 'react';
@@ -94,6 +136,8 @@ export default function OrgPostCard({
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
   const [deletePostMutation] = useMutation(DELETE_POST_MUTATION);
   const [togglePinMutation] = useMutation(TOGGLE_PINNED_POST);
+  const [imageSrc, setImageSrc] = useState<string>(AboutImg);
+  const [videoSrc, setVideoSrc] = useState<string>('');
 
   // Clean up object URLs when component unmounts or previews change
   useEffect(() => {
@@ -105,6 +149,31 @@ export default function OrgPostCard({
       });
     };
   }, [localPreviews]);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      if (imageAttachment && orgId) {
+        const url = await getPresignedUrlForAttachment(imageAttachment.name);
+        if (mounted) setImageSrc(url);
+      } else {
+        setImageSrc(AboutImg);
+      }
+      if (videoAttachment && orgId) {
+        try {
+          const url = await getPresignedUrlForAttachment(videoAttachment.name);
+          if (mounted) setVideoSrc(url);
+        } catch {
+          setVideoSrc('');
+        }
+      } else {
+        setVideoSrc('');
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [imageAttachment?.name, videoAttachment?.name, orgId]);
 
   const togglePostPin = async (): Promise<void> => {
     try {
@@ -360,7 +429,7 @@ export default function OrgPostCard({
                 onMouseLeave={handleVideoPause}
               >
                 <source
-                  src={videoAttachment.name} // This should be a presigned URL from the server
+                  src={videoSrc} // This should be a presigned URL from the server
                   type={videoAttachment.mimeType}
                 />
               </video>
@@ -368,7 +437,7 @@ export default function OrgPostCard({
               <Card.Img
                 className={styles.postimageOrgPostCard}
                 variant="top"
-                src={imageAttachment.name} // This should be a presigned URL from the server
+                src={imageSrc} // This should be a presigned URL from the server
                 alt="Post image"
               />
             ) : (
@@ -401,13 +470,13 @@ export default function OrgPostCard({
                 {videoAttachment ? (
                   <video controls autoPlay loop muted>
                     <source
-                      src={videoAttachment.name} // This should be a presigned URL from the server
+                      src={videoSrc} // This should be a presigned URL from the server
                       type={videoAttachment.mimeType}
                     />
                   </video>
                 ) : (
                   <img
-                    src={imageAttachment?.name || AboutImg} // This should be a presigned URL from the server
+                    src={imageSrc || AboutImg} // This should be a presigned URL from the server
                     alt="Post content"
                   />
                 )}
