@@ -38,10 +38,10 @@ Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/
 
 > **likeCount**: `number`
 
-### likedBy
-
-> **likedBy**: `object`[]
-
 ### text
 
 > **text**: `string`
+
+### upVoters
+
+> **upVoters**: `object`[]

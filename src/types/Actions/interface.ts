@@ -25,6 +25,7 @@ interface IActionUserInfo {
 export interface IActionItemInfo {
   id: string;
   assigneeId: string | null;
+  avatarURL?: string;
   categoryId: string | null;
   eventId: string | null;
   recurringEventInstanceId: string | null;

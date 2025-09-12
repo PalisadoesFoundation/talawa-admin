@@ -20,6 +20,7 @@ export const ACTION_ITEM_LIST = gql`
       assignee {
         id
         name
+        avatarURL
       }
       category {
         id

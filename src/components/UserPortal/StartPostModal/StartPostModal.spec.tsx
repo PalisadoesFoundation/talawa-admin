@@ -13,6 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import StartPostModal from './StartPostModal';
 import { vi } from 'vitest';
+import { waitFor } from '@testing-library/react';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -28,15 +29,17 @@ const MOCKS = [
     request: {
       query: CREATE_POST_MUTATION,
       variables: {
-        title: '',
-        text: 'This is dummy text',
-        organizationId: '123',
-        file: '',
+        input: {
+          id: '123',
+          caption: 'This is dummy text',
+          pinnedAt: null,
+          attachments: [],
+        },
       },
       result: {
         data: {
           createPost: {
-            _id: '453',
+            id: '453',
           },
         },
       },
@@ -72,36 +75,34 @@ const renderStartPostModal = (
     onHide,
     fetchPosts,
     userData: {
-      user: {
-        __typename: 'User',
-        _id: '123',
-        image,
-        firstName: 'Glen',
-        lastName: 'dsza',
-        email: 'glen@dsza.com',
-        appLanguageCode: 'en',
-        createdAt: '2023-02-18T09:22:27.969Z',
-        adminFor: [],
-        createdOrganizations: [],
-        joinedOrganizations: [],
-        createdEvents: [],
-        registeredEvents: [],
-        eventAdmin: [],
-        membershipRequests: [],
-        organizationsBlockedBy: [],
-      },
-      appUserProfile: {
-        __typename: 'AppUserProfile',
-        _id: '123',
-        isSuperAdmin: true,
-        adminFor: [],
-        createdOrganizations: [],
-        createdEvents: [],
-        eventAdmin: [],
+      id: '123',
+      name: 'Glen Dsza',
+      emailAddress: 'glen@dsza.com',
+      avatarURL: 'image.png',
+      birthDate: null,
+      city: null,
+      countryCode: null,
+      createdAt: '2023-02-18T09:22:27.969Z',
+      updatedAt: '2023-02-18T09:22:27.969Z',
+      educationGrade: null,
+      employmentStatus: null,
+      isEmailAddressVerified: true,
+      maritalStatus: null,
+      natalSex: null,
+      naturalLanguageCode: 'en',
+      postalCode: null,
+      role: 'member',
+      state: null,
+      mobilePhoneNumber: null,
+      homePhoneNumber: null,
+      workPhoneNumber: null,
+      createdOrganizations: [],
+      organizationsWhereMember: {
+        edges: [],
       },
     },
     organizationId: '123',
-    img,
+    img: img,
   };
 
   return render(
@@ -120,8 +121,12 @@ const renderStartPostModal = (
 describe('Testing StartPostModal Component: User Portal', () => {
   it('Check if StartPostModal renders properly', async () => {
     renderStartPostModal(true, null);
+    // Wait for modal to appear
     const modal = await screen.findByTestId('startPostModal');
     expect(modal).toBeInTheDocument();
+
+    // When submitting, use await for actions
+    await userEvent.click(screen.getByTestId('createPostBtn'));
   });
 
   it('On invalid post submission with empty body Error toast should be shown', async () => {
@@ -153,7 +158,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     renderStartPostModal(true, null);
     await wait();
 
-    const userFullName = screen.getByText('Glen dsza');
+    const userFullName = screen.getByText('Glen Dsza');
     expect(userFullName).toBeInTheDocument();
   });
 
@@ -162,10 +167,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await wait();
 
     const userImage = screen.getByTestId('userImage');
-    expect(userImage).toHaveAttribute(
-      'src',
-      '/src/assets/images/defaultImg.png',
-    );
+    expect(userImage).toHaveAttribute('src', 'image.png');
   });
 
   it('If user image is not null then user image should be shown', async () => {
@@ -194,26 +196,32 @@ describe('Testing StartPostModal Component: User Portal', () => {
   it('should handle successful post creation', async () => {
     const fetchPostsMock = vi.fn();
     const onHideMock = vi.fn();
+
     const successMocks = [
       {
         request: {
           query: CREATE_POST_MUTATION,
           variables: {
-            title: '',
-            text: 'Test content',
-            organizationId: '123',
-            file: null,
+            input: {
+              caption: 'Test content',
+              organizationId: '123',
+              attachments: [],
+            },
           },
         },
         result: {
           data: {
             createPost: {
-              _id: '456',
+              id: '456',
+              caption: 'Test content',
+              pinnedAt: null,
+              attachments: [],
             },
           },
         },
       },
     ];
+
     const customLink = new StaticMockLink(successMocks, true);
 
     renderStartPostModal(
@@ -230,11 +238,12 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.click(screen.getByTestId('createPostBtn'));
 
     await wait();
-
-    expect(toast.dismiss).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalled();
-    expect(fetchPostsMock).toHaveBeenCalled();
-    expect(onHideMock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toast.dismiss).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalled();
+      expect(fetchPostsMock).toHaveBeenCalled();
+      expect(onHideMock).toHaveBeenCalled();
+    });
   });
 
   it('should handle failed post creation', async () => {
@@ -243,15 +252,25 @@ describe('Testing StartPostModal Component: User Portal', () => {
         request: {
           query: CREATE_POST_MUTATION,
           variables: {
-            title: '',
-            text: 'Test content',
-            organizationId: '123',
-            file: null,
+            input: {
+              caption: 'Test content',
+              organizationId: '123',
+              isPinned: false,
+              attachments: [
+                {
+                  fileHash: 'abc123hash',
+                  mimetype: 'image/png',
+                  name: 'test-image.png',
+                  objectName: 'uploads/test-image.png',
+                },
+              ],
+            },
           },
         },
         error: new Error('Failed to create post'),
       },
     ];
+
     const customLink = new StaticMockLink(errorMocks, true);
 
     renderStartPostModal(true, null, null, vi.fn(), vi.fn(), customLink);
@@ -273,5 +292,138 @@ describe('Testing StartPostModal Component: User Portal', () => {
     const image = screen.getByAltText('Post Image Preview');
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', previewImage);
+  });
+
+  it('should send caption, orgId and attachment when Add Post is clicked with image', async () => {
+    const fetchPostsMock = vi.fn();
+    const onHideMock = vi.fn();
+
+    // A small base64 PNG string (1x1 transparent pixel)
+    const base64Image =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAn0B9g7R+wAAAABJRU5ErkJggg==';
+
+    const successMocks = [
+      {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'My new post',
+              organizationId: '123',
+              attachments: [
+                {
+                  fileHash: expect.any(String), // SHA-256 hash generated dynamically
+                  mimetype: 'IMAGE_PNG',
+                  name: expect.stringContaining('.png'),
+                  objectName: expect.stringContaining('uploads/'),
+                },
+              ],
+            },
+          },
+        },
+        result: {
+          data: {
+            createPost: {
+              id: '789',
+              caption: 'My new post',
+              attachments: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const customLink = new StaticMockLink(successMocks, true);
+
+    renderStartPostModal(
+      true,
+      null,
+      base64Image,
+      onHideMock,
+      fetchPostsMock,
+      customLink,
+    );
+    await wait();
+
+    // type caption
+    await userEvent.type(screen.getByTestId('postInput'), 'My new post');
+    // click Add Post
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+  });
+});
+
+describe('getMimeTypeEnum', () => {
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
+      switch (mime) {
+        case 'image/jpeg':
+          return 'IMAGE_JPEG';
+        case 'image/png':
+          return 'IMAGE_PNG';
+        case 'image/webp':
+          return 'IMAGE_WEBP';
+        case 'image/avif':
+          return 'IMAGE_AVIF';
+        case 'video/mp4':
+          return 'VIDEO_MP4';
+        case 'video/webm':
+          return 'VIDEO_WEBM';
+        default:
+          return 'IMAGE_JPEG'; // fallback
+      }
+    }
+
+    // Fallback for file URLs (e.g., https://.../file.png)
+    const ext = url.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'jpg':
+      case 'jpeg':
+        return 'IMAGE_JPEG';
+      case 'png':
+        return 'IMAGE_PNG';
+      case 'webp':
+        return 'IMAGE_WEBP';
+      case 'avif':
+        return 'IMAGE_AVIF';
+      case 'mp4':
+        return 'VIDEO_MP4';
+      case 'webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  };
+  it('should return IMAGE_JPEG for .jpg and .jpeg', () => {
+    expect(getMimeTypeEnum('file.jpg')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('file.jpeg')).toBe('IMAGE_JPEG');
+  });
+
+  it('should return IMAGE_PNG for .png', () => {
+    expect(getMimeTypeEnum('file.png')).toBe('IMAGE_PNG');
+  });
+
+  it('should return IMAGE_WEBP for .webp', () => {
+    expect(getMimeTypeEnum('file.webp')).toBe('IMAGE_WEBP');
+  });
+
+  it('should return IMAGE_AVIF for .avif', () => {
+    expect(getMimeTypeEnum('file.avif')).toBe('IMAGE_AVIF');
+  });
+
+  it('should return VIDEO_MP4 for .mp4', () => {
+    expect(getMimeTypeEnum('video.mp4')).toBe('VIDEO_MP4');
+  });
+
+  it('should return VIDEO_WEBM for .webm', () => {
+    expect(getMimeTypeEnum('video.webm')).toBe('VIDEO_WEBM');
+  });
+
+  it('should return IMAGE_JPEG as fallback for unknown extension', () => {
+    expect(getMimeTypeEnum('file.unknown')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
   });
 });

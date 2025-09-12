@@ -68,16 +68,16 @@ Defined in: [src/types/Comment/interface.ts:6](https://github.com/PalisadoesFoun
 
 ***
 
-### likedBy
-
-> **likedBy**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
-
-Defined in: [src/types/Comment/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L7)
-
-***
-
 ### text
 
 > **text**: `string`
 
 Defined in: [src/types/Comment/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L8)
+
+***
+
+### upVoters
+
+> **upVoters**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
+
+Defined in: [src/types/Comment/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L7)

@@ -1,3 +1,22 @@
+/**
+ * @file EventActionItems.tsx
+ * @summary This component renders a comprehensive management interface for action items associated with a specific event.
+ *
+ * @description
+ * The EventActionItems component is responsible for fetching, displaying, and managing all action items linked to a given event ID.
+ * It provides a user interface that includes:
+ * - A data grid to display the list of action items with details like assignee, category, status, and assigned date.
+ * - Functionality to create, view, edit, and delete action items through various modal windows.
+ * - Controls for searching by assignee or category, sorting by assignment date, and filtering by completion status.
+ * - Logic to differentiate between recurring and non-recurring events to handle template action items and instance-specific exceptions correctly.
+ *
+ * @component
+ * @param {object} props - The component props.
+ * @param {string} props.eventId - The unique identifier for the event whose action items are to be displayed.
+ * @param {Function} [props.orgActionItemsRefetch] - An optional callback function to trigger a refetch of action items at the organization level, ensuring data consistency across different views.
+ *
+ * @returns {JSX.Element} A React component that renders the event action items management view.
+ */
 import React, {
   useCallback,
   useMemo,
