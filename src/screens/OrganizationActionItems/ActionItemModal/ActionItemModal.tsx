@@ -315,11 +315,32 @@ const ItemModal: FC<IItemModalProps> = ({
           }
           className="p-2"
         >
-          {actionItem?.isTemplate && !actionItem.isInstanceException && (
+          {isRecurring && !editMode ? (
             <Form.Group className="mb-3">
               <Form.Label>{t('applyTo')}</Form.Label>
-              {/* Only show 'entire series' option if this action item is not showing instance exception data */}
-              {!actionItem?.isInstanceException && (
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          ) : null}
+          {editMode &&
+            actionItem?.isTemplate &&
+            !actionItem.isInstanceException && (
+              <Form.Group className="mb-3">
+                <Form.Label>{t('applyTo')}</Form.Label>
                 <Form.Check
                   type="radio"
                   label={t('entireSeries')}
@@ -328,21 +349,16 @@ const ItemModal: FC<IItemModalProps> = ({
                   checked={applyTo === 'series'}
                   onChange={() => setApplyTo('series')}
                 />
-              )}
-              <Form.Check
-                type="radio"
-                label={
-                  actionItem?.isInstanceException
-                    ? t('updateThisInstance')
-                    : t('thisEventOnly')
-                }
-                name="applyTo"
-                id="applyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
-              />
-            </Form.Group>
-          )}
+                <Form.Check
+                  type="radio"
+                  label={t('thisEventOnly')}
+                  name="applyTo"
+                  id="applyToInstance"
+                  checked={applyTo === 'instance'}
+                  onChange={() => setApplyTo('instance')}
+                />
+              </Form.Group>
+            )}
           <Form.Group className="d-flex gap-3 mb-3">
             <Autocomplete
               className={`${styles.noOutline} w-100`}

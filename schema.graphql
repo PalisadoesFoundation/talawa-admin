@@ -129,6 +129,15 @@ type ActionItemCategory {
   updater: User
 }
 
+type Address {
+  id: ID!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  country: String!
+}
+
 type Advertisement {
   """
   Array of attachments.
@@ -220,6 +229,14 @@ input AdvertisementWhereInput {
   Filter advertisements by completion status
   """
   isCompleted: Boolean
+}
+
+type AgendaCategory {
+  id: ID!
+  name: String!
+  organization: Organization!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type AgendaFolder {
@@ -3109,179 +3126,6 @@ input QueryOrganizationInput {
   id: String!
 }
 
-type Mutation {
-  acceptMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  addEventAttendee(data: EventAttendeeInput!): User!
-  addFeedback(data: FeedbackInput!): Feedback!
-  addLanguageTranslation(data: LanguageInput!): Language!
-  addOrganizationCustomField(
-    name: String!
-    organizationId: ID!
-    type: String!
-  ): OrganizationCustomField!
-  addOrganizationImage(file: String!, organizationId: String!): Organization!
-  addUserCustomData(
-    dataName: String!
-    dataValue: Any!
-    organizationId: ID!
-  ): UserCustomData!
-  addUserImage(file: String!): User!
-  addUserToUserFamily(familyId: ID!, userId: ID!): UserFamily!
-  adminRemoveEvent(eventId: ID!): Event!
-  assignUserTag(input: ToggleUserTagAssignInput!): User
-  blockUser(organizationId: ID!, userId: ID!): User!
-  cancelMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  checkIn(data: CheckInInput!): CheckIn!
-  createActionItem(input: CreateActionItemInput!): ActionItem
-
-  createAssociationException(
-    input: CreateAssociationExceptionInput!
-  ): AssociationException
-
-  createActionItemCategory(
-    input: MutationCreateActionItemCategoryInput!
-  ): ActionItemCategory!
-  createAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  createAdvertisement(input: MutationCreateAdvertisementInput): AdvertisementPg!
-  createAgendaCategory(input: CreateAgendaCategoryInput!): AgendaCategory!
-  createComment(data: CommentInput!, postId: ID!): Comment
-  createChat(data: chatInput!): Chat!
-  createDonation(
-    amount: Float!
-    nameOfOrg: String!
-    nameOfUser: String!
-    orgId: ID!
-    payPalId: ID!
-    userId: ID!
-  ): Donation!
-  createEvent(input: MutationCreateEventInput!): EventPg
-
-  createEventVolunteer(data: EventVolunteerInput!): EventVolunteer!
-  createMember(input: UserAndOrganizationInput!): Organization!
-  createOrganization(data: OrganizationInput, file: String): Organization!
-  createPost(data: PostInput!, file: String): Post
-  createSampleOrganization: Boolean!
-  createUserFamily(data: createUserFamilyInput!): UserFamily!
-  createUserTag(input: CreateUserTagInput!): UserTag
-  createVenue(data: VenueInput!): Venue
-  deleteAdvertisement(input: MutationDeleteAdvertisementInput!): AdvertisementPg
-  deleteActionItemCategory(
-    input: MutationDeleteActionItemCategoryInput!
-  ): ActionItemCategory
-  deleteAgendaCategory(id: ID!): ID!
-  deleteDonationById(id: ID!): DeletePayload!
-  deleteEntireRecurringEventSeries(
-    input: MutationDeleteEntireRecurringEventSeriesInput!
-  ): EventPg
-  deleteSingleEventInstance(
-    input: MutationDeleteSingleEventInstanceInput!
-  ): EventPg
-  deleteStandaloneEvent(input: MutationDeleteStandaloneEventInput!): EventPg
-  deleteThisAndFollowingEvents(
-    input: MutationDeleteThisAndFollowingEventsInput!
-  ): EventPg
-  deleteVenue(id: ID!): Venue
-  editVenue(data: EditVenueInput!): Venue
-  forgotPassword(data: ForgotPasswordData!): Boolean!
-  joinPublicOrganization(organizationId: ID!): User!
-  leaveOrganization(organizationId: ID!): User!
-  likeComment(id: ID!): Comment
-  likePost(id: ID!): Post
-  logout: Boolean!
-  markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
-  otp(data: OTPInput!): OtpData!
-  recaptcha(data: RecaptchaVerification!): Boolean!
-  refreshToken(refreshToken: String!): ExtendSession!
-  registerForEvent(id: ID!): Event!
-  rejectMembershipRequest(membershipRequestId: ID!): MembershipRequest!
-  deleteActionItem(input: MutationDeleteActionItemInput!): ActionItem
-  deleteAssociationException(id: ID!): AssociationException
-  removeAdmin(data: UserAndOrganizationInput!): AppUserProfile!
-  removeAdvertisement(id: ID!): Advertisement
-  removeComment(id: ID!): Comment
-  removeEventAttendee(data: EventAttendeeInput!): User!
-  removeEventVolunteer(id: ID!): EventVolunteer!
-  removeMember(data: UserAndOrganizationInput!): Organization!
-  deleteOrganizationMembership(
-    input: deleteOrganizationMembershipInput
-  ): Organization!
-  removeOrganization(id: ID!): UserData!
-  removeOrganizationCustomField(
-    customFieldId: ID!
-    organizationId: ID!
-  ): OrganizationCustomField!
-  removeOrganizationImage(organizationId: String!): Organization!
-  removePost(id: ID!): Post
-  removeSampleOrganization: Boolean!
-  removeUserCustomData(organizationId: ID!): UserCustomData!
-  removeUserFamily(familyId: ID!): UserFamily!
-  removeUserFromUserFamily(familyId: ID!, userId: ID!): UserFamily!
-  removeUserImage: User!
-  removeUserTag(id: ID!): UserTag
-  revokeRefreshTokenForUser: Boolean!
-  saveFcmToken(token: String): Boolean!
-  sendMembershipRequest(organizationId: ID!): MembershipRequest!
-  sendMessageToChat(
-    chatId: ID!
-    messageContent: String!
-    type: String!
-    replyTo: ID
-  ): ChatMessage!
-  signUp(input: UserInput!, file: String): AuthData!
-  createUser(input: createUserInput!): AuthData!
-  togglePostPin(id: ID!, title: String): Post!
-  unassignUserTag(input: ToggleUserTagAssignInput!): User
-  unblockUser(organizationId: ID!, userId: ID!): User!
-  unlikeComment(id: ID!): Comment
-  unlikePost(id: ID!): Post
-  unregisterForEventByUser(id: ID!): Event!
-  updateActionItem(input: MutationUpdateActionItemInput!): ActionItem
-  updateAssociationException(
-    id: ID!
-    input: UpdateAssociationExceptionInput!
-  ): AssociationException
-  updateActionItemCategory(
-    input: MutationUpdateActionItemCategoryInput!
-  ): ActionItemCategory
-  updateAdvertisement(input: MutationUpdateAdvertisementInput!): AdvertisementPg
-  updateAgendaCategory(
-    id: ID!
-    input: UpdateAgendaCategoryInput!
-  ): AgendaCategory
-  updateCurrentUser(input: MutationUpdateCurrentUserInput!): UserPg
-  updateStandaloneEvent(input: MutationUpdateEventInput!): EventPg
-  updateSingleRecurringEventInstance(
-    input: MutationUpdateSingleRecurringEventInstanceInput!
-  ): EventPg
-  updateThisAndFollowingEvents(
-    input: MutationUpdateThisAndFollowingEventsInput!
-  ): EventPg
-  updateEntireRecurringEventSeries(
-    input: MutationUpdateEntireRecurringEventSeriesInput!
-  ): EventPg
-  updateEventVolunteer(
-    data: UpdateEventVolunteerInput
-    id: ID!
-  ): EventVolunteer!
-  updateLanguage(languageCode: String!): User!
-  updateOrganization(
-    data: UpdateOrganizationInput
-    file: String
-    id: ID!
-  ): Organization!
-  updatePost(data: PostUpdateInput, id: ID!): Post!
-  updateSessionTimeout(timeout: Int!): Boolean!
-  updateUser(input: MutationUpdateUserInput!): UserPg
-  updateUserRoleInOrganization(
-    organizationId: ID!
-    role: String!
-    userId: ID!
-  ): Organization!
-  updateUserTag(input: UpdateUserTagInput!): UserTag
-  updateUserType(data: UpdateUserTypeInput!): Boolean!
-  venues: [Venue]
-}
-
 input OTPInput {
   email: EmailAddress!
 }
@@ -3292,18 +3136,34 @@ input AdvertisementWhereInput {
 
 type Organization {
   id: ID!
-  actionItemCategories: [ActionItemCategory]
+  actionItemCategories(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationActionItemCategoriesConnection
   address: Address
   admins(adminId: ID): [User!]
   agendaCategories: [AgendaCategory]
   apiUrl: URL!
-  blockedUsers: [User]
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnection
   createdAt: DateTime!
   creator: User
   customFields: [OrganizationCustomField!]!
   description: String!
   image: String
-  members: [User]
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    where: MembersWhereInput
+  ): OrganizationMembersConnection
   membershipRequests: [MembershipRequest]
   name: String!
 
@@ -5091,6 +4951,15 @@ type OrganizationBlockedUsersConnectionEdge {
   node: User
 }
 
+type OrganizationCustomField {
+  id: ID!
+  name: String!
+  type: String!
+  organization: Organization!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 """
 """
 type OrganizationChatsConnection {
@@ -6709,3 +6578,5 @@ input UpdateAssociationExceptionInput {
   overriddenData: String
   status: String
 }
+
+scalar URL
