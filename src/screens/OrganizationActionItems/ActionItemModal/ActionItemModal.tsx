@@ -1,3 +1,9 @@
+/**
+ * @file This file contains the ItemModal component, which is used for creating and updating action items.
+ * It includes a form with fields for assignee, category, assignment date, and completion notes.
+ * The modal handles both creation and editing of action items, including specific logic for recurring events.
+ * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
+ */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';

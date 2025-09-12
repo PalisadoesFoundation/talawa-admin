@@ -1,3 +1,8 @@
+/**
+ * @file This file contains the OrganizationActionItems component, which displays a list of action items for an organization.
+ * It includes features for searching, sorting, and filtering action items.
+ * The component also provides modals for creating, viewing, updating, and deleting action items.
+ */
 import React, {
   useCallback,
   useMemo,
