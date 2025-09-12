@@ -4,8 +4,8 @@ export const MOCKEVENT = {
   _id: 'event123',
   title: 'Test Event',
   description: 'This is a test event description',
-  startDate: '2023-05-01',
-  endDate: '2023-05-02',
+  startDate: '2030-05-01',
+  endDate: '2030-05-02',
   startTime: '09:00:00',
   endTime: '17:00:00',
   allDay: false,
@@ -54,7 +54,7 @@ export const MOCKS = [
               lastName: 'Garza',
               gender: null,
               birthDate: null,
-              createdAt: '2023-04-13T10:23:17.742',
+              createdAt: '2030-04-13T10:23:17.742',
               eventsAttended: [
                 {
                   __typename: 'Event',
@@ -73,7 +73,7 @@ export const MOCKS = [
               lastName: 'Smith',
               gender: null,
               birthDate: null,
-              createdAt: '2023-04-13T10:23:17.742',
+              createdAt: '2030-04-13T10:23:17.742',
               eventsAttended: [
                 {
                   __typename: 'Event',
