@@ -388,6 +388,7 @@ function OrganizationPeople(): JSX.Element {
                   borderRadius: '50%',
                   objectFit: 'cover',
                 }}
+                crossOrigin="anonymous"
               />
             ) : (
               <div
