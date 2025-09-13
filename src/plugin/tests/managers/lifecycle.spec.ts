@@ -63,6 +63,9 @@ describe('LifecycleManager', () => {
       updatePluginStatusInGraphQL: vi.fn(),
       isPluginActivated: vi.fn(),
       isPluginInstalled: vi.fn(),
+      graphqlService: null,
+      pluginIndex: [],
+      normalizeMainFile: vi.fn(),
     };
 
     mockExtensionRegistry = {
