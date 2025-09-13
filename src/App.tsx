@@ -11,6 +11,7 @@ import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
+import Loader from 'components/Loader/Loader';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -199,7 +200,7 @@ function App(): React.ReactElement {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
