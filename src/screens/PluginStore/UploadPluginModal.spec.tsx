@@ -103,7 +103,9 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByRole('heading', { name: 'Upload Plugin' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Upload Plugin' }),
+      ).toBeInTheDocument();
       expect(
         screen.getByText(
           'Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.',

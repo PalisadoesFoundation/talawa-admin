@@ -137,7 +137,10 @@ describe('usePluginActions', () => {
         },
       },
     });
-    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith('test-plugin', 'active');
+    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith(
+      'test-plugin',
+      'active',
+    );
     expect(mockRefetch).toHaveBeenCalled();
     expect(mockReload).toHaveBeenCalled();
     expect(result.current.loading).toBe(false);
@@ -286,7 +289,10 @@ describe('usePluginActions', () => {
     });
 
     expect(mockUpdatePlugin).not.toHaveBeenCalled();
-    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith('test-plugin', 'active');
+    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith(
+      'test-plugin',
+      'active',
+    );
   });
 
   it('should handle plugin not found in GraphQL data during uninstall', async () => {
@@ -310,7 +316,9 @@ describe('usePluginActions', () => {
     });
 
     expect(mockDeletePlugin).not.toHaveBeenCalled();
-    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith('test-plugin');
+    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
+      'test-plugin',
+    );
   });
 
   it('should handle plugin manager uninstall failure', async () => {
@@ -388,7 +396,9 @@ describe('usePluginActions', () => {
       await result.current.handleUninstallConfirm();
     });
 
-    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith('test-plugin');
+    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
+      'test-plugin',
+    );
   });
 
   it('should handle AdminPluginFileService.removePlugin failure', async () => {
@@ -399,7 +409,7 @@ describe('usePluginActions', () => {
     const mockAdminPluginFileService = {
       removePlugin: vi.fn().mockResolvedValue(false),
     };
-    
+
     vi.doMock('../../../plugin/services/AdminPluginFileService', () => ({
       adminPluginFileService: mockAdminPluginFileService,
     }));
@@ -420,7 +430,9 @@ describe('usePluginActions', () => {
       await result.current.handleUninstallConfirm();
     });
 
-    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith('test-plugin');
+    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
+      'test-plugin',
+    );
   });
 
   it('should handle deactivate plugin status', async () => {
@@ -446,12 +458,15 @@ describe('usePluginActions', () => {
         },
       },
     });
-    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith('test-plugin', 'inactive');
+    expect(mockPluginManager.togglePluginStatus).toHaveBeenCalledWith(
+      'test-plugin',
+      'inactive',
+    );
   });
 
   it('should set loading state correctly during installation', async () => {
-    mockInstallPlugin.mockImplementation(() => 
-      new Promise(resolve => setTimeout(resolve, 100))
+    mockInstallPlugin.mockImplementation(
+      () => new Promise((resolve) => setTimeout(resolve, 100)),
     );
     mockPluginManager.installPlugin.mockResolvedValue(true);
 
@@ -472,7 +487,7 @@ describe('usePluginActions', () => {
 
     // Wait for completion
     await act(async () => {
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise((resolve) => setTimeout(resolve, 150));
     });
 
     expect(result.current.loading).toBe(false);

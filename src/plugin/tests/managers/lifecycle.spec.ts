@@ -476,7 +476,9 @@ describe('LifecycleManager', () => {
       );
 
       expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith('Plugin nonExistent not found for activation');
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Plugin nonExistent not found for activation',
+      );
 
       consoleSpy.mockRestore();
     });

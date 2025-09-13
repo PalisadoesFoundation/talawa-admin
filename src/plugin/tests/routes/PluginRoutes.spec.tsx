@@ -17,9 +17,17 @@ vi.mock('react', async () => {
     ...actual,
     lazy: vi.fn((importFn) => {
       mockLazyComponent.mockImplementation(importFn);
-      return vi.fn(() => <div data-testid="lazy-component">Lazy Component</div>);
+      return vi.fn(() => (
+        <div data-testid="lazy-component">Lazy Component</div>
+      ));
     }),
-    Suspense: ({ children, fallback }: { children: React.ReactNode; fallback: React.ReactNode }) => (
+    Suspense: ({
+      children,
+      fallback,
+    }: {
+      children: React.ReactNode;
+      fallback: React.ReactNode;
+    }) => (
       <div data-testid="suspense">
         {fallback}
         {children}
@@ -94,7 +102,10 @@ describe('PluginRoutes', () => {
         </TestWrapper>,
       );
 
-      expect(mockUsePluginRoutes).toHaveBeenCalledWith(userPermissions, isAdmin);
+      expect(mockUsePluginRoutes).toHaveBeenCalledWith(
+        userPermissions,
+        isAdmin,
+      );
     });
   });
 
@@ -118,7 +129,10 @@ describe('PluginRoutes', () => {
       );
 
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
-      expect(screen.getByTestId('route-/test')).toHaveAttribute('data-path', '/test');
+      expect(screen.getByTestId('route-/test')).toHaveAttribute(
+        'data-path',
+        '/test',
+      );
     });
 
     it('should render multiple plugin routes', () => {
@@ -201,7 +215,9 @@ describe('PluginRoutes', () => {
     });
 
     it('should use custom fallback when provided', () => {
-      const customFallback = <div data-testid="custom-fallback">Custom Loading...</div>;
+      const customFallback = (
+        <div data-testid="custom-fallback">Custom Loading...</div>
+      );
       const mockRoutes = [
         {
           pluginId: 'test-plugin',
@@ -438,7 +454,9 @@ describe('PluginRoutes', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('route-/path/with-special_chars.and+symbols')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('route-/path/with-special_chars.and+symbols'),
+      ).toBeInTheDocument();
     });
 
     it('should handle routes with empty component name', () => {
