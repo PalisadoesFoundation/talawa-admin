@@ -32,7 +32,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(
       screen.getByText(
-        new Date('2023-01-01').toLocaleDateString(undefined, {
+        new Date('2030-01-01').toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
