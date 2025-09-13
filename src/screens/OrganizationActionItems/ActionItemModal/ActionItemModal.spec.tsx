@@ -1622,6 +1622,632 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       expect(mockHide).toHaveBeenCalled();
     });
   });
+
+  it('should handle radio button onChange for entireSeries and thisEventOnly', async () => {
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Initially, the entireSeries radio should be checked (default for template items)
+    const entireSeriesRadio = screen.getByLabelText('entireSeries');
+    const thisEventOnlyRadio = screen.getByLabelText('thisEventOnly');
+
+    expect(entireSeriesRadio).toBeChecked();
+    expect(thisEventOnlyRadio).not.toBeChecked();
+
+    // Click the thisEventOnly radio to change applyTo to 'instance'
+    await userEvent.click(thisEventOnlyRadio);
+
+    // Now the thisEventOnly radio should be checked and entireSeries should not be
+    expect(entireSeriesRadio).not.toBeChecked();
+    expect(thisEventOnlyRadio).toBeChecked();
+
+    // Click the entireSeries radio to change applyTo back to 'series'
+    await userEvent.click(entireSeriesRadio);
+
+    // Now the entireSeries radio should be checked again
+    expect(entireSeriesRadio).toBeChecked();
+    expect(thisEventOnlyRadio).not.toBeChecked();
+
+    // Test the onChange handler for thisEventOnly again
+    await userEvent.click(thisEventOnlyRadio);
+    expect(entireSeriesRadio).not.toBeChecked();
+    expect(thisEventOnlyRadio).toBeChecked();
+  });
+
+  it('should render radio buttons when isRecurring is true and editMode is false', async () => {
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: false, // Not in edit mode
+      actionItem: null,
+      isRecurring: true, // Recurring event
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Radio buttons should be visible when isRecurring && !editMode
+    const entireSeriesRadio = screen.getByLabelText('entireSeries');
+    const thisEventOnlyRadio = screen.getByLabelText('thisEventOnly');
+
+    expect(entireSeriesRadio).toBeInTheDocument();
+    expect(thisEventOnlyRadio).toBeInTheDocument();
+    expect(entireSeriesRadio).toBeChecked(); // Default state
+    expect(thisEventOnlyRadio).not.toBeChecked();
+
+    // Test the onChange handler for entireSeries
+    await userEvent.click(thisEventOnlyRadio);
+    expect(entireSeriesRadio).not.toBeChecked();
+    expect(thisEventOnlyRadio).toBeChecked();
+
+    // Test the onChange handler for thisEventOnly
+    await userEvent.click(entireSeriesRadio);
+    expect(entireSeriesRadio).toBeChecked();
+    expect(thisEventOnlyRadio).not.toBeChecked();
+  });
+
+  it('should not render radio buttons when isRecurring is false', async () => {
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: false,
+      actionItem: null,
+      isRecurring: false, // Not recurring
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Radio buttons should not be visible when !isRecurring
+    expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('thisEventOnly')).not.toBeInTheDocument();
+  });
+
+  it('should not render radio buttons when editMode is true and actionItem is not a template', async () => {
+    const nonTemplateActionItem = {
+      ...mockActionItem,
+      isTemplate: false, // Not a template
+    };
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true, // In edit mode
+      actionItem: nonTemplateActionItem,
+      isRecurring: true,
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Radio buttons should not be visible when actionItem is not a template
+    expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('thisEventOnly')).not.toBeInTheDocument();
+  });
+
+  it('should not render radio buttons when editMode is true and actionItem is an instance exception', async () => {
+    const instanceExceptionActionItem = {
+      ...mockActionItem,
+      isTemplate: true,
+      isInstanceException: true, // Instance exception
+    };
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: vi.fn(),
+      editMode: true, // In edit mode
+      actionItem: instanceExceptionActionItem,
+      isRecurring: true,
+    };
+
+    renderWithProviders(props);
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Radio buttons should not be visible when actionItem is an instance exception
+    expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('thisEventOnly')).not.toBeInTheDocument();
+  });
+
+  describe('postCompletionNotes field', () => {
+    it('should render postCompletionNotes field when isCompleted is true', async () => {
+      const completedActionItem = {
+        ...mockActionItem,
+        isCompleted: true,
+        postCompletionNotes: 'Completed task notes',
+      };
+
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: completedActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // postCompletionNotes field should be visible when isCompleted is true
+      const postCompletionNotesField = screen.getByLabelText(
+        'postCompletionNotes',
+      );
+      expect(postCompletionNotesField).toBeInTheDocument();
+      expect(postCompletionNotesField).toHaveValue('Completed task notes');
+    });
+
+    it('should render postCompletionNotes field with empty value when postCompletionNotes is null', async () => {
+      const completedActionItem = {
+        ...mockActionItem,
+        isCompleted: true,
+        postCompletionNotes: null,
+      };
+
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: completedActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // postCompletionNotes field should show empty value when postCompletionNotes is null
+      const postCompletionNotesField = screen.getByLabelText(
+        'postCompletionNotes',
+      );
+      expect(postCompletionNotesField).toHaveValue('');
+    });
+
+    it('should not render postCompletionNotes field when isCompleted is false', async () => {
+      const incompleteActionItem = {
+        ...mockActionItem,
+        isCompleted: false,
+        postCompletionNotes: 'Some notes',
+      };
+
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: incompleteActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // postCompletionNotes field should not be visible when isCompleted is false
+      expect(
+        screen.queryByLabelText('postCompletionNotes'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should handle postCompletionNotes onChange correctly', async () => {
+      const completedActionItem = {
+        ...mockActionItem,
+        isCompleted: true,
+        postCompletionNotes: 'Initial notes',
+      };
+
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: completedActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // Find and update the postCompletionNotes field
+      const postCompletionNotesField = screen.getByLabelText(
+        'postCompletionNotes',
+      );
+      await userEvent.clear(postCompletionNotesField);
+      await userEvent.type(
+        postCompletionNotesField,
+        'Updated completion notes',
+      );
+
+      // Verify the field has the new value
+      expect(postCompletionNotesField).toHaveValue('Updated completion notes');
+    });
+
+    it('should handle multiline postCompletionNotes field', async () => {
+      const completedActionItem = {
+        ...mockActionItem,
+        isCompleted: true,
+        postCompletionNotes: 'Line 1\nLine 2\nLine 3\nLine 4',
+      };
+
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: completedActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // Verify multiline content is displayed correctly
+      const postCompletionNotesField = screen.getByLabelText(
+        'postCompletionNotes',
+      );
+      expect(postCompletionNotesField).toHaveValue(
+        'Line 1\nLine 2\nLine 3\nLine 4',
+      );
+    });
+  });
+});
+
+describe('orgActionItemsRefetch functionality', () => {
+  it('should call orgActionItemsRefetch when provided in createActionItemHandler', async () => {
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const createWithEventMock = {
+      request: {
+        query: CREATE_ACTION_ITEM_MUTATION,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.assigneeId === 'user1' &&
+          variables.input.categoryId === 'cat1' &&
+          variables.input.organizationId === 'orgId' &&
+          variables.input.preCompletionNotes === 'Test with org refetch' &&
+          variables.input.eventId === 'event123' &&
+          typeof variables.input.assignedAt === 'string'
+        );
+      },
+      result: {
+        data: {
+          createActionItem: {
+            id: 'newId',
+            isCompleted: false,
+            assignedAt: '2024-01-01',
+            completionAt: null,
+            createdAt: '2024-01-01',
+            preCompletionNotes: 'Test with org refetch',
+            postCompletionNotes: null,
+            assignee: { id: 'user1', name: 'John Doe' },
+            creator: { id: 'creator1', name: 'Creator' },
+            updater: null,
+            category: {
+              id: 'cat1',
+              name: 'Category 1',
+              description: 'Test category 1',
+              isDisabled: false,
+            },
+            organization: { id: 'orgId', name: 'Organization' },
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test event description',
+            },
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [createWithEventMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: false,
+      actionItem: null,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
+    });
+
+    // Select category
+    const categoryInput = screen.getByLabelText('actionItemCategory *');
+    await userEvent.click(categoryInput);
+    await userEvent.type(categoryInput, 'Category 1');
+    await waitFor(async () => {
+      const option = screen.getByText('Category 1');
+      await userEvent.click(option);
+    });
+
+    // Select assignee
+    const assigneeInput = screen.getByLabelText('assignee *');
+    await userEvent.click(assigneeInput);
+    await userEvent.type(assigneeInput, 'John Doe');
+    await waitFor(async () => {
+      const option = screen.getByText('John Doe');
+      await userEvent.click(option);
+    });
+
+    // Wait for notes field to appear
+    await waitFor(() => {
+      expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
+    });
+
+    // Fill notes field
+    const notesInput = screen.getByLabelText('preCompletionNotes');
+    await userEvent.clear(notesInput);
+    await userEvent.type(notesInput, 'Test with org refetch');
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalled();
+      expect(mockOrgRefetch).toHaveBeenCalled();
+      expect(mockHide).toHaveBeenCalled();
+    });
+  });
+
+  it('should call orgActionItemsRefetch when provided in updateActionItemHandler', async () => {
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_ITEM_MUTATION,
+        variables: {
+          input: {
+            id: '1',
+            isCompleted: false,
+            categoryId: 'cat1',
+            assigneeId: 'user1',
+            preCompletionNotes: 'Updated test notes with org refetch',
+            postCompletionNotes: undefined,
+          },
+        },
+      },
+      result: {
+        data: {
+          updateActionItem: {
+            id: '1',
+            isCompleted: false,
+            assignedAt: '2024-01-01',
+            completionAt: null,
+            preCompletionNotes: 'Updated test notes with org refetch',
+            postCompletionNotes: null,
+            assignee: { id: 'user1', name: 'John Doe' },
+            creator: { id: 'creator1', name: 'Creator' },
+            updater: { id: 'updater1', name: 'Updater' },
+            category: {
+              id: 'cat1',
+              name: 'Category 1',
+              description: 'Test category 1',
+              isDisabled: false,
+            },
+            organization: { id: 'orgId', name: 'Organization' },
+            event: null,
+            createdAt: '2024-01-01',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: undefined,
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Updated test notes with org refetch');
+    }
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalled();
+      expect(mockOrgRefetch).toHaveBeenCalled();
+      expect(mockHide).toHaveBeenCalled();
+    });
+  });
+
+  it('should call orgActionItemsRefetch when provided in updateActionForInstanceHandler', async () => {
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const updateMutationMock = {
+      request: {
+        query: UPDATE_ACTION_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: any) => {
+        return (
+          variables.input.actionId === '1' &&
+          variables.input.eventId === 'event123' &&
+          variables.input.preCompletionNotes ===
+            'Updated notes for instance with org refetch'
+        );
+      },
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: true,
+      actionItem: mockActionItem,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    // Find and update the notes field
+    const notesInputs = screen.getAllByRole('textbox');
+    const notesInput = notesInputs.find(
+      (input) =>
+        (input as HTMLInputElement).value === 'Test notes' ||
+        (input as HTMLInputElement).defaultValue === 'Test notes' ||
+        input.getAttribute('value') === 'Test notes',
+    );
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      await userEvent.type(
+        notesInput,
+        'Updated notes for instance with org refetch',
+      );
+    }
+
+    // Set applyTo to 'instance'
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
+    // Submit the form
+    const submitButton = screen.getByTestId('submitBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalled();
+      expect(mockOrgRefetch).toHaveBeenCalled();
+      expect(mockHide).toHaveBeenCalled();
+    });
+  });
 });
 
 describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM_MUTATION', () => {
