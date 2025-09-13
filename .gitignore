@@ -53,3 +53,12 @@ debug.log
 cypress/videos
 cypress/screenshots
 .nyc_output
+
+# Logs
+*.log
+vite*.log
+vitest*.log
+
+# Test/build artifacts
+.vitest/
+coverage/
