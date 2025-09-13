@@ -485,7 +485,7 @@ describe('AddMember Component', () => {
     });
 
     const page2Mock = createUserListMock(
-      { first: 10, after: 'cursor2', last: null, before: null },
+      { first: 10, after: 'cursor1', last: null, before: null },
       {
         edges: [
           {
@@ -520,6 +520,13 @@ describe('AddMember Component', () => {
       page1Mock,
       page2Mock,
       page1RevisitedMock,
+      // Add additional mock for potential edge case queries
+      createUserListMock({
+        first: 10,
+        after: 'cursor2',
+        last: null,
+        before: null,
+      }),
     ];
 
     const link = new StaticMockLink(mocks, true);
@@ -898,5 +905,64 @@ describe('AddMember Component', () => {
     // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
+  });
+
+  test('missing endCursor condition', async () => {
+    const orgId = 'org123';
+
+    // Mock with endCursor to trigger line 342
+    const mockWithoutEndCursor = createUserListMock(
+      {
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            cursor: 'cursor1',
+            node: {
+              id: 'user1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+              avatarURL: null,
+              createdAt: '2023-01-01T00:00:00Z',
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+        },
+      },
+    );
+
+    const mocks = [createOrganizationsMock(orgId), mockWithoutEndCursor];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AddMember />
+          </I18nextProvider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for users to load - this will trigger the useEffect that processes endCursor
+    await waitFor(() => {
+      expect(screen.getByTestId('user')).toBeInTheDocument();
+    });
   });
 });
