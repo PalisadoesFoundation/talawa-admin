@@ -36,6 +36,7 @@ vi.mock('plugin/graphql-service', () => ({
   useCreatePlugin: () => [mockCreatePlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
   useDeletePlugin: () => [mockDeletePlugin],
+  useInstallPlugin: () => [vi.fn()],
 }));
 
 // Mock toast

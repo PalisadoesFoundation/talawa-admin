@@ -103,10 +103,10 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByText('Upload Plugin')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Upload Plugin' })).toBeInTheDocument();
       expect(
         screen.getByText(
-          'Select a ZIP file containing admin and/or API plugin components',
+          'Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.',
         ),
       ).toBeInTheDocument();
     });
@@ -145,10 +145,10 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      const installButton = screen.getByRole('button', {
-        name: /install plugin/i,
+      const uploadButton = screen.getByRole('button', {
+        name: /upload plugin/i,
       });
-      expect(installButton).toBeDisabled();
+      expect(uploadButton).toBeDisabled();
     });
   });
 
@@ -348,10 +348,10 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
     });
 
@@ -476,17 +476,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin Dashboard Components components)',
+          'Plugin uploaded successfully! (Admin Dashboard Components components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -508,7 +508,7 @@ describe('UploadPluginModal Component', () => {
           pluginId: 'test-plugin',
         },
         installedComponents: [],
-        error: 'Failed to install plugin',
+        error: 'Failed to upload plugin',
       });
 
       render(
@@ -527,16 +527,16 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to install plugin');
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
       });
     });
 
@@ -564,17 +564,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -695,17 +695,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -868,18 +868,18 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       // Should handle null result gracefully - it will throw an error before reaching the catch block
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -925,16 +925,16 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to install plugin');
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
       });
     });
   });
@@ -1127,17 +1127,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! ( components)',
+          'Plugin uploaded successfully! ( components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1193,17 +1193,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin components)',
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1259,17 +1259,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin and API components)',
+          'Plugin uploaded successfully! (Admin and API components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1398,17 +1398,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin components)',
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1452,17 +1452,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -1505,17 +1505,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });

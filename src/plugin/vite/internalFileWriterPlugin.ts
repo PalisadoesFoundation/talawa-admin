@@ -52,6 +52,8 @@ export function createInternalFileWriterPlugin(
 
     configResolved(config) {
       if (debug) {
+        console.log('Internal File Writer Plugin: Initialized');
+        console.log('Base path:', basePath);
       }
     },
 
@@ -225,6 +227,10 @@ async function ensureDirectory(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
+
+  if (debug) {
+    console.log('Ensuring directory exists:', resolvedPath);
+  }
 
   await fs.mkdir(resolvedPath, { recursive: true });
 }

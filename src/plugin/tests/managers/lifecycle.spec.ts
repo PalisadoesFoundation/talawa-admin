@@ -62,6 +62,7 @@ describe('LifecycleManager', () => {
       removePluginFromGraphQL: vi.fn(),
       updatePluginStatusInGraphQL: vi.fn(),
       isPluginActivated: vi.fn(),
+      isPluginInstalled: vi.fn(),
     };
 
     mockExtensionRegistry = {
@@ -100,6 +101,7 @@ describe('LifecycleManager', () => {
         undefined,
       );
       (mockDiscoveryManager.isPluginActivated as Mock).mockReturnValue(true);
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
     });
 
     it('should successfully load a plugin', async () => {
@@ -242,6 +244,7 @@ describe('LifecycleManager', () => {
         undefined,
       );
       (mockDiscoveryManager.isPluginActivated as Mock).mockReturnValue(true);
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (mockDiscoveryManager.removePluginFromGraphQL as Mock).mockResolvedValue(
         undefined,
       );
@@ -370,6 +373,7 @@ describe('LifecycleManager', () => {
         undefined,
       );
       (mockDiscoveryManager.isPluginActivated as Mock).mockReturnValue(true);
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (
         mockDiscoveryManager.updatePluginStatusInGraphQL as Mock
       ).mockResolvedValue(undefined);
@@ -429,7 +433,7 @@ describe('LifecycleManager', () => {
 
       expect(result).toBe(false); // Should fail
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to toggle plugin status for testPlugin:',
+        'Failed to activate plugin testPlugin:',
         new Error('Registration failed'),
       );
 
@@ -445,28 +449,20 @@ describe('LifecycleManager', () => {
 
       expect(result).toBe(false);
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Invalid plugin ID provided for status toggle',
+        'Invalid plugin ID provided for activation',
       );
 
       consoleSpy.mockRestore();
     });
 
-    it('should handle invalid status value', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
+    it('should handle invalid status value by defaulting to deactivate', async () => {
       const result = await lifecycleManager.togglePluginStatus(
         'testPlugin',
         'invalid' as any,
       );
 
-      expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Invalid status provided. Must be "active" or "inactive"',
-      );
-
-      consoleSpy.mockRestore();
+      // Should call deactivatePlugin since it's not 'active'
+      expect(result).toBe(true);
     });
 
     it('should handle non-existent plugin for status toggle', async () => {
@@ -480,7 +476,7 @@ describe('LifecycleManager', () => {
       );
 
       expect(result).toBe(false);
-      expect(consoleSpy).toHaveBeenCalledWith('Plugin nonExistent not found');
+      expect(consoleSpy).toHaveBeenCalledWith('Plugin nonExistent not found for activation');
 
       consoleSpy.mockRestore();
     });
@@ -501,7 +497,7 @@ describe('LifecycleManager', () => {
 
       expect(result).toBe(false);
       expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to toggle plugin status for testPlugin:',
+        'Failed to deactivate plugin testPlugin:',
         graphQLError,
       );
 
@@ -521,6 +517,7 @@ describe('LifecycleManager', () => {
         undefined,
       );
       (mockDiscoveryManager.isPluginActivated as Mock).mockReturnValue(true);
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
 
       // Load a plugin first
       await lifecycleManager.loadPlugin('testPlugin');
@@ -634,6 +631,7 @@ describe('LifecycleManager', () => {
         undefined,
       );
       (mockDiscoveryManager.isPluginActivated as Mock).mockReturnValue(true);
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (mockDiscoveryManager.removePluginFromGraphQL as Mock).mockResolvedValue(
         undefined,
       );
@@ -684,6 +682,7 @@ describe('LifecycleManager', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (mockDiscoveryManager.loadPluginManifest as Mock).mockRejectedValue(
         new Error('Load failed'),
       );
@@ -702,6 +701,7 @@ describe('LifecycleManager', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (mockDiscoveryManager.loadPluginManifest as Mock).mockRejectedValue(
         new Error('Load failed'),
       );
@@ -722,6 +722,7 @@ describe('LifecycleManager', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
+      (mockDiscoveryManager.isPluginInstalled as Mock).mockReturnValue(true);
       (mockDiscoveryManager.loadPluginManifest as Mock).mockRejectedValue(
         new Error('Load failed'),
       );
