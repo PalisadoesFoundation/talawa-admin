@@ -122,6 +122,7 @@ export default function PluginStore() {
         <SearchBar
           placeholder={t('searchPlaceholder')}
           onSearch={debouncedSearch}
+          onChange={debouncedSearch}
           inputTestId="searchPlugins"
           buttonTestId="searchPluginsBtn"
         />

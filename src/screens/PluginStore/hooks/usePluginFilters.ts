@@ -1,24 +1,11 @@
 /**
  * Custom hook for handling plugin search and filtering logic
  */
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadedPlugins } from 'plugin/hooks';
-import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
+import useDebounce from 'components/OrgListCard/useDebounce';
 import type { IPluginMeta } from 'plugin';
-
-function useDebounce<T>(fn: (value: T) => void, delay: number) {
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  return useCallback(
-    (value: T) => {
-      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = window.setTimeout(() => {
-        fn(value);
-      }, delay) as unknown as ReturnType<typeof setTimeout>;
-    },
-    [fn, delay],
-  );
-}
 
 interface UsePluginFiltersProps {
   pluginData: any;
@@ -34,34 +21,6 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
     option: 'all',
     selectedOption: t('allPlugins'),
   });
-  const [pluginDetailsCache, setPluginDetailsCache] = useState<
-    Record<string, IPluginMeta>
-  >({});
-
-  const debouncedSearch = useDebounce<string>((value: string) => {
-    setSearchTerm(value);
-  }, 300);
-
-  const loadPluginDetails = useCallback(
-    async (pluginId: string): Promise<IPluginMeta | null> => {
-      try {
-        const details = await AdminPluginFileService.getPluginDetails(pluginId);
-        if (details) {
-          return {
-            id: details.id,
-            name: details.name,
-            description: details.description,
-            author: details.author,
-            icon: details.icon,
-          };
-        }
-      } catch (error) {
-        console.error(`Failed to load plugin details for ${pluginId}:`, error);
-      }
-      return null;
-    },
-    [],
-  );
 
   const isInstalled = useCallback(
     (pluginName: string): boolean => {
@@ -131,91 +90,54 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
     [loadedPlugins, pluginData],
   );
 
+  // Simple filtering effect - no async operations, no caching, no infinite loops
   useEffect(() => {
     const graphqlPlugins = pluginData?.getPlugins || [];
 
-    const processPlugins = async () => {
-      const allPluginsForDisplay = [
-        ...loadedPlugins.map((plugin) => ({
-          id: plugin.id,
-          name: plugin.manifest.name,
-          description: plugin.manifest.description,
-          author: plugin.manifest.author,
-          icon: plugin.manifest.icon || '/images/logo512.png',
+    // Combine loaded plugins and GraphQL plugins
+    const allPlugins: IPluginMeta[] = [
+      // Add loaded plugins
+      ...loadedPlugins.map((plugin) => ({
+        id: plugin.id,
+        name: plugin.manifest.name,
+        description: plugin.manifest.description,
+        author: plugin.manifest.author,
+        icon: plugin.manifest.icon || '/images/logo512.png',
+      })),
+      // Add GraphQL plugins that aren't already loaded
+      ...graphqlPlugins
+        .filter(
+          (gqlPlugin: any) =>
+            !loadedPlugins.some(
+              (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
+            ),
+        )
+        .map((gqlPlugin: any) => ({
+          id: gqlPlugin.pluginId,
+          name: gqlPlugin.pluginId,
+          description: `Plugin ${gqlPlugin.pluginId}`,
+          author: 'Unknown',
+          icon: '/images/logo512.png',
         })),
-      ];
+    ];
 
-      for (const gqlPlugin of graphqlPlugins) {
-        const isAlreadyLoaded = loadedPlugins.some(
-          (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
-        );
+    // Apply search filter
+    let filtered = allPlugins;
+    if (searchTerm) {
+      filtered = allPlugins.filter(
+        (plugin) =>
+          plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          plugin.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
 
-        if (!isAlreadyLoaded) {
-          let pluginDetails = pluginDetailsCache[gqlPlugin.pluginId];
+    // Apply installed filter
+    if (filterState.option === 'installed') {
+      filtered = filtered.filter((plugin) => isInstalled(plugin.name));
+    }
 
-          if (!pluginDetails) {
-            // Load details from files
-            const loadedDetails = await loadPluginDetails(gqlPlugin.pluginId);
-
-            if (loadedDetails) {
-              // Cache the details
-              setPluginDetailsCache((prev) => ({
-                ...prev,
-                [gqlPlugin.pluginId]: loadedDetails,
-              }));
-              pluginDetails = loadedDetails;
-            }
-          }
-
-          // Use loaded details or fallback to basic info
-          if (pluginDetails) {
-            allPluginsForDisplay.push(pluginDetails);
-          } else {
-            allPluginsForDisplay.push({
-              id: gqlPlugin.pluginId,
-              name: gqlPlugin.pluginId,
-              description: `Plugin ${gqlPlugin.pluginId}`,
-              author: 'Unknown',
-              icon: '/images/logo512.png',
-            });
-          }
-        }
-      }
-
-      if (!searchTerm) {
-        if (filterState.option === 'all') {
-          setFilteredPlugins(allPluginsForDisplay);
-        } else {
-          setFilteredPlugins(
-            allPluginsForDisplay.filter((plugin) => isInstalled(plugin.name)),
-          );
-        }
-      } else {
-        const searchFiltered = allPluginsForDisplay.filter(
-          (plugin) =>
-            plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            plugin.description.toLowerCase().includes(searchTerm.toLowerCase()),
-        );
-        if (filterState.option === 'all') {
-          setFilteredPlugins(searchFiltered);
-        } else {
-          setFilteredPlugins(
-            searchFiltered.filter((plugin) => isInstalled(plugin.name)),
-          );
-        }
-      }
-    };
-
-    processPlugins();
-  }, [
-    searchTerm,
-    filterState.option,
-    loadedPlugins,
-    pluginData,
-    pluginDetailsCache,
-    loadPluginDetails,
-    isInstalled,
-  ]);
+    setFilteredPlugins(filtered);
+  }, [searchTerm, filterState.option, loadedPlugins, pluginData, isInstalled]);
 
   const handleFilterChange = useCallback(
     (value: string): void => {
@@ -227,6 +149,14 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
     },
     [t],
   );
+
+  // Debounced search function following the same pattern as other components
+  const doSearch = useCallback((...args: unknown[]) => {
+    const value = args[0] as string;
+    setSearchTerm(value);
+  }, []);
+
+  const { debouncedCallback: debouncedSearch } = useDebounce(doSearch, 100);
 
   return {
     searchTerm,
