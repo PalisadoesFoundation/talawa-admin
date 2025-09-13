@@ -825,7 +825,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'test-plugin' } });
+      fireEvent.change(searchInput, { target: { value: 'test' } });
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
