@@ -63,9 +63,6 @@ describe('LifecycleManager', () => {
       updatePluginStatusInGraphQL: vi.fn(),
       isPluginActivated: vi.fn(),
       isPluginInstalled: vi.fn(),
-      graphqlService: null,
-      pluginIndex: [],
-      normalizeMainFile: vi.fn(),
     };
 
     mockExtensionRegistry = {
@@ -914,14 +911,19 @@ describe('LifecycleManager', () => {
 
       // Create a fresh lifecycle manager for this test
       const testDiscoveryManager = {
-        ...mockDiscoveryManager,
+        loadPluginManifest: vi.fn(),
+        loadPluginComponents: vi.fn(),
+        syncPluginWithGraphQL: vi.fn(),
         removePluginFromGraphQL: vi
           .fn()
           .mockRejectedValue(new Error('GraphQL error')),
+        updatePluginStatusInGraphQL: vi.fn(),
+        isPluginActivated: vi.fn(),
+        isPluginInstalled: vi.fn(),
       };
 
       const testLifecycleManager = new LifecycleManager(
-        testDiscoveryManager as DiscoveryManager,
+        testDiscoveryManager as unknown as DiscoveryManager,
         mockExtensionRegistry as ExtensionRegistryManager,
         mockEventManager as EventManager,
       );
