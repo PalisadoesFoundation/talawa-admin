@@ -16,7 +16,7 @@ Defined in: [src/screens/Users/Organization.mocks.ts:68](https://github.com/Pali
 
 ### createdAt
 
-> **createdAt**: `string` = `'19/06/2022'`
+> **createdAt**: `string` = `'19/06/2030'`
 
 ### email
 

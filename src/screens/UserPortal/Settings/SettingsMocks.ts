@@ -56,7 +56,7 @@ export const MOCKS1 = [
           birthDate: '2000-01-01',
           city: 'nyc',
           countryCode: 'in',
-          createdAt: '2025-02-06T03:10:50.254',
+          createdAt: '2025-02-06T03:10:50.254Z',
           description: 'This is a description',
           educationGrade: 'grade_8',
           emailAddress: 'test221@gmail.com',

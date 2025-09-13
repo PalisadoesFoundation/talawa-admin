@@ -35,7 +35,12 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import type { DropResult } from '@hello-pangea/dnd';
+import type {
+  DropResult,
+  DraggableProvided,
+  DraggableStateSnapshot,
+  DroppableProvided,
+} from '@hello-pangea/dnd';
 
 import {
   DELETE_AGENDA_ITEM_MUTATION,
@@ -264,7 +269,7 @@ function AgendaItemsContainer({
   return (
     <>
       <div
-        className={`mx-1 ${agendaItemConnection == 'Event' ? 'my-4' : 'my-0'}`}
+        className={`mx-1 ${agendaItemConnection === 'Event' ? 'my-4' : 'my-0'}`}
       >
         <div
           className={` shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
@@ -317,7 +322,7 @@ function AgendaItemsContainer({
         </div>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="agendaItems">
-            {(provided) => (
+            {(provided: DroppableProvided) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
@@ -330,7 +335,10 @@ function AgendaItemsContainer({
                       draggableId={agendaItem._id}
                       index={index}
                     >
-                      {(provided, snapshot) => (
+                      {(
+                        provided: DraggableProvided,
+                        snapshot: DraggableStateSnapshot,
+                      ) => (
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
@@ -424,6 +432,7 @@ function AgendaItemsContainer({
                       )}
                     </Draggable>
                   ))}
+                {provided.placeholder}
                 {agendaItemData?.length === 0 && (
                   <div className="lh-lg text-center fw-semibold text-body-tertiary">
                     {t('noAgendaItems')}

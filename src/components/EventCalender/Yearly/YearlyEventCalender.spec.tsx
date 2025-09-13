@@ -557,6 +557,14 @@ describe('Calendar Component', () => {
       },
     };
 
+    // Render with console logs to debug
+    console.log('Test - rendering with:', {
+      privateEventToday,
+      memberOrgData,
+      userId: 'member1',
+      userRole: UserRole.REGULAR,
+    });
+
     const { container, findAllByTestId } = renderWithRouterAndPath(
       <Calendar
         eventData={[privateEventToday]}
@@ -569,10 +577,17 @@ describe('Calendar Component', () => {
 
     await findAllByTestId('day');
 
+    // Debug what buttons are available
+    console.log(
+      'Test - available buttons:',
+      container.querySelectorAll('button').length,
+    );
+
     // Look specifically for an expand button (events are present)
     const expandButton = container.querySelector(
       '[data-testid^="expand-btn-"]',
     );
+    console.log('Test - found expand button:', expandButton !== null);
     expect(expandButton).toBeInTheDocument();
 
     if (expandButton) {
@@ -586,6 +601,7 @@ describe('Calendar Component', () => {
       const expandedList = container.querySelector(
         '._expand_event_list_d8535b',
       );
+      console.log('Test - found expanded list:', expandedList !== null);
       expect(expandedList).toBeInTheDocument();
     });
 

@@ -64,7 +64,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 #### result.data.currentUser.createdAt
 
-> **createdAt**: `string` = `'2025-02-06T03:10:50.254'`
+> **createdAt**: `string` = `'2025-02-06T03:10:50.254Z'`
 
 #### result.data.currentUser.description
 
