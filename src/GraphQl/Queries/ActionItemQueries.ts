@@ -68,7 +68,7 @@ export const GET_EVENT_ACTION_ITEMS = gql`
       baseEvent {
         id
       }
-      actionItems(first: 10) {
+      actionItems(first: 20) {
         edges {
           node {
             id

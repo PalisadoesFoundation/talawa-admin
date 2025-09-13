@@ -111,38 +111,38 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
   }
 `;
 export const COMPLETE_ACTION_FOR_INSTANCE = gql`
-  mutation CompleteActionForInstance(
-    $input: MutationCompleteActionForInstanceInput!
+  mutation CompleteActionItemForInstance(
+    $input: MutationCompleteActionItemForInstanceInput!
   ) {
-    completeActionForInstance(input: $input) {
+    completeActionItemForInstance(input: $input) {
       id
     }
   }
 `;
 export const MARK_ACTION_AS_PENDING_FOR_INSTANCE = gql`
-  mutation MarkActionAsPendingForInstance(
+  mutation MarkActionItemAsPendingForInstance(
     $input: MutationMarkActionAsPendingForInstanceInput!
   ) {
-    markActionAsPendingForInstance(input: $input) {
+    markActionItemAsPendingForInstance(input: $input) {
       id
     }
   }
 `;
 export const UPDATE_ACTION_FOR_INSTANCE = gql`
-  mutation UpdateActionForInstance(
-    $input: MutationUpdateActionForInstanceInput!
+  mutation UpdateActionItemForInstance(
+    $input: MutationUpdateActionItemForInstanceInput!
   ) {
-    updateActionForInstance(input: $input) {
+    updateActionItemForInstance(input: $input) {
       id
     }
   }
 `;
 
 export const DELETE_ACTION_FOR_INSTANCE = gql`
-  mutation DeleteActionForInstance(
-    $input: MutationDeleteActionForInstanceInput!
+  mutation DeleteActionItemForInstance(
+    $input: MutationDeleteActionItemForInstanceInput!
   ) {
-    deleteActionForInstance(input: $input) {
+    deleteActionItemForInstance(input: $input) {
       id
     }
   }
