@@ -19,12 +19,10 @@ import * as errorHandlerModule from 'utils/errorHandler';
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({
-    uploadFileToMinio: vi
-      .fn()
-      .mockResolvedValue({
-        objectName: 'mocked-file.jpg',
-        fileHash: 'mocked-hash',
-      }),
+    uploadFileToMinio: vi.fn().mockResolvedValue({
+      objectName: 'mocked-file.jpg',
+      fileHash: 'mocked-hash',
+    }),
   }),
 }));
 

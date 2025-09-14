@@ -4,7 +4,6 @@ import {
   ORGANIZATION_POST_LIST,
   GET_POSTS_BY_ORG,
 } from 'GraphQl/Queries/Queries';
-
 import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router';
 import type { ChangeEvent } from 'react';
@@ -30,7 +29,6 @@ import type {
   InterfacePost,
   InterfacePostAttachment,
 } from '../../types/Post/interface';
-
 /**
  * OrgPost Component
  * This component is responsible for rendering and managing organization posts.
@@ -38,9 +36,7 @@ import type {
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
   const { t: tCommon } = useTranslation('common');
-
   document.title = t('title');
-
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [postformState, setPostFormState] = useState<{
     posttitle: string;
@@ -59,7 +55,6 @@ function OrgPost(): JSX.Element {
     pinPost: false,
     attachments: [],
   });
-  // Initialize MinIO upload hook
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
   const [sortingOption, setSortingOption] = useState('None');
@@ -123,7 +118,6 @@ function OrgPost(): JSX.Element {
 
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
-
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -131,12 +125,9 @@ function OrgPost(): JSX.Element {
       if (!postformState.posttitle.trim()) {
         throw new Error('Title field cannot be empty');
       }
-
       if (!currentUrl) {
         throw new Error('Organization ID is required');
       }
-
-      // Create the typed input object
       const input: InterfaceMutationCreatePostInput = {
         caption: postformState.posttitle.trim(),
         organizationId: currentUrl,
@@ -172,8 +163,6 @@ function OrgPost(): JSX.Element {
       errorHandler(t, error);
     }
   };
-
-  console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -181,7 +170,6 @@ function OrgPost(): JSX.Element {
     const selectedFile = files?.[0];
 
     if (selectedFile) {
-      // Validate file type
       if (!selectedFile.type.startsWith('image/')) {
         toast.error('Please select an image file');
         return;
@@ -192,7 +180,6 @@ function OrgPost(): JSX.Element {
       }
 
       setFile(selectedFile);
-      // Validate file before upload
       const validation = validateFile(selectedFile);
       if (!validation.isValid) {
         toast.error(validation.errorMessage);
@@ -200,7 +187,6 @@ function OrgPost(): JSX.Element {
       }
 
       try {
-        // Upload to MinIO and get object name
         const { objectName, fileHash } = await uploadFileToMinio(
           selectedFile,
           currentUrl!,
@@ -239,7 +225,6 @@ function OrgPost(): JSX.Element {
         return;
       }
       setVideoFile(selectedFile);
-      // Validate file before upload
       const validation = validateFile(selectedFile);
       if (!validation.isValid) {
         toast.error(validation.errorMessage);
@@ -392,9 +377,8 @@ function OrgPost(): JSX.Element {
       ? orgPostListData?.organization?.posts?.pageInfo?.hasNextPage
       : currentPage < totalPages;
 
-  // Update the totalPages calculation
-
   const handleNextPage = (): void => {
+    // Update the totalPages calculation
     if (sortingOption === 'None') {
       const endCursor =
         orgPostListData?.organization?.posts?.pageInfo?.endCursor;
@@ -441,15 +425,8 @@ function OrgPost(): JSX.Element {
               onSearch={handleSearch}
               inputTestId="searchByName"
             />
-
             <div className={styles.btnsBlockOrgPost}>
               <div className="d-flex">
-                {/* <SearchingButton
-                  text="Search" 
-                  dataTestIdPrefix="sort-button"
-                  type="sort" 
-                  className={`${styles.dropdown} `}
-                /> */}
                 <SortingButton
                   title="Sort Post"
                   sortingOptions={[
@@ -463,7 +440,6 @@ function OrgPost(): JSX.Element {
                   dropdownTestId="sortpost-dropdown"
                 />
               </div>
-
               <Button
                 variant="success"
                 onClick={showInviteModal}
@@ -499,7 +475,6 @@ function OrgPost(): JSX.Element {
           </div>
         </div>
       </Row>
-
       <Modal
         show={postmodalisOpen}
         onHide={hideInviteModal}
@@ -560,7 +535,6 @@ function OrgPost(): JSX.Element {
               data-testid="addMediaField"
               className={`mb-3 ${styles.inputField}`}
             />
-
             <Form.Control
               id="videoAddMedia"
               name="videoAddMedia"
@@ -571,7 +545,6 @@ function OrgPost(): JSX.Element {
               data-testid="addVideoField"
               className={`mb-3 ${styles.inputField}`}
             />
-
             {postformState.addMedia && file && (
               <div className={styles.previewOrgPost} data-testid="mediaPreview">
                 {file.type.startsWith('image') ? (
@@ -672,5 +645,4 @@ function OrgPost(): JSX.Element {
     </>
   );
 }
-
 export default OrgPost;
