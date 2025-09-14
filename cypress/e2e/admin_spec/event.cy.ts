@@ -27,23 +27,6 @@ describe('Admin Event Tab', () => {
       'This is a test event created during E2E testing. Updated.',
       'Updated Location',
     );
-    // cy.get('[data-cy="leftDrawerButton-Venues"]').should('be.visible').click();
-    // cy.get('[data-cy="leftDrawerButton-Events"]').should('be.visible').click();
-    // cy.get('[data-testid="card"]').contains('Testing Event Creation').click();
-    // cy.get('[data-cy="updateName"]')
-    //   .should('be.visible')
-    //   .clear()
-    //   .type('Updated Event Name');
-    // cy.get('[data-cy="updateDescription"]')
-    //   .should('be.visible')
-    //   .clear()
-    //   .type('This is a test event created during E2E testing. Updated.');
-    // cy.get('[data-cy="updateLocation"]')
-    //   .should('be.visible')
-    //   .clear()
-    //   .type('Updated Location');
-    // cy.get('[data-cy="previewUpdateEventBtn"]').should('be.visible').click();
-    // cy.assertToast('Event updated successfully.');
   });
 
   it('delete the created event', () => {
