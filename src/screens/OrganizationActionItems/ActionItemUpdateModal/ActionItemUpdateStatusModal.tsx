@@ -35,15 +35,15 @@ import { useMutation } from '@apollo/client';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
-  COMPLETE_ACTION_FOR_INSTANCE,
-  MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+  COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+  MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
-} from 'types/Actions/interface';
+} from 'types/ActionItems/interface';
 
 export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
@@ -91,14 +91,14 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   );
 
   const [completeActionForInstance] = useMutation(
-    COMPLETE_ACTION_FOR_INSTANCE,
+    COMPLETE_ACTION_ITEM_FOR_INSTANCE,
     {
       refetchQueries: ['GetEventActionItems'],
     },
   );
 
   const [markActionAsPendingForInstance] = useMutation(
-    MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+    MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
     {
       refetchQueries: ['GetEventActionItems'],
     },

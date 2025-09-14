@@ -16,7 +16,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### request.query
 
-> **query**: `DocumentNode` = `COMPLETE_ACTION_FOR_INSTANCE`
+> **query**: `DocumentNode` = `COMPLETE_ACTION_ITEM_FOR_INSTANCE`
 
 #### request.variables
 

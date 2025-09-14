@@ -4,8 +4,8 @@ import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
   DELETE_ACTION_ITEM_MUTATION,
-  COMPLETE_ACTION_FOR_INSTANCE,
-  MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+  COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+  MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 
 export const actionItemCategory1 = {
@@ -382,7 +382,7 @@ export const deleteActionItemMutationError = {
 // Add mocks for instance-specific mutations
 export const completeActionForInstanceMutation = {
   request: {
-    query: COMPLETE_ACTION_FOR_INSTANCE,
+    query: COMPLETE_ACTION_ITEM_FOR_INSTANCE,
     variables: {
       input: {
         actionId: 'actionItemId1',
@@ -402,7 +402,7 @@ export const completeActionForInstanceMutation = {
 
 export const completeActionForInstanceMutationError = {
   request: {
-    query: COMPLETE_ACTION_FOR_INSTANCE,
+    query: COMPLETE_ACTION_ITEM_FOR_INSTANCE,
     variables: {
       input: {
         actionId: 'actionItemId1',
@@ -416,7 +416,7 @@ export const completeActionForInstanceMutationError = {
 
 export const markActionAsPendingForInstanceMutation = {
   request: {
-    query: MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+    query: MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
     variables: {
       input: {
         actionId: 'actionItemId1',
@@ -435,7 +435,7 @@ export const markActionAsPendingForInstanceMutation = {
 
 export const markActionAsPendingForInstanceMutationError = {
   request: {
-    query: MARK_ACTION_AS_PENDING_FOR_INSTANCE,
+    query: MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
     variables: {
       input: {
         actionId: 'actionItemId1',

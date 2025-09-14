@@ -17,7 +17,7 @@ import type {
   IActionItemInfo,
   ICreateActionItemInput,
   IUpdateActionItemInput,
-} from 'types/Actions/interface';
+} from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
-  UPDATE_ACTION_FOR_INSTANCE,
+  UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
@@ -137,9 +137,12 @@ const ItemModal: FC<IItemModalProps> = ({
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
 
-  const [updateActionForInstance] = useMutation(UPDATE_ACTION_FOR_INSTANCE, {
-    refetchQueries: ['GetEventActionItems'],
-  });
+  const [updateActionForInstance] = useMutation(
+    UPDATE_ACTION_ITEM_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
 
   const handleFormChange = (
     field: keyof IFormStateType,

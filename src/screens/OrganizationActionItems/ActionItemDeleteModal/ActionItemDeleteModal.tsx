@@ -36,12 +36,12 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
   DELETE_ACTION_ITEM_MUTATION,
-  DELETE_ACTION_FOR_INSTANCE,
+  DELETE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import type {
   IActionItemInfo,
   IDeleteActionItemInput,
-} from 'types/Actions/interface';
+} from 'types/ActionItems/interface';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
@@ -71,9 +71,12 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
 
-  const [deleteActionForInstance] = useMutation(DELETE_ACTION_FOR_INSTANCE, {
-    refetchQueries: ['GetEventActionItems'],
-  });
+  const [deleteActionForInstance] = useMutation(
+    DELETE_ACTION_ITEM_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
 
   const handleDelete = async (): Promise<void> => {
     try {

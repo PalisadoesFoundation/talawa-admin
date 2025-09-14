@@ -110,7 +110,7 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     }
   }
 `;
-export const COMPLETE_ACTION_FOR_INSTANCE = gql`
+export const COMPLETE_ACTION_ITEM_FOR_INSTANCE = gql`
   mutation CompleteActionItemForInstance(
     $input: MutationCompleteActionItemForInstanceInput!
   ) {
@@ -119,7 +119,7 @@ export const COMPLETE_ACTION_FOR_INSTANCE = gql`
     }
   }
 `;
-export const MARK_ACTION_AS_PENDING_FOR_INSTANCE = gql`
+export const MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE = gql`
   mutation MarkActionItemAsPendingForInstance(
     $input: MutationMarkActionAsPendingForInstanceInput!
   ) {
@@ -128,7 +128,7 @@ export const MARK_ACTION_AS_PENDING_FOR_INSTANCE = gql`
     }
   }
 `;
-export const UPDATE_ACTION_FOR_INSTANCE = gql`
+export const UPDATE_ACTION_ITEM_FOR_INSTANCE = gql`
   mutation UpdateActionItemForInstance(
     $input: MutationUpdateActionItemForInstanceInput!
   ) {
@@ -138,7 +138,7 @@ export const UPDATE_ACTION_FOR_INSTANCE = gql`
   }
 `;
 
-export const DELETE_ACTION_FOR_INSTANCE = gql`
+export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
   mutation DeleteActionItemForInstance(
     $input: MutationDeleteActionItemForInstanceInput!
   ) {
