@@ -9,7 +9,11 @@ export default defineConfig({
     alias: {
       '@mui/material/utils': '@mui/material/node/utils/index.js',
       '@mui/material/styles': '@mui/material/node/styles/index.js',
+      '@mui/material/Stack': '@mui/material/node/Stack/index.js',
     },
+  },
+  optimizeDeps: {
+    include: ['@mui/x-date-pickers'],
   },
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
