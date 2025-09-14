@@ -342,7 +342,7 @@ enum AdvertisementTypePg {
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
  * @property {string | null} user.image - The URL of the user's image, or null if not available.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  */
 export interface InterfaceUserType {
   user: {
@@ -360,7 +360,7 @@ export interface InterfaceUserType {
  * @property {string} user.id - The unique identifier of the user.
  * @property {string} user.name - The full name of the user.
  * @property {string} user.role - The role of the user.
- * @property {string} user.emailAddress - The email address of the user.
+ * @property {string} user.emailAddressAddress - The email address of the user.
  */
 export interface InterfaceUserTypePG {
   user: {
@@ -378,7 +378,7 @@ export interface InterfaceUserTypePG {
  * @property {string} currentUser.id - The unique identifier of the current user.
  * @property {string} currentUser.name - The full name of the current user.
  * @property {string} currentUser.role - The role of the current user.
- * @property {string} currentUser.emailAddress - The email address of the current user.
+ * @property {string} currentuser.emailAddressAddress - The email address of the current user.
  */
 export interface InterfaceCurrentUserTypePG {
   currentUser: {
@@ -576,7 +576,7 @@ export interface InterfaceOrgInfoTypePG {
  * @property {object} membershipRequests.user - The user who made the membership request.
  * @property {string} membershipRequests.user.firstName - The first name of the user.
  * @property {string} membershipRequests.user.lastName - The last name of the user.
- * @property {string} membershipRequests.user.email - The email address of the user.
+ * @property {string} membershipRequests.user.emailAddress - The email address of the user.
  * @property {object[]} blockedUsers - An array of users blocked by the organization.
  * @property {string} blockedUsers._id - The unique identifier of the blocked user.
  * @property {string} blockedUsers.firstName - The first name of the blocked user.
@@ -1928,7 +1928,7 @@ export interface InterfaceQueryBlockPageMemberListItem {
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
  * @property {string | null} user.image - The URL of the user's image, or null.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  * @property {object[]} user.organizationsBlockedBy - An array of organizations that have blocked this user.
  * @property {string} user.organizationsBlockedBy._id - The unique identifier of the blocking organization.
  * @property {string} user.organizationsBlockedBy.name - The name of the blocking organization.
@@ -1971,51 +1971,52 @@ export interface InterfaceQueryBlockPageMemberListItem {
  * @property {string} appUserProfile.eventAdmin._id - The unique identifier of the event.
  */
 export interface InterfaceQueryUserListItem {
-  user: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    image: string | null;
-    email: string;
-    organizationsBlockedBy: {
-      _id: string;
-      name: string;
-      image: string | null;
-      address: InterfaceAddress;
-      creator: {
-        _id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        image: string | null;
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL: string | null;
+  birthDate: string | null;
+  city: string | null;
+  countryCode: string | null;
+  createdAt: string;
+  updatedAt: string;
+  educationGrade: string | null;
+  employmentStatus: string | null;
+  isEmailAddressVerified: boolean;
+  maritalStatus: string | null;
+  natalSex: string | null;
+  naturalLanguageCode: string | null;
+  postalCode: string | null;
+  role: string | null;
+  state: string | null;
+  mobilePhoneNumber: string | null;
+  homePhoneNumber: string | null;
+  workPhoneNumber: string | null;
+
+  createdOrganizations: {
+    id: string;
+    name: string;
+    avatarURL?: string;
+  }[];
+
+  organizationsWhereMember: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        avatarURL?: string;
+        createdAt: string;
+        city?: string;
+        state?: string;
+        countryCode?: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+          avatarURL?: string;
+        };
       };
-      createdAt: string;
     }[];
-    joinedOrganizations: {
-      _id: string;
-      name: string;
-      address: InterfaceAddress;
-      image: string | null;
-      createdAt: string;
-      creator: {
-        _id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-        image: string | null;
-      };
-    }[];
-    createdAt: string;
-    registeredEvents: { _id: string }[];
-    membershipRequests: { id: string }[];
-  };
-  appUserProfile: {
-    _id: string;
-    adminFor: { _id: string }[];
-    isSuperAdmin: boolean;
-    createdOrganizations: { _id: string }[];
-    createdEvents: { _id: string }[];
-    eventAdmin: { _id: string }[];
   };
 }
 
@@ -2105,48 +2106,56 @@ export interface InterfaceCreateFund {
  * @property {string} comments.creator.lastName - The last name of the comment creator.
  * @property {string} comments.creator.email - The email address of the comment creator.
  * @property {number} comments.likeCount - The number of likes on the comment.
- * @property {object[]} comments.likedBy - An array of users who liked the comment.
- * @property {string} comments.likedBy.id - The unique identifier of the user who liked the comment.
+ * @property {object[]} comments.upVoters - An array of users who liked the comment.
+ * @property {string} comments.upVoters.id - The unique identifier of the user who liked the comment.
  * @property {string} comments.text - The text content of the comment.
- * @property {object[]} likedBy - An array of users who liked the post.
- * @property {string} likedBy.firstName - The first name of the user who liked the post.
- * @property {string} likedBy.lastName - The last name of the user who liked the post.
- * @property {string} likedBy.id - The unique identifier of the user who liked the post.
+ * @property {object[]} upVoters - An array of users who liked the post.
+ * @property {string} upVoters.firstName - The first name of the user who liked the post.
+ * @property {string} upVoters.lastName - The last name of the user who liked the post.
+ * @property {string} upVoters.id - The unique identifier of the user who liked the post.
  * @property {function} fetchPosts - A function to fetch posts.
  */
 export interface InterfacePostCard {
   id: string;
+  isModalView?: boolean;
   creator: {
-    firstName: string;
-    lastName: string;
-    email: string;
     id: string;
+    name: string;
+    email: string;
+    avatarURL?: string;
   };
   postedAt: string;
+  pinnedAt?: string | null;
   image: string | null;
   video: string | null;
-  text: string;
   title: string;
-  likeCount: number;
+  text: string;
   commentCount: number;
+  upVoters: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        } | null;
+      };
+    }[];
+  };
+  upVoteCount: number;
+  downVoteCount: number;
   comments: {
     id: string;
+    body: string;
     creator: {
       id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
       email: string;
     };
-    likeCount: number;
-    likedBy: {
-      id: string;
-    }[];
+    downVoteCount: number;
+    upVoteCount: number;
+    upVoters: { id: string }[];
     text: string;
-  }[];
-  likedBy: {
-    firstName: string;
-    lastName: string;
-    id: string;
   }[];
   fetchPosts: () => void;
 }
@@ -2179,7 +2188,7 @@ export interface InterfaceCreatePledge {
  * @property {string} organizations.membershipRequests.user.id - The unique identifier of the user.
  * @property {string} organizations.membershipRequests.user.firstName - The first name of the user.
  * @property {string} organizations.membershipRequests.user.lastName - The last name of the user.
- * @property {string} organizations.membershipRequests.user.email - The email address of the user.
+ * @property {string} organizations.membershipRequests.user.emailAddress - The email address of the user.
  */
 export interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
@@ -2525,7 +2534,7 @@ export interface InterfaceVolunteerMembership {
  * @property {string} user._id - The unique identifier of the user.
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
+ * @property {string} user.emailAddress - The email address of the user.
  * @property {string | null} user.image - The URL of the user's image, or null.
  */
 export interface InterfaceVolunteerRank {

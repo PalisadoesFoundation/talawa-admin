@@ -1425,7 +1425,6 @@ form label,
   flex: 1;
   position: relative;
   margin-left: 8px;
-  background-color: var(--input-bg);
   margin-right: 180px;
   width: 425px;
 }
@@ -1787,6 +1786,17 @@ form label,
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
   width: auto;
+  margin-inline-start: 12px;
+}
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 24px;
 }
 
 .justifyspAdvertisements {
@@ -1809,7 +1819,7 @@ form label,
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: repeat(2, 1fr); */
   grid-gap: 0.8rem 0.4rem;
   overflow: hidden;
 }
@@ -2789,6 +2799,12 @@ form label,
 
 .calender_month {
   display: flex;
+  align-items: center;
+}
+
+.navigation_buttons {
+  display: flex;
+  gap: 6px;
   align-items: center;
 }
 
@@ -4743,7 +4759,7 @@ form label,
   }
 
   .profileContainer {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
@@ -5528,6 +5544,13 @@ form {
   border-radius: 50%;
   margin-right: 25px;
   max-width: 70px;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  margin-right: 25px;
+  width: 53px;
+  height: 53px;
 }
 
 .people_card_container {
@@ -7741,6 +7764,14 @@ form {
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
+}
+
+.tableImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 /* -- OrganizationActionItems.tsx -- */

@@ -139,7 +139,7 @@ const leftDrawer = ({
           renderDrawerItem('/users', <RolesIcon />, t('users'), 'rolesBtn')}
 
         {renderDrawerItem(
-          '/CommunityProfile',
+          '/communityProfile',
           <SettingsIcon />,
           t('communityProfile'),
           'communityProfileBtn',

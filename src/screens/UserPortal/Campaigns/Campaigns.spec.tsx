@@ -201,7 +201,11 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
+
       expect(detailContainer).toHaveTextContent('2026-08-31');
+
+      expect(detailContainer).toHaveTextContent('2099-12-31');
+
       expect(detailContainer).toHaveTextContent('Active');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
@@ -233,7 +237,11 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
+
       expect(detailContainer).toHaveTextContent('2026-08-31');
+
+      expect(detailContainer).toHaveTextContent('2099-12-31');
+
     });
   });
 
@@ -259,7 +267,11 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
+ 
       expect(detailContainer).toHaveTextContent('2026-08-31');
+
+      expect(detailContainer).toHaveTextContent('2099-12-31');
+
     });
   });
 
@@ -285,7 +297,10 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
+
       expect(detailContainer).toHaveTextContent('2026-08-31');
+
+      expect(detailContainer).toHaveTextContent('2099-12-31');
     });
   });
 
@@ -311,7 +326,11 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
+
       expect(detailContainer).toHaveTextContent('2026-08-31');
+
+      expect(detailContainer).toHaveTextContent('2099-12-31');
+
     });
   });
 
