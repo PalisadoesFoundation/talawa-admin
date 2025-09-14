@@ -99,7 +99,7 @@ describe('refreshToken', () => {
   it('returns false and logs error when token refresh fails', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const errorMock = new Error('Failed to refresh token');
     mockApolloClient.mutate.mockRejectedValueOnce(errorMock);
