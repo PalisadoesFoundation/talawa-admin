@@ -277,7 +277,11 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   </Button>
                   {/* Only show 'complete for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
-                    <Button type="submit" className={styles.addButton}>
+                    <Button
+                      type="submit"
+                      className={styles.addButton}
+                      data-cy="markCompletionForSeries"
+                    >
                       {t('completeForSeries')}
                     </Button>
                   )}

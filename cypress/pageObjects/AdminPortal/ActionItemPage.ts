@@ -10,6 +10,7 @@ export class ActionItemPage {
   private readonly statusCheckbox = '[data-testid^="statusCheckbox"]';
   private readonly postCompletionNotes = '[data-cy="postCompletionNotes"]';
   private readonly createCompletionBtn = '[data-testid="createBtn"]';
+  private readonly completionBtnSeries = '[data-cy="markCompletionForSeries"]';
   private readonly deleteItemBtn = '[data-testid^="deleteItemBtn"]';
   private readonly deleteYesBtn = '[data-testid="deleteyesbtn"]';
   private readonly modalCloseBtn = '[data-testid="modalCloseBtn"]';
@@ -57,7 +58,7 @@ export class ActionItemPage {
   markFirstActionItemAsComplete(completionNotes: string) {
     cy.get(this.statusCheckbox).first().click();
     cy.get(this.postCompletionNotes).type(completionNotes);
-    cy.get(this.createCompletionBtn).should('be.visible').click();
+    cy.get(this.completionBtnSeries).should('be.visible').click();
     cy.assertToast('Completed');
     return this;
   }

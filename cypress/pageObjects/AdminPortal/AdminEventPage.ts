@@ -1,21 +1,25 @@
 export class AdminEventPage {
-  openEventsTab(): void {
-    cy.get('[data-cy="leftDrawerButton-Events"]').should('be.visible').click();
-    cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
-  }
+  private readonly _eventsTabButton = '[data-cy="leftDrawerButton-Events"]';
+  private readonly _venueTabButton = '[data-cy="leftDrawerButton-Events"]';
+  private readonly _createEventModalButton = '[data-cy="createEventModalBtn"]';
+  private readonly _eventTitleInput = '[data-cy="eventTitleInput"]';
+  private readonly _eventDescriptionInput = '[data-cy="eventDescriptionInput"]';
+  private readonly _eventLocationInput = '[data-cy="eventLocationInput"]';
+  private readonly _createEventBtn = '[data-cy="createEventBtn"]';
+  private readonly _updateNameInput = '[data-cy="updateName"]';
+  private readonly _updateDescriptionInput = '[data-cy="updateDescription"]';
+  private readonly _updateLocationInput = '[data-cy="updateLocation"]';
+  private readonly _previewUpdateEventBtn = '[data-cy="previewUpdateEventBtn"]';
+  private readonly _deleteEventModalBtn = '[data-cy="deleteEventModalBtn"]';
+  private readonly _deleteEventBtn = '[data-testid="deleteEventBtn"]';
 
   createEvent(title: string, description: string, location: string): void {
-    cy.get('[data-cy="createEventModalBtn"]').should('be.visible').click();
-    cy.get('[data-cy="eventTitleInput"]').should('be.visible').type(title);
-    cy.get('[data-cy="eventDescriptionInput"]')
-      .should('be.visible')
-      .type(description);
-    cy.get('[data-cy="eventLocationInput"]')
-      .should('be.visible')
-      .type(location);
-    cy.get('[data-cy="createEventBtn"]').should('be.visible').click();
+    cy.get(this._createEventModalButton).should('be.visible').click();
+    cy.get(this._eventTitleInput).should('be.visible').type(title);
+    cy.get(this._eventDescriptionInput).should('be.visible').type(description);
+    cy.get(this._eventLocationInput).should('be.visible').type(location);
+    cy.get(this._createEventBtn).should('be.visible').click();
     cy.assertToast('Congratulations! The Event is created.');
-    cy.wait(2000);
   }
 
   updateEvent(
@@ -24,27 +28,31 @@ export class AdminEventPage {
     description: string,
     location: string,
   ): void {
+    cy.get(this._venueTabButton).should('be.visible').click();
+    cy.get(this._eventsTabButton).should('be.visible').click();
     cy.get('[data-testid="card"]').contains(existingName).click();
-    cy.get('[data-cy="updateName"]').should('be.visible').clear().type(name);
-    cy.get('[data-cy="updateDescription"]')
+    cy.get(this._updateNameInput).should('be.visible').clear().type(name);
+    cy.get(this._updateDescriptionInput)
       .should('be.visible')
       .clear()
       .type(description);
-    cy.get('[data-cy="updateLocation"]')
+    cy.get(this._updateLocationInput)
       .should('be.visible')
       .clear()
       .type(location);
-    cy.get('[data-cy="previewUpdateEventBtn"]').should('be.visible').click();
+    cy.get(this._previewUpdateEventBtn).should('be.visible').click();
     cy.assertToast('Event updated successfully.');
   }
 
   deleteEvent(name: string): void {
+    cy.get(this._venueTabButton).should('be.visible').click();
+    cy.get(this._eventsTabButton).should('be.visible').click();
     cy.get('[data-testid="card"]')
       .should('be.visible')
       .should('contain.text', name);
     cy.get('[data-testid="card"]').contains(name).click();
-    cy.get('[data-cy="deleteEventModalBtn"]').should('be.visible').click();
-    cy.get('[data-testid="deleteEventBtn"]').should('be.visible').click();
+    cy.get(this._deleteEventModalBtn).should('be.visible').click();
+    cy.get(this._deleteEventBtn).should('be.visible').click();
     cy.assertToast('Event deleted successfully.');
   }
 }
