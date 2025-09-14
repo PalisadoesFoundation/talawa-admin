@@ -1,12 +1,3 @@
-// Default props for use in tests
-const props = {
-  id: '1',
-  memberName: 'John Doe',
-  memberLocation: 'India',
-  joinDate: '18/03/2022',
-  memberImage: 'image',
-  email: 'johndoe@gmail.com',
-};
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
