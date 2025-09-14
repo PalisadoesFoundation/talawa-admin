@@ -1032,7 +1032,7 @@ describe('updateActionForInstanceHandler', () => {
       variableMatcher: (variables: any) => {
         return (
           variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Hide test notes'
+          variables.input.preCompletionNotes === 'Updated notes'
         );
       },
       result: {

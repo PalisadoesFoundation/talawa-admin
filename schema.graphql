@@ -5895,14 +5895,6 @@ input QueryPostInput {
   id: String!
 }
 
-input CreateAssociationExceptionInput {
-  associationId: String!
-  associationType: String!
-  overriddenData: String
-  recurringEventInstanceId: String!
-  status: String!
-}
-
 """
 """
 input QuerySignInInput {
@@ -6637,11 +6629,6 @@ type VolunteerGroups {
   User who has last updated the Group.
   """
   updater: User
-}
-
-input UpdateAssociationExceptionInput {
-  overriddenData: String
-  status: String
 }
 
 scalar URL

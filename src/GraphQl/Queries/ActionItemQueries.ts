@@ -76,7 +76,6 @@ export const GET_EVENT_ACTION_ITEMS = gql`
             assignedAt
             preCompletionNotes
             postCompletionNotes
-            recurringEventInstanceId
             isInstanceException
             isTemplate
             creator {
