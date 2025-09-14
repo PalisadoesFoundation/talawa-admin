@@ -74,6 +74,7 @@ export interface InterfaceAttachment {
 
 export interface InterfaceCreator {
   id: string;
+  avatarURL: String | null;
 }
 
 export interface InterfacePost {
