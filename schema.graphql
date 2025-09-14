@@ -129,6 +129,15 @@ type ActionItemCategory {
   updater: User
 }
 
+type Address {
+  id: ID!
+  street: String!
+  city: String!
+  state: String!
+  zip: String!
+  country: String!
+}
+
 type Advertisement {
   """
   Array of attachments.
@@ -220,6 +229,14 @@ input AdvertisementWhereInput {
   Filter advertisements by completion status
   """
   isCompleted: Boolean
+}
+
+type AgendaCategory {
+  id: ID!
+  name: String!
+  organization: Organization!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type AgendaFolder {
@@ -2019,6 +2036,16 @@ type Mutation {
   ): CancelMembershipResponse
 
   """
+  Mutation to complete an action item for a single instance
+  """
+  completeActionItemForInstance(
+    """
+    Complete an action item for a single instance
+    """
+    input: MutationCompleteActionItemForInstanceInput!
+  ): ActionItem
+
+  """
   Mutation field to create an action item.
   """
   createActionItem(input: CreateActionItemInput!): ActionItem
@@ -2180,6 +2207,16 @@ type Mutation {
   deleteActionItemCategory(
     input: MutationDeleteActionItemCategoryInput!
   ): ActionItemCategory
+
+  """
+  Mutation to delete an action item for a single instance
+  """
+  deleteActionItemForInstance(
+    """
+    Delete an action item for a single instance
+    """
+    input: MutationDeleteActionItemForInstanceInput!
+  ): ActionItem
 
   """
   Mutation field to delete an advertisement.
@@ -2354,6 +2391,16 @@ type Mutation {
   markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
 
   """
+  Mutation to mark an action item as pending for a single instance
+  """
+  markActionItemAsPendingForInstance(
+    """
+    Mark an action item as pending for a single instance
+    """
+    input: MutationMarkActionAsPendingForInstanceInput!
+  ): ActionItem
+
+  """
   Mutation field to reject a membership request by an admin.
   """
   rejectMembershipRequest(
@@ -2404,6 +2451,16 @@ type Mutation {
   updateActionItemCategory(
     input: MutationUpdateActionItemCategoryInput!
   ): ActionItemCategory
+
+  """
+  Mutation to update an action item for a single instance
+  """
+  updateActionItemForInstance(
+    """
+    Update an action item for a single instance
+    """
+    input: MutationUpdateActionItemForInstanceInput!
+  ): ActionItem
 
   """
   Mutation field to update an advertisement.
@@ -2570,6 +2627,12 @@ input MutationCancelMembershipRequestInput {
   Global identifier of the membership request.
   """
   membershipRequestId: ID!
+}
+
+input MutationCompleteActionItemForInstanceInput {
+  actionId: ID!
+  eventId: ID!
+  postCompletionNotes: String!
 }
 
 """
@@ -3102,6 +3165,52 @@ input MutationCreateTagFolderInput {
   """
   Name of the tag.
   """
+  type: AdvertisementType!
+}
+
+input QueryOrganizationInput {
+  id: String!
+}
+
+input OTPInput {
+  email: EmailAddress!
+}
+
+input AdvertisementWhereInput {
+  isCompleted: Boolean!
+}
+
+type Organization {
+  id: ID!
+  actionItemCategories(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationActionItemCategoriesConnection
+  address: Address
+  admins(adminId: ID): [User!]
+  agendaCategories: [AgendaCategory]
+  apiUrl: URL!
+  blockedUsers(
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): OrganizationBlockedUsersConnection
+  createdAt: DateTime!
+  creator: User
+  customFields: [OrganizationCustomField!]!
+  description: String!
+  image: String
+  members(
+    after: String
+    before: String
+    first: Int
+    last: Int
+    where: MembersWhereInput
+  ): OrganizationMembersConnection
+  membershipRequests: [MembershipRequest]
   name: String!
 
   """
@@ -3313,6 +3422,11 @@ input MutationDeleteActionItemCategoryInput {
   ID of the action item category to delete.
   """
   id: ID!
+}
+
+input MutationDeleteActionItemForInstanceInput {
+  actionId: ID!
+  eventId: ID!
 }
 
 """
@@ -3598,6 +3712,11 @@ input MutationJoinPublicOrganizationInput {
   organizationId: ID!
 }
 
+input MutationMarkActionAsPendingForInstanceInput {
+  actionId: ID!
+  eventId: ID!
+}
+
 input MutationRejectMembershipRequestInput {
   """
   ID of the membership request to reject
@@ -3757,6 +3876,15 @@ input MutationUpdateActionItemCategoryInput {
   New name of the action item category.
   """
   name: String
+}
+
+input MutationUpdateActionItemForInstanceInput {
+  actionId: ID!
+  assignedAt: String
+  assigneeId: ID
+  categoryId: ID
+  eventId: ID!
+  preCompletionNotes: String
 }
 
 input MutationUpdateActionItemInput {
@@ -4886,6 +5014,15 @@ type OrganizationBlockedUsersConnection {
 type OrganizationBlockedUsersConnectionEdge {
   cursor: String!
   node: User
+}
+
+type OrganizationCustomField {
+  id: ID!
+  name: String!
+  type: String!
+  organization: Organization!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """
@@ -6493,3 +6630,5 @@ type VolunteerGroups {
   """
   updater: User
 }
+
+scalar URL

@@ -60,6 +60,11 @@ const components: ComponentType[] = [
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
   { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
+  {
+    name: 'Transactions',
+    comp_id: 'orgtransactions',
+    component: 'OrganizationTransactions',
+  },
   { name: 'Membership Requests', comp_id: 'requests', component: 'Requests' },
   { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },

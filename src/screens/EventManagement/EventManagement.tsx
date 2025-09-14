@@ -50,7 +50,7 @@ import { Button, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
-import OrganizationActionItems from 'screens/OrganizationActionItems/OrganizationActionItems';
+import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -151,7 +151,7 @@ const EventManagement = (): JSX.Element => {
       icon: <FaTasks size={16} className="me-1" />,
       component: (
         <div data-testid="eventActionsTab" className="mx-4 p-4 pt-2">
-          <OrganizationActionItems />
+          <EventActionItems eventId={eventId} />
         </div>
       ),
     },

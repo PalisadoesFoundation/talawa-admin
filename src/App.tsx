@@ -11,6 +11,7 @@ import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
+import Loader from 'components/Loader/Loader';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -44,6 +45,9 @@ const OrganizationEvents = lazy(
 const OrganizationFunds = lazy(
   () => import('screens/OrganizationFunds/OrganizationFunds'),
 );
+const OrganizationTransactions = lazy(
+  () => import('screens/OrganizationTransactions/OrganizationTransactions'),
+);
 const FundCampaignPledge = lazy(
   () => import('screens/FundCampaignPledge/FundCampaignPledge'),
 );
@@ -69,6 +73,9 @@ const Advertisements = lazy(
   () => import('components/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
+const Transactions = lazy(
+  () => import('screens/UserPortal/Transactions/Transactions'),
+);
 const Events = lazy(() => import('screens/UserPortal/Events/Events'));
 const Posts = lazy(() => import('screens/UserPortal/Posts/Posts'));
 const Organizations = lazy(
@@ -199,7 +206,7 @@ function App(): React.ReactElement {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
@@ -259,6 +266,10 @@ function App(): React.ReactElement {
               />
               <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
               <Route
+                path="/orgtransactions/:orgId"
+                element={<OrganizationTransactions />}
+              />
+              <Route
                 path="/orgfundcampaign/:orgId/:fundId"
                 element={<OrganizaitionFundCampiagn />}
               />
@@ -317,6 +328,10 @@ function App(): React.ReactElement {
               <Route path="/user/organization/:orgId" element={<Posts />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
+              <Route
+                path="/user/transactions/:orgId"
+                element={<Transactions />}
+              />
               <Route path="/user/events/:orgId" element={<Events />} />
               <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
               <Route path="/user/pledges/:orgId" element={<Pledges />} />
