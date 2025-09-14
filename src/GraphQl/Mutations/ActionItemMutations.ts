@@ -145,7 +145,44 @@ export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
     deleteActionItemForInstance(input: $input) {
       id
       postCompletionNotes
-      createdAt
+      createdAt 
+    }
+  }
+`;
+export const COMPLETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation CompleteActionItemForInstance(
+    $input: MutationCompleteActionItemForInstanceInput!
+  ) {
+    completeActionItemForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE = gql`
+  mutation MarkActionItemAsPendingForInstance(
+    $input: MutationMarkActionAsPendingForInstanceInput!
+  ) {
+    markActionItemAsPendingForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const UPDATE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation UpdateActionItemForInstance(
+    $input: MutationUpdateActionItemForInstanceInput!
+  ) {
+    updateActionItemForInstance(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation DeleteActionItemForInstance(
+    $input: MutationDeleteActionItemForInstanceInput!
+  ) {
+    deleteActionItemForInstance(input: $input) {
+      id
     }
   }
 `;

@@ -37,12 +37,15 @@ import {
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
   COMPLETE_ACTION_ITEM_FOR_INSTANCE,
   MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
+  COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+  MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { toast } from 'react-toastify';
 import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
+} from 'types/ActionItems/interface';
 } from 'types/ActionItems/interface';
 
 export interface IItemUpdateStatusModalProps {
@@ -52,6 +55,8 @@ export interface IItemUpdateStatusModalProps {
   actionItem: IActionItemInfo;
   isRecurring?: boolean;
   eventId?: string;
+  isRecurring?: boolean;
+  eventId?: string;
 }
 
 const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
@@ -59,6 +64,8 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   isOpen,
   actionItemsRefetch,
   actionItem,
+  isRecurring,
+  eventId,
   isRecurring,
   eventId,
 }) => {
@@ -79,12 +86,32 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
+  const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
 
   /**
    * Mutation to mark an action item as pending.
    */
   const [markActionItemAsPending] = useMutation(
     MARK_ACTION_ITEM_AS_PENDING_MUTATION,
+    {
+      refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+    },
+  );
+
+  const [completeActionForInstance] = useMutation(
+    COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
+
+  const [markActionAsPendingForInstance] = useMutation(
+    MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
     {
       refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
     },
@@ -142,6 +169,50 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         toast.success(t('isCompleted'));
       }
 
+      actionItemsRefetch();
+      hide();
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const completeActionForInstanceHandler = async (): Promise<void> => {
+    try {
+      if (!postCompletionNotes.trim()) {
+        toast.error(t('postCompletionNotesRequired'));
+        return;
+      }
+
+      await completeActionForInstance({
+        variables: {
+          input: {
+            actionId: id,
+            eventId,
+            postCompletionNotes: postCompletionNotes.trim(),
+          },
+        },
+      });
+
+      toast.success(t('isCompleted'));
+      actionItemsRefetch();
+      hide();
+    } catch (error: unknown) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  const markActionAsPendingForInstanceHandler = async (): Promise<void> => {
+    try {
+      await markActionAsPendingForInstance({
+        variables: {
+          input: {
+            actionId: id,
+            eventId,
+          },
+        },
+      });
+
+      toast.success(t('isPending'));
       actionItemsRefetch();
       hide();
     } catch (error: unknown) {
@@ -277,11 +348,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   </Button>
                   {/* Only show 'complete for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
-                    <Button
-                      type="submit"
-                      className={styles.addButton}
-                      data-cy="markCompletionForSeries"
-                    >
+                    <Button type="submit" className={styles.addButton}>
                       {t('completeForSeries')}
                     </Button>
                   )}
