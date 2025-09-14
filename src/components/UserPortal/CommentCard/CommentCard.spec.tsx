@@ -147,12 +147,22 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
   it('Component renders as expected if user likes the comment.', async () => {
     setItem('userId', '2');
-    render(
+
+    // Create props where user hasn't voted yet
+    const notVotedProps = {
+      ...defaultProps,
+      hasUserVoted: {
+        hasVoted: false,
+        voteType: null as null,
+      },
+    };
+
+    const { container } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <CommentCard {...defaultProps} />
+              <CommentCard {...notVotedProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -160,8 +170,21 @@ describe('Testing CommentCard Component [User Portal]', () => {
     );
 
     await wait();
+
+    // Verify initial state - should show 1 like (from defaultProps)
+    expect(screen.getByText('1')).toBeInTheDocument();
+
+    // Click the like button
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
+
+    // Verify the like count increased to 2
+    expect(screen.getByText('2')).toBeInTheDocument();
+
+    // Verify the button state changed (should now be primary color)
+    const likeBtn = screen.getByTestId('likeCommentBtn');
+    expect(likeBtn).toHaveClass('MuiIconButton-colorPrimary');
+    expect(likeBtn).toHaveClass('MuiIconButton-colorPrimary');
   });
 
   it('Component renders as expected if user unlikes the comment.', async () => {
