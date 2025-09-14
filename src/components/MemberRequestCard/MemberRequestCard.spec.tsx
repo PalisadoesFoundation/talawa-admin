@@ -98,26 +98,25 @@ describe('Testing Member Request Card', () => {
     };
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
-    try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
-      render(
-        <MockedProvider addTypename={false} link={link2}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+    const mockReload = vi.fn();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { ...originalLocation, reload: mockReload };
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await wait();
-      await userEvent.click(screen.getByText(/Accept/i));
-      await wait(2100);
-      expect(window.location.reload).toHaveBeenCalled();
-    } finally {
-      window.location = originalLocation;
-    }
+    await wait();
+    await userEvent.click(screen.getByText(/Accept/i));
+    await wait(2100);
+    expect(window.location.reload).toHaveBeenCalled();
+    // @ts-ignore
+    window.location = originalLocation;
   });
 
   it('should not reload window if acceptMutation fails', async () => {
@@ -131,78 +130,75 @@ describe('Testing Member Request Card', () => {
     };
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
-    try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
-      render(
-        <MockedProvider addTypename={false} link={link3}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-      await wait();
-      await userEvent.click(screen.getByText(/Accept/i));
-      await wait(2100);
-      expect(window.location.reload).not.toHaveBeenCalled();
-    } finally {
-      window.location = originalLocation;
-    }
+    const mockReload = vi.fn();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { ...originalLocation, reload: mockReload };
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+    await wait();
+    await userEvent.click(screen.getByText(/Accept/i));
+    await wait(2100);
+    expect(window.location.reload).not.toHaveBeenCalled();
+    // @ts-ignore
+    window.location = originalLocation;
   });
 
   it('should reload window if rejectMember is clicked', async () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
-    try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
-      render(
-        <MockedProvider addTypename={false} link={link2}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+    const mockReload = vi.fn();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { ...originalLocation, reload: mockReload };
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    render(
+      <MockedProvider addTypename={false} link={link2}>
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await wait();
-      await userEvent.click(screen.getByText(/Reject/i));
-      await wait();
-      expect(window.confirm).toHaveBeenCalled();
-      expect(window.location.reload).toHaveBeenCalled();
-    } finally {
-      window.location = originalLocation;
-    }
+    await wait();
+    await userEvent.click(screen.getByText(/Reject/i));
+    await wait();
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.location.reload).toHaveBeenCalled();
+    // @ts-ignore
+    window.location = originalLocation;
   });
 
   it('should not reload window if rejectMutation fails', async () => {
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
-    try {
-      window.location = {
-        ...originalLocation,
-        reload: vi.fn(),
-      };
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
-      render(
-        <MockedProvider addTypename={false} link={link3}>
-          <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...props} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+    const mockReload = vi.fn();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { ...originalLocation, reload: mockReload };
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <I18nextProvider i18n={i18nForTest}>
+          <MemberRequestCard {...props} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await wait();
-      await userEvent.click(screen.getByText(/Reject/i));
-      await wait();
-      expect(window.confirm).toHaveBeenCalled();
-      expect(window.location.reload).not.toHaveBeenCalled();
-    } finally {
-      window.location = originalLocation;
-    }
+    await wait();
+    await userEvent.click(screen.getByText(/Reject/i));
+    await wait();
+    expect(window.confirm).toHaveBeenCalled();
+    expect(window.location.reload).not.toHaveBeenCalled();
+    // @ts-ignore
+    window.location = originalLocation;
   });
 });

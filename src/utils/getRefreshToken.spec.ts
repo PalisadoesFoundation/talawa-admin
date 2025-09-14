@@ -24,14 +24,21 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  const { location } = window;
-
-  interface TestInterfacePartialWindow {
-    location?: Partial<Location>;
-  }
-
-  delete (window as TestInterfacePartialWindow).location;
-  global.window.location = { ...location, reload: vi.fn() };
+  let originalLocation: Location;
+  let mockReload: ReturnType<typeof vi.fn>;
+  beforeAll(() => {
+    // @ts-ignore
+    originalLocation = window.location;
+    mockReload = vi.fn();
+    // @ts-ignore
+    delete window.location;
+    // @ts-ignore
+    window.location = { ...originalLocation, reload: mockReload };
+  });
+  afterAll(() => {
+    // @ts-ignore
+    window.location = originalLocation;
+  });
 
   // Create storage mock
   const localStorageMock = {
@@ -69,7 +76,7 @@ describe('refreshToken', () => {
   it('returns false and logs error when token refresh fails', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const errorMock = new Error('Failed to refresh token');
     mockApolloClient.mutate.mockRejectedValueOnce(errorMock);
