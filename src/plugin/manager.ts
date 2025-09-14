@@ -91,11 +91,32 @@ export class PluginManager {
     return this.lifecycleManager.unloadPlugin(pluginId);
   }
 
+  async installPlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.installPlugin(pluginId);
+  }
+
+  async uninstallPlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.uninstallPlugin(pluginId);
+  }
+
+  async activatePlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.activatePlugin(pluginId);
+  }
+
+  async deactivatePlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.deactivatePlugin(pluginId);
+  }
+
   async togglePluginStatus(
     pluginId: string,
     status: 'active' | 'inactive',
   ): Promise<boolean> {
     return this.lifecycleManager.togglePluginStatus(pluginId, status);
+  }
+
+  // Public API - Plugin Discovery
+  async refreshPluginDiscovery(): Promise<void> {
+    await this.discoveryManager.loadPluginIndexFromGraphQL();
   }
 
   // Public API - Plugin Information
