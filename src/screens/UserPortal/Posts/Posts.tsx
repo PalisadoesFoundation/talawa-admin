@@ -168,10 +168,8 @@ export default function Home(): JSX.Element {
         (edge: { node: any }) => edge.node,
       );
       setPosts(newPosts);
-      setTotalPosts(data.organization.posts.totalCount);
-      setTotalPages(
-        Math.ceil(data.organization.posts.totalCount / POSTS_PER_PAGE),
-      );
+      setTotalPosts(data.organization.postsCount);
+      setTotalPages(Math.ceil(data.organization.postsCount / POSTS_PER_PAGE));
     }
   }, [data]);
 

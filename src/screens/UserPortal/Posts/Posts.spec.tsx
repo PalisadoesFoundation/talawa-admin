@@ -58,23 +58,33 @@ const MOCKS = [
         after: null,
         before: null,
         last: null,
+        userId: '640d98d9eb6a743d75341067',
       },
     },
     result: {
       data: {
         organization: {
           id: 'orgId',
+          postsCount: 4,
           posts: {
             edges: [
               {
                 node: {
                   id: '1-1',
                   caption: 'Post 1-1',
-                  creator: { id: 'u1', name: 'User1' },
+                  creator: {
+                    id: 'u1',
+                    name: 'User1',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -101,11 +111,19 @@ const MOCKS = [
                 node: {
                   id: '1-2',
                   caption: 'Post 1-2',
-                  creator: { id: 'u2', name: 'User2' },
+                  creator: {
+                    id: 'u2',
+                    name: 'User2',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -135,7 +153,6 @@ const MOCKS = [
               hasNextPage: true,
               hasPreviousPage: false,
             },
-            totalCount: 4,
           },
         },
       },
@@ -151,23 +168,33 @@ const MOCKS = [
         first: 5,
         before: null,
         last: null,
+        userId: '640d98d9eb6a743d75341067',
       },
     },
     result: {
       data: {
         organization: {
           id: 'orgId',
+          postsCount: 4,
           posts: {
             edges: [
               {
                 node: {
                   id: '2-1',
                   caption: 'Post 2-1',
-                  creator: { id: 'u3', name: 'User3' },
+                  creator: {
+                    id: 'u3',
+                    name: 'User3',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -194,11 +221,19 @@ const MOCKS = [
                 node: {
                   id: '2-2',
                   caption: 'Post 2-2',
-                  creator: { id: 'u4', name: 'User4' },
+                  creator: {
+                    id: 'u4',
+                    name: 'User4',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -228,7 +263,6 @@ const MOCKS = [
               hasNextPage: false,
               hasPreviousPage: true,
             },
-            totalCount: 4,
           },
         },
       },
@@ -244,23 +278,33 @@ const MOCKS = [
         last: 5,
         after: null,
         first: null,
+        userId: '640d98d9eb6a743d75341067',
       },
     },
     result: {
       data: {
         organization: {
           id: 'orgId',
+          postsCount: 4,
           posts: {
             edges: [
               {
                 node: {
                   id: '1-1',
                   caption: 'Post 1-1',
-                  creator: { id: 'u1', name: 'User1' },
+                  creator: {
+                    id: 'u1',
+                    name: 'User1',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -287,11 +331,19 @@ const MOCKS = [
                 node: {
                   id: '1-2',
                   caption: 'Post 1-2',
-                  creator: { id: 'u2', name: 'User2' },
+                  creator: {
+                    id: 'u2',
+                    name: 'User2',
+                    avatarURL: null,
+                  },
                   commentsCount: 0,
                   pinnedAt: null,
                   downVotesCount: 0,
                   upVotesCount: 0,
+                  hasUserVoted: {
+                    hasVoted: false,
+                    voteType: null,
+                  },
                   upVoters: {
                     edges: [],
                     pageInfo: {
@@ -321,60 +373,8 @@ const MOCKS = [
               hasNextPage: true,
               hasPreviousPage: false,
             },
-            totalCount: 4,
           },
         },
-      },
-    },
-  },
-  // Advertisements mock
-  {
-    request: {
-      query: ORGANIZATION_ADVERTISEMENT_LIST,
-      variables: { id: 'orgId', first: 6 },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            _id: 'orgId',
-            advertisements: {
-              edges: [
-                {
-                  node: {
-                    _id: '1234',
-                    name: 'Ad 1',
-                    type: 'BANNER',
-                    organization: { _id: 'orgId' },
-                    mediaUrl: 'Link 1',
-                    startDate: '2022-01-01',
-                    endDate: '2024-12-31',
-                  },
-                  cursor: '1234',
-                },
-              ],
-              pageInfo: {
-                startCursor: null,
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  // Delete post mock
-  {
-    request: {
-      query: DELETE_POST_MUTATION,
-      variables: { id: '6411e54835d7ba2344a78e29' },
-    },
-    result: {
-      data: {
-        removePost: { _id: '6411e54835d7ba2344a78e29' },
       },
     },
   },
