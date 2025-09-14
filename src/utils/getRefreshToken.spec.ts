@@ -27,17 +27,20 @@ describe('refreshToken', () => {
   let originalLocation: Location;
   let mockReload: ReturnType<typeof vi.fn>;
   beforeAll(() => {
+    // Preserve and safely override window.location.reload
     // @ts-ignore
     originalLocation = window.location;
     mockReload = vi.fn();
-    // @ts-ignore
-    delete window.location;
-    // @ts-ignore
-    window.location = { ...originalLocation, reload: mockReload };
+    Object.defineProperty(window, 'location', {
+      value: { ...originalLocation, reload: mockReload },
+      writable: true,
+    });
   });
   afterAll(() => {
-    // @ts-ignore
-    window.location = originalLocation;
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
   });
 
   // Create storage mock
