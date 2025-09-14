@@ -5,6 +5,12 @@ import svgrPlugin from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  resolve: {
+    alias: {
+      '@mui/material/utils': '@mui/material/node/utils/index.js',
+      '@mui/material/styles': '@mui/material/node/styles/index.js',
+    },
+  },
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
