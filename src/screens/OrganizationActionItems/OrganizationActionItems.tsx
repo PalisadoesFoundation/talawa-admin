@@ -503,6 +503,7 @@ function organizationActionItems(): JSX.Element {
             onClick={() => handleModalClick(null, ModalState.SAME)}
             className={styles.createButton}
             data-testid="createActionItemBtn"
+            data-cy="createActionItemBtn"
           >
             <i className={'fa fa-plus me-2'} />
             {tCommon('create')}

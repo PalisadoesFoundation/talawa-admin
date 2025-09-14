@@ -7,8 +7,8 @@ export default defineConfig({
     baseUrl: 'http://localhost:4321',
 
     // Viewport settings
-    viewportWidth: 1280,
-    viewportHeight: 720,
+    viewportWidth: 1920,
+    viewportHeight: 1080,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.ts',
 
@@ -16,6 +16,9 @@ export default defineConfig({
     requestTimeout: 50000,
     responseTimeout: 50000,
     pageLoadTimeout: 50000,
+
+    testIsolation: false, // Keep state between tests in same spec
+    experimentalRunAllSpecs: true,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,

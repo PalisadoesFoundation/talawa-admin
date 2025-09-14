@@ -147,6 +147,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
             <FormControl fullWidth className="mb-2">
               <TextField
                 label={t('postCompletionNotes')}
+                data-cy="postCompletionNotes"
                 variant="outlined"
                 className={styles.noOutline}
                 value={postCompletionNotes}
