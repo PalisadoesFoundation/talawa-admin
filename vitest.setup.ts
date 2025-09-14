@@ -23,14 +23,32 @@ const createMockDateInput = (inputType: string, dateFormat: string) => {
     onChange,
     ...props
   }: InterfaceMockComponentProps) {
+    // Handle different value types
+    let displayValue = '';
+    if (value) {
+      if (typeof value === 'string') {
+        displayValue = value;
+      } else if (value && typeof value === 'object') {
+        // Handle dayjs/moment objects
+        if ('format' in value && typeof value.format === 'function') {
+          displayValue = (value as { format: (f: string) => string }).format(
+            dateFormat,
+          );
+        } else if (
+          'toISOString' in value &&
+          typeof value.toISOString === 'function'
+        ) {
+          // Handle native Date objects
+          displayValue = (value as Date).toISOString().split('T')[0];
+        }
+      }
+    }
+
     return React.createElement('input', {
       type: inputType,
-      value:
-        value && typeof value === 'object' && 'format' in value
-          ? (value as { format: (f: string) => string }).format(dateFormat)
-          : '',
+      value: displayValue,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-        onChange?.(e.target.value),
+        onChange?.(e.target.value || null),
       ...props,
     });
   };
@@ -38,8 +56,9 @@ const createMockDateInput = (inputType: string, dateFormat: string) => {
 
 // Factory function for provider components
 const createMockProvider = () => {
+  // eslint-disable-next-line react/no-multi-comp
   return function MockProvider({ children }: InterfaceMockComponentProps) {
-    return children;
+    return React.createElement(React.Fragment, null, children);
   };
 };
 
@@ -62,6 +81,14 @@ vi.mock('@mui/x-date-pickers/LocalizationProvider', () => ({
 
 vi.mock('@mui/x-date-pickers/AdapterDayjs', () => ({
   AdapterDayjs: class AdapterDayjs {},
+}));
+
+// Root module mock (covers: import { DatePicker, TimePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers')
+vi.mock('@mui/x-date-pickers', () => ({
+  DatePicker: createMockDateInput('date', 'YYYY-MM-DD'),
+  TimePicker: createMockDateInput('time', 'HH:mm'),
+  DateTimePicker: createMockDateInput('datetime-local', 'YYYY-MM-DDTHH:mm'),
+  LocalizationProvider: createMockProvider(),
 }));
 
 // Simple console error handler for React 18 warnings
