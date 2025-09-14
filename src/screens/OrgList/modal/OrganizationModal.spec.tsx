@@ -430,7 +430,7 @@ describe('OrganizationModal Component', () => {
 
     await waitFor(() => {
       expect(mockToastError).toHaveBeenCalledWith(
-        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+        'Invalid file type. Please upload a file of type: AVIF, JPEG, PNG, WEBP, GIF, MP4, WEBM.',
       );
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
