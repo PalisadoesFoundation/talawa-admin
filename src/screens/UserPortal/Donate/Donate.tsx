@@ -241,12 +241,12 @@ export default function donate(): JSX.Element {
               </Button>
             </div>
           </div>
-          <div className={styles.donationsContainer}>
+          <div className={styles.sectionContainer}>
             <h5>{t('yourPreviousDonations')}</h5>
             <div
-              className={`d-flex flex-column justify-content-between ${styles.contentDonate}`}
+              className={`d-flex flex-column justify-content-between ${styles.sectionContent}`}
             >
-              <div className={` ${styles.donationCardsContainer}`}>
+              <div className={` ${styles.cardsContainer}`}>
                 {loading ? (
                   <div
                     className={`d-flex flex-row justify-content-center`}
