@@ -24,6 +24,7 @@ describe('Testing Routes reducer', () => {
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
+        { name: 'Transactions', url: '/orgtransactions/undefined' },
         { name: 'Membership Requests', url: '/requests/undefined' },
         { name: 'Settings', url: '/orgsetting/undefined' },
       ],
@@ -72,6 +73,11 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
+          name: 'Transactions',
+          comp_id: 'orgtransactions',
+          component: 'OrganizationTransactions',
+        },
+        {
           name: 'Membership Requests',
           comp_id: 'requests',
           component: 'Requests',
@@ -101,6 +107,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
+        { name: 'Transactions', url: '/orgtransactions/orgId' },
         { name: 'Membership Requests', url: '/requests/orgId' },
         { name: 'Settings', url: '/orgsetting/orgId' },
       ],
@@ -144,6 +151,11 @@ describe('Testing Routes reducer', () => {
           component: 'Advertisements',
         },
         { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
+        {
+          name: 'Transactions',
+          comp_id: 'orgtransactions',
+          component: 'OrganizationTransactions',
+        },
         {
           name: 'Membership Requests',
           comp_id: 'requests',

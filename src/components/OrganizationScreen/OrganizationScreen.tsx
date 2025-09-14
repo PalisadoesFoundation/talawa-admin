@@ -165,6 +165,7 @@ const map: InterfaceMapType = {
   orgcontribution: 'orgContribution',
   orgpost: 'orgPost',
   orgfunds: 'funds',
+  orgtransactions: 'transactions',
   orgfundcampaign: 'fundCampaign',
   fundCampaignPledge: 'pledges',
   orgsetting: 'orgSettings',

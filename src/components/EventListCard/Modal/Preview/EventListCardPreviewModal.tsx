@@ -245,6 +245,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateName"
+              data-cy="updateName"
               required
               value={
                 formState.name?.length > 100
@@ -265,6 +266,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateDescription"
+              data-cy="updateDescription"
               required
               value={
                 formState.eventdescrip?.length > 256
@@ -285,6 +287,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               className={`mb-3 ${styles.inputField}`}
               autoComplete="off"
               data-testid="updateLocation"
+              data-cy="updateLocation"
               required
               value={formState.location || ''}
               onChange={(e): void => {
@@ -465,6 +468,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               variant="success"
               className={styles.addButton}
               data-testid="previewUpdateEventBtn"
+              data-cy="previewUpdateEventBtn"
               onClick={handleEventUpdate}
             >
               {t('editEvent')}
@@ -474,6 +478,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             <Button
               variant="danger"
               data-testid="deleteEventModalBtn"
+              data-cy="deleteEventModalBtn"
               className={styles.removeButton}
               onClick={toggleDeleteModal}
             >

@@ -34,6 +34,42 @@ Defined in: [src/plugin/managers/lifecycle.ts:15](https://github.com/PalisadoesF
 
 ## Methods
 
+### activatePlugin()
+
+> **activatePlugin**(`pluginId`): `Promise`\<`boolean`\>
+
+Defined in: [src/plugin/managers/lifecycle.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L141)
+
+#### Parameters
+
+##### pluginId
+
+`string`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+***
+
+### deactivatePlugin()
+
+> **deactivatePlugin**(`pluginId`): `Promise`\<`boolean`\>
+
+Defined in: [src/plugin/managers/lifecycle.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L177)
+
+#### Parameters
+
+##### pluginId
+
+`string`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+***
+
 ### getActivePluginCount()
 
 > **getActivePluginCount**(): `number`
@@ -110,6 +146,24 @@ Defined in: [src/plugin/managers/lifecycle.ts:48](https://github.com/PalisadoesF
 
 ***
 
+### installPlugin()
+
+> **installPlugin**(`pluginId`): `Promise`\<`boolean`\>
+
+Defined in: [src/plugin/managers/lifecycle.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L213)
+
+#### Parameters
+
+##### pluginId
+
+`string`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+***
+
 ### loadPlugin()
 
 > **loadPlugin**(`pluginId`): `Promise`\<`boolean`\>
@@ -132,7 +186,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:58](https://github.com/PalisadoesF
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L124)
+Defined in: [src/plugin/managers/lifecycle.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L130)
 
 #### Parameters
 
@@ -150,11 +204,29 @@ Defined in: [src/plugin/managers/lifecycle.ts:124](https://github.com/Palisadoes
 
 ***
 
+### uninstallPlugin()
+
+> **uninstallPlugin**(`pluginId`): `Promise`\<`boolean`\>
+
+Defined in: [src/plugin/managers/lifecycle.ts:267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L267)
+
+#### Parameters
+
+##### pluginId
+
+`string`
+
+#### Returns
+
+`Promise`\<`boolean`\>
+
+***
+
 ### unloadPlugin()
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L96)
+Defined in: [src/plugin/managers/lifecycle.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L102)
 
 #### Parameters
 

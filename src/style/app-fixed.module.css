@@ -8463,6 +8463,27 @@ form {
   padding-inline: 1rem !important;
 }
 
+/* Shared section styles */
+.sectionContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionContent {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Donate specific styles */
 .donationsContainer {
   padding-top: 4rem;
   flex-grow: 1;
@@ -8476,6 +8497,26 @@ form {
 }
 
 .donationCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Transactions specific styles */
+.transactionsContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentTransactions {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.transactionCardsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
