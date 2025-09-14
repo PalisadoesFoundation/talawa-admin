@@ -1,3 +1,4 @@
+import { VoteType } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
 import type { User } from '../User/type';
 import type { Organization } from 'types/Organization/type';
@@ -106,11 +107,11 @@ export type PostNode = {
     id: string;
     name: string;
     emailAddress: string;
-    avatarURL?: string | undefined;
+    avatarURL?: string | null;
   };
   hasUserVoted: {
     hasVoted: boolean;
-    voteType: 'up_vote' | 'down_vote' | null;
+    voteType: VoteType;
   };
   upVotesCount: number;
   downVotesCount: number;
@@ -148,7 +149,7 @@ export type PostNode = {
         };
         hasUserVoted: {
           hasVoted: boolean;
-          voteType: 'up_vote' | 'down_vote' | null;
+          voteType: VoteType;
         };
         downVotesCount: number;
         upVotesCount: number;

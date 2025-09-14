@@ -39,6 +39,7 @@ import { toast } from 'react-toastify';
 import { styled } from '@mui/material/styles';
 import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
+import { VoteType } from 'utils/interfaces';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -67,7 +68,7 @@ interface InterfaceCommentCardProps {
   };
   hasUserVoted: {
     hasVoted: boolean;
-    voteType: 'up_vote' | 'down_vote' | null;
+    voteType: VoteType;
   };
   upVoteCount: number;
   downVoteCount: number;

@@ -307,7 +307,7 @@ export default function Home(): JSX.Element {
       >
         <div className={postStyles.storyBorder}>
           <Avatar
-            src={post.creator.avatarURL}
+            src={post.creator.avatarURL || '/static/images/avatar/1.jpg'}
             className={postStyles.storyAvatar}
           />
         </div>

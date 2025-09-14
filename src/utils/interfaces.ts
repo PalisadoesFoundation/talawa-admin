@@ -2116,14 +2116,14 @@ export interface InterfaceCreateFund {
  * @property {function} fetchPosts - A function to fetch posts.
  */
 
-type VoteType = 'up_vote' | 'down_vote' | null;
+export type VoteType = 'up_vote' | 'down_vote' | null;
 export interface InterfacePostCard {
   id: string;
   isModalView?: boolean;
   creator: {
     id: string;
     name: string;
-    avatarURL?: string | undefined;
+    avatarURL?: string | null;
   };
   hasUserVoted: {
     hasVoted: boolean;
