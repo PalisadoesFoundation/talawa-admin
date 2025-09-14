@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import React from 'react';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 // Basic cleanup after each test
 afterEach(() => {
@@ -31,7 +32,7 @@ afterAll(() => {
 
 // Root module mock for @mui/x-date-pickers to cover all import patterns
 vi.mock('@mui/x-date-pickers', () => ({
-  DatePicker: vi.fn(({ value, onChange, ...props }) => {
+  DatePicker: vi.fn(({ value, onChange }) => {
     return React.createElement('input', {
       'data-testid': 'date-picker',
       type: 'date',
@@ -42,12 +43,16 @@ vi.mock('@mui/x-date-pickers', () => ({
         : '',
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        onChange?.(newValue || null);
+        const isDayjs =
+          value &&
+          typeof value !== 'string' &&
+          typeof (value as { format?: (format: string) => string }).format ===
+            'function';
+        onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
-      ...props,
     });
   }),
-  DateTimePicker: vi.fn(({ value, onChange, ...props }) => {
+  DateTimePicker: vi.fn(({ value, onChange }) => {
     return React.createElement('input', {
       'data-testid': 'datetime-picker',
       type: 'datetime-local',
@@ -58,12 +63,16 @@ vi.mock('@mui/x-date-pickers', () => ({
         : '',
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        onChange?.(newValue || null);
+        const isDayjs =
+          value &&
+          typeof value !== 'string' &&
+          typeof (value as { format?: (format: string) => string }).format ===
+            'function';
+        onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
-      ...props,
     });
   }),
-  TimePicker: vi.fn(({ value, onChange, ...props }) => {
+  TimePicker: vi.fn(({ value, onChange }) => {
     return React.createElement('input', {
       'data-testid': 'time-picker',
       type: 'time',
@@ -74,13 +83,20 @@ vi.mock('@mui/x-date-pickers', () => ({
         : '',
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
-        onChange?.(newValue || null);
+        const isDayjs =
+          value &&
+          typeof value !== 'string' &&
+          typeof (value as { format?: (format: string) => string }).format ===
+            'function';
+        onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
-      ...props,
     });
   }),
 
   LocalizationProvider: vi.fn(({ children }) => {
+    return React.createElement(React.Fragment, {}, children);
+  }),
+  default: vi.fn(({ children }) => {
     return React.createElement(React.Fragment, {}, children);
   }),
 }));
