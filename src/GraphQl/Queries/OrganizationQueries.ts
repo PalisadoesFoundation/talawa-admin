@@ -24,6 +24,7 @@ export const ORGANIZATION_POST_LIST = gql`
   ) {
     organization(input: $input) {
       id
+      postsCount
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
