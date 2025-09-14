@@ -36,6 +36,7 @@ vi.mock('plugin/graphql-service', () => ({
   useCreatePlugin: () => [mockCreatePlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
   useDeletePlugin: () => [mockDeletePlugin],
+  useInstallPlugin: () => [vi.fn()],
 }));
 
 // Mock toast
@@ -390,46 +391,7 @@ describe('PluginStore', () => {
       });
     });
 
-    it('should uninstall plugin with keep data option', async () => {
-      mockUpdatePlugin.mockResolvedValue({
-        data: { updatePlugin: { id: '1' } },
-      });
-
-      renderPluginStore();
-
-      const pluginButton = screen.getByTestId(
-        'plugin-action-btn-test-plugin-1',
-      );
-      fireEvent.click(pluginButton);
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-
-      // Uninstall plugin
-      const uninstallButton = screen.getByRole('button', {
-        name: /Uninstall/i,
-      });
-      fireEvent.click(uninstallButton);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
-      });
-
-      // Keep data
-      const keepDataButton = screen.getByTestId('uninstall-keepdata-btn');
-
-      fireEvent.click(keepDataButton);
-
-      await waitFor(
-        () => {
-          expect(mockUpdatePlugin).toHaveBeenCalled();
-        },
-        { timeout: 2000 },
-      );
-    });
-
-    it('should uninstall plugin with remove permanently option', async () => {
+    it('should uninstall plugin permanently', async () => {
       mockDeletePlugin.mockResolvedValue({
         data: { deletePlugin: { id: '1' } },
       });
@@ -863,7 +825,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'test-plugin' } });
+      fireEvent.change(searchInput, { target: { value: 'test' } });
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));

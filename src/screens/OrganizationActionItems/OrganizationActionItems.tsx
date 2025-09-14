@@ -1,20 +1,7 @@
 /**
- * OrganizationActionItems component for managing action items within an organization.
- *
- * This component provides functionality to:
- * - Display action items in a data grid with filtering and sorting
- * - Create, edit, view, and delete action items
- * - Update action item status (complete/incomplete)
- * - Filter by assignee, category, and completion status
- * - Sort by assignment date
- *
- * @returns  The rendered component
- *
- * @example
- * ```tsx
- * // Component is typically used in a route with orgId parameter
- * <Route path="/organization/:orgId/action-items" component={OrganizationActionItems} />
- * ```
+ * @file This file contains the OrganizationActionItems component, which displays a list of action items for an organization.
+ * It includes features for searching, sorting, and filtering action items.
+ * The component also provides modals for creating, viewing, updating, and deleting action items.
  */
 import React, {
   useCallback,
@@ -33,7 +20,10 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type { IActionItemInfo, IActionItemList } from 'types/Actions/interface';
+import type {
+  IActionItemInfo,
+  IActionItemList,
+} from 'types/ActionItems/interface';
 
 import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
@@ -51,18 +41,12 @@ import ItemUpdateStatusModal from './ActionItemUpdateModal/ActionItemUpdateStatu
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
-/**
- * Enumeration for action item status types
- */
 enum ItemStatus {
   Pending = 'pending',
   Completed = 'completed',
   Late = 'late',
 }
 
-/**
- * Enumeration for modal states used in the component
- */
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
@@ -70,44 +54,28 @@ enum ModalState {
   STATUS = 'status',
 }
 
-function organizationActionItems(): JSX.Element {
+function OrganizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
-  /** Currently selected action item for modal operations */
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
-
-  /** Modal mode for create/edit operations */
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-
-  /** Search term for filtering action items */
   const [searchTerm, setSearchTerm] = useState<string>('');
-
-  /** Sort order for action items by assignment date */
   const [sortBy, setSortBy] = useState<
     'assignedAt_ASC' | 'assignedAt_DESC' | null
   >(null);
-
-  /** Filter by completion status */
   const [status, setStatus] = useState<ItemStatus | null>(null);
-
-  /** Search field selector (assignee or category) */
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
-
-  /** Processed and filtered action items */
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
-
-  /** Modal visibility state for different modal types */
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -117,25 +85,12 @@ function organizationActionItems(): JSX.Element {
     [ModalState.STATUS]: false,
   });
 
-  /**
-   * Opens a specific modal by setting its state to true
-   * @param modal - The modal type to open
-   */
   const openModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
-  /**
-   * Closes a specific modal by setting its state to false
-   * @param modal - The modal type to close
-   */
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
-  /**
-   * Handles modal opening with action item context
-   * @param actionItem - The action item to operate on (null for create operations)
-   * @param modal - The modal type to open
-   */
   const handleModalClick = useCallback(
     (actionItem: IActionItemInfo | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {
@@ -147,10 +102,6 @@ function organizationActionItems(): JSX.Element {
     [openModal],
   );
 
-  /**
-   * Query to fetch action items for the organization.
-   * Only accepts organizationId as input - all filtering/sorting done client-side
-   */
   const {
     data: actionItemsData,
     loading: actionItemsLoading,
@@ -169,22 +120,15 @@ function organizationActionItems(): JSX.Element {
     },
   });
 
-  /**
-   * Debounced search function to avoid excessive filtering during typing
-   */
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
 
-  /**
-   * Apply client-side filtering and sorting like the category component
-   */
   useEffect(() => {
     if (actionItemsData && actionItemsData.actionItemsByOrganization) {
       let filteredItems = actionItemsData.actionItemsByOrganization;
 
-      // Filter by completion status
       if (status !== null) {
         const isCompleted = status === ItemStatus.Completed;
         filteredItems = filteredItems.filter(
@@ -192,7 +136,6 @@ function organizationActionItems(): JSX.Element {
         );
       }
 
-      // Search filter
       if (searchTerm) {
         filteredItems = filteredItems.filter((item) => {
           if (searchBy === 'assignee') {
@@ -209,7 +152,6 @@ function organizationActionItems(): JSX.Element {
         });
       }
 
-      // Date sorting
       if (sortBy) {
         filteredItems = [...filteredItems].sort((a, b) => {
           const dateA = new Date(a.assignedAt);
@@ -242,9 +184,6 @@ function organizationActionItems(): JSX.Element {
     );
   }
 
-  /**
-   * Column definitions for the DataGrid component
-   */
   const columns: GridColDef[] = [
     {
       field: 'assignee',
@@ -319,6 +258,28 @@ function organizationActionItems(): JSX.Element {
             data-testid="categoryName"
           >
             {params.row.category?.name || 'No category'}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'event',
+      headerName: 'Event',
+      flex: 1,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="eventName"
+          >
+            {params.row.recurringEventInstance?.name ||
+              params.row.event?.name ||
+              'No event'}
           </div>
         );
       },
@@ -430,7 +391,6 @@ function organizationActionItems(): JSX.Element {
 
   return (
     <div>
-      {/* Header with search, filter and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
@@ -511,7 +471,6 @@ function organizationActionItems(): JSX.Element {
         </div>
       </div>
 
-      {/* Table with Action Items */}
       <DataGrid
         disableColumnMenu
         disableColumnResize
@@ -543,18 +502,17 @@ function organizationActionItems(): JSX.Element {
         isRowSelectable={() => false}
       />
 
-      {/* Item Modal (Create/Edit) */}
       <ItemModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}
         orgId={orgId}
         eventId={eventId}
         actionItemsRefetch={actionItemsRefetch}
+        orgActionItemsRefetch={actionItemsRefetch}
         actionItem={actionItem}
         editMode={modalMode === 'edit'}
       />
 
-      {/* View Modal */}
       {actionItem && (
         <>
           <ItemViewModal
@@ -582,4 +540,4 @@ function organizationActionItems(): JSX.Element {
   );
 }
 
-export default organizationActionItems;
+export default OrganizationActionItems;

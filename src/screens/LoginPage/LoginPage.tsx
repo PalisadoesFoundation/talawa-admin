@@ -25,7 +25,6 @@
  * @requires components/LoginPortalToggle/LoginPortalToggle
  * @requires assets/svgs/palisadoes.svg
  * @requires assets/svgs/talawa.svg
- * @requires plugin/PluginInjector
  *
  * @component
  * @description The `loginPage` component renders a login and registration interface with the following features:
@@ -79,7 +78,6 @@ import {
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
-import { PluginInjector } from 'plugin';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
@@ -434,11 +432,7 @@ const loginPage = (): JSX.Element => {
                 </a>
               )}
             </div>
-            <div className={styles.socialIcons}>
-              {socialIconsList}
-              {/* Plugin injector for additional social media icons */}
-              <PluginInjector injectorType="G1" />
-            </div>
+            <div className={styles.socialIcons}>{socialIconsList}</div>
           </Col>
           <Col sm={12} md={6} lg={5}>
             <div className={styles.right_portion}>

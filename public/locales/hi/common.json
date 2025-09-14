@@ -80,6 +80,7 @@
   "none": "कोई नहीं",
   "sort": "क्रम से लगाना",
   "Donate": "दान करें",
+  "Transactions": "लेन-देन",
   "addedSuccessfully": "{{item}} सफलतापूर्वक जोड़ा गया",
   "updatedSuccessfully": "{{item}} सफलतापूर्वक अपडेट किया गया",
   "removedSuccessfully": "{{item}} सफलतापूर्वक हटाया गया",

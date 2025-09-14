@@ -53,6 +53,7 @@ const map: InterfaceMapType = {
   people: 'people',
   events: 'userEvents',
   donate: 'donate',
+  transactions: 'transactions',
   chat: 'userChat',
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
