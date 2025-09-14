@@ -42,7 +42,7 @@ describe('PostsRenderer', () => {
     createdAt: '2023-01-01T00:00:00Z',
     creator: {
       id: 'user-1',
-      avatarURL: 'http://test-avatar.jpg',
+      avatarURL: null,
     },
     imageUrl: 'test-image.jpg',
     videoUrl: 'test-video.mp4',

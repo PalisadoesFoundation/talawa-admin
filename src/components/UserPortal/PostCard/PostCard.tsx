@@ -57,7 +57,6 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
 import CommentCard from '../CommentCard/CommentCard';
 import styles from '../../../style/app-fixed.module.css';
 
@@ -164,8 +163,6 @@ export default function PostCard({
 }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
-  const { getItem } = useLocalStorage();
-  const userId: string | null = getItem('userId');
   const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
 
   const [commentInput, setCommentInput] = React.useState('');

@@ -479,7 +479,7 @@ describe('Testing Home Screen: User Portal', () => {
   });
 });
 
-describe('HomeScreen with invalid orgId', () => {
+describe('HomeScreen additional scenarios', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: undefined });
   });
@@ -585,7 +585,7 @@ describe('HomeScreen with invalid orgId', () => {
       {
         request: {
           query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: { input: { id: 'orgId' } },
+          variables: { id: 'orgId', first: 6 },
         },
         result: {
           data: {
@@ -693,7 +693,7 @@ describe('HomeScreen with invalid orgId', () => {
       {
         request: {
           query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: { input: { id: 'orgId' } },
+          variables: { id: 'orgId', first: 6 },
         },
         result: {
           data: {
@@ -821,7 +821,7 @@ describe('HomeScreen with invalid orgId', () => {
       {
         request: {
           query: ORGANIZATION_ADVERTISEMENT_LIST,
-          variables: { input: { id: 'orgId' } },
+          variables: { id: 'orgId', first: 6 },
         },
         result: {
           data: {

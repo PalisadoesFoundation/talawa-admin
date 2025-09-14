@@ -352,6 +352,333 @@ describe('Testing StartPostModal Component: User Portal', () => {
 
     await wait();
   });
+
+  it('should handle error during post creation with image attachment', async () => {
+    const base64Image =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAn0B9g7R+wAAAABJRU5ErkJggg==';
+
+    const errorMocks = [
+      {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'Test post with error',
+              organizationId: '123',
+              attachments: [
+                {
+                  fileHash: expect.any(String),
+                  mimetype: 'IMAGE_PNG',
+                  name: expect.stringContaining('.png'),
+                  objectName: expect.stringContaining('uploads/'),
+                },
+              ],
+            },
+          },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    const customLink = new StaticMockLink(errorMocks, true);
+
+    renderStartPostModal(true, null, base64Image, vi.fn(), vi.fn(), customLink);
+    await wait();
+
+    await userEvent.type(
+      screen.getByTestId('postInput'),
+      'Test post with error',
+    );
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('should handle different base64 MIME types when creating post', async () => {
+    const base64Image =
+      'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A9VgAPxPgGYA8AD8AcANwA/+AB+B8AcANwA/E+AZgDwAPwBwA3AD/4AH4HwBwA3AD8T4BmAPAA/AHADcAP/gAfgfAHADcAPxPgGYA8AD8AcANwA/+AB+B8AcANwA/E+AZgDwAPwBwA3AD/4AH4HwBwA3AD8T4BmAPAA/AHADcAP/gAfgfAHADcAPxPgGYA8AD8AcANwA/+AB+B8AcANwA/E+AZgDwAPwBwA3AD/4AH4HwBwA3AD8T4BmAPAA/AHADcAP/9k=';
+
+    const successMocks = [
+      {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'Test post with jpeg',
+              organizationId: '123',
+              attachments: [
+                {
+                  fileHash: expect.any(String),
+                  mimeType: 'IMAGE_JPEG',
+                  name: expect.any(String),
+                  objectName: expect.stringContaining('uploads/'),
+                },
+              ],
+            },
+          },
+        },
+        result: {
+          data: {
+            createPost: {
+              id: '999',
+              caption: 'Test post with jpeg',
+              attachments: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const customLink = new StaticMockLink(successMocks, true);
+    const fetchPostsMock = vi.fn();
+    const onHideMock = vi.fn();
+
+    renderStartPostModal(
+      true,
+      null,
+      base64Image,
+      onHideMock,
+      fetchPostsMock,
+      customLink,
+    );
+    await wait();
+
+    await userEvent.type(
+      screen.getByTestId('postInput'),
+      'Test post with jpeg',
+    );
+
+    // Expect info toast to be called when processing starts
+    expect(toast.info).not.toHaveBeenCalled();
+
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle webp base64 images', async () => {
+    const base64WebpImage =
+      'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=';
+
+    renderStartPostModal(true, null, base64WebpImage);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test webp image');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle avif base64 images', async () => {
+    const base64AvifImage =
+      'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZgAAAPxtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA==';
+
+    renderStartPostModal(true, null, base64AvifImage);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test avif image');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle mp4 base64 videos', async () => {
+    const base64Mp4Video =
+      'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAhltZGF0AAABBQAAA==';
+
+    renderStartPostModal(true, null, base64Mp4Video);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test mp4 video');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle webm base64 videos', async () => {
+    const base64WebmVideo =
+      'data:video/webm;base64,GkXfo59ChoEBQveBAULygQRC84EIQoKEd2VibUKHgQRChYECGFOAZwEAAAAAAAHTEU2bdLpNu4tTq4QVSalmU6yBoU27i1OrhBZUrmtTrIHGTbuMU6uEElTDZ1OsggEXTbuMU6uEHFO7a1OsggG97AEAAAAAAABZAEMHhYuBhBSMhCKZa1OrgQEB4AQAnABAIHV5p0RQAACDgAcAAAAAAAAAMIeOg4OOgoCAhLOBgoGLhIGCgYCDgoOEhIKBhL+Bgo2LhJaChAAAAAAABKOWAcQBTYdAAAAA';
+
+    renderStartPostModal(true, null, base64WebmVideo);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test webm video');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle unknown base64 MIME type with fallback', async () => {
+    const base64UnknownType =
+      'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    renderStartPostModal(true, null, base64UnknownType);
+    await wait();
+
+    await userEvent.type(
+      screen.getByTestId('postInput'),
+      'Test unknown image type',
+    );
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle file URLs with different extensions', async () => {
+    const fileUrlJpeg = 'https://example.com/image.jpeg';
+
+    renderStartPostModal(true, null, fileUrlJpeg);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test jpeg file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle png file URLs', async () => {
+    const fileUrlPng = 'https://example.com/image.png';
+
+    renderStartPostModal(true, null, fileUrlPng);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test png file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle webp file URLs', async () => {
+    const fileUrlWebp = 'https://example.com/image.webp';
+
+    renderStartPostModal(true, null, fileUrlWebp);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test webp file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle avif file URLs', async () => {
+    const fileUrlAvif = 'https://example.com/image.avif';
+
+    renderStartPostModal(true, null, fileUrlAvif);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test avif file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle mp4 file URLs', async () => {
+    const fileUrlMp4 = 'https://example.com/video.mp4';
+
+    renderStartPostModal(true, null, fileUrlMp4);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test mp4 file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle webm file URLs', async () => {
+    const fileUrlWebm = 'https://example.com/video.webm';
+
+    renderStartPostModal(true, null, fileUrlWebm);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test webm file URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle unknown file extensions with fallback', async () => {
+    const fileUrlUnknown = 'https://example.com/file.unknown';
+
+    renderStartPostModal(true, null, fileUrlUnknown);
+    await wait();
+
+    await userEvent.type(
+      screen.getByTestId('postInput'),
+      'Test unknown file extension',
+    );
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+      );
+    });
+  });
+
+  it('should handle error when processing invalid file URL', async () => {
+    const invalidUrl = 'https://example.com/image.jpg';
+
+    renderStartPostModal(true, null, invalidUrl);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('postInput'), 'Test invalid URL');
+    await userEvent.click(screen.getByTestId('createPostBtn'));
+
+    await wait();
+
+    // This should trigger an error because getFileHashFromBase64 expects base64 data
+    expect(toast.error).toHaveBeenCalled();
+  });
 });
 
 describe('getMimeTypeEnum', () => {
@@ -425,5 +752,19 @@ describe('getMimeTypeEnum', () => {
   it('should return IMAGE_JPEG as fallback for unknown extension', () => {
     expect(getMimeTypeEnum('file.unknown')).toBe('IMAGE_JPEG');
     expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
+  });
+
+  it('should handle base64 data URIs correctly', () => {
+    expect(getMimeTypeEnum('data:image/jpeg;base64,abc123')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('data:image/png;base64,abc123')).toBe('IMAGE_PNG');
+    expect(getMimeTypeEnum('data:image/webp;base64,abc123')).toBe('IMAGE_WEBP');
+    expect(getMimeTypeEnum('data:image/avif;base64,abc123')).toBe('IMAGE_AVIF');
+    expect(getMimeTypeEnum('data:video/mp4;base64,abc123')).toBe('VIDEO_MP4');
+    expect(getMimeTypeEnum('data:video/webm;base64,abc123')).toBe('VIDEO_WEBM');
+  });
+
+  it('should return IMAGE_JPEG as fallback for unknown base64 MIME type', () => {
+    expect(getMimeTypeEnum('data:image/gif;base64,abc123')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('data:text/plain;base64,abc123')).toBe('IMAGE_JPEG');
   });
 });
