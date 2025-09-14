@@ -129,6 +129,15 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
+            endDate: '2026-08-31',
+            name: 'School Campaign',
+            fundingGoal: 22000,
+            currency: 'USD',
+            __typename: 'FundraisingCampaign',
+          },
+          {
+            _id: 'campaignId1',
+            startDate: '2024-07-28',
             endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
@@ -165,6 +174,15 @@ export const MOCKS = [
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
+            endDate: '2026-08-31',
+            name: 'School Campaign',
+            fundingGoal: 22000,
+            currency: 'USD',
+            __typename: 'FundraisingCampaign',
+          },
+          {
+            _id: 'campaignId1',
+            startDate: '2024-07-28',
             endDate: '2099-12-31',
             name: 'School Campaign',
             fundingGoal: 22000,
@@ -189,6 +207,15 @@ export const MOCKS = [
     result: {
       data: {
         getFundraisingCampaigns: [
+          {
+            _id: 'campaignId1',
+            startDate: '2024-07-28',
+            endDate: '2026-08-31',
+            name: 'School Campaign',
+            fundingGoal: 22000,
+            currency: 'USD',
+            __typename: 'FundraisingCampaign',
+          },
           {
             _id: 'campaignId1',
             startDate: '2024-07-28',
