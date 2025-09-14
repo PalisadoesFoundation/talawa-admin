@@ -6,4 +6,4 @@
 
 > `const` **ACTION\_ITEMS\_BY\_USER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L55)
+Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L112)

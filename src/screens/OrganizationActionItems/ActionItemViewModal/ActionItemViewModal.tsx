@@ -7,7 +7,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
@@ -175,7 +175,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               label={t('event')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={getEventDisplayName(event)}
+              value={getEventDisplayName(item.recurringEventInstance || event)}
               disabled
             />
           </Form.Group>

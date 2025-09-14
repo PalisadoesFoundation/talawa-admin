@@ -4,6 +4,8 @@ import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,
   DELETE_ACTION_ITEM_MUTATION,
+  COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+  MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 
 export const actionItemCategory1 = {
@@ -377,6 +379,73 @@ export const deleteActionItemMutationError = {
   error: new Error('Mock Graphql Error'),
 };
 
+// Add mocks for instance-specific mutations
+export const completeActionForInstanceMutation = {
+  request: {
+    query: COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+    variables: {
+      input: {
+        actionId: 'actionItemId1',
+        eventId: 'instanceId1',
+        postCompletionNotes: 'Valid completion notes',
+      },
+    },
+  },
+  result: {
+    data: {
+      completeActionForInstance: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+};
+
+export const completeActionForInstanceMutationError = {
+  request: {
+    query: COMPLETE_ACTION_ITEM_FOR_INSTANCE,
+    variables: {
+      input: {
+        actionId: 'actionItemId1',
+        eventId: 'instanceId1',
+        postCompletionNotes: 'Valid completion notes',
+      },
+    },
+  },
+  error: new Error('Mock Graphql Error'),
+};
+
+export const markActionAsPendingForInstanceMutation = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
+    variables: {
+      input: {
+        actionId: 'actionItemId1',
+        eventId: 'instanceId1',
+      },
+    },
+  },
+  result: {
+    data: {
+      markActionAsPendingForInstance: {
+        id: 'actionItemId1',
+      },
+    },
+  },
+};
+
+export const markActionAsPendingForInstanceMutationError = {
+  request: {
+    query: MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
+    variables: {
+      input: {
+        actionId: 'actionItemId1',
+        eventId: 'instanceId1',
+      },
+    },
+  },
+  error: new Error('Mock Graphql Error'),
+};
+
 // Combined mock arrays for different scenarios
 export const MOCKS = [
   actionItemListQuery,
@@ -385,6 +454,8 @@ export const MOCKS = [
   updateActionItemMutation,
   markActionItemAsPendingMutation,
   deleteActionItemMutation,
+  completeActionForInstanceMutation,
+  markActionAsPendingForInstanceMutation,
 ];
 
 export const MOCKS_EMPTY = [
@@ -399,6 +470,8 @@ export const MOCKS_ERROR = [
   actionItemCategoryListQuery,
   markActionItemAsPendingMutationError,
   deleteActionItemMutationError,
+  completeActionForInstanceMutationError,
+  markActionAsPendingForInstanceMutationError,
 ];
 
 export const MOCKS_LOADING = [

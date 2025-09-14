@@ -37,6 +37,11 @@ export class DiscoveryManager {
     return plugin ? plugin.isActivated : false;
   }
 
+  isPluginInstalled(pluginId: string): boolean {
+    const plugin = this.findPluginInIndex(pluginId);
+    return plugin ? plugin.isInstalled : false;
+  }
+
   async loadPluginIndexFromGraphQL(): Promise<void> {
     if (!this.graphqlService) return;
 
@@ -56,9 +61,12 @@ export class DiscoveryManager {
         try {
           const plugins = await this.graphqlService.getAllPlugins();
           this.pluginIndex = plugins;
-          const graphqlPlugins = plugins.map((p) => p.pluginId);
+          // Only discover plugins that are actually installed
+          const installedPlugins = plugins
+            .filter((p) => p.isInstalled)
+            .map((p) => p.pluginId);
           discoveredPlugins = [
-            ...new Set([...discoveredPlugins, ...graphqlPlugins]),
+            ...new Set([...discoveredPlugins, ...installedPlugins]),
           ];
         } catch (graphqlError) {
           console.error('GraphQL discovery failed:', graphqlError);
