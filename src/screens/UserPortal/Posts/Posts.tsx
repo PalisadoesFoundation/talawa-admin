@@ -156,6 +156,7 @@ export default function Home(): JSX.Element {
   });
 
   const { data: userData } = useQuery(USER_DETAILS, {
+    skip: !userId,
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
 
@@ -215,7 +216,6 @@ export default function Home(): JSX.Element {
       creator: {
         id: creator.id,
         name: creator.name,
-        email: creator.emailAddress || '',
         avatarURL: creator.avatarURL || undefined,
       },
       postedAt: formattedDate,
@@ -236,8 +236,7 @@ export default function Home(): JSX.Element {
           creator: {
             id: comment.creator.id,
             name: comment.creator.name,
-            email: comment.creator.emailAddress || '',
-            avatarURL: comment.creator.avatarURL,
+            avatarURL: comment.creator.avatarURL || undefined,
           },
           downVoteCount: comment.downVotesCount,
           upVoteCount: comment.upVotesCount,

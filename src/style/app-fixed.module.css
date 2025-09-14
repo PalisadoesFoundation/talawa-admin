@@ -5841,7 +5841,7 @@ form {
   top: 0;
   left: 0;
   width: 100%;
-  scale: 1.5;
+  transform: scale(1.5);
 }
 
 .previewImage {

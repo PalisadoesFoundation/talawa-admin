@@ -75,7 +75,7 @@ const MOCKS = [
                   creator: {
                     id: 'u1',
                     name: 'User1',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -105,7 +105,7 @@ const MOCKS = [
                   creator: {
                     id: 'u2',
                     name: 'User2',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -167,7 +167,7 @@ const MOCKS = [
                   creator: {
                     id: 'u3',
                     name: 'User3',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -197,7 +197,7 @@ const MOCKS = [
                   creator: {
                     id: 'u4',
                     name: 'User4',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -259,7 +259,7 @@ const MOCKS = [
                   creator: {
                     id: 'u1',
                     name: 'User1',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -289,7 +289,7 @@ const MOCKS = [
                   creator: {
                     id: 'u2',
                     name: 'User2',
-                    avatarURL: null,
+                    avatarURL: undefined,
                   },
                   commentsCount: 0,
                   pinnedAt: null,

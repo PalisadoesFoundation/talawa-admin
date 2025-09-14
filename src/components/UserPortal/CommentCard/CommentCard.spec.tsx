@@ -162,18 +162,17 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     // Verify initial state - should show 1 like (from defaultProps)
-    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
     // Click the like button
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
     // Verify the like count increased to 2
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText(/^\s*2\s*$/)).toBeInTheDocument();
 
     // Verify the button state changed (should now be primary color)
     const likeBtn = screen.getByTestId('likeCommentBtn');
-    expect(likeBtn).toHaveClass('MuiIconButton-colorPrimary');
     expect(likeBtn).toHaveClass('MuiIconButton-colorPrimary');
   });
 

@@ -59,7 +59,6 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import CommentCard from '../CommentCard/CommentCard';
-import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 
 const PostContainer = styled(Box)(({ theme }) => ({
@@ -167,7 +166,7 @@ export default function PostCard({
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const userId: string | null = getItem('userId');
-  const isLikedByUser = props.hasUserVoted.voteType == 'up_vote';
+  const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
 
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
@@ -274,13 +273,17 @@ export default function PostCard({
 
       <PostHeader>
         <UserInfo>
-          <span className={styles.userImageUserPost}>
-            <Image
-              crossOrigin="anonymous"
-              src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
-              alt={props.creator.name}
-            />
-          </span>
+          <Avatar
+            className={styles.userImageUserPost}
+            src={props.creator.avatarURL || UserDefault}
+            alt={props.creator.name ?? ''}
+            slotProps={{
+              img: {
+                crossOrigin: 'anonymous',
+                loading: 'lazy',
+              },
+            }}
+          />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
           </Typography>

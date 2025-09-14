@@ -168,7 +168,7 @@ const defaultProps = {
       },
       hasUserVoted: {
         hasVoted: false,
-        voteType: 'up_vote' as 'up_vote',
+        voteType: null,
       },
       upVoteCount: 2,
       downVoteCount: 0,

@@ -106,7 +106,7 @@ export type PostNode = {
     id: string;
     name: string;
     emailAddress: string;
-    avatarURL?: string;
+    avatarURL?: string | undefined;
   };
   hasUserVoted: {
     hasVoted: boolean;
@@ -144,7 +144,7 @@ export type PostNode = {
           id: string;
           name: string;
           emailAddress: string;
-          avatarURL?: string;
+          avatarURL?: string | null;
         };
         hasUserVoted: {
           hasVoted: boolean;
