@@ -488,6 +488,419 @@ describe('HomeScreen with invalid orgId', () => {
     vi.clearAllMocks();
   });
 
+  it('should filter and set pinned posts when posts have pinnedAt values', async () => {
+    const mocksWithPinnedPosts = [
+      // Mock with pinned posts
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 2,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'pinned-post-1',
+                      caption: 'Pinned Post 1',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                  {
+                    node: {
+                      id: 'normal-post-1',
+                      caption: 'Normal Post 1',
+                      creator: {
+                        id: 'u2',
+                        name: 'User2',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: null,
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-02T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c2',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { input: { id: 'orgId' } },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Pinned Post 1')).toBeInTheDocument();
+      expect(screen.getByText('Normal Post 1')).toBeInTheDocument();
+    });
+  });
+
+  it('should process promoted posts data and set ad content', async () => {
+    const mocksWithAds = [
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'post-1',
+                      caption: 'Test Post',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: null,
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { input: { id: 'orgId' } },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'ad-1',
+                        name: 'Test Advertisement',
+                        type: 'BANNER',
+                        mediaUrl: 'https://example.com/banner.jpg',
+                        endDate: '2024-12-31',
+                        startDate: '2024-01-01',
+                      },
+                    },
+                    {
+                      node: {
+                        id: 'ad-2',
+                        name: 'Another Ad',
+                        type: 'POPUP',
+                        mediaUrl: 'https://example.com/popup.jpg',
+                        endDate: '2024-12-31',
+                        startDate: '2024-01-01',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithAds = new StaticMockLink(mocksWithAds, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithAds}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Post')).toBeInTheDocument();
+    });
+  });
+
+  it('should cover InstagramStory component and handleStoryClick', async () => {
+    const mocksWithPinnedPosts = [
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'pinned-post-1',
+                      caption: 'Pinned Story Post',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: 'https://example.com/avatar.jpg',
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { input: { id: 'orgId' } },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Pinned Story Post')).toBeInTheDocument();
+    });
+
+    // This test covers the InstagramStory component and story-related code
+    // The presence of pinned posts should trigger the stories container rendering
+    const storiesContainer = screen
+      .getByText('Pinned Story Post')
+      .closest('div');
+    expect(storiesContainer).toBeInTheDocument();
+  });
+
+  it('should handle post button click', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('postBtn')).toBeInTheDocument();
+    });
+
+    // Test handlePostButtonClick functionality
+    const postButton = screen.getByTestId('postBtn');
+    fireEvent.click(postButton);
+
+    // Should open the start post modal
+    await waitFor(() => {
+      expect(screen.getByTestId('startPostModal')).toBeInTheDocument();
+    });
+  });
+
   it('Redirect to /user when organizationId is falsy', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

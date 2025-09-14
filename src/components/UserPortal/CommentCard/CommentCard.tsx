@@ -145,6 +145,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             crossOrigin="anonymous"
             src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
             alt={props.creator.name}
+            loading="lazy"
           />
         </span>
         <Box sx={{ flexGrow: 1 }}>

@@ -276,7 +276,7 @@ export default function PostCard({
           <Avatar
             className={styles.userImageUserPost}
             src={props.creator.avatarURL || UserDefault}
-            alt={props.creator.name ?? ''}
+            alt={props.creator.name}
             slotProps={{
               img: {
                 crossOrigin: 'anonymous',

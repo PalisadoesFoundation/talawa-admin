@@ -1,4 +1,4 @@
-import type { VoteType, VoteState } from 'utils/interfaces';
+import type { VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
 import type { User } from '../User/type';
 import type { Organization } from 'types/Organization/type';
