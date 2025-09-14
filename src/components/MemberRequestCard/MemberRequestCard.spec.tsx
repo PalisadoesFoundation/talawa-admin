@@ -1,3 +1,12 @@
+// Default props for use in tests
+const props = {
+  id: '1',
+  memberName: 'John Doe',
+  memberLocation: 'India',
+  joinDate: '18/03/2022',
+  memberImage: 'image',
+  email: 'johndoe@gmail.com',
+};
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -103,7 +112,6 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText('18/03/2022')).toBeInTheDocument();
     expect(screen.getByText('johndoe@gmail.com')).toBeInTheDocument();
   });
-
 
   it('should reload window after 2 seconds if addMember is clicked', async () => {
     const props = {
@@ -218,27 +226,6 @@ describe('Testing Member Request Card', () => {
     expect(window.location.reload).not.toHaveBeenCalled();
     // @ts-ignore
     window.location = originalLocation;
-=======
-  describe('window reload and mutation tests', () => {
-    // Optimized: Reuse defaultProps reference
-    const testProps = defaultProps;
-
-    let mockReload: ReturnType<typeof vi.fn>;
-
-    // Performance: Minimal setup in beforeEach
-    beforeEach(() => {
-      mockReload = vi.fn();
-
-      // TypeScript-safe, performance-optimized window.location mock
-      Object.defineProperty(window, 'location', {
-        value: {
-          ...window.location,
-          reload: mockReload,
-        },
-        writable: true,
-        configurable: true, // Performance: Allows proper cleanup
-      });
-    });
 
     // Performance: Efficient cleanup
     afterEach(() => {
@@ -252,7 +239,7 @@ describe('Testing Member Request Card', () => {
       render(
         <MockedProvider addTypename={false} mocks={MOCKS2}>
           <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...testProps} />
+            <MemberRequestCard {...props} />
           </I18nextProvider>
         </MockedProvider>,
       );
@@ -277,7 +264,7 @@ describe('Testing Member Request Card', () => {
       render(
         <MockedProvider addTypename={false} mocks={MOCKS3}>
           <I18nextProvider i18n={i18nForTest}>
-            <MemberRequestCard {...testProps} />
+            <MemberRequestCard {...props} />
           </I18nextProvider>
         </MockedProvider>,
       );
@@ -294,6 +281,5 @@ describe('Testing Member Request Card', () => {
 
       expect(mockReload).not.toHaveBeenCalled();
     });
-
   });
 });

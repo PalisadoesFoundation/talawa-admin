@@ -24,7 +24,6 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-
   let originalLocation: Location;
   let mockReload: ReturnType<typeof vi.fn>;
   beforeAll(() => {
@@ -46,7 +45,6 @@ describe('refreshToken', () => {
 
   // Create storage mock
 
-
   const localStorageMock = {
     getItem: vi.fn(),
     setItem: vi.fn(),
@@ -56,7 +54,7 @@ describe('refreshToken', () => {
     key: vi.fn(),
   };
 
-  let mockReload: any;
+  // let mockReload: any; // Removed redeclaration, already declared above
 
   beforeEach(() => {
     mockReload = vi.fn();
