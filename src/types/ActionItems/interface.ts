@@ -28,6 +28,7 @@ export interface IActionItemInfo {
   avatarURL?: string;
   categoryId: string | null;
   eventId: string | null;
+  recurringEventInstanceId: string | null;
   organizationId: string;
   creatorId: string | null;
   updaterId: string | null;
@@ -38,11 +39,14 @@ export interface IActionItemInfo {
   isCompleted: boolean;
   preCompletionNotes: string | null;
   postCompletionNotes: string | null;
+  isInstanceException?: boolean;
+  isTemplate?: boolean;
 
   // Related entities (populated via GraphQL)
   assignee: IActionUserInfo | null;
   creator: IActionUserInfo | null;
   event: InterfaceEvent | null;
+  recurringEventInstance: InterfaceEvent | null;
   category: IActionItemCategoryInfo | null;
 }
 
@@ -54,9 +58,11 @@ export interface ICreateActionItemInput {
   assigneeId: string;
   categoryId: string;
   eventId?: string;
+  recurringEventInstanceId?: string;
   organizationId: string;
   preCompletionNotes?: string;
   assignedAt?: string;
+  isTemplate?: boolean;
 }
 
 export interface IUpdateActionItemInput {
