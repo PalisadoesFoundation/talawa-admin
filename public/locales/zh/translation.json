@@ -501,7 +501,16 @@
     "groups": "小组",
     "assignTo": "分配给",
     "volunteers": "志愿者",
-    "volunteerGroups": "志愿者小组"
+    "volunteerGroups": "志愿者团体",
+    "applyTo": "适用于",
+    "entireSeries": "整个系列",
+    "thisEventOnly": "仅限本次活动",
+    "pendingForInstance": "此实例待定",
+    "pendingForSeries": "系列待定",
+    "completeForInstance": "此实例完成",
+    "completeForSeries": "系列完成",
+    "postCompletionNotesRequired": "需要完成后的备注",
+    "updateThisInstance": "更新此实例"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -772,6 +781,7 @@
   },
   "eventManagement": {
     "name": "事件管理",
+    "title": "事件管理",
     "dashboard": "仪表板",
     "registrants": "注册者",
     "attendance": "出席",

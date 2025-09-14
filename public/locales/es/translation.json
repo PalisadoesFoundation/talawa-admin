@@ -501,7 +501,16 @@
     "groups": "Grupos",
     "assignTo": "Asignar a",
     "volunteers": "Voluntarios",
-    "volunteerGroups": "Grupos de Voluntarios"
+    "volunteerGroups": "Grupos de voluntarios",
+    "applyTo": "Aplicar a",
+    "entireSeries": "Serie completa",
+    "thisEventOnly": "Solo este evento",
+    "updateThisInstance": "Actualizar esta instancia",
+    "pendingForInstance": "Pendiente para esta instancia",
+    "pendingForSeries": "Pendiente para la serie",
+    "completeForInstance": "Completo para esta instancia",
+    "completeForSeries": "Completo para la serie",
+    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -773,6 +782,7 @@
   },
   "eventManagement": {
     "name": "Gestión de eventos",
+    "title": "Gestión de eventos",
     "dashboard": "Tablero",
     "registrants": "Inscritos",
     "attendance": "Asistencia",

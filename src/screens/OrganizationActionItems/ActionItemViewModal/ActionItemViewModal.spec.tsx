@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -132,6 +132,7 @@ const createActionItem = (
   assigneeId: 'userId1',
   categoryId: 'categoryId1',
   eventId: 'eventId1',
+  recurringEventInstanceId: null,
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
@@ -155,6 +156,7 @@ const createActionItem = (
     avatarURL: 'https://example.com/avatar1.jpg',
   },
   event: mockEvent,
+  recurringEventInstance: null,
   category: {
     id: 'categoryId1',
     name: 'Test Category',
