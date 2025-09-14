@@ -64,7 +64,7 @@ interface InterfaceCommentCardProps {
   creator: {
     id: string;
     name: string;
-    avatarURL?: string;
+    avatarURL?: string | null;
   };
   hasUserVoted: {
     hasVoted: boolean;

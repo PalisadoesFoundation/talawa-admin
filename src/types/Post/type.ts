@@ -1,4 +1,4 @@
-import { VoteType } from 'utils/interfaces';
+import type { VoteType, VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
 import type { User } from '../User/type';
 import type { Organization } from 'types/Organization/type';
@@ -109,10 +109,7 @@ export type PostNode = {
     emailAddress: string;
     avatarURL?: string | null;
   };
-  hasUserVoted: {
-    hasVoted: boolean;
-    voteType: VoteType;
-  };
+  hasUserVoted: VoteState;
   upVotesCount: number;
   downVotesCount: number;
   pinnedAt: string | null;
@@ -147,10 +144,7 @@ export type PostNode = {
           emailAddress: string;
           avatarURL?: string | null;
         };
-        hasUserVoted: {
-          hasVoted: boolean;
-          voteType: VoteType;
-        };
+        hasUserVoted: VoteState;
         downVotesCount: number;
         upVotesCount: number;
         text: string;

@@ -2117,6 +2117,8 @@ export interface InterfaceCreateFund {
  */
 
 export type VoteType = 'up_vote' | 'down_vote' | null;
+export type VoteState = { hasVoted: boolean; voteType: VoteType };
+
 export interface InterfacePostCard {
   id: string;
   isModalView?: boolean;
@@ -2125,10 +2127,7 @@ export interface InterfacePostCard {
     name: string;
     avatarURL?: string | null;
   };
-  hasUserVoted: {
-    hasVoted: boolean;
-    voteType: VoteType;
-  };
+  hasUserVoted: VoteState;
   postedAt: string;
   pinnedAt?: string | null;
   image: string | null;
@@ -2144,12 +2143,9 @@ export interface InterfacePostCard {
     creator: {
       id: string;
       name: string;
-      avatarURL?: string;
+      avatarURL?: string | null;
     };
-    hasUserVoted: {
-      hasVoted: boolean;
-      voteType: VoteType;
-    };
+    hasUserVoted: VoteState;
     downVoteCount: number;
     upVoteCount: number;
     text: string;
