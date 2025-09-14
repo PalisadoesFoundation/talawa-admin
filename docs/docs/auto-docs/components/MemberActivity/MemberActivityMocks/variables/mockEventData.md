@@ -40,7 +40,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.endDate
 
-> **endDate**: `string` = `'2023-01-02'`
+> **endDate**: `string` = `'2030-01-02'`
 
 #### event.endTime
 
@@ -68,7 +68,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.startDate
 
-> **startDate**: `string` = `'2023-01-01'`
+> **startDate**: `string` = `'2030-01-01'`
 
 #### event.startTime
 
