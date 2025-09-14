@@ -22,7 +22,6 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import PostsRenderer from './Posts';
-// import SearchingButton from 'subComponents/SearchingButton';
 import SearchBar from 'subComponents/SearchBar';
 import type {
   InterfacePostEdge,
@@ -36,7 +35,6 @@ import type {
  * OrgPost Component
  * This component is responsible for rendering and managing organization posts.
  */
-
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
   const { t: tCommon } = useTranslation('common');
