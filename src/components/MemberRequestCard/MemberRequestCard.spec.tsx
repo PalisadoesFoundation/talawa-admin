@@ -105,14 +105,7 @@ describe('Testing Member Request Card', () => {
   });
 
   it('should reload window after 2 seconds if addMember is clicked', async () => {
-    const props = {
-      id: '1',
-      memberName: 'John Doe',
-      memberLocation: 'India',
-      joinDate: '18/03/2022',
-      memberImage: 'image',
-      email: 'johndoe@gmail.com',
-    };
+    const props = defaultProps;
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     const mockReload = vi.fn();
@@ -137,14 +130,7 @@ describe('Testing Member Request Card', () => {
   });
 
   it('should not reload window if acceptMutation fails', async () => {
-    const props = {
-      id: '1',
-      memberName: 'John Doe',
-      memberLocation: 'India',
-      joinDate: '18/03/2022',
-      memberImage: 'image',
-      email: '',
-    };
+    const props = { ...defaultProps, email: '' };
     global.confirm = (): boolean => true;
     const originalLocation = window.location;
     const mockReload = vi.fn();
@@ -179,7 +165,7 @@ describe('Testing Member Request Card', () => {
     render(
       <MockedProvider addTypename={false} link={link2}>
         <I18nextProvider i18n={i18nForTest}>
-          <MemberRequestCard {...props} />
+          <MemberRequestCard {...defaultProps} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -205,7 +191,7 @@ describe('Testing Member Request Card', () => {
     render(
       <MockedProvider addTypename={false} link={link3}>
         <I18nextProvider i18n={i18nForTest}>
-          <MemberRequestCard {...props} />
+          <MemberRequestCard {...defaultProps} />
         </I18nextProvider>
       </MockedProvider>,
     );
