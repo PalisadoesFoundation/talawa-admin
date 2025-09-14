@@ -169,12 +169,6 @@ export default function PostCard({
   const userId: string | null = getItem('userId');
   const isLikedByUser = props.hasUserVoted.voteType == 'up_vote';
 
-  const upVoters =
-    props.upVoters?.edges.map((edge) => ({
-      id: edge.node.id,
-      node: { id: edge.node.id },
-    })) || [];
-
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState(props.text);
@@ -373,9 +367,6 @@ export default function PostCard({
                 text={comment.body}
                 upVoteCount={comment.upVoteCount}
                 downVoteCount={comment.downVoteCount}
-                upVoters={{
-                  edges: upVoters,
-                }}
                 hasUserVoted={comment.hasUserVoted}
                 fetchComments={props.fetchPosts}
               />

@@ -37,19 +37,6 @@ export const ORGANIZATION_POST_LIST = gql`
             commentsCount
             pinnedAt
             downVotesCount
-            upVoters(first: 10) {
-              edges {
-                node {
-                  id
-                }
-              }
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-            }
             upVotesCount
             creator {
               id

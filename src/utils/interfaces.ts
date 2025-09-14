@@ -2135,17 +2135,6 @@ export interface InterfacePostCard {
   title: string;
   text: string;
   commentCount: number;
-  upVoters: {
-    edges: {
-      node: {
-        id: string;
-        creator: {
-          id: string;
-          name: string;
-        } | null;
-      };
-    }[];
-  };
   upVoteCount: number;
   downVoteCount: number;
   comments: {
@@ -2163,7 +2152,6 @@ export interface InterfacePostCard {
     };
     downVoteCount: number;
     upVoteCount: number;
-    upVoters: { id: string }[];
     text: string;
   }[];
   fetchPosts: () => void;

@@ -10,7 +10,6 @@
  * @param props.creator - The creator of the comment, including their ID and name.
  * @param props.upVoteCount - The number of upvotes (likes) on the comment.
  * @param props.downVoteCount - The number of downvotes (dislikes) on the comment.
- * @param props.upVoters - An array of users who have liked the comment.
  * @param props.downVoters - An array of users who have disliked the comment.
  * @param props.text - The text content of the comment.
  * @param props.onVote - Callback function triggered when the comment is voted on.
@@ -72,13 +71,6 @@ interface InterfaceCommentCardProps {
   };
   upVoteCount: number;
   downVoteCount: number;
-  upVoters: {
-    edges: Array<{
-      node: {
-        id: string;
-      };
-    }>;
-  };
   text: string;
   fetchComments?: () => void;
 }
@@ -97,7 +89,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     if (!userId) return;
     const liked = props.hasUserVoted.voteType == 'up_vote';
     setIsLiked(liked);
-  }, [props.upVoters, userId]);
+  }, [userId]);
 
   React.useEffect(() => {
     setLikes(props.upVoteCount);

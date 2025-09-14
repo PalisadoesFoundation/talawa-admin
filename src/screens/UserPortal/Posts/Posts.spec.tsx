@@ -85,15 +85,6 @@ const MOCKS = [
                     hasVoted: false,
                     voteType: null,
                   },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                   createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {
                     edges: [],
@@ -123,15 +114,6 @@ const MOCKS = [
                   hasUserVoted: {
                     hasVoted: false,
                     voteType: null,
-                  },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {
@@ -195,15 +177,6 @@ const MOCKS = [
                     hasVoted: false,
                     voteType: null,
                   },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                   createdAt: '2024-01-02T00:00:00.000Z',
                   comments: {
                     edges: [],
@@ -233,15 +206,6 @@ const MOCKS = [
                   hasUserVoted: {
                     hasVoted: false,
                     voteType: null,
-                  },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
                   },
                   createdAt: '2024-01-02T00:00:00.000Z',
                   comments: {
@@ -305,15 +269,6 @@ const MOCKS = [
                     hasVoted: false,
                     voteType: null,
                   },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                   createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {
                     edges: [],
@@ -343,15 +298,6 @@ const MOCKS = [
                   hasUserVoted: {
                     hasVoted: false,
                     voteType: null,
-                  },
-                  upVoters: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
                   comments: {

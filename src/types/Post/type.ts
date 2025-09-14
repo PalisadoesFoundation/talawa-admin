@@ -10,7 +10,6 @@ export type Post = {
   creator?: User; // Optional
   imageUrl?: string; // Optional
   likeCount?: number; // Optional
-  upVoters?: User[]; // Optional
   organization: Organization;
   pinned?: boolean; // Optional
   text: string;
@@ -90,9 +89,6 @@ export type PostComments = {
   };
 
   likeCount: number;
-  upVoters: {
-    id: string;
-  }[];
   text: string;
 }[];
 
@@ -119,18 +115,6 @@ export type PostNode = {
   upVotesCount: number;
   downVotesCount: number;
   pinnedAt: string | null;
-
-  upVoters: {
-    edges: {
-      node: {
-        id: string;
-        creator: {
-          id: string;
-          name: string;
-        };
-      };
-    }[];
-  };
   downVoters: {
     edges: {
       node: {
@@ -168,9 +152,6 @@ export type PostNode = {
         };
         downVotesCount: number;
         upVotesCount: number;
-        upVoters: {
-          id: string;
-        }[];
         text: string;
       };
     }[];

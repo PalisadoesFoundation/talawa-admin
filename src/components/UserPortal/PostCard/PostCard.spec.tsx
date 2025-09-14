@@ -172,23 +172,9 @@ const defaultProps = {
       },
       upVoteCount: 2,
       downVoteCount: 0,
-      upVoters: [{ id: '1' }],
       text: 'Test comment',
     },
   ],
-  upVoters: {
-    edges: [
-      {
-        node: {
-          id: '1',
-          creator: {
-            id: '1',
-            name: 'John Doe',
-          },
-        },
-      },
-    ],
-  },
   fetchPosts: fetchPostsMock,
 };
 

@@ -78,16 +78,6 @@ const defaultProps = {
   },
   upVoteCount: 1,
   downVoteCount: 0,
-  upVoters: {
-    edges: [
-      {
-        id: '1',
-        node: {
-          id: '1',
-        },
-      },
-    ],
-  },
   text: 'testComment',
   hasUserVoted: {
     hasVoted: true,

@@ -196,7 +196,6 @@ export default function Home(): JSX.Element {
       caption,
       createdAt,
       creator,
-      upVoters,
       upVotesCount,
       downVotesCount,
       comments,
@@ -227,22 +226,6 @@ export default function Home(): JSX.Element {
       pinnedAt: pinnedAt || null,
       commentCount: node.commentsCount,
       hasUserVoted: hasUserVoted,
-
-      upVoters: {
-        edges:
-          upVoters?.edges?.map((edge) => ({
-            node: {
-              id: edge.node.id,
-              creator: edge.node.creator
-                ? {
-                    id: edge.node.creator.id,
-                    name: edge.node.creator.name,
-                  }
-                : null,
-            },
-          })) || [],
-      },
-
       upVoteCount: upVotesCount,
       downVoteCount: downVotesCount,
 
@@ -258,10 +241,6 @@ export default function Home(): JSX.Element {
           },
           downVoteCount: comment.downVotesCount,
           upVoteCount: comment.upVotesCount,
-          upVoters:
-            comment?.upVoters?.map((like) => ({
-              id: like.id,
-            })) || [],
           text: comment.text || '',
           hasUserVoted: comment.hasUserVoted,
         })) ?? [],
