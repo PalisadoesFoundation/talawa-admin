@@ -6,7 +6,7 @@
 
 > **usePluginFilters**(`__namedParameters`): `object`
 
-Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/PluginStore/hooks/usePluginFilters.ts#L27)
+Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/PluginStore/hooks/usePluginFilters.ts#L14)
 
 ## Parameters
 
@@ -20,13 +20,13 @@ Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:27](https://githu
 
 ### debouncedSearch()
 
-> **debouncedSearch**: (`value`) => `void`
+> **debouncedSearch**: (...`args`) => `void`
 
 #### Parameters
 
-##### value
+##### args
 
-`string`
+...`unknown`[]
 
 #### Returns
 

@@ -372,6 +372,7 @@ const ItemModal: FC<IItemModalProps> = ({
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="categorySelect"
+              data-cy="categorySelect"
               options={actionItemCategories}
               value={actionItemCategory}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -399,6 +400,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 <Autocomplete
                   className={`${styles.noOutline} w-100`}
                   data-testid="memberSelect"
+                  data-cy="memberSelect"
                   options={members}
                   value={assigneeUser}
                   isOptionEqualToValue={(option, value) =>
@@ -438,6 +440,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 <TextField
                   label={t('preCompletionNotes')}
                   variant="outlined"
+                  data-cy="preCompletionNotes"
                   className={styles.noOutline}
                   value={preCompletionNotes}
                   onChange={(e) =>
@@ -467,6 +470,7 @@ const ItemModal: FC<IItemModalProps> = ({
             type="submit"
             className={styles.addButton}
             data-testid="submitBtn"
+            data-cy="submitBtn"
           >
             {editMode ? t('updateActionItem') : t('createActionItem')}
           </Button>
