@@ -83,7 +83,10 @@ import 'react-multi-carousel/lib/styles.css';
 import { PostNode } from 'types/Post/type';
 import postStyles from './Posts.module.css';
 import styles from 'style/app-fixed.module.css';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
+import { toast } from 'react-toastify';
 import { Col, Form, Row } from 'react-bootstrap';
 
 // Instagram-like stories carousel responsive settings
@@ -123,6 +126,15 @@ export default function Home(): JSX.Element {
   const [totalPosts, setTotalPosts] = useState(0);
   const [adContent, setAdContent] = useState<Ad[]>([]);
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
+  const [attachmentForModal, setAttachmentForModal] = useState<
+    {
+      fileHash: string;
+      mimeType: string;
+      name: string;
+      objectName: string;
+      previewUrl: string;
+    }[]
+  >([]);
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePostCard | null>(null);
 
@@ -157,6 +169,9 @@ export default function Home(): JSX.Element {
   const { data: userData } = useQuery(USER_DETAILS, {
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   const user: InterfaceQueryUserListItem | undefined = userData?.user;
 
@@ -306,12 +321,33 @@ export default function Home(): JSX.Element {
     setShowModal(true);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imgURL = URL.createObjectURL(file);
-      setPostImg(imgURL);
-      setShowModal(true); // open modal after selecting image
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
+        const previewUrl = await getFileFromMinio(objectName, orgId);
+        const attachment = {
+          fileHash,
+          mimeType: file.type,
+          name: file.name,
+          objectName,
+          previewUrl,
+        };
+        setShowModal(true);
+        setAttachmentForModal([attachment]);
+        toast.success('File uploaded successfully!');
+      } catch (err) {
+        console.error(err);
+        toast.error('File upload failed.');
+      }
     }
   };
 
@@ -377,15 +413,7 @@ export default function Home(): JSX.Element {
                 className={styles.inputField}
                 data-testid="postImageInput"
                 autoComplete="off"
-                onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
-                ): Promise<void> => {
-                  setPostImg('');
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files && target.files[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setPostImg(base64file);
-                }}
+                onChange={handleFileSelect}
               />
             </Col>
           </Row>
@@ -463,7 +491,7 @@ export default function Home(): JSX.Element {
         fetchPosts={refetch}
         userData={user}
         organizationId={orgId}
-        img={postImg}
+        attachment={attachmentForModal}
       />
 
       {selectedPinnedPost && (

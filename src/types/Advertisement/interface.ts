@@ -18,6 +18,12 @@ export interface InterfaceAddOnRegisterProps {
   >; // Function to update parent state
 }
 
+export interface InterfaceAdvertisementAttachment {
+  mimeType: string;
+  url: string;
+  localFile?: File;
+}
+
 export interface InterfaceFormStateTypes {
   name: string; // Name of the advertisement
   type: string; // Type of advertisement (e.g., BANNER, POPUP)
@@ -25,7 +31,7 @@ export interface InterfaceFormStateTypes {
   description: string | null; // Description of the advertisement
   endAt: Date; // End date of the advertisement
   organizationId?: string | undefined; // Organization ID
-  attachments: File[] | undefined; //File Array
+  attachments: AdvertisementAttachment[] | undefined; //File Array
   existingAttachments?: string | undefined; //Keep existing media URL for previews
 }
 

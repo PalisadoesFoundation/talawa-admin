@@ -47,7 +47,10 @@ import { Form, Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
+import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
@@ -69,6 +72,14 @@ interface InterfacePostAttachment {
   updaterId?: string | null;
 }
 
+interface InterfacePostAttachmentState {
+  url: string; // presigned URL for preview
+  mimeType: string;
+  objectName: string;
+  name: string;
+  fileHash: string;
+}
+
 interface InterfacePost {
   id: string;
   caption: string;
@@ -85,7 +96,7 @@ interface InterfaceOrgPostCardProps {
 
 interface InterfacePostFormState {
   caption: string;
-  attachments: { url: string; mimeType: string }[];
+  attachments: InterfacePostAttachmentState[];
 }
 
 export default function OrgPostCard({
@@ -105,6 +116,10 @@ export default function OrgPostCard({
 
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
+  // Initialize MinIO hooks
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+  const { orgId } = useParams();
 
   // Get media attachments
   const imageAttachment = post.attachments.find((a) =>
@@ -181,14 +196,37 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+      // Validate file before upload
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          orgId || 'organization',
+        );
+        const previewUrl = await getFileFromMinio(objectName, orgId!);
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              url: previewUrl, // for local preview
+              mimeType: file.type,
+              objectName,
+              name: file.name,
+              fileHash,
+            },
+          ],
+        }));
+        toast.success('File uploaded successfully!');
+      } catch (err) {
+        console.error(err);
+        toast.error('File upload failed.');
+      }
     }
   };
 
@@ -197,14 +235,34 @@ export default function OrgPostCard({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          orgId || 'organization',
+        );
+        const previewUrl = await getFileFromMinio(objectName, orgId!);
+        setPostFormState((prev) => ({
+          ...prev,
+          attachments: [
+            ...prev.attachments,
+            {
+              url: previewUrl,
+              mimeType: file.type,
+              objectName,
+              name: file.name,
+              fileHash,
+            },
+          ],
+        }));
+      } catch (err) {
+        console.error(err);
+        toast.error('File upload failed.');
+      }
     }
   };
 
@@ -249,7 +307,12 @@ export default function OrgPostCard({
           input: {
             id: post.id,
             caption: postFormState.caption.trim(),
-            attachments: postFormState.attachments,
+            attachments: postFormState.attachments.map((a) => ({
+              fileHash: a.fileHash,
+              mimeType: a.mimeType,
+              name: a.name,
+              objectName: a.objectName,
+            })),
           },
         },
       });

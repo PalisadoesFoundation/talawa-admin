@@ -61,12 +61,20 @@ export interface InterfaceOrganizationPostListData {
   organization: InterfaceOrganization;
 }
 
+export interface InterfacePostAttachment {
+  fileHash?: string;
+  id?: string;
+  mimeType: string;
+  name: string;
+  objectName: string;
+}
+
 // Define the proper interface for the mutation input
 export interface InterfaceMutationCreatePostInput {
   caption: string;
   organizationId: string;
   isPinned: boolean;
-  attachments?: File[];
+  attachments?: InterfacePostAttachment[];
 }
 
 export interface InterfaceAttachment {

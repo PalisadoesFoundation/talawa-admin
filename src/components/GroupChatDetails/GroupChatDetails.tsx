@@ -65,7 +65,8 @@ import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { validateFile } from 'utils/fileValidation';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
@@ -82,7 +83,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': { border: 0 },
 }));
 
-export default function groupChatDetails({
+export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
@@ -94,6 +95,9 @@ export default function groupChatDetails({
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
+
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   useEffect(() => {
     if (!userId) {
@@ -175,22 +179,31 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
-      // Add variables to updateChat call
-      await updateChat({
-        variables: {
-          input: {
-            _id: chat._id,
-            image: base64,
-            name: chatName,
+      const validation = validateFile(file);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
+
+      try {
+        const organizationId = chat.organization?._id || 'organization';
+        const { objectName } = await uploadFileToMinio(file, organizationId);
+        setSelectedImage(objectName);
+
+        await updateChat({
+          variables: {
+            input: {
+              _id: chat._id,
+              image: objectName,
+            },
           },
-        },
-      });
-      await chatRefetch();
-      setSelectedImage('');
-    } else {
-      setSelectedImage('');
+        });
+        await chatRefetch({ id: chat._id });
+        toast.success(t('imageUploadSuccess'));
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        toast.error(t('imageUploadFailed'));
+      }
     }
   };
 

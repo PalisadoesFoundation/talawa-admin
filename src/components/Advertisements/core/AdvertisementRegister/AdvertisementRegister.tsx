@@ -51,6 +51,8 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -62,6 +64,7 @@ import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,
+  InterfaceAdvertisementAttachment,
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
@@ -80,9 +83,10 @@ function AdvertisementRegister({
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   if (currentOrg === undefined) {
     return <PageNotFound />;
@@ -142,9 +146,9 @@ function AdvertisementRegister({
     setShow(false);
   };
 
-  const handleShow = (): void => setShow(true); // Shows the modal
+  const handleShow = (): void => setShow(true);
 
-  // Handle file uploads
+  // Handle file uploads with MinIO
   const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -165,10 +169,27 @@ function AdvertisementRegister({
       });
 
       if (validFiles.length > 0) {
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...(prev.attachments || []), ...validFiles],
-        }));
+        try {
+          const uploaded = await Promise.all(
+            validFiles.map(async (file) => {
+              const { objectName } = await uploadFileToMinio(file, currentOrg);
+              toast.success('Image uploaded successfully');
+              return {
+                mimeType: file.type,
+                url: objectName,
+                localFile: file, // for preview only
+              } as InterfaceAdvertisementAttachment;
+            }),
+          );
+
+          setFormState((prev) => ({
+            ...prev,
+            attachments: [...(prev.attachments || []), ...uploaded],
+          }));
+        } catch (err) {
+          console.log('error', err);
+          toast.error('Failed to upload file(s) to MinIO');
+        }
       }
     }
   };
@@ -214,52 +235,31 @@ function AdvertisementRegister({
         toast.error(t('endDateGreater') as string);
         return;
       }
-
       if (!formState.name) {
         toast.error('Invalid arguments for this action.');
         return;
       }
 
-      let variables: {
-        organizationId: string;
-        name: string;
-        type: string;
-        startAt: string;
-        endAt: string;
-        attachments: File[] | undefined;
-        description?: string | null;
-      } = {
+      const variables: any = {
         organizationId: currentOrg,
-        name: formState.name as string,
-        type: formState.type as string,
+        name: formState.name,
+        type: formState.type,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
+        attachments: formState.attachments?.map((a) => ({
+          mimetype: a.mimeType,
+          url: a.url,
+        })),
       };
 
       if (formState.description !== null) {
-        variables = {
-          ...variables,
-          description: formState.description,
-        };
+        variables.description = formState.description;
       }
 
-      const { data } = await createAdvertisement({
-        variables,
-      });
+      const { data } = await createAdvertisement({ variables });
       if (data) {
         toast.success(t('advertisementCreated') as string);
         handleClose();
-        setFormState({
-          name: '',
-          type: 'banner',
-          description: null,
-          startAt: new Date(formState.startAt || new Date()),
-          endAt: new Date(),
-          organizationId: currentOrg,
-          attachments: undefined,
-          existingAttachments: undefined,
-        });
         setAfterActive(null);
         setAfterCompleted(null);
       }
@@ -279,28 +279,17 @@ function AdvertisementRegister({
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
 
-      // Only include the fields which are updated
-      if (formState.name !== nameEdit) {
-        updatedFields.name = formState.name;
-      }
-      if (formState.type !== typeEdit) {
-        updatedFields.type = formState.type;
-      }
-      if (formState.description !== descriptionEdit) {
+      if (formState.name !== nameEdit) updatedFields.name = formState.name;
+      if (formState.type !== typeEdit) updatedFields.type = formState.type;
+      if (formState.description !== descriptionEdit)
         updatedFields.description = formState.description;
-      }
-      if (formState.startAt !== startAtEdit) {
+      if (formState.startAt !== startAtEdit)
         updatedFields.startAt = formState.startAt;
-      }
-      if (formState.endAt !== endAtEdit) {
-        updatedFields.endAt = formState.endAt;
-      }
+      if (formState.endAt !== endAtEdit) updatedFields.endAt = formState.endAt;
 
-      // if both are updated, check if end date is greater or not
       if (updatedFields.endAt && updatedFields.startAt) {
         const startDate = dayjs(updatedFields.startAt).startOf('day');
         const endDate = dayjs(updatedFields.endAt).startOf('day');
-
         if (!endDate.isAfter(startDate)) {
           toast.error(t('endDateGreater') as string);
           return;
@@ -314,25 +303,26 @@ function AdvertisementRegister({
         ? dayjs.utc(formState.endAt).startOf('day').toISOString()
         : null;
 
-      const mutationVariables = {
+      const mutationVariables: any = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
-        ...(updatedFields.attachments && {
-          attachments: updatedFields.attachments,
-        }),
         ...(updatedFields.description && {
           description: updatedFields.description,
         }),
         ...(updatedFields.type && { type: updatedFields.type }),
+        ...(formState.attachments && {
+          attachments: formState.attachments.map((a) => ({
+            mimetype: a.mimeType,
+            url: a.url,
+          })),
+        }),
         ...(startAt && { startAt }),
         ...(endAt && { endAt }),
       };
 
-      // query to update the advertisement.
       const { data } = await updateAdvertisement({
         variables: mutationVariables,
       });
-
       if (data) {
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
@@ -358,22 +348,19 @@ function AdvertisementRegister({
           onClick={handleShow}
           data-testid="createAdvertisement"
         >
-          <i className="fa fa-plus" />
-          &nbsp;
-          {t('createAdvertisement')}
+          <i className="fa fa-plus" /> &nbsp; {t('createAdvertisement')}
         </Button>
       ) : (
         <div onClick={handleShow} data-testid="editBtn">
           {tCommon('edit')}
         </div>
       )}
+
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          {formStatus === 'register' ? (
-            <Modal.Title> {t('addNew')}</Modal.Title>
-          ) : (
-            <Modal.Title>{t('editAdvertisement')}</Modal.Title>
-          )}
+          <Modal.Title>
+            {formStatus === 'register' ? t('addNew') : t('editAdvertisement')}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -385,16 +372,14 @@ function AdvertisementRegister({
                 autoComplete="off"
                 required
                 value={formState.name}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
-                }}
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
                 className={styles.inputField}
                 data-cy="advertisementNameInput"
               />
             </Form.Group>
+
             <Form.Group className="mb-3" controlId="registerForm.Rdesc">
               <Form.Label>{t('Rdesc')}</Form.Label>
               <Form.Control
@@ -402,16 +387,14 @@ function AdvertisementRegister({
                 placeholder={t('EXdesc')}
                 autoComplete="off"
                 value={formState.description || ''}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    description: e.target.value,
-                  });
-                }}
+                onChange={(e) =>
+                  setFormState({ ...formState, description: e.target.value })
+                }
                 className={styles.inputField}
                 data-cy="advertisementDescriptionInput"
               />
             </Form.Group>
+
             {formStatus === 'register' && (
               <Form.Group className="mb-3">
                 <Form.Label htmlFor="advertisementMedia">
@@ -428,57 +411,51 @@ function AdvertisementRegister({
                   className={styles.inputField}
                   data-cy="advertisementMediaInput"
                 />
-                {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
-                  <div key={index}>
-                    {file.type.startsWith('video/') ? (
-                      <video
-                        data-testid="mediaPreview"
-                        controls
-                        src={encodeURI(URL.createObjectURL(file))}
-                        className={styles.previewAdvertisementRegister}
-                      >
-                        <track
-                          kind="captions"
-                          srcLang="en"
-                          label="English captions"
+
+                {(formState.attachments || []).map(
+                  (file: any, index: number) => (
+                    <div key={index}>
+                      {file.localFile?.type.startsWith('video/') ? (
+                        <video
+                          data-testid="mediaPreview"
+                          controls
+                          src={URL.createObjectURL(file.localFile)}
+                          className={styles.previewAdvertisementRegister}
                         />
-                      </video>
-                    ) : (
-                      <img
-                        data-testid="mediaPreview"
-                        src={encodeURI(URL.createObjectURL(file))}
-                        alt="Preview"
-                        className={styles.previewAdvertisementRegister}
-                      />
-                    )}
-                    <Button
-                      variant="danger"
-                      data-testid="closePreview"
-                      className={styles.removeButton}
-                      onClick={() => removeFile(index)}
-                    >
-                      <FaTrashCan />
-                    </Button>
-                  </div>
-                ))}
+                      ) : (
+                        <img
+                          data-testid="mediaPreview"
+                          src={URL.createObjectURL(file.localFile)}
+                          alt="Preview"
+                          className={styles.previewAdvertisementRegister}
+                        />
+                      )}
+                      <Button
+                        variant="danger"
+                        data-testid="closePreview"
+                        className={styles.removeButton}
+                        onClick={() => removeFile(index)}
+                      >
+                        <FaTrashCan />
+                      </Button>
+                    </div>
+                  ),
+                )}
               </Form.Group>
             )}
+
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
               <Form.Label>{t('Rtype')}</Form.Label>
               <Form.Select
                 aria-label={t('Rtype')}
                 value={formState.type}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    type: e.target.value,
-                  });
-                }}
+                onChange={(e) =>
+                  setFormState({ ...formState, type: e.target.value })
+                }
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">Banner Ad </option>
+                <option value="banner">Banner Ad</option>
                 <option value="pop_up">Popup Ad</option>
                 <option value="menu">Menu Ad</option>
               </Form.Select>
@@ -494,13 +471,10 @@ function AdvertisementRegister({
                     ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
                     : ''
                 }
-                onChange={(e): void => {
+                onChange={(e) => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
-                  setFormState({
-                    ...formState,
-                    startAt: newDate,
-                  });
+                  setFormState({ ...formState, startAt: newDate });
                 }}
                 className={styles.inputField}
               />
@@ -515,13 +489,10 @@ function AdvertisementRegister({
                     ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
                     : ''
                 }
-                onChange={(e): void => {
+                onChange={(e) => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
-                  setFormState({
-                    ...formState,
-                    endAt: newDate,
-                  });
+                  setFormState({ ...formState, endAt: newDate });
                 }}
                 className={styles.inputField}
               />

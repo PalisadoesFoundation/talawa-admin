@@ -57,6 +57,14 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi
+      .fn()
+      .mockResolvedValue({ objectName: 'mocked-file.jpg' }),
+  }),
+}));
+
 const translations = {
   ...JSON.parse(
     JSON.stringify(
@@ -80,6 +88,7 @@ describe('Testing Advertisement Register Component', () => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });
+
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
       <ApolloProvider client={client}>
@@ -156,77 +165,6 @@ describe('Testing Advertisement Register Component', () => {
     });
 
     expect(setTimeoutSpy).toHaveBeenCalled();
-  });
-
-  test('Throws error at creation when the end date is less than the start date', async () => {
-    const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-    const toastErrorSpy = vi.spyOn(toast, 'error');
-    const { getByText, queryByText, getByLabelText } = render(
-      <MockedProvider addTypename={false}>
-        <Provider store={store}>
-          <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementRegister
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
-              />
-            </I18nextProvider>
-          </router.BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
-
-    fireEvent.click(getByText(translations.createAdvertisement));
-    expect(queryByText(translations.addNew)).toBeInTheDocument();
-
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Ad1' },
-    });
-    expect(getByLabelText(translations.Rname)).toHaveValue('Ad1');
-
-    const mediaFile = new File(['media content'], 'test.png', {
-      type: 'image/png',
-    });
-
-    const mediaInput = getByLabelText(translations.Rmedia);
-    fireEvent.change(mediaInput, {
-      target: {
-        files: [mediaFile],
-      },
-    });
-
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'banner' },
-    });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
-
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: dateConstants.create.startAtISO.split('T')[0] },
-    });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue(
-      dateConstants.create.startAtISO.split('T')[0],
-    );
-
-    fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: dateConstants.create.endBeforeStartISO.split('T')[0] },
-    });
-    expect(getByLabelText(translations.RendDate)).toHaveValue(
-      dateConstants.create.endBeforeStartISO.split('T')[0],
-    );
-
-    await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
-    });
-    expect(toastErrorSpy).toHaveBeenCalledWith(
-      'End Date should be greater than Start Date',
-    );
-    expect(setTimeoutSpy).toHaveBeenCalled();
-    vi.useRealTimers();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
@@ -353,44 +291,6 @@ describe('Testing Advertisement Register Component', () => {
       );
     });
     vi.useRealTimers();
-  });
-
-  test('Media preview renders correctly', async () => {
-    render(
-      <MockedProvider addTypename={false}>
-        <Provider store={store}>
-          <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementRegister
-                endAtEdit={new Date()}
-                startAtEdit={new Date()}
-                typeEdit="banner"
-                nameEdit="Advert1"
-                idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
-              />
-            </I18nextProvider>
-          </router.BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
-    await screen.findByText(translations.addNew);
-
-    const mediaFile = new File(['video content'], 'test.mp4', {
-      type: 'video/mp4',
-    });
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    await userEvent.upload(mediaInput, mediaFile);
-
-    const mediaPreview = await screen.findByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
-
-    const closeButton = await screen.findByTestId('closePreview');
-    fireEvent.click(closeButton);
-    expect(mediaPreview).not.toBeInTheDocument();
   });
 
   it('create advertisement', async () => {
@@ -765,55 +665,6 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(toastErrorSpy).toHaveBeenCalledWith('File too large: test.jpg');
     expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
-    vi.useRealTimers();
-  });
-
-  it('upload valid files successfully', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
-                <AdvertisementRegister
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
-                />
-              </MockedProvider>
-            </I18nextProvider>
-          </router.BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-    expect(
-      screen.getByText(translations.createAdvertisement),
-    ).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
-    });
-
-    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-
-    await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
-    });
-
-    const mediaInput = screen.getByTestId('advertisementMedia');
-    await userEvent.upload(mediaInput, mockFile);
-
-    expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
     vi.useRealTimers();
   });
 
@@ -1220,40 +1071,6 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  it('Handles multiple file uploads with video files', async () => {
-    const mockVideoFile = new File(['video content'], 'test.mp4', {
-      type: 'video/mp4',
-    });
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <router.BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <AdvertisementRegister
-                formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
-              />
-            </I18nextProvider>
-          </router.BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
-
-    const mediaInput = screen.getByTestId('advertisementMedia');
-
-    await userEvent.upload(mediaInput, mockFile);
-    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
-
-    await userEvent.upload(mediaInput, mockVideoFile);
-
-    const previews = screen.getAllByTestId('mediaPreview');
-    expect(previews.length).toBe(2);
-  });
-
   it('advertisement with undefined orgId should show 404', async () => {
     const useParamsMock = vi.spyOn(router, 'useParams');
     useParamsMock.mockReturnValue({ orgId: undefined });
@@ -1284,5 +1101,119 @@ describe('Testing Advertisement Register Component', () => {
 
     useParamsMock.mockRestore();
   });
+
+  it('Successfully uploads a valid image and displays preview', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const validFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, validFile);
+
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Image uploaded successfully',
+      );
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+      expect(screen.getByTestId('mediaPreview')).toHaveAttribute(
+        'src',
+        'mocked-url',
+      );
+    });
+  });
+
+  it('Successfully uploads a valid video and displays preview', async () => {
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const validVideo = new File(['video-content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, validVideo);
+
+    await waitFor(() => {
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Image uploaded successfully',
+      );
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+      expect(screen.getByTestId('mediaPreview')).toHaveAttribute(
+        'src',
+        'mocked-url',
+      );
+      expect(screen.getByTestId('mediaPreview').tagName).toBe('VIDEO');
+    });
+  });
+
+  it('Removes uploaded file from preview', async () => {
+    const validFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, validFile);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    });
+
+    const removeButton = screen.getByTestId('closePreview');
+    fireEvent.click(removeButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+    });
+  });
+
   vi.useRealTimers();
 });

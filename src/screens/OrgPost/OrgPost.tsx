@@ -15,7 +15,9 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import convertToBase64 from 'utils/convertToBase64';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { validateFile } from 'utils/fileValidation';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
@@ -27,6 +29,7 @@ import type {
   InterfaceOrganizationPostListData,
   InterfaceMutationCreatePostInput,
   InterfacePost,
+  InterfacePostAttachment,
 } from '../../types/Post/interface';
 
 /**
@@ -41,14 +44,26 @@ function OrgPost(): JSX.Element {
   document.title = t('title');
 
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
-  const [postformState, setPostFormState] = useState({
+  const [postformState, setPostFormState] = useState<{
+    posttitle: string;
+    postinfo: string;
+    postImage: string;
+    postVideo: string;
+    addMedia: string;
+    pinPost: boolean;
+    attachments: InterfacePostAttachment[];
+  }>({
     posttitle: '',
     postinfo: '',
     postImage: '',
     postVideo: '',
     addMedia: '',
     pinPost: false,
+    attachments: [],
   });
+  // Initialize MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
   const [sortingOption, setSortingOption] = useState('None');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -89,6 +104,7 @@ function OrgPost(): JSX.Element {
       postVideo: '',
       addMedia: '',
       pinPost: false,
+      attachments: [],
     });
   };
 
@@ -127,13 +143,8 @@ function OrgPost(): JSX.Element {
         caption: postformState.posttitle.trim(),
         organizationId: currentUrl,
         isPinned: postformState.pinPost,
+        attachments: postformState.attachments,
       };
-
-      // Handle file upload
-      if (file instanceof File) {
-        // With apollo-upload-client, we can directly pass the File object
-        input.attachments = [file];
-      }
 
       const { data } = await create({
         variables: { input },
@@ -154,6 +165,7 @@ function OrgPost(): JSX.Element {
           postVideo: '',
           addMedia: '',
           pinPost: false,
+          attachments: [],
         });
         setFile(null);
         setPostModalIsOpen(false);
@@ -167,15 +179,13 @@ function OrgPost(): JSX.Element {
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const selectedFile = e.target.files?.[0];
+    const files = e.target.files;
+    const selectedFile = files?.[0];
 
     if (selectedFile) {
       // Validate file type
-      if (
-        !selectedFile.type.startsWith('image/') &&
-        !selectedFile.type.startsWith('video/')
-      ) {
-        toast.error('Please select an image or video file');
+      if (!selectedFile.type.startsWith('image/')) {
+        toast.error('Please select an image file');
         return;
       }
 
@@ -184,12 +194,36 @@ function OrgPost(): JSX.Element {
       }
 
       setFile(selectedFile);
+      // Validate file before upload
+      const validation = validateFile(selectedFile);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
 
       try {
-        const base64 = await convertToBase64(selectedFile);
-        setPostFormState((prev) => ({ ...prev, addMedia: base64 }));
+        // Upload to MinIO and get object name
+        const { objectName, fileHash } = await uploadFileToMinio(
+          selectedFile,
+          currentUrl!,
+        );
+        const previewUrl = await getFileFromMinio(objectName, currentUrl!);
+        const attachment: InterfacePostAttachment = {
+          mimeType: selectedFile.type,
+          name: selectedFile.name,
+          objectName,
+          fileHash,
+        };
+        setPostFormState((prev) => ({
+          ...prev,
+          addMedia: previewUrl,
+          postImage: objectName,
+          attachments: [...prev.attachments, attachment],
+        }));
+        toast.success('Image uploaded successfully');
       } catch {
-        toast.error('Could not generate preview');
+        console.error('Error uploading image:', error);
+        toast.error('Image upload failed');
       }
     } else {
       setFile(null);
@@ -207,11 +241,24 @@ function OrgPost(): JSX.Element {
         return;
       }
       setVideoFile(selectedFile);
+      // Validate file before upload
+      const validation = validateFile(selectedFile);
+      if (!validation.isValid) {
+        toast.error(validation.errorMessage);
+        return;
+      }
       try {
-        const base64 = await convertToBase64(selectedFile);
-        setVideoPreview(base64);
+        const { objectName } = await uploadFileToMinio(
+          selectedFile,
+          currentUrl!,
+        );
+        const previewVideo = await getFileFromMinio(objectName, currentUrl!);
+        setPostFormState((prev) => ({ ...prev, postVideo: objectName }));
+        setVideoPreview(previewVideo);
+        toast.success('Video uploaded successfully');
       } catch {
-        toast.error('Could not generate video preview');
+        console.error('Error uploading video:', error);
+        toast.error('Video upload failed');
       }
     } else {
       setVideoFile(null);

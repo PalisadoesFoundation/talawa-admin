@@ -15,9 +15,17 @@ import {
   UPDATE_COMMUNITY_PG,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
+import * as fileValidation from 'utils/fileValidation';
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
+}));
+
+const mockUploadFileToMinio = vi.fn();
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  }),
 }));
 
 const MOCKS1 = [
@@ -196,18 +204,6 @@ const ERROR_MOCK = [
   },
 ];
 
-const BASE64_MOCKS = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: null,
-      },
-    },
-  },
-];
 const UPDATE_SUCCESS_MOCKS = [
   {
     request: {
@@ -292,6 +288,11 @@ vi.mock('react-toastify', () => ({
 describe('Testing Community Profile Screen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUploadFileToMinio.mockReset();
+  });
+
+  afterEach(() => {
+    mockUploadFileToMinio.mockReset();
   });
 
   test('Components should render properly', async () => {
@@ -504,9 +505,15 @@ describe('Testing Community Profile Screen', () => {
     );
   });
 
-  test('should handle null base64 conversion when updating logo', async () => {
+  test('should upload logo successfully to MinIO', async () => {
+    // mock uploadFileToMinio success
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'uploads/test.png',
+      fileHash: 'abc123',
+    });
+
     render(
-      <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -515,22 +522,70 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    const mockFile = new File([''], 'test.png', { type: 'image/png' });
-    vi.mock('utils/convertToBase64', () => ({
-      default: vi.fn().mockResolvedValue(null),
-    }));
-
-    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    fireEvent.change(fileInput, {
-      target: { files: [mockFile] },
-    });
     await wait();
 
-    // Ensure state or UI behavior when base64 conversion fails
-    expect(fileInput.value).toBe('');
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const file = new File(['file-content'], 'test.png', { type: 'image/png' });
 
-    // Ensure no success toast is shown for null conversion
-    expect(toast.success).not.toHaveBeenCalled();
+    await userEvent.upload(fileInput, file);
+
+    await wait(150);
+
+    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organizations');
+    expect(toast.success).toHaveBeenCalledWith('Logo uploaded successfully');
+  });
+
+  test('should handle upload error from MinIO correctly', async () => {
+    mockUploadFileToMinio.mockRejectedValue(new Error('Upload failed'));
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const file = new File(['file-content'], 'test.png', { type: 'image/png' });
+
+    await userEvent.upload(fileInput, file);
+    await wait(150);
+
+    expect(toast.error).toHaveBeenCalledWith('Logo upload failed');
+  });
+
+  test('should show error toast for file exceeding max size', async () => {
+    const largeFile = new File(
+      [new Array(6 * 1024 * 1024).join('a')],
+      'large.png',
+      {
+        type: 'image/png',
+      },
+    );
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+    await userEvent.upload(fileInput, largeFile);
+    await wait(100);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      expect.stringContaining('File is too large'),
+    );
   });
 
   test('should show success toast when profile is updated successfully', async () => {
