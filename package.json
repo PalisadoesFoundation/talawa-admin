@@ -23,7 +23,7 @@
     "@mui/system": "^7.0.1",
     "@mui/x-charts": "^8.5.2",
     "@mui/x-data-grid": "^7.28.3",
-    "@mui/x-date-pickers": "^7.28.3",
+    "@mui/x-date-pickers": "^8.3.1",
     "@pdfme/common": "^5.2.11",
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
@@ -218,6 +218,7 @@
     "graphql": "^16.5.0"
   },
   "optionalDependencies": {
+    "@esbuild/darwin-arm64": "^0.25.9",
     "@rollup/rollup-darwin-arm64": "^4.46.2",
     "@rollup/rollup-darwin-x64": "^4.46.2",
     "@rollup/rollup-linux-x64-gnu": "^4.46.2",
