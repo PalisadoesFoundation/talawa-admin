@@ -216,6 +216,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
             <FormControl fullWidth className="mb-2">
               <TextField
                 label={t('postCompletionNotes')}
+                data-cy="postCompletionNotes"
                 variant="outlined"
                 className={styles.noOutline}
                 value={postCompletionNotes}
@@ -276,7 +277,11 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   </Button>
                   {/* Only show 'complete for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
-                    <Button type="submit" className={styles.addButton}>
+                    <Button
+                      type="submit"
+                      className={styles.addButton}
+                      data-cy="markCompletionForSeries"
+                    >
                       {t('completeForSeries')}
                     </Button>
                   )}

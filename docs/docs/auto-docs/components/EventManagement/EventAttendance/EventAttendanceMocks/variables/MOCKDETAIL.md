@@ -64,7 +64,7 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### result.data.event.endDate
 
-> **endDate**: `string` = `'2023-05-02'`
+> **endDate**: `string` = `'2030-05-02'`
 
 #### result.data.event.endTime
 
@@ -92,7 +92,7 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### result.data.event.startDate
 
-> **startDate**: `string` = `'2023-05-01'`
+> **startDate**: `string` = `'2030-05-01'`
 
 #### result.data.event.startTime
 
