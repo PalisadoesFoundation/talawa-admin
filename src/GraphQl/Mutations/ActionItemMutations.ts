@@ -97,7 +97,6 @@ export const DELETE_ACTION_ITEM_MUTATION = gql`
     }
   }
 `;
-
 /**
  * GraphQL mutation to mark action item as pending.
  * New mutation for status updates.
@@ -107,45 +106,8 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     markActionItemAsPending(input: $input) {
       id
       isCompleted
-    }
-  }
-`;
-export const COMPLETE_ACTION_ITEM_FOR_INSTANCE = gql`
-  mutation CompleteActionItemForInstance(
-    $input: MutationCompleteActionItemForInstanceInput!
-  ) {
-    completeActionItemForInstance(input: $input) {
-      id
-    }
-  }
-`;
-export const MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE = gql`
-  mutation MarkActionItemAsPendingForInstance(
-    $input: MutationMarkActionAsPendingForInstanceInput!
-  ) {
-    markActionItemAsPendingForInstance(input: $input) {
-      id
-    }
-  }
-`;
-export const UPDATE_ACTION_ITEM_FOR_INSTANCE = gql`
-  mutation UpdateActionItemForInstance(
-    $input: MutationUpdateActionItemForInstanceInput!
-  ) {
-    updateActionItemForInstance(input: $input) {
-      id
-    }
-  }
-`;
-
-export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
-  mutation DeleteActionItemForInstance(
-    $input: MutationDeleteActionItemForInstanceInput!
-  ) {
-    deleteActionItemForInstance(input: $input) {
-      id
+      createdAt
       postCompletionNotes
-      updatedAt
     }
   }
 `;

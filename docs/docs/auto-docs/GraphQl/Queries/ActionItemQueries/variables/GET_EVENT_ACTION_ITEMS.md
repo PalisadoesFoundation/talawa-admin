@@ -6,4 +6,4 @@
 
 > `const` **GET\_EVENT\_ACTION\_ITEMS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L61)
+Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L55)

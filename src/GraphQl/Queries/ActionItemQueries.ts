@@ -30,10 +30,6 @@ export const ACTION_ITEM_LIST = gql`
         id
         name
       }
-      recurringEventInstance {
-        id
-        name
-      }
       organization {
         id
         name
@@ -52,8 +48,6 @@ export const ACTION_ITEM_LIST = gql`
       isCompleted
       preCompletionNotes
       postCompletionNotes
-      isInstanceException
-      isTemplate
     }
   }
 `;
