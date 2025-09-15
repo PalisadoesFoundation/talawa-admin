@@ -80,6 +80,7 @@
   "none": "Aucun",
   "sort": "Trier",
   "Donate": "Faire un don",
+  "Transactions": "Transactions",
   "addedSuccessfully": "{{item}} ajouté avec succès",
   "updatedSuccessfully": "{{item}} mis à jour avec succès",
   "removedSuccessfully": "{{item}} supprimé avec succès",

@@ -4,7 +4,7 @@
  */
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { IActionItemCategoryInfo } from 'types/Actions/interface';
+import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
