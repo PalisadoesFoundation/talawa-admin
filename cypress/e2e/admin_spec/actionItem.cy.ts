@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+import '../../support/commands';
 import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 
