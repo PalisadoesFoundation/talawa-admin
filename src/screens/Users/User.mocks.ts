@@ -16,9 +16,6 @@ export const MOCKS = [
           name: 'John Doe',
           avatarURL: '',
           emailAddress: 'John_Does_Palasidoes@gmail.com',
-          name: 'John Doe',
-          avatarURL: '',
-          emailAddress: 'John_Does_Palasidoes@gmail.com',
         },
       },
     },
@@ -27,9 +24,6 @@ export const MOCKS = [
     request: {
       query: USER_LIST,
       variables: {
-        input: {
-          ids: '123', // Match loggedInUserId from beforeEach
-        },
         input: {
           ids: '123', // Match loggedInUserId from beforeEach
         },
@@ -44,7 +38,7 @@ export const MOCKS = [
             name: 'John Doe',
             emailAddress: 'john@example.com',
             avatarURL: null,
-            createdAt: '2022-06-20T00:00:00.000Z',
+            createdAt: '2030-06-20T00:00:00.000Z',
             city: 'Kingston',
             state: 'Kingston Parish',
             countryCode: 'JM',
@@ -56,16 +50,10 @@ export const MOCKS = [
                     id: 'org1',
                     name: 'Organization 1',
                     avatarURL: null,
-                    createdAt: '2022-06-20T00:00:00.000Z',
+                    createdAt: '2030-06-20T00:00:00.000Z',
                     city: 'Kingston',
                     state: 'Kingston Parish',
                     countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
-                    },
                     creator: {
                       id: 'user1',
                       name: 'John Doe',
@@ -76,13 +64,6 @@ export const MOCKS = [
                 },
               ],
             },
-            createdOrganizations: [
-              {
-                id: 'org1',
-                name: 'Organization 1',
-                avatarURL: null,
-              },
-            ],
             createdOrganizations: [
               {
                 id: 'org1',
@@ -96,7 +77,7 @@ export const MOCKS = [
             name: 'Jane Doe',
             emailAddress: 'jane@example.com',
             avatarURL: null,
-            createdAt: '2022-06-20T00:00:00.000Z',
+            createdAt: '2030-06-20T00:00:00.000Z',
             city: 'Kingston',
             state: 'Kingston Parish',
             countryCode: 'JM',
@@ -108,16 +89,10 @@ export const MOCKS = [
                     id: 'org1',
                     name: 'Organization 1',
                     avatarURL: null,
-                    createdAt: '2022-06-20T00:00:00.000Z',
+                    createdAt: '2030-06-20T00:00:00.000Z',
                     city: 'Kingston',
                     state: 'Kingston Parish',
                     countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
-                    },
                     creator: {
                       id: 'user1',
                       name: 'John Doe',
@@ -128,7 +103,6 @@ export const MOCKS = [
                 },
               ],
             },
-            createdOrganizations: [],
             createdOrganizations: [],
           },
         ],
@@ -144,7 +118,6 @@ export const MOCKS = [
         organizations: [
           {
             id: 'org1',
-            id: 'org1',
             image: null,
             creator: {
               firstName: 'John',
@@ -154,20 +127,16 @@ export const MOCKS = [
             members: [
               {
                 id: 'user1',
-                id: 'user1',
               },
               {
-                id: 'user2',
                 id: 'user2',
               },
             ],
             admins: [
               {
                 id: 'user1',
-                id: 'user1',
               },
               {
-                id: 'user2',
                 id: 'user2',
               },
             ],
@@ -213,9 +182,6 @@ export const MOCKS2 = [
         input: {
           ids: '123', // Match loggedInUserId from beforeEach
         },
-        input: {
-          ids: '123', // Match loggedInUserId from beforeEach
-        },
       },
     },
     result: {
@@ -227,7 +193,7 @@ export const MOCKS2 = [
             name: 'John Doe',
             emailAddress: 'john@example.com',
             avatarURL: null,
-            createdAt: '2022-06-20T00:00:00.000Z',
+            createdAt: '2030-06-20T00:00:00.000Z',
             city: 'Kingston',
             state: 'Kingston Parish',
             countryCode: 'JM',
@@ -239,16 +205,10 @@ export const MOCKS2 = [
                     id: 'org1',
                     name: 'Organization 1',
                     avatarURL: null,
-                    createdAt: '2022-06-20T00:00:00.000Z',
+                    createdAt: '2030-06-20T00:00:00.000Z',
                     city: 'Kingston',
                     state: 'Kingston Parish',
                     countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
-                    },
                     creator: {
                       id: 'user1',
                       name: 'John Doe',
@@ -259,7 +219,6 @@ export const MOCKS2 = [
                 },
               ],
             },
-            createdOrganizations: [],
             createdOrganizations: [],
           },
         ],
@@ -275,7 +234,6 @@ export const MOCKS2 = [
         organizations: [
           {
             id: 'org1',
-            id: 'org1',
             image: null,
             creator: {
               firstName: 'John',
@@ -285,12 +243,10 @@ export const MOCKS2 = [
             members: [
               {
                 id: 'user1',
-                id: 'user1',
               },
             ],
             admins: [
               {
-                id: 'user1',
                 id: 'user1',
               },
             ],
