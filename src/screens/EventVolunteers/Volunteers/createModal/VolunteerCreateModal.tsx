@@ -34,7 +34,7 @@ import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -61,18 +61,16 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
 
   const [userId, setUserId] = useState<string>('');
-  const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
+    variables: { organizationId: orgId },
   });
 
-  useEffect(() => {
-    if (memberData) {
-      setMembers(memberData.organizations[0].members);
-    }
-  }, [memberData]);
+  const members = useMemo(
+    () => membersData?.usersByOrganizationId || [],
+    [membersData],
+  );
 
   // Function to add a volunteer for an event
   const addVolunteerHandler = useCallback(
@@ -118,13 +116,13 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               limitTags={2}
               data-testid="membersSelect"
               options={members}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+                member.name
               }
               onChange={(_, newVolunteer): void => {
-                setUserId(newVolunteer?._id ?? '');
+                setUserId(newVolunteer?.id ?? '');
               }}
               renderInput={(params) => <TextField {...params} label="Member" />}
             />

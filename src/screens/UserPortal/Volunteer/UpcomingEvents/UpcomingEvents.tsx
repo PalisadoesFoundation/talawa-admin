@@ -76,6 +76,7 @@ import type { InterfaceUserEvents } from 'utils/interfaces';
 import { IoIosHand } from 'react-icons/io';
 import Loader from 'components/Loader/Loader';
 import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/PlugInQueries';
+import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
@@ -118,9 +119,67 @@ const UpcomingEvents = (): JSX.Element => {
         variables: { data: { event: eventId, group, status, userId } },
       });
       toast.success(t('volunteerSuccess'));
-      refetchEvents();
+      // Refetch membership data first, then events with a small delay to prevent rate limiting
+      await refetchMemberships();
+      setTimeout(() => {
+        refetchEvents();
+      }, 500);
     } catch (error) {
       toast.error((error as Error).message);
+    }
+  };
+
+  // Helper function to get volunteer status and button configuration
+  // Uses the same color scheme as EventVolunteers/Volunteers component
+  const getVolunteerStatus = (eventId: string, groupId?: string) => {
+    const key = groupId ? `${eventId}-${groupId}` : eventId;
+    const membership = membershipLookup[key];
+
+    if (!membership) {
+      return {
+        status: 'none',
+        buttonText: groupId ? t('join') : t('volunteer'),
+        buttonVariant: 'outline-success' as const,
+        disabled: false,
+        icon: IoIosHand,
+      };
+    }
+
+    // Match the exact color scheme from EventVolunteers/Volunteers component
+    switch (membership.status) {
+      case 'requested':
+      case 'invited':
+        return {
+          status: 'requested',
+          buttonText: t('pending'),
+          buttonVariant: 'outline-warning' as const,
+          disabled: true,
+          icon: IoIosHand,
+        };
+      case 'accepted':
+        return {
+          status: 'accepted',
+          buttonText: groupId ? t('joined') : t('volunteered'),
+          buttonVariant: 'outline-success' as const,
+          disabled: true,
+          icon: FaCheck,
+        };
+      case 'rejected':
+        return {
+          status: 'rejected',
+          buttonText: t('rejected'),
+          buttonVariant: 'outline-danger' as const,
+          disabled: true,
+          icon: IoIosHand,
+        };
+      default:
+        return {
+          status: 'none',
+          buttonText: groupId ? t('join') : t('volunteer'),
+          buttonVariant: 'outline-success' as const,
+          disabled: false,
+          icon: IoIosHand,
+        };
     }
   };
 
@@ -131,31 +190,89 @@ const UpcomingEvents = (): JSX.Element => {
     error: eventsError,
     refetch: refetchEvents,
   }: {
-    data?: { eventsByOrganizationConnection: InterfaceUserEvents[] };
+    data?: {
+      organization: {
+        events: {
+          edges: Array<{ node: InterfaceUserEvents }>;
+        };
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(USER_EVENTS_VOLUNTEER, {
     variables: {
-      organization_id: orgId,
-      title_contains: searchBy === 'title' ? searchTerm : '',
-      location_contains: searchBy === 'location' ? searchTerm : '',
+      organizationId: orgId,
       upcomingOnly: true,
-      first: null,
-      skip: null,
+      first: 30,
     },
+    fetchPolicy: 'cache-first', // Use cache-first to reduce network requests
+    errorPolicy: 'all', // Handle rate limiting errors gracefully
   });
+
+  // Fetch user's volunteer memberships to get status information
+  const {
+    data: membershipData,
+    refetch: refetchMemberships,
+    loading: membershipLoading,
+  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+    variables: {
+      where: { userId },
+    },
+    skip: !userId,
+    fetchPolicy: 'cache-first', // Use cache-first to reduce network requests
+    errorPolicy: 'all', // Handle errors gracefully
+  });
+
+  // Create a lookup map for user's volunteer memberships
+  const membershipLookup = useMemo(() => {
+    if (!membershipData?.getVolunteerMembership) {
+      console.log('No membership data found:', membershipData);
+      return {};
+    }
+
+    console.log('Membership data:', membershipData.getVolunteerMembership);
+
+    const lookup: Record<string, any> = {};
+    membershipData.getVolunteerMembership.forEach((membership: any) => {
+      const key = membership.group
+        ? `${membership.event.id}-${membership.group.id}`
+        : membership.event.id;
+      console.log(`Creating lookup key: ${key}, status: ${membership.status}`);
+      lookup[key] = membership;
+    });
+    return lookup;
+  }, [membershipData]);
 
   // Extracts the list of upcoming events from the fetched data
   const events = useMemo(() => {
-    if (eventsData) {
-      return eventsData.eventsByOrganizationConnection;
+    if (eventsData?.organization?.events?.edges) {
+      return eventsData.organization.events.edges.map((edge: any) => {
+        const event: any = {
+          ...edge.node,
+          _id: edge.node.id,
+          title: edge.node.name,
+          startDate: edge.node.startAt,
+          endDate: edge.node.endAt,
+          recurring: edge.node.isRecurringEventTemplate || false,
+          volunteerGroups:
+            edge.node.volunteerGroups?.map((group: any) => ({
+              _id: group.id,
+              name: group.name,
+              description: group.description,
+              volunteersRequired: group.volunteersRequired,
+              volunteers: group.volunteers || [],
+            })) || [],
+          volunteers: edge.node.volunteers || [],
+        };
+        return event;
+      });
     }
     return [];
   }, [eventsData]);
 
-  // Renders a loader while events are being fetched
-  if (eventsLoading) return <Loader size="xl" />;
+  // Renders a loader while events or membership data are being fetched
+  if (eventsLoading || membershipLoading) return <Loader size="xl" />;
   if (eventsError) {
     // Displays an error message if there is an issue loading the events
     return (
@@ -206,7 +323,7 @@ const UpcomingEvents = (): JSX.Element => {
           {t('noEvents')}
         </Stack>
       ) : (
-        events.map((event: InterfaceUserEvents, index: number) => {
+        events.map((event: any, index: number) => {
           const {
             title,
             description,
@@ -218,9 +335,11 @@ const UpcomingEvents = (): JSX.Element => {
             _id,
             volunteers,
           } = event;
-          const isVolunteered = volunteers.some(
-            (volunteer) => volunteer.user._id === userId,
-          );
+
+          // Get volunteer status for individual volunteering
+          const volunteerStatus = getVolunteerStatus(_id);
+          const Icon = volunteerStatus.icon;
+
           return (
             <Accordion className="mt-3 rounded" key={_id}>
               <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
@@ -257,20 +376,18 @@ const UpcomingEvents = (): JSX.Element => {
                       variant={
                         new Date(endDate) < new Date()
                           ? 'outline-secondary'
-                          : 'outline-success'
+                          : volunteerStatus.buttonVariant
                       }
                       data-testid="volunteerBtn"
-                      disabled={isVolunteered || new Date(endDate) < new Date()}
+                      disabled={
+                        volunteerStatus.disabled ||
+                        new Date(endDate) < new Date()
+                      }
                       onClick={() => handleVolunteer(_id, null, 'requested')}
                       className={styles.outlineBtn}
                     >
-                      {isVolunteered ? (
-                        <FaCheck className="me-1" />
-                      ) : (
-                        <IoIosHand className="me-1" size={21} />
-                      )}
-
-                      {t(isVolunteered ? 'volunteered' : 'volunteer')}
+                      <Icon className="me-1" size={21} />
+                      {volunteerStatus.buttonText}
                     </Button>
                   </div>
                 </div>
@@ -312,11 +429,13 @@ const UpcomingEvents = (): JSX.Element => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {volunteerGroups.map((group, index) => {
+                          {volunteerGroups.map((group: any, index: number) => {
                             const { _id: gId, name, volunteers } = group;
-                            const hasJoined = volunteers.some(
-                              (volunteer) => volunteer._id === userId,
-                            );
+
+                            // Get volunteer status for this specific group
+                            const groupStatus = getVolunteerStatus(_id, gId);
+                            const GroupIcon = groupStatus.icon;
+
                             return (
                               <TableRow
                                 key={gId}
@@ -340,19 +459,22 @@ const UpcomingEvents = (): JSX.Element => {
                                     variant={
                                       new Date(endDate) < new Date()
                                         ? 'outline-secondary'
-                                        : 'outline-success'
+                                        : groupStatus.buttonVariant
                                     }
                                     size="sm"
                                     data-testid="joinBtn"
                                     disabled={
-                                      hasJoined ||
+                                      groupStatus.disabled ||
                                       new Date(endDate) < new Date()
                                     }
                                     onClick={() =>
                                       handleVolunteer(_id, gId, 'requested')
                                     }
                                   >
-                                    {t(hasJoined ? 'joined' : 'join')}
+                                    {groupStatus.status !== 'none' && (
+                                      <GroupIcon className="me-1" size={16} />
+                                    )}
+                                    {groupStatus.buttonText}
                                   </Button>
                                 </TableCell>
                               </TableRow>

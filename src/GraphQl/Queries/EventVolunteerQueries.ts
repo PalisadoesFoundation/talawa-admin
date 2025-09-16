@@ -15,72 +15,73 @@ export const EVENT_VOLUNTEER_LIST = gql`
     $orderBy: EventVolunteersOrderByInput
   ) {
     getEventVolunteers(where: $where, orderBy: $orderBy) {
-      _id
+      id
       hasAccepted
+      volunteerStatus
       hoursVolunteered
+      isPublic
+      createdAt
+      updatedAt
       user {
-        _id
-        firstName
-        lastName
-        image
+        id
+        name
+        avatarURL
       }
-      assignments {
-        _id
+      event {
+        id
+        name
+      }
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
       }
       groups {
-        _id
+        id
         name
+        description
         volunteers {
-          _id
+          id
         }
       }
     }
   }
 `;
-
 export const EVENT_VOLUNTEER_GROUP_LIST = gql`
   query GetEventVolunteerGroups(
     $where: EventVolunteerGroupWhereInput!
     $orderBy: EventVolunteerGroupOrderByInput
   ) {
     getEventVolunteerGroups(where: $where, orderBy: $orderBy) {
-      _id
+      id
       name
       description
       volunteersRequired
       createdAt
       creator {
-        _id
-        firstName
-        lastName
-        image
+        id
+        name
+        avatarURL
       }
       leader {
-        _id
-        firstName
-        lastName
-        image
+        id
+        name
+        avatarURL
       }
       volunteers {
-        _id
+        id
+        hasAccepted
         user {
-          _id
-          firstName
-          lastName
-          image
-        }
-      }
-      assignments {
-        _id
-        actionItemCategory {
-          _id
+          id
           name
+          avatarURL
         }
-        allottedHours
-        isCompleted
       }
       event {
-        _id
+        id
       }
     }
   }
@@ -92,26 +93,38 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
     $orderBy: VolunteerMembershipOrderByInput
   ) {
     getVolunteerMembership(where: $where, orderBy: $orderBy) {
-      _id
+      id
       status
       createdAt
+      updatedAt
       event {
-        _id
-        title
-        startDate
+        id
+        name
+        startAt
+        endAt
       }
       volunteer {
-        _id
+        id
+        hasAccepted
+        hoursVolunteered
         user {
-          _id
-          firstName
-          lastName
-          image
+          id
+          name
+          avatarURL
         }
       }
-      group {
-        _id
+      createdBy {
+        id
         name
+      }
+      updatedBy {
+        id
+        name
+      }
+      group {
+        id
+        name
+        description
       }
     }
   }
@@ -123,11 +136,9 @@ export const VOLUNTEER_RANKING = gql`
       rank
       hoursVolunteered
       user {
-        _id
-        lastName
-        firstName
-        image
-        email
+        id
+        name
+        avatarURL
       }
     }
   }

@@ -407,7 +407,7 @@ function EventListCardModals({
   };
 
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(
-    (attendee) => attendee._id === userId,
+    (attendee) => attendee.id === userId,
   );
   const [isRegistered, setIsRegistered] = useState(isInitiallyRegistered);
 

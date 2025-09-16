@@ -42,10 +42,11 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfo,
+  InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -117,17 +118,21 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     name: group?.name ?? '',
     description: group?.description ?? '',
     leader: group?.leader ?? null,
-    volunteerUsers: group?.volunteers.map((volunteer) => volunteer.user) ?? [],
+    volunteerUsers: group?.volunteers?.map((volunteer) => volunteer.user) ?? [],
     volunteersRequired: group?.volunteersRequired ?? null,
   });
-  const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
+    variables: { organizationId: orgId },
   });
+
+  const members = useMemo(
+    () => membersData?.usersByOrganizationId || [],
+    [membersData],
+  );
 
   useEffect(() => {
     setFormState({
@@ -139,12 +144,6 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       volunteersRequired: group?.volunteersRequired ?? null,
     });
   }, [group]);
-
-  useEffect(() => {
-    if (memberData) {
-      setMembers(memberData.organizations[0].members);
-    }
-  }, [memberData]);
 
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
@@ -169,7 +168,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       try {
         await updateVolunteerGroup({
           variables: {
-            id: group?._id,
+            id: group?.id,
             data: { ...updatedFields, eventId },
           },
         });
@@ -192,11 +191,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           variables: {
             data: {
               eventId,
-              leaderId: leader?._id,
+              leaderId: leader?.id,
               name,
               description,
               volunteersRequired,
-              volunteerUserIds: volunteerUsers.map((user) => user._id),
+              volunteerUserIds: volunteerUsers.map((user) => user.id),
             },
           },
         });
@@ -280,10 +279,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               options={members}
               value={leader}
               disabled={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
               onChange={(_, newLeader): void => {
                 if (newLeader) {
@@ -297,7 +296,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                     ...formState,
                     leader: null,
                     volunteerUsers: volunteerUsers.filter(
-                      (user) => user._id !== leader?._id,
+                      (user) => user.id !== leader?.id,
                     ),
                   });
                 }
@@ -317,10 +316,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               data-testid="volunteerSelect"
               options={members}
               value={volunteerUsers}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
               disabled={mode === 'edit'}
               onChange={(_, newUsers): void => {

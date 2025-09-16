@@ -563,6 +563,57 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
   }
 `;
 
+// Balanced query for volunteer events - essential data without rate limiting
+export const USER_EVENTS_VOLUNTEER = gql`
+  query GetUserEventsVolunteer(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+  ) {
+    organization(input: { id: $id }) {
+      events(first: $first, after: $after, startDate: $startDate) {
+        edges {
+          node {
+            # Essential event fields
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+            isPublic
+            isRegisterable
+
+            # Volunteer data needed for UI functionality
+            volunteerGroups {
+              id
+              name
+              volunteersRequired
+              description
+              volunteers {
+                id
+              }
+            }
+            volunteers {
+              id
+
+              user {
+                id
+              }
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_POSTS_PG = gql`
   query GetOrganizationPosts($id: String!, $first: Int) {
     organization(input: { id: $id }) {

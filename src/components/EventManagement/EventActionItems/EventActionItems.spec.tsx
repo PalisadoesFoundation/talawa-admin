@@ -164,10 +164,9 @@ const mockActionItem: IActionItemInfo = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'userId2',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
+      id: 'userId2',
+      name: 'Jane Smith',
+      emailAddress: 'jane@example.com',
       createdAt: new Date('2024-01-01T00:00:00.000Z'),
     },
   },

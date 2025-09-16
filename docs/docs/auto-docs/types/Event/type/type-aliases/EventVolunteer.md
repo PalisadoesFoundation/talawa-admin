@@ -6,23 +6,15 @@
 
 > **EventVolunteer** = `object`
 
-Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L86)
+Defined in: [src/types/Event/type.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L84)
 
 ## Properties
-
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/types/Event/type.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L87)
-
-***
 
 ### createdAt
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L88)
+Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L89)
 
 ***
 
@@ -30,7 +22,7 @@ Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation
 
 > `optional` **creator**: [`User`](User.md)
 
-Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L89)
+Defined in: [src/types/Event/type.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L93)
 
 ***
 
@@ -38,37 +30,53 @@ Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation
 
 > `optional` **event**: [`Event`](Event.md)
 
-Defined in: [src/types/Event/type.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L90)
-
-***
-
-### isAssigned?
-
-> `optional` **isAssigned**: `boolean`
-
-Defined in: [src/types/Event/type.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L91)
-
-***
-
-### isInvited?
-
-> `optional` **isInvited**: `boolean`
-
 Defined in: [src/types/Event/type.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L92)
 
 ***
 
-### response?
+### hasAccepted
 
-> `optional` **response**: `string`
+> **hasAccepted**: `boolean`
 
-Defined in: [src/types/Event/type.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L93)
+Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L86)
+
+***
+
+### hoursVolunteered
+
+> **hoursVolunteered**: `number`
+
+Defined in: [src/types/Event/type.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L87)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/Event/type.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L85)
+
+***
+
+### isPublic
+
+> **isPublic**: `boolean`
+
+Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L88)
 
 ***
 
 ### updatedAt
 
 > **updatedAt**: `Date`
+
+Defined in: [src/types/Event/type.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L90)
+
+***
+
+### updater?
+
+> `optional` **updater**: [`User`](User.md)
 
 Defined in: [src/types/Event/type.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L94)
 
@@ -78,4 +86,4 @@ Defined in: [src/types/Event/type.ts:94](https://github.com/PalisadoesFoundation
 
 > **user**: [`User`](User.md)
 
-Defined in: [src/types/Event/type.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L95)
+Defined in: [src/types/Event/type.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L91)

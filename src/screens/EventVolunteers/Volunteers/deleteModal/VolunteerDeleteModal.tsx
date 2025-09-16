@@ -62,7 +62,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deleteVolunteer({ variables: { id: volunteer._id } });
+      await deleteVolunteer({ variables: { id: volunteer.id } });
       refetchVolunteers();
       hide();
       toast.success(t('volunteerRemoved'));

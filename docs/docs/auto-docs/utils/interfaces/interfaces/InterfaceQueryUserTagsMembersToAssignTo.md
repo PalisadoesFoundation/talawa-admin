@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
-Defined in: [src/utils/interfaces.ts:1566](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1566)
+Defined in: [src/utils/interfaces.ts:1569](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1569)
 
 InterfaceQueryUserTagsMembersToAssignTo
 
@@ -18,7 +18,7 @@ Defines the structure for a query result containing user tags and members availa
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1567](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1567)
+Defined in: [src/utils/interfaces.ts:1570](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1570)
 
 The name of the user tag.
 
@@ -28,6 +28,6 @@ The name of the user tag.
 
 > **usersToAssignTo**: `InterfaceTagMembersData`
 
-Defined in: [src/utils/interfaces.ts:1568](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1568)
+Defined in: [src/utils/interfaces.ts:1571](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1571)
 
 The members available to assign data.

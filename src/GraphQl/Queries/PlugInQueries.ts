@@ -122,45 +122,47 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
 
 export const USER_EVENTS_VOLUNTEER = gql`
   query UserEventsVolunteer(
-    $organization_id: ID!
-    $title_contains: String
-    $location_contains: String
-    $first: Int
-    $skip: Int
+    $organizationId: String!
     $upcomingOnly: Boolean
+    $first: Int
   ) {
-    eventsByOrganizationConnection(
-      where: {
-        organization_id: $organization_id
-        title_contains: $title_contains
-        location_contains: $location_contains
-      }
-      first: $first
-      skip: $skip
-      upcomingOnly: $upcomingOnly
-    ) {
-      _id
-      title
-      startDate
-      endDate
-      location
-      startTime
-      endTime
-      allDay
-      recurring
-      volunteerGroups {
-        _id
-        name
-        volunteersRequired
-        description
-        volunteers {
-          _id
-        }
-      }
-      volunteers {
-        _id
-        user {
-          _id
+    organization(input: { id: $organizationId }) {
+      id
+      events(upcomingOnly: $upcomingOnly, first: $first) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+            allDay
+            isRecurringEventTemplate
+            volunteers {
+              id
+              hasAccepted
+              volunteerStatus
+              user {
+                id
+                name
+              }
+            }
+            volunteerGroups {
+              id
+              name
+              description
+              volunteersRequired
+              volunteers {
+                id
+                hasAccepted
+                user {
+                  id
+                  name
+                }
+              }
+            }
+          }
         }
       }
     }

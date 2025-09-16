@@ -46,9 +46,9 @@ const mockEventListCardProps = {
   isRegisterable: true,
   attendees: [],
   creator: {
-    _id: 'creator123',
-    firstName: 'John',
-    lastName: 'Doe',
+    id: 'creator123',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
   },
   userRole: UserRole.ADMINISTRATOR,
   isRecurringTemplate: false,

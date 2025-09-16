@@ -73,6 +73,7 @@ enum VolunteerStatus {
   All = 'all',
   Pending = 'pending',
   Accepted = 'accepted',
+  Rejected = 'rejected',
 }
 
 enum ModalState {
@@ -177,10 +178,28 @@ function volunteers(): JSX.Element {
     [],
   );
 
-  const volunteers = useMemo(
-    () => volunteersData?.getEventVolunteers || [],
-    [volunteersData],
-  );
+  const volunteers = useMemo(() => {
+    const allVolunteers = volunteersData?.getEventVolunteers || [];
+
+    // Apply client-side filtering based on volunteerStatus
+    if (status === VolunteerStatus.All) {
+      return allVolunteers;
+    } else if (status === VolunteerStatus.Pending) {
+      return allVolunteers.filter(
+        (volunteer) => volunteer.volunteerStatus === 'pending',
+      );
+    } else if (status === VolunteerStatus.Rejected) {
+      return allVolunteers.filter(
+        (volunteer) => volunteer.volunteerStatus === 'rejected',
+      );
+    } else if (status === VolunteerStatus.Accepted) {
+      return allVolunteers.filter(
+        (volunteer) => volunteer.volunteerStatus === 'accepted',
+      );
+    }
+
+    return allVolunteers;
+  }, [volunteersData, status]);
 
   if (volunteersLoading) {
     return <Loader size="xl" />;
@@ -208,15 +227,15 @@ function volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.user;
+        const { id, name, avatarURL } = params.row.user;
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="volunteerName"
           >
-            {image ? (
+            {avatarURL ? (
               <img
-                src={image}
+                src={avatarURL}
                 alt="volunteer"
                 data-testid="volunteer_image"
                 className={styles.TableImages}
@@ -224,16 +243,16 @@ function volunteers(): JSX.Element {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={_id + '1'}
+                  key={id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImages}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
+                  name={name}
+                  alt={name}
                 />
               </div>
             )}
-            {firstName + ' ' + lastName}
+            {name}
           </div>
         );
       },
@@ -248,13 +267,40 @@ function volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
+        const status = params.row.volunteerStatus;
+        const getStatusInfo = (status: string) => {
+          switch (status) {
+            case 'accepted':
+              return {
+                label: 'Accepted',
+                color: 'success' as const,
+                className: styles.active,
+              };
+            case 'rejected':
+              return {
+                label: 'Rejected',
+                color: 'error' as const,
+                className: styles.rejected,
+              };
+            case 'pending':
+            default:
+              return {
+                label: 'Pending',
+                color: 'warning' as const,
+                className: styles.pending,
+              };
+          }
+        };
+
+        const statusInfo = getStatusInfo(status);
+
         return (
           <Chip
             icon={<Circle className={styles.chipIcon} />}
-            label={params.row.hasAccepted ? 'Accepted' : 'Pending'}
+            label={statusInfo.label}
             variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.hasAccepted ? styles.active : styles.pending}`}
+            color={statusInfo.color}
+            className={`${styles.chip} ${statusInfo.className}`}
           />
         );
       },
@@ -278,25 +324,25 @@ function volunteers(): JSX.Element {
         );
       },
     },
-    {
-      field: 'actionItem',
-      headerName: 'Actions Completed',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="actionNos"
-          >
-            {params.row.assignments.length}
-          </div>
-        );
-      },
-    },
+    // {
+    //   field: 'actionItem',
+    //   headerName: 'Actions Completed',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   sortable: false,
+    //   headerClassName: `${styles.tableHeader}`,
+    //   flex: 1,
+    //   renderCell: (params: GridCellParams) => {
+    //     return (
+    //       <div
+    //         className="d-flex justify-content-center fw-bold"
+    //         data-testid="actionNos"
+    //       >
+    //         {params.row.assignments.length}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: 'options',
       headerName: 'Options',
@@ -373,6 +419,7 @@ function volunteers(): JSX.Element {
                 { label: tCommon('all'), value: VolunteerStatus.All },
                 { label: tCommon('pending'), value: VolunteerStatus.Pending },
                 { label: t('accepted'), value: VolunteerStatus.Accepted },
+                { label: t('rejected'), value: VolunteerStatus.Rejected },
               ]}
               selectedOption={status}
               onSortChange={(value) => setStatus(value as VolunteerStatus)}
@@ -401,7 +448,7 @@ function volunteers(): JSX.Element {
         disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -413,10 +460,7 @@ function volunteers(): JSX.Element {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={volunteers.map((volunteer, index) => ({
-          id: index + 1,
-          ...volunteer,
-        }))}
+        rows={volunteers}
         columns={columns}
         isRowSelectable={() => false}
       />

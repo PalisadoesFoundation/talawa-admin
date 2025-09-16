@@ -57,7 +57,7 @@ const VolunteerGroupDeleteModal: React.FC<
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deleteVolunteerGroup({ variables: { id: group?._id } });
+      await deleteVolunteerGroup({ variables: { id: group?.id } });
       refetchGroups();
       hide();
       toast.success(t('volunteerGroupDeleted'));

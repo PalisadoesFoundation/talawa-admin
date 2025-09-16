@@ -23,10 +23,9 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Standalone event fields
     isRecurringTemplate: false,
@@ -59,10 +58,9 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Recurring instance fields
     isRecurringTemplate: false,

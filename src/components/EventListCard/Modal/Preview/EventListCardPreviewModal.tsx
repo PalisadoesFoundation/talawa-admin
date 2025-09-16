@@ -84,7 +84,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
   // Check if the user has permission to edit the event
   const canEditEvent =
-    eventListCardProps.creator?._id === userId ||
+    eventListCardProps.creator?.id === userId ||
     eventListCardProps.userRole === UserRole.ADMINISTRATOR;
 
   const getDayName = (dayIndex: number): string => {
@@ -481,7 +481,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             </Button>
           )}
           {eventListCardProps.userRole === UserRole.REGULAR &&
-            !(eventListCardProps.creator?._id === userId) &&
+            !(eventListCardProps.creator?.id === userId) &&
             (isRegistered ? (
               <Button className={styles.addButton} variant="success" disabled>
                 {t('alreadyRegistered')}
