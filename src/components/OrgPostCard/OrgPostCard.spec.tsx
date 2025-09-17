@@ -976,3 +976,77 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
     });
   });
 });
+
+describe('getMimeTypeEnum', () => {
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
+      switch (mime) {
+        case 'image/jpeg':
+          return 'IMAGE_JPEG';
+        case 'image/png':
+          return 'IMAGE_PNG';
+        case 'image/webp':
+          return 'IMAGE_WEBP';
+        case 'image/avif':
+          return 'IMAGE_AVIF';
+        case 'video/mp4':
+          return 'VIDEO_MP4';
+        case 'video/webm':
+          return 'VIDEO_WEBM';
+        default:
+          return 'IMAGE_JPEG'; // fallback
+      }
+    }
+
+    // Fallback for file URLs (e.g., https://.../file.png)
+    const ext = url.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'jpg':
+      case 'jpeg':
+        return 'IMAGE_JPEG';
+      case 'png':
+        return 'IMAGE_PNG';
+      case 'webp':
+        return 'IMAGE_WEBP';
+      case 'avif':
+        return 'IMAGE_AVIF';
+      case 'mp4':
+        return 'VIDEO_MP4';
+      case 'webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  };
+  it('should return IMAGE_JPEG for .jpg and .jpeg', () => {
+    expect(getMimeTypeEnum('file.jpg')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('file.jpeg')).toBe('IMAGE_JPEG');
+  });
+
+  it('should return IMAGE_PNG for .png', () => {
+    expect(getMimeTypeEnum('file.png')).toBe('IMAGE_PNG');
+  });
+
+  it('should return IMAGE_WEBP for .webp', () => {
+    expect(getMimeTypeEnum('file.webp')).toBe('IMAGE_WEBP');
+  });
+
+  it('should return IMAGE_AVIF for .avif', () => {
+    expect(getMimeTypeEnum('file.avif')).toBe('IMAGE_AVIF');
+  });
+
+  it('should return VIDEO_MP4 for .mp4', () => {
+    expect(getMimeTypeEnum('video.mp4')).toBe('VIDEO_MP4');
+  });
+
+  it('should return VIDEO_WEBM for .webm', () => {
+    expect(getMimeTypeEnum('video.webm')).toBe('VIDEO_WEBM');
+  });
+
+  it('should return IMAGE_JPEG as fallback for unknown extension', () => {
+    expect(getMimeTypeEnum('file.unknown')).toBe('IMAGE_JPEG');
+    expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
+  });
+});

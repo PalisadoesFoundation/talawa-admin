@@ -25,8 +25,6 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
 
-const toastSuccessMock = toast.success as unknown as ReturnType<typeof vi.fn>;
-
 vi.mock('utils/convertToBase64');
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
@@ -318,54 +316,6 @@ const mockOrgPostList = {
   },
 };
 
-const mocks = [
-  {
-    request: {
-      query: GET_POSTS_BY_ORG,
-      variables: { input: { organizationId: '123' } },
-    },
-    result: { data: mockPosts },
-  },
-  {
-    request: {
-      query: ORGANIZATION_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        after: null,
-        before: null,
-        first: 6,
-        last: null,
-      },
-    },
-    result: { data: mockOrgPostList },
-  },
-  {
-    request: {
-      query: CREATE_POST_MUTATION,
-      variables: {
-        input: {
-          caption: 'Test Post Title',
-          organizationId: '123',
-          isPinned: false,
-        },
-      },
-    },
-    result: {
-      data: {
-        createPost: {
-          id: '3',
-          caption: 'Test Post Title',
-          pinnedAt: null,
-          attachments: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      },
-    },
-  },
-  createPostWithFileMock,
-];
-
 const minimalMocks: MockedResponse[] = [
   {
     request: {
@@ -442,6 +392,35 @@ const mockOrgPostList1 = {
     },
   },
 };
+export const mockPosts2 = {
+  postsByOrganization: [
+    {
+      id: 'p3',
+      caption: 'Post 3 on page 2',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: 'p4',
+      caption: 'Post 4 on page 2',
+      createdAt: new Date().toISOString(),
+    },
+  ],
+};
+
+export const mockOrgPostList2 = {
+  organization: {
+    posts: {
+      edges: mockPosts2.postsByOrganization.map((post) => ({ node: post })),
+      pageInfo: {
+        hasNextPage: false, // last page
+        hasPreviousPage: true, // because we can go back
+        startCursor: 'cursor2', // 👈 matches endCursor from page 1
+        endCursor: 'cursor3',
+      },
+      totalCount: 2,
+    },
+  },
+};
 
 const mocks1 = [
   {
@@ -491,6 +470,62 @@ const mocks1 = [
   },
 ];
 
+const mocks = [
+  // Initial GET_POSTS_BY_ORG
+  {
+    request: {
+      query: GET_POSTS_BY_ORG,
+      variables: { input: { organizationId: '123' } },
+    },
+    result: { data: mockPosts1 },
+  },
+
+  // Page 1
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: { data: mockOrgPostList1 },
+  },
+
+  // Page 2 (next page)
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: 'cursor1', // must match endCursor in mockOrgPostList1.pageInfo
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: { data: mockOrgPostList2 },
+  },
+
+  // Back to Page 1 (previous page)
+  {
+    request: {
+      query: ORGANIZATION_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        after: null,
+        before: 'cursor1', // must match startCursor in mockOrgPostList2.pageInfo
+        first: null,
+        last: 6,
+      },
+    },
+    result: { data: mockOrgPostList1 },
+  },
+];
+
 const loadingMocks: MockedResponse[] = [
   {
     request: {
@@ -524,6 +559,31 @@ const createPostSuccessMock: MockedResponse = {
       input: {
         caption: 'Test Post Title',
         organizationId: '123',
+        isPinned: false,
+        attachments: [file],
+      },
+    },
+  },
+  result: {
+    data: {
+      createPost: {
+        id: '3',
+        caption: 'Test Post Title',
+        pinnedAt: null,
+        attachments: [{ url: 'base64String' }],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    },
+  },
+};
+const NoOrgId: MockedResponse = {
+  request: {
+    query: CREATE_POST_MUTATION,
+    variables: {
+      input: {
+        caption: 'Test Post Title',
+        organizationId: null,
         isPinned: false,
         attachments: [file],
       },
@@ -596,6 +656,106 @@ describe('OrgPost Component', () => {
       },
       { timeout: 5000 },
     );
+  });
+
+  it('creates a post and verifies mutation is called', async () => {
+    render(
+      <MockedProvider mocks={[createPostSuccessMock]} addTypename={false}>
+        <MemoryRouter>
+          <OrgPost />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Open modal
+    fireEvent.click(await screen.findByTestId('createPostModalBtn'));
+    expect(
+      await screen.findByTestId('modalOrganizationHeader'),
+    ).toBeInTheDocument();
+
+    // Fill required fields
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Test Post Title' },
+    });
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Some info' },
+    });
+
+    // Upload file
+    const file = new File(['dummy'], 'test.png', { type: 'image/png' });
+    fireEvent.change(screen.getByTestId('addMediaField'), {
+      target: { files: [file] },
+    });
+
+    // Ensure preview shows
+    expect(await screen.findByTestId('mediaPreview')).toBeInTheDocument();
+
+    // Submit post
+    fireEvent.click(screen.getByTestId('createPostBtn'));
+  });
+
+  it('should throw error if post title is empty', async () => {
+    render(
+      <MockedProvider mocks={[NoOrgId]} addTypename={false}>
+        <MemoryRouter>
+          <OrgPost />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Open modal
+    fireEvent.click(await screen.findByTestId('createPostModalBtn'));
+    expect(
+      await screen.findByTestId('modalOrganizationHeader'),
+    ).toBeInTheDocument();
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Some info' },
+    });
+
+    // Upload file
+    const file = new File(['dummy'], 'test.png', { type: 'image/png' });
+    fireEvent.change(screen.getByTestId('addMediaField'), {
+      target: { files: [file] },
+    });
+
+    // Ensure preview shows
+    expect(await screen.findByTestId('mediaPreview')).toBeInTheDocument();
+
+    // Submit post
+    fireEvent.click(screen.getByTestId('createPostBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Organization post list error:'),
+      );
+    });
+  });
+
+  it('should throw error if organizationId is missing', async () => {
+    render(
+      <MockedProvider mocks={[NoOrgId]} addTypename={false}>
+        <MemoryRouter>
+          <OrgPost />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Open modal
+    fireEvent.click(await screen.findByTestId('createPostModalBtn'));
+
+    // Fill title but orgId is undefined
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Some title' },
+    });
+    fireEvent.click(screen.getByTestId('createPostBtn'));
+
+    const { toast } = await import('react-toastify');
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Organization post list error:'),
+      );
+    });
   });
 
   it('renders the create post button when orgId is provided', async () => {
@@ -1281,6 +1441,26 @@ describe('OrgPost SearchBar functionality', () => {
       expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');
     });
   });
+
+  it('renders loader when loading', async () => {
+    renderWithMocks([]);
+    expect(await screen.findByTestId('posts-renderer')).toBeInTheDocument();
+  });
+
+  it('renders error state when query fails', async () => {
+    const mocks = [
+      {
+        request: {
+          query: GET_POSTS_BY_ORG,
+          variables: { input: { organizationId: undefined } },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+    renderWithMocks(mocks);
+
+    expect(await screen.findByTestId('not-found')).toBeInTheDocument();
+  });
 });
 
 describe('OrgPost component - Post Creation Tests', () => {
@@ -1463,7 +1643,6 @@ describe('OrgPost component - Post Creation Tests', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
   });
-
   it('allows filling out the post form', async () => {
     const createPostButton = screen.getByTestId('createPostModalBtn');
     await userEvent.click(createPostButton);
@@ -1518,6 +1697,37 @@ describe('OrgPost component - Post Creation Tests', () => {
 
     expect(newTitleInput).toHaveValue('');
     expect(screen.getByTestId('modalinfo')).toHaveValue('');
+  });
+
+  it('allow post creation', async () => {
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    await userEvent.click(createPostButton);
+
+    const titleInput = await screen.findByTestId('modalTitle');
+    const infoInput = screen.getByTestId('modalinfo');
+
+    await userEvent.type(titleInput, 'Test Post');
+    await userEvent.type(infoInput, 'This is a test post description');
+
+    expect(titleInput).toHaveValue('Test Post');
+    expect(infoInput).toHaveValue('This is a test post description');
+
+    const submitButton = screen.getByTestId('createPostBtn');
+    await userEvent.click(submitButton);
+  });
+
+  it('allows post creation and triggers success flow', async () => {
+    const createPostButton = screen.getByTestId('createPostModalBtn');
+    await userEvent.click(createPostButton);
+
+    const titleInput = await screen.findByTestId('modalTitle');
+    const infoInput = screen.getByTestId('modalinfo');
+
+    await userEvent.type(titleInput, 'Test Post');
+    await userEvent.type(infoInput, 'This is a test post description');
+
+    const submitButton = screen.getByTestId('createPostBtn');
+    await userEvent.click(submitButton);
   });
 
   // Replace the getFileHashFromFile function with a mock

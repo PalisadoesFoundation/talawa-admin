@@ -140,13 +140,6 @@ function OrgPost(): JSX.Element {
     e.preventDefault();
 
     try {
-      if (!postformState.posttitle.trim()) {
-        throw new Error('Title field cannot be empty');
-      }
-
-      if (!currentUrl) {
-        throw new Error('Organization ID is required');
-      }
       let attachment = null;
       if (file && typeof file !== 'string') {
         const fileName = file.name.split('/').pop() || 'defaultFileName';
@@ -205,10 +198,6 @@ function OrgPost(): JSX.Element {
       ) {
         toast.error('Please select an image or video file');
         return;
-      }
-
-      if (filteredPosts.length === 0) {
-        toast.error('No filtered posts found');
       }
 
       setFile(selectedFile);
@@ -308,9 +297,6 @@ function OrgPost(): JSX.Element {
       setDisplayPosts([]);
 
       refetchPosts({ input: { organizationId: currentUrl } });
-      return;
-    }
-    if (loading || error || !data?.postsByOrganization) {
       return;
     }
 
@@ -441,6 +427,7 @@ function OrgPost(): JSX.Element {
                   ]}
                   selectedOption={sortingOption}
                   onSortChange={handleSorting}
+                  data-testid="sorting"
                   dataTestIdPrefix="sortpost-toggle"
                   dropdownTestId="sortpost-dropdown"
                 />
