@@ -191,6 +191,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('Check if All details are rendered correctly', async () => {
+    vi.setSystemTime(new Date('2025-01-01'));
     renderCampaigns(link1);
 
     const detailContainer = await screen.findByTestId('detailContainer1');
@@ -209,6 +210,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer2).toHaveTextContent('2022-08-30');
       expect(detailContainer2).toHaveTextContent('Ended');
     });
+    vi.useRealTimers();
   });
 
   it('Sort the Campaigns list by lowest fundingGoal', async () => {
@@ -233,7 +235,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent('2024-08-31');
     });
   });
 
@@ -259,7 +261,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent('2024-08-31');
     });
   });
 
@@ -285,7 +287,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent('2024-08-31');
     });
   });
 
@@ -333,6 +335,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('open and closes add pledge modal', async () => {
+    vi.setSystemTime(new Date('2025-01-01'));
     renderCampaigns(link1);
 
     const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
@@ -346,6 +349,7 @@ describe('Testing User Campaigns Screen', () => {
     await waitFor(() =>
       expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
     );
+    vi.useRealTimers();
   });
 
   it('Redirect to My Pledges screen', async () => {
@@ -359,4 +363,4 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
     });
   });
-});
+});            
