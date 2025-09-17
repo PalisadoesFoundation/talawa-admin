@@ -268,4 +268,4 @@ export const USER_FUND_CAMPAIGNS_ERROR = [
     error: new Error('Error fetching campaigns'),
   },
   userDetailsQuery,
-];        
+];

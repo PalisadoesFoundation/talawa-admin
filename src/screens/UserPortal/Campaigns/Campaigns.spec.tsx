@@ -363,4 +363,4 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
     });
   });
-});            
+});
