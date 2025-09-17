@@ -4,7 +4,7 @@
 
 # Interface: UpdatePluginInput
 
-Defined in: [src/plugin/graphql-service.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L29)
+Defined in: [src/plugin/graphql-service.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L32)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/graphql-service.ts:29](https://github.com/PalisadoesFoun
 
 > `optional` **backup**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L33)
+Defined in: [src/plugin/graphql-service.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L36)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/graphql-service.ts:33](https://github.com/PalisadoesFoun
 
 > **id**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L30)
+Defined in: [src/plugin/graphql-service.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L33)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/graphql-service.ts:30](https://github.com/PalisadoesFoun
 
 > `optional` **isActivated**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L31)
+Defined in: [src/plugin/graphql-service.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L34)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/plugin/graphql-service.ts:31](https://github.com/PalisadoesFoun
 
 > `optional` **isInstalled**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L32)
+Defined in: [src/plugin/graphql-service.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L35)

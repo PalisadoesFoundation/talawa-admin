@@ -501,7 +501,16 @@
     "groups": "समूहों",
     "assignTo": "सौंपें",
     "volunteers": "स्वयंसेवक",
-    "volunteerGroups": "स्वयंसेवक समूह"
+    "volunteerGroups": "स्वयंसेवक समूह",
+    "applyTo": "लागू करें",
+    "entireSeries": "पूरी श्रृंखला",
+    "thisEventOnly": "केवल यह घटना",
+    "updateThisInstance": "इस इंस्टेंस को अपडेट करें",
+    "pendingForInstance": "इस उदाहरण के लिए लंबित",
+    "pendingForSeries": "श्रृंखला के लिए लंबित",
+    "completeForInstance": "इस उदाहरण के लिए पूर्ण",
+    "completeForSeries": "श्रृंखला के लिए पूर्ण",
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -772,6 +781,7 @@
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
+    "title": "इवेंट मैनेजमेंट",
     "dashboard": "डैशबोर्ड",
     "registrants": "कुलसचिव",
     "attendance": "उपस्थिति",
@@ -1199,6 +1209,31 @@
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
     "donateTo": "दान करें"
+  },
+  "transactions": {
+    "title": "लेन-देन",
+    "transactionsFor": "के लिए लेन-देन",
+    "transactionHistory": "लेन-देन का इतिहास",
+    "searchTransactions": "लेन-देन खोजें",
+    "userName": "उपयोगकर्ता का नाम",
+    "amount": "राशि",
+    "type": "प्रकार",
+    "status": "स्थिति",
+    "date": "तारीख",
+    "transactionId": "लेन-देन आईडी",
+    "completed": "पूर्ण",
+    "pending": "लंबित",
+    "failed": "विफल",
+    "donation": "दान",
+    "payment": "भुगतान",
+    "refund": "धनवापसी",
+    "loading": "लोड हो रहा है...",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "managingTransactionsFor": "के लिए लेन-देन प्रबंधन",
+    "latestFirst": "नवीनतम पहले",
+    "earliestFirst": "सबसे पहले",
+    "noTransactionsFound": "कोई लेन-देन नहीं मिला",
+    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
   },
   "userEvents": {
     "name": "ईवेंट",

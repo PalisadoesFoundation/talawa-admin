@@ -88,6 +88,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'Volunteer',
     testId: 'Icon-Component-Volunteer',
   },
+  Transactions: {
+    name: 'Transactions',
+    testId: 'Icon-Component-Transactions',
+  },
   default: {
     name: 'default',
     testId: 'Icon-Component-DefaultIcon',
