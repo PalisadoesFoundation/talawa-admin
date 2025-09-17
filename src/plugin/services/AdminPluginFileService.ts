@@ -233,10 +233,6 @@ export class AdminPluginFileService {
         };
       }
 
-      console.log(
-        `Plugin ${pluginId} installed successfully (${response.filesWritten} files)`,
-      );
-
       return {
         success: true,
         pluginId,

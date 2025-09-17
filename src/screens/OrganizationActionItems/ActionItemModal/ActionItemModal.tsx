@@ -17,7 +17,7 @@ import type {
   IActionItemInfo,
   ICreateActionItemInput,
   IUpdateActionItemInput,
-} from 'types/Actions/interface';
+} from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
-  UPDATE_ACTION_FOR_INSTANCE,
+  UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
@@ -137,9 +137,12 @@ const ItemModal: FC<IItemModalProps> = ({
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
 
-  const [updateActionForInstance] = useMutation(UPDATE_ACTION_FOR_INSTANCE, {
-    refetchQueries: ['GetEventActionItems'],
-  });
+  const [updateActionForInstance] = useMutation(
+    UPDATE_ACTION_ITEM_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
 
   const handleFormChange = (
     field: keyof IFormStateType,
@@ -369,6 +372,7 @@ const ItemModal: FC<IItemModalProps> = ({
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="categorySelect"
+              data-cy="categorySelect"
               options={actionItemCategories}
               value={actionItemCategory}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -396,6 +400,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 <Autocomplete
                   className={`${styles.noOutline} w-100`}
                   data-testid="memberSelect"
+                  data-cy="memberSelect"
                   options={members}
                   value={assigneeUser}
                   isOptionEqualToValue={(option, value) =>
@@ -435,6 +440,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 <TextField
                   label={t('preCompletionNotes')}
                   variant="outlined"
+                  data-cy="preCompletionNotes"
                   className={styles.noOutline}
                   value={preCompletionNotes}
                   onChange={(e) =>
@@ -464,6 +470,7 @@ const ItemModal: FC<IItemModalProps> = ({
             type="submit"
             className={styles.addButton}
             data-testid="submitBtn"
+            data-cy="submitBtn"
           >
             {editMode ? t('updateActionItem') : t('createActionItem')}
           </Button>

@@ -10,7 +10,7 @@ import i18nForTest from '../../../utils/i18nForTest';
 import { vi } from 'vitest';
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 
 // Mock dependencies
 vi.mock('react-router', async () => {

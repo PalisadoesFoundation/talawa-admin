@@ -12,10 +12,10 @@ import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
-  UPDATE_ACTION_FOR_INSTANCE,
+  UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 
 // Mock the toast functions
 vi.mock('react-toastify', () => ({
@@ -1027,7 +1027,7 @@ describe('updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1171,7 +1171,7 @@ describe('updateActionForInstanceHandler', () => {
   it('should handle mutation error and show error toast', async () => {
     const errorUpdateMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1241,7 +1241,7 @@ describe('updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1318,7 +1318,7 @@ describe('updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1393,7 +1393,7 @@ describe('updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1468,7 +1468,7 @@ describe('updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -1545,7 +1545,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (
@@ -2171,7 +2171,7 @@ describe('orgActionItemsRefetch functionality', () => {
 
     const updateMutationMock = {
       request: {
-        query: UPDATE_ACTION_FOR_INSTANCE,
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
       variableMatcher: (variables: any) => {
         return (

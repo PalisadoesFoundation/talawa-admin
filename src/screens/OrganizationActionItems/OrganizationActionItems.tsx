@@ -20,7 +20,10 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type { IActionItemInfo, IActionItemList } from 'types/Actions/interface';
+import type {
+  IActionItemInfo,
+  IActionItemList,
+} from 'types/ActionItems/interface';
 
 import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
@@ -460,6 +463,7 @@ function OrganizationActionItems(): JSX.Element {
             onClick={() => handleModalClick(null, ModalState.SAME)}
             className={styles.createButton}
             data-testid="createActionItemBtn"
+            data-cy="createActionItemBtn"
           >
             <i className={'fa fa-plus me-2'} />
             {tCommon('create')}

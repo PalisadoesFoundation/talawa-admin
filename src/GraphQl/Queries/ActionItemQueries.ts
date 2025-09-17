@@ -52,7 +52,6 @@ export const ACTION_ITEM_LIST = gql`
       isCompleted
       preCompletionNotes
       postCompletionNotes
-      hasExceptions
       isInstanceException
       isTemplate
     }
@@ -69,7 +68,7 @@ export const GET_EVENT_ACTION_ITEMS = gql`
       baseEvent {
         id
       }
-      actionItems(first: 10) {
+      actionItems(first: 20) {
         edges {
           node {
             id
@@ -77,8 +76,6 @@ export const GET_EVENT_ACTION_ITEMS = gql`
             assignedAt
             preCompletionNotes
             postCompletionNotes
-            recurringEventInstanceId
-            hasExceptions
             isInstanceException
             isTemplate
             creator {

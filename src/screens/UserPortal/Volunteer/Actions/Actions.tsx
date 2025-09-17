@@ -38,7 +38,7 @@ import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {

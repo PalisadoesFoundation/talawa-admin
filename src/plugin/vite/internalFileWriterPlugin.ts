@@ -193,12 +193,6 @@ async function handleFileOperation(
         await fs.writeFile(fullPath, content, 'utf8');
       }
 
-      if (debug) {
-        console.log('Internal File Writer Plugin: File written', {
-          path: fullPath,
-        });
-      }
-
       return { path: fullPath };
     }
 
@@ -254,10 +248,6 @@ async function writeFile(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-  if (debug) {
-    console.log('Writing file:', resolvedPath);
-  }
-
   // Ensure directory exists
   await fs.mkdir(dirname(resolvedPath), { recursive: true });
 
@@ -276,10 +266,6 @@ async function readFile(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
-
-  if (debug) {
-    console.log('Reading file:', resolvedPath);
-  }
 
   return await fs.readFile(resolvedPath, 'utf8');
 }
@@ -320,10 +306,6 @@ async function listDirectories(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-  if (debug) {
-    console.log('Listing directories:', resolvedPath);
-  }
-
   const entries = await fs.readdir(resolvedPath, { withFileTypes: true });
   return entries
     .filter((entry) => entry.isDirectory())
@@ -341,10 +323,6 @@ async function readDirectoryRecursive(
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
-
-  if (debug) {
-    console.log('Reading directory recursively:', resolvedPath);
-  }
 
   const files: Record<string, string> = {};
 
@@ -384,10 +362,6 @@ async function removeDirectory(
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
-  if (debug) {
-    console.log('Removing directory:', resolvedPath);
-  }
-
   await fs.rm(resolvedPath, { recursive: true, force: true });
 }
 
@@ -406,15 +380,6 @@ async function copyDirectory(
   const resolvedDestination = destination.startsWith('/')
     ? join(process.cwd(), destination.substring(1))
     : join(basePath, destination);
-
-  if (debug) {
-    console.log(
-      'Copying directory:',
-      resolvedSource,
-      'to',
-      resolvedDestination,
-    );
-  }
 
   await fs.mkdir(resolvedDestination, { recursive: true });
 

@@ -110,39 +110,39 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     }
   }
 `;
-export const COMPLETE_ACTION_FOR_INSTANCE = gql`
-  mutation CompleteActionForInstance(
-    $input: MutationCompleteActionForInstanceInput!
+export const COMPLETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation CompleteActionItemForInstance(
+    $input: MutationCompleteActionItemForInstanceInput!
   ) {
-    completeActionForInstance(input: $input) {
+    completeActionItemForInstance(input: $input) {
       id
     }
   }
 `;
-export const MARK_ACTION_AS_PENDING_FOR_INSTANCE = gql`
-  mutation MarkActionAsPendingForInstance(
+export const MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE = gql`
+  mutation MarkActionItemAsPendingForInstance(
     $input: MutationMarkActionAsPendingForInstanceInput!
   ) {
-    markActionAsPendingForInstance(input: $input) {
+    markActionItemAsPendingForInstance(input: $input) {
       id
     }
   }
 `;
-export const UPDATE_ACTION_FOR_INSTANCE = gql`
-  mutation UpdateActionForInstance(
-    $input: MutationUpdateActionForInstanceInput!
+export const UPDATE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation UpdateActionItemForInstance(
+    $input: MutationUpdateActionItemForInstanceInput!
   ) {
-    updateActionForInstance(input: $input) {
+    updateActionItemForInstance(input: $input) {
       id
     }
   }
 `;
 
-export const DELETE_ACTION_FOR_INSTANCE = gql`
-  mutation DeleteActionForInstance(
-    $input: MutationDeleteActionForInstanceInput!
+export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation DeleteActionItemForInstance(
+    $input: MutationDeleteActionItemForInstanceInput!
   ) {
-    deleteActionForInstance(input: $input) {
+    deleteActionItemForInstance(input: $input) {
       id
     }
   }

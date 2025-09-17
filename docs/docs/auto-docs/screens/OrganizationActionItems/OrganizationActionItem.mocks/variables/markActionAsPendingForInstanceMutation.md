@@ -16,7 +16,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### request.query
 
-> **query**: `DocumentNode` = `MARK_ACTION_AS_PENDING_FOR_INSTANCE`
+> **query**: `DocumentNode` = `MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE`
 
 #### request.variables
 
