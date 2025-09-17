@@ -5,13 +5,29 @@ import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
-import { MOCKS } from './RequestsTableItemMocks';
+import { MOCKS, ERROR_MOCKS } from './RequestsTableItemMocks';
 import RequestsTableItem from './RequestsTableItem';
 import { BrowserRouter } from 'react-router';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+  },
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+
 const { setItem } = useLocalStorage();
 
 async function wait(ms = 100): Promise<void> {
@@ -22,13 +38,6 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 const resetAndRefetchMock = vi.fn();
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-  },
-}));
 
 beforeEach(() => {
   setItem('id', '123');
@@ -80,6 +89,8 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/2./i)).toBeInTheDocument();
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
+    expect(screen.getByText('Accept')).toBeInTheDocument();
+    expect(screen.getByText('Decline')).toBeInTheDocument();
   });
 
   it('Accept MembershipRequest Button works properly', async () => {
@@ -114,9 +125,13 @@ describe('Testing User Table Item', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
+    await wait();
+    expect(toast.success).toHaveBeenCalled();
+    expect(resetAndRefetchMock).toHaveBeenCalled();
   });
 
   it('Accept MembershipRequest handles error', async () => {
+    const errorLink = new StaticMockLink(ERROR_MOCKS, true);
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -137,7 +152,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -148,6 +163,8 @@ describe('Testing User Table Item', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
+    await wait();
+    expect(errorHandler).toHaveBeenCalled();
   });
 
   it('Reject MembershipRequest Button works properly', async () => {
@@ -182,9 +199,13 @@ describe('Testing User Table Item', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+    await wait();
+    expect(toast.success).toHaveBeenCalled();
+    expect(resetAndRefetchMock).toHaveBeenCalled();
   });
 
   it('Reject MembershipRequest handles error', async () => {
+    const errorLink = new StaticMockLink(ERROR_MOCKS, true);
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -205,7 +226,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -216,5 +237,7 @@ describe('Testing User Table Item', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
+    await wait();
+    expect(errorHandler).toHaveBeenCalled();
   });
 });
