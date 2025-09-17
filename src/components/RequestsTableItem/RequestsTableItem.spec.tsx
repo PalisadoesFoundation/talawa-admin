@@ -7,7 +7,7 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
 import { MOCKS, ERROR_MOCKS } from './RequestsTableItemMocks';
 import RequestsTableItem from './RequestsTableItem';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';

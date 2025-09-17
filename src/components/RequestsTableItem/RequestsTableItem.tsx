@@ -122,7 +122,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       </td>
       <td>
         <Button
-          className={`btn ${styles.requestsAcceptButton}`}
+          className={`btn ${styles.requestsAcceptButton} ${styles.hoverShadowOnly}`}
           data-testid={`acceptMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
             await handleAcceptUser(request.membershipRequestId);
@@ -134,7 +134,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       </td>
       <td>
         <Button
-          className={`btn ${styles.requestsRejectButton}`}
+          className={`btn ${styles.requestsRejectButton} ${styles.hoverShadowOnly}`}
           data-testid={`rejectMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
             await handleRejectUser(request.membershipRequestId);

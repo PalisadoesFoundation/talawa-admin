@@ -4884,15 +4884,6 @@ form label,
   margin-left: -1rem;
 }
 
-.requestsAcceptButton:hover,
-.requestsAcceptButton:focus,
-.requestsAcceptButton:active {
-  background-color: var(--actionsButton-bg-color) !important;
-  color: var(--actionsButton-color) !important;
-  border-color: var(--actionsButton-border-hover) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--actionsButton-box-shadow-hover);
-}
-
 .requestsRejectButton {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
@@ -4900,15 +4891,6 @@ form label,
   width: 120px;
   height: 46px;
   margin-left: -1rem;
-}
-
-.requestsRejectButton:hover,
-.requestsRejectButton:focus,
-.requestsRejectButton:active {
-  background-color: var(--removeButton-bg) !important;
-  color: var(--removeButton-color) !important;
-  border-color: var(--removeButton-border) !important;
-  box-shadow: 2.5px 2.5px 2.5px var(--actionsButton-box-shadow-hover);
 }
 
 @media (max-width: 1020px) {
