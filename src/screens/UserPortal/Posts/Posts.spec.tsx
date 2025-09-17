@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
+  USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -48,6 +49,52 @@ vi.mock('react-router', async () => {
 
 // COMPLETE MOCK DATA WITH ALL REQUIRED FIELDS
 const MOCKS = [
+  // USER_DETAILS query
+  {
+    request: {
+      query: USER_DETAILS,
+      variables: {
+        input: { id: '640d98d9eb6a743d75341067' },
+        first: 100,
+      },
+    },
+    result: {
+      data: {
+        user: {
+          id: '640d98d9eb6a743d75341067',
+          name: 'Test User',
+          email: 'test@example.com',
+          joinedOrganizations: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
+              endCursor: null,
+            },
+          },
+          organizationsBlockedBy: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
+              endCursor: null,
+            },
+          },
+          tags: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    },
+  },
   // Initial load - Page 1
   {
     request: {
@@ -899,6 +946,740 @@ describe('HomeScreen additional scenarios', () => {
     await waitFor(() => {
       expect(screen.getByTestId('startPostModal')).toBeInTheDocument();
     });
+  });
+
+  it('should handle empty posts scenario', async () => {
+    const mockWithNoPosts = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: {
+            input: { id: '640d98d9eb6a743d75341067' },
+            first: 100,
+          },
+        },
+        result: {
+          data: {
+            user: {
+              id: '640d98d9eb6a743d75341067',
+              name: 'Test User',
+              email: 'test@example.com',
+              joinedOrganizations: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              organizationsBlockedBy: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              tags: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 0,
+              posts: {
+                edges: [],
+                pageInfo: {
+                  startCursor: null,
+                  endCursor: null,
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { id: 'orgId', first: 6 },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithNoPosts = new StaticMockLink(mockWithNoPosts, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithNoPosts}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('no-post')).toBeInTheDocument();
+    });
+  });
+  it('should handle query errors gracefully', async () => {
+    const mocksWithErrors = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: {
+            input: { id: '640d98d9eb6a743d75341067' },
+            first: 100,
+          },
+        },
+        error: new GraphQLError('User details fetch failed'),
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        error: new GraphQLError('Posts fetch failed'),
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { id: 'orgId', first: 6 },
+        },
+        error: new GraphQLError('Advertisements fetch failed'),
+      },
+    ];
+
+    const linkWithErrors = new StaticMockLink(mocksWithErrors, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithErrors}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Component should still render even with errors
+    await waitFor(() => {
+      expect(screen.getByTestId('postBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle posts with comments and votes', async () => {
+    const mocksWithComments = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: {
+            input: { id: '640d98d9eb6a743d75341067' },
+            first: 100,
+          },
+        },
+        result: {
+          data: {
+            user: {
+              id: '640d98d9eb6a743d75341067',
+              name: 'Test User',
+              email: 'test@example.com',
+              joinedOrganizations: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              organizationsBlockedBy: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              tags: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'post-with-comments',
+                      caption: 'Post with comments',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: 'https://example.com/avatar.jpg',
+                      },
+                      commentsCount: 2,
+                      pinnedAt: null,
+                      downVotesCount: 1,
+                      upVotesCount: 5,
+                      hasUserVoted: {
+                        hasVoted: true,
+                        voteType: 'UPVOTE',
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'comment-1',
+                              body: 'Great post!',
+                              creator: {
+                                id: 'u2',
+                                name: 'Commenter1',
+                                avatarURL: null,
+                              },
+                              downVotesCount: 0,
+                              upVotesCount: 2,
+                              text: 'Great post!',
+                              hasUserVoted: {
+                                hasVoted: false,
+                                voteType: null,
+                              },
+                            },
+                          },
+                          {
+                            node: {
+                              id: 'comment-2',
+                              body: 'I agree!',
+                              creator: {
+                                id: 'u3',
+                                name: 'Commenter2',
+                                avatarURL: 'https://example.com/avatar2.jpg',
+                              },
+                              downVotesCount: 1,
+                              upVotesCount: 0,
+                              text: 'I agree!',
+                              hasUserVoted: {
+                                hasVoted: true,
+                                voteType: 'DOWNVOTE',
+                              },
+                            },
+                          },
+                        ],
+                        pageInfo: {
+                          startCursor: 'comment-cursor-1',
+                          endCursor: 'comment-cursor-2',
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { id: 'orgId', first: 6 },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithComments = new StaticMockLink(mocksWithComments, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithComments}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Post with comments')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle file selection without files', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('postBtn')).toBeInTheDocument();
+    });
+
+    // Test file selection with no files
+    const hiddenFileInput = document.querySelector('input[type="file"]');
+    expect(hiddenFileInput).toBeInTheDocument();
+
+    // Trigger change event with no files
+    fireEvent.change(hiddenFileInput!, { target: { files: null } });
+
+    // Modal should not open
+    await wait(100);
+    expect(screen.queryByTestId('startPostModal')).not.toBeInTheDocument();
+  });
+
+  it('should handle posts with attachments', async () => {
+    const mocksWithAttachments = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: {
+            input: { id: '640d98d9eb6a743d75341067' },
+            first: 100,
+          },
+        },
+        result: {
+          data: {
+            user: {
+              id: '640d98d9eb6a743d75341067',
+              name: 'Test User',
+              email: 'test@example.com',
+              joinedOrganizations: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              organizationsBlockedBy: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              tags: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'post-with-attachments',
+                      caption: 'Post with attachments',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: null,
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      attachments: [
+                        {
+                          id: 'attachment-1',
+                          type: 'IMAGE',
+                          url: 'https://example.com/image.jpg',
+                        },
+                        {
+                          id: 'attachment-2',
+                          type: 'VIDEO',
+                          url: 'https://example.com/video.mp4',
+                        },
+                      ],
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { id: 'orgId', first: 6 },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithAttachments = new StaticMockLink(mocksWithAttachments, true);
+
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithAttachments}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Post with attachments')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle pagination when no next/previous page available', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+
+    const singlePageMocks = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: {
+            input: { id: '640d98d9eb6a743d75341067' },
+            first: 100,
+          },
+        },
+        result: {
+          data: {
+            user: {
+              id: '640d98d9eb6a743d75341067',
+              name: 'Test User',
+              email: 'test@example.com',
+              joinedOrganizations: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              organizationsBlockedBy: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              tags: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'single-post',
+                      caption: 'Single post',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: undefined,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: null,
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_ADVERTISEMENT_LIST,
+          variables: { id: 'orgId', first: 6 },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'orgId',
+                advertisements: {
+                  edges: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const singlePageLink = new StaticMockLink(singlePageMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={singlePageLink}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Single post')).toBeInTheDocument();
+    });
+
+    // Both pagination buttons should be disabled
+    const nextBtn = screen.getByTestId('next-btn');
+    const prevBtn = screen.getByTestId('prev-btn');
+
+    expect(nextBtn).toBeDisabled();
+    expect(prevBtn).toBeDisabled();
+
+    // Clicking should have no effect
+    fireEvent.click(nextBtn);
+    fireEvent.click(prevBtn);
+
+    await wait(100);
+    // Should still be on the same page
+    expect(screen.getByText('Single post')).toBeInTheDocument();
   });
 
   it('Redirect to /user when organizationId is falsy', async () => {
