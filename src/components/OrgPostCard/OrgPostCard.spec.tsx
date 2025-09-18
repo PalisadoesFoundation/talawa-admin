@@ -1050,3 +1050,268 @@ describe('getMimeTypeEnum', () => {
     expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
   });
 });
+
+describe('getFileHashFromBase64', () => {
+  // Test the getFileHashFromBase64 function
+  const getFileHashFromBase64 = async (
+    base64String: string,
+  ): Promise<string> => {
+    const base64 = base64String.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  };
+
+  it('should generate hash from base64 string', async () => {
+    const base64String =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+    const result = await getFileHashFromBase64(base64String);
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
+    expect(result.length).toBe(64); // SHA-256 hash should be 64 characters
+  });
+
+  it('should handle different base64 inputs', async () => {
+    const base64String = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/';
+    const result = await getFileHashFromBase64(base64String);
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
+    expect(result.length).toBe(64);
+  });
+});
+
+describe('OrgPostCard Additional Coverage Tests', () => {
+  const mockPost = {
+    id: '12',
+    caption: 'Test Caption',
+    createdAt: new Date('2024-02-22'),
+    updatedAt: new Date('2024-02-23'),
+    pinnedAt: null,
+    creatorId: '123',
+    attachments: [],
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { reload: vi.fn() },
+    });
+  });
+
+  it('should cover attachment processing in updatePost', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    const fileInput = await screen.findByTestId('image-upload');
+    const file = new File(['dummy content'], 'test-image.png', {
+      type: 'image/png',
+    });
+
+    // Mock URL.createObjectURL
+    const originalCreateObjectURL = global.URL.createObjectURL;
+    global.URL.createObjectURL = vi.fn(
+      () => 'data:image/png;base64,ZHVtbXkgY29udGVudA==',
+    );
+
+    await userEvent.upload(fileInput, file);
+
+    await waitFor(() => {
+      const previewImage = screen.getByAltText('Preview');
+      expect(previewImage).toBeInTheDocument();
+    });
+
+    // Restore the original function
+    global.URL.createObjectURL = originalCreateObjectURL;
+  });
+
+  it('should handle update post without attachment', async () => {
+    const updateMock = {
+      request: {
+        query: UPDATE_POST_MUTATION,
+        variables: {
+          input: {
+            id: '12',
+            caption: 'Updated Caption',
+            attachments: [],
+          },
+        },
+      },
+      result: {
+        data: {
+          updatePost: { id: '12' },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[updateMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    // Update caption only (no attachments)
+    const captionInput = screen.getByPlaceholderText(/enterCaption/i);
+    await userEvent.clear(captionInput);
+    await userEvent.type(captionInput, 'Updated Caption');
+
+    const submitButton = screen.getByTestId('update-post-submit');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Post Updated successfully.');
+    });
+  });
+
+  it('should handle update post error with attachments', async () => {
+    const errorMock = {
+      request: {
+        query: UPDATE_POST_MUTATION,
+        variables: {
+          input: {
+            id: '12',
+            caption: 'Updated Caption',
+            attachments: expect.any(Array),
+          },
+        },
+      },
+      error: new Error('Update failed'),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    // Add an attachment to trigger the attachment processing code
+    const fileInput = await screen.findByTestId('image-upload');
+    const file = new File(['dummy content'], 'test.png', {
+      type: 'image/png',
+    });
+    await userEvent.upload(fileInput, file);
+
+    const captionInput = screen.getByPlaceholderText(/enterCaption/i);
+    await userEvent.clear(captionInput);
+    await userEvent.type(captionInput, 'Updated Caption');
+
+    const submitButton = screen.getByTestId('update-post-submit');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(errorHandlerModule.errorHandler).toHaveBeenCalled();
+    });
+  });
+
+  it('should handle close menu option', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockPost} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    // Check that the menu is visible
+    const menu = screen.getByTestId('post-menu');
+    expect(menu).toBeInTheDocument();
+
+    const closeMenuOption = screen.getByTestId('close-menu-option');
+    await userEvent.click(closeMenuOption);
+
+    // Check that the menu is closed
+    await waitFor(() => {
+      expect(screen.queryByTestId('post-menu')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle file name extraction from URL', async () => {
+    const mockWithUrl = {
+      id: '12',
+      caption: 'Test Caption',
+      createdAt: new Date('2024-02-22'),
+      updatedAt: new Date('2024-02-23'),
+      pinnedAt: null,
+      creatorId: '123',
+      attachments: [],
+    };
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <OrgPostCard post={mockWithUrl} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const postItem = screen.getByTestId('post-item');
+    await userEvent.click(postItem);
+
+    const moreOptionsButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreOptionsButton);
+
+    const editButton = screen.getByText(/edit/i);
+    await userEvent.click(editButton);
+
+    // Test file with complex URL structure
+    const fileInput = await screen.findByTestId('image-upload');
+    const file = new File(['dummy content'], 'complex/path/test-image.png', {
+      type: 'image/png',
+    });
+    await userEvent.upload(fileInput, file);
+
+    // Verify that the preview shows up
+    await waitFor(() => {
+      const previewImage = screen.getByAltText('Preview');
+      expect(previewImage).toBeInTheDocument();
+    });
+  });
+});

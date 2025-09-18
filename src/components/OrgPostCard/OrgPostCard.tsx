@@ -255,43 +255,49 @@ export default function OrgPostCard({
   const getMimeTypeEnum = (url: string): string => {
     // Check for base64 data URI
     if (url.startsWith('data:')) {
-      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
-      switch (mime) {
-        case 'image/jpeg':
-          return 'IMAGE_JPEG';
-        case 'image/png':
-          return 'IMAGE_PNG';
-        case 'image/webp':
-          return 'IMAGE_WEBP';
-        case 'image/avif':
-          return 'IMAGE_AVIF';
-        case 'video/mp4':
-          return 'VIDEO_MP4';
-        case 'video/webm':
-          return 'VIDEO_WEBM';
-        default:
-          return 'IMAGE_JPEG'; // fallback
+      const mimeMatch = url.match(/data:([^;]+)/);
+      if (!mimeMatch) {
+        return 'IMAGE_JPEG'; // fallback for malformed data URI
+      }
+
+      const mime = mimeMatch[1];
+
+      if (mime === 'image/jpeg') {
+        return 'IMAGE_JPEG';
+      } else if (mime === 'image/png') {
+        return 'IMAGE_PNG';
+      } else if (mime === 'image/webp') {
+        return 'IMAGE_WEBP';
+      } else if (mime === 'image/avif') {
+        return 'IMAGE_AVIF';
+      } else if (mime === 'video/mp4') {
+        return 'VIDEO_MP4';
+      } else if (mime === 'video/webm') {
+        return 'VIDEO_WEBM';
+      } else {
+        return 'IMAGE_JPEG'; // fallback for unknown mime types
       }
     }
 
     // Fallback for file URLs (e.g., https://.../file.png)
-    const ext = url.split('.').pop()?.toLowerCase();
-    switch (ext) {
-      case 'jpg':
-      case 'jpeg':
-        return 'IMAGE_JPEG';
-      case 'png':
-        return 'IMAGE_PNG';
-      case 'webp':
-        return 'IMAGE_WEBP';
-      case 'avif':
-        return 'IMAGE_AVIF';
-      case 'mp4':
-        return 'VIDEO_MP4';
-      case 'webm':
-        return 'VIDEO_WEBM';
-      default:
-        return 'IMAGE_JPEG'; // fallback
+    // Remove query parameters and fragments before extracting extension
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    const ext = cleanUrl.split('.').pop()?.toLowerCase();
+
+    if (ext === 'jpg' || ext === 'jpeg') {
+      return 'IMAGE_JPEG';
+    } else if (ext === 'png') {
+      return 'IMAGE_PNG';
+    } else if (ext === 'webp') {
+      return 'IMAGE_WEBP';
+    } else if (ext === 'avif') {
+      return 'IMAGE_AVIF';
+    } else if (ext === 'mp4') {
+      return 'VIDEO_MP4';
+    } else if (ext === 'webm') {
+      return 'VIDEO_WEBM';
+    } else {
+      return 'IMAGE_JPEG'; // fallback for unknown extensions
     }
   };
 

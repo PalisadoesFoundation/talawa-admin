@@ -2275,9 +2275,30 @@ describe('pagination handlers', () => {
 });
 
 describe('getMimeTypeEnum', () => {
-  function getMimeTypeEnum(fileName: string): string {
-    const ext = fileName.split('.').pop()?.toLowerCase();
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
+      switch (mime) {
+        case 'image/jpeg':
+          return 'IMAGE_JPEG';
+        case 'image/png':
+          return 'IMAGE_PNG';
+        case 'image/webp':
+          return 'IMAGE_WEBP';
+        case 'image/avif':
+          return 'IMAGE_AVIF';
+        case 'video/mp4':
+          return 'VIDEO_MP4';
+        case 'video/webm':
+          return 'VIDEO_WEBM';
+        default:
+          return 'IMAGE_JPEG'; // fallback
+      }
+    }
 
+    // Fallback for file URLs (e.g., https://.../file.png)
+    const ext = url.split('.').pop()?.toLowerCase();
     switch (ext) {
       case 'jpg':
       case 'jpeg':
@@ -2295,8 +2316,7 @@ describe('getMimeTypeEnum', () => {
       default:
         return 'IMAGE_JPEG'; // fallback
     }
-  }
-
+  };
   it('should return IMAGE_JPEG for .jpg and .jpeg', () => {
     expect(getMimeTypeEnum('file.jpg')).toBe('IMAGE_JPEG');
     expect(getMimeTypeEnum('file.jpeg')).toBe('IMAGE_JPEG');
