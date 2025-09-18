@@ -115,7 +115,9 @@ const RequestsTableItem = (props: Props): JSX.Element => {
 
   return (
     <tr className={styles.requestsTableItemRow}>
-      <td className={styles.requestsTableItemIndex}>{index + 1}.</td>
+      <th scope="row" className={styles.requestsTableItemIndex}>
+        {index + 1}.
+      </th>
       <td className={styles.requestsTableItemName}>{`${request.user.name}`}</td>
       <td className={styles.requestsTableItemEmail}>
         {request.user.emailAddress}

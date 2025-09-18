@@ -4857,8 +4857,6 @@ form label,
 /* Keep base colors on hover by pairing with .hoverShadowOnly helper */
 
 /* -- RequestsTableItem.tsx -- */
-.requestsTableItemRow {
-}
 
 .requestsTableItemIndex {
   padding-left: 2.5rem;
@@ -4881,7 +4879,7 @@ form label,
   border-color: var(--actionsButton-border);
   width: 120px;
   height: 46px;
-  margin-left: -1rem;
+  margin-inline-start: -1rem;
 }
 
 .requestsRejectButton {
@@ -4890,7 +4888,7 @@ form label,
   border-color: var(--removeButton-border);
   width: 120px;
   height: 46px;
-  margin-left: -1rem;
+  margin-inline-start: -1rem;
 }
 
 @media (max-width: 1020px) {
@@ -4905,7 +4903,7 @@ form label,
 
   .requestsAcceptButton,
   .requestsRejectButton {
-    margin-left: -0.25rem;
+    margin-inline-start: -0.25rem;
   }
 }
 
@@ -4918,7 +4916,7 @@ form label,
 
   .requestsAcceptButton,
   .requestsRejectButton {
-    margin-left: 0;
+    margin-inline-start: 0;
     width: 100%;
   }
 }

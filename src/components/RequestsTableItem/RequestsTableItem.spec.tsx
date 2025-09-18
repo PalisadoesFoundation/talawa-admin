@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -163,8 +163,7 @@ describe('Testing User Table Item', () => {
 
     await wait();
     await userEvent.click(screen.getByTestId('acceptMembershipRequestBtn123'));
-    await wait();
-    expect(errorHandler).toHaveBeenCalled();
+    await waitFor(() => expect(errorHandler).toHaveBeenCalled());
   });
 
   it('Reject MembershipRequest Button works properly', async () => {
@@ -200,10 +199,9 @@ describe('Testing User Table Item', () => {
     await wait();
     await userEvent.click(screen.getByTestId('rejectMembershipRequestBtn123'));
     await wait();
-    expect(toast.success).toHaveBeenCalled();
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
     expect(resetAndRefetchMock).toHaveBeenCalled();
   });
-
   it('Reject MembershipRequest handles error', async () => {
     const errorLink = new StaticMockLink(ERROR_MOCKS, true);
     const props: {
