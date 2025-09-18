@@ -16,7 +16,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](htt
 
 #### request.query
 
-> **query**: `DocumentNode` = `EVENT_VOLUNTEER_LIST`
+> **query**: `DocumentNode` = `GET_EVENT_VOLUNTEERS`
 
 #### request.variables
 

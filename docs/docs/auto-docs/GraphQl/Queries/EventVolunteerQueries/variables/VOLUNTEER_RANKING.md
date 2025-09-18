@@ -6,4 +6,4 @@
 
 > `const` **VOLUNTEER\_RANKING**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/EventVolunteerQueries.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/EventVolunteerQueries.ts#L133)
+Defined in: [src/GraphQl/Queries/EventVolunteerQueries.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/EventVolunteerQueries.ts#L149)

@@ -205,9 +205,25 @@ const Invitations = (): JSX.Element => {
             <div className="d-flex flex-column gap-2">
               <div className="fw-bold" data-testid="inviteSubject">
                 {invite.group && invite.group.id ? (
-                  <>{t('groupInvitationSubject')}</>
+                  // Group invitation
+                  <>
+                    {invite.event.recurrenceRule &&
+                    invite.volunteer.isTemplate ? (
+                      <>{t('groupInvitationRecurringSubject')}</>
+                    ) : (
+                      <>{t('groupInvitationSubject')}</>
+                    )}
+                  </>
                 ) : (
-                  <>{t('eventInvitationSubject')}</>
+                  // Individual invitation
+                  <>
+                    {invite.event.recurrenceRule &&
+                    invite.volunteer.isTemplate ? (
+                      <>{t('eventInvitationRecurringSubject')}</>
+                    ) : (
+                      <>{t('eventInvitationSubject')}</>
+                    )}
+                  </>
                 )}
               </div>
               <div className="d-flex gap-3">

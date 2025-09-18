@@ -2384,12 +2384,20 @@ export interface InterfaceEventVolunteerInfo {
   volunteerStatus: 'accepted' | 'rejected' | 'pending';
   hoursVolunteered: number;
   isPublic: boolean;
+  isInstanceException?: boolean;
+  isTemplate?: boolean;
   createdAt: string;
   updatedAt: string;
   user: InterfaceUserInfoPG;
   event: {
     id: string;
     name: string;
+    recurrenceRule?: {
+      id: string;
+    } | null;
+    baseEvent?: {
+      id: string;
+    } | null;
   };
   creator: InterfaceUserInfoPG;
   updater: InterfaceUserInfoPG;
@@ -2506,11 +2514,15 @@ export interface InterfaceVolunteerMembership {
     name: string;
     startAt: string;
     endAt: string;
+    recurrenceRule?: {
+      id: string;
+    } | null;
   };
   volunteer: {
     id: string;
     hasAccepted: boolean;
     hoursVolunteered: number;
+    isTemplate?: boolean;
     user: {
       id: string;
       name: string;

@@ -49,6 +49,10 @@ export interface InterfaceVolunteerCreateModal {
   eventId: string;
   orgId: string;
   refetchVolunteers: () => void;
+  // New props for recurring events
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
+  recurringEventInstanceId?: string;
 }
 
 const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
@@ -57,10 +61,14 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   eventId,
   orgId,
   refetchVolunteers,
+  isRecurring = false,
+  baseEvent = null,
+  recurringEventInstanceId,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
 
   const [userId, setUserId] = useState<string>('');
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
 
   const { data: membersData } = useQuery(MEMBERS_LIST, {
@@ -77,17 +85,37 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
-        await addVolunteer({ variables: { data: { eventId, userId } } });
+
+        // Determine which eventId to use and set fields based on selection
+        const mutationData: any = {
+          userId,
+          eventId: isRecurring
+            ? baseEvent?.id // Always use baseEvent for recurring events
+            : eventId, // Use eventId for non-recurring events
+        };
+
+        // Add recurring event specific fields
+        if (isRecurring) {
+          mutationData.isTemplate = applyTo === 'series';
+          if (applyTo === 'instance') {
+            // For instance-only, set the recurring instance ID
+            mutationData.recurringEventInstanceId = eventId;
+          }
+          // For series, no recurringEventInstanceId is needed
+        }
+
+        await addVolunteer({ variables: { data: mutationData } });
 
         toast.success(t('volunteerAdded'));
         refetchVolunteers();
         setUserId('');
+        setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
         toast.error((error as Error).message);
       }
     },
-    [userId, eventId],
+    [userId, eventId, isRecurring, applyTo, baseEvent],
   );
 
   return (
@@ -109,6 +137,29 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           onSubmitCapture={addVolunteerHandler}
           className="p-3"
         >
+          {/* Radio buttons for recurring events */}
+          {isRecurring ? (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          ) : null}
+
           {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete

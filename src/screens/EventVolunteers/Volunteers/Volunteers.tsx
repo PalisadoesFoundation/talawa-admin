@@ -44,7 +44,7 @@
  * - Modals are used for adding, viewing, and deleting volunteers.
  * - Displays a loader while fetching data and handles errors gracefully.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -61,7 +61,7 @@ import {
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
-import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
@@ -119,6 +119,8 @@ function volunteers(): JSX.Element {
     'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
   >(null);
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -150,17 +152,27 @@ function volunteers(): JSX.Element {
    * Query to fetch event volunteers for the event.
    */
   const {
-    data: volunteersData,
+    data: eventData,
     loading: volunteersLoading,
     error: volunteersError,
     refetch: refetchVolunteers,
   }: {
-    data?: { getEventVolunteers: InterfaceEventVolunteerInfo[] };
+    data?: {
+      event: {
+        id: string;
+        recurrenceRule?: { id: string } | null;
+        baseEvent?: { id: string } | null;
+        volunteers: InterfaceEventVolunteerInfo[];
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_LIST, {
+  } = useQuery(GET_EVENT_VOLUNTEERS, {
     variables: {
+      input: {
+        id: eventId,
+      },
       where: {
         eventId: eventId,
         hasAccepted:
@@ -178,28 +190,52 @@ function volunteers(): JSX.Element {
     [],
   );
 
+  // Effect to set recurring event info similar to EventActionItems
+  useEffect(() => {
+    if (eventData && eventData.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+      setBaseEvent(eventData.event.baseEvent || null);
+    }
+  }, [eventData]);
+
   const volunteers = useMemo(() => {
-    const allVolunteers = volunteersData?.getEventVolunteers || [];
+    const allVolunteers = eventData?.event?.volunteers || [];
 
     // Apply client-side filtering based on volunteerStatus
-    if (status === VolunteerStatus.All) {
-      return allVolunteers;
-    } else if (status === VolunteerStatus.Pending) {
-      return allVolunteers.filter(
-        (volunteer) => volunteer.volunteerStatus === 'pending',
-      );
-    } else if (status === VolunteerStatus.Rejected) {
-      return allVolunteers.filter(
-        (volunteer) => volunteer.volunteerStatus === 'rejected',
-      );
-    } else if (status === VolunteerStatus.Accepted) {
-      return allVolunteers.filter(
-        (volunteer) => volunteer.volunteerStatus === 'accepted',
+    let filteredVolunteers = allVolunteers;
+
+    // Filter by search term
+    if (searchTerm) {
+      filteredVolunteers = filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) => {
+          const userName = volunteer.user?.name || '';
+          return userName.toLowerCase().includes(searchTerm.toLowerCase());
+        },
       );
     }
 
-    return allVolunteers;
-  }, [volunteersData, status]);
+    // Filter by status
+    if (status === VolunteerStatus.All) {
+      return filteredVolunteers;
+    } else if (status === VolunteerStatus.Pending) {
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'pending',
+      );
+    } else if (status === VolunteerStatus.Rejected) {
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'rejected',
+      );
+    } else if (status === VolunteerStatus.Accepted) {
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'accepted',
+      );
+    }
+
+    return filteredVolunteers;
+  }, [eventData, status, searchTerm]);
 
   if (volunteersLoading) {
     return <Loader size="xl" />;
@@ -471,6 +507,9 @@ function volunteers(): JSX.Element {
         eventId={eventId}
         orgId={orgId}
         refetchVolunteers={refetchVolunteers}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
+        recurringEventInstanceId={eventId}
       />
 
       {volunteer && (
@@ -485,6 +524,8 @@ function volunteers(): JSX.Element {
             hide={() => closeModal(ModalState.DELETE)}
             volunteer={volunteer}
             refetchVolunteers={refetchVolunteers}
+            isRecurring={isRecurring}
+            eventId={eventId}
           />
         </>
       )}

@@ -8,6 +8,18 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 ## Properties
 
+### baseEvent?
+
+> `optional` **baseEvent**: `object`
+
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L54)
+
+#### id
+
+> **id**: `string`
+
+***
+
 ### eventId
 
 > **eventId**: `string`
@@ -36,11 +48,27 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 ***
 
+### isRecurring?
+
+> `optional` **isRecurring**: `boolean`
+
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L53)
+
+***
+
 ### orgId
 
 > **orgId**: `string`
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L50)
+
+***
+
+### recurringEventInstanceId?
+
+> `optional` **recurringEventInstanceId**: `string`
+
+Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L55)
 
 ***
 

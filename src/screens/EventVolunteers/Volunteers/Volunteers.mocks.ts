@@ -2,7 +2,7 @@ import {
   ADD_VOLUNTEER,
   DELETE_VOLUNTEER,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 const volunteer1 = {
@@ -46,7 +46,7 @@ const volunteer2 = {
 export const MOCKS = [
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '' },
         orderBy: null,
@@ -60,7 +60,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '' },
         orderBy: 'hoursVolunteered_ASC',
@@ -74,7 +74,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '' },
         orderBy: 'hoursVolunteered_DESC',
@@ -88,7 +88,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: 'T' },
         orderBy: null,
@@ -102,7 +102,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
         orderBy: null,
@@ -116,7 +116,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
         orderBy: null,
@@ -130,7 +130,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '', hasAccepted: true },
         orderBy: null,
@@ -217,7 +217,7 @@ export const MOCKS = [
 export const MOCKS_ERROR = [
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '' },
         orderBy: null,
@@ -288,7 +288,7 @@ export const MOCKS_ERROR = [
 export const MOCKS_EMPTY = [
   {
     request: {
-      query: EVENT_VOLUNTEER_LIST,
+      query: GET_EVENT_VOLUNTEERS,
       variables: {
         where: { eventId: 'eventId', name_contains: '' },
         orderBy: null,

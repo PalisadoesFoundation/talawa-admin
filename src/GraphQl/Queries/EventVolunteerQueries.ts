@@ -9,42 +9,54 @@ import gql from 'graphql-tag';
  *
  **/
 
-export const EVENT_VOLUNTEER_LIST = gql`
+export const GET_EVENT_VOLUNTEERS = gql`
   query GetEventVolunteers(
+    $input: QueryEventInput!
     $where: EventVolunteerWhereInput!
     $orderBy: EventVolunteersOrderByInput
   ) {
-    getEventVolunteers(where: $where, orderBy: $orderBy) {
+    event(input: $input) {
       id
-      hasAccepted
-      volunteerStatus
-      hoursVolunteered
-      isPublic
-      createdAt
-      updatedAt
-      user {
+      recurrenceRule {
         id
-        name
-        avatarURL
       }
-      event {
+      baseEvent {
         id
-        name
       }
-      creator {
+      volunteers(where: $where, orderBy: $orderBy) {
         id
-        name
-      }
-      updater {
-        id
-        name
-      }
-      groups {
-        id
-        name
-        description
-        volunteers {
+        hasAccepted
+        volunteerStatus
+        hoursVolunteered
+        isPublic
+        isInstanceException
+        isTemplate
+        createdAt
+        updatedAt
+        user {
           id
+          name
+          avatarURL
+        }
+        event {
+          id
+          name
+        }
+        creator {
+          id
+          name
+        }
+        updater {
+          id
+          name
+        }
+        groups {
+          id
+          name
+          description
+          volunteers {
+            id
+          }
         }
       }
     }
@@ -102,11 +114,15 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
         name
         startAt
         endAt
+        recurrenceRule {
+          id
+        }
       }
       volunteer {
         id
         hasAccepted
         hoursVolunteered
+        isTemplate
         user {
           id
           name
