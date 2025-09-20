@@ -79,6 +79,7 @@
   "searchResultsFor": "Search results for {{text}}",
   "none": "None",
   "Donate": "Donate",
+  "Transactions": "Transactions",
   "addedSuccessfully": "{{item}} added Successfully",
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",

@@ -501,7 +501,16 @@
     "groups": "小组",
     "assignTo": "分配给",
     "volunteers": "志愿者",
-    "volunteerGroups": "志愿者小组"
+    "volunteerGroups": "志愿者团体",
+    "applyTo": "适用于",
+    "entireSeries": "整个系列",
+    "thisEventOnly": "仅限本次活动",
+    "pendingForInstance": "此实例待定",
+    "pendingForSeries": "系列待定",
+    "completeForInstance": "此实例完成",
+    "completeForSeries": "系列完成",
+    "postCompletionNotesRequired": "需要完成后的备注",
+    "updateThisInstance": "更新此实例"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -772,6 +781,7 @@
   },
   "eventManagement": {
     "name": "事件管理",
+    "title": "事件管理",
     "dashboard": "仪表板",
     "registrants": "注册者",
     "attendance": "出席",
@@ -1199,6 +1209,31 @@
     "donationAmountDescription": "请输入捐款金额的数值。",
     "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
     "donateTo": "捐赠给"
+  },
+  "transactions": {
+    "title": "交易",
+    "transactionsFor": "交易记录",
+    "transactionHistory": "交易历史",
+    "searchTransactions": "搜索交易",
+    "userName": "用户名",
+    "amount": "金额",
+    "type": "类型",
+    "status": "状态",
+    "date": "日期",
+    "transactionId": "交易ID",
+    "completed": "已完成",
+    "pending": "待处理",
+    "failed": "失败",
+    "donation": "捐赠",
+    "payment": "付款",
+    "refund": "退款",
+    "loading": "加载中...",
+    "nothingToShow": "这里没有什么可显示的。",
+    "managingTransactionsFor": "管理交易记录",
+    "latestFirst": "最新优先",
+    "earliestFirst": "最早优先",
+    "noTransactionsFound": "未找到交易记录",
+    "errorLoadingTransactions": "加载交易记录时出错"
   },
   "userEvents": {
     "name": "活动",

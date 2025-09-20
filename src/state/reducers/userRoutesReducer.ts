@@ -57,6 +57,7 @@ const components: ComponentType[] = [
   { name: 'Events', comp_id: 'events', component: 'Events' },
   { name: 'Volunteer', comp_id: 'volunteer', component: 'VolunteerManagement' },
   { name: 'Donate', comp_id: 'donate', component: 'Donate' },
+  { name: 'Transactions', comp_id: 'transactions', component: 'Transactions' },
   { name: 'Chat', comp_id: 'chat', component: 'Chat' },
   {
     name: 'Campaigns',

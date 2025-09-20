@@ -1079,14 +1079,13 @@ export const GET_COMMUNITY_DATA_PG = gql`
       id
       inactivityTimeoutDuration
       instagramURL
-      linkedInURL
+      linkedinURL
       logoMimeType
       logoURL
       name
       redditURL
       slackURL
       updatedAt
-      updater
       websiteURL
       xURL
       youtubeURL

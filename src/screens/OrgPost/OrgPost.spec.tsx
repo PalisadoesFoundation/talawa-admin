@@ -24,6 +24,7 @@ import { I18nextProvider } from 'react-i18next';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 vi.mock('utils/convertToBase64');
 vi.mock('react-toastify', () => ({
@@ -392,6 +393,7 @@ const mockOrgPostList1 = {
     },
   },
 };
+
 export const mockPosts2 = {
   postsByOrganization: [
     {
@@ -414,7 +416,7 @@ export const mockOrgPostList2 = {
       pageInfo: {
         hasNextPage: false, // last page
         hasPreviousPage: true, // because we can go back
-        startCursor: 'cursor2', // 👈 matches endCursor from page 1
+        startCursor: 'cursor2', //  matches endCursor from page 1
         endCursor: 'cursor3',
       },
       totalCount: 2,
@@ -501,7 +503,7 @@ const mocks = [
       query: ORGANIZATION_POST_LIST,
       variables: {
         input: { id: '123' },
-        after: 'cursor1', // must match endCursor in mockOrgPostList1.pageInfo
+        after: 'cursor2',
         before: null,
         first: 6,
         last: null,
@@ -517,7 +519,7 @@ const mocks = [
       variables: {
         input: { id: '123' },
         after: null,
-        before: 'cursor1', // must match startCursor in mockOrgPostList2.pageInfo
+        before: 'cursor2',
         first: null,
         last: 6,
       },
@@ -1941,10 +1943,6 @@ describe('OrgPost Edge Cases', () => {
 
     const submitButton = await screen.findByTestId('createPostBtn');
     fireEvent.click(submitButton);
-
-    // await waitFor(() => {
-    //   expect(toast.error).toHaveBeenCalled();
-    // });
   });
 
   it('handles file removal from video preview', async () => {
@@ -2271,6 +2269,231 @@ describe('pagination handlers', () => {
     handlePreviousPage();
 
     expect(setCurrentPage).not.toHaveBeenCalled();
+  });
+
+  it('handles pagination with Next and Previous buttons', async () => {
+    // const mocks = [
+    //   // Page 1
+    //   {
+    //     request: {
+    //       query: ORGANIZATION_POST_LIST,
+    //       variables: {
+    //         input: { id: 'orgId' },
+    //         first: 5,
+    //         after: null,
+    //         before: null,
+    //         last: null,
+    //       },
+    //     },
+    //     result: {
+    //       data: {
+    //         organization: {
+    //           id: 'orgId',
+    //           posts: {
+    //             edges: [
+    //               {
+    //                 node: {
+    //                   id: '1-1',
+    //                   caption: 'Post 1-1',
+    //                   creator: { id: 'u1', name: 'User1' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-01T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c1',
+    //               },
+    //               {
+    //                 node: {
+    //                   id: '1-2',
+    //                   caption: 'Post 1-2',
+    //                   creator: { id: 'u2', name: 'User2' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-01T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c2',
+    //               },
+    //             ],
+    //             pageInfo: {
+    //               startCursor: 'c1',
+    //               endCursor: 'c2',
+    //               hasNextPage: true,
+    //               hasPreviousPage: false,
+    //             },
+    //             totalCount: 4,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    //   // Page 2
+    //   {
+    //     request: {
+    //       query: ORGANIZATION_POST_LIST,
+    //       variables: {
+    //         input: { id: 'orgId' },
+    //         after: 'c2',
+    //         first: 5,
+    //         before: null,
+    //         last: null,
+    //       },
+    //     },
+    //     result: {
+    //       data: {
+    //         organization: {
+    //           id: 'orgId',
+    //           posts: {
+    //             edges: [
+    //               {
+    //                 node: {
+    //                   id: '2-1',
+    //                   caption: 'Post 2-1',
+    //                   creator: { id: 'u3', name: 'User3' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-02T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c3',
+    //               },
+    //               {
+    //                 node: {
+    //                   id: '2-2',
+    //                   caption: 'Post 2-2',
+    //                   creator: { id: 'u4', name: 'User4' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-02T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c4',
+    //               },
+    //             ],
+    //             pageInfo: {
+    //               startCursor: 'c3',
+    //               endCursor: 'c4',
+    //               hasNextPage: false,
+    //               hasPreviousPage: true,
+    //             },
+    //             totalCount: 4,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    //   // Back to Page 1
+    //   {
+    //     request: {
+    //       query: ORGANIZATION_POST_LIST,
+    //       variables: {
+    //         input: { id: 'orgId' },
+    //         before: 'c3',
+    //         last: 5,
+    //         after: null,
+    //         first: null,
+    //       },
+    //     },
+    //     result: {
+    //       data: {
+    //         organization: {
+    //           id: 'orgId',
+    //           posts: {
+    //             edges: [
+    //               {
+    //                 node: {
+    //                   id: '1-1',
+    //                   caption: 'Post 1-1',
+    //                   creator: { id: 'u1', name: 'User1' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-01T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c1',
+    //               },
+    //               {
+    //                 node: {
+    //                   id: '1-2',
+    //                   caption: 'Post 1-2',
+    //                   creator: { id: 'u2', name: 'User2' },
+    //                   commentsCount: 0,
+    //                   pinnedAt: null,
+    //                   downVotesCount: 0,
+    //                   upVotesCount: 0,
+    //                   upVoters: { edges: [], pageInfo: {} },
+    //                   createdAt: '2024-01-01T00:00:00.000Z',
+    //                   comments: { edges: [], pageInfo: {} },
+    //                 },
+    //                 cursor: 'c2',
+    //               },
+    //             ],
+    //             pageInfo: {
+    //               startCursor: 'c1',
+    //               endCursor: 'c2',
+    //               hasNextPage: true,
+    //               hasPreviousPage: false,
+    //             },
+    //             totalCount: 4,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // ];
+
+    const mockOrgId = '123';
+    const renderComponent = () =>
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18n}>
+            <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+              <Routes>
+                <Route path="/org/:orgId" element={<OrgPost />} />
+              </Routes>
+            </MemoryRouter>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+    renderComponent();
+
+    // Page 1 should load
+    await waitFor(() => {
+      expect(screen.getByText('Early Post')).toBeInTheDocument();
+    });
+
+    // Click Next → Page 2
+    const nextBtn = screen.getByTestId('next-page-button');
+    fireEvent.click(nextBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Post 3 on page 2')).toBeInTheDocument();
+    });
+
+    // Click Previous → Back to Page 1
+    const prevBtn = screen.getByTestId('previous-page-button');
+    fireEvent.click(prevBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Early Post')).toBeInTheDocument();
+    });
   });
 });
 
