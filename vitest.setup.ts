@@ -32,10 +32,21 @@ afterAll(() => {
 
 // Root module mock for @mui/x-date-pickers to cover all import patterns
 vi.mock('@mui/x-date-pickers', () => ({
-  DatePicker: vi.fn(({ value, onChange }) => {
+  DatePicker: vi.fn(({ value, onChange, slotProps, label, ...props }) => {
+    // Extract attributes from slotProps.textField.inputProps if available
+    const inputProps = slotProps?.textField?.inputProps || {};
+
+    // Filter out non-standard HTML attributes to avoid React warnings
+    const { className, ...cleanProps } = props;
+
     return React.createElement('input', {
-      'data-testid': 'date-picker',
+      'data-testid': inputProps['data-testid'] || 'date-picker',
       type: 'date',
+      id: 'birthDate', // Set the id to match the label's for attribute
+      'aria-label': inputProps['aria-label'] || label,
+      label: label, // Pass through the label prop for components that use it as an attribute
+      max: inputProps.max,
+      className: className,
       value: value
         ? typeof value === 'string'
           ? value
@@ -50,12 +61,19 @@ vi.mock('@mui/x-date-pickers', () => ({
             'function';
         onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
+      ...cleanProps,
     });
   }),
-  DateTimePicker: vi.fn(({ value, onChange }) => {
+  DateTimePicker: vi.fn(({ value, onChange, slotProps, label, ...props }) => {
+    const inputProps = slotProps?.textField?.inputProps || {};
+    const { className, ...cleanProps } = props;
+
     return React.createElement('input', {
-      'data-testid': 'datetime-picker',
+      'data-testid': inputProps['data-testid'] || 'datetime-picker',
       type: 'datetime-local',
+      'aria-label': inputProps['aria-label'] || label,
+      label: label,
+      className: className,
       value: value
         ? typeof value === 'string'
           ? value
@@ -70,12 +88,19 @@ vi.mock('@mui/x-date-pickers', () => ({
             'function';
         onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
+      ...cleanProps,
     });
   }),
-  TimePicker: vi.fn(({ value, onChange }) => {
+  TimePicker: vi.fn(({ value, onChange, slotProps, label, ...props }) => {
+    const inputProps = slotProps?.textField?.inputProps || {};
+    const { className, ...cleanProps } = props;
+
     return React.createElement('input', {
-      'data-testid': 'time-picker',
+      'data-testid': inputProps['data-testid'] || 'time-picker',
       type: 'time',
+      'aria-label': inputProps['aria-label'] || label,
+      label: label,
+      className: className,
       value: value
         ? typeof value === 'string'
           ? value
@@ -90,6 +115,7 @@ vi.mock('@mui/x-date-pickers', () => ({
             'function';
         onChange?.(newValue ? (isDayjs ? dayjs(newValue) : newValue) : null);
       },
+      ...cleanProps,
     });
   }),
 
