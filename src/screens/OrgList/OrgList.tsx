@@ -339,30 +339,32 @@ function orgList(): JSX.Element {
             <SearchOutlined className={styles.colorWhite} />
           </InputGroup.Text>
         </InputGroup>
-        <div className={styles.btnsBlockSearchBar}>
-          <SortingButton
-            title="Sort organizations"
-            sortingOptions={[
-              { label: t('Latest'), value: 'Latest' },
-              { label: t('Earliest'), value: 'Earliest' },
-            ]}
-            selectedOption={sortingState.selectedOption}
-            onSortChange={handleSortChange}
-            dataTestIdPrefix="sortOrgs"
-            dropdownTestId="sort"
-          />
-        </div>
-        <div className={styles.btnsBlock}>
-          {role === 'administrator' && (
-            <Button
-              className={`${styles.dropdown} ${styles.createorgdropdown}`}
-              onClick={toggleModal}
-              data-testid="createOrganizationBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createOrganization')}
-            </Button>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className={styles.btnsBlockSearchBar}>
+            <SortingButton
+              title={t('sortOrganizations')}
+              sortingOptions={[
+                { label: t('Latest'), value: 'Latest' },
+                { label: t('Earliest'), value: 'Earliest' },
+              ]}
+              selectedOption={sortingState.selectedOption}
+              onSortChange={handleSortChange}
+              dataTestIdPrefix="sortOrgs"
+              dropdownTestId="sort"
+            />
+          </div>
+          <div className={styles.btnsBlock}>
+            {role === 'administrator' && (
+              <Button
+                className={`${styles.dropdown} ${styles.createorgdropdown}`}
+                onClick={toggleModal}
+                data-testid="createOrganizationBtn"
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createOrganization')}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
