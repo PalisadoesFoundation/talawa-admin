@@ -401,7 +401,10 @@ export const GET_POSTS_BY_ORG = gql`
       createdAt
       updatedAt
       attachments {
-        url
+        id
+        name
+        mimeType
+        objectName
       }
       creator {
         id

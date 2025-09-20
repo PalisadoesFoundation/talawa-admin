@@ -205,7 +205,10 @@ export const TOGGLE_PINNED_POST = gql`
       caption
       pinnedAt
       attachments {
-        url
+        id
+        name
+        mimeType
+        objectName
       }
     }
   }
