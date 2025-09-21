@@ -114,7 +114,7 @@ const RequestsTableItem = (props: Props): JSX.Element => {
   };
 
   return (
-    <tr className={styles.requestsTableItemRow}>
+    <tr>
       <th scope="row" className={styles.requestsTableItemIndex}>
         {index + 1}.
       </th>

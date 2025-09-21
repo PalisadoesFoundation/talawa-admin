@@ -4849,9 +4849,6 @@ form label,
 .hoverShadowOnly:focus,
 .hoverShadowOnly:active {
   box-shadow: var(--hover-shadow);
-  background-color: inherit !important;
-  color: inherit !important;
-  border-color: inherit !important;
 }
 
 /* Keep base colors on hover by pairing with .hoverShadowOnly helper */
