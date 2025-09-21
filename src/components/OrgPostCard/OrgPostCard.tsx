@@ -142,7 +142,6 @@ export default function OrgPostCard({
         toast.error('Failed to toggle pin');
       }
     } catch (error: unknown) {
-      console.error('Mutation Error:', error);
       errorHandler(t, error);
     }
   };
@@ -240,8 +239,87 @@ export default function OrgPostCard({
     }
   };
 
+  async function getFileHashFromBase64(base64String: string): Promise<string> {
+    const base64 = base64String.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mimeMatch = url.match(/data:([^;]+)/);
+      if (!mimeMatch) {
+        return 'IMAGE_JPEG'; // fallback for malformed data URI
+      }
+
+      const mime = mimeMatch[1];
+
+      if (mime === 'image/jpeg') {
+        return 'IMAGE_JPEG';
+      } else if (mime === 'image/png') {
+        return 'IMAGE_PNG';
+      } else if (mime === 'image/webp') {
+        return 'IMAGE_WEBP';
+      } else if (mime === 'image/avif') {
+        return 'IMAGE_AVIF';
+      } else if (mime === 'video/mp4') {
+        return 'VIDEO_MP4';
+      } else if (mime === 'video/webm') {
+        return 'VIDEO_WEBM';
+      } else {
+        return 'IMAGE_JPEG'; // fallback for unknown mime types
+      }
+    }
+
+    // Fallback for file URLs (e.g., https://.../file.png)
+    // Remove query parameters and fragments before extracting extension
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    const ext = cleanUrl.split('.').pop()?.toLowerCase();
+
+    if (ext === 'jpg' || ext === 'jpeg') {
+      return 'IMAGE_JPEG';
+    } else if (ext === 'png') {
+      return 'IMAGE_PNG';
+    } else if (ext === 'webp') {
+      return 'IMAGE_WEBP';
+    } else if (ext === 'avif') {
+      return 'IMAGE_AVIF';
+    } else if (ext === 'mp4') {
+      return 'VIDEO_MP4';
+    } else if (ext === 'webm') {
+      return 'VIDEO_WEBM';
+    } else {
+      return 'IMAGE_JPEG'; // fallback for unknown extensions
+    }
+  };
+
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    let attachment = null;
+    if (postFormState.attachments.length > 0) {
+      const fileName =
+        postFormState.attachments[0].url.split('/').pop() || 'defaultFileName';
+      const mimeType = postFormState.attachments[0].mimeType;
+      const objectName = 'uploads/' + fileName;
+      const fileHash = await getFileHashFromBase64(
+        postFormState.attachments[0].url,
+      );
+
+      attachment = {
+        fileHash,
+        mimetype: getMimeTypeEnum(mimeType),
+        name: fileName,
+        objectName,
+      };
+    }
 
     try {
       const { data } = await updatePostMutation({
@@ -249,7 +327,7 @@ export default function OrgPostCard({
           input: {
             id: post.id,
             caption: postFormState.caption.trim(),
-            attachments: postFormState.attachments,
+            attachments: attachment ? [attachment] : [],
           },
         },
       });

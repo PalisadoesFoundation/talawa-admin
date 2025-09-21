@@ -1,5 +1,6 @@
 import type { User } from 'types/User/type';
 import type { Comment } from 'types/Comment/type';
+import { TReturnOptionalNull } from 'i18next';
 export interface InterfacePostCard {
   _id: string;
   creator: Partial<User>;
@@ -83,7 +84,7 @@ export interface InterfacePost {
   createdAt: string;
   pinnedAt?: string | null;
   pinned?: boolean; // Add this if you're using it
-  creator?: InterfaceCreator;
+  creator?: InterfaceCreator | null;
   attachments?: InterfaceAttachment[];
   imageUrl?: string | null; // Add these if you're using them directly
   videoUrl?: string | null; // in your component
