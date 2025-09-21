@@ -37,36 +37,41 @@ vi.mock('@mui/x-date-pickers', () => ({
     const inputProps = slotProps?.textField?.inputProps || {};
 
     // Filter out non-standard HTML attributes to avoid React warnings
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { 
-      className, 
-      maxDate, 
-      minDate, 
-      format, 
-      timeSteps, 
-      minTime, 
-      maxTime,
-      shouldDisableDate,
-      shouldDisableTime,
-      minutesStep,
-      secondsStep,
-      disableFuture,
-      disablePast,
-      ampm,
-      ...cleanProps 
-    } = props;
+    const nonHtmlProps = [
+      'maxDate',
+      'minDate',
+      'format',
+      'timeSteps',
+      'minTime',
+      'maxTime',
+      'shouldDisableDate',
+      'shouldDisableTime',
+      'minutesStep',
+      'secondsStep',
+      'disableFuture',
+      'disablePast',
+      'ampm',
+    ];
+    const cleanProps = Object.fromEntries(
+      Object.entries(props).filter(([key]) => !nonHtmlProps.includes(key)),
+    );
 
     const [isOpen, setIsOpen] = React.useState(false);
 
     return React.createElement('div', {}, [
-      label && React.createElement('label', { key: 'label', htmlFor: 'date-picker-input' }, label),
+      label &&
+        React.createElement(
+          'label',
+          { key: 'label', htmlFor: 'date-picker-input' },
+          label,
+        ),
       React.createElement('input', {
         key: 'input',
         'data-testid': inputProps['data-testid'] || 'date-picker',
         type: 'date',
         id: label || 'date-picker-input',
         'aria-label': inputProps['aria-label'] || label,
-        className: className,
+        className: props.className,
         value: value
           ? typeof value === 'string'
             ? value
@@ -83,62 +88,80 @@ vi.mock('@mui/x-date-pickers', () => ({
         },
         ...cleanProps,
       }),
-      React.createElement('button', {
-        key: 'choose-button',
-        'aria-label': 'choose date',
-        type: 'button',
-        onClick: () => setIsOpen(!isOpen),
-      }, 'choose date'),
-      
+      React.createElement(
+        'button',
+        {
+          key: 'choose-button',
+          'aria-label': 'choose date',
+          type: 'button',
+          onClick: () => setIsOpen(!isOpen),
+        },
+        'choose date',
+      ),
+
       // Calendar interface when opened
-      isOpen && React.createElement('div', {
-        key: 'calendar-interface',
-        'data-testid': 'date-picker-interface',
-        role: 'grid',
-        'aria-label': 'Calendar',
-      }, Array.from({ length: 31 }, (_, i) => 
-        React.createElement('button', {
-          key: `day-${i + 1}`,
-          role: 'gridcell',
-          onClick: () => {
-            const currentDate = value ? dayjs(value) : dayjs();
-            const newDate = currentDate.date(i + 1);
-            onChange?.(newDate);
-            setIsOpen(false);
+      isOpen &&
+        React.createElement(
+          'div',
+          {
+            key: 'calendar-interface',
+            'data-testid': 'date-picker-interface',
+            role: 'grid',
+            'aria-label': 'Calendar',
           },
-        }, (i + 1).toString())
-      ))
+          Array.from({ length: 31 }, (_, i) =>
+            React.createElement(
+              'button',
+              {
+                key: `day-${i + 1}`,
+                role: 'gridcell',
+                onClick: () => {
+                  const currentDate = value ? dayjs(value) : dayjs();
+                  const newDate = currentDate.date(i + 1);
+                  onChange?.(newDate);
+                  setIsOpen(false);
+                },
+              },
+              (i + 1).toString(),
+            ),
+          ),
+        ),
     ]);
   }),
   DateTimePicker: vi.fn(({ value, onChange, slotProps, label, ...props }) => {
     const inputProps = slotProps?.textField?.inputProps || {};
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {
-      className,
-      maxDate,
-      minDate,
-      timeSteps,
-      shouldDisableDate,
-      shouldDisableTime,
-      minutesStep,
-      secondsStep,
-      disableFuture,
-      disablePast,
-      ampm,
-      ...cleanProps
-    } = props;
+    const nonHtmlProps = [
+      'maxDate',
+      'minDate',
+      'timeSteps',
+      'shouldDisableDate',
+      'shouldDisableTime',
+      'minutesStep',
+      'secondsStep',
+      'disableFuture',
+      'disablePast',
+      'ampm',
+    ];
+    const cleanProps = Object.fromEntries(
+      Object.entries(props).filter(([key]) => !nonHtmlProps.includes(key)),
+    );
 
     const [isOpen, setIsOpen] = React.useState(false);
 
     const container = React.createElement('div', {}, [
-      label && React.createElement('label', { key: 'label', htmlFor: 'datetime-picker-input' }, label),
+      label &&
+        React.createElement(
+          'label',
+          { key: 'label', htmlFor: 'datetime-picker-input' },
+          label,
+        ),
       React.createElement('input', {
         key: 'input',
         'data-testid': inputProps['data-testid'] || 'datetime-picker',
         type: 'datetime-local',
         id: label || 'datetime-picker-input',
         'aria-label': inputProps['aria-label'] || label,
-        className: className,
+        className: props.className,
         value: value
           ? typeof value === 'string'
             ? value
@@ -155,44 +178,53 @@ vi.mock('@mui/x-date-pickers', () => ({
         },
         ...cleanProps,
       }),
-      React.createElement('button', {
-        key: 'button',
-        type: 'button',
-        'aria-label': 'choose date and time',
-        onClick: () => setIsOpen(!isOpen),
-      }, 'choose date and time')
+      React.createElement(
+        'button',
+        {
+          key: 'button',
+          type: 'button',
+          'aria-label': 'choose date and time',
+          onClick: () => setIsOpen(!isOpen),
+        },
+        'choose date and time',
+      ),
     ]);
 
     return container;
   }),
   TimePicker: vi.fn(({ value, onChange, slotProps, label, ...props }) => {
     const inputProps = slotProps?.textField?.inputProps || {};
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {
-      className,
-      maxTime,
-      minTime,
-      timeSteps,
-      shouldDisableTime,
-      minutesStep,
-      secondsStep,
-      disableFuture,
-      disablePast,
-      ampm,
-      ...cleanProps
-    } = props;
+    const nonHtmlProps = [
+      'maxTime',
+      'minTime',
+      'timeSteps',
+      'shouldDisableTime',
+      'minutesStep',
+      'secondsStep',
+      'disableFuture',
+      'disablePast',
+      'ampm',
+    ];
+    const cleanProps = Object.fromEntries(
+      Object.entries(props).filter(([key]) => !nonHtmlProps.includes(key)),
+    );
 
     const [isOpen, setIsOpen] = React.useState(false);
 
     const container = React.createElement('div', {}, [
-      label && React.createElement('label', { key: 'label', htmlFor: 'time-picker-input' }, label),
+      label &&
+        React.createElement(
+          'label',
+          { key: 'label', htmlFor: 'time-picker-input' },
+          label,
+        ),
       React.createElement('input', {
         key: 'input',
         'data-testid': inputProps['data-testid'] || 'time-picker',
         type: 'time',
         id: label || 'time-picker-input',
         'aria-label': inputProps['aria-label'] || label,
-        className: className,
+        className: props.className,
         value: value
           ? typeof value === 'string'
             ? value
@@ -209,48 +241,73 @@ vi.mock('@mui/x-date-pickers', () => ({
         },
         ...cleanProps,
       }),
-      React.createElement('button', {
-        key: 'button',
-        type: 'button',
-        'aria-label': 'choose time',
-        onClick: () => setIsOpen(!isOpen),
-      }, 'choose time'),
-      
+      React.createElement(
+        'button',
+        {
+          key: 'button',
+          type: 'button',
+          'aria-label': 'choose time',
+          onClick: () => setIsOpen(!isOpen),
+        },
+        'choose time',
+      ),
+
       // Time picker interface
-      isOpen && React.createElement('div', {
-        key: 'time-interface',
-        'data-testid': 'time-picker-interface',
-      }, [
-        React.createElement('div', {
-          key: 'hours-listbox',
-          role: 'listbox',
-          'aria-label': 'Select hours',
-        }, Array.from({ length: 24 }, (_, i) => 
-          React.createElement('div', {
-            key: `hour-${i}`,
-            role: 'option',
-            onClick: () => {
-              const newTime = `${i.toString().padStart(2, '0')}:${value?.format?.('mm') || '00'}`;
-              onChange?.(dayjs(newTime, 'HH:mm'));
-            },
-          }, i.toString())
-        )),
-        
-        React.createElement('div', {
-          key: 'minutes-listbox',
-          role: 'listbox',
-          'aria-label': 'Select minutes',
-        }, Array.from({ length: 60 }, (_, i) => 
-          React.createElement('div', {
-            key: `minute-${i}`,
-            role: 'option',
-            onClick: () => {
-              const newTime = `${value?.format?.('HH') || '00'}:${i.toString().padStart(2, '0')}`;
-              onChange?.(dayjs(newTime, 'HH:mm'));
-            },
-          }, i.toString().padStart(2, '0'))
-        ))
-      ])
+      isOpen &&
+        React.createElement(
+          'div',
+          {
+            key: 'time-interface',
+            'data-testid': 'time-picker-interface',
+          },
+          [
+            React.createElement(
+              'div',
+              {
+                key: 'hours-listbox',
+                role: 'listbox',
+                'aria-label': 'Select hours',
+              },
+              Array.from({ length: 24 }, (_, i) =>
+                React.createElement(
+                  'div',
+                  {
+                    key: `hour-${i}`,
+                    role: 'option',
+                    onClick: () => {
+                      const newTime = `${i.toString().padStart(2, '0')}:${value?.format?.('mm') || '00'}`;
+                      onChange?.(dayjs(newTime, 'HH:mm'));
+                    },
+                  },
+                  i.toString(),
+                ),
+              ),
+            ),
+
+            React.createElement(
+              'div',
+              {
+                key: 'minutes-listbox',
+                role: 'listbox',
+                'aria-label': 'Select minutes',
+              },
+              Array.from({ length: 60 }, (_, i) =>
+                React.createElement(
+                  'div',
+                  {
+                    key: `minute-${i}`,
+                    role: 'option',
+                    onClick: () => {
+                      const newTime = `${value?.format?.('HH') || '00'}:${i.toString().padStart(2, '0')}`;
+                      onChange?.(dayjs(newTime, 'HH:mm'));
+                    },
+                  },
+                  i.toString().padStart(2, '0'),
+                ),
+              ),
+            ),
+          ],
+        ),
     ]);
 
     return container;
