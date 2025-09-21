@@ -334,7 +334,7 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-fix-dependabot-rollup
+  fix - dependabot - rollup;
   it('open and closes add pledge modal', async () => {
     vi.setSystemTime(new Date('2025-01-01'));
     renderCampaigns(link1);
@@ -353,8 +353,7 @@ fix-dependabot-rollup
     vi.useRealTimers();
   });
 
-
- develop
+  develop;
   it('Redirect to My Pledges screen', async () => {
     renderCampaigns(link1);
 
