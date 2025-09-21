@@ -4,6 +4,26 @@ import React from 'react';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 
+// Mock the problematic ES module import from @mui/x-date-pickers
+vi.mock('@mui/material/utils', () => ({
+  capitalize: vi.fn((str) => str.charAt(0).toUpperCase() + str.slice(1)),
+  debounce: vi.fn((fn) => fn),
+  deprecatedPropType: vi.fn(),
+  isHostComponent: vi.fn(() => false),
+  isMuiElement: vi.fn(() => false),
+  ownerDocument: vi.fn(() => document),
+  ownerWindow: vi.fn(() => window),
+  requirePropFactory: vi.fn(),
+  setRef: vi.fn(),
+  unsupportedProp: vi.fn(),
+  useControlled: vi.fn(),
+  useEnhancedEffect: vi.fn(),
+  useEventCallback: vi.fn(),
+  useForkRef: vi.fn(),
+  useId: vi.fn(),
+  default: {},
+}));
+
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
@@ -68,14 +88,14 @@ vi.mock('@mui/x-date-pickers', () => ({
       React.createElement('input', {
         key: 'input',
         'data-testid': inputProps['data-testid'] || 'date-picker',
-        type: 'date',
+        type: 'text', // Use text type instead of date to accept MM/DD/YYYY format
         id: label || 'date-picker-input',
         'aria-label': inputProps['aria-label'] || label,
         className: props.className,
         value: value
           ? typeof value === 'string'
             ? value
-            : value.format?.('YYYY-MM-DD') || ''
+            : value.format?.('MM/DD/YYYY') || ''
           : '',
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           const newValue = e.target.value;
@@ -158,14 +178,14 @@ vi.mock('@mui/x-date-pickers', () => ({
       React.createElement('input', {
         key: 'input',
         'data-testid': inputProps['data-testid'] || 'datetime-picker',
-        type: 'datetime-local',
+        type: 'text', // Use text type instead of datetime-local to accept MM/DD/YYYY format
         id: label || 'datetime-picker-input',
         'aria-label': inputProps['aria-label'] || label,
         className: props.className,
         value: value
           ? typeof value === 'string'
             ? value
-            : value.format?.('YYYY-MM-DDTHH:mm') || ''
+            : value.format?.('MM/DD/YYYY') || ''
           : '',
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           const newValue = e.target.value;

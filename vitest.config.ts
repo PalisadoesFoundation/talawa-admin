@@ -2,9 +2,18 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  resolve: {
+    alias: {
+      '@mui/material/utils': path.resolve(
+        __dirname,
+        'node_modules/@mui/material/utils/index.js',
+      ),
+    },
+  },
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
