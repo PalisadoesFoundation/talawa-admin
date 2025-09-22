@@ -2,17 +2,21 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MetricType } from 'web-vitals';
 
 // Mock the web-vitals module
-const mockOnCLS = vi.fn();
-const mockOnFCP = vi.fn();
-const mockOnLCP = vi.fn();
-const mockOnTTFB = vi.fn();
-
-vi.mock('web-vitals', () => ({
+const mocks = vi.hoisted(() => ({
+  onCLS: vi.fn(),
+  onFCP: vi.fn(),
+  onINP: vi.fn(),
+  onLCP: vi.fn(),
+  onTTFB: vi.fn(),
+}));
+vi.mock('web-vitals', () => mocks);
+const {
   onCLS: mockOnCLS,
   onFCP: mockOnFCP,
+  onINP: mockOnINP,
   onLCP: mockOnLCP,
   onTTFB: mockOnTTFB,
-}));
+} = mocks;
 
 describe('reportWebVitals', () => {
   let reportWebVitals: (onPerfEntry?: (metric: MetricType) => void) => void;
