@@ -21,15 +21,15 @@ const {
 describe('reportWebVitals', () => {
   let reportWebVitals: (onPerfEntry?: (metric: MetricType) => void) => void;
 
-beforeEach(async () => {
-  // Clear all mocks before each test
-  vi.clearAllMocks();
+  beforeEach(async () => {
+    // Clear all mocks before each test
+    vi.clearAllMocks();
 
-  // Dynamically import the module to ensure fresh imports
-  vi.resetModules();
-  const module = await import('./reportWebVitals');
-  reportWebVitals = module.default;
-});
+    // Dynamically import the module to ensure fresh imports
+    vi.resetModules();
+    const module = await import('./reportWebVitals');
+    reportWebVitals = module.default;
+  });
 
   afterEach(() => {
     vi.restoreAllMocks();
@@ -47,6 +47,7 @@ beforeEach(async () => {
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
+      expect(mockOnINP).not.toHaveBeenCalled();
       expect(mockOnLCP).not.toHaveBeenCalled();
       expect(mockOnTTFB).not.toHaveBeenCalled();
     });
@@ -59,6 +60,7 @@ beforeEach(async () => {
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
+      expect(mockOnINP).not.toHaveBeenCalled();
       expect(mockOnLCP).not.toHaveBeenCalled();
       expect(mockOnTTFB).not.toHaveBeenCalled();
     });
@@ -73,6 +75,7 @@ beforeEach(async () => {
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
+      expect(mockOnINP).not.toHaveBeenCalled();
       expect(mockOnLCP).not.toHaveBeenCalled();
       expect(mockOnTTFB).not.toHaveBeenCalled();
     });
@@ -87,6 +90,7 @@ beforeEach(async () => {
     await vi.waitFor(() => {
       expect(mockOnCLS).toHaveBeenCalledWith(mockCallback);
       expect(mockOnFCP).toHaveBeenCalledWith(mockCallback);
+      expect(mockOnINP).toHaveBeenCalledWith(mockCallback);
       expect(mockOnLCP).toHaveBeenCalledWith(mockCallback);
       expect(mockOnTTFB).toHaveBeenCalledWith(mockCallback);
     });
