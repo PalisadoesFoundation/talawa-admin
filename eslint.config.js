@@ -32,7 +32,7 @@ export default [
     ],
   },
   {
-    files: ['*.ts', '*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'], // Changed from ['*.ts', '*.tsx'] to include subdirectories
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

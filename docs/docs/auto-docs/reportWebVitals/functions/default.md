@@ -15,7 +15,7 @@ the bundle size for users who don't need performance monitoring. It measures
 the following Core Web Vitals:
 
 - **CLS** (Cumulative Layout Shift): Measures visual stability
-- **FCP** (First Contentful Paint): Measures loading performance  
+- **FCP** (First Contentful Paint): Measures loading performance
 - **LCP** (Largest Contentful Paint): Measures loading performance
 - **TTFB** (Time to First Byte): Measures server responsiveness
 - **INP** (Interaction to Next Paint): Measures interaction responsiveness (new in v5.x)
