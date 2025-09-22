@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MetricType } from 'web-vitals';
 
-// Define ReportHandler type locally since 'web-vitals' does not export it
-type ReportHandler = (metric: MetricType) => void;
+// Define WebVitalsCallback type locally since 'web-vitals' does not export it
+type WebVitalsCallback = (metric: MetricType) => void;
 
 // Mock the web-vitals module
 const mocks = vi.hoisted(() => ({
@@ -22,7 +22,7 @@ const {
 } = mocks;
 
 describe('reportWebVitals', () => {
-  let reportWebVitals: (onPerfEntry?: ReportHandler) => void;
+  let reportWebVitals: (onPerfEntry?: WebVitalsCallback) => void;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -50,7 +50,7 @@ describe('reportWebVitals', () => {
   });
 
   it('should not call web-vitals functions when onPerfEntry is null', () => {
-    reportWebVitals(null as unknown as ReportHandler);
+    reportWebVitals(null as unknown as WebVitalsCallback);
     expect(mockOnCLS).not.toHaveBeenCalled();
     expect(mockOnFCP).not.toHaveBeenCalled();
     expect(mockOnINP).not.toHaveBeenCalled();
@@ -59,7 +59,7 @@ describe('reportWebVitals', () => {
   });
 
   it('should not call web-vitals functions when onPerfEntry is not a function', () => {
-    reportWebVitals('not a function' as unknown as ReportHandler);
+    reportWebVitals('not a function' as unknown as WebVitalsCallback);
     expect(mockOnCLS).not.toHaveBeenCalled();
     expect(mockOnFCP).not.toHaveBeenCalled();
     expect(mockOnINP).not.toHaveBeenCalled();
