@@ -17,14 +17,15 @@ vi.mock('web-vitals', () => ({
 describe('reportWebVitals', () => {
   let reportWebVitals: (onPerfEntry?: (metric: MetricType) => void) => void;
 
-  beforeEach(async () => {
-    // Clear all mocks before each test
-    vi.clearAllMocks();
+beforeEach(async () => {
+  // Clear all mocks before each test
+  vi.clearAllMocks();
 
-    // Dynamically import the module to ensure fresh imports
-    const module = await import('./reportWebVitals');
-    reportWebVitals = module.default;
-  });
+  // Dynamically import the module to ensure fresh imports
+  vi.resetModules();
+  const module = await import('./reportWebVitals');
+  reportWebVitals = module.default;
+});
 
   afterEach(() => {
     vi.restoreAllMocks();
