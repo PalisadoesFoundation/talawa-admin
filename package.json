@@ -124,7 +124,7 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@cypress/code-coverage": "^3.14.5",
     "@eslint/js": "^9.22.0",
-    "@graphql-eslint/eslint-plugin": "^4.3.0",
+    "@graphql-eslint/eslint-plugin": "^4.4.0",
     "@graphql-tools/graphql-file-loader": "^8.0.12",
     "@graphql-tools/load": "^8.0.12",
     "@graphql-tools/schema": "^10.0.16",
