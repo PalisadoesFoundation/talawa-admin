@@ -27,7 +27,7 @@ describe('reportWebVitals', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should be defined', () => {
