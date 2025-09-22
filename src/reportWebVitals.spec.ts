@@ -95,6 +95,7 @@ describe('reportWebVitals', () => {
     await vi.waitFor(() => {
       expect(mockOnCLS).toHaveBeenCalledWith(console.log);
       expect(mockOnFCP).toHaveBeenCalledWith(console.log);
+      expect(mockOnINP).toHaveBeenCalledWith(console.log);
       expect(mockOnLCP).toHaveBeenCalledWith(console.log);
       expect(mockOnTTFB).toHaveBeenCalledWith(console.log);
     });
