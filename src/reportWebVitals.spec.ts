@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MetricType } from 'web-vitals';
 
+// Define ReportHandler type locally since 'web-vitals' does not export it
+type ReportHandler = (metric: MetricType) => void;
+
 // Mock the web-vitals module
 const mocks = vi.hoisted(() => ({
   onCLS: vi.fn(),
@@ -19,13 +22,10 @@ const {
 } = mocks;
 
 describe('reportWebVitals', () => {
-  let reportWebVitals: (onPerfEntry?: (metric: MetricType) => void) => void;
+  let reportWebVitals: (onPerfEntry?: ReportHandler) => void;
 
   beforeEach(async () => {
-    // Clear all mocks before each test
     vi.clearAllMocks();
-
-    // Dynamically import the module to ensure fresh imports
     vi.resetModules();
     const module = await import('./reportWebVitals');
     reportWebVitals = module.default;
@@ -42,8 +42,6 @@ describe('reportWebVitals', () => {
 
   it('should not call web-vitals functions when onPerfEntry is undefined', async () => {
     reportWebVitals();
-
-    // Wait for any async operations
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
@@ -54,9 +52,7 @@ describe('reportWebVitals', () => {
   });
 
   it('should not call web-vitals functions when onPerfEntry is null', async () => {
-    reportWebVitals(null as unknown as (metric: MetricType) => void);
-
-    // Wait for any async operations
+    reportWebVitals(null as unknown as ReportHandler);
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
@@ -67,11 +63,7 @@ describe('reportWebVitals', () => {
   });
 
   it('should not call web-vitals functions when onPerfEntry is not a function', async () => {
-    reportWebVitals(
-      'not a function' as unknown as (metric: MetricType) => void,
-    );
-
-    // Wait for any async operations
+    reportWebVitals('not a function' as unknown as ReportHandler);
     await vi.waitFor(() => {
       expect(mockOnCLS).not.toHaveBeenCalled();
       expect(mockOnFCP).not.toHaveBeenCalled();
@@ -88,9 +80,13 @@ describe('reportWebVitals', () => {
 
     // Wait for the dynamic import and function calls
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(mockCallback);
+      expect(mockOnCLS).toHaveBeenCalledWith(mockCallback, {
+        reportAllChanges: true,
+      });
       expect(mockOnFCP).toHaveBeenCalledWith(mockCallback);
-      expect(mockOnINP).toHaveBeenCalledWith(mockCallback);
+      expect(mockOnINP).toHaveBeenCalledWith(mockCallback, {
+        reportAllChanges: true,
+      });
       expect(mockOnLCP).toHaveBeenCalledWith(mockCallback);
       expect(mockOnTTFB).toHaveBeenCalledWith(mockCallback);
     });
@@ -102,9 +98,13 @@ describe('reportWebVitals', () => {
     reportWebVitals(console.log);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(console.log);
+      expect(mockOnCLS).toHaveBeenCalledWith(console.log, {
+        reportAllChanges: true,
+      });
       expect(mockOnFCP).toHaveBeenCalledWith(console.log);
-      expect(mockOnINP).toHaveBeenCalledWith(console.log);
+      expect(mockOnINP).toHaveBeenCalledWith(console.log, {
+        reportAllChanges: true,
+      });
       expect(mockOnLCP).toHaveBeenCalledWith(console.log);
       expect(mockOnTTFB).toHaveBeenCalledWith(console.log);
     });
@@ -120,16 +120,20 @@ describe('reportWebVitals', () => {
     reportWebVitals(arrowCallback);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(arrowCallback);
+      expect(mockOnCLS).toHaveBeenCalledWith(arrowCallback, {
+        reportAllChanges: true,
+      });
       expect(mockOnFCP).toHaveBeenCalledWith(arrowCallback);
-      expect(mockOnINP).toHaveBeenCalledWith(arrowCallback);
+      expect(mockOnINP).toHaveBeenCalledWith(arrowCallback, {
+        reportAllChanges: true,
+      });
       expect(mockOnLCP).toHaveBeenCalledWith(arrowCallback);
       expect(mockOnTTFB).toHaveBeenCalledWith(arrowCallback);
     });
   });
 
   it('should accept functions created via Function constructor', async () => {
-    // Exercise a Function-constructor-created callback as a valid function
+    // Test with Function constructor to cover instanceof Function check
     const funcConstructor = new Function('metric', 'return metric;') as (
       metric: MetricType,
     ) => MetricType;
@@ -137,9 +141,13 @@ describe('reportWebVitals', () => {
     reportWebVitals(funcConstructor);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(funcConstructor);
+      expect(mockOnCLS).toHaveBeenCalledWith(funcConstructor, {
+        reportAllChanges: true,
+      });
       expect(mockOnFCP).toHaveBeenCalledWith(funcConstructor);
-      expect(mockOnINP).toHaveBeenCalledWith(funcConstructor);
+      expect(mockOnINP).toHaveBeenCalledWith(funcConstructor, {
+        reportAllChanges: true,
+      });
       expect(mockOnLCP).toHaveBeenCalledWith(funcConstructor);
       expect(mockOnTTFB).toHaveBeenCalledWith(funcConstructor);
     });
