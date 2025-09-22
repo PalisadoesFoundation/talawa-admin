@@ -40,37 +40,31 @@ describe('reportWebVitals', () => {
     expect(typeof reportWebVitals).toBe('function');
   });
 
-  it('should not call web-vitals functions when onPerfEntry is undefined', async () => {
+  it('should not call web-vitals functions when onPerfEntry is undefined', () => {
     reportWebVitals();
-    await vi.waitFor(() => {
-      expect(mockOnCLS).not.toHaveBeenCalled();
-      expect(mockOnFCP).not.toHaveBeenCalled();
-      expect(mockOnINP).not.toHaveBeenCalled();
-      expect(mockOnLCP).not.toHaveBeenCalled();
-      expect(mockOnTTFB).not.toHaveBeenCalled();
-    });
+    expect(mockOnCLS).not.toHaveBeenCalled();
+    expect(mockOnFCP).not.toHaveBeenCalled();
+    expect(mockOnINP).not.toHaveBeenCalled();
+    expect(mockOnLCP).not.toHaveBeenCalled();
+    expect(mockOnTTFB).not.toHaveBeenCalled();
   });
 
-  it('should not call web-vitals functions when onPerfEntry is null', async () => {
+  it('should not call web-vitals functions when onPerfEntry is null', () => {
     reportWebVitals(null as unknown as ReportHandler);
-    await vi.waitFor(() => {
-      expect(mockOnCLS).not.toHaveBeenCalled();
-      expect(mockOnFCP).not.toHaveBeenCalled();
-      expect(mockOnINP).not.toHaveBeenCalled();
-      expect(mockOnLCP).not.toHaveBeenCalled();
-      expect(mockOnTTFB).not.toHaveBeenCalled();
-    });
+    expect(mockOnCLS).not.toHaveBeenCalled();
+    expect(mockOnFCP).not.toHaveBeenCalled();
+    expect(mockOnINP).not.toHaveBeenCalled();
+    expect(mockOnLCP).not.toHaveBeenCalled();
+    expect(mockOnTTFB).not.toHaveBeenCalled();
   });
 
-  it('should not call web-vitals functions when onPerfEntry is not a function', async () => {
+  it('should not call web-vitals functions when onPerfEntry is not a function', () => {
     reportWebVitals('not a function' as unknown as ReportHandler);
-    await vi.waitFor(() => {
-      expect(mockOnCLS).not.toHaveBeenCalled();
-      expect(mockOnFCP).not.toHaveBeenCalled();
-      expect(mockOnINP).not.toHaveBeenCalled();
-      expect(mockOnLCP).not.toHaveBeenCalled();
-      expect(mockOnTTFB).not.toHaveBeenCalled();
-    });
+    expect(mockOnCLS).not.toHaveBeenCalled();
+    expect(mockOnFCP).not.toHaveBeenCalled();
+    expect(mockOnINP).not.toHaveBeenCalled();
+    expect(mockOnLCP).not.toHaveBeenCalled();
+    expect(mockOnTTFB).not.toHaveBeenCalled();
   });
 
   it('should call all web-vitals functions when onPerfEntry is a valid function', async () => {
