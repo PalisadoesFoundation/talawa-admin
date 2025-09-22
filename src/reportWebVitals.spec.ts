@@ -128,8 +128,8 @@ describe('reportWebVitals', () => {
     });
   });
 
-  it('should handle Function constructor instances', async () => {
-    // Test with Function constructor to cover instanceof Function check
+  it('should accept functions created via Function constructor', async () => {
+    // Exercise a Function-constructor-created callback as a valid function
     const funcConstructor = new Function('metric', 'return metric;') as (
       metric: MetricType,
     ) => MetricType;
