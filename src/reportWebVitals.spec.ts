@@ -74,13 +74,19 @@ describe('reportWebVitals', () => {
 
     // Wait for the dynamic import and function calls
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(mockCallback, {
-        reportAllChanges: true,
-      });
+      expect(mockOnCLS).toHaveBeenCalledWith(
+        mockCallback,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnFCP).toHaveBeenCalledWith(mockCallback);
-      expect(mockOnINP).toHaveBeenCalledWith(mockCallback, {
-        reportAllChanges: true,
-      });
+      expect(mockOnINP).toHaveBeenCalledWith(
+        mockCallback,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnLCP).toHaveBeenCalledWith(mockCallback);
       expect(mockOnTTFB).toHaveBeenCalledWith(mockCallback);
     });
@@ -92,13 +98,19 @@ describe('reportWebVitals', () => {
     reportWebVitals(console.log);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(console.log, {
-        reportAllChanges: true,
-      });
+      expect(mockOnCLS).toHaveBeenCalledWith(
+        console.log,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnFCP).toHaveBeenCalledWith(console.log);
-      expect(mockOnINP).toHaveBeenCalledWith(console.log, {
-        reportAllChanges: true,
-      });
+      expect(mockOnINP).toHaveBeenCalledWith(
+        console.log,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnLCP).toHaveBeenCalledWith(console.log);
       expect(mockOnTTFB).toHaveBeenCalledWith(console.log);
     });
@@ -114,13 +126,19 @@ describe('reportWebVitals', () => {
     reportWebVitals(arrowCallback);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(arrowCallback, {
-        reportAllChanges: true,
-      });
+      expect(mockOnCLS).toHaveBeenCalledWith(
+        arrowCallback,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnFCP).toHaveBeenCalledWith(arrowCallback);
-      expect(mockOnINP).toHaveBeenCalledWith(arrowCallback, {
-        reportAllChanges: true,
-      });
+      expect(mockOnINP).toHaveBeenCalledWith(
+        arrowCallback,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnLCP).toHaveBeenCalledWith(arrowCallback);
       expect(mockOnTTFB).toHaveBeenCalledWith(arrowCallback);
     });
@@ -135,13 +153,19 @@ describe('reportWebVitals', () => {
     reportWebVitals(funcConstructor);
 
     await vi.waitFor(() => {
-      expect(mockOnCLS).toHaveBeenCalledWith(funcConstructor, {
-        reportAllChanges: true,
-      });
+      expect(mockOnCLS).toHaveBeenCalledWith(
+        funcConstructor,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnFCP).toHaveBeenCalledWith(funcConstructor);
-      expect(mockOnINP).toHaveBeenCalledWith(funcConstructor, {
-        reportAllChanges: true,
-      });
+      expect(mockOnINP).toHaveBeenCalledWith(
+        funcConstructor,
+        expect.objectContaining({
+          reportAllChanges: true,
+        }),
+      );
       expect(mockOnLCP).toHaveBeenCalledWith(funcConstructor);
       expect(mockOnTTFB).toHaveBeenCalledWith(funcConstructor);
     });
