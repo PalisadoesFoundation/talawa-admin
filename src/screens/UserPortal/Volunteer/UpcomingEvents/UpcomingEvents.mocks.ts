@@ -143,6 +143,21 @@ const baseRecurringEvent = {
   recurrenceRule: { frequency: 'WEEKLY' },
 };
 
+// Event without baseEventId for testing edge cases
+const recurringEventWithoutBase = {
+  id: 'eventWithoutBaseId',
+  name: 'Recurring Event Without Base',
+  startAt: '2044-11-02T10:00:00.000Z',
+  endAt: '2044-11-02T12:00:00.000Z',
+  location: 'Delhi',
+  description: 'Recurring event without baseEvent',
+  isRecurringEventTemplate: true, // This makes it a recurring template
+  baseEvent: null,
+  volunteerGroups: [],
+  volunteers: [],
+  recurrenceRule: { frequency: 'DAILY' },
+};
+
 // Common queries
 const eventsQuery = {
   request: {
@@ -330,6 +345,146 @@ export const RECURRING_MODAL_MOCKS = [
           'baseEventId1',
           'recurringGroupId1',
         ),
+      },
+    },
+  },
+];
+
+// Mocks for testing edge cases with events without baseEventId
+export const EDGE_CASE_MOCKS = [
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: recurringInstanceEvent },
+              { node: baseRecurringEvent },
+              { node: recurringEventWithoutBase },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: { data: { getVolunteerMembership: [] } },
+  },
+  // Mock for events without baseEventId - series scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventWithoutBaseId',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '7',
+          'eventWithoutBaseId',
+        ),
+      },
+    },
+  },
+  // Mock for events without baseEventId - instance scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventWithoutBaseId',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventWithoutBaseId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '8',
+          'eventWithoutBaseId',
+        ),
+      },
+    },
+  },
+];
+
+// Mocks for testing membership lookup enhancement with recurring events
+export const MEMBERSHIP_LOOKUP_MOCKS = [
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: recurringInstanceEvent },
+              { node: baseRecurringEvent },
+              // Add another instance that references the same base
+              {
+                node: {
+                  id: 'eventInstanceId2',
+                  name: 'Recurring Event Instance 2',
+                  startAt: '2044-11-08T10:00:00.000Z',
+                  endAt: '2044-11-08T12:00:00.000Z',
+                  location: 'Mumbai',
+                  description: 'Another instance of recurring event',
+                  isRecurringEventTemplate: false,
+                  baseEvent: {
+                    id: 'baseEventId1',
+                    isRecurringEventTemplate: true,
+                  },
+                  volunteerGroups: [
+                    {
+                      id: 'recurringGroupId1',
+                      name: 'Recurring Group 1',
+                      description: 'desc',
+                      volunteersRequired: 5,
+                      volunteers: [],
+                    },
+                  ],
+                  volunteers: [],
+                  recurrenceRule: { frequency: 'WEEKLY' },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: {
+      data: {
+        getVolunteerMembership: [
+          // Base event membership (should cascade to instances)
+          {
+            id: 'baseMembership1',
+            status: 'accepted',
+            event: { id: 'baseEventId1' },
+            group: null,
+          },
+          // Base event group membership (should cascade to instances)
+          {
+            id: 'baseMembership2',
+            status: 'requested',
+            event: { id: 'baseEventId1' },
+            group: { id: 'recurringGroupId1' },
+          },
+        ],
       },
     },
   },
