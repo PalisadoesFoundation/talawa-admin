@@ -208,7 +208,7 @@ describe('EventListCardModals', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        attendees: [{ _id: 'user1' }],
+        attendees: [{ id: 'user1' }],
       },
     });
     const previewProps = MockPreviewModal.mock.calls[0][0];

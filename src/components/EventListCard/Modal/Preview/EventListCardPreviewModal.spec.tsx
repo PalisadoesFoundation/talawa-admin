@@ -167,7 +167,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        creator: { _id: 'user123' },
+        creator: { id: 'user123' },
         userRole: UserRole.REGULAR,
       },
       userId: 'user123',
