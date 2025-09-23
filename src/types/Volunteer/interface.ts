@@ -322,7 +322,7 @@ export interface InterfaceEventVolunteerInfo {
  * @property {string} [recurringEventInstanceId] - Optional instance ID for recurring events.
  */
 export interface InterfaceCreateVolunteerGroupData {
-  eventId: string;
+  eventId: string | undefined;
   leaderId?: string;
   name: string;
   description?: string | null;

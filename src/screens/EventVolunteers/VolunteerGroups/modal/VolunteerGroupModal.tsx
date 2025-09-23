@@ -199,7 +199,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         // Template-First Hierarchy: Use scope-based approach
         const mutationData: InterfaceCreateVolunteerGroupData = {
           eventId: isRecurring
-            ? baseEvent?.id || eventId // Always use baseEvent for recurring events (templates stored in base)
+            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
             : eventId, // Use eventId for non-recurring events
           leaderId: leader?.id,
           name,

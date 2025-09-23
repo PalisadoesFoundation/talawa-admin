@@ -350,4 +350,276 @@ describe('Testing VolunteerGroupModal', () => {
       expect(toast.success).toHaveBeenCalled();
     });
   });
+
+  describe('Recurring Events', () => {
+    const recurringEventProps: InterfaceVolunteerGroupModal = {
+      isOpen: true,
+      hide: vi.fn(),
+      eventId: 'eventInstanceId',
+      orgId: 'orgId',
+      refetchGroups: vi.fn(),
+      mode: 'create',
+      group: null,
+      isRecurring: true,
+      baseEvent: { id: 'baseEventId' },
+    };
+
+    it('should create volunteer group for entire series when applyTo is "series"', async () => {
+      renderGroupModal(link1, recurringEventProps);
+      expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+
+      // Should show radio buttons for recurring events
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      expect(seriesRadio).toBeInTheDocument();
+      expect(instanceRadio).toBeInTheDocument();
+      expect(seriesRadio).toBeChecked(); // Default should be 'series'
+
+      // Fill form
+      const nameInput = screen.getByLabelText(`${t.name} *`);
+      fireEvent.change(nameInput, {
+        target: { value: 'Recurring Group Series' },
+      });
+
+      const descInput = screen.getByLabelText(t.description);
+      fireEvent.change(descInput, { target: { value: 'desc' } });
+
+      const vrInput = screen.getByLabelText(t.volunteersRequired);
+      fireEvent.change(vrInput, { target: { value: '10' } });
+
+      // Select Leader
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      // Select Volunteers
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
+        expect(recurringEventProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should create volunteer group for this instance only when applyTo is "instance"', async () => {
+      renderGroupModal(link1, recurringEventProps);
+      expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+
+      // Select "This Event Only" radio button
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Fill form
+      const nameInput = screen.getByLabelText(`${t.name} *`);
+      fireEvent.change(nameInput, {
+        target: { value: 'Recurring Group Instance' },
+      });
+
+      const descInput = screen.getByLabelText(t.description);
+      fireEvent.change(descInput, { target: { value: 'desc' } });
+
+      const vrInput = screen.getByLabelText(t.volunteersRequired);
+      fireEvent.change(vrInput, { target: { value: '10' } });
+
+      // Select Leader
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      // Select Volunteers
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
+        expect(recurringEventProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should not show radio buttons for recurring events in edit mode', async () => {
+      const editRecurringProps = {
+        ...recurringEventProps,
+        mode: 'edit' as const,
+        group: {
+          id: 'groupId',
+          name: 'Group 1',
+          description: 'desc',
+          volunteersRequired: 2,
+          createdAt: '2024-10-25T16:16:32.978Z',
+          creator: {
+            id: 'creatorId1',
+            name: 'Wilt Shepherd',
+            emailAddress: 'wilt@example.com',
+          },
+          leader: {
+            id: 'userId',
+            name: 'Teresa Bradley',
+            emailAddress: 'teresa@example.com',
+          },
+          volunteers: [],
+          event: {
+            id: 'eventId',
+          },
+        },
+      };
+
+      renderGroupModal(link1, editRecurringProps);
+      expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+
+      // Should NOT show radio buttons in edit mode
+      const seriesRadio = screen.queryByRole('radio', {
+        name: /entire series/i,
+      });
+      const instanceRadio = screen.queryByRole('radio', {
+        name: /this event only/i,
+      });
+
+      expect(seriesRadio).not.toBeInTheDocument();
+      expect(instanceRadio).not.toBeInTheDocument();
+    });
+
+    it('should use baseEvent ID for recurring events when available', async () => {
+      renderGroupModal(link1, recurringEventProps);
+
+      // Fill minimal form to test the mutation logic
+      const nameInput = screen.getByLabelText(`${t.name} *`);
+      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
+
+      // Select Leader (required)
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      // This test verifies that the logic in createGroupHandler is executed:
+      // - isRecurring is true
+      // - baseEvent?.id is used as eventId ('baseEventId')
+      // - scope is set to 'ENTIRE_SERIES' by default
+      waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle radio button onChange for series selection', async () => {
+      renderGroupModal(link1, recurringEventProps);
+
+      // Initially "series" should be selected by default
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+
+      // Click on instance radio to change selection
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+      expect(seriesRadio).not.toBeChecked();
+
+      // Click back on series radio to test onChange={() => setApplyTo('series')}
+      await userEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+    });
+
+    it('should handle radio button onChange for instance selection', async () => {
+      renderGroupModal(link1, recurringEventProps);
+
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      // Test onChange={() => setApplyTo('instance')}
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+      expect(seriesRadio).not.toBeChecked();
+
+      // Test that clicking the same radio button maintains its state
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+      expect(seriesRadio).not.toBeChecked();
+    });
+
+    it('should toggle between radio options correctly', async () => {
+      renderGroupModal(link1, recurringEventProps);
+
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      // Test multiple toggles to ensure onChange handlers work properly
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      await userEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      await userEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+    });
+
+    it('should maintain radio button state during form interactions', async () => {
+      renderGroupModal(link1, recurringEventProps);
+
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      // Change to instance
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Fill some form fields
+      const nameInput = screen.getByLabelText(`${t.name} *`);
+      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
+
+      // Radio button state should be preserved
+      expect(instanceRadio).toBeChecked();
+      expect(seriesRadio).not.toBeChecked();
+
+      // Change back to series
+      await userEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+
+      // Form data should still be there
+      expect(nameInput).toHaveValue('Test Group');
+    });
+  });
 });

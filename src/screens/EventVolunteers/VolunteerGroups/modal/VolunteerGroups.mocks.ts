@@ -220,6 +220,55 @@ export const MOCKS = [
       },
     },
   },
+  // Mock for recurring event series scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Recurring Group Series',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringGroupId',
+        },
+      },
+    },
+  },
+  // Mock for recurring event instance scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Recurring Group Instance',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventInstanceId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringGroupInstanceId',
+        },
+      },
+    },
+  },
 ];
 
 export const MOCKS_EMPTY = [
