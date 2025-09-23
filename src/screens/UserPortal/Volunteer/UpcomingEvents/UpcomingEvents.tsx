@@ -399,9 +399,6 @@ const UpcomingEvents = (): JSX.Element => {
 
           // Only add if we don't already have a specific membership for this instance
           if (!lookup[instanceKey]) {
-            console.log(
-              `Adding series lookup: ${instanceKey} -> ${membership.status}`,
-            );
             lookup[instanceKey] = membership;
           }
         });
@@ -508,8 +505,7 @@ const UpcomingEvents = (): JSX.Element => {
                       </span>
                       {recurring ? (
                         <span>
-                          Recurrence:{' '}
-                          {event.recurrenceRule?.frequency || 'Daily'}
+                          Recurrence: {event.recurrenceRule?.frequency}
                         </span>
                       ) : (
                         <>
