@@ -4,6 +4,6 @@
 
 # Variable: GROUP\_CHAT\_BY\_USER\_ID\_QUERY\_MOCK
 
-> `const` **GROUP\_CHAT\_BY\_USER\_ID\_QUERY\_MOCK**: `InterfaceGQLMock`[]
+> `const` **GROUP\_CHAT\_BY\_USER\_ID\_QUERY\_MOCK**: `IGQLMockInterface`[]
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L413)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L483)

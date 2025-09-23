@@ -7,7 +7,7 @@ import {
 } from 'GraphQl/Queries/PlugInQueries';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 
-interface InterfaceGQLMock {
+interface IGQLMockInterface {
   request: {
     query: DocumentNode;
     variables: Record<string, unknown>;
@@ -191,7 +191,7 @@ const singleChat = {
 // --------------------------------------------------------------------
 // 1) UserConnectionListMock
 // --------------------------------------------------------------------
-export const UserConnectionListMock: InterfaceGQLMock[] = [
+export const UserConnectionListMock: IGQLMockInterface[] = [
   {
     request: {
       query: USERS_CONNECTION_LIST,
@@ -220,6 +220,76 @@ export const UserConnectionListMock: InterfaceGQLMock[] = [
           {
             user: userDeanneMarks,
             appUserProfile,
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: { firstName_contains: 'John', lastName_contains: 'Doe' },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              _id: '2',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '2',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: { firstName_contains: 'John', lastName_contains: '' },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              _id: '3',
+              firstName: 'John',
+              lastName: 'Smith',
+              email: 'johnsmith@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '3',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
             __typename: 'UserData',
           },
         ],
@@ -271,7 +341,7 @@ function makeMessageSentResult(_id: string): {
   };
 }
 
-export const MESSAGE_SENT_TO_CHAT_MOCK: InterfaceGQLMock[] = [
+export const MESSAGE_SENT_TO_CHAT_MOCK: IGQLMockInterface[] = [
   {
     request: { query: MESSAGE_SENT_TO_CHAT, variables: { userId: null } },
     result: makeMessageSentResult('668ec1f1364e03ac47a151'),
@@ -289,7 +359,7 @@ export const MESSAGE_SENT_TO_CHAT_MOCK: InterfaceGQLMock[] = [
 // --------------------------------------------------------------------
 // 3) CHAT_BY_ID_QUERY_MOCK
 // --------------------------------------------------------------------
-export const CHAT_BY_ID_QUERY_MOCK: InterfaceGQLMock[] = [
+export const CHAT_BY_ID_QUERY_MOCK: IGQLMockInterface[] = [
   {
     request: { query: CHAT_BY_ID, variables: { id: '1' } },
     result: { data: { chatById: singleChat } },
@@ -309,7 +379,7 @@ export const CHAT_BY_ID_QUERY_MOCK: InterfaceGQLMock[] = [
 // --------------------------------------------------------------------
 const singleUnreadChat = { ...singleChat }; // same shape used repeatedly
 
-export const UNREAD_CHAT_LIST_QUERY_MOCK: InterfaceGQLMock[] = [
+export const UNREAD_CHAT_LIST_QUERY_MOCK: IGQLMockInterface[] = [
   // No variables:
   {
     request: { query: UNREAD_CHAT_LIST, variables: {} },
@@ -410,7 +480,7 @@ const singleGroupChat = {
   unseenMessagesByUsers: JSON.stringify({ '1': 0, '2': 0 }),
 };
 
-export const GROUP_CHAT_BY_USER_ID_QUERY_MOCK: InterfaceGQLMock[] = [
+export const GROUP_CHAT_BY_USER_ID_QUERY_MOCK: IGQLMockInterface[] = [
   {
     request: { query: GROUP_CHAT_LIST, variables: {} },
     result: { data: { getGroupChatsByUserId: singleGroupChat } },

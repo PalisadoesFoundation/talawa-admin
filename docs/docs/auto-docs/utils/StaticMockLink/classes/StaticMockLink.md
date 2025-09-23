@@ -17,7 +17,7 @@ when it is used allowing it to be used in places like Storybook.
 
 ### new StaticMockLink()
 
-> **new StaticMockLink**(`mockedResponses`, `addTypename`): [`StaticMockLink`](StaticMockLink.md)
+> **new StaticMockLink**(`mockedResponses`, `addTypename`): `StaticMockLink`
 
 Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L35)
 
@@ -25,7 +25,7 @@ Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFounda
 
 ##### mockedResponses
 
-readonly `MockedResponse`[]
+readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
 
 ##### addTypename
 
@@ -33,7 +33,7 @@ readonly `MockedResponse`[]
 
 #### Returns
 
-[`StaticMockLink`](StaticMockLink.md)
+`StaticMockLink`
 
 #### Overrides
 

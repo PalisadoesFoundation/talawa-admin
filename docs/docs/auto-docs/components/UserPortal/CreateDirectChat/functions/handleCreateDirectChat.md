@@ -20,7 +20,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:89]
 
 ### t
 
-`TFunction`\<`"userChat"`\>
+`TFunction`\<`"translation"`, `"userChat"`\>
 
 ### createChat
 
