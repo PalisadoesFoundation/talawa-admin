@@ -320,11 +320,8 @@ const UpcomingEvents = (): JSX.Element => {
   // Create a basic lookup map for user's volunteer memberships
   const basicMembershipLookup = useMemo(() => {
     if (!membershipData?.getVolunteerMembership) {
-      console.log('No membership data found:', membershipData);
       return {};
     }
-
-    console.log('Membership data:', membershipData.getVolunteerMembership);
 
     const lookup: Record<string, InterfaceVolunteerMembership> = {};
     membershipData.getVolunteerMembership.forEach(
@@ -332,9 +329,7 @@ const UpcomingEvents = (): JSX.Element => {
         const key = membership.group
           ? `${membership.event.id}-${membership.group.id}`
           : membership.event.id;
-        console.log(
-          `Creating lookup key: ${key}, status: ${membership.status}`,
-        );
+
         lookup[key] = membership;
       },
     );
