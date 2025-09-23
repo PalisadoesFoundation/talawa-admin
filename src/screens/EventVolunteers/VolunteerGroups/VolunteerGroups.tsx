@@ -16,7 +16,7 @@
  *
  * @returns The rendered volunteer groups management component.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -35,7 +35,7 @@ import {
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
-import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
@@ -90,6 +90,8 @@ function volunteerGroups(): JSX.Element {
     'volunteers_ASC' | 'volunteers_DESC' | null
   >(null);
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -99,27 +101,30 @@ function volunteerGroups(): JSX.Element {
   });
 
   /**
-   * Query to fetch the list of volunteer groups for the event.
+   * Query to fetch event and volunteer groups for the event.
    */
   const {
-    data: groupsData,
+    data: eventData,
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
   }: {
-    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
+    data?: {
+      event: {
+        id: string;
+        recurrenceRule?: { id: string } | null;
+        baseEvent?: { id: string } | null;
+        volunteerGroups: InterfaceVolunteerGroupInfo[];
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
-      where: {
-        eventId: eventId,
-        ...(searchBy === 'leader' && searchTerm && { leaderName: searchTerm }),
-        ...(searchBy === 'group' &&
-          searchTerm && { name_contains: searchTerm }),
+      input: {
+        id: eventId,
       },
-      orderBy: sortBy,
     },
   });
 
@@ -145,10 +150,48 @@ function volunteerGroups(): JSX.Element {
     [],
   );
 
-  const groups = useMemo(
-    () => groupsData?.getEventVolunteerGroups || [],
-    [groupsData],
-  );
+  // Effect to set recurring event info similar to Volunteers component
+  useEffect(() => {
+    if (eventData && eventData.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+      setBaseEvent(eventData.event.baseEvent || null);
+    }
+  }, [eventData]);
+
+  const groups = useMemo(() => {
+    const allGroups = eventData?.event?.volunteerGroups || [];
+
+    // Apply client-side filtering based on search term
+    let filteredGroups = allGroups;
+
+    if (searchTerm) {
+      filteredGroups = filteredGroups.filter(
+        (group: InterfaceVolunteerGroupInfo) => {
+          if (searchBy === 'leader') {
+            const leaderName = group.leader?.name || '';
+            return leaderName.toLowerCase().includes(searchTerm.toLowerCase());
+          } else {
+            const groupName = group.name || '';
+            return groupName.toLowerCase().includes(searchTerm.toLowerCase());
+          }
+        },
+      );
+    }
+
+    // Apply sorting (create a copy to avoid read-only array issues)
+    let finalGroups = [...filteredGroups];
+    if (sortBy === 'volunteers_ASC') {
+      finalGroups.sort(
+        (a, b) => (a.volunteers?.length || 0) - (b.volunteers?.length || 0),
+      );
+    } else if (sortBy === 'volunteers_DESC') {
+      finalGroups.sort(
+        (a, b) => (b.volunteers?.length || 0) - (a.volunteers?.length || 0),
+      );
+    }
+
+    return finalGroups;
+  }, [eventData, searchTerm, searchBy, sortBy]);
 
   if (groupsLoading) {
     return <Loader size="xl" />;
@@ -370,6 +413,9 @@ function volunteerGroups(): JSX.Element {
         orgId={orgId}
         group={group}
         mode={modalMode}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
+        recurringEventInstanceId={eventId}
       />
 
       {group && (
@@ -385,6 +431,8 @@ function volunteerGroups(): JSX.Element {
             hide={() => closeModal(ModalState.DELETE)}
             refetchGroups={refetchGroups}
             group={group}
+            isRecurring={isRecurring}
+            eventId={eventId}
           />
         </>
       )}

@@ -66,6 +66,10 @@ export interface InterfaceVolunteerGroupModal {
   group: InterfaceVolunteerGroupInfo | null;
   refetchGroups: () => void;
   mode: 'create' | 'edit';
+  // New props for recurring events
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
+  recurringEventInstanceId?: string;
 }
 
 /**
@@ -108,6 +112,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   group,
   refetchGroups,
   mode,
+  isRecurring = false,
+  baseEvent = null,
+  recurringEventInstanceId,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventVolunteers',
@@ -121,6 +128,8 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     volunteerUsers: group?.volunteers?.map((volunteer) => volunteer.user) ?? [],
     volunteersRequired: group?.volunteersRequired ?? null,
   });
+
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
@@ -187,16 +196,33 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
+
+        // Template-First Hierarchy: Use scope-based approach
+        const mutationData: any = {
+          eventId: isRecurring
+            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
+            : eventId, // Use eventId for non-recurring events
+          leaderId: leader?.id,
+          name,
+          description,
+          volunteersRequired,
+          volunteerUserIds: volunteerUsers.map((user) => user.id),
+        };
+
+        // Add Template-First recurring event logic
+        if (isRecurring) {
+          if (applyTo === 'series') {
+            mutationData.scope = 'ENTIRE_SERIES';
+            // No recurringEventInstanceId needed - template appears on all instances
+          } else {
+            mutationData.scope = 'THIS_INSTANCE_ONLY';
+            mutationData.recurringEventInstanceId = eventId; // Current instance ID
+          }
+        }
+
         await createVolunteerGroup({
           variables: {
-            data: {
-              eventId,
-              leaderId: leader?.id,
-              name,
-              description,
-              volunteersRequired,
-              volunteerUserIds: volunteerUsers.map((user) => user.id),
-            },
+            data: mutationData,
           },
         });
 
@@ -209,12 +235,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           volunteerUsers: [],
           volunteersRequired: null,
         });
+        setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
         toast.error((error as Error).message);
       }
     },
-    [formState, eventId],
+    [formState, eventId, isRecurring, applyTo, baseEvent],
   );
 
   return (
@@ -239,6 +266,29 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           }
           className="p-3"
         >
+          {/* Radio buttons for recurring events - only show in create mode */}
+          {isRecurring && mode === 'create' ? (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          ) : null}
+
           {/* Input field to enter the group name */}
           <Form.Group className="mb-3">
             <FormControl fullWidth>

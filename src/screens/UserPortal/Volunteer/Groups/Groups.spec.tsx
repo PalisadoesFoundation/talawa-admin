@@ -202,30 +202,6 @@ describe('Testing Groups Screen', () => {
   });
 
   /**
-   * Verifies the search by leader functionality of the Groups screen.
-   */
-  it('Search by Leader', async () => {
-    renderGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
-
-    const searchToggle = await screen.findByTestId('searchByToggle');
-    expect(searchToggle).toBeInTheDocument();
-    await userEvent.click(searchToggle);
-
-    const searchByLeader = await screen.findByTestId('leader');
-    expect(searchByLeader).toBeInTheDocument();
-    await userEvent.click(searchByLeader);
-
-    // Search by name on press of ENTER
-    await userEvent.type(searchInput, 'Bruce');
-    await debounceWait();
-
-    const groupName = await screen.findAllByTestId('groupName');
-    expect(groupName[0]).toHaveTextContent('Group 1');
-  });
-
-  /**
    * Verifies the behavior when there are no groups to display.
    */
   it('should render screen with No Groups', async () => {

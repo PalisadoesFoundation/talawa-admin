@@ -75,13 +75,14 @@ import { useMutation, useQuery } from '@apollo/client';
 import type { InterfaceUserEvents } from 'utils/interfaces';
 import { IoIosHand } from 'react-icons/io';
 import Loader from 'components/Loader/Loader';
-import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/PlugInQueries';
+import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/EventVolunteerQueries';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
+import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -102,6 +103,18 @@ const UpcomingEvents = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
 
+  // Modal state for recurring event volunteering
+  const [showRecurringModal, setShowRecurringModal] = useState(false);
+  const [pendingVolunteerRequest, setPendingVolunteerRequest] = useState<{
+    eventId: string;
+    eventName: string;
+    eventDate: string;
+    groupId?: string;
+    groupName?: string;
+    status: string;
+    isRecurring: boolean;
+  } | null>(null);
+
   const [createVolunteerMembership] = useMutation(CREATE_VOLUNTEER_MEMBERSHIP);
 
   const debouncedSearch = useMemo(
@@ -109,14 +122,58 @@ const UpcomingEvents = (): JSX.Element => {
     [],
   );
 
+  const handleVolunteerClick = (
+    eventId: string,
+    eventName: string,
+    eventDate: string,
+    group: string | null,
+    groupName: string | null,
+    status: string,
+    isRecurring: boolean,
+  ): void => {
+    if (isRecurring) {
+      // Show modal for recurring events to let user choose series vs instance
+      setPendingVolunteerRequest({
+        eventId,
+        eventName,
+        eventDate,
+        groupId: group || undefined,
+        groupName: groupName || undefined,
+        status,
+        isRecurring,
+      });
+      setShowRecurringModal(true);
+    } else {
+      // Direct volunteer for non-recurring events
+      handleVolunteer(eventId, group, status);
+    }
+  };
+
   const handleVolunteer = async (
     eventId: string,
     group: string | null,
     status: string,
+    scope?: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY',
+    recurringEventInstanceId?: string,
   ): Promise<void> => {
     try {
+      const volunteerData: any = {
+        event: eventId,
+        group,
+        status,
+        userId,
+      };
+
+      // Add scope fields for recurring events
+      if (scope) {
+        volunteerData.scope = scope;
+        if (recurringEventInstanceId) {
+          volunteerData.recurringEventInstanceId = recurringEventInstanceId;
+        }
+      }
+
       await createVolunteerMembership({
-        variables: { data: { event: eventId, group, status, userId } },
+        variables: { data: volunteerData },
       });
       toast.success(t('volunteerSuccess'));
       // Refetch membership data first, then events with a small delay to prevent rate limiting
@@ -127,6 +184,51 @@ const UpcomingEvents = (): JSX.Element => {
     } catch (error) {
       toast.error((error as Error).message);
     }
+  };
+
+  const handleRecurringModalSelection = async (
+    scope: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY',
+  ): Promise<void> => {
+    if (!pendingVolunteerRequest) return;
+
+    const { eventId, groupId, status } = pendingVolunteerRequest;
+
+    // Find the event in our list to get its metadata
+    const eventData = events.find((e) => e._id === eventId);
+
+    let targetEventId = eventId;
+    let recurringEventInstanceId = undefined;
+
+    if (scope === 'ENTIRE_SERIES') {
+      // For series volunteering, use the base event ID (template)
+      if (eventData?.baseEventId) {
+        targetEventId = eventData.baseEventId;
+      }
+    } else if (scope === 'THIS_INSTANCE_ONLY') {
+      // For instance-only volunteering, use current event ID and pass instanceId
+      recurringEventInstanceId = eventId;
+      // The target event should be the base event for the backend logic
+      if (eventData?.baseEventId) {
+        targetEventId = eventData.baseEventId;
+      }
+    }
+
+    await handleVolunteer(
+      targetEventId,
+      groupId || null,
+      status,
+      scope,
+      recurringEventInstanceId,
+    );
+
+    // Close modal and reset state
+    setShowRecurringModal(false);
+    setPendingVolunteerRequest(null);
+  };
+
+  const handleModalClose = (): void => {
+    setShowRecurringModal(false);
+    setPendingVolunteerRequest(null);
   };
 
   // Helper function to get volunteer status and button configuration
@@ -224,8 +326,8 @@ const UpcomingEvents = (): JSX.Element => {
     errorPolicy: 'all', // Handle errors gracefully
   });
 
-  // Create a lookup map for user's volunteer memberships
-  const membershipLookup = useMemo(() => {
+  // Create a basic lookup map for user's volunteer memberships
+  const basicMembershipLookup = useMemo(() => {
     if (!membershipData?.getVolunteerMembership) {
       console.log('No membership data found:', membershipData);
       return {};
@@ -248,13 +350,24 @@ const UpcomingEvents = (): JSX.Element => {
   const events = useMemo(() => {
     if (eventsData?.organization?.events?.edges) {
       return eventsData.organization.events.edges.map((edge: any) => {
+        // Determine if this is a recurring event:
+        // 1. If isRecurringEventTemplate is true, it's the base template/series
+        // 2. If isRecurringEventTemplate is false but baseEvent exists and baseEvent.isRecurringEventTemplate is true, it's a recurring instance
+        // 3. If isRecurringEventTemplate is false and no baseEvent, it's standalone
+        const isRecurringInstance =
+          edge.node.baseEvent && edge.node.baseEvent.isRecurringEventTemplate;
+        const isRecurringTemplate = edge.node.isRecurringEventTemplate;
+        const isRecurring = isRecurringTemplate || isRecurringInstance;
+
         const event: any = {
           ...edge.node,
           _id: edge.node.id,
           title: edge.node.name,
           startDate: edge.node.startAt,
           endDate: edge.node.endAt,
-          recurring: edge.node.isRecurringEventTemplate || false,
+          recurring: isRecurring,
+          isRecurringInstance: isRecurringInstance,
+          baseEventId: edge.node.baseEvent?.id || null,
           volunteerGroups:
             edge.node.volunteerGroups?.map((group: any) => ({
               _id: group.id,
@@ -265,11 +378,48 @@ const UpcomingEvents = (): JSX.Element => {
             })) || [],
           volunteers: edge.node.volunteers || [],
         };
+
         return event;
       });
     }
     return [];
   }, [eventsData]);
+
+  // Create enhanced membership lookup after events are defined
+  const membershipLookup = useMemo(() => {
+    const lookup: Record<string, any> = { ...basicMembershipLookup };
+
+    // For recurring events, add cross-references between instances and series
+    if (events.length > 0) {
+      Object.entries(basicMembershipLookup).forEach(
+        ([originalKey, membership]) => {
+          const eventId = membership.event.id;
+
+          // Find if this membership is for a base template (series-level)
+          const relatedInstances = events.filter(
+            (event) => event.baseEventId === eventId, // This instance belongs to this template
+          );
+
+          // Add lookup keys for all related instances
+          relatedInstances.forEach((relatedEvent) => {
+            const instanceKey = membership.group
+              ? `${relatedEvent._id}-${membership.group.id}`
+              : relatedEvent._id;
+
+            // Only add if we don't already have a specific membership for this instance
+            if (!lookup[instanceKey]) {
+              console.log(
+                `Adding series lookup: ${instanceKey} -> ${membership.status}`,
+              );
+              lookup[instanceKey] = membership;
+            }
+          });
+        },
+      );
+    }
+
+    return lookup;
+  }, [basicMembershipLookup, events]);
 
   // Renders a loader while events or membership data are being fetched
   if (eventsLoading || membershipLoading) return <Loader size="xl" />;
@@ -367,8 +517,22 @@ const UpcomingEvents = (): JSX.Element => {
                         <IoLocationOutline className="me-1 mb-1" />
                         location: {location}
                       </span>
-                      <span>Start Date: {startDate as unknown as string}</span>
-                      <span>End Date: {endDate as unknown as string}</span>
+                      {recurring ? (
+                        <span>
+                          Recurrence:{' '}
+                          {event.recurrenceRule?.frequency || 'Daily'}
+                        </span>
+                      ) : (
+                        <>
+                          <span>
+                            Start Date:{' '}
+                            {new Date(startDate).toLocaleDateString()}
+                          </span>
+                          <span>
+                            End Date: {new Date(endDate).toLocaleDateString()}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="d-flex gap-3">
@@ -383,7 +547,17 @@ const UpcomingEvents = (): JSX.Element => {
                         volunteerStatus.disabled ||
                         new Date(endDate) < new Date()
                       }
-                      onClick={() => handleVolunteer(_id, null, 'requested')}
+                      onClick={() =>
+                        handleVolunteerClick(
+                          _id,
+                          title,
+                          startDate,
+                          null,
+                          null,
+                          'requested',
+                          recurring,
+                        )
+                      }
                       className={styles.outlineBtn}
                     >
                       <Icon className="me-1" size={21} />
@@ -468,7 +642,15 @@ const UpcomingEvents = (): JSX.Element => {
                                       new Date(endDate) < new Date()
                                     }
                                     onClick={() =>
-                                      handleVolunteer(_id, gId, 'requested')
+                                      handleVolunteerClick(
+                                        _id,
+                                        title,
+                                        startDate,
+                                        gId,
+                                        name,
+                                        'requested',
+                                        recurring,
+                                      )
                                     }
                                   >
                                     {groupStatus.status !== 'none' && (
@@ -490,6 +672,20 @@ const UpcomingEvents = (): JSX.Element => {
           );
         })
       )}
+
+      {/* Recurring Event Volunteer Modal */}
+      <RecurringEventVolunteerModal
+        show={showRecurringModal}
+        onHide={handleModalClose}
+        eventName={pendingVolunteerRequest?.eventName || ''}
+        eventDate={pendingVolunteerRequest?.eventDate || ''}
+        isForGroup={!!pendingVolunteerRequest?.groupId}
+        groupName={pendingVolunteerRequest?.groupName}
+        onSelectSeries={() => handleRecurringModalSelection('ENTIRE_SERIES')}
+        onSelectInstance={() =>
+          handleRecurringModalSelection('THIS_INSTANCE_ONLY')
+        }
+      />
     </>
   );
 };

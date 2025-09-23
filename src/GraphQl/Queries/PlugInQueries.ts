@@ -120,55 +120,6 @@ export const ORGANIZATION_EVENTS_CONNECTION = gql`
   }
 `;
 
-export const USER_EVENTS_VOLUNTEER = gql`
-  query UserEventsVolunteer(
-    $organizationId: String!
-    $upcomingOnly: Boolean
-    $first: Int
-  ) {
-    organization(input: { id: $organizationId }) {
-      id
-      events(upcomingOnly: $upcomingOnly, first: $first) {
-        edges {
-          node {
-            id
-            name
-            description
-            startAt
-            endAt
-            location
-            allDay
-            isRecurringEventTemplate
-            volunteers {
-              id
-              hasAccepted
-              volunteerStatus
-              user {
-                id
-                name
-              }
-            }
-            volunteerGroups {
-              id
-              name
-              description
-              volunteersRequired
-              volunteers {
-                id
-                hasAccepted
-                user {
-                  id
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve a list of chats based on user ID.
  *

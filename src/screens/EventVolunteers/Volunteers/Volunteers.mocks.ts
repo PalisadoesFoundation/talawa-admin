@@ -6,23 +6,38 @@ import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 const volunteer1 = {
-  _id: 'volunteerId1',
+  id: 'volunteerId1',
   hasAccepted: true,
+  volunteerStatus: 'accepted',
   hoursVolunteered: 10,
+  isPublic: true,
+  createdAt: '2023-01-01T00:00:00Z',
+  updatedAt: '2023-01-01T00:00:00Z',
   user: {
-    _id: 'userId1',
-    firstName: 'Teresa',
-    lastName: 'Bradley',
-    image: null,
+    id: 'userId1',
+    name: 'Teresa Bradley',
+    avatarURL: null,
   },
-  assignments: [],
+  event: {
+    id: 'eventId',
+    name: 'Test Event',
+  },
+  creator: {
+    id: 'userId1',
+    name: 'Creator Name',
+  },
+  updater: {
+    id: 'userId1',
+    name: 'Updater Name',
+  },
   groups: [
     {
-      _id: 'groupId1',
+      id: 'groupId1',
       name: 'group1',
+      description: 'Test group',
       volunteers: [
         {
-          _id: 'volunteerId1',
+          id: 'volunteerId1',
         },
       ],
     },
@@ -30,31 +45,57 @@ const volunteer1 = {
 };
 
 const volunteer2 = {
-  _id: 'volunteerId2',
+  id: 'volunteerId2',
   hasAccepted: false,
+  volunteerStatus: 'pending',
   hoursVolunteered: null,
+  isPublic: true,
+  createdAt: '2023-01-01T00:00:00Z',
+  updatedAt: '2023-01-01T00:00:00Z',
   user: {
-    _id: 'userId3',
-    firstName: 'Bruce',
-    lastName: 'Graza',
-    image: 'img-url',
+    id: 'userId2',
+    name: 'Bruce Graza',
+    avatarURL: 'img-url',
   },
-  assignments: [],
+  event: {
+    id: 'eventId',
+    name: 'Test Event',
+  },
+  creator: {
+    id: 'userId2',
+    name: 'Creator Name',
+  },
+  updater: {
+    id: 'userId2',
+    name: 'Updater Name',
+  },
   groups: [],
 };
+
+const eventResponseWrapper = (volunteers: any[]) => ({
+  id: 'eventId',
+  recurrenceRule: null,
+  baseEvent: null,
+  volunteers,
+});
 
 export const MOCKS = [
   {
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: '',
+          hasAccepted: undefined,
+        },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer1, volunteer2],
+        event: eventResponseWrapper([volunteer1, volunteer2]),
       },
     },
   },
@@ -62,13 +103,18 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: '',
+          hasAccepted: undefined,
+        },
         orderBy: 'hoursVolunteered_ASC',
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer2, volunteer1],
+        event: eventResponseWrapper([volunteer2, volunteer1]),
       },
     },
   },
@@ -76,13 +122,18 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: '',
+          hasAccepted: undefined,
+        },
         orderBy: 'hoursVolunteered_DESC',
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer1, volunteer2],
+        event: eventResponseWrapper([volunteer1, volunteer2]),
       },
     },
   },
@@ -90,13 +141,18 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: 'T' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: 'T',
+          hasAccepted: undefined,
+        },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer1],
+        event: eventResponseWrapper([volunteer1]),
       },
     },
   },
@@ -104,13 +160,14 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        input: { id: 'eventId' },
         where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer2],
+        event: eventResponseWrapper([volunteer2]),
       },
     },
   },
@@ -118,27 +175,14 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteers: [volunteer2],
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_EVENT_VOLUNTEERS,
-      variables: {
+        input: { id: 'eventId' },
         where: { eventId: 'eventId', name_contains: '', hasAccepted: true },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteers: [volunteer1],
+        event: eventResponseWrapper([volunteer1]),
       },
     },
   },
@@ -152,7 +196,7 @@ export const MOCKS = [
     result: {
       data: {
         removeEventVolunteer: {
-          _id: 'volunteerId1',
+          id: 'volunteerId1',
         },
       },
     },
@@ -161,34 +205,29 @@ export const MOCKS = [
     request: {
       query: MEMBERS_LIST,
       variables: {
-        id: 'orgId',
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'orgId',
-            members: [
-              {
-                _id: 'userId2',
-                firstName: 'Harve',
-                lastName: 'Lance',
-                email: 'harve@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2030-02-14',
-              },
-              {
-                _id: 'userId3',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2030-02-14',
-              },
-            ],
+            id: 'userId3',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+            role: 'regular',
+            avatarURL: '',
+            createdAt: '2023-01-01T00:00:00Z',
+            updatedAt: '2023-01-01T00:00:00Z',
+          },
+          {
+            id: 'userId4',
+            name: 'Jane Smith',
+            emailAddress: 'jane@example.com',
+            role: 'regular',
+            avatarURL: '',
+            createdAt: '2023-01-01T00:00:00Z',
+            updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
       },
@@ -207,7 +246,7 @@ export const MOCKS = [
     result: {
       data: {
         createEventVolunteer: {
-          _id: 'volunteerId1',
+          id: 'volunteerId1',
         },
       },
     },
@@ -219,7 +258,12 @@ export const MOCKS_ERROR = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: '',
+          hasAccepted: undefined,
+        },
         orderBy: null,
       },
     },
@@ -238,34 +282,20 @@ export const MOCKS_ERROR = [
     request: {
       query: MEMBERS_LIST,
       variables: {
-        id: 'orgId',
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'orgId',
-            members: [
-              {
-                _id: 'userId2',
-                firstName: 'Harve',
-                lastName: 'Lance',
-                email: 'harve@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2030-02-14',
-              },
-              {
-                _id: 'userId3',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2030-02-14',
-              },
-            ],
+            id: 'userId3',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+            role: 'regular',
+            avatarURL: '',
+            createdAt: '2023-01-01T00:00:00Z',
+            updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
       },
@@ -290,13 +320,18 @@ export const MOCKS_EMPTY = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
-        where: { eventId: 'eventId', name_contains: '' },
+        input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: '',
+          hasAccepted: undefined,
+        },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteers: [],
+        event: eventResponseWrapper([]),
       },
     },
   },

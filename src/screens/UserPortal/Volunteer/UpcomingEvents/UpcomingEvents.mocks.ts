@@ -1,9 +1,13 @@
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/PlugInQueries';
+import {
+  USER_EVENTS_VOLUNTEER,
+  USER_VOLUNTEER_MEMBERSHIP,
+} from 'GraphQl/Queries/EventVolunteerQueries';
 
 const event1 = {
   _id: 'eventId1',
   title: 'Event 1',
+  name: 'Event 1',
   startDate: '2044-10-30',
   endDate: '2044-10-30',
   location: 'Mumbai',
@@ -46,6 +50,7 @@ const event1 = {
 const event2 = {
   _id: 'eventId2',
   title: 'Event 2',
+  name: 'Event 2',
   startDate: '2044-10-31',
   endDate: '2044-10-31',
   location: 'Pune',
@@ -79,6 +84,7 @@ const event2 = {
 const event3 = {
   _id: 'eventId3',
   title: 'Event 3',
+  name: 'Event 3',
   startDate: '2044-10-31',
   endDate: '2022-10-31',
   location: 'Delhi',
@@ -115,53 +121,33 @@ export const MOCKS = [
     request: {
       query: USER_EVENTS_VOLUNTEER,
       variables: {
-        organization_id: 'orgId',
-        title_contains: '',
-        location_contains: '',
+        organizationId: 'orgId',
         upcomingOnly: true,
-        first: null,
-        skip: null,
+        first: 30,
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [event1, event2, event3],
+        organization: {
+          events: {
+            edges: [{ node: event1 }, { node: event2 }, { node: event3 }],
+          },
+        },
       },
     },
   },
   {
     request: {
-      query: USER_EVENTS_VOLUNTEER,
+      query: USER_VOLUNTEER_MEMBERSHIP,
       variables: {
-        organization_id: 'orgId',
-        title_contains: '1',
-        location_contains: '',
-        upcomingOnly: true,
-        first: null,
-        skip: null,
+        where: {
+          userId: 'userId',
+        },
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [event1],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_EVENTS_VOLUNTEER,
-      variables: {
-        organization_id: 'orgId',
-        title_contains: '',
-        location_contains: 'M',
-        upcomingOnly: true,
-        first: null,
-        skip: null,
-      },
-    },
-    result: {
-      data: {
-        eventsByOrganizationConnection: [event1],
+        getVolunteerMembership: [],
       },
     },
   },
@@ -180,7 +166,25 @@ export const MOCKS = [
     result: {
       data: {
         createVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId1',
+          status: 'requested',
+          createdAt: '2025-09-20T15:20:00.000Z',
+          volunteer: {
+            id: 'volunteerId1',
+            hasAccepted: false,
+            user: {
+              id: 'userId',
+              name: 'User Name',
+            },
+          },
+          event: {
+            id: 'eventId1',
+            name: 'Event 1',
+          },
+          createdBy: {
+            id: 'createrId',
+            name: 'Creator Name',
+          },
         },
       },
     },
@@ -200,7 +204,30 @@ export const MOCKS = [
     result: {
       data: {
         createVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId2',
+          status: 'requested',
+          createdAt: '2025-09-20T15:20:00.000Z',
+          volunteer: {
+            id: 'volunteerId2',
+            hasAccepted: false,
+            user: {
+              id: 'userId',
+              name: 'User Name',
+            },
+          },
+          event: {
+            id: 'eventId1',
+            name: 'Event 1',
+          },
+          createdBy: {
+            id: 'createrId',
+            name: 'Creator Name',
+          },
+          group: {
+            id: 'groupId1',
+            name: 'Group 1',
+            description: 'desc',
+          },
         },
       },
     },
@@ -212,17 +239,18 @@ export const EMPTY_MOCKS = [
     request: {
       query: USER_EVENTS_VOLUNTEER,
       variables: {
-        organization_id: 'orgId',
-        title_contains: '',
-        location_contains: '',
+        organizationId: 'orgId',
         upcomingOnly: true,
-        first: null,
-        skip: null,
+        first: 30,
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [],
+        organization: {
+          events: {
+            edges: [],
+          },
+        },
       },
     },
   },
@@ -233,12 +261,9 @@ export const ERROR_MOCKS = [
     request: {
       query: USER_EVENTS_VOLUNTEER,
       variables: {
-        organization_id: 'orgId',
-        title_contains: '',
-        location_contains: '',
+        organizationId: 'orgId',
         upcomingOnly: true,
-        first: null,
-        skip: null,
+        first: 30,
       },
     },
     error: new Error('Mock Graphql USER_EVENTS_VOLUNTEER Error'),
@@ -250,17 +275,33 @@ export const CREATE_ERROR_MOCKS = [
     request: {
       query: USER_EVENTS_VOLUNTEER,
       variables: {
-        organization_id: 'orgId',
-        title_contains: '',
-        location_contains: '',
+        organizationId: 'orgId',
         upcomingOnly: true,
-        first: null,
-        skip: null,
+        first: 30,
       },
     },
     result: {
       data: {
-        eventsByOrganizationConnection: [event1, event2],
+        organization: {
+          events: {
+            edges: [{ node: event1 }, { node: event2 }, { node: event3 }],
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          userId: 'userId',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [],
       },
     },
   },

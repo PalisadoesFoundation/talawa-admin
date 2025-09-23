@@ -29,8 +29,6 @@ export const GET_EVENT_VOLUNTEERS = gql`
         volunteerStatus
         hoursVolunteered
         isPublic
-        isInstanceException
-        isTemplate
         createdAt
         updatedAt
         user {
@@ -99,6 +97,49 @@ export const EVENT_VOLUNTEER_GROUP_LIST = gql`
   }
 `;
 
+export const GET_EVENT_VOLUNTEER_GROUPS = gql`
+  query GetEventVolunteerGroups($input: QueryEventInput!) {
+    event(input: $input) {
+      id
+      recurrenceRule {
+        id
+      }
+      baseEvent {
+        id
+      }
+      volunteerGroups {
+        id
+        name
+        description
+        volunteersRequired
+        createdAt
+        creator {
+          id
+          name
+          avatarURL
+        }
+        leader {
+          id
+          name
+          avatarURL
+        }
+        volunteers {
+          id
+          hasAccepted
+          user {
+            id
+            name
+            avatarURL
+          }
+        }
+        event {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const USER_VOLUNTEER_MEMBERSHIP = gql`
   query GetVolunteerMembership(
     $where: VolunteerMembershipWhereInput!
@@ -122,7 +163,6 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
         id
         hasAccepted
         hoursVolunteered
-        isTemplate
         user {
           id
           name
@@ -141,6 +181,64 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
         id
         name
         description
+      }
+    }
+  }
+`;
+
+export const USER_EVENTS_VOLUNTEER = gql`
+  query UserEventsVolunteer(
+    $organizationId: String!
+    $upcomingOnly: Boolean
+    $first: Int
+  ) {
+    organization(input: { id: $organizationId }) {
+      id
+      events(upcomingOnly: $upcomingOnly, first: $first) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            location
+            allDay
+            isRecurringEventTemplate
+            baseEvent {
+              id
+              name
+              isRecurringEventTemplate
+            }
+            recurrenceRule {
+              id
+              frequency
+            }
+            volunteers {
+              id
+              hasAccepted
+              volunteerStatus
+              user {
+                id
+                name
+              }
+            }
+            volunteerGroups {
+              id
+              name
+              description
+              volunteersRequired
+              volunteers {
+                id
+                hasAccepted
+                user {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

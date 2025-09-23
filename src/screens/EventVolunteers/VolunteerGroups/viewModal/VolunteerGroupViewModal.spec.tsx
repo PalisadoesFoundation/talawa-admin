@@ -37,13 +37,13 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
         id: 'creatorId1',
         name: 'Wilt Shepherd',
         emailAddress: 'wilt@example.com',
-        avatarURL: null,
+        avatarURL: 'img-url',
       },
       leader: {
         id: 'userId',
         name: 'Teresa Bradley',
         emailAddress: 'teresa@example.com',
-        avatarURL: null,
+        avatarURL: 'img-url',
       },
       volunteers: [
         {
@@ -112,14 +112,14 @@ describe('Testing VolunteerGroupViewModal', () => {
   it('Render VolunteerGroupViewModal (variation 1)', async () => {
     renderGroupViewModal(itemProps[0]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('leader_image')).toBeInTheDocument();
+    expect(screen.getByTestId('creator_image')).toBeInTheDocument();
   });
 
   it('Render VolunteerGroupViewModal (variation 2)', async () => {
     renderGroupViewModal(itemProps[1]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('leader_image')).toBeInTheDocument();
-    expect(screen.getByTestId('creator_image')).toBeInTheDocument();
+    expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
   });
 });

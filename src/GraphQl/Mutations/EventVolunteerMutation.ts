@@ -132,6 +132,35 @@ export const DELETE_VOLUNTEER_FOR_INSTANCE = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to delete a volunteer group from a specific recurring event instance.
+ *
+ * @param input - The input containing volunteerGroupId and recurringEventInstanceId.
+ * @returns The deleted volunteer group information.
+ */
+export const DELETE_VOLUNTEER_GROUP_FOR_INSTANCE = gql`
+  mutation DeleteEventVolunteerGroupForInstance(
+    $input: DeleteEventVolunteerGroupForInstanceInput!
+  ) {
+    deleteEventVolunteerGroupForInstance(input: $input) {
+      id
+      name
+      description
+      volunteersRequired
+      createdAt
+      leader {
+        id
+        name
+        avatarURL
+      }
+      creator {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const CREATE_VOLUNTEER_MEMBERSHIP = gql`
   mutation CreateVolunteerMembership($data: VolunteerMembershipInput!) {
     createVolunteerMembership(data: $data) {

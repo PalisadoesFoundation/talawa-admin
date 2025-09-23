@@ -8,6 +8,18 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 ## Properties
 
+### baseEvent?
+
+> `optional` **baseEvent**: `object`
+
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L71)
+
+#### id
+
+> **id**: `string`
+
+***
+
 ### eventId
 
 > **eventId**: `string`
@@ -44,6 +56,14 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 ***
 
+### isRecurring?
+
+> `optional` **isRecurring**: `boolean`
+
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L70)
+
+***
+
 ### mode
 
 > **mode**: `"create"` \| `"edit"`
@@ -57,6 +77,14 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 > **orgId**: `string`
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L65)
+
+***
+
+### recurringEventInstanceId?
+
+> `optional` **recurringEventInstanceId**: `string`
+
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L72)
 
 ***
 

@@ -2384,8 +2384,6 @@ export interface InterfaceEventVolunteerInfo {
   volunteerStatus: 'accepted' | 'rejected' | 'pending';
   hoursVolunteered: number;
   isPublic: boolean;
-  isInstanceException?: boolean;
-  isTemplate?: boolean;
   createdAt: string;
   updatedAt: string;
   user: InterfaceUserInfoPG;
@@ -2522,7 +2520,6 @@ export interface InterfaceVolunteerMembership {
     id: string;
     hasAccepted: boolean;
     hoursVolunteered: number;
-    isTemplate?: boolean;
     user: {
       id: string;
       name: string;

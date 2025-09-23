@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L288)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L318)
 
 ## Type declaration
 
@@ -22,6 +22,14 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](htt
 
 > **variables**: `object`
 
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.id
+
+> **id**: `string` = `'eventId'`
+
 #### request.variables.orderBy
 
 > **orderBy**: `any` = `null`
@@ -33,6 +41,10 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](htt
 #### request.variables.where.eventId
 
 > **eventId**: `string` = `'eventId'`
+
+#### request.variables.where.hasAccepted
+
+> **hasAccepted**: `any` = `undefined`
 
 #### request.variables.where.name\_contains
 
@@ -46,6 +58,22 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:288](htt
 
 > **data**: `object`
 
-#### result.data.getEventVolunteers
+#### result.data.event
 
-> **getEventVolunteers**: `any`[] = `[]`
+> **event**: `object`
+
+#### result.data.event.baseEvent
+
+> **baseEvent**: `any` = `null`
+
+#### result.data.event.id
+
+> **id**: `string` = `'eventId'`
+
+#### result.data.event.recurrenceRule
+
+> **recurrenceRule**: `any` = `null`
+
+#### result.data.event.volunteers
+
+> **volunteers**: `any`[]

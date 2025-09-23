@@ -207,8 +207,7 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id ? (
                   // Group invitation
                   <>
-                    {invite.event.recurrenceRule &&
-                    invite.volunteer.isTemplate ? (
+                    {invite.event.recurrenceRule ? (
                       <>{t('groupInvitationRecurringSubject')}</>
                     ) : (
                       <>{t('groupInvitationSubject')}</>
@@ -217,8 +216,7 @@ const Invitations = (): JSX.Element => {
                 ) : (
                   // Individual invitation
                   <>
-                    {invite.event.recurrenceRule &&
-                    invite.volunteer.isTemplate ? (
+                    {invite.event.recurrenceRule ? (
                       <>{t('eventInvitationRecurringSubject')}</>
                     ) : (
                       <>{t('eventInvitationSubject')}</>

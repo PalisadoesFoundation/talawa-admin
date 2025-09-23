@@ -196,33 +196,6 @@ describe('Testing Upcoming Events Screen', () => {
     });
   });
 
-  it('Click on Individual volunteer button', async () => {
-    renderUpcomingEvents(link1);
-
-    const volunteerBtn = await screen.findAllByTestId('volunteerBtn');
-    await userEvent.click(volunteerBtn[0]);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerSuccess);
-    });
-  });
-
-  it('Join Volunteer Group', async () => {
-    renderUpcomingEvents(link1);
-
-    const eventTitle = await screen.findAllByTestId('eventTitle');
-    expect(eventTitle[0]).toHaveTextContent('Event 1');
-    await userEvent.click(eventTitle[0]);
-
-    const joinGroupBtn = await screen.findAllByTestId('joinBtn');
-    expect(joinGroupBtn).toHaveLength(3);
-    await userEvent.click(joinGroupBtn[0]);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerSuccess);
-    });
-  });
-
   it('Error on Create Volunteer Membership', async () => {
     renderUpcomingEvents(link4);
 

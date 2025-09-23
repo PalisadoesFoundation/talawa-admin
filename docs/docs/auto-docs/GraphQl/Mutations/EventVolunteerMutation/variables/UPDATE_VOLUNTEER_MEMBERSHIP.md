@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_VOLUNTEER\_MEMBERSHIP**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L169)
+Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L198)
 
 GraphQL mutation to update an event volunteer group.
 

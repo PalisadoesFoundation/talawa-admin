@@ -86,22 +86,23 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       try {
         e.preventDefault();
 
-        // Determine which eventId to use and set fields based on selection
+        // Template-First Hierarchy: Use scope-based approach
         const mutationData: any = {
           userId,
           eventId: isRecurring
-            ? baseEvent?.id // Always use baseEvent for recurring events
+            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
             : eventId, // Use eventId for non-recurring events
         };
 
-        // Add recurring event specific fields
+        // Add Template-First recurring event logic
         if (isRecurring) {
-          mutationData.isTemplate = applyTo === 'series';
-          if (applyTo === 'instance') {
-            // For instance-only, set the recurring instance ID
-            mutationData.recurringEventInstanceId = eventId;
+          if (applyTo === 'series') {
+            mutationData.scope = 'ENTIRE_SERIES';
+            // No recurringEventInstanceId needed - template appears on all instances
+          } else {
+            mutationData.scope = 'THIS_INSTANCE_ONLY';
+            mutationData.recurringEventInstanceId = eventId; // Current instance ID
           }
-          // For series, no recurringEventInstanceId is needed
         }
 
         await addVolunteer({ variables: { data: mutationData } });
