@@ -116,7 +116,6 @@
     ]
   },
   "devDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.50.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
