@@ -46,7 +46,7 @@ import { ADD_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
 // Interface for add volunteer mutation data
 interface InterfaceAddVolunteerData {
   userId: string;
-  eventId: string;
+  eventId: string | undefined;
   scope?: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY';
   recurringEventInstanceId?: string;
 }
@@ -97,7 +97,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         const mutationData: InterfaceAddVolunteerData = {
           userId,
           eventId: isRecurring
-            ? baseEvent?.id || eventId // Use baseEvent.id if available, fallback to eventId
+            ? baseEvent?.id // Use baseEvent.id if available, fallback to eventId
             : eventId, // Use eventId for non-recurring events
         };
 

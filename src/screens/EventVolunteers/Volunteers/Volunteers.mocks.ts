@@ -252,6 +252,47 @@ export const MOCKS = [
       },
     },
   },
+  // Mock for recurring event series volunteering
+  {
+    request: {
+      query: ADD_VOLUNTEER,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          userId: 'userId3',
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteer: {
+          id: 'recurringVolunteerId1',
+        },
+      },
+    },
+  },
+  // Mock for recurring event instance volunteering
+  {
+    request: {
+      query: ADD_VOLUNTEER,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          userId: 'userId3',
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventInstanceId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteer: {
+          id: 'recurringVolunteerId2',
+        },
+      },
+    },
+  },
 ];
 
 export const MOCKS_ERROR = [
