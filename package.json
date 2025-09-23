@@ -217,7 +217,12 @@
     "@types/react-dom": "^18.3.1",
     "graphql": "^16.5.0"
   },
-  "optionalDependencies": {},
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.52.1",
+    "@rollup/rollup-darwin-x64": "^4.52.1",
+    "@rollup/rollup-linux-x64-gnu": "^4.52.1",
+    "@rollup/rollup-win32-x64-msvc": "^4.52.1"
+  },
   "engines": {
     "node": ">=20.x"
   },
