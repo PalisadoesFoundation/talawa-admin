@@ -1,7 +1,6 @@
 import type { ActionItem } from '../actionItem';
 import type { Organization } from 'types/Organization/type';
 import type { CheckInStatus } from '../CheckIn/type';
-import type { Address } from '../User/type';
 
 export type User = {
   id: string;

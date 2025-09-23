@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 
-interface RecurringEventVolunteerModalProps {
+interface InterfaceRecurringEventVolunteerModalProps {
   show: boolean;
   onHide: () => void;
   eventName: string;
@@ -14,7 +13,7 @@ interface RecurringEventVolunteerModalProps {
 }
 
 const RecurringEventVolunteerModal: React.FC<
-  RecurringEventVolunteerModalProps
+  InterfaceRecurringEventVolunteerModalProps
 > = ({
   show,
   onHide,
@@ -25,7 +24,6 @@ const RecurringEventVolunteerModal: React.FC<
   isForGroup = false,
   groupName,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const [selectedOption, setSelectedOption] = useState<'series' | 'instance'>(
     'series',
   );

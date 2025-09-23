@@ -75,13 +75,13 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   const deleteHandler = async (): Promise<void> => {
     try {
       // Template-First Approach: For recurring events, all volunteers are templates
-      if (isRecurring && applyTo === 'instance') {
+      if (isRecurring && applyTo === 'instance' && eventId) {
         // Delete for specific instance only (create exception)
         await deleteVolunteerForInstance({
           variables: {
             input: {
               volunteerId: volunteer.id,
-              recurringEventInstanceId: eventId!,
+              recurringEventInstanceId: eventId,
             },
           },
         });
