@@ -43,6 +43,14 @@ import { Autocomplete, TextField } from '@mui/material';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ADD_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
 
+// Interface for add volunteer mutation data
+interface InterfaceAddVolunteerData {
+  userId: string;
+  eventId: string;
+  scope?: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY';
+  recurringEventInstanceId?: string;
+}
+
 export interface InterfaceVolunteerCreateModal {
   isOpen: boolean;
   hide: () => void;
@@ -63,7 +71,6 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   refetchVolunteers,
   isRecurring = false,
   baseEvent = null,
-  recurringEventInstanceId,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
 
@@ -87,10 +94,10 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         e.preventDefault();
 
         // Template-First Hierarchy: Use scope-based approach
-        const mutationData: any = {
+        const mutationData: InterfaceAddVolunteerData = {
           userId,
           eventId: isRecurring
-            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
+            ? baseEvent?.id || eventId // Use baseEvent.id if available, fallback to eventId
             : eventId, // Use eventId for non-recurring events
         };
 

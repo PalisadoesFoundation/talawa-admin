@@ -51,13 +51,12 @@ vi.mock('react-router-dom', async () => {
 vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
-  const MockNavigate = () => null;
   const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
     useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
-    Navigate: MockNavigate,
+    Navigate: () => null,
   } as unknown as typeof import('react-router');
 });
 

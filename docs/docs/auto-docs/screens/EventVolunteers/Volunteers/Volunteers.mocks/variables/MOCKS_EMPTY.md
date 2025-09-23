@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L318)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L319)
 
 ## Type declaration
 
@@ -76,4 +76,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:318](htt
 
 #### result.data.event.volunteers
 
-> **volunteers**: `any`[]
+> **volunteers**: [`InterfaceEventVolunteerInfo`](../../../../../types/Volunteer/interface/interfaces/InterfaceEventVolunteerInfo.md)[]

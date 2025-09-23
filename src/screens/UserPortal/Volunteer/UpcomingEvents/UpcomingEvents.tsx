@@ -52,11 +52,19 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
-import type { InterfaceUserEvents } from 'utils/interfaces';
+import type {
+  InterfaceVolunteerMembership,
+  InterfaceVolunteerData,
+  InterfaceEventEdge,
+  InterfaceMappedEvent,
+  InterfaceVolunteerStatus,
+} from 'types/Volunteer/interface';
 import { IoIosHand } from 'react-icons/io';
 import Loader from 'components/Loader/Loader';
-import { USER_EVENTS_VOLUNTEER } from 'GraphQl/Queries/EventVolunteerQueries';
-import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
+import {
+  USER_EVENTS_VOLUNTEER,
+  USER_VOLUNTEER_MEMBERSHIP,
+} from 'GraphQl/Queries/EventVolunteerQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
@@ -80,7 +88,7 @@ const UpcomingEvents = (): JSX.Element => {
     // Redirects to the homepage if orgId or userId is missing
     return <Navigate to={'/'} replace />;
   }
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
 
   // Modal state for recurring event volunteering
@@ -137,11 +145,11 @@ const UpcomingEvents = (): JSX.Element => {
     recurringEventInstanceId?: string,
   ): Promise<void> => {
     try {
-      const volunteerData: any = {
+      const volunteerData: InterfaceVolunteerData = {
         event: eventId,
         group,
         status,
-        userId,
+        userId: (userId as string) || '',
       };
 
       // Add scope fields for recurring events
@@ -213,7 +221,10 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Helper function to get volunteer status and button configuration
   // Uses the same color scheme as EventVolunteers/Volunteers component
-  const getVolunteerStatus = (eventId: string, groupId?: string) => {
+  const getVolunteerStatus = (
+    eventId: string,
+    groupId?: string,
+  ): InterfaceVolunteerStatus => {
     const key = groupId ? `${eventId}-${groupId}` : eventId;
     const membership = membershipLookup[key];
 
@@ -275,7 +286,7 @@ const UpcomingEvents = (): JSX.Element => {
     data?: {
       organization: {
         events: {
-          edges: Array<{ node: InterfaceUserEvents }>;
+          edges: Array<InterfaceEventEdge>;
         };
       };
     };
@@ -315,21 +326,25 @@ const UpcomingEvents = (): JSX.Element => {
 
     console.log('Membership data:', membershipData.getVolunteerMembership);
 
-    const lookup: Record<string, any> = {};
-    membershipData.getVolunteerMembership.forEach((membership: any) => {
-      const key = membership.group
-        ? `${membership.event.id}-${membership.group.id}`
-        : membership.event.id;
-      console.log(`Creating lookup key: ${key}, status: ${membership.status}`);
-      lookup[key] = membership;
-    });
+    const lookup: Record<string, InterfaceVolunteerMembership> = {};
+    membershipData.getVolunteerMembership.forEach(
+      (membership: InterfaceVolunteerMembership) => {
+        const key = membership.group
+          ? `${membership.event.id}-${membership.group.id}`
+          : membership.event.id;
+        console.log(
+          `Creating lookup key: ${key}, status: ${membership.status}`,
+        );
+        lookup[key] = membership;
+      },
+    );
     return lookup;
   }, [membershipData]);
 
   // Extracts the list of upcoming events from the fetched data
   const events = useMemo(() => {
     if (eventsData?.organization?.events?.edges) {
-      return eventsData.organization.events.edges.map((edge: any) => {
+      return eventsData.organization.events.edges.map((edge) => {
         // Determine if this is a recurring event:
         // 1. If isRecurringEventTemplate is true, it's the base template/series
         // 2. If isRecurringEventTemplate is false but baseEvent exists and baseEvent.isRecurringEventTemplate is true, it's a recurring instance
@@ -339,17 +354,17 @@ const UpcomingEvents = (): JSX.Element => {
         const isRecurringTemplate = edge.node.isRecurringEventTemplate;
         const isRecurring = isRecurringTemplate || isRecurringInstance;
 
-        const event: any = {
+        const event: InterfaceMappedEvent = {
           ...edge.node,
           _id: edge.node.id,
           title: edge.node.name,
           startDate: edge.node.startAt,
           endDate: edge.node.endAt,
-          recurring: isRecurring,
-          isRecurringInstance: isRecurringInstance,
+          recurring: Boolean(isRecurring),
+          isRecurringInstance: Boolean(isRecurringInstance),
           baseEventId: edge.node.baseEvent?.id || null,
           volunteerGroups:
-            edge.node.volunteerGroups?.map((group: any) => ({
+            edge.node.volunteerGroups?.map((group) => ({
               _id: group.id,
               name: group.name,
               description: group.description,
@@ -367,35 +382,35 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Create enhanced membership lookup after events are defined
   const membershipLookup = useMemo(() => {
-    const lookup: Record<string, any> = { ...basicMembershipLookup };
+    const lookup: Record<string, InterfaceVolunteerMembership> = {
+      ...basicMembershipLookup,
+    };
 
     // For recurring events, add cross-references between instances and series
     if (events.length > 0) {
-      Object.entries(basicMembershipLookup).forEach(
-        ([originalKey, membership]) => {
-          const eventId = membership.event.id;
+      Object.entries(basicMembershipLookup).forEach(([, membership]) => {
+        const eventId = membership.event.id;
 
-          // Find if this membership is for a base template (series-level)
-          const relatedInstances = events.filter(
-            (event) => event.baseEventId === eventId, // This instance belongs to this template
-          );
+        // Find if this membership is for a base template (series-level)
+        const relatedInstances = events.filter(
+          (event) => event.baseEventId === eventId, // This instance belongs to this template
+        );
 
-          // Add lookup keys for all related instances
-          relatedInstances.forEach((relatedEvent) => {
-            const instanceKey = membership.group
-              ? `${relatedEvent._id}-${membership.group.id}`
-              : relatedEvent._id;
+        // Add lookup keys for all related instances
+        relatedInstances.forEach((relatedEvent) => {
+          const instanceKey = membership.group
+            ? `${relatedEvent._id}-${membership.group.id}`
+            : relatedEvent._id;
 
-            // Only add if we don't already have a specific membership for this instance
-            if (!lookup[instanceKey]) {
-              console.log(
-                `Adding series lookup: ${instanceKey} -> ${membership.status}`,
-              );
-              lookup[instanceKey] = membership;
-            }
-          });
-        },
-      );
+          // Only add if we don't already have a specific membership for this instance
+          if (!lookup[instanceKey]) {
+            console.log(
+              `Adding series lookup: ${instanceKey} -> ${membership.status}`,
+            );
+            lookup[instanceKey] = membership;
+          }
+        });
+      });
     }
 
     return lookup;
@@ -453,7 +468,7 @@ const UpcomingEvents = (): JSX.Element => {
           {t('noEvents')}
         </Stack>
       ) : (
-        events.map((event: any, index: number) => {
+        events.map((event: InterfaceMappedEvent, index: number) => {
           const {
             title,
             description,
@@ -463,7 +478,6 @@ const UpcomingEvents = (): JSX.Element => {
             volunteerGroups,
             recurring,
             _id,
-            volunteers,
           } = event;
 
           // Get volunteer status for individual volunteering
@@ -583,7 +597,7 @@ const UpcomingEvents = (): JSX.Element => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {volunteerGroups.map((group: any, index: number) => {
+                          {volunteerGroups.map((group, index: number) => {
                             const { _id: gId, name, volunteers } = group;
 
                             // Get volunteer status for this specific group

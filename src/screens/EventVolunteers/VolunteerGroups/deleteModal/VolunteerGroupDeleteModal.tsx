@@ -68,13 +68,13 @@ const VolunteerGroupDeleteModal: React.FC<
   const deleteHandler = async (): Promise<void> => {
     try {
       // Template-First Approach: For recurring events, all volunteer groups are templates
-      if (isRecurring && applyTo === 'instance') {
+      if (isRecurring && applyTo === 'instance' && group && eventId) {
         // Delete for specific instance only (create exception)
         await deleteVolunteerGroupForInstance({
           variables: {
             input: {
-              volunteerGroupId: group!.id,
-              recurringEventInstanceId: eventId!,
+              volunteerGroupId: group.id,
+              recurringEventInstanceId: eventId,
             },
           },
         });

@@ -41,10 +41,10 @@ import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceUserInfo,
   InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
+import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -114,7 +114,6 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   mode,
   isRecurring = false,
   baseEvent = null,
-  recurringEventInstanceId,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventVolunteers',
@@ -198,9 +197,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         e.preventDefault();
 
         // Template-First Hierarchy: Use scope-based approach
-        const mutationData: any = {
+        const mutationData: InterfaceCreateVolunteerGroupData = {
           eventId: isRecurring
-            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
+            ? baseEvent?.id || eventId // Always use baseEvent for recurring events (templates stored in base)
             : eventId, // Use eventId for non-recurring events
           leaderId: leader?.id,
           name,

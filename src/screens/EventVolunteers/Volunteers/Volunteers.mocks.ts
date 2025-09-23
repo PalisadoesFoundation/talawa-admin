@@ -4,11 +4,12 @@ import {
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
 
-const volunteer1 = {
+const volunteer1: InterfaceEventVolunteerInfo = {
   id: 'volunteerId1',
   hasAccepted: true,
-  volunteerStatus: 'accepted',
+  volunteerStatus: 'accepted' as const,
   hoursVolunteered: 10,
   isPublic: true,
   createdAt: '2023-01-01T00:00:00Z',
@@ -44,11 +45,11 @@ const volunteer1 = {
   ],
 };
 
-const volunteer2 = {
+const volunteer2: InterfaceEventVolunteerInfo = {
   id: 'volunteerId2',
   hasAccepted: false,
-  volunteerStatus: 'pending',
-  hoursVolunteered: null,
+  volunteerStatus: 'pending' as const,
+  hoursVolunteered: 0,
   isPublic: true,
   createdAt: '2023-01-01T00:00:00Z',
   updatedAt: '2023-01-01T00:00:00Z',
@@ -72,7 +73,7 @@ const volunteer2 = {
   groups: [],
 };
 
-const eventResponseWrapper = (volunteers: any[]) => ({
+const eventResponseWrapper = (volunteers: InterfaceEventVolunteerInfo[]) => ({
   id: 'eventId',
   recurrenceRule: null,
   baseEvent: null,

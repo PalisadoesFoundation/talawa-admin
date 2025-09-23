@@ -18,7 +18,7 @@
  * - Uses Apollo Client mutations for updating and deleting events.
  *
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -27,8 +27,6 @@ import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
-import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
-import { createDefaultRecurrenceRule } from 'utils/recurrenceUtils/recurrenceUtilityFunctions';
 import {
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -169,58 +167,6 @@ function EventListCardModals({
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
-    // Check if dates have changed
-    const newStartAt = alldaychecked
-      ? dayjs.utc(eventStartDate).isValid()
-        ? dayjs.utc(eventStartDate).startOf('day').toISOString()
-        : ''
-      : dayjs(eventStartDate).isValid()
-        ? dayjs(eventStartDate)
-            .hour(parseInt(formState.startTime.split(':')[0]))
-            .minute(parseInt(formState.startTime.split(':')[1]))
-            .second(parseInt(formState.startTime.split(':')[2]))
-            .toISOString()
-        : '';
-
-    const newEndAt = alldaychecked
-      ? dayjs.utc(eventEndDate).isValid()
-        ? dayjs.utc(eventEndDate).endOf('day').toISOString()
-        : ''
-      : dayjs(eventEndDate).isValid()
-        ? dayjs(eventEndDate)
-            .hour(parseInt(formState.endTime.split(':')[0]))
-            .minute(parseInt(formState.endTime.split(':')[1]))
-            .second(parseInt(formState.endTime.split(':')[2]))
-            .toISOString()
-        : '';
-
-    const originalStartAt = eventListCardProps.allDay
-      ? dayjs.utc(eventListCardProps.startDate).isValid()
-        ? dayjs.utc(eventListCardProps.startDate).startOf('day').toISOString()
-        : ''
-      : dayjs(
-            `${eventListCardProps.startDate}T${eventListCardProps.startTime}`,
-          ).isValid()
-        ? dayjs(
-            `${eventListCardProps.startDate}T${eventListCardProps.startTime}`,
-          ).toISOString()
-        : '';
-
-    const originalEndAt = eventListCardProps.allDay
-      ? dayjs(eventListCardProps.endDate).isValid()
-        ? dayjs(eventListCardProps.endDate).endOf('day').toISOString()
-        : ''
-      : dayjs(
-            `${eventListCardProps.endDate}T${eventListCardProps.endTime}`,
-          ).isValid()
-        ? dayjs(
-            `${eventListCardProps.endDate}T${eventListCardProps.endTime}`,
-          ).toISOString()
-        : '';
-
-    const datesChanged =
-      newStartAt !== originalStartAt || newEndAt !== originalEndAt;
-
     // Return true if only name/description changed, and no other fields changed
     return (
       (nameChanged || descriptionChanged) &&
@@ -352,7 +298,7 @@ function EventListCardModals({
       } else {
         // Recurring instance - handle based on selected option
         switch (deleteOption) {
-          case 'single':
+          case 'single': {
             const singleResult = await deleteSingleInstance({
               variables: {
                 input: {
@@ -362,7 +308,8 @@ function EventListCardModals({
             });
             data = singleResult.data;
             break;
-          case 'following':
+          }
+          case 'following': {
             const followingResult = await deleteThisAndFollowing({
               variables: {
                 input: {
@@ -372,7 +319,8 @@ function EventListCardModals({
             });
             data = followingResult.data;
             break;
-          case 'all':
+          }
+          case 'all': {
             const allResult = await deleteEntireSeries({
               variables: {
                 input: {
@@ -382,6 +330,7 @@ function EventListCardModals({
             });
             data = allResult.data;
             break;
+          }
         }
       }
 
