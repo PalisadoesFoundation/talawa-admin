@@ -92,7 +92,22 @@ export const TableRow = ({
       }
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
-      const blob = new Blob([new Uint8Array(pdf.buffer)], {
+      // Ensure pdf.buffer is a true ArrayBuffer for Blob compatibility
+      let arrayBuffer: ArrayBuffer;
+      if (pdf.buffer instanceof ArrayBuffer) {
+        arrayBuffer = pdf.buffer;
+      } else if (
+        typeof SharedArrayBuffer !== 'undefined' &&
+        pdf.buffer instanceof SharedArrayBuffer
+      ) {
+        // Copy bytes from SharedArrayBuffer into a new ArrayBuffer
+        const sharedBuf = pdf.buffer as SharedArrayBuffer;
+        const temp = new Uint8Array(sharedBuf);
+        arrayBuffer = temp.slice().buffer;
+      } else {
+        throw new Error('pdf.buffer is not a supported buffer type');
+      }
+      const blob = new Blob([new Uint8Array(arrayBuffer)], {
         type: 'application/pdf',
       });
       const url = URL.createObjectURL(blob);

@@ -40,7 +40,7 @@
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^6.0.4",
     "history": "^5.3.0",
-    "i18next": "^24.2.2",
+    "i18next": "^25.4.1",
     "i18next-browser-languagedetector": "^8.0.2",
     "i18next-http-backend": "^3.0.2",
     "inquirer": "^12.9.0",
@@ -117,9 +117,6 @@
   },
   "devDependencies": {
     "@rollup/rollup-darwin-arm64": "^4.50.0",
-    "@rollup/rollup-darwin-x64": "^4.50.0",
-    "@rollup/rollup-linux-x64-gnu": "^4.50.0",
-    "@rollup/rollup-win32-x64-msvc": "^4.50.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
