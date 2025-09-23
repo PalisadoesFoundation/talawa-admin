@@ -110,36 +110,58 @@ function OrgPost(): JSX.Element {
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
 
+  async function getFileHashFromFile(file: File): Promise<string> {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function getMimeTypeEnum(mime: string): string {
+    switch (mime) {
+      case 'image/jpeg':
+        return 'IMAGE_JPEG';
+      case 'image/png':
+        return 'IMAGE_PNG';
+      case 'image/webp':
+        return 'IMAGE_WEBP';
+      case 'image/avif':
+        return 'IMAGE_AVIF';
+      case 'video/mp4':
+        return 'VIDEO_MP4';
+      case 'video/webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  }
+
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
-      if (!postformState.posttitle.trim()) {
-        throw new Error('Title field cannot be empty');
+      let attachment = null;
+      if (file && typeof file !== 'string') {
+        const fileName = file.name.split('/').pop() || 'defaultFileName';
+        const mimeType = file.type;
+        const objectName = 'uploads/' + fileName;
+        const fileHash = await getFileHashFromFile(file);
+
+        attachment = {
+          fileHash,
+          mimetype: getMimeTypeEnum(file.type),
+          name: fileName,
+          objectName,
+        };
       }
-
-      if (!currentUrl) {
-        throw new Error('Organization ID is required');
-      }
-
-      // Create the typed input object
-      const input: InterfaceMutationCreatePostInput = {
-        caption: postformState.posttitle.trim(),
-        organizationId: currentUrl,
-        isPinned: postformState.pinPost,
-      };
-
-      // Handle file upload
-      if (file instanceof File) {
-        // With apollo-upload-client, we can directly pass the File object
-        input.attachments = [file];
-      }
-
       const { data } = await create({
-        variables: { input },
-        context: {
-          // Ensure the file upload request includes the required header
-          headers: { 'Apollo-Require-Preflight': 'true' },
+        variables: {
+          input: {
+            caption: postformState.posttitle.trim(),
+            organizationId: currentUrl,
+            isPinned: postformState.pinPost,
+            attachments: attachment ? [attachment] : [],
+          },
         },
       });
 
@@ -163,7 +185,6 @@ function OrgPost(): JSX.Element {
     }
   };
 
-  console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -177,10 +198,6 @@ function OrgPost(): JSX.Element {
       ) {
         toast.error('Please select an image or video file');
         return;
-      }
-
-      if (filteredPosts.length === 0) {
-        console.log('No filtered posts found');
       }
 
       setFile(selectedFile);
@@ -230,8 +247,7 @@ function OrgPost(): JSX.Element {
 
   useEffect(() => {
     if (orgPostListError) {
-      console.error('Organization post list error:', orgPostListError);
-      // Add proper error handling here
+      toast.error('Organization post list error:');
     }
   }, [orgPostListError]);
 
@@ -261,6 +277,7 @@ function OrgPost(): JSX.Element {
       data-is-filtering={String(isFiltering)}
       data-sorting-option={sortingOption}
     >
+      {error && <div data-testid="not-found">Error loading post</div>}
       <PostsRenderer
         loading={loading}
         error={error}
@@ -280,9 +297,6 @@ function OrgPost(): JSX.Element {
       setDisplayPosts([]);
 
       refetchPosts({ input: { organizationId: currentUrl } });
-      return;
-    }
-    if (loading || error || !data?.postsByOrganization) {
       return;
     }
 
@@ -323,7 +337,6 @@ function OrgPost(): JSX.Element {
         setFilteredPosts(filtered);
       }
     } catch (error) {
-      console.error('Search error:', error);
       toast.error('Error searching posts');
       setIsFiltering(false);
     }
@@ -414,6 +427,7 @@ function OrgPost(): JSX.Element {
                   ]}
                   selectedOption={sortingOption}
                   onSortChange={handleSorting}
+                  data-testid="sorting"
                   dataTestIdPrefix="sortpost-toggle"
                   dropdownTestId="sortpost-dropdown"
                 />
