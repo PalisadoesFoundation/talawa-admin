@@ -6,20 +6,9 @@
  *
  * @component
  *
- * @remarks
- * - Redirects to the homepage if `orgId` or `userId` is missing.
- * - Displays a loader while fetching events and handles errors gracefully.
- * - Allows users to search events by title or location and sort the results.
- * - Users can volunteer for events or join specific volunteer groups.
  *
  * @returns {JSX.Element} The rendered UpcomingEvents component.
  *
- * @dependencies
- * - `react`, `react-bootstrap`, `react-router-dom`, `react-icons`, `@mui/material`
- * - `@apollo/client` for GraphQL queries and mutations
- * - `react-toastify` for notifications
- * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
  *
  * @example
  * ```tsx
@@ -36,15 +25,6 @@
  * - `searchTerm` - The current search term entered by the user.
  * - `searchBy` - The field to search by, either "title" or "location".
  *
- * @hooks
- * - `useTranslation` - For multi-language support.
- * - `useLocalStorage` - To retrieve the stored user ID.
- * - `useQuery` - To fetch events data.
- * - `useMutation` - To handle volunteering actions.
- *
- * @errors
- * - Displays an error message if events fail to load.
- * - Handles errors during volunteering actions and shows appropriate notifications.
  */
 import React, { useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
