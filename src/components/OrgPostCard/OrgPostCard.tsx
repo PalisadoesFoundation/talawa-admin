@@ -348,11 +348,23 @@ export default function OrgPostCard({
     <>
       <div
         className="col-xl-4 col-lg-4 col-md-6"
+        style={{
+          width: '100%',
+          maxWidth: '600px',
+          margin: '20px auto', // center horizontally + spacing between posts
+        }}
         data-testid="post-item"
         onClick={handleCardClick}
       >
         <div className={styles.cardsOrgPostCard}>
-          <Card className={styles.cardOrgPostCard}>
+          <Card
+            className={styles.cardOrgPostCard}
+            style={{
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            }}
+          >
             {videoAttachment ? (
               <video
                 ref={videoRef}

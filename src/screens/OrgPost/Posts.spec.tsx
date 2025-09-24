@@ -8,6 +8,7 @@ import type {
   InterfacePost,
   InterfacePostEdge,
 } from '../../types/Post/interface';
+
 interface InterfaceOrgPostCardProps {
   post: {
     id: string;
@@ -40,7 +41,12 @@ describe('PostsRenderer', () => {
     id: 'post-1',
     caption: 'Test Post',
     createdAt: '2023-01-01T00:00:00Z',
-    creator: { id: 'user-1' },
+    creator: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+      avatarURL: 'avatar.jpg',
+    },
     imageUrl: 'test-image.jpg',
     videoUrl: 'test-video.mp4',
     pinned: true,
@@ -50,7 +56,11 @@ describe('PostsRenderer', () => {
     id: 'post-2',
     caption: 'Test Post No Attachments',
     createdAt: '2023-01-01T00:00:00Z',
-    creator: { id: 'user-1' },
+    creator: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+    },
     pinned: false,
   };
 
@@ -241,7 +251,11 @@ describe('PostsRenderer', () => {
       id: 'post-4',
       caption: '',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
@@ -267,7 +281,11 @@ describe('PostsRenderer', () => {
       id: '', // empty string to simulate a null/invalid ID
       caption: 'Post with null ID',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
@@ -303,6 +321,7 @@ describe('PostsRenderer', () => {
 
     expect(screen.getByTestId('not-found')).toBeInTheDocument();
   });
+
   // Replace the getFileHashFromFile function with a mock
   vi.mock('../../../utils/fileUtils', () => ({
     getFileHashFromFile: vi.fn().mockResolvedValue('mock-file-hash-123'),
@@ -310,14 +329,12 @@ describe('PostsRenderer', () => {
 
   // Then in your test, remove the actual implementation and just test the structure
   it('should create valid FileMetadataInput', async () => {
-    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
-
     // Mock the hash function directly in the test
     vi.spyOn(global, 'crypto', 'get').mockReturnValue({
       subtle: {
         digest: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3, 4])),
       },
-    } as any);
+    } as unknown as Crypto);
 
     const attachment = {
       fileHash: 'mock-hash-value',
@@ -336,14 +353,17 @@ describe('PostsRenderer', () => {
 });
 
 // Add these tests to your Posts.spec.tsx
-
 describe('PostsRenderer Edge Cases', () => {
   it('handles posts with undefined imageUrl and videoUrl', () => {
     const postWithUndefinedMedia: InterfacePost = {
       id: 'post-5',
       caption: 'Post with undefined media',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       imageUrl: undefined,
       videoUrl: undefined,
       pinned: false,
@@ -417,7 +437,11 @@ describe('PostsRenderer Edge Cases', () => {
                   id: 'post-7',
                   caption: 'Mixed CASE Post',
                   createdAt: '2023-01-01T00:00:00Z',
-                  creator: { id: 'user-1' },
+                  creator: {
+                    id: 'user-1',
+                    name: 'Test User',
+                    email: 'test@example.com',
+                  },
                   pinned: false,
                 },
                 cursor: 'cursor-7',
@@ -430,7 +454,11 @@ describe('PostsRenderer Edge Cases', () => {
             id: 'post-7',
             caption: 'Mixed CASE Post',
             createdAt: '2023-01-01T00:00:00Z',
-            creator: { id: 'user-1' },
+            creator: {
+              id: 'user-1',
+              name: 'Test User',
+              email: 'test@example.com',
+            },
             pinned: false,
           },
         ],
@@ -453,7 +481,11 @@ describe('PostsRenderer Edge Cases', () => {
       id: 'post-8',
       caption: longCaption,
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
@@ -484,7 +516,11 @@ describe('PostsRenderer Edge Cases', () => {
       id: 'post-9',
       caption: 'Post with spéciål chàracters & symbols! @#$%^&*()',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
@@ -518,7 +554,11 @@ describe('PostsRenderer Edge Cases', () => {
       id: 'post-10',
       caption: 'Duplicate Post',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
@@ -526,7 +566,11 @@ describe('PostsRenderer Edge Cases', () => {
       id: 'post-11',
       caption: 'Duplicate Post',
       createdAt: '2023-01-02T00:00:00Z',
-      creator: { id: 'user-2' },
+      creator: {
+        id: 'user-2',
+        name: 'Test User 2',
+        email: 'test2@example.com',
+      },
       pinned: false,
     };
 
@@ -561,7 +605,11 @@ describe('PostsRenderer Edge Cases', () => {
       id: 'post-12',
       caption: 'Post with null date',
       createdAt: '12',
-      creator: { id: 'user-1' },
+      creator: {
+        id: 'user-1',
+        name: 'Test User',
+        email: 'test@example.com',
+      },
       pinned: false,
     };
 
