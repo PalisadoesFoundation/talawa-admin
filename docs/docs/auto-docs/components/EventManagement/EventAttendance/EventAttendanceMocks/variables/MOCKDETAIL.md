@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L27)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

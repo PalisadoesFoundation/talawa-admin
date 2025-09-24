@@ -8,7 +8,7 @@
 
 Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L102)
 
-## Type declaration
+## Type Declaration
 
 ### agendaItemCategories
 

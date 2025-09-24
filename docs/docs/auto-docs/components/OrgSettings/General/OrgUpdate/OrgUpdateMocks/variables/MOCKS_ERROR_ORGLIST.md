@@ -8,7 +8,7 @@
 
 Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L110)
 
-## Type declaration
+## Type Declaration
 
 ### error
 
