@@ -1,3 +1,23 @@
+/**
+ * PinnedPostsStory Component
+ *
+ * A React functional component that renders pinned posts as an Instagram-style
+ * story carousel. Each story shows the author's avatar and name, and can be clicked
+ * to trigger a callback with the selected post.
+ *
+ * @component
+ * @param {InterfacePinnedPostsStoryProps} props - The props for the component.
+ * @param {InterfacePost[]} props.pinnedPosts - Array of pinned posts to render in the carousel.
+ * @param {(post: InterfacePost) => void} props.onStoryClick - Callback triggered when a story is clicked.
+ *
+ * @returns {JSX.Element | null} A JSX element rendering the pinned posts carousel, or null if there are no pinned posts.
+ *
+ * @example
+ * ```tsx
+ * <PinnedPostsStory pinnedPosts={pinnedPosts} onStoryClick={handleStoryClick} />
+ * ```
+ */
+
 import React from 'react';
 import { Avatar, Typography, Box } from '@mui/material';
 import Carousel from 'react-multi-carousel';
@@ -16,6 +36,11 @@ const storiesResponsive = {
   mobile: { breakpoint: { max: 464, min: 0 }, items: 3 },
 };
 
+/**
+ * PinnedPostsStory Component
+ *
+ * ... (JSDoc content)
+ */
 const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
   pinnedPosts,
   onStoryClick,
