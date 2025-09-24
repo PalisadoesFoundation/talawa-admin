@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
 import PostsRenderer from './Posts';
@@ -32,6 +32,29 @@ vi.mock('components/OrgPostCard/OrgPostCard', () => ({
   default: ({ post }: InterfaceOrgPostCardProps) => (
     <div data-testid="org-post-card" data-post-id={post.id}>
       {post.caption}
+    </div>
+  ),
+}));
+
+// Mock PinnedPostsStory component
+vi.mock('./PinnedPostsStory', () => ({
+  default: ({
+    pinnedPosts,
+    onStoryClick,
+  }: {
+    pinnedPosts: InterfacePost[];
+    onStoryClick: (post: InterfacePost) => void;
+  }) => (
+    <div data-testid="pinned-posts-story">
+      {pinnedPosts.map((post) => (
+        <button
+          key={post.id}
+          data-testid={`story-${post.id}`}
+          onClick={() => onStoryClick(post)}
+        >
+          {post.caption}
+        </button>
+      ))}
     </div>
   ),
 }));
@@ -106,6 +129,7 @@ describe('PostsRenderer', () => {
   it('renders error message when error is provided', () => {
     const mockError = new ApolloError({ errorMessage: 'Test error' });
     render(<PostsRenderer {...defaultProps} error={mockError} />);
+    expect(screen.getByTestId('error-message')).toBeInTheDocument();
     expect(screen.getByText('Error loading posts')).toBeInTheDocument();
   });
 
@@ -113,7 +137,7 @@ describe('PostsRenderer', () => {
     render(<PostsRenderer {...defaultProps} />);
 
     expect(screen.getAllByTestId('org-post-card').length).toBe(3);
-    expect(screen.getByText('Test Post')).toBeInTheDocument();
+    expect(screen.getAllByText('Test Post').length).toBe(2);
     expect(screen.getByText('Test Post No Attachments')).toBeInTheDocument();
     expect(screen.getByText('Test Post No Creator')).toBeInTheDocument();
   });
@@ -154,7 +178,7 @@ describe('PostsRenderer', () => {
     render(<PostsRenderer {...props} />);
 
     expect(screen.getAllByTestId('org-post-card').length).toBe(2);
-    expect(screen.getByText('Test Post')).toBeInTheDocument();
+    expect(screen.getAllByText('Test Post').length).toBe(2);
     expect(screen.getByText('Test Post No Attachments')).toBeInTheDocument();
   });
 
@@ -349,6 +373,100 @@ describe('PostsRenderer', () => {
       name: 'hello.txt',
       objectName: expect.any(String),
     });
+  });
+
+  const mockPinnedPost: InterfacePost = {
+    id: 'pinned-post-1',
+    caption: 'Pinned Test Post',
+    createdAt: '2023-01-01T00:00:00Z',
+    creator: {
+      id: 'user-1',
+      name: 'Test User',
+      email: 'test@example.com',
+    },
+    pinned: true,
+  };
+
+  const defaultProps1 = {
+    loading: false,
+    error: undefined,
+    data: {
+      organization: {
+        posts: {
+          edges: [{ node: mockPinnedPost, cursor: 'cursor-1' }],
+        },
+      },
+      postsByOrganization: [mockPinnedPost],
+    },
+    isFiltering: false,
+    searchTerm: '',
+    sortingOption: 'None',
+    displayPosts: [],
+  };
+
+  it('should open modal when pinned post story is clicked', () => {
+    render(<PostsRenderer {...defaultProps1} />);
+
+    // Click on a pinned post story button (not the org-post-card)
+    const storyButton = screen.getByTestId('story-pinned-post-1');
+    fireEvent.click(storyButton);
+
+    // Modal should open with the post content
+    expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+    expect(screen.getByTestId('close-pinned-post-button')).toBeInTheDocument();
+  });
+
+  it('should close modal when close button is clicked', () => {
+    render(<PostsRenderer {...defaultProps1} />);
+
+    // Open modal first by clicking story
+    const storyButton = screen.getByTestId('story-pinned-post-1');
+    fireEvent.click(storyButton);
+    expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+
+    // Close modal using close button
+    const closeButton = screen.getByTestId('close-pinned-post-button');
+    fireEvent.click(closeButton);
+
+    // Modal should be closed
+    expect(screen.queryByTestId('pinned-post-modal')).not.toBeInTheDocument();
+  });
+
+  it('should render pinned posts story component', () => {
+    render(<PostsRenderer {...defaultProps1} />);
+
+    expect(screen.getByTestId('pinned-posts-story')).toBeInTheDocument();
+    expect(screen.getByTestId('story-pinned-post-1')).toBeInTheDocument();
+  });
+
+  it('should render regular posts container', () => {
+    render(<PostsRenderer {...defaultProps} />);
+
+    expect(screen.getByTestId('regular-posts-container')).toBeInTheDocument();
+  });
+
+  it('should render filtered posts container when filtering', () => {
+    const props = {
+      ...defaultProps,
+      isFiltering: true,
+      searchTerm: 'Test Post',
+    };
+
+    render(<PostsRenderer {...props} />);
+
+    expect(screen.getByTestId('filtered-posts-container')).toBeInTheDocument();
+  });
+
+  it('should render dropdown container when sorting', () => {
+    const props = {
+      ...defaultProps,
+      sortingOption: 'CreatedAt',
+      displayPosts: [mockPost],
+    };
+
+    render(<PostsRenderer {...props} />);
+
+    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
   });
 });
 

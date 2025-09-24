@@ -59,7 +59,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
 
   if (loading) return <Loader />;
-  if (error) return <div>Error loading posts</div>;
+  if (error) return <div data-testid="error-message">Error loading posts</div>;
 
   const createAttachments = (
     post: InterfacePost,
@@ -170,9 +170,11 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
         <PinnedPostsStory
           pinnedPosts={pinnedPosts}
           onStoryClick={handleStoryClick}
+          data-testid="story-pinned-post-1"
         />
 
         <div
+          data-testid="filtered-posts-container"
           style={{
             maxWidth: 900,
             margin: '0 auto',
@@ -191,6 +193,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           <Modal
             open={showPinnedPostModal}
             onClose={handleClosePinnedModal}
+            data-testid="pinned-post-modal"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -213,6 +216,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
             >
               <IconButton
                 onClick={handleClosePinnedModal}
+                data-testid="close-pinned-post-button"
                 sx={{
                   position: 'absolute',
                   top: 8,
@@ -246,6 +250,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
         <PinnedPostsStory
           pinnedPosts={pinnedPosts}
           onStoryClick={handleStoryClick}
+          data-testid="story-pinned-post-1"
         />
 
         <div data-testid="dropdown">
@@ -257,6 +262,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           <Modal
             open={showPinnedPostModal}
             onClose={handleClosePinnedModal}
+            data-testid="pinned-post-modal"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -279,6 +285,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
             >
               <IconButton
                 onClick={handleClosePinnedModal}
+                data-testid="close-pinned-post-button"
                 sx={{
                   position: 'absolute',
                   top: 8,
@@ -311,17 +318,21 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       <PinnedPostsStory
         pinnedPosts={pinnedPosts}
         onStoryClick={handleStoryClick}
+        data-testid="story-pinned-post-1"
       />
 
       {/* Regular Posts */}
-      {data.organization.posts.edges
-        .map((edge: InterfacePostEdge) => renderPostCard(edge.node))
-        .filter(Boolean)}
+      <div data-testid="regular-posts-container">
+        {data.organization.posts.edges
+          .map((edge: InterfacePostEdge) => renderPostCard(edge.node))
+          .filter(Boolean)}
+      </div>
 
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
         <Modal
           open={showPinnedPostModal}
+          data-testid="pinned-post-modal"
           onClose={handleClosePinnedModal}
           sx={{
             display: 'flex',
@@ -333,7 +344,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           <Box
             sx={{
               width: '100%',
-              maxWidth: 600,
+              maxWidth: 800,
               maxHeight: '90vh',
               overflowY: 'auto',
               outline: 'none',
@@ -345,6 +356,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           >
             <IconButton
               onClick={handleClosePinnedModal}
+              data-testid="close-pinned-post-button"
               sx={{
                 position: 'absolute',
                 top: 8,
