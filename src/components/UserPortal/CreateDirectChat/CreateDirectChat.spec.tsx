@@ -348,4 +348,206 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     expect(chatsListRefetch).not.toHaveBeenCalled();
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
   });
+  it('should handle existing user without firstName and fallback to "this user"', async () => {
+    const t = ((key: string) => {
+      return key;
+    }) as TFunction;
+    const createChat = vi.fn();
+    const chatsListRefetch = vi.fn();
+    const toggleCreateDirectChatModal = vi.fn();
+    const chats: GroupChat[] = [
+      {
+        _id: '1',
+        isGroup: false,
+        name: '',
+        image: '',
+        messages: [],
+        unseenMessagesByUsers: '{}',
+        users: [
+          {
+            _id: '1',
+            firstName: 'Aaditya',
+            lastName: 'Agarwal',
+            email: '',
+            image: '',
+            createdAt: new Date(),
+          },
+          {
+            _id: '2',
+            firstName: '',
+            lastName: 'User',
+            email: '',
+            image: '',
+            createdAt: new Date(),
+          },
+        ],
+        createdAt: new Date(),
+        admins: [],
+        description: '',
+      },
+    ];
+    await handleCreateDirectChat(
+      '2',
+      chats,
+      t,
+      createChat,
+      '1',
+      '1',
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    );
+    expect(createChat).not.toHaveBeenCalled();
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
+  });
+
+  it('should handle search form submission with firstName and lastName', async () => {
+    setItem('userId', '1');
+    const mock = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...CHATS_LIST_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CREATE_CHAT_MUTATION_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_LIST_QUERY_MOCK,
+      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatComp />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const dropdown = await screen.findByTestId('dropdown');
+    fireEvent.click(dropdown);
+    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
+    fireEvent.click(newDirectChatBtn);
+
+    const searchInput = (await screen.findByTestId(
+      'searchUser',
+    )) as HTMLInputElement;
+
+    fireEvent.change(searchInput, { target: { value: 'John Doe' } });
+    expect(searchInput.value).toBe('John Doe');
+
+    const submitBtn = await screen.findByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(searchInput).toBeInTheDocument();
+    });
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+  });
+
+  it('should handle search form submission with only firstName', async () => {
+    setItem('userId', '1');
+    const mock = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...CHATS_LIST_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CREATE_CHAT_MUTATION_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_LIST_QUERY_MOCK,
+      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatComp />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const dropdown = await screen.findByTestId('dropdown');
+    fireEvent.click(dropdown);
+    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
+    fireEvent.click(newDirectChatBtn);
+
+    const searchInput = (await screen.findByTestId(
+      'searchUser',
+    )) as HTMLInputElement;
+
+    fireEvent.change(searchInput, { target: { value: 'John' } });
+    expect(searchInput.value).toBe('John');
+
+    const submitBtn = await screen.findByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(searchInput).toBeInTheDocument();
+    });
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+  });
+
+  it('should handle search form submission with empty search (triggering firstName || fallback)', async () => {
+    setItem('userId', '1');
+    const mock = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...CHATS_LIST_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CREATE_CHAT_MUTATION_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_LIST_QUERY_MOCK,
+      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatComp />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const dropdown = await screen.findByTestId('dropdown');
+    fireEvent.click(dropdown);
+    const newDirectChatBtn = await screen.findByTestId('newDirectChat');
+    fireEvent.click(newDirectChatBtn);
+
+    const searchInput = (await screen.findByTestId(
+      'searchUser',
+    )) as HTMLInputElement;
+
+    fireEvent.change(searchInput, { target: { value: ' ' } });
+    expect(searchInput.value).toBe(' ');
+
+    const submitBtn = await screen.findByTestId('submitBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(searchInput).toBeInTheDocument();
+    });
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+  });
 });
