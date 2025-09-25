@@ -226,6 +226,76 @@ export const UserConnectionListMock: InterfaceGQLMock[] = [
       },
     },
   },
+   {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: { firstName_contains: 'John', lastName_contains: 'Doe' },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              _id: '2',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '2',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USERS_CONNECTION_LIST,
+      variables: { firstName_contains: 'John', lastName_contains: '' },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            user: {
+              _id: '3',
+              firstName: 'John',
+              lastName: 'Smith',
+              email: 'johnsmith@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '3',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
+        ],
+      },
+    },
+  },
 ];
 
 // --------------------------------------------------------------------
