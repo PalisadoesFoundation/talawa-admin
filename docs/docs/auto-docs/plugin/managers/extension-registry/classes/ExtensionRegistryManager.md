@@ -8,7 +8,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 ## Constructors
 
-### new ExtensionRegistryManager()
+### Constructor
 
 > **new ExtensionRegistryManager**(): `ExtensionRegistryManager`
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 ### getExtensionPoints()
 
-> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
+> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg?`): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
 Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L232)
 

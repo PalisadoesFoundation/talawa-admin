@@ -8,9 +8,9 @@ Defined in: [src/plugin/manager.ts:14](https://github.com/PalisadoesFoundation/t
 
 ## Constructors
 
-### new PluginManager()
+### Constructor
 
-> **new PluginManager**(`apolloClient`?): `PluginManager`
+> **new PluginManager**(`apolloClient?`): `PluginManager`
 
 Defined in: [src/plugin/manager.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L21)
 
@@ -76,7 +76,7 @@ Defined in: [src/plugin/manager.ts:142](https://github.com/PalisadoesFoundation/
 
 ### getExtensionPoints()
 
-> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
+> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg?`): [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
 Defined in: [src/plugin/manager.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L147)
 
@@ -142,7 +142,7 @@ Defined in: [src/plugin/manager.ts:123](https://github.com/PalisadoesFoundation/
 
 ### getPluginComponent()
 
-> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
+> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{ \}\>
 
 Defined in: [src/plugin/manager.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L131)
 
@@ -158,7 +158,7 @@ Defined in: [src/plugin/manager.ts:131](https://github.com/PalisadoesFoundation/
 
 #### Returns
 
-`ComponentType`\<\{\}\>
+`ComponentType`\<\{ \}\>
 
 ***
 

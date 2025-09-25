@@ -92,7 +92,7 @@ export const TableRow = ({
       }
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
-      const blob = new Blob([new Uint8Array(pdf.buffer)], {
+      const blob = new Blob([new Uint8Array(pdf.buffer as ArrayBuffer)], {
         type: 'application/pdf',
       });
       const url = URL.createObjectURL(blob);

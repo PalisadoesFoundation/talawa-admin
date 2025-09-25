@@ -10,7 +10,7 @@ Defined in: [src/plugin/types.ts:118](https://github.com/PalisadoesFoundation/ta
 
 ### components?
 
-> `optional` **components**: `Record`\<`string`, `ComponentType`\<`any`\>\>
+> `optional` **components**: `Record`\<`string`, `React.ComponentType`\<`any`\>\>
 
 Defined in: [src/plugin/types.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L125)
 
