@@ -4844,6 +4844,113 @@ form label,
   outline: none;
 }
 
+/* Utility: add hover shadow without changing colors */
+.hoverShadowOnly:hover,
+.hoverShadowOnly:focus,
+.hoverShadowOnly:active {
+  box-shadow: var(--hover-shadow);
+}
+
+/* Keep base colors on hover by pairing with .hoverShadowOnly helper */
+
+/* -- RequestsTableItem.tsx -- */
+
+.requestsTableItemIndex {
+  padding-inline-start: 2.5rem;
+  padding-top: 1rem;
+}
+
+.requestsTableItemName {
+  padding-inline-start: 1.5rem;
+  padding-top: 1rem;
+}
+
+.requestsTableItemEmail {
+  padding-inline-start: 1.5rem;
+  padding-top: 1rem;
+}
+
+.requestsAcceptButton {
+  background-color: var(--actionsButton-bg);
+  color: var(--actionsButton-color);
+  border-color: var(--actionsButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsRejectButton {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border-color: var(--removeButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsAcceptButton:focus-visible {
+  background-color: var(--actionsButton-bg) !important;
+  color: var(--actionsButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsRejectButton:focus-visible {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsAcceptButton:disabled,
+.requestsAcceptButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.requestsRejectButton:disabled,
+.requestsRejectButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (max-width: 1020px) {
+  .requestsTableItemIndex {
+    padding-inline-start: 2rem;
+  }
+
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: -0.25rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .requestsTableItemIndex,
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+}
 .btnConfirmDelete {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);

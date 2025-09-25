@@ -17,7 +17,8 @@ export const MOCKS = [
           },
         ],
         acceptMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request accepted successfully',
         },
       },
     },
@@ -35,7 +36,8 @@ export const MOCKS = [
           },
         ],
         rejectMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request rejected successfully',
         },
       },
     },
@@ -55,7 +57,8 @@ export const MOCKS2 = [
           },
         ],
         acceptMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request accepted successfully',
         },
       },
     },
@@ -73,7 +76,8 @@ export const MOCKS2 = [
           },
         ],
         rejectMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request rejected successfully',
         },
       },
     },
@@ -93,7 +97,8 @@ export const MOCKS3 = [
           },
         ],
         acceptMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request accepted successfully',
         },
       },
     },
@@ -111,7 +116,8 @@ export const MOCKS3 = [
           },
         ],
         rejectMembershipRequest: {
-          _id: '1',
+          success: true,
+          message: 'Membership request rejected successfully',
         },
       },
     },
