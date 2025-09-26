@@ -175,205 +175,180 @@ export const USER_EVENTS_VOLUNTEER = gql`
  */
 
 export const CHAT_BY_ID = gql`
-  query chatById($id: ID!) {
-    chatById(id: $id) {
-      _id
-      isGroup
+  query Chat(
+    $input: QueryChatInput!
+    $first: Int
+    $after: String
+    $firstMessages: Int
+    $afterMessages: String
+  ) {
+    chat(input: $input) {
+      id
       name
-      organization {
-        _id
-      }
+      description
+      avatarMimeType
+      avatarURL
       createdAt
-      messages {
-        _id
-        createdAt
-        messageContent
-        media
-        replyTo {
-          _id
-          createdAt
-          messageContent
-          sender {
-            _id
-            firstName
-            lastName
-            email
-            image
+      updatedAt
+      organization {
+        id
+        name
+        countryCode
+      }
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      members(first: $first, after: $after) {
+        edges {
+          cursor
+          node {
+            id
+            name
+            avatarMimeType
+            avatarURL
           }
         }
-        sender {
-          _id
-          firstName
-          lastName
-          email
-          image
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
         }
       }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
+      messages(first: $firstMessages, after: $afterMessages) {
+        edges {
+          cursor
+          node {
+            id
+            body
+            createdAt
+            updatedAt
+            creator {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
+            parentMessage {
+              id
+              body
+              createdAt
+              creator {
+                id
+                name
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
+        }
       }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        image
-      }
-      unseenMessagesByUsers
     }
   }
 `;
 
 export const GROUP_CHAT_LIST = gql`
-  query groupChatsByUserId {
-    getGroupChatsByUserId {
-      _id
-      isGroup
+  query ChatsByUser {
+    chatsByUser {
+      id
       name
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        createdAt
-        messageContent
-        media
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
       organization {
-        _id
+        id
         name
+        countryCode
       }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        image
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      unseenMessagesByUsers
     }
   }
 `;
 
 export const UNREAD_CHAT_LIST = gql`
-  query unreadChatList {
-    getUnreadChatsByUserId {
-      _id
-      isGroup
+  query ChatsByUser {
+    chatsByUser {
+      id
       name
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        createdAt
-        messageContent
-        media
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
       organization {
-        _id
+        id
         name
+        countryCode
       }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        image
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      unseenMessagesByUsers
     }
   }
 `;
 
 export const CHATS_LIST = gql`
-  query ChatsByUserId($id: ID!, $searchString: String) {
-    chatsByUserId(
-      id: $id
-      where: {
-        name_contains: $searchString
-        user: {
-          firstName_contains: $searchString
-          lastName_contains: $searchString
-        }
-      }
-    ) {
-      _id
-      isGroup
+  query ChatsByUser {
+    chatsByUser {
+      id
       name
-      image
-      creator {
-        _id
-        firstName
-        lastName
-        email
-      }
-      messages {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-          email
-        }
-      }
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
       organization {
-        _id
+        id
         name
+        countryCode
       }
-      users {
-        _id
-        firstName
-        lastName
-        email
-        image
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      admins {
-        _id
-        firstName
-        lastName
-        email
-        image
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
       }
-      unseenMessagesByUsers
     }
   }
 `;

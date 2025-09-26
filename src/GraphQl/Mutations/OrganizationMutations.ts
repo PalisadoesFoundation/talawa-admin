@@ -58,23 +58,25 @@ export const REMOVE_SAMPLE_ORGANIZATION_MUTATION = gql`
  */
 
 export const CREATE_CHAT = gql`
-  mutation createChat(
-    $userIds: [ID!]!
-    $organizationId: ID
-    $isGroup: Boolean!
-    $name: String
-    $image: String
-  ) {
-    createChat(
-      data: {
-        userIds: $userIds
-        organizationId: $organizationId
-        isGroup: $isGroup
-        name: $name
-        image: $image
+  mutation CreateChat($input: MutationCreateChatInput!) {
+    createChat(input: $input) {
+      id
+      name
+      description
+      organization {
+        id
+        name
       }
-    ) {
-      _id
+    }
+  }
+`;
+
+export const CREATE_CHAT_MEMBERSHIP = gql`
+  mutation CreateChatMembership($input: MutationCreateChatMembershipInput!) {
+    createChatMembership(input: $input) {
+      id
+      name
+      description
     }
   }
 `;
@@ -87,106 +89,120 @@ export const ADD_USER_TO_GROUP_CHAT = gql`
   }
 `;
 
-export const MARK_CHAT_MESSAGES_AS_READ = gql`
-  mutation markChatMessagesAsRead($chatId: ID!, $userId: ID!) {
-    markChatMessagesAsRead(chatId: $chatId, userId: $userId) {
-      _id
-    }
-  }
-`;
+// TODO: Update this mutation to match the new schema - markChatMessagesAsRead not found in schema
+// export const MARK_CHAT_MESSAGES_AS_READ = gql`
+//   mutation markChatMessagesAsRead($chatId: ID!, $userId: ID!) {
+//     markChatMessagesAsRead(chatId: $chatId, userId: $userId) {
+//       _id
+//     }
+//   }
+// `;
 
 export const UPDATE_CHAT = gql`
-  mutation updateChat($input: UpdateChatInput!) {
+  mutation UpdateChat($input: MutationUpdateChatInput!) {
     updateChat(input: $input) {
-      _id
+      id
+      name
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
+      organization {
+        id
+        name
+        countryCode
+      }
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
     }
   }
 `;
 
 export const EDIT_CHAT_MESSAGE = gql`
-  mutation updateChatMessage(
-    $messageId: ID!
-    $messageContent: String!
-    $chatId: ID!
-  ) {
-    updateChatMessage(
-      input: {
-        messageId: $messageId
-        messageContent: $messageContent
-        chatId: $chatId
-      }
-    ) {
-      _id
-      messageContent
+  mutation UpdateChatMessage($input: MutationUpdateChatMessageInput!) {
+    updateChatMessage(input: $input) {
+      id
+      body
+      createdAt
       updatedAt
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      parentMessage {
+        id
+        body
+        createdAt
+        creator {
+          id
+          name
+        }
+      }
     }
   }
 `;
 
 export const SEND_MESSAGE_TO_CHAT = gql`
-  mutation sendMessageToChat(
-    $chatId: ID!
-    $replyTo: ID
-    $media: String
-    $messageContent: String
-  ) {
-    sendMessageToChat(
-      chatId: $chatId
-      replyTo: $replyTo
-      messageContent: $messageContent
-      media: $media
-    ) {
-      _id
+  mutation CreateChatMessage($input: MutationCreateChatMessageInput!) {
+    createChatMessage(input: $input) {
+      id
+      body
       createdAt
-      messageContent
-      media
-      replyTo {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-        }
-        updatedAt
-      }
-      sender {
-        _id
-        firstName
-        lastName
-      }
       updatedAt
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      parentMessage {
+        id
+        body
+        createdAt
+        creator {
+          id
+          name
+        }
+      }
     }
   }
 `;
 
 export const MESSAGE_SENT_TO_CHAT = gql`
-  subscription messageSentToChat($userId: ID!) {
-    messageSentToChat(userId: $userId) {
-      _id
+  subscription ChatMessageCreate($input: SubscriptionChatMessageCreateInput!) {
+    chatMessageCreate(input: $input) {
+      id
+      body
       createdAt
-      chatMessageBelongsTo {
-        _id
-      }
-      messageContent
-      replyTo {
-        _id
-        createdAt
-        messageContent
-        sender {
-          _id
-          firstName
-          lastName
-        }
-        updatedAt
-      }
-      sender {
-        _id
-        firstName
-        lastName
-      }
       updatedAt
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      parentMessage {
+        id
+        body
+        createdAt
+        creator {
+          id
+          name
+        }
+      }
     }
   }
 `;

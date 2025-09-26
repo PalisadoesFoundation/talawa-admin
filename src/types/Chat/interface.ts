@@ -1,10 +1,73 @@
 import type { ApolloQueryResult } from '@apollo/client';
 import { type GroupChat } from 'types/Chat/type';
 
+export type NewChatType = {
+  id: string;
+  name: string;
+  description?: string;
+  avatarMimeType?: string;
+  avatarURL?: string;
+  isGroup: boolean;
+  createdAt: string;
+  updatedAt: string;
+  organization?: {
+    id: string;
+    name: string;
+    countryCode?: string;
+  };
+  creator?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  updater?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  members: {
+    edges: Array<{
+      node: {
+        id: string;
+        name: string;
+        avatarMimeType?: string;
+        avatarURL?: string;
+      };
+    }>;
+  };
+  messages: {
+    edges: Array<{
+      node: {
+        id: string;
+        body: string;
+        createdAt: string;
+        updatedAt: string;
+        creator: {
+          id: string;
+          name: string;
+          avatarMimeType?: string;
+          avatarURL?: string;
+        };
+        parentMessage?: {
+          id: string;
+          body: string;
+          createdAt: string;
+          creator: {
+            id: string;
+            name: string;
+          };
+        };
+      };
+    }>;
+  };
+};
+
 export interface InterfaceGroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
   groupChatDetailsModalisOpen: boolean;
-  chat: GroupChat;
+  chat: GroupChat | NewChatType;
   chatRefetch: (
     variables?:
       | Partial<{

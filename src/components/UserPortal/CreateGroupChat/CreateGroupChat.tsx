@@ -51,15 +51,17 @@ import styles from '../../../style/app-fixed.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  CREATE_CHAT,
+  CREATE_CHAT_MEMBERSHIP,
+} from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
@@ -116,6 +118,7 @@ export default function CreateGroupChat({
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   const [createChat] = useMutation(CREATE_CHAT);
+  const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -144,15 +147,47 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    await createChat({
+    // Create the chat
+    const chatResult = await createChat({
       variables: {
-        organizationId: currentOrg,
-        userIds: [userId, ...userIds],
-        name: title,
-        isGroup: true,
-        image: selectedImage,
+        input: {
+          organizationId: currentOrg,
+          name: title,
+          description: description,
+          avatar: selectedImage,
+        },
       },
     });
+
+    const chatId = (chatResult.data as { createChat: { id: string } })
+      ?.createChat?.id;
+
+    if (chatId && userId) {
+      // Add current user as member
+      await createChatMembership({
+        variables: {
+          input: {
+            memberId: userId,
+            chatId,
+            role: 'regular',
+          },
+        },
+      });
+
+      // Add all selected users as members
+      for (const memberId of userIds) {
+        await createChatMembership({
+          variables: {
+            input: {
+              memberId,
+              chatId,
+              role: 'regular',
+            },
+          },
+        });
+      }
+    }
+
     chatsListRefetch();
     toggleAddUserModal();
     toggleCreateGroupChatModal();
@@ -165,18 +200,25 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+  } = useQuery(ORGANIZATION_MEMBERS, {
+    variables: {
+      input: { id: currentOrg },
+      first: 20,
+      after: null,
+      where: {},
+    },
   });
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    const [firstName, lastName] = userName.split(' ');
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
-    };
-    allUsersRefetch({ ...newFilterData });
+    const trimmedName = userName.trim();
+
+    allUsersRefetch({
+      input: { id: currentOrg },
+      first: 20,
+      after: null,
+      where: trimmedName ? { name_contains: trimmedName } : {},
+    });
   };
 
   const handleImageClick = (): void => {
@@ -323,10 +365,19 @@ export default function CreateGroupChat({
                   </TableHead>
                   <TableBody>
                     {allUsersData &&
-                      allUsersData.users.length > 0 &&
-                      allUsersData.users.map(
+                      allUsersData.organization?.members?.edges?.length > 0 &&
+                      allUsersData.organization.members.edges.map(
                         (
-                          userDetails: InterfaceQueryUserListItem,
+                          {
+                            node: userDetails,
+                          }: {
+                            node: {
+                              id: string;
+                              name: string;
+                              avatarURL?: string;
+                              role: string;
+                            };
+                          },
                           index: number,
                         ) => (
                           <StyledTableRow
@@ -339,7 +390,7 @@ export default function CreateGroupChat({
                             <StyledTableCell align="center">
                               {userDetails.name}
                               <br />
-                              {userDetails.emailAddress}
+                              {userDetails.role || 'Member'}
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               {userIds.includes(userDetails.id) ? (

@@ -10,9 +10,16 @@
  * - Displays group chat details when applicable.
  *
  * @param props - The props for the ChatRoom component.
- * @returns The rendered ChatRoom component.
- *
- * @example
+ * @returns The rendered ChatRoom comp                            {message.parentMessage && (
+                              <a href={`#${message.parentMessage.id}`}>
+                                <div className={styles.replyToMessage}>
+                                  <p className={styles.replyToMessageSender}>
+                                    {message.parentMessage.creator.name}
+                                  </p>
+                                  <span>{message.parentMessage.body}</span>
+                                </div>
+                              </a>
+                            )} @example
  * ```tsx
  * <ChatRoom
  *   selectedContact="12345"
@@ -22,7 +29,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, JSX } from 'react';
+import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
@@ -33,7 +40,6 @@ import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   EDIT_CHAT_MESSAGE,
-  MARK_CHAT_MESSAGES_AS_READ,
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
@@ -57,6 +63,69 @@ interface IChatRoomProps {
         }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
+}
+
+interface INewChat {
+  id: string;
+  name: string;
+  description?: string;
+  avatarMimeType?: string;
+  avatarURL?: string;
+  isGroup: boolean;
+  createdAt: string;
+  updatedAt: string;
+  organization?: {
+    id: string;
+    name: string;
+    countryCode?: string;
+  };
+  creator?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  updater?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  members: {
+    edges: Array<{
+      node: {
+        id: string;
+        name: string;
+        avatarMimeType?: string;
+        avatarURL?: string;
+      };
+    }>;
+  };
+  messages: {
+    edges: Array<{
+      node: {
+        id: string;
+        body: string;
+        createdAt: string;
+        updatedAt: string;
+        creator: {
+          id: string;
+          name: string;
+          avatarMimeType?: string;
+          avatarURL?: string;
+        };
+        parentMessage?: {
+          id: string;
+          body: string;
+          createdAt: string;
+          creator: {
+            id: string;
+            name: string;
+          };
+        };
+      };
+    }>;
+  };
 }
 
 // Helper component to handle MinIO image loading
@@ -166,7 +235,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
   const [newMessage, setNewMessage] = useState('');
-  const [chat, setChat] = useState<GroupChat>();
+  const [chat, setChat] = useState<INewChat>();
   const [replyToDirectMessage, setReplyToDirectMessage] =
     useState<DirectMessage | null>(null);
   const [editMessage, setEditMessage] = useState<DirectMessage | null>(null);
@@ -201,32 +270,42 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   const [sendMessageToChat] = useMutation(SEND_MESSAGE_TO_CHAT, {
     variables: {
-      chatId: props.selectedContact,
-      replyTo: replyToDirectMessage?._id,
-      media: attachmentObjectName || null,
-      messageContent: newMessage,
+      input: {
+        chatId: props.selectedContact,
+        replyTo: replyToDirectMessage?._id,
+        media: attachmentObjectName || null,
+        messageContent: newMessage,
+      },
     },
   });
 
   const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
     variables: {
-      messageId: editMessage?._id,
-      messageContent: newMessage,
-      chatId: props.selectedContact,
+      input: {
+        messageId: editMessage?._id,
+        messageContent: newMessage,
+        chatId: props.selectedContact,
+      },
     },
   });
 
-  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-    variables: {
-      chatId: props.selectedContact,
-      userId: userId,
-    },
-  });
+  // TODO: Update markChatMessagesAsRead to match new schema
+  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+  //   variables: {
+  //     chatId: props.selectedContact,
+  //     userId: userId,
+  //   },
+  // });
 
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
-      id: props.selectedContact,
+      input: { id: props.selectedContact },
+      first: 20,
+      after: null,
+      firstMessages: 50,
+      afterMessages: null,
     },
+    skip: !props.selectedContact || props.selectedContact.trim() === '',
   });
 
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
@@ -242,28 +321,29 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   });
 
   useEffect(() => {
-    markChatMessagesAsRead().then(() => {
-      props.chatListRefetch();
-      unreadChatListRefetch();
-    });
+    // TODO: Update markChatMessagesAsRead to match new schema
+    // markChatMessagesAsRead().then(() => {
+    //   props.chatListRefetch();
+    //   unreadChatListRefetch();
+    // });
   }, [props.selectedContact]);
 
   useEffect(() => {
     if (chatData) {
-      const chat = chatData.chatById;
+      const chat = chatData.chat;
       setChat(chat);
       if (chat.isGroup) {
         setChatTitle(chat.name);
-        setChatSubtitle(`${chat.users.length} members`);
-        setChatImage(chat.image);
+        setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
+        setChatImage(chat.avatarURL);
       } else {
-        const otherUser = chat.users.find(
-          (user: { _id: string }) => user._id !== userId,
-        );
+        const otherUser = chat.members?.edges?.find(
+          (edge: { node: { id: string } }) => edge.node.id !== userId,
+        )?.node;
         if (otherUser) {
-          setChatTitle(`${otherUser.firstName} ${otherUser.lastName}`);
-          setChatSubtitle(otherUser.email);
-          setChatImage(otherUser.image);
+          setChatTitle(`${otherUser.name}`);
+          setChatSubtitle(''); // Email not available in new schema
+          setChatImage(otherUser.avatarURL);
         }
       }
     }
@@ -285,15 +365,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
-      userId: userId,
+      input: {
+        id: props.selectedContact,
+      },
     },
     onData: async (messageSubscriptionData) => {
       if (
-        messageSubscriptionData?.data.data.messageSentToChat &&
-        messageSubscriptionData?.data.data.messageSentToChat
-          .chatMessageBelongsTo['_id'] == props.selectedContact
+        messageSubscriptionData?.data.data.chatMessageCreate &&
+        messageSubscriptionData?.data.data.chatMessageCreate
+          .chatMessageBelongsTo?.id == props.selectedContact
       ) {
-        await markChatMessagesAsRead();
+        // TODO: Update markChatMessagesAsRead to match new schema
+        // await markChatMessagesAsRead();
         chatRefetch();
       }
       props.chatListRefetch();
@@ -330,7 +413,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
     try {
       // Get current organization ID from the chat data
-      const organizationId = chat?.organization?._id || 'organization';
+      const organizationId = chat?.organization?.id || 'organization';
 
       // Use MinIO for file uploads regardless of organization context
       // If there's no organization specific ID, use 'organization' as default
@@ -396,129 +479,111 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           </div>
           <div className={`d-flex flex-grow-1 flex-column`}>
             <div className={styles.chatMessages}>
-              {!!chat?.messages.length && (
+              {!!chat?.messages?.edges?.length && (
                 <div id="messages">
-                  {chat?.messages.map((message: DirectMessage) => {
-                    // Get organization ID if available, otherwise use default
-                    const organizationId =
-                      chat?.organization?._id || 'organization';
-
-                    return (
-                      <div
-                        className={
-                          message.sender._id === userId
-                            ? styles.messageSentContainer
-                            : styles.messageReceivedContainer
-                        }
-                        key={message._id}
-                      >
-                        {chat.isGroup &&
-                          message.sender._id !== userId &&
-                          (message.sender?.image ? (
-                            <img
-                              src={message.sender.image}
-                              alt={message.sender.image}
-                              className={styles.contactImage}
-                            />
-                          ) : (
-                            <Avatar
-                              name={
-                                message.sender.firstName +
-                                ' ' +
-                                message.sender.lastName
-                              }
-                              alt={
-                                message.sender.firstName +
-                                ' ' +
-                                message.sender.lastName
-                              }
-                              avatarStyle={styles.contactImage}
-                            />
-                          ))}
+                  {chat?.messages.edges.map(
+                    (edge: {
+                      node: INewChat['messages']['edges'][0]['node'];
+                    }) => {
+                      const message = edge.node;
+                      return (
                         <div
                           className={
-                            message.sender._id === userId
-                              ? styles.messageSent
-                              : styles.messageReceived
+                            message.creator.id === userId
+                              ? styles.messageSentContainer
+                              : styles.messageReceivedContainer
                           }
-                          data-testid="message"
-                          key={message._id}
-                          id={message._id}
+                          key={message.id}
                         >
-                          <span className={styles.messageContent}>
-                            {chat.isGroup && message.sender._id !== userId && (
-                              <p className={styles.senderInfo}>
-                                {message.sender.firstName +
-                                  ' ' +
-                                  message.sender.lastName}
-                              </p>
-                            )}
-                            {message.replyTo && (
-                              <a href={`#${message.replyTo._id}`}>
-                                <div className={styles.replyToMessage}>
-                                  <p className={styles.senderInfo}>
-                                    {message.replyTo.sender.firstName +
-                                      ' ' +
-                                      message.replyTo.sender.lastName}
-                                  </p>
-                                  <span>{message.replyTo.messageContent}</span>
-                                </div>
-                              </a>
-                            )}
-                            {message.media && (
-                              <MessageImage
-                                media={message.media}
-                                organizationId={organizationId}
-                                getFileFromMinio={getFileFromMinio}
+                          {chat.isGroup &&
+                            message.creator.id !== userId &&
+                            (message.creator?.avatarURL ? (
+                              <img
+                                src={message.creator.avatarURL}
+                                alt={message.creator.avatarURL}
+                                className={styles.contactImage}
                               />
-                            )}
-                            {message.messageContent}
-                          </span>
-                          <div className={styles.messageAttributes}>
-                            <Dropdown
-                              data-testid="moreOptions"
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <Dropdown.Toggle
-                                className={styles.customToggle}
-                                data-testid={'dropdown'}
+                            ) : (
+                              <Avatar
+                                name={message.creator.name}
+                                alt={message.creator.name}
+                                avatarStyle={styles.contactImage}
+                              />
+                            ))}
+                          <div
+                            className={
+                              message.creator.id === userId
+                                ? styles.messageSent
+                                : styles.messageReceived
+                            }
+                            data-testid="message"
+                            key={message.id}
+                            id={message.id}
+                          >
+                            <span className={styles.messageContent}>
+                              {chat.isGroup &&
+                                message.creator.id !== userId && (
+                                  <p className={styles.senderInfo}>
+                                    {message.creator.name}
+                                  </p>
+                                )}
+                              {message.parentMessage && (
+                                <a href={`#${message.parentMessage.id}`}>
+                                  <div className={styles.replyToMessage}>
+                                    <p className={styles.replyToMessageSender}>
+                                      {message.parentMessage.creator.name}
+                                    </p>
+                                    <span>{message.parentMessage.body}</span>
+                                  </div>
+                                </a>
+                              )}
+                              {message.body}
+                            </span>
+                            <div className={styles.messageAttributes}>
+                              <Dropdown
+                                data-testid="moreOptions"
+                                style={{ cursor: 'pointer' }}
                               >
-                                <MoreVert />
-                              </Dropdown.Toggle>
-                              <Dropdown.Menu>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setReplyToDirectMessage(message);
-                                  }}
-                                  data-testid="replyBtn"
+                                <Dropdown.Toggle
+                                  className={styles.customToggle}
+                                  data-testid={'dropdown'}
                                 >
-                                  {t('reply')}
-                                </Dropdown.Item>
-                                <Dropdown.Item
-                                  onClick={() => {
-                                    setEditMessage(message);
-                                    setNewMessage(message.messageContent);
-                                  }}
-                                  data-testid="replyToMessage"
-                                >
-                                  Edit
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                            <span className={styles.messageTime}>
-                              {new Date(message?.createdAt).toLocaleTimeString(
-                                'it-IT',
-                                {
+                                  <MoreVert />
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setReplyToDirectMessage(message as any);
+                                    }}
+                                    data-testid="replyBtn"
+                                  >
+                                    {t('reply')}
+                                  </Dropdown.Item>
+                                  <Dropdown.Item
+                                    onClick={() => {
+                                      setEditMessage(message as any);
+                                      setNewMessage(message.body);
+                                    }}
+                                    data-testid="replyToMessage"
+                                  >
+                                    Edit
+                                  </Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                              <span className={styles.messageTime}>
+                                {new Date(
+                                  message?.createdAt,
+                                ).toLocaleTimeString('it-IT', {
                                   hour: '2-digit',
                                   minute: '2-digit',
-                                },
-                              )}
-                            </span>
+                                })}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    },
+                  )}
                 </div>
               )}
             </div>
