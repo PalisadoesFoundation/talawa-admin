@@ -116,7 +116,37 @@ const combinedLink = ApolloLink.from([
 ]);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          organization: {
+            // Cache organization separately by ID
+            keyArgs: ['input.id'],
+            merge(existing, incoming) {
+              // Merge organization fields, keeping both old and new event queries
+              return {
+                ...existing,
+                ...incoming,
+              };
+            },
+          },
+        },
+      },
+      Organization: {
+        fields: {
+          events: {
+            // Cache by date range and recurring flag only
+            keyArgs: ['startDate', 'endDate', 'includeRecurring'],
+            merge(_existing, incoming) {
+              // Always replace with incoming data to avoid cache conflicts
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
   link: combinedLink,
 });
 const fallbackLoader = <div className="loader"></div>;

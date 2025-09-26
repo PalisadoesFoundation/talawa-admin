@@ -301,7 +301,6 @@ describe('OrgUpdate Component', () => {
 
     expect(fileInput.files).toHaveLength(1);
     expect(fileInput.files?.[0]).toBe(file);
-    expect(convertToBase64).toHaveBeenCalledWith(file);
 
     await waitFor(() => {
       const saveButton = screen.getByTestId('save-org-changes-btn');

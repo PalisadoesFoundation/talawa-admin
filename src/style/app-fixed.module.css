@@ -1132,7 +1132,6 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
 }
 
 /* Table Header */
@@ -1157,10 +1156,12 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .btnsContainer .btnsBlock {
+  padding-right: 30px;
+  padding-inline-end: 30px;
   display: flex;
   width: max-content;
 }
@@ -1223,6 +1224,7 @@ form label,
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
+    max-width: 800px;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1231,7 +1233,6 @@ form label,
 }
 
 .btnsContainer .btnsBlock button {
-  margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1424,9 +1425,8 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  margin-left: 8px;
-  background-color: var(--input-bg);
-  margin-right: 180px;
+  padding-right: 30px;
+  padding-inline-end: 30px;
   width: 425px;
 }
 
@@ -1787,6 +1787,17 @@ form label,
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
   width: auto;
+  margin-inline-start: 12px;
+}
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 24px;
 }
 
 .justifyspAdvertisements {
@@ -1809,7 +1820,7 @@ form label,
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: repeat(2, 1fr); */
   grid-gap: 0.8rem 0.4rem;
   overflow: hidden;
 }
@@ -2792,6 +2803,12 @@ form label,
   align-items: center;
 }
 
+.navigation_buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .buttonEventCalendar {
   border-radius: 100px;
   color: var(--buttonEventCalendar-color);
@@ -3159,19 +3176,14 @@ form label,
 .time {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
-  padding-bottom: 0px;
-  width: 33%;
+  align-items: center;
+  padding: 12px;
+  width: fit-content;
   border: 1px solid var(--time-border);
   box-sizing: border-box;
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
-  border-radius: 20px;
-  background: var(--time-bg);
   border-radius: 8px;
-  margin-bottom: 0;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3183,11 +3195,6 @@ form label,
     -webkit-box-orient: vertical;
     white-space: initial;
   }
-}
-
-.cardItem .time {
-  font-size: 0.9rem;
-  color: var(--cardItem-color);
 }
 
 .startTime,
@@ -3894,7 +3901,9 @@ form label,
 }
 
 .cardItem .time {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
   color: var(--cardItem-time-color);
 }
 
@@ -3937,13 +3946,13 @@ form label,
 
 .rightCard {
   display: flex;
+  width: fit-content;
   gap: 7px;
-  min-width: 170px;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  width: 210px;
+  /* min-width: 240px; */
 }
 
 .creator {
@@ -4751,7 +4760,7 @@ form label,
   }
 
   .profileContainer {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
@@ -4835,6 +4844,113 @@ form label,
   outline: none;
 }
 
+/* Utility: add hover shadow without changing colors */
+.hoverShadowOnly:hover,
+.hoverShadowOnly:focus,
+.hoverShadowOnly:active {
+  box-shadow: var(--hover-shadow);
+}
+
+/* Keep base colors on hover by pairing with .hoverShadowOnly helper */
+
+/* -- RequestsTableItem.tsx -- */
+
+.requestsTableItemIndex {
+  padding-inline-start: 2.5rem;
+  padding-top: 1rem;
+}
+
+.requestsTableItemName {
+  padding-inline-start: 1.5rem;
+  padding-top: 1rem;
+}
+
+.requestsTableItemEmail {
+  padding-inline-start: 1.5rem;
+  padding-top: 1rem;
+}
+
+.requestsAcceptButton {
+  background-color: var(--actionsButton-bg);
+  color: var(--actionsButton-color);
+  border-color: var(--actionsButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsRejectButton {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border-color: var(--removeButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsAcceptButton:focus-visible {
+  background-color: var(--actionsButton-bg) !important;
+  color: var(--actionsButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsRejectButton:focus-visible {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsAcceptButton:disabled,
+.requestsAcceptButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.requestsRejectButton:disabled,
+.requestsRejectButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (max-width: 1020px) {
+  .requestsTableItemIndex {
+    padding-inline-start: 2rem;
+  }
+
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: -0.25rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .requestsTableItemIndex,
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+}
 .btnConfirmDelete {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
@@ -5536,6 +5652,13 @@ form {
   border-radius: 50%;
   margin-right: 25px;
   max-width: 70px;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  margin-right: 25px;
+  width: 53px;
+  height: 53px;
 }
 
 .people_card_container {
@@ -7388,7 +7511,6 @@ form {
   }
 
   .btnsContainerSearchBar .btnsBlockSearchBar {
-    margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
@@ -7425,6 +7547,11 @@ form {
     margin-right: 0;
     width: 100%;
   }
+}
+
+.toolbarRow {
+  display: flex;
+  align-items: center;
 }
 
 .listBoxOrgList {
@@ -7749,6 +7876,14 @@ form {
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
+}
+
+.tableImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 /* -- OrganizationActionItems.tsx -- */
@@ -8435,6 +8570,27 @@ form {
   padding-inline: 1rem !important;
 }
 
+/* Shared section styles */
+.sectionContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionContent {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Donate specific styles */
 .donationsContainer {
   padding-top: 4rem;
   flex-grow: 1;
@@ -8448,6 +8604,26 @@ form {
 }
 
 .donationCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Transactions specific styles */
+.transactionsContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentTransactions {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.transactionCardsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -8754,12 +8930,7 @@ form {
     width: 100%;
   }
 }
-
 @media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
-
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -9003,10 +9174,6 @@ form {
 }
 
 @media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
-
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -9339,5 +9506,26 @@ form {
 }
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+}
+
+.venueimage {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  display: block;
+}
+
+.CardItemMainDiv {
+  width: 100%;
+}
+.CardItemMainDivEvent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.upcomingEventsTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 /* ----------------------------------------------------- */

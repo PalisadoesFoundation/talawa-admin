@@ -30,7 +30,7 @@ interface InterfaceMutationUpdateOrganizationInput {
   state?: string;
   postalCode?: string;
   countryCode?: string;
-  avatar?: string | null;
+  avatar?: File;
 }
 
 /**
@@ -45,12 +45,14 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
     address: InterfaceAddress;
     orgImage: string | null;
+    avatar?: File;
   }>({
     orgName: '',
     orgDescrip: '',
@@ -154,7 +156,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       }
 
       setIsSaving(true);
-
       // Function to remove empty string fields from the input object
       const removeEmptyFields = (
         obj: InterfaceMutationUpdateOrganizationInput,
@@ -179,7 +180,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         state: formState.address.state,
         postalCode: formState.address.postalCode,
         countryCode: formState.address?.countryCode,
-        ...(formState.orgImage ? { avatar: formState.orgImage } : {}),
+        ...(formState.avatar ? { avatar: formState.avatar } : {}),
       };
 
       // Filter out empty fields
@@ -194,6 +195,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       if (data) {
         refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
+        // Clear avatar from state and file input after successful upload
+        setFormState((prev) => ({ ...prev, avatar: undefined }));
+        if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
         toast.error('Failed to update organization');
       }
@@ -270,6 +274,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             {tCommon('displayImage')}:
           </Form.Label>
           <Form.Control
+            ref={fileInputRef}
             className={styles.customFileInput}
             accept="image/*"
             placeholder={tCommon('displayImage')}
@@ -282,7 +287,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               if (file)
                 setFormState({
                   ...formState,
-                  orgImage: await convertToBase64(file),
+                  avatar: file,
                 });
             }}
             data-testid="organisationImage"

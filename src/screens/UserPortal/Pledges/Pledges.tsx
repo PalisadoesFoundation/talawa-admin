@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +45,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Popover } from '@base-ui-components/react/popover';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -95,7 +95,6 @@ const Pledges = (): JSX.Element => {
   }
   const userId: string = userIdFromStorage as string;
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
@@ -110,7 +109,7 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  const open = Boolean(anchor);
+  const [open, setOpen] = useState(false);
   const id = open ? 'simple-popup' : undefined;
 
   const {
@@ -127,7 +126,7 @@ const Pledges = (): JSX.Element => {
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {
-      userId: userId,
+      input: { userId },
       where: {
         firstName_contains: searchBy === 'pledgers' ? searchTerm : undefined,
         name_contains: searchBy === 'campaigns' ? searchTerm : undefined,
@@ -160,12 +159,9 @@ const Pledges = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
+  const handleClick = (users: InterfaceUserInfoPG[]): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : event.currentTarget);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -192,8 +188,8 @@ const Pledges = (): JSX.Element => {
 
   const columns: GridColDef[] = [
     {
-      field: 'pledgers',
-      headerName: 'Pledgers',
+      field: 'pledger',
+      headerName: 'Pledger',
       flex: 4,
       minWidth: 50,
       align: 'left',
@@ -201,43 +197,47 @@ const Pledges = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
+        const pledger = params.row.pledger;
+        const users = params.row.users || (pledger ? [pledger] : []);
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {params.row.users
+            {users
               .slice(0, 2)
               .map((user: InterfaceUserInfoPG, index: number) => (
-                <div className={styles.pledgerContainer} key={index}>
-                  {user.image ? (
+                <div
+                  className={styles.pledgerContainer}
+                  key={`${user.id}-${index}`}
+                >
+                  {user.avatarURL ? (
                     <img
-                      src={user.image}
-                      alt="pledge"
-                      data-testid={`image${index + 1}`}
+                      src={user.avatarURL}
+                      alt={user.avatarURL}
+                      data-testid={`image-pledger-${user.id}`}
                       className={styles.TableImage}
                     />
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={user.id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={user.firstName + ' ' + user.lastName}
-                        alt={user.firstName + ' ' + user.lastName}
+                        key={`${user.id}-avatar`}
+                        containerStyle={styles.imageContainerPledge}
+                        avatarStyle={styles.TableImagePledge}
+                        name={user.name}
+                        alt={user.name}
+                        dataTestId={`avatar-pledger-${user.id}`}
                       />
                     </div>
                   )}
-                  <span key={user.id + '2'}>
-                    {user.firstName + ' ' + user.lastName}
-                  </span>
+                  <span key={`${user.id}-name`}>{user.name}</span>
                 </div>
               ))}
-            {params.row.users.length > 2 && (
+            {users.length > 2 && (
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                data-testid="moreContainer"
-                onClick={(e) => handleClick(e, params.row.users.slice(2))}
+                data-testid={`moreContainer-${params.row.id}`}
+                onClick={() => handleClick(users.slice(2))}
               >
-                <span>+{params.row.users.length - 2} more...</span>
+                +{users.length - 2} more...
               </div>
             )}
           </div>
@@ -326,13 +326,21 @@ const Pledges = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: () => {
+      renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center align-items-center h-100">
             <ProgressBar
-              now={200}
-              label={`${(200 / 1000) * 100}%`}
-              max={1000}
+              now={
+                params.row.goalAmount > 0
+                  ? (params.row.amount / params.row.goalAmount) * 100
+                  : 0
+              }
+              label={
+                params.row.goalAmount > 0
+                  ? `${Math.round((params.row.amount / params.row.goalAmount) * 100)}%`
+                  : '0%'
+              }
+              max={100}
               className={styles.progressBar}
               data-testid="progressBar"
             />
@@ -444,12 +452,16 @@ const Pledges = (): JSX.Element => {
         rowHeight={65}
         rows={pledges.map((pledge) => ({
           id: pledge.id,
-          users: pledge.users,
+          name: pledge.pledger?.name,
+          image: pledge.pledger?.avatarURL,
           startDate: pledge.startDate,
-          endDate: pledge.endDate,
+          endDate: pledge.campaign?.endAt,
           amount: pledge.amount,
-          currency: pledge.currency,
           campaign: pledge.campaign,
+          pledger: pledge.pledger,
+          users: (pledge as any).users, // Include users array for multiple pledgers functionality
+          currency: pledge.campaign?.currencyCode,
+          goalAmount: pledge.campaign?.goalAmount,
         }))}
         columns={columns}
         isRowSelectable={() => false}
@@ -462,7 +474,7 @@ const Pledges = (): JSX.Element => {
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledge?.campaign ? pledge?.campaign.endDate : new Date()}
+        endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
         mode={'edit'}
       />
 
@@ -473,44 +485,49 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-      >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Trigger>
+          <div id={id} />
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Positioner
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.image ? (
-              <img
-                src={user.image}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user.id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={user.firstName + ' ' + user.lastName}
-                  alt={user.firstName + ' ' + user.lastName}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
-            )}
-            <span key={user.id + '2'}>
-              {user.firstName + ' ' + user.lastName}
-            </span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Popup>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={index}
+                  data-testid={`extra${index + 1}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt="pledger"
+                      data-testid={`extraImage${index + 1}`}
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={user.id + '1'}
+                        containerStyle={styles.imageContainer}
+                        avatarStyle={styles.TableImage}
+                        name={user.name}
+                        alt={user.name}
+                        dataTestId={`extraAvatar${index + 1}`}
+                      />
+                    </div>
+                  )}
+                  <span key={user.id + '2'}>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };

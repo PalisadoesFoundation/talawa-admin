@@ -10,14 +10,10 @@ Defined in: [src/types/Post/type.ts:99](https://github.com/PalisadoesFoundation/
 
 ## Type declaration
 
-### firstName
-
-> **firstName**: `string`
-
 ### id
 
 > **id**: `string`
 
-### lastName
+### name
 
-> **lastName**: `string`
+> **name**: `string`

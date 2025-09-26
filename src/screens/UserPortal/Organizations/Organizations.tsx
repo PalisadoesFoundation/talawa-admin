@@ -37,8 +37,8 @@ import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
-  USER_JOINED_ORGANIZATIONS_PG,
-  ORGANIZATION_LIST,
+  ORGANIZATION_FILTER_LIST,
+  USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
@@ -72,7 +72,6 @@ interface IOrganizationCardProps {
   image: string;
   description: string;
   admins: [];
-  members: InterfaceMemberNode[];
   address: {
     city: string;
     countryCode: string;
@@ -140,6 +139,7 @@ interface IOrganization {
 }
 
 interface IOrgData {
+  isMember: boolean;
   addressLine1: string;
   avatarURL: string | null;
   id: string;
@@ -213,7 +213,7 @@ export default function organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_LIST, {
+  } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -226,8 +226,9 @@ export default function organizations(): React.JSX.Element {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_PG, {
+  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
+    skip: mode !== 1,
   });
 
   const {
@@ -236,6 +237,7 @@ export default function organizations(): React.JSX.Element {
     refetch: refetchCreated,
   } = useQuery(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
+    skip: mode !== 2,
   });
   /**
    * 2) doSearch sets the filterName (triggering refetch)
@@ -245,9 +247,9 @@ export default function organizations(): React.JSX.Element {
     if (mode === 0) {
       refetchAll({ filter: value });
     } else if (mode === 1) {
-      refetchJoined({ filter: value });
+      refetchJoined({ id: userId, first: rowsPerPage, filter: value });
     } else {
-      refetchCreated({ filter: value });
+      refetchCreated({ id: userId, filter: value });
     }
   }
 
@@ -280,11 +282,7 @@ export default function organizations(): React.JSX.Element {
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
           // Check if current user is a member
-          const memberEdges = org.members?.edges || [];
-          const isMember = memberEdges.some(
-            (edge: IOrgData['members']['edges'][number]) =>
-              edge.node.id === userId,
-          );
+          const isMember = org.isMember;
 
           return {
             id: org.id,
@@ -300,10 +298,6 @@ export default function organizations(): React.JSX.Element {
             adminsCount: org.adminsCount || 0,
             membersCount: org.membersCount || 0,
             admins: [],
-            members:
-              org.members?.edges?.map(
-                (e: IOrgData['members']['edges'][number]) => e.node,
-              ) || [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
@@ -396,12 +390,15 @@ export default function organizations(): React.JSX.Element {
       <div
         className={`${hideDrawer ? styles.expand : styles.contract}`}
         style={{
-          marginLeft: hideDrawer ? '100px' : '20px',
+          marginLeft: hideDrawer ? '40px' : '20px',
           paddingTop: '20px',
         }}
         data-testid="organizations-container"
       >
-        <div className={styles.mainContainerOrganization}>
+        <div
+          className={styles.mainContainerOrganization}
+          style={{ overflowX: 'hidden' }}
+        >
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
               <h1>{t('selectOrganization')}</h1>
@@ -490,9 +487,6 @@ export default function organizations(): React.JSX.Element {
                           id: organization.id,
                           description: organization.description,
                           admins: organization.admins,
-                          members:
-                            organization.members?.edges?.map((e) => e.node) ??
-                            [],
                           address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,

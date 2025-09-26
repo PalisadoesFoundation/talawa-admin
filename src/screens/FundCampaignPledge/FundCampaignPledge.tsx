@@ -2,7 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Popover } from '@base-ui-components/react/popover';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -71,7 +71,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
-  const open = Boolean(anchor);
+  const [open, setOpen] = useState(false);
   const id = open ? 'simple-popup' : undefined;
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -205,12 +205,9 @@ const fundCampaignPledge = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
+  const handleClick = (users: InterfaceUserInfoPG[]): void => {
     setExtraUsers(users);
-    setAnchor(anchor ? null : event.currentTarget);
+    setOpen(true);
   };
 
   const isWithinCampaignDates = useMemo(() => {
@@ -262,9 +259,9 @@ const fundCampaignPledge = (): JSX.Element => {
                 key={`${params.row.id}-main-${index}`}
                 data-testid={`mainUser-${params.row.id}-${index}`}
               >
-                {user.image ? (
+                {user.avatarURL ? (
                   <img
-                    src={user.image}
+                    src={user.avatarURL}
                     alt={user.name}
                     className={styles.TableImagePledge}
                   />
@@ -283,7 +280,7 @@ const fundCampaignPledge = (): JSX.Element => {
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                onClick={(e) => handleClick(e, extraUsers)}
+                onClick={() => handleClick(extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
                 +{extraUsers.length} more...
@@ -588,38 +585,44 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-        data-testid="extra-users-popup"
-      >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={user.id}
-            data-testid={`extraUser-${index}`}
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Trigger>
+          <div id={id} />
+        </Popover.Trigger>
+
+        <Popover.Portal>
+          <Popover.Positioner
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.image ? (
-              <img
-                src={user.image}
-                alt={user.name}
-                className={styles.TableImagePledge}
-              />
-            ) : (
-              <Avatar
-                containerStyle={styles.imageContainerPledge}
-                avatarStyle={styles.TableImagePledge}
-                name={user.name}
-                alt={user.name}
-              />
-            )}
-            <span>{user.name}</span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Popup>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={user.id}
+                  data-testid={`extraUser-${index}`}
+                >
+                  {user.avatarURL ? (
+                    <img
+                      src={user.avatarURL}
+                      alt={user.name}
+                      className={styles.TableImagePledge}
+                    />
+                  ) : (
+                    <Avatar
+                      containerStyle={styles.imageContainerPledge}
+                      avatarStyle={styles.TableImagePledge}
+                      name={user.name}
+                      alt={user.name}
+                    />
+                  )}
+                  <span>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
     </div>
   );
 };

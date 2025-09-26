@@ -273,6 +273,10 @@ const leftDrawerOrg = ({
               <div className={styles.imageContainer}>
                 {data.organization.avatarURL ? (
                   <img
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    decoding="async"
                     src={data.organization.avatarURL}
                     alt={`${data.organization.name}`}
                   />

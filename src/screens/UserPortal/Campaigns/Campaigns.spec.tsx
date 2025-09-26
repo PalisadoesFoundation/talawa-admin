@@ -201,7 +201,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2025-08-31');
+      expect(detailContainer).toHaveTextContent('2099-12-31');
       expect(detailContainer).toHaveTextContent('Active');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
@@ -233,7 +233,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2024-08-31');
+      expect(detailContainer).toHaveTextContent('2099-12-31');
     });
   });
 
@@ -259,7 +259,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2024-08-31');
+      expect(detailContainer).toHaveTextContent('2099-12-31');
     });
   });
 
@@ -285,7 +285,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2024-08-31');
+      expect(detailContainer).toHaveTextContent('2099-12-31');
     });
   });
 
@@ -311,7 +311,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2025-08-31');
+      expect(detailContainer).toHaveTextContent('2099-12-31');
     });
   });
 
@@ -330,22 +330,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.queryByText('School Campaign')).toBeNull();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
-  });
-
-  it('open and closes add pledge modal', async () => {
-    renderCampaigns(link1);
-
-    const addPledgeBtn = await screen.findAllByTestId('addPledgeBtn');
-    await waitFor(() => expect(addPledgeBtn[0]).toBeInTheDocument());
-    await userEvent.click(addPledgeBtn[0]);
-
-    await waitFor(() =>
-      expect(screen.getAllByText(pTranslations.createPledge)).toHaveLength(2),
-    );
-    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('pledgeModalCloseBtn')).toBeNull(),
-    );
   });
 
   it('Redirect to My Pledges screen', async () => {

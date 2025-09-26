@@ -55,15 +55,20 @@ const editPledgeProps = (): InterfacePledgeModal => ({
     currency: 'USD',
     startDate: '2024-01-01',
     endDate: '2024-01-10',
-    users: [
-      {
-        id: '1',
-        firstName: 'John',
-        lastName: 'Doe',
-        name: 'John Doe',
-        image: undefined,
-      },
-    ],
+    pledger: {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      name: 'John Doe',
+      avatarURL: 'img-url',
+    },
+    campaign: {
+      id: '101',
+      name: 'Campaign Name',
+      endAt: new Date('2024-01-15'),
+      currencyCode: 'USD',
+      goalAmount: 500,
+    },
   },
   mode: 'edit',
 });
@@ -552,7 +557,7 @@ describe('PledgeModal', () => {
   it('should handle missing pledgeUsers array', async () => {
     const invalidPledge = {
       ...(pledgeProps[1].pledge ? pledgeProps[1].pledge : {}),
-      users: undefined,
+      pledger: undefined,
     };
 
     const props = {

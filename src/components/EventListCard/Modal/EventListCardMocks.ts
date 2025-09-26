@@ -46,7 +46,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        updateEvent: {
+        updateStandaloneEvent: {
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
@@ -57,7 +57,7 @@ export const MOCKS = [
           isPublic: true,
           isRegisterable: true,
           createdAt: '2022-03-18',
-          updatedAt: '2022-03-18',
+          updatedAt: '2030-03-18',
           creator: {
             id: '123',
             name: 'Test Creator',
@@ -103,7 +103,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        updateEvent: {
+        updateStandaloneEvent: {
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
@@ -147,26 +147,81 @@ export const MOCKS = [
           isPublic: false, // Note: this might be different based on initial state
           isRegisterable: true,
           allDay: true,
-          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          startAt: dayjs('2030-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2030-03-20').endOf('day').toISOString(),
           location: 'New Delhi',
         },
       },
     },
     result: {
       data: {
-        updateEvent: {
+        updateStandaloneEvent: {
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
-          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          startAt: dayjs('2030-03-18').startOf('day').toISOString(),
+          endAt: dayjs('2030-03-20').endOf('day').toISOString(),
           allDay: true,
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
-          createdAt: '2022-03-18',
-          updatedAt: '2022-03-18',
+          createdAt: '2030-03-18',
+          updatedAt: '2030-03-18',
+          creator: {
+            id: '123',
+            name: 'Test Creator',
+          },
+          updater: {
+            id: '123',
+            name: 'Test Updater',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Org',
+          },
+        },
+      },
+    },
+  },
+  // Additional comprehensive mock for the failing test case with exact variable match
+  {
+    request: {
+      query: UPDATE_EVENT_MUTATION,
+      variables: {
+        input: {
+          id: '1',
+          name: 'Updated name',
+          description: 'This is a new update',
+          location: 'New Delhi',
+          isPublic: false,
+          isRegisterable: true,
+          startAt: dayjs('2030-03-18')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs('2030-03-20').hour(17).minute(0).second(0).toISOString(),
+        },
+      },
+    },
+    result: {
+      data: {
+        updateStandaloneEvent: {
+          id: '1',
+          name: 'Updated name',
+          description: 'This is a new update',
+          startAt: dayjs('2030-03-18')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs('2030-03-20').hour(17).minute(0).second(0).toISOString(),
+          allDay: false,
+          location: 'New Delhi',
+          isPublic: false,
+          isRegisterable: true,
+          createdAt: '2030-03-18',
+          updatedAt: '2030-03-18',
           creator: {
             id: '123',
             name: 'Test Creator',

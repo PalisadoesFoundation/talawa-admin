@@ -44,15 +44,20 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import { ALL_ORGANIZATIONS_PG, CURRENT_USER } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  ALL_ORGANIZATIONS_PG,
+  CURRENT_USER,
+} from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
+import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import type {
@@ -67,9 +72,27 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
+import { Form, InputGroup, Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import SearchOutlined from '@mui/icons-material/SearchOutlined';
+
+const { getItem } = useLocalStorage();
+
+function useDebounce<T>(fn: (val: T) => void, delay: number) {
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function debouncedFn(val: T) {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      fn(val);
+    }, delay);
+  }
+
+  return debouncedFn;
+}
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -110,7 +133,11 @@ function orgList(): JSX.Element {
   document.title = t('title');
 
   const perPageResult = 8;
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [isLoading, setIsLoading] = useState(true);
+  const [typedValue, setTypedValue] = useState('');
+  const [filterName, setFilterName] = useState('');
   const [sortingState, setSortingState] = useState({
     option: '',
     selectedOption: t('sort'),
@@ -152,58 +179,22 @@ function orgList(): JSX.Element {
   });
 
   const {
-    data: UsersOrgsData,
-    loading,
+    data: allOrganizationsData,
+    loading: loadingAll,
     error: errorList,
     refetch: refetchOrgs,
-  } = useQuery(ALL_ORGANIZATIONS_PG, { notifyOnNetworkStatusChange: true });
+  } = useQuery(ORGANIZATION_LIST, {
+    variables: { filter: filterName },
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true,
+  });
 
-  const orgsData = UsersOrgsData?.organizations;
-
-  // To clear the search field and form fields on unmount
-  // useEffect(() => {
-  //   return () => {
-  //     setSearchByName('');
-  //     setFormState({
-  //       name: '',
-  //       descrip: '',
-  //       userRegistrationRequired: true,
-  //       visible: false,
-  //       address: {
-  //         city: '',
-  //         countryCode: '',
-  //         dependentLocality: '',
-  //         line1: '',
-  //         line2: '',
-  //         postalCode: '',
-  //         sortingCode: '',
-  //         state: '',
-  //       },
-  //       image: '',
-  //     });
-  //   };
-  // }, []);
+  const orgsData = allOrganizationsData?.organizations;
 
   useEffect(() => {
-    setIsLoading(loading);
-  }, [loading]);
-
-  // const isAdminForCurrentOrg = (
-  //   currentOrg: InterfaceOrgConnectionInfoType,
-  // ): boolean => {
-  //   if (adminFor.length === 1) {
-  //     // If user is admin for one org only then check if that org is current org
-  //     return adminFor[0]._id === currentOrg._id;
-  //   } else {
-  //     // If user is admin for more than one org then check if current org is present in adminFor array
-  //     return (
-  //       adminFor.some(
-  //         (org: { _id: string; name: string; image: string | null }) =>
-  //           org._id === currentOrg._id,
-  //       ) ?? false
-  //     );
-  //   }
-  // };
+    setIsLoading(loadingAll);
+  }, [loadingAll]);
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -282,105 +273,106 @@ function orgList(): JSX.Element {
     window.location.assign('/');
   }
 
-  // const resetAllParams = (): void => {
-  //   refetchOrgs({
-  //     filter: '',
-  //     first: perPageResult,
-  //     skip: 0,
-  //     orderBy:
-  //       sortingState.option === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC',
-  //   });
-  //   sethasMore(true);
-  // };
-
-  const handleSearch = (value: string): void => {
-    setSearchByName(value);
-    // if (value == '') {
-    //    resetAllParams();
-    //   return;
-    // }
-    // refetchOrgs({
-    //   filter: value,
-    // });
+  const doSearch = (value: string): void => {
+    setFilterName(value);
+    refetchOrgs({ filter: value });
   };
 
-  // const loadMoreOrganizations = (): void => {
-  //   if (!isLoadingMore || hasMore) setIsLoadingMore(true);
-  //   fetchMore({
-  //     variables: {
-  //       skip: orgsData?.length || 0,
-  //     },
-  //     updateQuery: (prev, { fetchMoreResult }) => {
-  //       setIsLoadingMore(false);
+  const debouncedSearch = useDebounce(doSearch, 300);
 
-  //       if (!fetchMoreResult || !fetchMoreResult.user) {
-  //         return prev; // Prevents breaking the UI
-  //       }
+  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVal = e.target.value;
+    setTypedValue(newVal);
+    setSearchByName(newVal);
+    debouncedSearch(newVal);
+  };
 
-  //       return {
-  //         user: {
-  //           organizationsWhereMember: {
-  //             pageInfo: fetchMoreResult.user.organizationsWhereMember.pageInfo,
-  //             edges: [
-  //               ...(prev?.user.organizationsWhereMember.edges || []),
-  //               ...fetchMoreResult.user.organizationsWhereMember.edges,
-  //             ],
-  //           },
-  //         },
-  //       };
-  //     },
-  //   });
-  // };
+  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      doSearch(typedValue);
+    }
+  };
+
+  const handleSearchByBtnClick = () => {
+    doSearch(typedValue);
+  };
 
   const handleSortChange = (value: string): void => {
-    // Update the sorting state and refetch organizations based on the selected sorting option
     setSortingState({ option: value, selectedOption: t(value) });
-    // const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-    // refetchOrgs({
-    //   first: perPageResult,
-    //   skip: 0,
-    //   filter: searchByName,
-    //   orderBy,
-    // });
+  };
+
+  const handleChangePage = (
+    _event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+  ): void => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void => {
+    const newVal = event.target.value;
+    setRowsPerPage(parseInt(newVal, 10));
+    setPage(0);
   };
 
   return (
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainerSearchBar}>
-        <SearchBar
-          placeholder={tCommon('searchByName')}
-          onSearch={handleSearch}
-          inputTestId="searchByName"
-          buttonTestId="searchBtn"
-        />
-        <div className={styles.btnsBlockSearchBar}>
-          <SortingButton
-            title="Sort organizations"
-            sortingOptions={[
-              { label: t('Latest'), value: 'Latest' },
-              { label: t('Earliest'), value: 'Earliest' },
-            ]}
-            selectedOption={sortingState.selectedOption}
-            onSortChange={handleSortChange}
-            dataTestIdPrefix="sortOrgs"
-            dropdownTestId="sort"
+        <InputGroup className={styles.maxWidth}>
+          <Form.Control
+            placeholder={t('searchOrganizations')}
+            id="searchUserOrgs"
+            type="text"
+            className={styles.inputField}
+            value={typedValue}
+            onChange={handleChangeFilter}
+            onKeyUp={handleSearchByEnter}
+            data-testid="searchInput"
           />
-        </div>
+        </InputGroup>
+
         <div className={styles.btnsBlock}>
-          {role === 'administrator' && (
-            <>
-              <NotificationIcon />
-              <Button
-                className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                onClick={toggleModal}
-                data-testid="createOrganizationBtn"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createOrganization')}
-              </Button>
-            </>
-          )}
+          <NotificationIcon />
+
+          <InputGroup.Text
+            className={styles.searchButton}
+            style={{ cursor: 'pointer' }}
+            onClick={handleSearchByBtnClick}
+            data-testid="searchBtn"
+          >
+            <SearchOutlined className={styles.colorWhite} />
+          </InputGroup.Text>
+
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className={styles.btnsBlockSearchBar}>
+              <SortingButton
+                title={t('sortOrganizations')}
+                sortingOptions={[
+                  { label: t('Latest'), value: 'Latest' },
+                  { label: t('Earliest'), value: 'Earliest' },
+                ]}
+                selectedOption={sortingState.selectedOption}
+                onSortChange={handleSortChange}
+                dataTestIdPrefix="sortOrgs"
+                dropdownTestId="sort"
+              />
+            </div>
+
+            {role === 'administrator' && (
+              <div className={styles.btnsBlock}>
+                <Button
+                  className={`${styles.dropdown} ${styles.createorgdropdown}`}
+                  onClick={toggleModal}
+                  data-testid="createOrganizationBtn"
+                >
+                  <i className="fa fa-plus me-2" />
+                  {t('createOrganization')}
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -394,7 +386,7 @@ function orgList(): JSX.Element {
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
-      ) : !isLoading && orgsData.length == 0 && searchByName.length > 0 ? (
+      ) : !isLoading && orgsData?.length == 0 && searchByName.length > 0 ? (
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
@@ -402,55 +394,6 @@ function orgList(): JSX.Element {
         </div>
       ) : (
         <>
-          {/* Infinite scroll can be added when query supports infinitescroll*/}
-          {/* <InfiniteScroll
-            dataLength={orgsData?.length ?? 0}
-
-            next={loadMoreOrganizations}
-            loader={
-              <>
-                {[...Array(perPageResult)].map((_, index) => (
-                  <div key={index} className={styles.itemCardOrgList}>
-                    <div className={styles.loadingWrapper}>
-                      <div className={styles.innerContainer}>
-                        <div
-                          className={`${styles.orgImgContainer} shimmer`}
-                        ></div>
-                        <div className={styles.content}>
-                          <h5 className="shimmer" title="Org name"></h5>
-                          <h6 className="shimmer" title="Location"></h6>
-                          <h6 className="shimmer" title="Admins"></h6>
-                          <h6 className="shimmer" title="Members"></h6>
-                        </div>
-                      </div>
-                      <div className={`shimmer ${styles.button}`} />
-                    </div>
-                  </div>
-                ))}
-              </>
-            }
-            hasMore={hasMore}
-            className={styles.listBoxOrgList}
-            data-testid="organizations-list"
-            endMessage={
-              <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-              </div>
-            }
-          >
-            {orgsData?.map(
-                  (item: any) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className={styles.itemCardOrgList}
-                      >
-                        <OrgListCard data={item} />
-                      </div>
-                    );
-                  },
-                )}
-          </InfiniteScroll> */}
           {isLoading && (
             <>
               {[...Array(perPageResult)].map((_, index) => (
@@ -473,20 +416,53 @@ function orgList(): JSX.Element {
             </>
           )}
           <div className={`${styles.listBoxOrgList}`}>
-            {orgsData
-              ?.filter((org: InterfaceOrgInfoTypePG) =>
-                searchByName
-                  ? org.name.toLowerCase().includes(searchByName.toLowerCase())
-                  : org,
-              )
-              .map((item: InterfaceOrgInfoTypePG) => {
-                return (
-                  <div key={item.id} className={styles.itemCardOrgList}>
-                    <OrgListCard data={item} />
-                  </div>
-                );
-              })}
+            {(rowsPerPage > 0
+              ? orgsData
+                  ?.filter((org: InterfaceOrgInfoTypePG) =>
+                    searchByName
+                      ? org.name
+                          .toLowerCase()
+                          .includes(searchByName.toLowerCase())
+                      : org,
+                  )
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : orgsData?.filter((org: InterfaceOrgInfoTypePG) =>
+                  searchByName
+                    ? org.name
+                        .toLowerCase()
+                        .includes(searchByName.toLowerCase())
+                    : org,
+                )
+            )?.map((item: InterfaceOrgInfoTypePG) => {
+              return (
+                <div key={item.id} className={styles.itemCardOrgList}>
+                  <OrgListCard data={item} />
+                </div>
+              );
+            })}
           </div>
+          {/* pagination */}
+          <table style={{ width: '100%' }}>
+            <tbody>
+              <tr>
+                <PaginationList
+                  count={
+                    orgsData?.filter((org: InterfaceOrgInfoTypePG) =>
+                      searchByName
+                        ? org.name
+                            .toLowerCase()
+                            .includes(searchByName.toLowerCase())
+                        : org,
+                    ).length || 0
+                  }
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </tr>
+            </tbody>
+          </table>
         </>
       )}
       {/* Create Organization Modal */}

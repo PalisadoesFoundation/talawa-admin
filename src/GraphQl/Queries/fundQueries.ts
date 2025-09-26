@@ -119,26 +119,43 @@ export const USER_FUND_CAMPAIGNS = gql`
 
 export const USER_PLEDGES = gql`
   query GetPledgesByUserId(
-    $userId: ID!
-    $where: PledgeWhereInput
-    $orderBy: PledgeOrderByInput
+    $input: QueryFundCampaignPledgesByUserInput!
+    $where: QueryPledgeWhereInput
+    $orderBy: QueryPledgeOrderByInput
+    $limit: Int
+    $offset: Int
   ) {
-    getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
+    getPledgesByUserId(
+      input: $input
+      where: $where
+      orderBy: $orderBy
+      limit: $limit
+      offset: $offset
+    ) {
       id
       amount
-      startDate
-      endDate
+      note
+      updatedAt
       campaign {
         id
         name
-        endDate
+        startAt
+        endAt
+        currencyCode
+        goalAmount
       }
-      currency
+      pledger {
+        id
+        name
+        avatarURL
+      }
       users {
         id
-        firstName
-        lastName
-        image
+        name
+        avatarURL
+      }
+      updater {
+        id
       }
     }
   }

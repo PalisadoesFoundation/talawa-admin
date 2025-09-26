@@ -231,14 +231,29 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               </>
             )}
             {plugin && !isInstalled(plugin.name) && meta && (
-              <Button
-                variant="primary"
-                className="w-100"
-                onClick={() => installPlugin(meta)}
-                disabled={loading}
-              >
-                Install
-              </Button>
+              <>
+                <Button
+                  variant="primary"
+                  className="w-100"
+                  onClick={() => installPlugin(meta)}
+                  disabled={loading}
+                >
+                  Install
+                </Button>
+                <Button
+                  variant="light"
+                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                  onClick={() => uninstallPlugin(meta)}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <FaSpinner className="animate-spin" />
+                  ) : (
+                    <FaTrash style={{ fontSize: '14px' }} />
+                  )}
+                  Uninstall
+                </Button>
+              </>
             )}
           </div>
         </div>

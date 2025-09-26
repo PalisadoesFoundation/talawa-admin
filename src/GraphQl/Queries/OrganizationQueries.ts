@@ -28,10 +28,48 @@ export const ORGANIZATION_POST_LIST = gql`
           node {
             id
             caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVoters(first: 10) {
+              edges {
+                node {
+                  id
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
+            upVotesCount
             creator {
               id
+              name
             }
             createdAt
+            comments(first: 10) {
+              edges {
+                node {
+                  id
+                  body
+                  creator {
+                    id
+                    name
+                  }
+                  downVotesCount
+                  upVotesCount
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
           }
           cursor
         }
@@ -321,25 +359,28 @@ export const ORGANIZATION_FUNDS = gql`
  * @returns The list of venues associated with the organization.
  */
 export const VENUE_LIST = gql`
-  query GetVenueByOrgId(
-    $orgId: ID!
-    $first: Int
-    $orderBy: VenueOrderByInput
-    $where: VenueWhereInput
-  ) {
-    getVenueByOrgId(
-      orgId: $orgId
-      first: $first
-      orderBy: $orderBy
-      where: $where
-    ) {
-      _id
-      capacity
-      name
-      description
-      imageUrl
-      organization {
-        _id
+  query venuesByOrganization($orgId: String!) {
+    organization(input: { id: $orgId }) {
+      venues(first: 32) {
+        edges {
+          node {
+            id
+            name
+            description
+            createdAt
+            capacity
+            attachments {
+              url
+              mimeType
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          startCursor
+          hasPreviousPage
+        }
       }
     }
   }

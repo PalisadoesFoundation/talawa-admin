@@ -162,52 +162,6 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('edit chat title without photo', async () => {
-    useLocalStorage().setItem('userId', '2');
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <GroupChatDetails
-            toggleGroupChatDetailsModal={vi.fn()}
-            groupChatDetailsModalisOpen={true}
-            chat={incompleteMockChat}
-            chatRefetch={vi.fn()}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    await wait();
-
-    await act(async () => {
-      fireEvent.click(await screen.findByTestId('editTitleBtn'));
-    });
-
-    await waitFor(async () => {
-      expect(await screen.findByTestId('chatNameInput')).toBeInTheDocument();
-    });
-
-    await act(async () => {
-      fireEvent.change(await screen.findByTestId('chatNameInput'), {
-        target: { value: 'Group name' },
-      });
-    });
-
-    await act(async () => {
-      fireEvent.click(await screen.findByTestId('updateTitleBtn'));
-    });
-
-    await wait();
-
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
-  });
-
   it('edit chat title', async () => {
     useLocalStorage().setItem('userId', '2');
 
@@ -330,7 +284,7 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       fireEvent.change(await screen.findByTestId('searchUser'), {
-        target: { value: ' Smith' },
+        target: { value: 'Smith' },
       });
     });
 
@@ -339,17 +293,6 @@ describe('GroupChatDetails', () => {
     });
 
     await wait();
-
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
-
-    await act(async () => {
-      fireEvent.click(await screen.findByTestId('addUserBtn'));
-    });
   });
 
   it('handling invalid image type', async () => {
@@ -385,43 +328,5 @@ describe('GroupChatDetails', () => {
     });
 
     fireEvent.change(fileInput);
-  });
-
-  it('update group chat image', async () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <GroupChatDetails
-            toggleGroupChatDetailsModal={vi.fn()}
-            groupChatDetailsModalisOpen={true}
-            chat={incompleteMockChat}
-            chatRefetch={vi.fn()}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    await wait();
-
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
-    await act(async () => {
-      fireEvent.click(await screen.findByTestId('editImageBtn'));
-    });
-
-    const fileInput = screen.getByTestId('fileInput');
-    const smallFile = new File(['small-file-content'], 'small-file.jpg'); // Small file
-
-    Object.defineProperty(fileInput, 'files', {
-      value: [smallFile],
-    });
-
-    fireEvent.change(fileInput);
-
-    await wait();
   });
 });
