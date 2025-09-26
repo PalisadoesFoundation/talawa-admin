@@ -304,6 +304,7 @@ export default function Home(): JSX.Element {
                 const cardProps = getCardProps(node);
                 return (
                   <div
+                    key={cardProps.id}
                     className={postStyles.instagramStory}
                     onClick={() => handleStoryClick(cardProps)} // make clickable
                     style={{ cursor: 'pointer' }}
