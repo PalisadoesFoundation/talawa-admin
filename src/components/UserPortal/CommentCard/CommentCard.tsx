@@ -19,19 +19,13 @@
  */
 import React from 'react';
 import {
-  Avatar,
   IconButton,
   Typography,
   Stack,
   Box,
   CircularProgress,
 } from '@mui/material';
-import {
-  ThumbUp,
-  ThumbDown,
-  ThumbUpOutlined,
-  ThumbDownOutlined,
-} from '@mui/icons-material';
+import { ThumbUp, ThumbUpOutlined } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -40,6 +34,7 @@ import { styled } from '@mui/material/styles';
 import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { VoteType } from 'utils/interfaces';
+import defaultAvatar from 'assets/images/defaultImg.png';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -53,7 +48,7 @@ const CommentContent = styled(Typography)({
   whiteSpace: 'pre-line',
 });
 
-const VoteCount = styled(Typography)(({ theme }) => ({
+const VoteCount = styled(Typography)(() => ({
   fontSize: '0.75rem',
   minWidth: 20,
   textAlign: 'center',
@@ -66,43 +61,48 @@ interface InterfaceCommentCardProps {
     name: string;
     avatarURL?: string | null;
   };
-  hasUserVoted: {
-    hasVoted: boolean;
-    voteType: VoteType;
-  };
+  hasUserVoted?: { voteType: VoteType } | null;
   upVoteCount: number;
-  downVoteCount: number;
+  // downVoteCount: number;
   text: string;
   fetchComments?: () => void;
 }
 
 function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
+  const { id, creator, hasUserVoted, upVoteCount, text } = props;
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
-  const [likes, setLikes] = React.useState(props.upVoteCount);
+  const [likes, setLikes] = React.useState(upVoteCount);
   const [isLiked, setIsLiked] = React.useState(false);
 
   const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
   const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
 
   React.useEffect(() => {
-    if (!userId) return;
-    const liked = props.hasUserVoted.voteType == 'up_vote';
-    setIsLiked(liked);
-  }, [userId]);
+    if (!userId) {
+      setIsLiked(false);
+      return;
+    }
+    const liked = hasUserVoted?.voteType === 'up_vote';
+    setIsLiked(Boolean(liked));
+  }, [userId, hasUserVoted?.voteType]);
 
   React.useEffect(() => {
-    setLikes(props.upVoteCount);
-  }, [props.upVoteCount]);
+    setLikes(upVoteCount);
+  }, [upVoteCount]);
 
   const handleToggleLike = async (): Promise<void> => {
+    if (!userId) {
+      toast.warn('Please sign in to like comments.');
+      return;
+    }
     try {
       if (isLiked) {
         // Unlike
         const { data } = await unlikeComment({
           variables: {
-            input: { commentId: props.id, creatorId: userId },
+            input: { commentId: id },
           },
         });
 
@@ -116,7 +116,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         // Like
         const { data } = await likeComment({
           variables: {
-            input: { commentId: props.id, type: 'up_vote' },
+            input: { commentId: id, type: 'up_vote' },
           },
         });
 
@@ -125,14 +125,18 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           setIsLiked(true);
         }
       }
-    } catch (error: any) {
-      const errorCode = error?.graphQLErrors?.[0]?.extensions?.code;
+    } catch (error) {
+      const errorCode = (
+        error as Error & {
+          graphQLErrors?: Array<{ extensions?: { code?: string } }>;
+        }
+      )?.graphQLErrors?.[0]?.extensions?.code;
       if (errorCode === 'forbidden_action_on_arguments_associated_resources') {
         toast.error('You have already liked this comment.');
       } else if (errorCode === 'arguments_associated_resources_not_found') {
         toast.error('No associated vote found to remove.');
       } else {
-        toast.error(error.message || 'Something went wrong.');
+        toast.error((error as Error).message || 'Something went wrong.');
       }
     }
   };
@@ -143,16 +147,16 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         <span className={styles.userImageUserComment}>
           <Image
             crossOrigin="anonymous"
-            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
-            alt={props.creator.name}
+            src={creator.avatarURL || defaultAvatar}
+            alt={creator.name}
             loading="lazy"
           />
         </span>
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="subtitle2" fontWeight="bold">
-            {props.creator.name}
+            {creator.name}
           </Typography>
-          <CommentContent variant="body2">{props.text}</CommentContent>
+          <CommentContent variant="body2">{text}</CommentContent>
 
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton

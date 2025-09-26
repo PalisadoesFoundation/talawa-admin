@@ -22,7 +22,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
-import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { expect, describe, it, vi } from 'vitest';
 import { GraphQLError } from 'graphql';
 
@@ -55,7 +54,7 @@ const MOCKS = [
       query: USER_DETAILS,
       variables: {
         input: { id: '640d98d9eb6a743d75341067' },
-        first: 100,
+        first: 10,
       },
     },
     result: {
@@ -63,7 +62,7 @@ const MOCKS = [
         user: {
           id: '640d98d9eb6a743d75341067',
           name: 'Test User',
-          email: 'test@example.com',
+          emailAddress: 'test@example.com',
           joinedOrganizations: {
             edges: [],
             pageInfo: {
@@ -122,7 +121,7 @@ const MOCKS = [
                   creator: {
                     id: 'u1',
                     name: 'User1',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -152,7 +151,7 @@ const MOCKS = [
                   creator: {
                     id: 'u2',
                     name: 'User2',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -214,7 +213,7 @@ const MOCKS = [
                   creator: {
                     id: 'u3',
                     name: 'User3',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -244,7 +243,7 @@ const MOCKS = [
                   creator: {
                     id: 'u4',
                     name: 'User4',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -306,7 +305,7 @@ const MOCKS = [
                   creator: {
                     id: 'u1',
                     name: 'User1',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -336,7 +335,7 @@ const MOCKS = [
                   creator: {
                     id: 'u2',
                     name: 'User2',
-                    avatarURL: undefined,
+                    avatarURL: null,
                   },
                   commentsCount: 0,
                   pinnedAt: null,
@@ -537,6 +536,8 @@ describe('HomeScreen additional scenarios', () => {
 
   it('should filter and set pinned posts when posts have pinnedAt values', async () => {
     const mocksWithPinnedPosts = [
+      // Satisfy useQuery(USER_DETAILS)
+      MOCKS[0],
       // Mock with pinned posts
       {
         request: {
@@ -676,6 +677,8 @@ describe('HomeScreen additional scenarios', () => {
 
   it('should process promoted posts data and set ad content', async () => {
     const mocksWithAds = [
+      // Satisfy useQuery(USER_DETAILS)
+      MOCKS[0],
       {
         request: {
           query: ORGANIZATION_POST_LIST,
@@ -804,6 +807,8 @@ describe('HomeScreen additional scenarios', () => {
 
   it('should cover InstagramStory component and handleStoryClick', async () => {
     const mocksWithPinnedPosts = [
+      // Satisfy useQuery(USER_DETAILS)
+      MOCKS[0],
       {
         request: {
           query: ORGANIZATION_POST_LIST,
@@ -955,7 +960,7 @@ describe('HomeScreen additional scenarios', () => {
           query: USER_DETAILS,
           variables: {
             input: { id: '640d98d9eb6a743d75341067' },
-            first: 100,
+            first: 10,
           },
         },
         result: {
@@ -1209,7 +1214,7 @@ describe('HomeScreen additional scenarios', () => {
                       upVotesCount: 5,
                       hasUserVoted: {
                         hasVoted: true,
-                        voteType: 'UPVOTE',
+                        voteType: 'up_vote',
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
                       comments: {
@@ -1225,7 +1230,6 @@ describe('HomeScreen additional scenarios', () => {
                               },
                               downVotesCount: 0,
                               upVotesCount: 2,
-                              text: 'Great post!',
                               hasUserVoted: {
                                 hasVoted: false,
                                 voteType: null,
@@ -1243,10 +1247,9 @@ describe('HomeScreen additional scenarios', () => {
                               },
                               downVotesCount: 1,
                               upVotesCount: 0,
-                              text: 'I agree!',
                               hasUserVoted: {
                                 hasVoted: true,
-                                voteType: 'DOWNVOTE',
+                                voteType: 'down_vote',
                               },
                             },
                           },
@@ -1314,6 +1317,11 @@ describe('HomeScreen additional scenarios', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Post with comments')).toBeInTheDocument();
+      const showCommentsBtn = screen.getByTestId('comment-card');
+      expect(showCommentsBtn).toBeInTheDocument();
+      fireEvent.click(showCommentsBtn);
+      expect(screen.getByText('Great post!')).toBeInTheDocument();
+      expect(screen.getByText('I agree!')).toBeInTheDocument();
     });
   });
 
@@ -1344,7 +1352,9 @@ describe('HomeScreen additional scenarios', () => {
     expect(hiddenFileInput).toBeInTheDocument();
 
     // Trigger change event with no files
-    fireEvent.change(hiddenFileInput!, { target: { files: null } });
+    if (hiddenFileInput) {
+      fireEvent.change(hiddenFileInput, { target: { files: null } });
+    }
 
     // Modal should not open
     await wait(100);
@@ -1512,6 +1522,10 @@ describe('HomeScreen additional scenarios', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Post with attachments')).toBeInTheDocument();
+      expect(screen.getByAltText('Post with attachments')).toHaveAttribute(
+        'src',
+        '/src/assets/images/defaultImg.png',
+      );
     });
   });
 
@@ -1591,7 +1605,7 @@ describe('HomeScreen additional scenarios', () => {
                       creator: {
                         id: 'u1',
                         name: 'User1',
-                        avatarURL: undefined,
+                        avatarURL: null,
                       },
                       commentsCount: 0,
                       pinnedAt: null,

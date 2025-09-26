@@ -1,6 +1,5 @@
 import type { User } from 'types/User/type';
 import type { Comment } from 'types/Comment/type';
-import { TReturnOptionalNull } from 'i18next';
 export interface InterfacePostCard {
   _id: string;
   creator: Partial<User>;
@@ -75,7 +74,7 @@ export interface InterfaceAttachment {
 
 export interface InterfaceCreator {
   id: string;
-  avatarURL: string | null;
+  avatarURL?: string | null;
 }
 
 export interface InterfacePost {

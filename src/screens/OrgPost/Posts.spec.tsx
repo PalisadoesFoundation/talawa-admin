@@ -40,10 +40,7 @@ describe('PostsRenderer', () => {
     id: 'post-1',
     caption: 'Test Post',
     createdAt: '2023-01-01T00:00:00Z',
-    creator: {
-      id: 'user-1',
-      avatarURL: null,
-    },
+    creator: { id: 'user-1' },
     imageUrl: 'test-image.jpg',
     videoUrl: 'test-video.mp4',
     pinned: true,
@@ -53,10 +50,7 @@ describe('PostsRenderer', () => {
     id: 'post-2',
     caption: 'Test Post No Attachments',
     createdAt: '2023-01-01T00:00:00Z',
-    creator: {
-      id: 'user-1',
-      avatarURL: 'http://test-avatar.jpg',
-    },
+    creator: { id: 'user-1' },
     pinned: false,
   };
 
@@ -247,7 +241,7 @@ describe('PostsRenderer', () => {
       id: 'post-4',
       caption: '',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1', avatarURL: 'http://test-avatar.jpg' },
+      creator: { id: 'user-1' },
       pinned: false,
     };
 
@@ -273,7 +267,7 @@ describe('PostsRenderer', () => {
       id: '', // empty string to simulate a null/invalid ID
       caption: 'Post with null ID',
       createdAt: '2023-01-01T00:00:00Z',
-      creator: { id: 'user-1', avatarURL: 'http://test-avatar.jpg' },
+      creator: { id: 'user-1' },
       pinned: false,
     };
 

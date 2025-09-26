@@ -157,10 +157,7 @@ const RightModalActions = styled(Box)({
   gap: 8,
 });
 
-export default function PostCard({
-  isModalView = false,
-  ...props
-}: InterfacePostCard): JSX.Element {
+export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
   const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
@@ -219,7 +216,7 @@ export default function PostCard({
       setCommentInput('');
       props.fetchPosts();
     } catch (error: unknown) {
-      toast.error(t('unexpectedError'));
+      errorHandler(t, error);
     }
   };
   const toggleEditPost = (): void => setShowEditPost(!showEditPost);
@@ -366,7 +363,7 @@ export default function PostCard({
                 creator={comment.creator}
                 text={comment.body}
                 upVoteCount={comment.upVoteCount}
-                downVoteCount={comment.downVoteCount}
+                // downVoteCount={comment.downVoteCount}
                 hasUserVoted={comment.hasUserVoted}
                 fetchComments={props.fetchPosts}
               />

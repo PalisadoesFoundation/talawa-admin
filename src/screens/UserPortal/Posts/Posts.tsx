@@ -48,7 +48,7 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { HourglassBottom, MoreHoriz } from '@mui/icons-material';
+import { HourglassBottom } from '@mui/icons-material';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST,
@@ -61,19 +61,7 @@ import type {
 } from 'utils/interfaces';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import {
-  Avatar,
-  IconButton,
-  Button,
-  Modal,
-  FormControl,
-  Input,
-  InputAdornment,
-  Box,
-  Typography,
-  Divider,
-  CircularProgress,
-} from '@mui/material';
+import { Avatar, Button, Modal, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -142,7 +130,6 @@ export default function Home(): JSX.Element {
   const {
     data,
     refetch,
-    error,
     loading: loadingPosts,
   } = useQuery(ORGANIZATION_POST_LIST, {
     variables: {
@@ -166,7 +153,7 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     if (data?.organization?.posts) {
       const newPosts = data.organization.posts.edges.map(
-        (edge: { node: any }) => edge.node,
+        (edge: { node: PostNode }) => edge.node,
       );
       setPosts(newPosts);
       setTotalPosts(data.organization.postsCount);
@@ -179,13 +166,13 @@ export default function Home(): JSX.Element {
       const pinned = posts.filter((post) => post.pinnedAt !== null);
       setPinnedPosts(pinned);
     }
-  }, [posts]);
+  }, [posts, adContent, totalPosts]);
 
   useEffect(() => {
     if (promotedPostsData?.organizations) {
       const ads: Ad[] =
         promotedPostsData.organizations[0].advertisements?.edges.map(
-          (edge: { node: any }) => edge.node,
+          (edge: { node: Ad }) => edge.node,
         ) || [];
       setAdContent(ads);
     }
@@ -200,7 +187,7 @@ export default function Home(): JSX.Element {
       upVotesCount,
       downVotesCount,
       comments,
-      attachments,
+      // attachments,
       pinnedAt,
       hasUserVoted,
     } = node;
@@ -282,41 +269,20 @@ export default function Home(): JSX.Element {
     setShowPinnedPostModal(true);
   };
 
-  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  // const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imgURL = URL.createObjectURL(file);
-      setPostImg(imgURL);
-      setShowModal(true); // open modal after selecting image
-    }
-  };
-
-  // Instagram-like Story component
-  const InstagramStory = ({ post }: { post: InterfacePostCard }) => {
-    return (
-      <div
-        className={postStyles.instagramStory}
-        onClick={() => handleStoryClick(post)} // make clickable
-        style={{ cursor: 'pointer' }}
-      >
-        <div className={postStyles.storyBorder}>
-          <Avatar
-            src={post.creator.avatarURL || '/static/images/avatar/1.jpg'}
-            className={postStyles.storyAvatar}
-          />
-        </div>
-        <span className={postStyles.storyUsername}>
-          {post.creator.name.split(' ')[0]}
-        </span>
-      </div>
-    );
-  };
+  // const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const imgURL = URL.createObjectURL(file);
+  //     setPostImg(imgURL);
+  //     setShowModal(true); // open modal after selecting image
+  //   }
+  // };
 
   return (
     <div className={postStyles.instagramContainer}>
@@ -337,11 +303,24 @@ export default function Home(): JSX.Element {
               {pinnedPosts.map((node) => {
                 const cardProps = getCardProps(node);
                 return (
-                  <InstagramStory
-                    key={node.id}
-                    post={cardProps}
-                    data-testid="pinned-post"
-                  />
+                  <div
+                    className={postStyles.instagramStory}
+                    onClick={() => handleStoryClick(cardProps)} // make clickable
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={postStyles.storyBorder}>
+                      <Avatar
+                        src={
+                          cardProps.creator.avatarURL ||
+                          '/static/images/avatar/1.jpg'
+                        }
+                        className={postStyles.storyAvatar}
+                      />
+                    </div>
+                    <span className={postStyles.storyUsername}>
+                      {cardProps.creator.name.split(' ')[0]}
+                    </span>
+                  </div>
                 );
               })}
             </Carousel>
