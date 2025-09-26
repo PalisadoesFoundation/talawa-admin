@@ -154,16 +154,17 @@ export default function CreateGroupChat({
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: selectedImage,
+          avatar: null,
         },
       },
     });
+    console.log(chatResult, 'chatResult');
+    console.log(title, 'title');
 
     const chatId = (chatResult.data as { createChat: { id: string } })
       ?.createChat?.id;
 
     if (chatId && userId) {
-      // Add current user as member
       await createChatMembership({
         variables: {
           input: {
@@ -173,8 +174,7 @@ export default function CreateGroupChat({
           },
         },
       });
-
-      // Add all selected users as members
+      console.log(userIds, 'userIds');
       for (const memberId of userIds) {
         await createChatMembership({
           variables: {
@@ -366,9 +366,9 @@ export default function CreateGroupChat({
                   <TableBody>
                     {allUsersData &&
                       allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges.map(
-                        (
-                          {
+                      allUsersData.organization.members.edges
+                        .filter(
+                          ({
                             node: userDetails,
                           }: {
                             node: {
@@ -377,50 +377,63 @@ export default function CreateGroupChat({
                               avatarURL?: string;
                               role: string;
                             };
-                          },
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.name}
-                              <br />
-                              {userDetails.role || 'Member'}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userIds.includes(userDetails.id) ? (
-                                <Button
-                                  variant="danger"
-                                  onClick={() => {
-                                    const updatedUserIds = userIds.filter(
-                                      (id) => id !== userDetails.id,
-                                    );
-                                    setUserIds(updatedUserIds);
-                                  }}
-                                  data-testid="removeBtn"
-                                >
-                                  Remove
-                                </Button>
-                              ) : (
-                                <Button
-                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
-                                  onClick={() => {
-                                    setUserIds([...userIds, userDetails.id]);
-                                  }}
-                                  data-testid="addBtn"
-                                >
-                                  {t('add')}
-                                </Button>
-                              )}
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                          }) => userDetails.id !== userId,
+                        )
+                        .map(
+                          (
+                            {
+                              node: userDetails,
+                            }: {
+                              node: {
+                                id: string;
+                                name: string;
+                                avatarURL?: string;
+                                role: string;
+                              };
+                            },
+                            index: number,
+                          ) => (
+                            <StyledTableRow
+                              data-testid="user"
+                              key={userDetails.id}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {index + 1}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userDetails.name}
+                                <br />
+                                {userDetails.role || 'Member'}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userIds.includes(userDetails.id) ? (
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => {
+                                      const updatedUserIds = userIds.filter(
+                                        (id) => id !== userDetails.id,
+                                      );
+                                      setUserIds(updatedUserIds);
+                                    }}
+                                    data-testid="removeBtn"
+                                  >
+                                    Remove
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    className={`${styles.colorPrimary} ${styles.borderNone}`}
+                                    onClick={() => {
+                                      setUserIds([...userIds, userDetails.id]);
+                                    }}
+                                    data-testid="addBtn"
+                                  >
+                                    {t('add')}
+                                  </Button>
+                                )}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ),
+                        )}
                   </TableBody>
                 </Table>
               </StyledTableContainer>

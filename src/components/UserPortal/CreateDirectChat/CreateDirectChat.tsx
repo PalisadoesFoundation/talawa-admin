@@ -166,7 +166,6 @@ export const handleCreateDirectChat = async (
     );
   } else {
     try {
-      // Create the chat
       const chatResult = await createChat({
         variables: {
           input: {
@@ -178,10 +177,10 @@ export const handleCreateDirectChat = async (
         },
       });
 
-      const chatId = (chatResult.data as { createChat: { id: string } })?.createChat?.id;
+      const chatId = (chatResult.data as { createChat: { id: string } })
+        ?.createChat?.id;
 
       if (chatId && userId) {
-        // Add current user as member
         await createChatMembership({
           variables: {
             input: {
@@ -191,9 +190,9 @@ export const handleCreateDirectChat = async (
             },
           },
         });
-
-        // Add selected user as member
-        await createChatMembership({
+        console.log(id, 'id');
+        console.log(userId, 'userId');
+        const result = await createChatMembership({
           variables: {
             input: {
               memberId: id,
@@ -202,6 +201,7 @@ export const handleCreateDirectChat = async (
             },
           },
         });
+        console.log(result, 'result');
       }
 
       await chatsListRefetch();
@@ -240,7 +240,6 @@ export default function createDirectChatModal({
       where: {},
     },
   });
-  console.log(allUsersData, 'allUsersData');
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
     const trimmedName = userName.trim();
@@ -310,48 +309,56 @@ export default function createDirectChatModal({
                   <TableBody>
                     {allUsersData &&
                       allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges.map(
-                        (
-                          {
+                      allUsersData.organization.members.edges
+                        .filter(
+                          ({
                             node: userDetails,
-                          }: { node: InterfaceOrganizationMember },
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.name}
-                              <br />
-                              {userDetails.role || 'Member'}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                onClick={() => {
-                                  handleCreateDirectChat(
-                                    userDetails.id,
-                                    chats,
-                                    t,
-                                    createChat,
-                                    createChatMembership,
-                                    organizationId,
-                                    userId,
-                                    chatsListRefetch,
-                                    toggleCreateDirectChatModal,
-                                  );
-                                }}
-                                data-testid="addBtn"
-                              >
-                                {t('add')}
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                          }: {
+                            node: InterfaceOrganizationMember;
+                          }) => userDetails.id !== userId,
+                        )
+                        .map(
+                          (
+                            {
+                              node: userDetails,
+                            }: { node: InterfaceOrganizationMember },
+                            index: number,
+                          ) => (
+                            <StyledTableRow
+                              data-testid="user"
+                              key={userDetails.id}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {index + 1}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userDetails.name}
+                                <br />
+                                {userDetails.role || 'Member'}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <Button
+                                  onClick={() => {
+                                    handleCreateDirectChat(
+                                      userDetails.id,
+                                      chats,
+                                      t,
+                                      createChat,
+                                      createChatMembership,
+                                      organizationId,
+                                      userId,
+                                      chatsListRefetch,
+                                      toggleCreateDirectChatModal,
+                                    );
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  {t('add')}
+                                </Button>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ),
+                        )}
                   </TableBody>
                 </Table>
               </TableContainer>
