@@ -50,7 +50,7 @@ import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
-import type { DirectMessage, GroupChat } from 'types/Chat/type';
+import type { GroupChat } from 'types/Chat/type';
 import { toast } from 'react-toastify';
 import { validateFile } from 'utils/fileValidation';
 
@@ -236,9 +236,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [chatImage, setChatImage] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [chat, setChat] = useState<INewChat>();
-  const [replyToDirectMessage, setReplyToDirectMessage] =
-    useState<DirectMessage | null>(null);
-  const [editMessage, setEditMessage] = useState<DirectMessage | null>(null);
+  const [replyToDirectMessage, setReplyToDirectMessage] = useState<
+    INewChat['messages']['edges'][0]['node'] | null
+  >(null);
+  const [editMessage, setEditMessage] = useState<
+    INewChat['messages']['edges'][0]['node'] | null
+  >(null);
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
@@ -272,7 +275,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     variables: {
       input: {
         chatId: props.selectedContact,
-        replyTo: replyToDirectMessage?._id,
+        replyTo: replyToDirectMessage?.id,
         media: attachmentObjectName || null,
         messageContent: newMessage,
       },
@@ -282,7 +285,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
     variables: {
       input: {
-        messageId: editMessage?._id,
+        messageId: editMessage?.id,
         messageContent: newMessage,
         chatId: props.selectedContact,
       },
@@ -553,7 +556,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                 <Dropdown.Menu>
                                   <Dropdown.Item
                                     onClick={() => {
-                                      setReplyToDirectMessage(message as any);
+                                      setReplyToDirectMessage(message);
                                     }}
                                     data-testid="replyBtn"
                                   >
@@ -561,7 +564,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                   </Dropdown.Item>
                                   <Dropdown.Item
                                     onClick={() => {
-                                      setEditMessage(message as any);
+                                      setEditMessage(message);
                                       setNewMessage(message.body);
                                     }}
                                     data-testid="replyToMessage"
@@ -597,30 +600,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               onChange={handleImageChange}
               data-testid="hidden-file-input" // <<< ADD THIS
             />
-            {!!replyToDirectMessage?._id && (
+            {!!replyToDirectMessage?.id && (
               <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
                   <div className={styles.userDetails}>
                     <Avatar
-                      name={
-                        replyToDirectMessage.sender.firstName +
-                        ' ' +
-                        replyToDirectMessage.sender.lastName
-                      }
-                      alt={
-                        replyToDirectMessage.sender.firstName +
-                        ' ' +
-                        replyToDirectMessage.sender.lastName
-                      }
+                      name={replyToDirectMessage.creator.name}
+                      alt={replyToDirectMessage.creator.name}
                       avatarStyle={styles.userImage}
                     />
-                    <span>
-                      {replyToDirectMessage.sender.firstName +
-                        ' ' +
-                        replyToDirectMessage.sender.lastName}
-                    </span>
+                    <span>{replyToDirectMessage.creator.name}</span>
                   </div>
-                  <p>{replyToDirectMessage.messageContent}</p>
+                  <p>{replyToDirectMessage.body}</p>
                 </div>
 
                 <Button
