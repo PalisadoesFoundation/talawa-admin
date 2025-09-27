@@ -6,4 +6,4 @@
 
 > **InterfaceEvent** = [`IEvent`](../interfaces/IEvent.md)
 
-Defined in: [src/types/Event/interface.ts:214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L214)
+Defined in: [src/types/Event/interface.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L212)

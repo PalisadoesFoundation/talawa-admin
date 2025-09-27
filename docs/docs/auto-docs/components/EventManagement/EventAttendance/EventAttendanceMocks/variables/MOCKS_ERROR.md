@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L92)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L98)
 
 ## Type declaration
 
@@ -24,4 +24,8 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### request.variables
 
-> **variables**: `object` = `{}`
+> **variables**: `object`
+
+#### request.variables.eventId
+
+> **eventId**: `string` = `'event123'`

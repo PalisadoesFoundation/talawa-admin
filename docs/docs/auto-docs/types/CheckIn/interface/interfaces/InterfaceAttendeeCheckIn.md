@@ -8,27 +8,31 @@ Defined in: [src/types/CheckIn/interface.ts:7](https://github.com/PalisadoesFoun
 
 ## Properties
 
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/types/CheckIn/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L8)
-
-***
-
 ### checkIn
 
 > **checkIn**: `object`
 
 Defined in: [src/types/CheckIn/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L10)
 
-#### \_id
+#### feedbackSubmitted
 
-> **\_id**: `string`
+> **feedbackSubmitted**: `boolean`
+
+#### id
+
+> **id**: `string`
 
 #### time
 
 > **time**: `string`
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/CheckIn/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L8)
 
 ***
 
