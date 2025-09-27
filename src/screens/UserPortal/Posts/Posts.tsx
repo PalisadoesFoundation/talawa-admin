@@ -28,7 +28,7 @@
  * @remarks
  * The component uses the following GraphQL queries:
  * - `ORGANIZATION_ADVERTISEMENT_LIST` to fetch advertisements.
- * - `ORGANIZATION_POST_LIST` to fetch posts.
+ * - `ORGANIZATION_POST_LIST_WITH_VOTES` to fetch posts.
  * - `USER_DETAILS` to fetch user details.
  *
  * @remarks
@@ -51,7 +51,7 @@ import { useQuery } from '@apollo/client';
 import { HourglassBottom } from '@mui/icons-material';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
@@ -131,7 +131,7 @@ export default function Home(): JSX.Element {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, {
+  } = useQuery(ORGANIZATION_POST_LIST_WITH_VOTES, {
     variables: {
       input: { id: orgId },
       userId: userId,
