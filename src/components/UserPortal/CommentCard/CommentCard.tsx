@@ -102,7 +102,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         // Unlike
         const { data } = await unlikeComment({
           variables: {
-            input: { commentId: id },
+            input: { commentId: id, creatorId: userId },
           },
         });
 

@@ -538,6 +538,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         variables: {
           input: {
             commentId: '1',
+            creatorId: '1',
           },
         },
       },
@@ -657,6 +658,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
         variables: {
           input: {
             commentId: '1',
+            creatorId: '1',
           },
         },
       },
