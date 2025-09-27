@@ -12,7 +12,7 @@ import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
@@ -97,7 +97,7 @@ const MOCKS = [
   // Initial load - Page 1
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: 'orgId' },
         first: 5,
@@ -189,7 +189,7 @@ const MOCKS = [
   // Page 2 - Next page
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: 'orgId' },
         after: 'c2',
@@ -281,7 +281,7 @@ const MOCKS = [
   // Back to Page 1 - Previous page
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: 'orgId' },
         before: 'c3',
@@ -541,7 +541,7 @@ describe('HomeScreen additional scenarios', () => {
       // Mock with pinned posts
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -681,7 +681,7 @@ describe('HomeScreen additional scenarios', () => {
       MOCKS[0],
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -811,7 +811,7 @@ describe('HomeScreen additional scenarios', () => {
       MOCKS[0],
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -1002,7 +1002,7 @@ describe('HomeScreen additional scenarios', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -1087,7 +1087,7 @@ describe('HomeScreen additional scenarios', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -1182,7 +1182,7 @@ describe('HomeScreen additional scenarios', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -1410,7 +1410,7 @@ describe('HomeScreen additional scenarios', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
@@ -1581,7 +1581,7 @@ describe('HomeScreen additional scenarios', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: 'orgId' },
             first: 5,
