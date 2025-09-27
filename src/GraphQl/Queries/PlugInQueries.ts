@@ -266,6 +266,7 @@ export const GROUP_CHAT_LIST = gql`
       id
       name
       description
+      isGroup
       avatarMimeType
       avatarURL
       createdAt
@@ -274,6 +275,15 @@ export const GROUP_CHAT_LIST = gql`
         id
         name
         countryCode
+      }
+      members(first: 10) {
+        edges {
+          node {
+            id
+            name
+            role
+          }
+        }
       }
       creator {
         id
@@ -297,6 +307,7 @@ export const UNREAD_CHAT_LIST = gql`
       id
       name
       description
+      isGroup
       avatarMimeType
       avatarURL
       createdAt
@@ -305,6 +316,15 @@ export const UNREAD_CHAT_LIST = gql`
         id
         name
         countryCode
+      }
+      members(first: 10) {
+        edges {
+          node {
+            id
+            name
+            role
+          }
+        }
       }
       creator {
         id
@@ -323,31 +343,30 @@ export const UNREAD_CHAT_LIST = gql`
 `;
 
 export const CHATS_LIST = gql`
-  query ChatsByUser {
+  query GetUserChats($first: Int, $after: String) {
     chatsByUser {
       id
       name
       description
-      avatarMimeType
-      avatarURL
       createdAt
-      updatedAt
       organization {
         id
         name
-        countryCode
       }
-      creator {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-      updater {
-        id
-        name
-        avatarMimeType
-        avatarURL
+      members(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            role
+          }
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
       }
     }
   }

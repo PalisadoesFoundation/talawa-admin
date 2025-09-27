@@ -84,7 +84,6 @@ const uploadLink = createUploadLink({
 const wsLink = new GraphQLWsLink(
   createClient({ url: REACT_APP_BACKEND_WEBSOCKET_URL }),
 );
-
 // const wsLink = new GraphQLWsLink(
 //   createClient({
 //     url: 'ws://localhost:4000/subscriptions',

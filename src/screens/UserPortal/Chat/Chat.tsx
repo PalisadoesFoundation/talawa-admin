@@ -42,7 +42,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from 'style/app-fixed.module.css';
+import styles from './Chat.module.css';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
@@ -55,9 +55,9 @@ import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirec
 import type { GroupChat } from 'types/Chat/type';
 import type { NewChatType } from 'types/Chat/interface';
 
-// Type guard to check if chat is NewChatType
+// Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
 const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {
-  return 'id' in chat && 'members' in chat && 'messages' in chat;
+  return 'id' in chat && !('_id' in chat);
 };
 interface InterfaceContactCardProps {
   id: string;
@@ -99,11 +99,15 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 
+  const [cursor] = useState<string | null>(null);
+
   const {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST);
+  } = useQuery(CHATS_LIST, {
+    variables: { first: 10, after: cursor },
+  });
 
   const { data: groupChatListData, refetch: groupChatListRefetch } =
     useQuery(GROUP_CHAT_LIST);
@@ -251,15 +255,17 @@ export default function chat(): JSX.Element {
                       chats.map((chat: GroupChat | NewChatType) => {
                         const cardProps: InterfaceContactCardProps = {
                           id: isNewChatType(chat) ? chat.id : chat._id,
-                          title: chat.isGroup
-                            ? (chat.name ?? 'Group Chat')
-                            : 'Direct Message',
+                          title: chat.name || 'Chat',
                           image: isNewChatType(chat)
                             ? chat.avatarURL || ''
                             : chat.image || '',
                           setSelectedContact,
                           selectedContact,
-                          isGroup: chat.isGroup,
+                          isGroup:
+                            chat.isGroup ||
+                            (isNewChatType(chat)
+                              ? (chat.members?.edges?.length || 0) > 2
+                              : false),
                           unseenMessages: 0, // TODO: Update when unseen messages are available in new schema
                           lastMessage: '', // Messages are not fetched in the chat list query
                         };
