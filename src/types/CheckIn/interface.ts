@@ -1,21 +1,22 @@
 export interface InterfaceUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
+  id: string;
+  name: string;
+  emailAddress: string;
 }
 
 export interface InterfaceAttendeeCheckIn {
-  _id: string;
+  id: string;
   user: InterfaceUser;
   checkIn: null | {
-    _id: string;
+    id: string;
     time: string;
+    feedbackSubmitted: boolean;
   };
 }
 
 export interface InterfaceAttendeeQueryResponse {
   event: {
-    _id: string;
+    id: string;
     attendeesCheckInStatus: InterfaceAttendeeCheckIn[];
   };
 }
@@ -31,10 +32,12 @@ export interface InterfaceTableCheckIn {
   name: string;
   userId: string;
   checkIn: null | {
-    _id: string;
+    id: string;
     time: string;
+    feedbackSubmitted: boolean;
   };
   eventId: string;
+  isRecurring?: boolean;
 }
 
 export interface InterfaceTableData {

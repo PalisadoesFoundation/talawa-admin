@@ -53,48 +53,110 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
   const { title, startdate, location, orgId, eventId } = props;
 
   return (
-    <Card className="border-0 py-1 rounded-0" data-testid="EventsAttendedCard">
-      <Card.Body className="p-1">
-        <Row className="align-items-center">
-          <Col xs={3} md={2} className="text-center">
-            <div className="text-secondary">
+    <Card
+      className="border-0 rounded-4 shadow-sm mb-3 overflow-hidden position-relative"
+      data-testid="EventsAttendedCard"
+      style={{
+        transition: 'all 0.3s ease',
+        background: 'linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%)',
+        border: '1px solid #e3f2fd',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-2px)';
+        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+      }}
+    >
+      <Card.Body className="p-3">
+        <Row className="align-items-center g-0">
+          <Col xs={3} md={3} className="text-center">
+            <div
+              className="rounded-3 d-inline-block p-2"
+              style={{
+                background: 'linear-gradient(135deg, #A8C7FA 0%, #A8C7FA 100%)',
+                color: '#555',
+                minWidth: '60px',
+              }}
+            >
               {startdate && dayjs(startdate).isValid() ? (
                 <>
-                  <div className="fs-6 fw-normal">
+                  <div
+                    className="fs-7 fw-bold mb-1"
+                    style={{ fontSize: '0.75rem' }}
+                  >
                     {dayjs(startdate).format('MMM').toUpperCase()}
                   </div>
-                  <div className="fs-1 fw-semibold">
+                  <div className="fs-4 fw-bold lh-1">
                     {dayjs(startdate).format('D')}
                   </div>
                 </>
               ) : (
-                <div className="fs-6 fw-normal">Date N/A</div>
+                <div className="fs-7 fw-bold" style={{ fontSize: '0.75rem' }}>
+                  Date N/A
+                </div>
               )}
             </div>
           </Col>
-          <Col xs={7} md={9} className="mb-3">
-            <h5 className="mb-1">{title}</h5>
-            <p className="text-muted mb-0 small">
-              <MdLocationOn
-                className="text-action"
-                size={20}
-                data-testid="LocationOnIcon"
-              />
-              {location}
-            </p>
+          <Col xs={7} md={8} className="ps-3">
+            <h6
+              className="mb-2 fw-semibold text-dark"
+              style={{ fontSize: '1rem' }}
+            >
+              {title}
+            </h6>
+            {location && (
+              <div className="d-flex align-items-center text-muted">
+                <MdLocationOn
+                  className="me-1 text-info"
+                  size={16}
+                  data-testid="LocationOnIcon"
+                />
+                <span className="small" style={{ fontSize: '0.85rem' }}>
+                  {location}
+                </span>
+              </div>
+            )}
           </Col>
           <Col xs={2} md={1} className="text-end">
-            <Link to={`/event/${orgId}/${eventId}`} state={{ id: eventId }}>
-              <MdChevronRight
-                className="text-action"
-                size={20}
-                data-testid="ChevronRightIcon"
-              />
+            <Link
+              to={`/event/${orgId}/${eventId}`}
+              state={{ id: eventId }}
+              className="text-decoration-none"
+            >
+              <div
+                className="rounded-circle d-flex align-items-center justify-content-center"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  backgroundColor: '#e3f2fd',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <MdChevronRight
+                  className="text-primary"
+                  size={18}
+                  data-testid="ChevronRightIcon"
+                  style={{ transition: 'color 0.2s ease' }}
+                />
+              </div>
             </Link>
           </Col>
         </Row>
       </Card.Body>
-      <div className="border-top border-1"></div>
+      {/* Decorative accent bar */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '4px',
+          height: '100%',
+          background: 'linear-gradient(135deg,  #A8C7FA 0%,  #A8C7FA 100%)',
+        }}
+      />
     </Card>
   );
 };

@@ -23,16 +23,15 @@ export const FilterPeriod = {
 
 export interface IMember {
   createdAt: string;
-  firstName: string;
-  lastName: string;
-  email: `${string}@${string}.${string}`;
-  gender: string;
+  name: string;
+  emailAddress: `${string}@${string}.${string}`;
+  natalSex: string;
   eventsAttended?: {
-    _id: string;
+    id: string;
   }[];
   birthDate: Date;
-  __typename: string;
-  _id: string;
+  role: string;
+  id: string;
   tagsAssignedWith: {
     edges: {
       cursor: string;
@@ -46,14 +45,14 @@ export interface IMember {
 export interface IEvent {
   userRole?: string;
   key?: string;
-  _id: string;
+  id: string;
   location: string;
   name: string;
   description: string;
-  startDate: string;
-  endDate: string;
-  startTime: string | null;
-  endTime: string | null;
+  startAt: string;
+  endAt: string;
+  startTime?: string | null;
+  endTime?: string | null;
   allDay: boolean;
   userId?: string;
   isPublic: boolean;
@@ -63,11 +62,10 @@ export interface IEvent {
   averageFeedbackScore?: number;
   feedback?: Feedback[];
   // Recurring event fields
-  isMaterialized?: boolean;
-  isRecurringTemplate?: boolean;
-  recurringEventId?: string | null;
-  instanceStartTime?: string | null;
-  baseEventId?: string | null;
+  isRecurringEventTemplate?: boolean;
+  baseEvent?: {
+    id: string;
+  } | null;
   sequenceNumber?: number | null;
   totalCount?: number | null;
   hasExceptions?: boolean;

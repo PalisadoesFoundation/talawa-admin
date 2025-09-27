@@ -32,7 +32,7 @@ vi.mock('./CustomCell/customTableCell', () => ({
 }));
 
 const mockEvents = Array.from({ length: 6 }, (_, index) => ({
-  _id: `${index + 1}`,
+  id: `${index + 1}`,
   name: `Event ${index + 1}`,
   date: '2024-03-14',
   isRecurring: true,

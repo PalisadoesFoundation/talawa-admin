@@ -40,8 +40,8 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
     expect(link).toHaveAttribute('href', '/event/org123/event123');
@@ -96,7 +96,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event999' },
         },
         result: {
           data: {
@@ -108,11 +108,13 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={noEventMock} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <BrowserRouter>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event999" />
+            </tbody>
+          </table>
+        </BrowserRouter>
       </MockedProvider>,
     );
 

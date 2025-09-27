@@ -17,9 +17,12 @@ export interface InterfaceUser {
 }
 
 export interface InterfaceUserAttendee {
-  _id: string;
-  userId: string;
+  id: string;
+  user: {
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
   isRegistered: boolean;
-  __typename: string;
   time: string;
 }

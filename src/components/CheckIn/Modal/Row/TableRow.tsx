@@ -55,8 +55,12 @@ export const TableRow = ({
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
   const markCheckIn = (): void => {
+    const variables = data.isRecurring
+      ? { userId: data.userId, recurringEventInstanceId: data.eventId }
+      : { userId: data.userId, eventId: data.eventId };
+
     checkInMutation({
-      variables: { userId: data.userId, eventId: data.eventId },
+      variables: variables,
     })
       .then(() => {
         toast.success(t('checkedInSuccessfully') as string);
@@ -119,8 +123,7 @@ export const TableRow = ({
         </div>
       ) : (
         <Button
-          variant="contained"
-          color="success"
+          style={{ backgroundColor: '#A8C7FA', color: '#555' }}
           onClick={markCheckIn}
           className="m-2 p-2"
         >

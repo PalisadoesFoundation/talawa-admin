@@ -46,8 +46,12 @@ import {
 import { Button, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import { useLazyQuery } from '@apollo/client';
-import { EVENT_ATTENDEES, EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import {
+  EVENT_ATTENDEES,
+  EVENT_REGISTRANTS,
+  EVENT_DETAILS,
+} from 'GraphQl/Queries/Queries';
 import { useParams } from 'react-router';
 import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
@@ -62,18 +66,37 @@ function EventRegistrants(): JSX.Element {
   const [combinedData, setCombinedData] = useState<
     (InterfaceUserAttendee & Partial<InterfaceMember>)[]
   >([]);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+
+  // First, get event details to determine if it's recurring or standalone
+  const { data: eventData } = useQuery(EVENT_DETAILS, {
+    variables: { eventId: eventId },
+    fetchPolicy: 'cache-first',
+  });
+
+  // Determine event type and set appropriate variables
+  useEffect(() => {
+    if (eventData?.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+    }
+  }, [eventData]);
+
+  // Create proper GraphQL variables based on event type
+  const registrantVariables = isRecurring
+    ? { recurringEventInstanceId: eventId }
+    : { eventId: eventId };
 
   const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
-    variables: { eventId },
+    variables: registrantVariables,
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       if (data?.getEventAttendeesByEventId) {
         const mappedData = data.getEventAttendeesByEventId.map(
           (attendee: InterfaceUserAttendee) => ({
-            _id: attendee._id,
-            userId: attendee.userId,
+            id: attendee.id,
+            userId: attendee.user?.id,
             isRegistered: attendee.isRegistered,
-            __typename: attendee.__typename,
+            user: attendee.user,
           }),
         );
         setRegistrants(mappedData);
@@ -82,7 +105,7 @@ function EventRegistrants(): JSX.Element {
   });
   // Fetch attendees
   const [getEventAttendees] = useLazyQuery(EVENT_ATTENDEES, {
-    variables: { id: eventId },
+    variables: { eventId: eventId },
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
       if (data?.event?.attendees) {
@@ -103,7 +126,7 @@ function EventRegistrants(): JSX.Element {
     if (registrants.length > 0 && attendees.length > 0) {
       const mergedData = registrants.map((registrant) => {
         const matchedAttendee = attendees.find(
-          (attendee) => attendee._id === registrant.userId,
+          (attendee) => attendee.id === registrant.user.id,
         );
         const [date, timeWithMilliseconds] = matchedAttendee?.createdAt
           ? matchedAttendee.createdAt.split('T')
@@ -114,8 +137,7 @@ function EventRegistrants(): JSX.Element {
             : ['N/A'];
         return {
           ...registrant,
-          firstName: matchedAttendee?.firstName || 'N/A',
-          lastName: matchedAttendee?.lastName || 'N/A',
+          name: matchedAttendee?.name || 'N/A',
           createdAt: date,
           time: time,
         };
@@ -199,10 +221,7 @@ function EventRegistrants(): JSX.Element {
               </TableRow>
             ) : (
               combinedData.map((data, index) => (
-                <TableRow
-                  key={data._id}
-                  data-testid={`registrant-row-${index}`}
-                >
+                <TableRow key={data.id} data-testid={`registrant-row-${index}`}>
                   <TableCell
                     component="th"
                     scope="row"
@@ -214,7 +233,7 @@ function EventRegistrants(): JSX.Element {
                     align="left"
                     data-testid={`attendee-name-${index}`}
                   >
-                    {data.firstName} {data.lastName}
+                    {data.name}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -226,7 +245,16 @@ function EventRegistrants(): JSX.Element {
                     align="left"
                     data-testid={`registrant-created-at-${index}`}
                   >
-                    {data.time}
+                    {data.time && data.time !== 'N/A'
+                      ? new Date(`1970-01-01T${data.time}`).toLocaleTimeString(
+                          [],
+                          {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          },
+                        )
+                      : 'N/A'}
                   </TableCell>
                   <TableCell
                     align="left"

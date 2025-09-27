@@ -38,11 +38,15 @@
  * - `react-toastify` for toast notifications.
  * - `react-i18next` for translations.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
-import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  EVENT_ATTENDEES,
+  MEMBERS_LIST,
+  EVENT_DETAILS,
+} from 'GraphQl/Queries/Queries';
 import {
   ADD_EVENT_ATTENDEE,
   REMOVE_EVENT_ATTENDEE,
@@ -68,6 +72,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
@@ -79,15 +84,28 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   });
   const { t: tCommon } = useTranslation('common');
 
+  // First, get event details to determine if it's recurring or standalone
+  const { data: eventData } = useQuery(EVENT_DETAILS, {
+    variables: { eventId: eventId },
+    fetchPolicy: 'cache-first',
+  });
+
+  // Determine event type
+  useEffect(() => {
+    if (eventData?.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+    }
+  }, [eventData]);
+
   // Query hooks to fetch event attendees and organization members
   const {
     data: attendeesData,
     loading: attendeesLoading,
     refetch: attendeesRefetch,
-  } = useQuery(EVENT_ATTENDEES, { variables: { id: eventId } });
+  } = useQuery(EVENT_ATTENDEES, { variables: { eventId: eventId } });
 
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+    variables: { organizationId: orgId },
   });
 
   // Function to add a new registrant to the event
@@ -97,8 +115,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       return;
     }
     toast.warn('Adding the attendee...');
+    const addVariables = isRecurring
+      ? { userId: member.id, recurringEventInstanceId: eventId }
+      : { userId: member.id, eventId: eventId };
+
     addRegistrantMutation({
-      variables: { userId: member.id, eventId: eventId },
+      variables: addVariables,
     })
       .then(() => {
         toast.success(
@@ -115,7 +137,11 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to remove a registrant from the event
   const deleteRegistrant = (userId: string): void => {
     toast.warn('Removing the attendee...');
-    removeRegistrantMutation({ variables: { userId, eventId: eventId } })
+    const removeVariables = isRecurring
+      ? { userId, recurringEventInstanceId: eventId }
+      : { userId, eventId: eventId };
+
+    removeRegistrantMutation({ variables: removeVariables })
       .then(() => {
         toast.success(
           tCommon('removedSuccessfully', { item: 'Attendee' }) as string,
@@ -147,26 +173,30 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white">Event Registrants</Modal.Title>
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
+        >
+          <Modal.Title>Event Registrants</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <h5 className="mb-2"> Registered Registrants </h5>
-          {attendeesData.event.attendees.length == 0
+          {!attendeesData?.event?.attendees ||
+          attendeesData.event.attendees.length === 0
             ? `There are no registered attendees for this event.`
             : null}
           <Stack direction="row" className="flex-wrap gap-2">
-            {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
+            {attendeesData?.event?.attendees?.map((attendee: InterfaceUser) => (
               <Chip
                 avatar={
-                  <Avatar>{`${attendee.firstName[0]}${attendee.lastName[0]}`}</Avatar>
+                  <Avatar>{attendee.name?.[0]?.toUpperCase() || 'U'}</Avatar>
                 }
-                label={`${attendee.firstName} ${attendee.lastName}`}
+                label={attendee.name || 'Unknown User'}
                 variant="outlined"
                 key={attendee.id}
                 onDelete={(): void => deleteRegistrant(attendee.id)}
               />
-            ))}
+            )) || []}
           </Stack>
           <br />
 
@@ -180,6 +210,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 <p className="me-2">No Registrations found</p>
                 <span
                   className="underline"
+                  style={{
+                    color: '#555',
+                    textDecoration: 'underline',
+                  }}
                   onClick={() => {
                     setOpen(true);
                   }}
@@ -188,9 +222,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 </span>
               </div>
             }
-            options={memberData.organizations[0].members}
+            options={memberData?.usersByOrganizationId || []}
             getOptionLabel={(member: InterfaceUser): string =>
-              `${member.firstName} ${member.lastName}`
+              member.name || 'Unknown User'
             }
             renderInput={(params): React.ReactNode => (
               <TextField
@@ -204,7 +238,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <br />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={addRegistrant}>
+          <Button
+            style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+            onClick={addRegistrant}
+          >
             Add Registrant
           </Button>
         </Modal.Footer>
