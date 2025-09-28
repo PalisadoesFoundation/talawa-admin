@@ -28,7 +28,7 @@
  * ```
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'; // TODO: Remove useCallback when attachment functionality is re-enabled
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -47,12 +47,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
-import { GrAttachment } from 'react-icons/gr';
-import { useMinioUpload } from 'utils/MinioUpload';
-import { useMinioDownload } from 'utils/MinioDownload';
+// import { GrAttachment } from 'react-icons/gr'; // TODO: Remove when attachment functionality is re-enabled
+// import { useMinioUpload } from 'utils/MinioUpload'; // TODO: Remove when attachment functionality is re-enabled
+// import { useMinioDownload } from 'utils/MinioDownload'; // TODO: Remove when attachment functionality is re-enabled
 import type { GroupChat } from 'types/Chat/type';
-import { toast } from 'react-toastify';
-import { validateFile } from 'utils/fileValidation';
+// import { toast } from 'react-toastify'; // TODO: Remove when attachment functionality is re-enabled
+// import { validateFile } from 'utils/fileValidation'; // TODO: Remove when attachment functionality is re-enabled
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -245,13 +245,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
-  const [attachment, setAttachment] = useState<string | null>(null);
-  const [attachmentObjectName, setAttachmentObjectName] = useState<
-    string | null
-  >(null);
-  const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  // TODO: Re-enable attachment state when schema supports media field
+  // const [attachment, setAttachment] = useState<string | null>(null);
+  // const [attachmentObjectName, setAttachmentObjectName] = useState<
+  //   string | null
+  // >(null);
+  // const { uploadFileToMinio } = useMinioUpload();
+  // const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  // const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
@@ -275,9 +276,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     variables: {
       input: {
         chatId: props.selectedContact,
-        replyTo: replyToDirectMessage?.id,
-        media: attachmentObjectName || null,
-        messageContent: newMessage,
+        parentMessageId: replyToDirectMessage?.id,
+        body: newMessage,
       },
     },
   });
@@ -285,9 +285,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
     variables: {
       input: {
-        messageId: editMessage?.id,
-        messageContent: newMessage,
-        chatId: props.selectedContact,
+        id: editMessage?.id,
+        body: newMessage,
       },
     },
   });
@@ -309,8 +308,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       afterMessages: null,
     },
   });
-  console.log('chatData', chatData);
-  console.log('props.selectedContact', props.selectedContact);
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
   //   variables: {
   //     id: userId,
@@ -361,13 +358,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
     await chatRefetch();
     setReplyToDirectMessage(null);
+    setEditMessage(null); // Clear edit mode after sending
     setNewMessage('');
-    setAttachment(null);
-    setAttachmentObjectName(null);
+    // setAttachment(null); // TODO: Re-enable when attachment functionality is supported
     await props.chatListRefetch({ id: userId as string });
   };
 
-  useSubscription(MESSAGE_SENT_TO_CHAT, {
+  const subscription = useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
         id: props.selectedContact,
@@ -376,8 +373,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     onData: async (messageSubscriptionData) => {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
-        messageSubscriptionData?.data.data.chatMessageCreate
-          .chatMessageBelongsTo?.id == props.selectedContact
+        messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
+          props.selectedContact
       ) {
         // TODO: Update markChatMessagesAsRead to match new schema
         // await markChatMessagesAsRead();
@@ -387,61 +384,63 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       unreadChatListRefetch();
     },
   });
-
+  console.log('subscription', subscription);
   useEffect(() => {
     document
       .getElementById('chat-area')
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   });
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // TODO: Re-enable file input ref when attachment functionality is supported
+  // const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAddAttachment = (): void => {
-    fileInputRef?.current?.click();
-  };
+  // TODO: Re-enable attachment functionality when schema supports media field
+  // const handleAddAttachment = (): void => {
+  //   fileInputRef?.current?.click();
+  // };
 
-  const handleImageChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // const handleImageChange = async (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  // ): Promise<void> => {
+  //   const file = e.target.files?.[0];
+  //   if (!file) return;
 
-    // Use the fileValidation utility for validation
-    const validation = validateFile(file);
+  //   // Use the fileValidation utility for validation
+  //   const validation = validateFile(file);
 
-    if (!validation.isValid) {
-      toast.error(validation.errorMessage);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-      return;
-    }
+  //   if (!validation.isValid) {
+  //     toast.error(validation.errorMessage);
+  //     if (fileInputRef.current) fileInputRef.current.value = '';
+  //     return;
+  //   }
 
-    try {
-      // Get current organization ID from the chat data
-      const organizationId = chat?.organization?.id || 'organization';
+  //   try {
+  //     // Get current organization ID from the chat data
+  //     const organizationId = chat?.organization?.id || 'organization';
 
-      // Use MinIO for file uploads regardless of organization context
-      // If there's no organization specific ID, use 'organization' as default
-      const { objectName } = await uploadFileToMinio(file, organizationId);
+  //     // Use MinIO for file uploads regardless of organization context
+  //     // If there's no organization specific ID, use 'organization' as default
+  //     const { objectName } = await uploadFileToMinio(file, organizationId);
 
-      // Store the object name for sending with the message
-      setAttachmentObjectName(objectName);
+  //     // Store the object name for sending with the message
+  //     setAttachmentObjectName(objectName);
 
-      // Get a presigned URL to display the image preview
-      const presignedUrl = await getFileFromMinio(objectName, organizationId);
-      setAttachment(presignedUrl);
+  //     // Get a presigned URL to display the image preview
+  //     const presignedUrl = await getFileFromMinio(objectName, organizationId);
+  //     setAttachment(presignedUrl);
 
-      // Allow re-selecting the same file
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      toast.error('Error uploading image. Please try again.');
+  //     // Allow re-selecting the same file
+  //     if (fileInputRef.current) fileInputRef.current.value = '';
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error);
+  //     toast.error('Error uploading image. Please try again.');
 
-      // Clear any partial data
-      setAttachment(null);
-      setAttachmentObjectName(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
+  //     // Clear any partial data
+  //     setAttachment(null);
+  //     setAttachmentObjectName(null);
+  //     if (fileInputRef.current) fileInputRef.current.value = '';
+  //   }
+  // };
 
   return (
     <div
@@ -593,14 +592,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div id="messageInput">
-            <input
+            {/* TODO: Re-enable file input when schema supports media field */}
+            {/* <input
               type="file"
               accept="image/*"
               ref={fileInputRef}
               style={{ display: 'none' }} // Hide the input
               onChange={handleImageChange}
-              data-testid="hidden-file-input" // <<< ADD THIS
-            />
+              data-testid="hidden-file-input"
+            /> */}
             {!!replyToDirectMessage?.id && (
               <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
@@ -624,7 +624,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 </Button>
               </div>
             )}
-            {attachment && (
+            {/* TODO: Re-enable attachment display when schema supports media field */}
+            {/* {attachment && (
               <div className={styles.attachment}>
                 <img src={attachment} alt="attachment" />
 
@@ -640,15 +641,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   <Close />
                 </Button>
               </div>
-            )}
+            )} */}
 
             <InputGroup>
-              <button
+              {/* TODO: Re-enable attachment button when schema supports media field */}
+              {/* <button
                 onClick={handleAddAttachment}
                 className={styles.addAttachmentBtn}
               >
                 <GrAttachment />
-              </button>
+              </button> */}
               <Form.Control
                 placeholder={t('sendMessage')}
                 aria-label="Send Message"

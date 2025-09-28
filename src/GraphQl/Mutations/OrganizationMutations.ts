@@ -188,6 +188,9 @@ export const MESSAGE_SENT_TO_CHAT = gql`
       body
       createdAt
       updatedAt
+      chat {
+        id
+      }
       creator {
         id
         name
