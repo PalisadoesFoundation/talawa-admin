@@ -10,8 +10,9 @@ describe('useDebounce', () => {
 
   afterEach(() => {
     vi.runOnlyPendingTimers();
-    vi.useRealTimers();
     vi.clearAllMocks();
+    // keep fake timers active to respect the global setupTests.ts contract
+    vi.useFakeTimers();
   });
 
   it('should delay execution of the callback until after the delay', () => {
