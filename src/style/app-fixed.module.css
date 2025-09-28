@@ -1322,14 +1322,14 @@ form label,
 }
 
 .dropdown:is(
-    :hover,
-    :focus,
-    :active,
-    :focus-visible,
-    .show,
-    :disabled,
-    :checked
-  ) {
+  :hover,
+  :focus,
+  :active,
+  :focus-visible,
+  .show,
+  :disabled,
+  :checked
+) {
   box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
   color: var(--dropdown-font-color) !important;
