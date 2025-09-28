@@ -72,7 +72,7 @@ describe('PostsRenderer', () => {
     },
     imageUrl: 'test-image.jpg',
     videoUrl: 'test-video.mp4',
-    pinned: true,
+    pinnedAt: '2023-01-01T00:00:00Z',
   };
 
   const mockPostNoAttachments: InterfacePost = {
@@ -84,7 +84,7 @@ describe('PostsRenderer', () => {
       name: 'Test User',
       email: 'test@example.com',
     },
-    pinned: false,
+    pinnedAt: null,
   };
 
   const mockPostNoCreator: InterfacePost = {
@@ -384,7 +384,7 @@ describe('PostsRenderer', () => {
       name: 'Test User',
       email: 'test@example.com',
     },
-    pinned: true,
+    pinnedAt: '2023-01-01T00:00:00Z',
   };
 
   const defaultProps1 = {
