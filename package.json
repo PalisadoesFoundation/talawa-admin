@@ -213,9 +213,15 @@
   },
   "resolutions": {
     "@apollo/client": "^3.4.0-beta.19",
-    "@types/react": "^19.1.1",
-    "@types/react-dom": "^19.1.1",
-    "graphql": "^16.5.0"
+   "overrides": {
+     "@types/react": "^19.1.1",
+     "@types/react-dom": "^19.1.1",
+     "whatwg-url": "^14.0.0",
+     "core-js": "^3.40.0",
+     "rc-color-picker": {
+       /* existing nested overrides */
+     }
+   },
   },
   "optionalDependencies": {
     "@rollup/rollup-darwin-arm64": "^4.46.2",
