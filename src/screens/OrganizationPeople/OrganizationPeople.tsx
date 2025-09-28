@@ -468,6 +468,7 @@ function OrganizationPeople(): JSX.Element {
         <Button
           className={`${styles.removeButton}`}
           variant="danger"
+          disabled={state == 2}
           onClick={() => toggleRemoveMemberModal(params.row._id)}
           aria-label="Remove member"
           data-testid="removeMemberModalBtn"
