@@ -69,7 +69,8 @@
     "vite-tsconfig-paths": "^5.1.3"
   },
   "scripts": {
-    "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css,graphql}\""
+    "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css,graphql}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css,graphql}\""
   },
   "eslintConfig": {
     "extends": [
