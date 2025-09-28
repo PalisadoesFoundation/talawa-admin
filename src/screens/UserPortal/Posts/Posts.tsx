@@ -28,7 +28,7 @@
  * @remarks
  * The component uses the following GraphQL queries:
  * - `ORGANIZATION_ADVERTISEMENT_LIST` to fetch advertisements.
- * - `ORGANIZATION_POST_LIST` to fetch posts.
+ * - `ORGANIZATION_POST_LIST_WITH_VOTES` to fetch posts.
  * - `USER_DETAILS` to fetch user details.
  *
  * @remarks
@@ -48,10 +48,10 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { HourglassBottom, MoreHoriz } from '@mui/icons-material';
+import { HourglassBottom } from '@mui/icons-material';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import PostCard from 'components/UserPortal/PostCard/PostCard';
@@ -61,19 +61,7 @@ import type {
 } from 'utils/interfaces';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import {
-  Avatar,
-  IconButton,
-  Button,
-  Modal,
-  FormControl,
-  Input,
-  InputAdornment,
-  Box,
-  Typography,
-  Divider,
-  CircularProgress,
-} from '@mui/material';
+import { Avatar, Button, Modal, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -137,15 +125,16 @@ export default function Home(): JSX.Element {
       variables: { id: orgId, first: 6 },
     },
   );
+  const userId: string | null = getItem('userId');
 
   const {
     data,
     refetch,
-    error,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST, {
+  } = useQuery(ORGANIZATION_POST_LIST_WITH_VOTES, {
     variables: {
       input: { id: orgId },
+      userId: userId,
       after,
       before,
       first: after || !before ? POSTS_PER_PAGE : null,
@@ -153,8 +142,8 @@ export default function Home(): JSX.Element {
     },
   });
 
-  const userId: string | null = getItem('userId');
   const { data: userData } = useQuery(USER_DETAILS, {
+    skip: !userId,
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
 
@@ -164,13 +153,11 @@ export default function Home(): JSX.Element {
   useEffect(() => {
     if (data?.organization?.posts) {
       const newPosts = data.organization.posts.edges.map(
-        (edge: { node: any }) => edge.node,
+        (edge: { node: PostNode }) => edge.node,
       );
       setPosts(newPosts);
-      setTotalPosts(data.organization.posts.totalCount);
-      setTotalPages(
-        Math.ceil(data.organization.posts.totalCount / POSTS_PER_PAGE),
-      );
+      setTotalPosts(data.organization.postsCount);
+      setTotalPages(Math.ceil(data.organization.postsCount / POSTS_PER_PAGE));
     }
   }, [data]);
 
@@ -179,13 +166,13 @@ export default function Home(): JSX.Element {
       const pinned = posts.filter((post) => post.pinnedAt !== null);
       setPinnedPosts(pinned);
     }
-  }, [posts]);
+  }, [posts, adContent, totalPosts]);
 
   useEffect(() => {
     if (promotedPostsData?.organizations) {
       const ads: Ad[] =
         promotedPostsData.organizations[0].advertisements?.edges.map(
-          (edge: { node: any }) => edge.node,
+          (edge: { node: Ad }) => edge.node,
         ) || [];
       setAdContent(ads);
     }
@@ -197,12 +184,12 @@ export default function Home(): JSX.Element {
       caption,
       createdAt,
       creator,
-      upVoters,
       upVotesCount,
       downVotesCount,
       comments,
-      attachments,
+      // attachments,
       pinnedAt,
+      hasUserVoted,
     } = node;
 
     const formattedDate = new Intl.DateTimeFormat('en-US', {
@@ -216,7 +203,7 @@ export default function Home(): JSX.Element {
       creator: {
         id: creator.id,
         name: creator.name,
-        email: creator.emailAddress || '',
+        avatarURL: creator.avatarURL || undefined,
       },
       postedAt: formattedDate,
       image: null,
@@ -225,22 +212,7 @@ export default function Home(): JSX.Element {
       text: '',
       pinnedAt: pinnedAt || null,
       commentCount: node.commentsCount,
-
-      upVoters: {
-        edges:
-          upVoters?.edges?.map((edge) => ({
-            node: {
-              id: edge.node.id,
-              creator: edge.node.creator
-                ? {
-                    id: edge.node.creator.id,
-                    name: edge.node.creator.name,
-                  }
-                : null,
-            },
-          })) || [],
-      },
-
+      hasUserVoted: hasUserVoted,
       upVoteCount: upVotesCount,
       downVoteCount: downVotesCount,
 
@@ -251,15 +223,12 @@ export default function Home(): JSX.Element {
           creator: {
             id: comment.creator.id,
             name: comment.creator.name,
-            email: comment.creator.emailAddress || '',
+            avatarURL: comment.creator.avatarURL || undefined,
           },
           downVoteCount: comment.downVotesCount,
           upVoteCount: comment.upVotesCount,
-          upVoters:
-            comment?.upVoters?.map((like) => ({
-              id: like.id,
-            })) || [],
           text: comment.text || '',
+          hasUserVoted: comment.hasUserVoted,
         })) ?? [],
 
       fetchPosts: refetch,
@@ -300,41 +269,20 @@ export default function Home(): JSX.Element {
     setShowPinnedPostModal(true);
   };
 
-  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  // const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imgURL = URL.createObjectURL(file);
-      setPostImg(imgURL);
-      setShowModal(true); // open modal after selecting image
-    }
-  };
-
-  // Instagram-like Story component
-  const InstagramStory = ({ post }: { post: InterfacePostCard }) => {
-    return (
-      <div
-        className={postStyles.instagramStory}
-        onClick={() => handleStoryClick(post)} // make clickable
-        style={{ cursor: 'pointer' }}
-      >
-        <div className={postStyles.storyBorder}>
-          <Avatar
-            src={post.creator.avatarURL}
-            className={postStyles.storyAvatar}
-          />
-        </div>
-        <span className={postStyles.storyUsername}>
-          {post.creator.name.split(' ')[0]}
-        </span>
-      </div>
-    );
-  };
+  // const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const imgURL = URL.createObjectURL(file);
+  //     setPostImg(imgURL);
+  //     setShowModal(true); // open modal after selecting image
+  //   }
+  // };
 
   return (
     <div className={postStyles.instagramContainer}>
@@ -355,11 +303,25 @@ export default function Home(): JSX.Element {
               {pinnedPosts.map((node) => {
                 const cardProps = getCardProps(node);
                 return (
-                  <InstagramStory
-                    key={node.id}
-                    post={cardProps}
-                    data-testid="pinned-post"
-                  />
+                  <div
+                    key={cardProps.id}
+                    className={postStyles.instagramStory}
+                    onClick={() => handleStoryClick(cardProps)} // make clickable
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className={postStyles.storyBorder}>
+                      <Avatar
+                        src={
+                          cardProps.creator.avatarURL ||
+                          '/static/images/avatar/1.jpg'
+                        }
+                        className={postStyles.storyAvatar}
+                      />
+                    </div>
+                    <span className={postStyles.storyUsername}>
+                      {cardProps.creator.name.split(' ')[0]}
+                    </span>
+                  </div>
                 );
               })}
             </Carousel>

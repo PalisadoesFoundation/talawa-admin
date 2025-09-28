@@ -11,7 +11,6 @@ export interface InterfacePostCard {
   likeCount: number;
   commentCount: number;
   comments: Comment[];
-  upVoters: Partial<User>[];
   fetchPosts: () => void;
 }
 
