@@ -1,6 +1,5 @@
 import type { User } from 'types/User/type';
 import type { Comment } from 'types/Comment/type';
-import { TReturnOptionalNull } from 'i18next';
 export interface InterfacePostCard {
   _id: string;
   creator: Partial<User>;
@@ -12,7 +11,6 @@ export interface InterfacePostCard {
   likeCount: number;
   commentCount: number;
   comments: Comment[];
-  upVoters: Partial<User>[];
   fetchPosts: () => void;
 }
 
@@ -76,6 +74,9 @@ export interface InterfaceAttachment {
 
 export interface InterfaceCreator {
   id: string;
+  name: string;
+  email: string;
+  avatarURL?: string;
 }
 
 export interface InterfacePost {
