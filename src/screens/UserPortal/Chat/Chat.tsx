@@ -108,7 +108,7 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-
+  console.log('chatsListData', chatsListData);
   const { data: groupChatListData, refetch: groupChatListRefetch } =
     useQuery(GROUP_CHAT_LIST);
 
@@ -158,6 +158,17 @@ export default function chat(): JSX.Element {
       setChats(chatsListData.chatsByUser);
     }
   }, [chatsListData]);
+
+  // Auto-select the first chat when chats are loaded and no contact is selected
+  React.useEffect(() => {
+    if (chats.length > 0 && !selectedContact) {
+      const firstChat = chats[0];
+      const firstChatId = isNewChatType(firstChat)
+        ? firstChat.id
+        : firstChat._id;
+      setSelectedContact(firstChatId);
+    }
+  }, [chats, selectedContact]);
 
   return (
     <>

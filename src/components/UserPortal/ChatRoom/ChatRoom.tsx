@@ -303,14 +303,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       input: { id: props.selectedContact },
-      first: 20,
+      first: 10,
       after: null,
-      firstMessages: 50,
+      firstMessages: 10,
       afterMessages: null,
     },
-    skip: !props.selectedContact || props.selectedContact.trim() === '',
   });
-
+  console.log('chatData', chatData);
+  console.log('props.selectedContact', props.selectedContact);
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
   //   variables: {
   //     id: userId,
@@ -335,19 +335,20 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (chatData) {
       const chat = chatData.chat;
       setChat(chat);
-      if (chat.isGroup) {
-        setChatTitle(chat.name);
-        setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
-      } else {
-        const otherUser = chat.members?.edges?.find(
+
+      if (chat.members?.edges?.length === 2) {
+        const otherUser = chat.members.edges.find(
           (edge: { node: { id: string } }) => edge.node.id !== userId,
         )?.node;
         if (otherUser) {
           setChatTitle(`${otherUser.name}`);
-          setChatSubtitle(''); // Email not available in new schema
+          setChatSubtitle('');
           setChatImage(otherUser.avatarURL);
         }
+      } else if (chat.members?.edges?.length > 2) {
+        setChatTitle(chat.name);
+        setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
+        setChatImage(chat.avatarURL);
       }
     }
   }, [chatData]);
