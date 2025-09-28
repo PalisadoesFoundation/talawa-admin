@@ -110,7 +110,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
             id: post.id,
             caption: post.caption,
             createdAt,
-            pinnedAt: post.pinned ? new Date() : null,
+            pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
             creatorId: post.creator?.id || null,
             attachments,
           }}
