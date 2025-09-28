@@ -212,16 +212,7 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "^3.4.0-beta.19",
-   "overrides": {
-     "@types/react": "^19.1.1",
-     "@types/react-dom": "^19.1.1",
-     "whatwg-url": "^14.0.0",
-     "core-js": "^3.40.0",
-     "rc-color-picker": {
-       /* existing nested overrides */
-     }
-   },
+    "@apollo/client": "^3.4.0-beta.19"
   },
   "optionalDependencies": {
     "@rollup/rollup-darwin-arm64": "^4.46.2",
@@ -233,6 +224,8 @@
     "node": ">=20.x"
   },
   "overrides": {
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.1",
     "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "rc-color-picker": {
