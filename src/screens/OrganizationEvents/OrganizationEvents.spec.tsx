@@ -17,15 +17,11 @@ import i18n from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import { createTheme } from '@mui/material';
-import { ThemeProvider } from 'react-bootstrap';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
-import {
-  GET_ORGANIZATION_EVENTS_PG,
-  GET_ORGANIZATION_DATA_PG,
-} from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { describe, test, expect, vi } from 'vitest';
 
 const theme = createTheme({
