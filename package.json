@@ -72,7 +72,8 @@
   "scripts": {
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css,graphql}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css,graphql}\"",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "check-tsdoc": "node .github/workflows/check-tsdoc.js"
   },
   "eslintConfig": {
     "extends": [
