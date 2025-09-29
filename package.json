@@ -75,7 +75,8 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "test:coverage": "vitest run --coverage",
-    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts"
+    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
+    "build": "vite build --config config/vite.config.ts"
   },
   "eslintConfig": {
     "extends": [
