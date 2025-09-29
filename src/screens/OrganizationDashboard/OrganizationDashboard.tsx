@@ -1,29 +1,4 @@
-/**
- * OrganizationDashboard Component
- *
- * This component renders the dashboard for an organization, displaying
- * various statistics and information such as member count, admin count,
- * posts, events, and upcoming events. It also provides navigation to
- * related sections like posts and events.
- *
 
- * @returns  The rendered OrganizationDashboard component.
- *
- * @remarks
- * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
- * - Displays loading states and handles errors using `react-toastify`.
- * - Utilizes `react-bootstrap` for layout and styling.
- * - Integrates with `react-router-dom` for navigation.
- * - Supports internationalization using `react-i18next`.
- *
- *
- * @example
- * ```tsx
- * <OrganizationDashboard />
- * ```
- *
-
- */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, useRef, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
@@ -50,10 +25,6 @@ import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/Ca
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
 import { Navigate, useNavigate, useParams } from 'react-router';
-// import { Navigate, useNavigate, useParams } from 'react-router';
-// import gold from 'assets/images/gold.png';
-// import silver from 'assets/images/silver.png';
-// import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
 import type {
   IEvent,
@@ -62,7 +33,6 @@ import type {
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
-// import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
@@ -77,19 +47,11 @@ function OrganizationDashboard(): JSX.Element {
   const [blockedCount, setBlockedCount] = useState(0);
   const [venueCount, setVenueCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
-  // const currentDate = dayjs().toISOString();
-
-  // const leaderboardLink = `/leaderboard/${orgId}`;
-  // const peopleLink = `/orgpeople/${orgId}`;
   const postsLink = `/orgpost/${orgId}`;
   const eventsLink = `/orgevents/${orgId}`;
   const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = `/requests/${orgId}`;
   const venuesLink = `/orgvenues/${orgId}`;
-
-  /**
-   * Query to fetch organization data.
-   */
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
     useQuery(MEMBERSHIP_REQUEST, {
@@ -173,10 +135,6 @@ function OrganizationDashboard(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
-  /**
-   * graphQL query to fetch organization venues data
-   * this query fetches venue count for the dashboard card
-   */
   const {
     data: orgVenuesData,
     loading: venuesLoading,
@@ -249,9 +207,6 @@ function OrganizationDashboard(): JSX.Element {
     }
   }, [orgBlockedUsersData, fetchMoreBlockedUsers, orgId]);
 
-  /**
-   * UseEffect to update venue count when venue data is loaded.
-   */
   useEffect(() => {
     if (orgVenuesData && !hasFetchedAllVenues.current) {
       const newVenueCount = orgVenuesData.organization.venues.edges.length;
@@ -271,39 +226,6 @@ function OrganizationDashboard(): JSX.Element {
       }
     }
   }, [orgVenuesData, fetchMoreVenues, orgId]);
-
-  /**
-   * Query to fetch vvolunteer rankings.
-   */
-  // const {
-  //   data: rankingsData,
-  //   loading: rankingsLoading,
-  //   // error: errorRankings,
-  // }: {
-  //   data?: {
-  //     getVolunteerRanks: InterfaceVolunteerRank[];
-  //   };
-  //   loading: boolean;
-  //   error?: ApolloError;
-  // } = useQuery(VOLUNTEER_RANKING, {
-  //   variables: {
-  //     orgId,
-  //     where: {
-  //       orderBy: 'hours_DESC',
-  //       timeFrame: 'allTime',
-  //       limit: 3,
-  //     },
-  //   },
-  // });
-
-  // const rankings = useMemo(
-  //   () => rankingsData?.getVolunteerRanks || [],
-  //   [rankingsData],
-  // );
-
-  /**
-   * Query to fetch posts for the organization.
-   */
   const {
     data: postData,
     loading: loadingPost,
@@ -312,9 +234,6 @@ function OrganizationDashboard(): JSX.Element {
     variables: { id: orgId, first: 5 },
   });
 
-  /**
-   * UseEffect to handle errors and navigate if necessary.
-   */
   useEffect(() => {
     if (
       errorPost ||
@@ -373,7 +292,6 @@ function OrganizationDashboard(): JSX.Element {
                 className="mb-4"
                 data-testid="membersCount"
                 onClick={(): void => {
-                  // navigate(peopleLink);
                 }}
               >
                 <DashBoardCard
@@ -389,7 +307,6 @@ function OrganizationDashboard(): JSX.Element {
                 className="mb-4"
                 data-testid="adminsCount"
                 onClick={(): void => {
-                  // navigate(peopleLink);
                 }}
               >
                 <DashBoardCard
@@ -664,44 +581,9 @@ function OrganizationDashboard(): JSX.Element {
                 className={styles.containerBody}
                 style={{ padding: '0px' }}
               >
-                {/* {rankingsLoading ? (
-                  [...Array(3)].map((_, index) => {
-                    return <CardItemLoading key={`rankingLoading_${index}`} />;
-                  })
-                ) : rankings.length == 0 ? (
-                  <div className={styles.emptyContainer}>
-                    <h6>{t('noVolunteers')}</h6>
-                  </div>
-                ) : (
-                  rankings.map(({ rank, user, hoursVolunteered }, index) => {
-                    return (
-                      <div key={`ranking_${index}`}>
-                        <div className="d-flex ms-4 mt-1 mb-3">
-                          <div className="fw-bold me-2">
-                            {rank <= 3 ? (
-                              <img
-                                src={
-                                  rank === 1
-                                    ? gold
-                                    : rank === 2
-                                      ? silver
-                                      : bronze
-                                }
-                                alt="gold"
-                                className={styles.rankings}
-                              />
-                            ) : (
-                              rank
-                            )}
-                          </div>
-                          <div className="me-2 mt-2">{`${user.firstName} ${user.lastName}`}</div>
-                          <div className="mt-2">- {hoursVolunteered} hours</div>
-                        </div>
-                        {index < 2 && <hr />}
-                      </div>
-                    );
-                  })
-                )} */}
+                <div className={styles.emptyContainer}>
+                  <h6>{t('comingSoon')}</h6>
+                </div>
               </Card.Body>
             </Card>
           </Row>
