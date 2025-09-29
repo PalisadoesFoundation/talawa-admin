@@ -74,39 +74,6 @@ const addressBrooklyn = {
   __typename: 'Address',
 };
 
-type UserLite = {
-  _id: string;
-  firstName: string | null;
-  lastName: string | null;
-  email: string;
-  image: string | null;
-  createdAt?: string;
-  organizationsBlockedBy?: unknown[];
-  joinedOrganizations?: unknown[];
-};
-
-function makeUserData(user: UserLite) {
-  return {
-    user: {
-      createdAt: user.createdAt ?? '2023-04-13T04:53:17.742Z',
-      organizationsBlockedBy: user.organizationsBlockedBy ?? [],
-      joinedOrganizations: user.joinedOrganizations ?? [],
-      __typename: 'User',
-      ...user,
-    },
-    appUserProfile: {
-      _id: user._id,
-      adminFor: [],
-      createdOrganizations: [],
-      createdEvents: [],
-      eventAdmin: [],
-      isSuperAdmin: false,
-      __typename: 'AppUserProfile',
-    },
-    __typename: 'UserData',
-  };
-}
-
 const orgBronx = {
   _id: '6437904485008f171cf29924',
   name: 'Unity Foundation',
@@ -259,7 +226,7 @@ export const UserConnectionListMock: InterfaceGQLMock[] = [
       },
     },
   },
-  {
+   {
     request: {
       query: USERS_CONNECTION_LIST,
       variables: { firstName_contains: 'John', lastName_contains: 'Doe' },
@@ -267,13 +234,29 @@ export const UserConnectionListMock: InterfaceGQLMock[] = [
     result: {
       data: {
         users: [
-          makeUserData({
-            _id: '2',
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'john@example.com',
-            image: null,
-          }),
+          {
+            user: {
+              _id: '2',
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '2',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
         ],
       },
     },
@@ -286,13 +269,29 @@ export const UserConnectionListMock: InterfaceGQLMock[] = [
     result: {
       data: {
         users: [
-          makeUserData({
-            _id: '3',
-            firstName: 'John',
-            lastName: 'Smith',
-            email: 'johnsmith@example.com',
-            image: null,
-          }),
+          {
+            user: {
+              _id: '3',
+              firstName: 'John',
+              lastName: 'Smith',
+              email: 'johnsmith@example.com',
+              image: null,
+              createdAt: '2023-04-13T04:53:17.742Z',
+              organizationsBlockedBy: [],
+              joinedOrganizations: [],
+              __typename: 'User',
+            },
+            appUserProfile: {
+              _id: '3',
+              adminFor: [],
+              createdOrganizations: [],
+              createdEvents: [],
+              eventAdmin: [],
+              isSuperAdmin: false,
+              __typename: 'AppUserProfile',
+            },
+            __typename: 'UserData',
+          },
         ],
       },
     },

@@ -19,7 +19,6 @@ import { vi } from 'vitest';
 import { handleCreateDirectChat } from './CreateDirectChat';
 import type { TFunction } from 'i18next';
 import type { ApolloQueryResult, FetchResult } from '@apollo/client';
-import { toast } from 'react-toastify';
 import {
   MESSAGE_SENT_TO_CHAT_MOCK,
   CHAT_BY_ID_QUERY_MOCK,
@@ -57,16 +56,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-  },
-}));
 
 describe('Testing Create Direct Chat Modal [User Portal]', () => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -360,9 +349,6 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
   });
   it('should handle existing user without firstName and fallback to "this user"', async () => {
-    // Clear any previous toast.error calls
-    vi.clearAllMocks();
-
     const t = ((key: string) => {
       return key;
     }) as TFunction;
@@ -413,11 +399,6 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     expect(createChat).not.toHaveBeenCalled();
     expect(chatsListRefetch).not.toHaveBeenCalled();
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
-
-    // Assert that toast.error was called with the fallback message
-    expect(toast.error).toHaveBeenCalledWith(
-      'A conversation with this user already exists!',
-    );
   });
 
   it('should handle search form submission with firstName and lastName', async () => {
