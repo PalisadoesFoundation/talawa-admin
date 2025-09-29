@@ -2115,15 +2115,19 @@ export interface InterfaceCreateFund {
  * @property {string} upVoters.id - The unique identifier of the user who liked the post.
  * @property {function} fetchPosts - A function to fetch posts.
  */
+
+export type VoteType = 'up_vote' | 'down_vote' | null;
+export type VoteState = { hasVoted: boolean; voteType: VoteType };
+
 export interface InterfacePostCard {
   id: string;
   isModalView?: boolean;
   creator: {
     id: string;
     name: string;
-    email: string;
-    avatarURL?: string;
+    avatarURL?: string | null;
   };
+  hasUserVoted: VoteState;
   postedAt: string;
   pinnedAt?: string | null;
   image: string | null;
@@ -2131,17 +2135,6 @@ export interface InterfacePostCard {
   title: string;
   text: string;
   commentCount: number;
-  upVoters: {
-    edges: {
-      node: {
-        id: string;
-        creator: {
-          id: string;
-          name: string;
-        } | null;
-      };
-    }[];
-  };
   upVoteCount: number;
   downVoteCount: number;
   comments: {
@@ -2150,11 +2143,11 @@ export interface InterfacePostCard {
     creator: {
       id: string;
       name: string;
-      email: string;
+      avatarURL?: string | null;
     };
+    hasUserVoted: VoteState;
     downVoteCount: number;
     upVoteCount: number;
-    upVoters: { id: string }[];
     text: string;
   }[];
   fetchPosts: () => void;
