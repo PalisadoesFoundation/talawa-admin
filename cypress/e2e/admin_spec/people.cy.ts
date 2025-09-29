@@ -8,8 +8,7 @@ describe('Admin People Tab', () => {
   beforeEach(() => {
     cy.loginByApi('admin');
     dashboard.visit().verifyOnDashboard().openFirstOrganization();
-    cy.get('[data-cy="leftDrawerButton-People"]').should('be.visible').click();
-    cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
+    peoplePage.visitPeoplePage();
   });
 
   it('should search a particular member and then reset to all members', () => {
