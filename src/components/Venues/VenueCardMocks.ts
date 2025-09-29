@@ -6,6 +6,7 @@ export const MOCK_VENUE_ITEM = {
     name: 'Grand Hall',
     image: null,
     description: 'A spacious venue for large events.',
+    capacity: 500,
     attachments: [],
   },
 };
@@ -21,6 +22,7 @@ export const MOCK_VENUE_ITEM_WITH_IMAGE = {
       },
     ],
     description: 'A modern conference room with all amenities.',
+    capacity: 50,
   },
 };
 
@@ -31,6 +33,7 @@ export const MOCK_VENUE_ITEM_LONG_TEXT = {
     image: null,
     description:
       'This is a very long description that should be truncated. It contains more than seventy five characters to ensure we can test the truncation logic properly. This text will be cut off.',
+    capacity: 100,
     attachments: [],
   },
 };
