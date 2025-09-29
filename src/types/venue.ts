@@ -1,16 +1,22 @@
 import type { Organization } from 'types/Organization/type';
 
 export type Venue = {
-  _id: string;
-  capacity: number;
+  id: string; // Changed from _id to id for PostgreSQL compatibility
+  capacity?: number;
   description?: string;
   imageUrl?: string;
   name: string;
   organization: Organization;
+  attachments?: Array<{
+    url: string;
+    mimeType: string;
+  }>;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type VenueInput = {
-  capacity: number;
+  capacity?: number;
   description?: string;
   file?: string;
   name: string;
@@ -18,7 +24,7 @@ export type VenueInput = {
 };
 
 export type EditVenueInput = {
-  capacity?: number; // Optional
+  capacity?: number;
   description?: string; // Optional
   file?: string; // Optional
   id: string;

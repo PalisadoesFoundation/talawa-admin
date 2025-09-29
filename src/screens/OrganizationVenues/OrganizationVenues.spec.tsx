@@ -5,7 +5,7 @@
  * - Handling the absence of `orgId` by redirecting to the homepage.
  * - Fetching and displaying venues via Apollo GraphQL queries.
  * - Allowing users to search venues by name or description.
- * - Sorting venues by capacity in ascending or descending order.
+ * - Sorting venues by name in ascending or descending order.
  * - Verifying that long venue names or descriptions are handled gracefully.
  * - Testing loading states and edge cases for Apollo queries.
  * - Mocking GraphQL mutations for venue-related actions and validating their behavior.
@@ -53,7 +53,6 @@ const MOCKS = [
                   description: 'Updated description for venue 1',
                   createdAt: '2021-01-01T00:00:00Z',
                   attachments: [],
-                  capacity: '1000',
                   image: null,
                 },
               },
@@ -64,7 +63,6 @@ const MOCKS = [
                   description: 'Updated description for venue 2',
                   createdAt: '2021-01-01T00:00:00Z',
                   attachments: [],
-                  capacity: '1500',
                   image: null,
                 },
               },
@@ -76,7 +74,6 @@ const MOCKS = [
                     'Venue description that should be truncated because it is longer than 75 characters',
                   createdAt: '2021-01-01T00:00:00Z',
                   attachments: [],
-                  capacity: '2000',
                   image: null,
                 },
               },
@@ -100,7 +97,7 @@ const MOCKS = [
     result: {
       data: {
         deleteVenue: {
-          _id: 'venue1',
+          id: 'venue1',
           __typename: 'Venue',
         },
       },
@@ -116,7 +113,7 @@ const MOCKS = [
     result: {
       data: {
         deleteVenue: {
-          _id: 'venue2',
+          id: 'venue2',
           __typename: 'Venue',
         },
       },
@@ -249,7 +246,7 @@ describe('Organisation Venues', () => {
     });
   });
 
-  test('sorts the venue list by lowest capacity correctly', async () => {
+  test('sorts the venue list by Z to A correctly', async () => {
     renderOrganizationVenue(link);
     await waitFor(() =>
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
@@ -264,7 +261,7 @@ describe('Organisation Venues', () => {
     });
   });
 
-  test('sorts the venue list by highest capacity correctly', async () => {
+  test('sorts the venue list by A to Z correctly', async () => {
     renderOrganizationVenue(link);
     await waitFor(() =>
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
@@ -448,7 +445,6 @@ describe('Organisation Venues Error Handling', () => {
                         id: 'venue1',
                         name: 'Test Venue',
                         description: 'Test Description',
-                        capacity: '100',
                         image: null,
                         createdAt: '2021-01-01T00:00:00Z',
                         attachments: [],

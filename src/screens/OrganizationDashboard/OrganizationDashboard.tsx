@@ -36,6 +36,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
+  GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
@@ -43,6 +44,7 @@ import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
 import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
+import VenuesIcon from 'assets/svgs/venues.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
@@ -57,7 +59,6 @@ import type {
   IEvent,
   InterfaceOrganizationMembersConnectionEdgePg,
   InterfaceOrganizationPg,
-  InterfaceOrganizationEventsConnectionEdgePg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
@@ -74,6 +75,7 @@ function OrganizationDashboard(): JSX.Element {
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
+  const [venueCount, setVenueCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
   if (!orgId) {
@@ -87,6 +89,7 @@ function OrganizationDashboard(): JSX.Element {
   const eventsLink = `/orgevents/${orgId}`;
   const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = `/requests/${orgId}`;
+  const venuesLink = `/orgvenues/${orgId}`;
 
   /**
    * Query to fetch organization data.
@@ -107,6 +110,7 @@ function OrganizationDashboard(): JSX.Element {
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedAllEvents = useRef(false);
   const hasFetchedAllBlockedUsers = useRef(false);
+  const hasFetchedAllVenues = useRef(false);
 
   const {
     data: orgMemberData,
@@ -173,6 +177,29 @@ function OrganizationDashboard(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  /**
+   * graphQL query to fetch organization venues data
+   * this query fetches venue count for the dashboard card
+   */
+  const {
+    data: orgVenuesData,
+    loading: venuesLoading,
+    error: venuesError,
+    fetchMore: fetchMoreVenues,
+  } = useQuery<{
+    organization: {
+      venues: {
+        edges: Array<{
+          node: { id: string; name: string; description?: string };
+        }>;
+        pageInfo: { hasNextPage: boolean; endCursor: string };
+      };
+    };
+  }>(GET_ORGANIZATION_VENUES_PG, {
+    variables: { id: orgId, first: 32, after: null },
+    notifyOnNetworkStatusChange: true,
+  });
+
   useEffect(() => {
     if (orgEventsData && !hasFetchedAllEvents.current) {
       const now = new Date();
@@ -227,6 +254,29 @@ function OrganizationDashboard(): JSX.Element {
   }, [orgBlockedUsersData, fetchMoreBlockedUsers, orgId]);
 
   /**
+   * UseEffect to update venue count when venue data is loaded.
+   */
+  useEffect(() => {
+    if (orgVenuesData && !hasFetchedAllVenues.current) {
+      const newVenueCount = orgVenuesData.organization.venues.edges.length;
+
+      setVenueCount((prevCount) => prevCount + newVenueCount);
+
+      if (orgVenuesData.organization.venues.pageInfo.hasNextPage) {
+        fetchMoreVenues({
+          variables: {
+            id: orgId,
+            first: 32,
+            after: orgVenuesData.organization.venues.pageInfo.endCursor,
+          },
+        });
+      } else {
+        hasFetchedAllVenues.current = true;
+      }
+    }
+  }, [orgVenuesData, fetchMoreVenues]); // Removed orgId from dependency array
+
+  /**
    * Query to fetch vvolunteer rankings.
    */
   // const {
@@ -275,7 +325,8 @@ function OrganizationDashboard(): JSX.Element {
       orgPostsError ||
       orgMemberError ||
       orgEventsError ||
-      orgBlockedUsersError
+      orgBlockedUsersError ||
+      venuesError
     ) {
       toast.error(tErrors('errorLoading', { entity: '' }));
       navigate('/');
@@ -286,6 +337,7 @@ function OrganizationDashboard(): JSX.Element {
     orgMemberError,
     orgEventsError,
     orgBlockedUsersError,
+    venuesError,
   ]);
 
   return (
@@ -295,9 +347,10 @@ function OrganizationDashboard(): JSX.Element {
           {orgMemberLoading ||
           orgPostsLoading ||
           orgEventsLoading ||
-          orgBlockedUsersLoading ? (
+          orgBlockedUsersLoading ||
+          venuesLoading ? (
             <Row style={{ display: 'flex' }}>
-              {[...Array(6)].map((_, index) => {
+              {[...Array(7)].map((_, index) => {
                 return (
                   <Col
                     xs={6}
@@ -411,6 +464,22 @@ function OrganizationDashboard(): JSX.Element {
                   }
                   title={tCommon('requests')}
                   icon={<UsersIcon fill="#555555" />}
+                />
+              </Col>
+              <Col
+                xs={6}
+                sm={4}
+                role="button"
+                className="mb-4"
+                data-testid="venuesCount"
+                onClick={async (): Promise<void> => {
+                  await navigate(venuesLink);
+                }}
+              >
+                <DashBoardCard
+                  count={venueCount}
+                  title={t('venues')}
+                  icon={<VenuesIcon fill="#555555" />}
                 />
               </Col>
             </Row>

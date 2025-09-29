@@ -426,9 +426,9 @@ export const VENUE_LIST = gql`
           node {
             id
             name
+            capacity
             description
             createdAt
-            capacity
             attachments {
               url
               mimeType
