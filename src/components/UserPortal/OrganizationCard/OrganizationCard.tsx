@@ -147,14 +147,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = membershipRequests?.[0]?.status === 'pending';
-
     try {
-      if (!membershipRequest) {
-        toast.error(t('MembershipRequestNotFound') as string);
-        return;
-      }
-
       await cancelMembershipRequest({
         variables: {
           membershipRequestId: membershipRequests?.[0]?.membershipRequestId,
