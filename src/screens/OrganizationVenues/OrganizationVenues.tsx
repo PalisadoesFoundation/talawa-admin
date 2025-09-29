@@ -8,7 +8,7 @@
  *
  * @Features
  * - Search venues by name or description.
- * - Sort venues by highest or lowest capacity.
+ * - Sort venues by alphabetical order (A to Z or Z to A).
  * - Create new venues or edit existing ones using a modal.
  * - Delete venues with confirmation.
  * - Displays a loader while fetching data and handles errors gracefully.
@@ -136,7 +136,7 @@ function organizationVenues(): JSX.Element {
 
   /**
    * Updates the sort order state when the user selects a sort option.
-   * @param value - The order to sort venues by (highest or lowest capacity).
+   * @param value - The order to sort venues by (A to Z or Z to A).
    */
   const handleSortChange = (value: string): void => {
     setSortOrder(value as 'highest' | 'lowest');
@@ -196,14 +196,14 @@ function organizationVenues(): JSX.Element {
         );
       }
 
-      // Client-side sorting by capacity
+      // Client-side sorting by name (since capacity doesn't exist in PostgreSQL schema)
       if (filteredVenues.length > 0) {
         filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
+          const nameA = a.node.name.toLowerCase();
+          const nameB = b.node.name.toLowerCase();
           return sortOrder === 'highest'
-            ? capacityB - capacityA
-            : capacityA - capacityB;
+            ? nameB.localeCompare(nameA)
+            : nameA.localeCompare(nameB);
         });
       }
 
@@ -235,12 +235,10 @@ function organizationVenues(): JSX.Element {
           <SortingButton
             title="Sort Venues"
             sortingOptions={[
-              { label: t('highestCapacity'), value: 'highest' },
-              { label: t('lowestCapacity'), value: 'lowest' },
+              { label: t('A to Z'), value: 'highest' },
+              { label: t('Z to A'), value: 'lowest' },
             ]}
-            selectedOption={t(
-              sortOrder === 'highest' ? 'highestCapacity' : 'lowestCapacity',
-            )}
+            selectedOption={t(sortOrder === 'highest' ? 'A to Z' : 'Z to A')}
             onSortChange={handleSortChange}
             dataTestIdPrefix="sortVenues"
             className={styles.dropdown} // Pass a custom class name if needed

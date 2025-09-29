@@ -2023,21 +2023,22 @@ export interface InterfaceQueryUserListItem {
 /**
  * @interface InterfaceQueryVenueListItem
  * @description Defines the structure for a venue list item returned from a query.
- * @property {string} _id - The unique identifier of the venue.
+ * @property {string} id - The unique identifier of the venue.
  * @property {string} name - The name of the venue.
  * @property {string | null} description - The description of the venue, or null.
  * @property {string | null} image - The URL of the venue's image, or null.
- * @property {string} capacity - The capacity of the venue.
  */
 export interface InterfaceQueryVenueListItem {
   node: {
     id: string;
     name: string;
+    capacity?: number;
     description: string | null;
     image?: string | null;
-    capacity?: number;
+    createdAt?: string;
     attachments?: Array<{
       url: string;
+      mimeType?: string;
       name?: string;
     }>;
   };

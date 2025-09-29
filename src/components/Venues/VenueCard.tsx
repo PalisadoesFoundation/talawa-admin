@@ -52,6 +52,9 @@ const VenueCard = ({
 }: InterfaceVenueCardProps): JSX.Element => {
   // Translation hook for internationalization
   const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationVenues',
+  });
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
@@ -69,19 +72,33 @@ const VenueCard = ({
             crossOrigin="anonymous"
           />
           <Card.Body className="pb-0">
-            <Card.Title className="d-flex justify-content-between">
+            <Card.Title className="d-flex justify-content-between align-items-center">
               {/* Venue name with truncation if too long */}
               <div className={styles.title}>
                 {venueItem.node.name.length > 25
                   ? venueItem.node.name.slice(0, 25) + '...'
                   : venueItem.node.name}
               </div>
-
-              {/* Venue capacity with icon */}
-              {venueItem.node.capacity != null && (
-                <div className={styles.capacityLabel}>
-                  {tCommon('capacity')}: {venueItem.node.capacity}
-                  <PeopleIcon className="ms-1" width={16} height={16} />
+              {/* Venue capacity badge positioned to the right */}
+              {venueItem.node.capacity && (
+                <div
+                  className="d-flex align-items-center px-2 py-1 rounded"
+                  style={{
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    fontSize: '0.75rem',
+                    fontWeight: '500',
+                  }}
+                >
+                  <PeopleIcon
+                    className="me-1"
+                    width={12}
+                    height={12}
+                    fill="white"
+                  />
+                  <span>
+                    {t('capacity')}: {venueItem.node.capacity}
+                  </span>
                 </div>
               )}
             </Card.Title>
