@@ -74,7 +74,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css,graphql}\"",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts"
   },
   "eslintConfig": {
     "extends": [
