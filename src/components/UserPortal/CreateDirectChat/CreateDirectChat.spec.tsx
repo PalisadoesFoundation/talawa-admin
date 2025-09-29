@@ -58,6 +58,31 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+function renderChatWithMocks(): void {
+  const mocks = [
+    ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+    ...MESSAGE_SENT_TO_CHAT_MOCK,
+    ...UserConnectionListMock,
+    ...CHATS_LIST_MOCK,
+    ...CHAT_BY_ID_QUERY_MOCK,
+    ...CREATE_CHAT_MUTATION_MOCK,
+    ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+    ...UNREAD_CHAT_LIST_QUERY_MOCK,
+    ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+  ];
+  render(
+    <MockedProvider addTypename={false} mocks={mocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <ChatComp />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+}
+
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
   toast: {
@@ -86,28 +111,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
   });
 
   it('Open and close create new direct chat modal', async () => {
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatComp />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderChatWithMocks();
 
     await wait();
 
@@ -124,8 +128,9 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     const searchInput = (await screen.findByTestId(
       'searchUser',
     )) as HTMLInputElement;
-    expect(searchInput).toBeInTheDocument();
 
+    const addBtns = await screen.findAllByTestId('addBtn');
+    expect(addBtns.length).toBeGreaterThan(0);
     fireEvent.change(searchInput, { target: { value: 'Disha' } });
 
     expect(searchInput.value).toBe('Disha');
@@ -140,28 +145,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
   it('create new direct chat', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatComp />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderChatWithMocks();
 
     await wait();
 
@@ -399,6 +383,12 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
         description: '',
       },
     ];
+
+    const errorHandlerSpy = vi.spyOn(
+      await import('utils/errorHandler'),
+      'errorHandler',
+    );
+
     await handleCreateDirectChat(
       '2',
       chats,
@@ -413,6 +403,14 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     expect(chatsListRefetch).not.toHaveBeenCalled();
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
 
+    // Assert that errorHandler was called with the fallback message
+    expect(errorHandlerSpy).toHaveBeenCalledWith(
+      t,
+      expect.objectContaining({
+        message: 'A conversation with this user already exists!',
+      }),
+    );
+
     // Assert that toast.error was called with the fallback message
     expect(toast.error).toHaveBeenCalledWith(
       'A conversation with this user already exists!',
@@ -421,28 +419,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
   it('should handle search form submission with firstName and lastName', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatComp />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderChatWithMocks();
 
     await wait();
 
@@ -461,9 +438,8 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     const submitBtn = await screen.findByTestId('submitBtn');
     fireEvent.click(submitBtn);
 
-    await waitFor(() => {
-      expect(searchInput).toBeInTheDocument();
-    });
+    const addBtns = await screen.findAllByTestId('addBtn');
+    expect(addBtns.length).toBeGreaterThan(0);
 
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
@@ -471,28 +447,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
   it('should handle search form submission with only firstName', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatComp />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderChatWithMocks();
 
     await wait();
 
@@ -511,9 +466,8 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
     const submitBtn = await screen.findByTestId('submitBtn');
     fireEvent.click(submitBtn);
 
-    await waitFor(() => {
-      expect(searchInput).toBeInTheDocument();
-    });
+    const addBtns = await screen.findAllByTestId('addBtn');
+    expect(addBtns.length).toBeGreaterThan(0);
 
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
@@ -521,28 +475,7 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
   it('should handle search form submission with empty search (triggering firstName || fallback)', async () => {
     setItem('userId', '1');
-    const mock = [
-      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
-      ...MESSAGE_SENT_TO_CHAT_MOCK,
-      ...UserConnectionListMock,
-      ...CHATS_LIST_MOCK,
-      ...CHAT_BY_ID_QUERY_MOCK,
-      ...CREATE_CHAT_MUTATION_MOCK,
-      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
-      ...UNREAD_CHAT_LIST_QUERY_MOCK,
-      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
-    ];
-    render(
-      <MockedProvider addTypename={false} mocks={mock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ChatComp />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderChatWithMocks();
 
     await wait();
 
@@ -555,15 +488,14 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
       'searchUser',
     )) as HTMLInputElement;
 
-    fireEvent.change(searchInput, { target: { value: ' ' } });
-    expect(searchInput.value).toBe(' ');
+    fireEvent.change(searchInput, { target: { value: '' } });
+    expect(searchInput.value).toBe('');
 
     const submitBtn = await screen.findByTestId('submitBtn');
     fireEvent.click(submitBtn);
 
-    await waitFor(() => {
-      expect(searchInput).toBeInTheDocument();
-    });
+    const addBtns = await screen.findAllByTestId('addBtn');
+    expect(addBtns.length).toBeGreaterThan(0);
 
     const closeButton = screen.getByRole('button', { name: /close/i });
     fireEvent.click(closeButton);
