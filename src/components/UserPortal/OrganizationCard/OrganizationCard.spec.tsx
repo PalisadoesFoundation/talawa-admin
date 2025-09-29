@@ -225,7 +225,7 @@ const defaultProps: InterfaceOrganizationCardProps = {
   membersCount: 0,
   adminsCount: 0,
   membershipRequestStatus: '',
-  userRegistrationRequired: false,
+  isUserRegistrationRequired: false,
   membershipRequests: [],
   isJoined: false,
 };
@@ -355,7 +355,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={successMocks}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={true}
+            isUserRegistrationRequired={true}
             isJoined={false}
           />
         </TestWrapper>,
@@ -374,7 +374,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={successMocks}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={false}
+            isUserRegistrationRequired={false}
             isJoined={false}
           />
         </TestWrapper>,
@@ -393,7 +393,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={errorMocks}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={true}
+            isUserRegistrationRequired={true}
             isJoined={false}
           />
         </TestWrapper>,
@@ -410,8 +410,12 @@ describe('OrganizationCard Component with New Interface', () => {
     it('should handle membership withdrawal successfully', async () => {
       const props = {
         ...defaultProps,
-        membershipRequestStatus: 'pending',
-        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+        membershipRequests: [
+          {
+            membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
+            status: 'pending',
+          },
+        ],
       };
 
       render(
@@ -437,8 +441,12 @@ describe('OrganizationCard Component with New Interface', () => {
 
       const props = {
         ...defaultProps,
-        membershipRequestStatus: 'pending',
-        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+        membershipRequests: [
+          {
+            membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
+            status: 'pending',
+          },
+        ],
       };
 
       const errorMocks: MockedResponse[] = [
@@ -498,7 +506,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={errorMocksWithAlreadyJoined}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={false}
+            isUserRegistrationRequired={false}
             isJoined={false}
           />
         </TestWrapper>,
@@ -534,11 +542,10 @@ describe('OrganizationCard Component with New Interface', () => {
 
       const props = {
         ...defaultProps,
-        membershipRequestStatus: 'pending',
         membershipRequests: [
           {
-            id: 'requestId',
-            user: { id: 'differentUserId' },
+            membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
+            status: 'pending',
           },
         ],
       };
@@ -581,8 +588,13 @@ describe('OrganizationCard Component with New Interface', () => {
 
       const props = {
         ...defaultProps,
-        membershipRequestStatus: 'pending',
-        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+        // membershipRequestStatus: 'pending',
+        membershipRequests: [
+          {
+            membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
+            status: 'pending',
+          },
+        ],
       };
 
       render(
@@ -610,8 +622,12 @@ describe('OrganizationCard Component with New Interface', () => {
 
       const props = {
         ...defaultProps,
-        membershipRequestStatus: 'pending',
-        membershipRequests: [{ id: 'requestId', user: { id: 'mockUserId' } }],
+        membershipRequests: [
+          {
+            membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
+            status: 'pending',
+          },
+        ],
       };
 
       const errorMocks: MockedResponse[] = [
@@ -661,7 +677,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={genericErrorMock}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={false}
+            isUserRegistrationRequired={false}
             isJoined={false}
           />
         </TestWrapper>,
@@ -747,7 +763,7 @@ describe('OrganizationCard Component with New Interface', () => {
         <TestWrapper mocks={[joinMutation, userOrgQuery, organizationListMock]}>
           <OrganizationCard
             {...defaultProps}
-            userRegistrationRequired={false}
+            isUserRegistrationRequired={false}
             isJoined={false}
           />
         </TestWrapper>,

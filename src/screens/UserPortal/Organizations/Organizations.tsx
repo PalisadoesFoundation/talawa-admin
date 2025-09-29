@@ -49,8 +49,6 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 
-const { getItem } = useLocalStorage();
-
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -80,12 +78,10 @@ interface IOrganizationCardProps {
     state: string;
   };
   membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
+  isUserRegistrationRequired: boolean;
   membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
+    status: string;
+    membershipRequestId: string;
   }[];
   isJoined: boolean;
   membersCount: number; // Add this
@@ -120,6 +116,7 @@ interface IOrganization {
   adminsCount?: number;
   membersCount?: number;
   admins: [];
+  isUserRegistrationRequired: boolean;
   members?: InterfaceMembersConnection; // <-- update this
   address: {
     city: string;
@@ -129,12 +126,9 @@ interface IOrganization {
     state: string;
   };
   membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
   membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
+    status: string;
+    membershipRequestId: string;
   }[];
 }
 
@@ -145,6 +139,7 @@ interface IOrgData {
   id: string;
   adminsCount: number;
   membersCount: number;
+  isUserRegistrationRequired: boolean;
   members: {
     edges: [
       {
@@ -156,6 +151,10 @@ interface IOrgData {
       },
     ];
   };
+  membershipRequests: {
+    status: string;
+    membershipRequestId: string;
+  }[];
   description: string;
   __typename: string;
   name: string;
@@ -214,7 +213,7 @@ export default function organizations(): React.JSX.Element {
     loading: loadingAll,
     refetch: refetchAll,
   } = useQuery(ORGANIZATION_FILTER_LIST, {
-    variables: { filter: filterName },
+    variables: { filter: filterName, userId: userId },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
@@ -299,8 +298,8 @@ export default function organizations(): React.JSX.Element {
             membersCount: org.membersCount || 0,
             admins: [],
             membershipRequestStatus: isMember ? 'accepted' : '',
-            userRegistrationRequired: false,
-            membershipRequests: [],
+            isUserRegistrationRequired: org.isUserRegistrationRequired,
+            membershipRequests: org.membershipRequests,
             isJoined: isMember, // Set based on membership check
           };
         });
@@ -490,8 +489,8 @@ export default function organizations(): React.JSX.Element {
                           address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,
-                          userRegistrationRequired:
-                            organization.userRegistrationRequired,
+                          isUserRegistrationRequired:
+                            organization.isUserRegistrationRequired,
                           membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,

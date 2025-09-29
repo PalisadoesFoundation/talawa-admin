@@ -16,12 +16,10 @@ export interface InterfaceOrganizationCardProps {
   membersCount: number;
   adminsCount: number;
   membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
+  isUserRegistrationRequired: boolean;
   membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
+    status: string;
+    membershipRequestId: string;
   }[];
   isJoined?: boolean;
 }

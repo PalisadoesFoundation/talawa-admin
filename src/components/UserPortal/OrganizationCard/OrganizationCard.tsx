@@ -70,8 +70,7 @@ function OrganizationCard({
   adminsCount,
   membersCount,
   address,
-  membershipRequestStatus,
-  userRegistrationRequired,
+  isUserRegistrationRequired,
   membershipRequests,
   isJoined,
 }: InterfaceOrganizationCardProps): JSX.Element {
@@ -117,7 +116,7 @@ function OrganizationCard({
    */
   async function joinOrganization(): Promise<void> {
     try {
-      if (userRegistrationRequired) {
+      if (isUserRegistrationRequired) {
         await sendMembershipRequest({ variables: { organizationId: id } });
         toast.success(t('MembershipRequestSent') as string);
       } else {
@@ -148,9 +147,7 @@ function OrganizationCard({
       return;
     }
 
-    const membershipRequest = membershipRequests.find(
-      (request) => request.user.id === userId,
-    );
+    const membershipRequest = membershipRequests?.[0]?.status === 'pending';
 
     try {
       if (!membershipRequest) {
@@ -159,7 +156,9 @@ function OrganizationCard({
       }
 
       await cancelMembershipRequest({
-        variables: { membershipRequestId: membershipRequest.id },
+        variables: {
+          membershipRequestId: membershipRequests?.[0]?.membershipRequestId,
+        },
       });
 
       toast.success(t('MembershipRequestWithdrawn') as string);
@@ -228,7 +227,7 @@ function OrganizationCard({
           >
             {t('visit')}
           </Button>
-        ) : membershipRequestStatus === 'pending' ? (
+        ) : membershipRequests?.[0]?.status === 'pending' ? (
           <Button
             variant="danger"
             onClick={withdrawMembershipRequest}
