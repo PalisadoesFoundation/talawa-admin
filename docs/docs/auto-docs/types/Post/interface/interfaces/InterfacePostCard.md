@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundat
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
+Defined in: [src/types/Post/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L15)
 
 #### Returns
 
@@ -89,6 +89,14 @@ Defined in: [src/types/Post/interface.ts:9](https://github.com/PalisadoesFoundat
 > **title**: `string`
 
 Defined in: [src/types/Post/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L10)
+
+***
+
+### upVoters
+
+> **upVoters**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
+
+Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 
 ***
 

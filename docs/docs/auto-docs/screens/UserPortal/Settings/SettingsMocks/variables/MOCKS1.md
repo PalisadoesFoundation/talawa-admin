@@ -64,7 +64,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 #### result.data.currentUser.createdAt
 
-> **createdAt**: `string` = `'2025-02-06T03:10:50.254Z'`
+> **createdAt**: `string` = `'2025-02-06T03:10:50.254'`
 
 #### result.data.currentUser.description
 
@@ -128,7 +128,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 #### result.data.currentUser.updatedAt
 
-> **updatedAt**: `string` = `'2025-02-06T03:22:17.808Z'`
+> **updatedAt**: `string` = `'2025-02-06T03:22:17.808'`
 
 #### result.data.currentUser.workPhoneNumber
 

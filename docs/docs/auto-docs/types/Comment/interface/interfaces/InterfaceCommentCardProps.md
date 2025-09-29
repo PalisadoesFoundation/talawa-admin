@@ -20,7 +20,7 @@ Defined in: [src/types/Comment/interface.ts:5](https://github.com/PalisadoesFoun
 
 > **handleDislikeComment**: (`commentId`) => `void`
 
-Defined in: [src/types/Comment/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L9)
+Defined in: [src/types/Comment/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L10)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Comment/interface.ts:9](https://github.com/PalisadoesFoun
 
 > **handleLikeComment**: (`commentId`) => `void`
 
-Defined in: [src/types/Comment/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L8)
+Defined in: [src/types/Comment/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L9)
 
 #### Parameters
 
@@ -71,5 +71,13 @@ Defined in: [src/types/Comment/interface.ts:6](https://github.com/PalisadoesFoun
 ### text
 
 > **text**: `string`
+
+Defined in: [src/types/Comment/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L8)
+
+***
+
+### upVoters
+
+> **upVoters**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
 
 Defined in: [src/types/Comment/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/interface.ts#L7)
