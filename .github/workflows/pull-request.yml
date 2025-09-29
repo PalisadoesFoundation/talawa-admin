@@ -378,7 +378,7 @@ jobs:
             kill "$(cat .pidfile_prod)"
           fi
       - name: Start Development App
-        working-directory: ./
+      - name: Start Development App
         run: |
           npm run serve &
           echo $! > .pidfile_dev
