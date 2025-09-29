@@ -54,7 +54,7 @@ export const MOCKS = [
               lastName: 'Garza',
               gender: null,
               birthDate: null,
-              createdAt: '2030-04-13T10:23:17.742',
+              createdAt: '2030-04-13T10:23:17.742Z',
               eventsAttended: [
                 {
                   __typename: 'Event',
@@ -73,7 +73,7 @@ export const MOCKS = [
               lastName: 'Smith',
               gender: null,
               birthDate: null,
-              createdAt: '2030-04-13T10:23:17.742',
+              createdAt: '2030-04-13T10:23:17.742Z',
               eventsAttended: [
                 {
                   __typename: 'Event',

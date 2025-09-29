@@ -5928,7 +5928,28 @@ form {
   top: 0;
   left: 0;
   width: 100%;
-  scale: 1.5;
+  transform: scale(1.5);
+}
+
+.userImageUserComment {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserComment img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
 }
 
 .previewImage {
