@@ -53,3 +53,6 @@ debug.log
 cypress/videos
 cypress/screenshots
 .nyc_output
+
+# Redis related
+dump.rdb
