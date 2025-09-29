@@ -70,11 +70,6 @@ function OrganizationDashboard(): JSX.Element {
   const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const navigate = useNavigate();
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
@@ -275,7 +270,7 @@ function OrganizationDashboard(): JSX.Element {
         hasFetchedAllVenues.current = true;
       }
     }
-  }, [orgVenuesData, fetchMoreVenues]); // Removed orgId from dependency array
+  }, [orgVenuesData, fetchMoreVenues, orgId]);
 
   /**
    * Query to fetch vvolunteer rankings.
@@ -340,6 +335,10 @@ function OrganizationDashboard(): JSX.Element {
     orgBlockedUsersError,
     venuesError,
   ]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   return (
     <>
