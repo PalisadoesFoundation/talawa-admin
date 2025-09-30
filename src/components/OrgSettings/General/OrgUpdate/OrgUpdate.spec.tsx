@@ -62,6 +62,7 @@ const mockOrgData = {
     avatarURL: null,
     createdAt: '2024-02-24T00:00:00Z',
     updatedAt: '2024-02-24T00:00:00Z',
+    isUserRegistrationRequired: false,
   },
 };
 
@@ -90,6 +91,7 @@ describe('OrgUpdate Component', () => {
             state: 'Test State',
             postalCode: '12345',
             countryCode: 'US',
+            userRegistrationRequired: false,
           },
         },
       },
@@ -184,7 +186,7 @@ describe('OrgUpdate Component', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        'Organization updated successfully',
+        i18n.t('orgUpdate.successfulUpdated'),
       );
     });
   });
@@ -230,6 +232,7 @@ describe('OrgUpdate Component', () => {
             state: 'Test State',
             postalCode: '12345',
             countryCode: 'US',
+            userRegistrationRequired: false,
           },
         },
       },
@@ -278,7 +281,6 @@ describe('OrgUpdate Component', () => {
   }));
 
   it('handles file upload', async () => {
-    const convertToBase64 = (await import('utils/convertToBase64')).default;
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     render(
@@ -448,16 +450,7 @@ describe('OrgUpdate Component', () => {
                 avatarURL: null,
                 createdAt: '2024-02-24T00:00:00Z',
                 updatedAt: '2024-02-24T00:00:00Z',
-                creator: {
-                  id: '1',
-                  name: 'Test Creator',
-                  emailAddress: 'creator@test.com',
-                },
-                updater: {
-                  id: '1',
-                  name: 'Test Updater',
-                  emailAddress: 'updater@test.com',
-                },
+                isUserRegistrationRequired: false,
               },
             },
           },
@@ -476,6 +469,7 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
+                userRegistrationRequired: false,
               },
             },
           },
@@ -591,6 +585,7 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
+                userRegistrationRequired: false,
               },
             },
           },
@@ -640,6 +635,7 @@ describe('OrgUpdate Component', () => {
         avatarURL: null,
         createdAt: '2024-02-24T00:00:00Z',
         updatedAt: '2024-02-24T00:00:00Z',
+        isUserRegistrationRequired: false,
       },
     };
 
@@ -679,17 +675,17 @@ describe('OrgUpdate Component', () => {
         .closest('.d-flex')
         ?.querySelector('input[type="checkbox"]');
       expect(userRegSwitch).toBeInTheDocument();
-      expect(userRegSwitch).not.toBeChecked();
+      expect(userRegSwitch).toBeChecked();
 
       if (userRegSwitch) {
         fireEvent.click(userRegSwitch);
-        expect(userRegSwitch).toBeChecked();
+        expect(userRegSwitch).not.toBeChecked();
       }
 
       if (userRegSwitch) {
         fireEvent.click(userRegSwitch);
       }
-      expect(userRegSwitch).not.toBeChecked();
+      expect(userRegSwitch).toBeChecked();
     });
 
     it('toggles visibility switch correctly', async () => {
@@ -783,6 +779,7 @@ describe('OrgUpdate Component', () => {
                 state: 'Test State',
                 postalCode: '12345',
                 countryCode: 'US',
+                userRegistrationRequired: false,
               },
             },
           },
@@ -814,13 +811,10 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(
-            'Failed to update organization',
-          );
+          expect(toast.error).toHaveBeenCalledWith('failedToUpdateOrg');
         },
         { timeout: 2000 },
       );
-
       expect(saveButton).not.toBeDisabled();
       expect(saveButton).toHaveTextContent('Save Changes');
     });
