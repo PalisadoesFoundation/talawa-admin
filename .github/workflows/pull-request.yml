@@ -304,6 +304,7 @@ jobs:
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           exclude: 'docs/'
           files: ./coverage/vitest/lcov.info
           flags: vitest
