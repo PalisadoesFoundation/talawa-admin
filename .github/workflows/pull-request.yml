@@ -301,14 +301,6 @@ jobs:
         run: |
           npm run test:coverage
 
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          exclude: 'docs/'
-          files: ./coverage/vitest/lcov.info
-          flags: vitest
-          fail_ci_if_error: true
-
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
