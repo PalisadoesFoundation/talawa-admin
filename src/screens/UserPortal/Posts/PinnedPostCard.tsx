@@ -25,16 +25,18 @@ import type { InterfacePostCard } from 'utils/interfaces';
 export interface InterfacePinnedPostCardProps {
   post: InterfacePostCard;
   onClick: () => void;
+  'data-testid'?: string;
 }
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   post,
   onClick,
+  'data-testid': dataTestId,
 }) => {
   return (
     <Card
       onClick={onClick}
-      data-testid="pinned-post"
+      data-testid={dataTestId}
       sx={{
         display: 'flex',
         flexDirection: 'column',

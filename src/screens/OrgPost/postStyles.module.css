@@ -232,3 +232,12 @@
 .carousel-item-spacing:last-child {
   margin-right: 0; /* remove gap after last card */
 }
+
+.pinned-posts-carousel-container {
+  display: flex;
+  gap: 10px; /* space between items */
+  overflow-x: auto;
+}
+.pinned-posts-carousel-item {
+  margin-right: 10px;
+}

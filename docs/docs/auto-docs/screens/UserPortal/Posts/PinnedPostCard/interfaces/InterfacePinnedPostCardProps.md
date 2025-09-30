@@ -8,6 +8,14 @@ Defined in: [src/screens/UserPortal/Posts/PinnedPostCard.tsx:25](https://github.
 
 ## Properties
 
+### data-testid?
+
+> `optional` **data-testid**: `string`
+
+Defined in: [src/screens/UserPortal/Posts/PinnedPostCard.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/PinnedPostCard.tsx#L28)
+
+***
+
 ### onClick()
 
 > **onClick**: () => `void`

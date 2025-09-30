@@ -24,6 +24,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { InterfacePost } from 'types/Post/interface';
 import AboutImg from 'assets/images/defaultImg.png';
+import styles from './postStyles.module.css';
 
 interface InterfacePinnedPostsStoryProps {
   pinnedPosts: InterfacePost[];
@@ -60,7 +61,7 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
         showDots={false}
         infinite={false}
         keyBoardControl
-        itemClass="carousel-item-spacing"
+        containerClass={styles.pinnedPostsCarouselContainer}
       >
         {pinnedPosts.map((post) => (
           <Card
