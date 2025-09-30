@@ -24,7 +24,7 @@ import type {
 /**
  * Props interface for the dashboard data hook
  */
-export interface UseDashboardDataProps {
+export interface InterfaceUseDashboardDataProps {
   orgId: string | undefined;
   tErrors: (key: string) => string;
 }
@@ -32,7 +32,7 @@ export interface UseDashboardDataProps {
 /**
  * Return type for the dashboard data hook
  */
-export interface DashboardData {
+export interface InterfaceDashboardData {
   memberCount: number;
   adminCount: number;
   eventCount: number;
@@ -40,7 +40,17 @@ export interface DashboardData {
   venueCount: number;
   postsCount: number;
   upcomingEvents: IEvent[];
-  membershipRequestData: any;
+  membershipRequestData: {
+    organization: {
+      membershipRequests: Array<{
+        _id: string;
+        user: {
+          name: string;
+          emailAddress: string;
+        };
+      }>;
+    };
+  } | null;
   loadingMembershipRequests: boolean;
   isLoading: boolean;
   hasError: boolean;
@@ -57,7 +67,7 @@ export interface DashboardData {
 export function useDashboardData({
   orgId,
   tErrors,
-}: UseDashboardDataProps): DashboardData {
+}: InterfaceUseDashboardDataProps): InterfaceDashboardData {
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
@@ -104,11 +114,7 @@ export function useDashboardData({
   });
 
   // Posts query
-  const {
-    data: postData,
-    loading: postLoading,
-    error: postError,
-  } = useQuery<{
+  const { loading: postLoading, error: postError } = useQuery<{
     organization: {
       posts: InterfaceOrganizationPostsConnectionEdgePg;
     };
@@ -225,7 +231,7 @@ export function useDashboardData({
         setEventCount(events.length);
 
         const upcomingEventsList = events
-          .map((edge: any) => edge.node)
+          .map((edge: { node: IEvent }) => edge.node)
           .filter(
             (event: IEvent) => new Date(event?.node?.startAt) > new Date(),
           )

@@ -3,7 +3,7 @@
  * Renders interactive cards showing member, admin, event, post, blocked user, and venue counts.
  */
 import React from 'react';
-import { Card, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdminsIcon from 'assets/svgs/admin.svg?react';
 import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
@@ -17,7 +17,7 @@ import DashboardCardLoading from 'components/OrganizationDashCards/Loader/Dashbo
 /**
  * Props interface for the dashboard cards component
  */
-export interface DashboardCardsProps {
+export interface InterfaceDashboardCardsProps {
   memberCount: number;
   adminCount: number;
   eventCount: number;
@@ -56,9 +56,8 @@ export default function DashboardCards({
   venuesLink,
   isLoading,
   navigate,
-}: DashboardCardsProps): JSX.Element {
+}: InterfaceDashboardCardsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
-  const { t: tCommon } = useTranslation('common');
 
   if (isLoading) {
     return (

@@ -11,25 +11,16 @@ import { useDashboardData } from './hooks/useDashboardData';
 import DashboardCards from './components/DashboardCards';
 
 /**
- * OrganizationDashboard component provides a comprehensive overview of organization statistics and metrics.
+ * Main dashboard for organization overview - shows all the key stats at a glance.
  *
- * This component displays key organizational data including member counts, admin counts, event counts,
- * post counts, blocked users, membership requests, and venue information. It supports PostgreSQL
- * pagination and provides navigation to detailed views for each metric.
+ * Displays member/admin counts, upcoming events, membership requests, venues, and posts.
+ * Uses PostgreSQL pagination for efficient data loading. Each section has a "view all"
+ * button that takes you to the detailed page.
  *
- * Features:
- * - Real-time statistics with loading states
- * - PostgreSQL-compatible pagination queries
- * - Interactive dashboard cards with navigation
- * - Venue capacity display and management
- * - Error handling and loading indicators
- * - Responsive design with Bootstrap components
- *
- * @returns JSX.Element - The rendered organization dashboard interface
+ * @returns The dashboard component
  */
 function OrganizationDashboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
-  const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
   document.title = t('title');
   const { orgId } = useParams();
@@ -173,18 +164,23 @@ function OrganizationDashboard(): JSX.Element {
                     0 ? (
                   membershipRequestData.organization.membershipRequests
                     .slice(0, 3)
-                    .map((request: any) => (
-                      <div
-                        key={request._id}
-                        className={styles.cardItemContainer}
-                        data-testid="cardItem"
-                      >
-                        <h6 className="fs-6 fw-bold">{request.user.name}</h6>
-                        <p className="fs-6 text-muted">
-                          {request.user.emailAddress}
-                        </p>
-                      </div>
-                    ))
+                    .map(
+                      (request: {
+                        _id: string;
+                        user: { name: string; emailAddress: string };
+                      }) => (
+                        <div
+                          key={request._id}
+                          className={styles.cardItemContainer}
+                          data-testid="cardItem"
+                        >
+                          <h6 className="fs-6 fw-bold">{request.user.name}</h6>
+                          <p className="fs-6 text-muted">
+                            {request.user.emailAddress}
+                          </p>
+                        </div>
+                      ),
+                    )
                 ) : (
                   <div className={styles.emptyContainer}>
                     <h6>{t('noMembershipRequests')}</h6>
