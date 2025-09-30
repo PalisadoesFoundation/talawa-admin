@@ -3,7 +3,7 @@
  * Handles all GraphQL queries and data aggregation for dashboard statistics.
  */
 import { useQuery } from '@apollo/client';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   GET_ORGANIZATION_MEMBERS_PG,
@@ -165,15 +165,7 @@ export function useDashboardData({
       const endCursor =
         orgMemberData.organization?.members?.pageInfo?.endCursor;
 
-      console.log('DEBUG: Members data processing', {
-        membersCount: members.length,
-        hasNextPage,
-        endCursor,
-        hasFetchedAll: hasFetchedAllMembers.current,
-      });
-
       if (hasNextPage && endCursor) {
-        console.log('DEBUG: Fetching more members with cursor:', endCursor);
         fetchMoreMembers({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
@@ -183,11 +175,6 @@ export function useDashboardData({
 
             const prevEdges = prev.organization.members.edges || [];
             const newEdges = fetchMoreResult.organization.members.edges || [];
-
-            console.log('DEBUG: Fetching more - updateQuery called', {
-              prevEdges: prevEdges.length,
-              fetchMoreEdges: newEdges.length,
-            });
 
             const updatedData = {
               ...prev,
@@ -201,17 +188,10 @@ export function useDashboardData({
               },
             };
 
-            console.log(
-              'DEBUG: Updated data - total edges:',
-              updatedData.organization.members.edges.length,
-            );
             return updatedData;
           },
         });
       } else {
-        console.log(
-          'DEBUG: No more pages, setting hasFetchedAllMembers to true',
-        );
         hasFetchedAllMembers.current = true;
 
         // Calculate counts immediately
@@ -226,11 +206,6 @@ export function useDashboardData({
           },
         );
 
-        console.log('DEBUG: Setting counts immediately', {
-          totalMembers,
-          newAdminCount,
-        });
-
         setMemberCount(totalMembers);
         setAdminCount(newAdminCount);
       }
@@ -243,11 +218,6 @@ export function useDashboardData({
       const allMembers = orgMemberData.organization?.members?.edges || [];
       let newAdminCount = 0;
 
-      console.log(
-        'DEBUG: Recalculating counts with all members:',
-        allMembers.length,
-      );
-
       allMembers.forEach(
         (member: InterfaceOrganizationMembersConnectionEdgePg) => {
           if (member.node.role === 'administrator') {
@@ -255,11 +225,6 @@ export function useDashboardData({
           }
         },
       );
-
-      console.log('DEBUG: Final counts', {
-        memberCount: allMembers.length,
-        adminCount: newAdminCount,
-      });
 
       setMemberCount(allMembers.length);
       setAdminCount(newAdminCount);
@@ -393,36 +358,26 @@ export function useDashboardData({
     }
   }, [venuesData, fetchMoreVenues, orgId]);
 
-  // Error handling
+  // Error handling - consolidated into single effect
   useEffect(() => {
-    if (orgMemberError) {
+    const errors = [
+      orgMemberError,
+      eventError,
+      postError,
+      blockedUsersError,
+      venuesError,
+    ];
+    if (errors.some((error) => error)) {
       toast.error(tErrors('errorLoading'));
     }
-  }, [orgMemberError, tErrors]);
-
-  useEffect(() => {
-    if (eventError) {
-      toast.error(tErrors('errorLoading'));
-    }
-  }, [eventError, tErrors]);
-
-  useEffect(() => {
-    if (postError) {
-      toast.error(tErrors('errorLoading'));
-    }
-  }, [postError, tErrors]);
-
-  useEffect(() => {
-    if (blockedUsersError) {
-      toast.error(tErrors('errorLoading'));
-    }
-  }, [blockedUsersError, tErrors]);
-
-  useEffect(() => {
-    if (venuesError) {
-      toast.error(tErrors('errorLoading'));
-    }
-  }, [venuesError, tErrors]);
+  }, [
+    orgMemberError,
+    eventError,
+    postError,
+    blockedUsersError,
+    venuesError,
+    tErrors,
+  ]);
 
   const isLoading =
     orgMemberLoading ||
