@@ -78,7 +78,6 @@ interface IOrganizationCardProps {
     postalCode: string;
     state: string;
   };
-  membershipRequestStatus: string;
   isUserRegistrationRequired: boolean;
   membershipRequests?: InterfaceMembershipRequestSummary[];
   isJoined: boolean;
@@ -295,7 +294,6 @@ export default function organizations(): React.JSX.Element {
             adminsCount: org.adminsCount || 0,
             membersCount: org.membersCount || 0,
             admins: [],
-            membershipRequestStatus: isMember ? 'accepted' : '',
             isUserRegistrationRequired: org.isUserRegistrationRequired,
             membershipRequests: org.membershipRequests,
             isJoined: isMember, // Set based on membership check
@@ -312,7 +310,6 @@ export default function organizations(): React.JSX.Element {
               const organization = edge.node;
               return {
                 ...organization,
-                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
                 isJoined: true,
               };
             },
@@ -327,7 +324,6 @@ export default function organizations(): React.JSX.Element {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
             ...org,
-            membershipRequestStatus: 'created',
             isJoined: true,
           }),
         );
@@ -485,8 +481,6 @@ export default function organizations(): React.JSX.Element {
                           description: organization.description,
                           admins: organization.admins,
                           address: organization.address,
-                          membershipRequestStatus:
-                            organization.membershipRequestStatus,
                           isUserRegistrationRequired:
                             organization.isUserRegistrationRequired,
                           membershipRequests:
@@ -501,14 +495,12 @@ export default function organizations(): React.JSX.Element {
                             className="col-md-6 mb-4"
                             data-testid="organization-card"
                             data-organization-name={organization.name}
-                            data-membership-status={
-                              organization.membershipRequestStatus
-                            }
+                            data-membership-status={organization.isJoined}
                             data-cy="orgCard"
                           >
                             <div
                               data-testid={`membership-status-${organization.name}`}
-                              data-status={organization.membershipRequestStatus}
+                              data-status={organization.isJoined}
                               className="visually-hidden"
                             ></div>
 
