@@ -15,7 +15,6 @@ export interface InterfaceOrganizationCardProps {
   };
   membersCount: number;
   adminsCount: number;
-  membershipRequestStatus: string;
   isUserRegistrationRequired: boolean;
   membershipRequests?: InterfaceMembershipRequestSummary[];
   isJoined?: boolean;

@@ -13,7 +13,6 @@
  * @param props.adminsCount - The number of admins in the organization.
  * @param props.membersCount - The number of members in the organization.
  * @param props.address - The address of the organization, including city and country code.
- * @param props.membershipRequestStatus - The current membership request status for the user.
  * @param props.userRegistrationRequired - Indicates if user registration is required to join.
  * @param props.membershipRequests - List of membership requests for the organization.
  * @param props.isJoined - Indicates if the user is already a member of the organization.
@@ -35,7 +34,6 @@
  *   adminsCount={5}
  *   membersCount={100}
  *   address={{ city: "New York", countryCode: "US", line1: "123 Main St" }}
- *   membershipRequestStatus="pending"
  *   userRegistrationRequired={true}
  *   membershipRequests={[]}
  *   isJoined={false}

@@ -226,7 +226,6 @@ const defaultProps: InterfaceOrganizationCardProps = {
   },
   membersCount: 0,
   adminsCount: 0,
-  membershipRequestStatus: '',
   isUserRegistrationRequired: false,
   membershipRequests: [],
   isJoined: false,
@@ -544,7 +543,6 @@ describe('OrganizationCard Component with New Interface', () => {
 
       const props = {
         ...defaultProps,
-        // membershipRequestStatus: 'pending',
         membershipRequests: [
           {
             membershipRequestId: '33a5ebb9-cf72-4353-bfbc-8ff0d0007807',
