@@ -21,7 +21,10 @@ export interface InterfaceOrganizationCardProps {
   isJoined?: boolean;
 }
 
-export type InterfaceMembershipRequestStatus = 'pending' | 'approved';
+export type InterfaceMembershipRequestStatus =
+  | 'pending'
+  | 'approved'
+  | 'rejected';
 
 export interface InterfaceMembershipRequestSummary {
   status: InterfaceMembershipRequestStatus;

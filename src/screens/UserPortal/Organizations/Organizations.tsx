@@ -80,7 +80,7 @@ interface IOrganizationCardProps {
   };
   membershipRequestStatus: string;
   isUserRegistrationRequired: boolean;
-  membershipRequests: InterfaceMembershipRequestSummary[];
+  membershipRequests?: InterfaceMembershipRequestSummary[];
   isJoined: boolean;
   membersCount: number; // Add this
   adminsCount: number; // Add this
