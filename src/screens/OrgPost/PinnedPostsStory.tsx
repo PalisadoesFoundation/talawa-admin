@@ -19,7 +19,7 @@
  */
 
 import React from 'react';
-import { Avatar, Typography, Box } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { InterfacePost } from 'types/Post/interface';
@@ -31,16 +31,11 @@ interface InterfacePinnedPostsStoryProps {
 }
 
 const storiesResponsive = {
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 7 },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 5 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 3 },
+  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 5, slidesToSlide: 1 },
+  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2, slidesToSlide: 1 },
+  mobile: { breakpoint: { max: 464, min: 0 }, items: 2, slidesToSlide: 1 },
 };
 
-/**
- * PinnedPostsStory Component
- *
- * ... (JSDoc content)
- */
 const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
   pinnedPosts,
   onStoryClick,
@@ -54,6 +49,8 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
         backgroundColor: '#ffffffec',
         padding: 2,
         borderRadius: 2,
+        '& .carousel-item-spacing': { marginRight: '10px' },
+        '& .carousel-item-spacing:last-of-type': { marginRight: 0 },
       }}
     >
       <Carousel
@@ -62,55 +59,63 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
         draggable
         showDots={false}
         infinite={false}
+        keyBoardControl
+        itemClass="carousel-item-spacing"
       >
         {pinnedPosts.map((post) => (
-          <Box
+          <Card
             key={post.id}
+            onClick={() => onStoryClick(post)}
+            data-testid="pinned-post"
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
+              bgcolor: '#dbe4f379',
+              width: '200px',
+              height: '200px',
               cursor: 'pointer',
-              p: 1,
+              boxShadow: 3,
             }}
-            onClick={() => onStoryClick(post)}
           >
+            <CardMedia
+              component="img"
+              sx={{ width: '100%', height: '120px', objectFit: 'cover' }}
+              image={post.imageUrl ?? AboutImg}
+              alt={post.caption ?? 'Pinned Post'}
+            />
             <Box
               sx={{
-                width: 64,
-                height: 64,
-                borderRadius: '50%',
-                padding: '3px',
-                background:
-                  'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)',
+                flex: 1,
+                p: 1.5,
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 0.5,
+                flexDirection: 'column',
+                justifyContent: 'space-between',
               }}
             >
-              <Avatar
-                src={post.creator?.avatarURL || AboutImg}
-                sx={{
-                  width: 58,
-                  height: 58,
-                  border: '2px solid white',
-                }}
-              />
+              <CardContent sx={{ pb: 0 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#000',
+                    mb: 0.5,
+                    fontSize: 15,
+                  }}
+                  noWrap
+                >
+                  {post.caption ?? 'Untitled'}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="gray"
+                  sx={{ mb: 1, display: 'block', fontSize: 12 }}
+                  noWrap
+                >
+                  {post.creator?.name ?? 'Unknown'}
+                </Typography>
+              </CardContent>
             </Box>
-            <Typography
-              variant="caption"
-              sx={{
-                maxWidth: 70,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                textAlign: 'center',
-              }}
-            >
-              {post.creator?.name?.split(' ')[0] || 'Unknown'}
-            </Typography>
-          </Box>
+          </Card>
         ))}
       </Carousel>
     </Box>

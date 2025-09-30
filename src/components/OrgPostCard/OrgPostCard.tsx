@@ -351,7 +351,7 @@ export default function OrgPostCard({
         style={{
           width: '100%',
           maxWidth: '600px',
-          margin: '20px auto', // center horizontally + spacing between posts
+          margin: '20px auto',
         }}
         data-testid="post-item"
         onClick={handleCardClick}
