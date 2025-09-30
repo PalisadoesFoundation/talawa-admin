@@ -356,7 +356,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
 
       - name: Install Dependencies
         run: npm install
@@ -476,7 +476,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x' 
+          node-version: '22.x' 
       - name: Install dependencies
         working-directory: ./docs
         run: npm install
