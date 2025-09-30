@@ -418,7 +418,7 @@ describe('OrganizationCard Component with New Interface', () => {
             status: 'pending',
           },
         ],
-      };
+      } as InterfaceOrganizationCardProps;
 
       render(
         <TestWrapper mocks={successMocks}>
@@ -430,7 +430,7 @@ describe('OrganizationCard Component with New Interface', () => {
       fireEvent.click(withdrawButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith('Request withdrawn');
       });
     });
 
@@ -449,7 +449,7 @@ describe('OrganizationCard Component with New Interface', () => {
             status: 'pending',
           },
         ],
-      };
+      } as InterfaceOrganizationCardProps;
 
       const errorMocks: MockedResponse[] = [
         {
@@ -551,7 +551,7 @@ describe('OrganizationCard Component with New Interface', () => {
             status: 'pending',
           },
         ],
-      };
+      } as InterfaceOrganizationCardProps;
 
       render(
         <TestWrapper mocks={mocksWithSpy}>
@@ -584,7 +584,7 @@ describe('OrganizationCard Component with New Interface', () => {
             status: 'pending',
           },
         ],
-      };
+      } as InterfaceOrganizationCardProps;
 
       const errorMocks: MockedResponse[] = [
         {

@@ -17,11 +17,15 @@ export interface InterfaceOrganizationCardProps {
   adminsCount: number;
   membershipRequestStatus: string;
   isUserRegistrationRequired: boolean;
-  membershipRequests: {
-    status: string;
-    membershipRequestId: string;
-  }[];
+  membershipRequests?: InterfaceMembershipRequestSummary[];
   isJoined?: boolean;
+}
+
+export type InterfaceMembershipRequestStatus = 'pending' | 'approved';
+
+export interface InterfaceMembershipRequestSummary {
+  status: InterfaceMembershipRequestStatus;
+  membershipRequestId: string;
 }
 
 export interface InterfaceOrgPeopleListCardProps {

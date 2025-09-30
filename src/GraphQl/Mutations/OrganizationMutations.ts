@@ -223,7 +223,7 @@ export const TOGGLE_PINNED_POST = gql`
  */
 
 export const SEND_MEMBERSHIP_REQUEST = gql`
-  mutation ($organizationId: ID!) {
+  mutation SendMembershipRequest($organizationId: ID!) {
     sendMembershipRequest(input: { organizationId: $organizationId }) {
       # _id
       # organization {
@@ -252,7 +252,7 @@ export const JOIN_PUBLIC_ORGANIZATION = gql`
 `;
 
 export const CANCEL_MEMBERSHIP_REQUEST = gql`
-  mutation ($membershipRequestId: ID!) {
+  mutation CancelMembershipRequest($membershipRequestId: ID!) {
     cancelMembershipRequest(
       input: { membershipRequestId: $membershipRequestId }
     ) {

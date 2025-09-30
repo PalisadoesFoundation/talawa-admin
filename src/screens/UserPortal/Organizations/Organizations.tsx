@@ -48,6 +48,7 @@ import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
+import { InterfaceMembershipRequestSummary } from 'types/Organization/interface';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -79,10 +80,7 @@ interface IOrganizationCardProps {
   };
   membershipRequestStatus: string;
   isUserRegistrationRequired: boolean;
-  membershipRequests: {
-    status: string;
-    membershipRequestId: string;
-  }[];
+  membershipRequests: InterfaceMembershipRequestSummary[];
   isJoined: boolean;
   membersCount: number; // Add this
   adminsCount: number; // Add this
@@ -491,7 +489,8 @@ export default function organizations(): React.JSX.Element {
                             organization.membershipRequestStatus,
                           isUserRegistrationRequired:
                             organization.isUserRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
+                          membershipRequests:
+                            organization.membershipRequests as InterfaceMembershipRequestSummary[],
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,
                           adminsCount: organization.adminsCount || 0,
