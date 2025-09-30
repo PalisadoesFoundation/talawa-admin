@@ -122,7 +122,6 @@ interface IOrganization {
     postalCode: string;
     state: string;
   };
-  membershipRequestStatus: string;
   membershipRequests: {
     status: string;
     membershipRequestId: string;
