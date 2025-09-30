@@ -54,7 +54,10 @@ export interface DashboardData {
  * @param tErrors - Translation function for error messages
  * @returns Dashboard data and loading states
  */
-export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): DashboardData {
+export function useDashboardData({
+  orgId,
+  tErrors,
+}: UseDashboardDataProps): DashboardData {
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
@@ -144,8 +147,10 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
   useEffect(() => {
     if (orgMemberData && !hasFetchedAllMembers.current) {
       const members = orgMemberData.organization?.members?.edges || [];
-      const hasNextPage = orgMemberData.organization?.members?.pageInfo?.hasNextPage;
-      const endCursor = orgMemberData.organization?.members?.pageInfo?.endCursor;
+      const hasNextPage =
+        orgMemberData.organization?.members?.pageInfo?.hasNextPage;
+      const endCursor =
+        orgMemberData.organization?.members?.pageInfo?.endCursor;
 
       if (hasNextPage && endCursor) {
         fetchMoreMembers({
@@ -173,11 +178,13 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
         let newAdminCount = 0;
         const totalMembers = members.length;
 
-        members.forEach((member: InterfaceOrganizationMembersConnectionEdgePg) => {
-          if (member.node.role === 'administrator') {
-            newAdminCount += 1;
-          }
-        });
+        members.forEach(
+          (member: InterfaceOrganizationMembersConnectionEdgePg) => {
+            if (member.node.role === 'administrator') {
+              newAdminCount += 1;
+            }
+          },
+        );
 
         setMemberCount(totalMembers);
         setAdminCount(newAdminCount);
@@ -216,10 +223,12 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
       } else {
         hasFetchedAllEvents.current = true;
         setEventCount(events.length);
-        
+
         const upcomingEventsList = events
           .map((edge: any) => edge.node)
-          .filter((event: IEvent) => new Date(event?.node?.startAt) > new Date())
+          .filter(
+            (event: IEvent) => new Date(event?.node?.startAt) > new Date(),
+          )
           .slice(0, 5);
         setUpcomingEvents(upcomingEventsList);
       }
@@ -229,9 +238,12 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
   // Blocked users data processing
   useEffect(() => {
     if (blockedUsersData && !hasFetchedAllBlockedUsers.current) {
-      const blockedUsers = blockedUsersData.organization?.blockedUsers?.edges || [];
-      const hasNextPage = blockedUsersData.organization?.blockedUsers?.pageInfo?.hasNextPage;
-      const endCursor = blockedUsersData.organization?.blockedUsers?.pageInfo?.endCursor;
+      const blockedUsers =
+        blockedUsersData.organization?.blockedUsers?.edges || [];
+      const hasNextPage =
+        blockedUsersData.organization?.blockedUsers?.pageInfo?.hasNextPage;
+      const endCursor =
+        blockedUsersData.organization?.blockedUsers?.pageInfo?.endCursor;
 
       if (hasNextPage && endCursor) {
         fetchMoreBlockedUsers({
@@ -265,7 +277,8 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
   useEffect(() => {
     if (venuesData && !hasFetchedAllVenues.current) {
       const venues = venuesData.organization?.venues?.edges || [];
-      const hasNextPage = venuesData.organization?.venues?.pageInfo?.hasNextPage;
+      const hasNextPage =
+        venuesData.organization?.venues?.pageInfo?.hasNextPage;
       const endCursor = venuesData.organization?.venues?.pageInfo?.endCursor;
 
       if (hasNextPage && endCursor) {
@@ -327,8 +340,19 @@ export function useDashboardData({ orgId, tErrors }: UseDashboardDataProps): Das
     }
   }, [venuesError, tErrors]);
 
-  const isLoading = orgMemberLoading || eventLoading || postLoading || blockedUsersLoading || venuesLoading;
-  const hasError = !!(orgMemberError || eventError || postError || blockedUsersError || venuesError);
+  const isLoading =
+    orgMemberLoading ||
+    eventLoading ||
+    postLoading ||
+    blockedUsersLoading ||
+    venuesLoading;
+  const hasError = !!(
+    orgMemberError ||
+    eventError ||
+    postError ||
+    blockedUsersError ||
+    venuesError
+  );
 
   return {
     memberCount,

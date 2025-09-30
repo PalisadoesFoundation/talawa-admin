@@ -5,9 +5,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import type {
-  IEvent,
-} from 'utils/interfaces';
+import type { IEvent } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
 import { useDashboardData } from './hooks/useDashboardData';
 import DashboardCards from './components/DashboardCards';
@@ -71,9 +69,7 @@ function OrganizationDashboard(): JSX.Element {
 
   return (
     <>
-      {isLoading && (
-        <div data-testid="fallback-ui">Loading...</div>
-      )}
+      {isLoading && <div data-testid="fallback-ui">Loading...</div>}
       <Row>
         <Col lg={6}>
           <DashboardCards
@@ -84,8 +80,7 @@ function OrganizationDashboard(): JSX.Element {
             blockedCount={blockedCount}
             venueCount={venueCount}
             membershipRequestsCount={
-              membershipRequestData?.organization.membershipRequests
-                .length || 0
+              membershipRequestData?.organization.membershipRequests.length || 0
             }
             postsLink={postsLink}
             eventsLink={eventsLink}
@@ -174,8 +169,8 @@ function OrganizationDashboard(): JSX.Element {
                     </div>
                   </>
                 ) : membershipRequestData &&
-                  membershipRequestData.organization.membershipRequests
-                    .length > 0 ? (
+                  membershipRequestData.organization.membershipRequests.length >
+                    0 ? (
                   membershipRequestData.organization.membershipRequests
                     .slice(0, 3)
                     .map((request: any) => (
@@ -184,10 +179,10 @@ function OrganizationDashboard(): JSX.Element {
                         className={styles.cardItemContainer}
                         data-testid="cardItem"
                       >
-                        <h6 className="fs-6 fw-bold">
-                          {request.user.name}
-                        </h6>
-                        <p className="fs-6 text-muted">{request.user.emailAddress}</p>
+                        <h6 className="fs-6 fw-bold">{request.user.name}</h6>
+                        <p className="fs-6 text-muted">
+                          {request.user.emailAddress}
+                        </p>
                       </div>
                     ))
                 ) : (
@@ -199,7 +194,7 @@ function OrganizationDashboard(): JSX.Element {
               <Card.Footer>
                 <Button
                   data-testid="viewAllMembershipRequests"
-                  variant="outline-primary" 
+                  variant="outline-primary"
                   size="sm"
                   onClick={() => navigate(requestLink)}
                 >
@@ -210,14 +205,12 @@ function OrganizationDashboard(): JSX.Element {
           </Row>
         </Col>
       </Row>
-      
+
       <Row className="mt-4">
         <Col lg={6}>
           <Card className={styles.dashboardCard}>
             <Card.Header>
-              <h5 className={styles.dashboardCardHeader}>
-                {t('posts')}
-              </h5>
+              <h5 className={styles.dashboardCardHeader}>{t('posts')}</h5>
             </Card.Header>
             <Card.Body className={styles.containerBody}>
               <div className={styles.emptyContainer}>
@@ -236,13 +229,11 @@ function OrganizationDashboard(): JSX.Element {
             </Card.Footer>
           </Card>
         </Col>
-        
+
         <Col lg={6}>
           <Card className={styles.dashboardCard}>
             <Card.Header>
-              <h5 className={styles.dashboardCardHeader}>
-                {t('leaderboard')}
-              </h5>
+              <h5 className={styles.dashboardCardHeader}>{t('leaderboard')}</h5>
             </Card.Header>
             <Card.Body className={styles.containerBody}>
               <div className={styles.emptyContainer}>
