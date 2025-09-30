@@ -1,4 +1,3 @@
-
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, useRef, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
@@ -291,8 +290,7 @@ function OrganizationDashboard(): JSX.Element {
                 role="button"
                 className="mb-4"
                 data-testid="membersCount"
-                onClick={(): void => {
-                }}
+                onClick={(): void => {}}
               >
                 <DashBoardCard
                   count={memberCount}
@@ -306,8 +304,7 @@ function OrganizationDashboard(): JSX.Element {
                 role="button"
                 className="mb-4"
                 data-testid="adminsCount"
-                onClick={(): void => {
-                }}
+                onClick={(): void => {}}
               >
                 <DashBoardCard
                   count={adminCount}
