@@ -81,15 +81,7 @@ const VenueCard = ({
               </div>
               {/* Venue capacity badge positioned to the right */}
               {venueItem.node.capacity && (
-                <div
-                  className="d-flex align-items-center px-2 py-1 rounded"
-                  style={{
-                    backgroundColor: '#28a745',
-                    color: 'white',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                  }}
-                >
+                <div className={styles.capacityBadge}>
                   <PeopleIcon
                     className="me-1"
                     width={12}

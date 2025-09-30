@@ -25,24 +25,50 @@ import type {
  * function to handle blocked users pagination update query
  */
 export const updateBlockedUsersQuery = (
-  prev: any,
-  { fetchMoreResult }: any,
+  prev: Record<string, unknown>,
+  {
+    fetchMoreResult,
+  }: {
+    fetchMoreResult?: Record<string, unknown> | null;
+  },
 ) => {
-  if (!fetchMoreResult || !fetchMoreResult.organization?.blockedUsers)
-    return prev;
-  if (!prev?.organization?.blockedUsers) return fetchMoreResult;
+  const prevData = prev as {
+    organization?: {
+      blockedUsers?: {
+        edges: unknown[];
+        pageInfo: unknown;
+      };
+    };
+  };
+  const fetchMoreData = fetchMoreResult as
+    | {
+        organization?: {
+          blockedUsers?: {
+            edges: unknown[];
+            pageInfo: unknown;
+          };
+        };
+      }
+    | undefined;
 
-  const prevEdges = prev.organization.blockedUsers.edges || [];
-  const newEdges = fetchMoreResult.organization.blockedUsers.edges || [];
+  if (!fetchMoreData || !fetchMoreData.organization?.blockedUsers) {
+    return prev;
+  }
+  if (!prevData?.organization?.blockedUsers) {
+    return fetchMoreResult;
+  }
+
+  const prevEdges = prevData.organization.blockedUsers.edges || [];
+  const newEdges = fetchMoreData.organization.blockedUsers.edges || [];
 
   return {
     ...prev,
     organization: {
-      ...prev.organization,
+      ...prevData.organization,
       blockedUsers: {
-        ...prev.organization.blockedUsers,
+        ...prevData.organization.blockedUsers,
         edges: [...prevEdges, ...newEdges],
-        pageInfo: fetchMoreResult.organization.blockedUsers.pageInfo,
+        pageInfo: fetchMoreData.organization.blockedUsers.pageInfo,
       },
     },
   };
@@ -51,21 +77,51 @@ export const updateBlockedUsersQuery = (
 /**
  * function to handle venues pagination update query
  */
-export const updateVenuesQuery = (prev: any, { fetchMoreResult }: any) => {
-  if (!fetchMoreResult || !fetchMoreResult.organization?.venues) return prev;
-  if (!prev?.organization?.venues) return fetchMoreResult;
+export const updateVenuesQuery = (
+  prev: Record<string, unknown>,
+  {
+    fetchMoreResult,
+  }: {
+    fetchMoreResult?: Record<string, unknown> | null;
+  },
+) => {
+  const prevData = prev as {
+    organization?: {
+      venues?: {
+        edges: unknown[];
+        pageInfo: unknown;
+      };
+    };
+  };
+  const fetchMoreData = fetchMoreResult as
+    | {
+        organization?: {
+          venues?: {
+            edges: unknown[];
+            pageInfo: unknown;
+          };
+        };
+      }
+    | undefined;
 
-  const prevEdges = prev.organization.venues.edges || [];
-  const newEdges = fetchMoreResult.organization.venues.edges || [];
+  if (!fetchMoreData || !fetchMoreData.organization?.venues) {
+    return prev;
+  }
+  if (!prevData?.organization?.venues) {
+    return fetchMoreResult;
+  }
+
+  const prevEdges = prevData.organization.venues.edges || [];
+  const newEdges = fetchMoreData.organization.venues.edges || [];
 
   return {
     ...prev,
     organization: {
-      ...prev.organization,
+      ...prevData.organization,
       venues: {
-        ...prev.organization.venues,
+        ...prevData.organization.venues,
         edges: [...prevEdges, ...newEdges],
-        pageInfo: fetchMoreResult.organization.venues.pageInfo,
+        pageInfo: fetchMoreData.organization.venues.pageInfo,
       },
     },
   };
@@ -74,21 +130,51 @@ export const updateVenuesQuery = (prev: any, { fetchMoreResult }: any) => {
 /**
  * function to handle events pagination update query
  */
-export const updateEventsQuery = (prev: any, { fetchMoreResult }: any) => {
-  if (!fetchMoreResult || !fetchMoreResult.organization?.events) return prev;
-  if (!prev?.organization?.events) return fetchMoreResult;
+export const updateEventsQuery = (
+  prev: Record<string, unknown>,
+  {
+    fetchMoreResult,
+  }: {
+    fetchMoreResult?: Record<string, unknown> | null;
+  },
+) => {
+  const prevData = prev as {
+    organization?: {
+      events?: {
+        edges: unknown[];
+        pageInfo: unknown;
+      };
+    };
+  };
+  const fetchMoreData = fetchMoreResult as
+    | {
+        organization?: {
+          events?: {
+            edges: unknown[];
+            pageInfo: unknown;
+          };
+        };
+      }
+    | undefined;
 
-  const prevEdges = prev.organization.events.edges || [];
-  const newEdges = fetchMoreResult.organization.events.edges || [];
+  if (!fetchMoreData || !fetchMoreData.organization?.events) {
+    return prev;
+  }
+  if (!prevData?.organization?.events) {
+    return fetchMoreResult;
+  }
+
+  const prevEdges = prevData.organization.events.edges || [];
+  const newEdges = fetchMoreData.organization.events.edges || [];
 
   return {
     ...prev,
     organization: {
-      ...prev.organization,
+      ...prevData.organization,
       events: {
-        ...prev.organization.events,
+        ...prevData.organization.events,
         edges: [...prevEdges, ...newEdges],
-        pageInfo: fetchMoreResult.organization.events.pageInfo,
+        pageInfo: fetchMoreData.organization.events.pageInfo,
       },
     },
   };
