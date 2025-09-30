@@ -6,9 +6,9 @@ import { BrowserRouter } from 'react-router';
 import { mockData } from '../EventStatsMocks';
 import { vi, describe, expect, it } from 'vitest';
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
+// Mock the modules for PieChart rendering as they require a transformer being used (which is not done by Vitest)
 // These modules are used by the Feedback component
-vi.mock('@mui/x-charts/PieChart', async () => ({
+vi.mock('@mui/x-charts', async () => ({
   PieChart: () => <div data-testid="mocked-pie-chart">Test</div>,
   pieArcClasses: { faded: 'faded-class' },
   pieArcLabelClasses: { root: 'label-root-class', faded: 'label-faded-class' },
