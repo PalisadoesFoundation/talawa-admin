@@ -202,8 +202,8 @@ function organizationVenues(): JSX.Element {
           const nameA = a.node.name.toLowerCase();
           const nameB = b.node.name.toLowerCase();
           return sortOrder === 'highest'
-            ? nameB.localeCompare(nameA)
-            : nameA.localeCompare(nameB);
+            ? nameA.localeCompare(nameB)
+            : nameB.localeCompare(nameA);
         });
       }
 
