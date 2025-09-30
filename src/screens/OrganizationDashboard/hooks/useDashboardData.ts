@@ -87,8 +87,9 @@ export function useDashboardData({
         input: { id: orgId },
         first: 8,
         skip: 0,
-        firstName_contains: '',
+        name_contains: '',
       },
+      skip: !orgId,
     });
 
   // Members query
@@ -100,6 +101,7 @@ export function useDashboardData({
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
     variables: { id: orgId, first: 32, after: null },
     notifyOnNetworkStatusChange: true,
+    skip: !orgId,
   });
 
   // Events query
@@ -111,6 +113,7 @@ export function useDashboardData({
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId, first: 50, after: null },
     notifyOnNetworkStatusChange: true,
+    skip: !orgId,
   });
 
   // Posts query
@@ -120,11 +123,13 @@ export function useDashboardData({
     };
   }>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
+    skip: !orgId,
   });
 
   // Posts count query
   const { data: postCountData } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
     variables: { id: orgId },
+    skip: !orgId,
   });
 
   // Blocked users query
@@ -136,6 +141,7 @@ export function useDashboardData({
   } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_PG, {
     variables: { id: orgId, first: 32, after: null },
     notifyOnNetworkStatusChange: true,
+    skip: !orgId,
   });
 
   // Venues query
@@ -147,6 +153,7 @@ export function useDashboardData({
   } = useQuery(GET_ORGANIZATION_VENUES_PG, {
     variables: { id: orgId, first: 32, after: null },
     notifyOnNetworkStatusChange: true,
+    skip: !orgId,
   });
 
   // Members data processing
@@ -158,12 +165,26 @@ export function useDashboardData({
       const endCursor =
         orgMemberData.organization?.members?.pageInfo?.endCursor;
 
+      console.log('DEBUG: Members data processing', {
+        membersCount: members.length,
+        hasNextPage,
+        endCursor,
+        hasFetchedAll: hasFetchedAllMembers.current,
+      });
+
       if (hasNextPage && endCursor) {
+        console.log('DEBUG: Fetching more members with cursor:', endCursor);
         fetchMoreMembers({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult) return prev;
-            return {
+
+            console.log('DEBUG: Fetching more - updateQuery called', {
+              prevEdges: prev.organization.members.edges.length,
+              fetchMoreEdges: fetchMoreResult.organization.members.edges.length,
+            });
+
+            const updatedData = {
               ...prev,
               organization: {
                 ...prev.organization,
@@ -177,10 +198,21 @@ export function useDashboardData({
                 },
               },
             };
+
+            console.log(
+              'DEBUG: Updated data - total edges:',
+              updatedData.organization.members.edges.length,
+            );
+            return updatedData;
           },
         });
       } else {
+        console.log(
+          'DEBUG: No more pages, setting hasFetchedAllMembers to true',
+        );
         hasFetchedAllMembers.current = true;
+
+        // Calculate counts immediately
         let newAdminCount = 0;
         const totalMembers = members.length;
 
@@ -192,11 +224,45 @@ export function useDashboardData({
           },
         );
 
+        console.log('DEBUG: Setting counts immediately', {
+          totalMembers,
+          newAdminCount,
+        });
+
         setMemberCount(totalMembers);
         setAdminCount(newAdminCount);
       }
     }
   }, [orgMemberData, fetchMoreMembers, orgId]);
+
+  // Recalculate member counts when pagination completes
+  useEffect(() => {
+    if (orgMemberData && hasFetchedAllMembers.current) {
+      const allMembers = orgMemberData.organization?.members?.edges || [];
+      let newAdminCount = 0;
+
+      console.log(
+        'DEBUG: Recalculating counts with all members:',
+        allMembers.length,
+      );
+
+      allMembers.forEach(
+        (member: InterfaceOrganizationMembersConnectionEdgePg) => {
+          if (member.node.role === 'administrator') {
+            newAdminCount += 1;
+          }
+        },
+      );
+
+      console.log('DEBUG: Final counts', {
+        memberCount: allMembers.length,
+        adminCount: newAdminCount,
+      });
+
+      setMemberCount(allMembers.length);
+      setAdminCount(newAdminCount);
+    }
+  }, [orgMemberData, hasFetchedAllMembers]);
 
   // Events data processing
   useEffect(() => {
@@ -231,9 +297,9 @@ export function useDashboardData({
         setEventCount(events.length);
 
         const upcomingEventsList = events
-          .map((edge: { node: IEvent }) => edge.node)
           .filter(
-            (event: IEvent) => new Date(event?.node?.startAt) > new Date(),
+            (edge: { node: { startAt: string } }) =>
+              new Date(edge.node.startAt) > new Date(),
           )
           .slice(0, 5);
         setUpcomingEvents(upcomingEventsList);

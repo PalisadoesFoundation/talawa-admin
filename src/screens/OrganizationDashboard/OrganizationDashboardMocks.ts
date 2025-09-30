@@ -4,6 +4,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG, // re-enabled!
   GET_ORGANIZATION_POSTS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
+  GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 
@@ -117,6 +118,46 @@ export const MOCKS = [
       loading: false,
     },
   },
+
+  // --- Organization Venues ---
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          venues: {
+            edges: [
+              {
+                node: {
+                  id: 'venue1',
+                  name: 'Test Venue 1',
+                  capacity: 100,
+                  description: 'A great venue for events',
+                  attachments: [],
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'venue2',
+                  name: 'Test Venue 2',
+                  capacity: 200,
+                  description: 'Another excellent venue',
+                  attachments: [],
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
   {
     request: {
       query: MEMBERSHIP_REQUEST,
@@ -124,7 +165,7 @@ export const MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
@@ -268,7 +309,7 @@ export const EMPTY_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
@@ -292,6 +333,24 @@ export const EMPTY_MOCKS = [
       },
     },
   },
+
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          venues: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+
   {
     request: {
       query: GET_ORGANIZATION_BLOCKED_USERS_PG,
@@ -318,7 +377,7 @@ export const MIXED_REQUESTS_MOCK = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
@@ -403,10 +462,18 @@ export const ERROR_MOCKS = [
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
+  },
+
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_VENUES_PG Error'),
   },
 
   {
