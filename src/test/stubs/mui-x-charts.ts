@@ -1,9 +1,12 @@
-/* eslint-disable react/no-multi-comp */
 import React from 'react';
 
-export const PieChart: React.FC = () => null;
-export const BarChart: React.FC = () => null;
-export const LineChart: React.FC = () => null;
+function MockChart(): React.ReactElement | null {
+  return null;
+}
+
+export const PieChart = MockChart;
+export const BarChart = MockChart;
+export const LineChart = MockChart;
 export const pieArcClasses: Record<string, string> = {};
 export const pieArcLabelClasses: Record<string, string> = {};
 
