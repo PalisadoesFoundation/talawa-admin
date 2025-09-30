@@ -247,6 +247,7 @@
     "members": "成员",
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
+    "MembershipRequestWithdrawn": "会员请求已撤回",
     "AlreadyJoined": "已加入",
     "errorOccured": "发生错误"
   },

@@ -15,15 +15,19 @@ export interface InterfaceOrganizationCardProps {
   };
   membersCount: number;
   adminsCount: number;
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
+  isUserRegistrationRequired: boolean;
+  membershipRequests?: InterfaceMembershipRequestSummary[];
   isJoined?: boolean;
+}
+
+export type InterfaceMembershipRequestStatus =
+  | 'pending'
+  | 'approved'
+  | 'rejected';
+
+export interface InterfaceMembershipRequestSummary {
+  status: InterfaceMembershipRequestStatus;
+  membershipRequestId: string;
 }
 
 export interface InterfaceOrgPeopleListCardProps {

@@ -223,16 +223,20 @@ export const TOGGLE_PINNED_POST = gql`
  */
 
 export const SEND_MEMBERSHIP_REQUEST = gql`
-  mutation ($organizationId: ID!) {
-    sendMembershipRequest(organizationId: $organizationId) {
-      _id
-      organization {
-        _id
-        name
-      }
-      user {
-        _id
-      }
+  mutation SendMembershipRequest($organizationId: ID!) {
+    sendMembershipRequest(input: { organizationId: $organizationId }) {
+      # _id
+      # organization {
+      #   _id
+      #   name
+      # }
+      # user {
+      #   _id
+      # }
+      userId
+      organizationId
+      membershipRequestId
+      createdAt
     }
   }
 `;
@@ -248,9 +252,12 @@ export const JOIN_PUBLIC_ORGANIZATION = gql`
 `;
 
 export const CANCEL_MEMBERSHIP_REQUEST = gql`
-  mutation ($membershipRequestId: ID!) {
-    cancelMembershipRequest(membershipRequestId: $membershipRequestId) {
-      _id
+  mutation CancelMembershipRequest($membershipRequestId: ID!) {
+    cancelMembershipRequest(
+      input: { membershipRequestId: $membershipRequestId }
+    ) {
+      message
+      success
     }
   }
 `;
