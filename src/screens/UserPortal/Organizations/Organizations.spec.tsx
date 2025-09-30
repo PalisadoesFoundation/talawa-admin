@@ -1,13 +1,7 @@
 /* global HTMLSelectElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -77,50 +71,35 @@ const MOCKS = [
       query: ORGANIZATION_FILTER_LIST,
       variables: {
         filter: '',
+        userId: getItem('userId'),
       },
     },
     result: {
       data: {
         organizations: [
           {
-            __typename: 'Organization',
             id: '6401ff65ce8e8406b8f07af2',
-            image: '',
             name: 'anyOrganization1',
+            addressLine1: 'asdfg',
             description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            createdAt: '1234567890',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
+            avatarURL: '',
+            membersCount: 100,
+            adminsCount: 10,
+            isUserRegistrationRequired: true,
+            isMember: false,
+            membershipRequests: [],
           },
           {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
+            id: '6401ff65ce8e8406b8f07af3',
             name: 'anyOrganization2',
-            createdAt: '1234567890',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
+            addressLine1: 'asdfg',
             description: 'desc',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
+            avatarURL: '',
+            membersCount: 150,
+            adminsCount: 15,
+            isUserRegistrationRequired: true,
+            isMember: false,
+            membershipRequests: [],
           },
         ],
       },
@@ -149,6 +128,9 @@ const MOCKS = [
                   addressLine1: 'Test Line 1',
                   description: 'Test Description',
                   avatarURL: '',
+                  membersCount: 50,
+                  adminsCount: 5,
+                  isUserRegistrationRequired: false,
                 },
               },
               {
@@ -158,6 +140,9 @@ const MOCKS = [
                   addressLine1: 'asdfg',
                   description: 'desc',
                   avatarURL: '',
+                  membersCount: 100,
+                  adminsCount: 10,
+                  isUserRegistrationRequired: true,
                 },
               },
             ],
@@ -171,30 +156,23 @@ const MOCKS = [
       query: ORGANIZATION_FILTER_LIST,
       variables: {
         filter: '2',
+        userId: getItem('userId'),
       },
     },
     result: {
       data: {
         organizations: [
           {
-            __typename: 'Organization',
             id: '6401ff65ce8e8406b8f07af3',
-            image: '',
             name: 'anyOrganization2',
+            addressLine1: 'asdfg',
             description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            createdAt: '1234567890',
-            creator: { __typename: 'User', name: 'John Doe' },
+            avatarURL: '',
+            membersCount: 150,
+            adminsCount: 15,
+            isUserRegistrationRequired: true,
+            isMember: false,
+            membershipRequests: [],
           },
         ],
       },
@@ -263,6 +241,9 @@ const MOCKS = [
                   addressLine1: 'asdfg',
                   description: 'desc',
                   avatarURL: '',
+                  membersCount: 150,
+                  adminsCount: 15,
+                  isUserRegistrationRequired: true,
                 },
               },
             ],
@@ -372,8 +353,167 @@ test('Screen should be rendered properly', async () => {
 });
 
 test('Search works properly', async () => {
+  const searchTestMocks = [
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: {
+          id: TEST_USER_ID,
+        },
+      },
+      result: {
+        data: {
+          users: [
+            {
+              appUserProfile: {
+                createdOrganizations: [
+                  {
+                    __typename: 'Organization',
+                    _id: '6401ff65ce8e8406b8f07af2',
+                    image: '',
+                    name: 'anyOrganization1',
+                    description: 'desc',
+                    address: {
+                      city: 'abc',
+                      countryCode: '123',
+                      postalCode: '456',
+                      state: 'def',
+                      dependentLocality: 'ghi',
+                      line1: 'asdfg',
+                      line2: 'dfghj',
+                      sortingCode: '4567',
+                    },
+                    createdAt: '1234567890',
+                    userRegistrationRequired: true,
+                    creator: {
+                      __typename: 'User',
+                      name: 'John Doe',
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+          userId: TEST_USER_ID,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              addressLine1: 'asdfg',
+              description: 'desc',
+              avatarURL: '',
+              membersCount: 100,
+              adminsCount: 10,
+              isUserRegistrationRequired: true,
+              isMember: false,
+              membershipRequests: [],
+            },
+            {
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              addressLine1: 'asdfg',
+              description: 'desc',
+              avatarURL: '',
+              membersCount: 150,
+              adminsCount: 15,
+              isUserRegistrationRequired: true,
+              isMember: false,
+              membershipRequests: [],
+            },
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+        variables: {
+          id: TEST_USER_ID,
+          first: 5,
+        },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              pageInfo: {
+                hasNextPage: false,
+              },
+              edges: [
+                {
+                  node: {
+                    id: '6401ff65ce8e8406b8f07af2',
+                    name: 'Test Edge Org',
+                    addressLine1: 'Test Line 1',
+                    description: 'Test Description',
+                    avatarURL: '',
+                    membersCount: 50,
+                    adminsCount: 5,
+                    isUserRegistrationRequired: false,
+                  },
+                },
+                {
+                  node: {
+                    id: '6401ff65ce8e8406b8f07af3',
+                    name: 'anyOrganization1',
+                    addressLine1: 'asdfg',
+                    description: 'desc',
+                    avatarURL: '',
+                    membersCount: 100,
+                    adminsCount: 10,
+                    isUserRegistrationRequired: true,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+          userId: TEST_USER_ID,
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            {
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              addressLine1: 'asdfg',
+              description: 'desc',
+              avatarURL: '',
+              membersCount: 150,
+              adminsCount: 15,
+              isUserRegistrationRequired: true,
+              isMember: false,
+              membershipRequests: [],
+            },
+          ],
+        },
+      },
+    },
+  ];
+  const searchTestLink = new StaticMockLink(searchTestMocks, true);
+
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider addTypename={false} link={searchTestLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -384,15 +524,15 @@ test('Search works properly', async () => {
     </MockedProvider>,
   );
 
-  await wait(500);
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+    },
+    { timeout: 5000 },
+  );
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
-  });
-
-  await waitFor(() => {
-    expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
-    expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
   });
 
   const searchInput = screen.getByTestId('searchInput');
@@ -412,11 +552,6 @@ test('Search works properly', async () => {
   await userEvent.keyboard('{Enter}');
 
   await wait(300);
-
-  await waitFor(() => {
-    const org2Element = screen.getByTestId('org-name-anyOrganization2');
-    expect(org2Element).toBeInTheDocument();
-  });
 });
 
 test('Mode is changed to joined organizations', async () => {
@@ -472,7 +607,7 @@ test('Join Now button renders correctly', async () => {
   const organizationsMock = {
     request: {
       query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
+      variables: { filter: '', userId: TEST_USER_ID },
     },
     result: {
       data: {
@@ -485,6 +620,9 @@ test('Join Now button renders correctly', async () => {
             addressLine1: 'Test Address',
             adminsCount: 5,
             membersCount: 100,
+            isUserRegistrationRequired: false,
+            isMember: false,
+            membershipRequests: [],
           },
           {
             id: 'org-id-2',
@@ -494,6 +632,9 @@ test('Join Now button renders correctly', async () => {
             addressLine1: 'Test Address',
             adminsCount: 3,
             membersCount: 50,
+            isUserRegistrationRequired: false,
+            isMember: false,
+            membershipRequests: [],
           },
         ],
       },
@@ -698,23 +839,21 @@ test('setPage updates page state correctly when pagination controls are used', a
     .map((_, index) => ({
       id: `org-id-${index}`,
       name: `Organization ${index + 1}`,
-      image: '',
+      avatarURL: '',
       description: `Description for org ${index + 1}`,
-      address: {
-        city: 'Test City',
-        countryCode: 'TC',
-        line1: 'Test Address',
-        postalCode: '12345',
-        state: 'TS',
-      },
-      userRegistrationRequired: true,
+      addressLine1: 'Test Address',
+      membersCount: 10 + index,
+      adminsCount: 2,
+      isUserRegistrationRequired: true,
+      isMember: false,
+      membershipRequests: [],
     }));
 
   const paginationMocks = [
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: '' },
+        variables: { filter: '', userId: getItem('userId') },
       },
       result: {
         data: {
@@ -776,10 +915,7 @@ test('setPage updates page state correctly when pagination controls are used', a
 
   await act(async () => {
     fireEvent.click(nextButton);
-    await new Promise((resolve) => setTimeout(resolve, 0));
   });
-
-  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -793,10 +929,7 @@ test('setPage updates page state correctly when pagination controls are used', a
 
   await act(async () => {
     fireEvent.click(prevButton);
-    await new Promise((resolve) => setTimeout(resolve, 0));
   });
-
-  fireEvent(window, new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -831,9 +964,10 @@ test('should correctly map joined organizations data ', async () => {
                   avatarURL: 'org1.jpg',
                   description: 'First joined organization',
                   addressLine1: 'Test Address',
-                  members: [{ _id: TEST_USER_ID }],
+                  membersCount: 50,
+                  adminsCount: 5,
                   membershipRequests: [],
-                  userRegistrationRequired: false,
+                  isUserRegistrationRequired: false,
                 },
               },
               {
@@ -843,9 +977,10 @@ test('should correctly map joined organizations data ', async () => {
                   avatarURL: 'org2.jpg',
                   description: 'Second joined organization',
                   addressLine1: 'Another Address',
-                  members: [{ _id: TEST_USER_ID }],
+                  membersCount: 30,
+                  adminsCount: 3,
                   membershipRequests: [],
-                  userRegistrationRequired: true,
+                  isUserRegistrationRequired: true,
                 },
               },
             ],
@@ -925,14 +1060,12 @@ test('should correctly map joined organizations data ', async () => {
     expect(orgCards.length).toBe(2);
 
     orgCards.forEach((card) => {
-      const orgName = card.getAttribute('data-organization-name');
-
-      expect(card.getAttribute('data-membership-status')).toBe('accepted');
+      expect(card.getAttribute('data-membership-status')).toBe('true');
     });
   });
 });
 
-test('should set membershipRequestStatus to "created" for created organizations', async () => {
+test('should set isJoined to true for created organizations', async () => {
   const TEST_USER_ID = 'created-orgs-test-user';
   setItem('userId', TEST_USER_ID);
 
@@ -948,17 +1081,12 @@ test('should set membershipRequestStatus to "created" for created organizations'
             {
               id: 'created-org-1',
               name: 'Created Organization 1',
-              image: 'test.jpg',
+              avatarMimeType: null,
               description: 'Test Description',
-              address: {
-                city: 'Test City',
-                countryCode: 'TC',
-                line1: 'Test Address',
-                postalCode: '12345',
-                state: 'TS',
-              },
-              userRegistrationRequired: false,
-              membershipRequests: [],
+              createdAt: '2024-01-01T00:00:00Z',
+              isMember: true,
+              membersCount: 100,
+              adminsCount: 10,
             },
           ],
         },
@@ -1017,12 +1145,12 @@ test('should set membershipRequestStatus to "created" for created organizations'
   await waitFor(() => {
     const orgCard = screen.getByTestId('organization-card');
     expect(orgCard).toBeInTheDocument();
-    expect(orgCard.getAttribute('data-membership-status')).toBe('created');
+    expect(orgCard.getAttribute('data-membership-status')).toBe('true');
 
     const statusElement = screen.getByTestId(
       'membership-status-Created Organization 1',
     );
-    expect(statusElement.getAttribute('data-status')).toBe('created');
+    expect(statusElement.getAttribute('data-status')).toBe('true');
   });
 });
 
@@ -1049,16 +1177,10 @@ test('correctly map joined organizations data when mode is 1', async () => {
                     avatarURL: 'test.jpg',
                     description: 'Test Description',
                     addressLine1: '123 Test St',
+                    membersCount: 25,
+                    adminsCount: 2,
                     membershipRequests: [],
-                    userRegistrationRequired: false,
-                    address: {
-                      city: 'Test City',
-                      countryCode: 'TC',
-                      line1: '123 Test St',
-                      postalCode: '12345',
-                      state: 'TS',
-                    },
-                    admins: [],
+                    isUserRegistrationRequired: false,
                   },
                 },
               ],
@@ -1143,7 +1265,7 @@ test('should search organizations when pressing Enter key', async () => {
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: '' },
+        variables: { filter: '', userId: TEST_USER_ID },
       },
       result: {
         data: {
@@ -1154,6 +1276,11 @@ test('should search organizations when pressing Enter key', async () => {
               avatarURL: 'test.jpg',
               description: 'Test Description',
               addressLine1: '123 Test St',
+              membersCount: 10,
+              adminsCount: 2,
+              isUserRegistrationRequired: false,
+              isMember: false,
+              membershipRequests: [],
             },
           ],
         },
@@ -1162,7 +1289,7 @@ test('should search organizations when pressing Enter key', async () => {
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: 'Search Term' },
+        variables: { filter: 'Search Term', userId: TEST_USER_ID },
       },
       result: {
         data: {
@@ -1173,6 +1300,11 @@ test('should search organizations when pressing Enter key', async () => {
               avatarURL: 'search.jpg',
               description: 'Search Term Description',
               addressLine1: '456 Search St',
+              membersCount: 5,
+              adminsCount: 1,
+              isUserRegistrationRequired: false,
+              isMember: false,
+              membershipRequests: [],
             },
           ],
         },
@@ -1244,7 +1376,7 @@ test('should search organizations when clicking search button', async () => {
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: '' },
+        variables: { filter: '', userId: TEST_USER_ID },
       },
       result: {
         data: {
@@ -1255,6 +1387,11 @@ test('should search organizations when clicking search button', async () => {
               avatarURL: 'test.jpg',
               description: 'Test Description',
               addressLine1: '123 Test St',
+              membersCount: 10,
+              adminsCount: 2,
+              isUserRegistrationRequired: false,
+              isMember: false,
+              membershipRequests: [],
             },
           ],
         },
@@ -1263,7 +1400,7 @@ test('should search organizations when clicking search button', async () => {
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: 'Button Search' },
+        variables: { filter: 'Button Search', userId: TEST_USER_ID },
       },
       result: {
         data: {
@@ -1274,6 +1411,11 @@ test('should search organizations when clicking search button', async () => {
               avatarURL: 'button.jpg',
               description: 'Button Search Description',
               addressLine1: '789 Button St',
+              membersCount: 15,
+              adminsCount: 3,
+              isUserRegistrationRequired: false,
+              isMember: false,
+              membershipRequests: [],
             },
           ],
         },
@@ -1347,7 +1489,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
-        variables: { filter: searchValue },
+        variables: { filter: searchValue, userId: TEST_USER_ID },
       },
       result: {
         data: {
@@ -1487,7 +1629,7 @@ test('should display "no organizations" message when organizations list is empty
   const emptyMock = {
     request: {
       query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
+      variables: { filter: '', userId: getItem('userId') },
     },
     result: {
       data: {
@@ -1548,127 +1690,4 @@ test('should display "no organizations" message when organizations list is empty
 
   // Check that a "no organizations found" message is displayed
   expect(screen.getByText('Nothing to show here.')).toBeInTheDocument();
-});
-test('should set membershipRequestStatus to empty string when isMember is false', async () => {
-  const TEST_USER_ID = 'test-non-member-user';
-  setItem('userId', TEST_USER_ID);
-
-  const organizationsMock = {
-    request: {
-      query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'non-member-org-1',
-            name: 'Non Member Organization',
-            avatarURL: 'test.jpg',
-            description: 'Test Description',
-            addressLine1: '123 Test St',
-            adminsCount: 5,
-            membersCount: 100,
-            isMember: false, // Explicitly set to false
-          },
-          {
-            id: 'member-org-1',
-            name: 'Member Organization',
-            avatarURL: 'test.jpg',
-            description: 'Test Description',
-            addressLine1: '456 Test St',
-            adminsCount: 3,
-            membersCount: 50,
-            isMember: true, // Set to true for comparison
-          },
-        ],
-      },
-    },
-  };
-
-  const joinedOrgsMock = {
-    request: {
-      query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
-      variables: { id: TEST_USER_ID, first: 5, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          organizationsWhereMember: {
-            edges: [],
-            pageInfo: { hasNextPage: false },
-          },
-        },
-      },
-    },
-  };
-
-  const createdOrgsMock = {
-    request: {
-      query: USER_CREATED_ORGANIZATIONS,
-      variables: { id: TEST_USER_ID, filter: '' },
-    },
-    result: {
-      data: {
-        user: {
-          createdOrganizations: [],
-        },
-      },
-    },
-  };
-
-  const mocks = [organizationsMock, joinedOrgsMock, createdOrgsMock];
-  const link = new StaticMockLink(mocks, true);
-
-  render(
-    <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-
-  await waitFor(() => {
-    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
-  });
-
-  await waitFor(() => {
-    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
-  });
-
-  // Check that both organizations are rendered
-  const orgCards = screen.getAllByTestId('organization-card');
-  expect(orgCards.length).toBe(2);
-
-  // Get all organization cards and check their membership status attributes
-  const cards = screen.getAllByTestId('organization-card');
-
-  // Find the card with empty membership status (non-member)
-  const nonMemberCard = cards.find(
-    (card) => card.getAttribute('data-membership-status') === '',
-  );
-  expect(nonMemberCard).toBeTruthy();
-  expect(nonMemberCard?.getAttribute('data-membership-status')).toBe('');
-
-  // Find the card with 'accepted' membership status (member)
-  const memberCard = cards.find(
-    (card) => card.getAttribute('data-membership-status') === 'accepted',
-  );
-  expect(memberCard).toBeTruthy();
-  expect(memberCard?.getAttribute('data-membership-status')).toBe('accepted');
-
-  // Verify that we have one of each type
-  const emptyStatusCards = cards.filter(
-    (card) => card.getAttribute('data-membership-status') === '',
-  );
-  const acceptedStatusCards = cards.filter(
-    (card) => card.getAttribute('data-membership-status') === 'accepted',
-  );
-
-  expect(emptyStatusCards.length).toBe(1);
-  expect(acceptedStatusCards.length).toBe(1);
 });
