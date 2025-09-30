@@ -46,6 +46,7 @@ const ORG_FIELDS = gql`
     avatarURL
     membersCount
     adminsCount
+    isUserRegistrationRequired
   }
 `;
 
@@ -70,10 +71,14 @@ export const ORGANIZATION_LIST = gql`
 `;
 
 export const ORGANIZATION_FILTER_LIST = gql`
-  query OrganizationFilterList($filter: String) {
+  query OrganizationFilterList($filter: String, $userId: String) {
     organizations(filter: $filter) {
       ...OrgFields
       isMember
+      membershipRequests(where: { user: { userId: $userId } }) {
+        status
+        membershipRequestId
+      }
     }
   }
   ${ORG_FIELDS}
@@ -601,6 +606,7 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     avatarURL
     createdAt
     updatedAt
+    isUserRegistrationRequired
   }
 `;
 
