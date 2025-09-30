@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
+  "_dummy_ci_trigger": "2025-09-30",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
     "@apollo/client": "^3.11.8",
