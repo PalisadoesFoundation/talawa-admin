@@ -22,6 +22,79 @@ import type {
 } from 'utils/interfaces';
 
 /**
+ * function to handle blocked users pagination update query
+ */
+export const updateBlockedUsersQuery = (
+  prev: any,
+  { fetchMoreResult }: any,
+) => {
+  if (!fetchMoreResult || !fetchMoreResult.organization?.blockedUsers)
+    return prev;
+  if (!prev?.organization?.blockedUsers) return fetchMoreResult;
+
+  const prevEdges = prev.organization.blockedUsers.edges || [];
+  const newEdges = fetchMoreResult.organization.blockedUsers.edges || [];
+
+  return {
+    ...prev,
+    organization: {
+      ...prev.organization,
+      blockedUsers: {
+        ...prev.organization.blockedUsers,
+        edges: [...prevEdges, ...newEdges],
+        pageInfo: fetchMoreResult.organization.blockedUsers.pageInfo,
+      },
+    },
+  };
+};
+
+/**
+ * function to handle venues pagination update query
+ */
+export const updateVenuesQuery = (prev: any, { fetchMoreResult }: any) => {
+  if (!fetchMoreResult || !fetchMoreResult.organization?.venues) return prev;
+  if (!prev?.organization?.venues) return fetchMoreResult;
+
+  const prevEdges = prev.organization.venues.edges || [];
+  const newEdges = fetchMoreResult.organization.venues.edges || [];
+
+  return {
+    ...prev,
+    organization: {
+      ...prev.organization,
+      venues: {
+        ...prev.organization.venues,
+        edges: [...prevEdges, ...newEdges],
+        pageInfo: fetchMoreResult.organization.venues.pageInfo,
+      },
+    },
+  };
+};
+
+/**
+ * function to handle events pagination update query
+ */
+export const updateEventsQuery = (prev: any, { fetchMoreResult }: any) => {
+  if (!fetchMoreResult || !fetchMoreResult.organization?.events) return prev;
+  if (!prev?.organization?.events) return fetchMoreResult;
+
+  const prevEdges = prev.organization.events.edges || [];
+  const newEdges = fetchMoreResult.organization.events.edges || [];
+
+  return {
+    ...prev,
+    organization: {
+      ...prev.organization,
+      events: {
+        ...prev.organization.events,
+        edges: [...prevEdges, ...newEdges],
+        pageInfo: fetchMoreResult.organization.events.pageInfo,
+      },
+    },
+  };
+};
+
+/**
  * Props interface for the dashboard data hook
  */
 export interface InterfaceUseDashboardDataProps {
@@ -241,26 +314,7 @@ export function useDashboardData({
       if (hasNextPage && endCursor) {
         fetchMoreEvents({
           variables: { id: orgId, first: 32, after: endCursor },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult || !fetchMoreResult.organization?.events)
-              return prev;
-            if (!prev?.organization?.events) return fetchMoreResult;
-
-            const prevEdges = prev.organization.events.edges || [];
-            const newEdges = fetchMoreResult.organization.events.edges || [];
-
-            return {
-              ...prev,
-              organization: {
-                ...prev.organization,
-                events: {
-                  ...prev.organization.events,
-                  edges: [...prevEdges, ...newEdges],
-                  pageInfo: fetchMoreResult.organization.events.pageInfo,
-                },
-              },
-            };
-          },
+          updateQuery: updateEventsQuery,
         });
       } else {
         hasFetchedAllEvents.current = true;
@@ -290,27 +344,7 @@ export function useDashboardData({
       if (hasNextPage && endCursor) {
         fetchMoreBlockedUsers({
           variables: { id: orgId, first: 32, after: endCursor },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult || !fetchMoreResult.organization?.blockedUsers)
-              return prev;
-            if (!prev?.organization?.blockedUsers) return fetchMoreResult;
-
-            const prevEdges = prev.organization.blockedUsers.edges || [];
-            const newEdges =
-              fetchMoreResult.organization.blockedUsers.edges || [];
-
-            return {
-              ...prev,
-              organization: {
-                ...prev.organization,
-                blockedUsers: {
-                  ...prev.organization.blockedUsers,
-                  edges: [...prevEdges, ...newEdges],
-                  pageInfo: fetchMoreResult.organization.blockedUsers.pageInfo,
-                },
-              },
-            };
-          },
+          updateQuery: updateBlockedUsersQuery,
         });
       } else {
         hasFetchedAllBlockedUsers.current = true;
@@ -330,26 +364,7 @@ export function useDashboardData({
       if (hasNextPage && endCursor) {
         fetchMoreVenues({
           variables: { id: orgId, first: 32, after: endCursor },
-          updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult || !fetchMoreResult.organization?.venues)
-              return prev;
-            if (!prev?.organization?.venues) return fetchMoreResult;
-
-            const prevEdges = prev.organization.venues.edges || [];
-            const newEdges = fetchMoreResult.organization.venues.edges || [];
-
-            return {
-              ...prev,
-              organization: {
-                ...prev.organization,
-                venues: {
-                  ...prev.organization.venues,
-                  edges: [...prevEdges, ...newEdges],
-                  pageInfo: fetchMoreResult.organization.venues.pageInfo,
-                },
-              },
-            };
-          },
+          updateQuery: updateVenuesQuery,
         });
       } else {
         hasFetchedAllVenues.current = true;
