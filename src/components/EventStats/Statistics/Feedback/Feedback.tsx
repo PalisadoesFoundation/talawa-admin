@@ -32,11 +32,7 @@
  *
  */
 import React from 'react';
-import {
-  PieChart,
-  pieArcClasses,
-  pieArcLabelClasses,
-} from '@mui/x-charts/PieChart';
+import { PieChart, pieArcClasses, pieArcLabelClasses } from '@mui/x-charts';
 import Card from 'react-bootstrap/Card';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';

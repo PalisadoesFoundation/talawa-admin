@@ -9,8 +9,8 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { vi, describe, expect, it } from 'vitest';
 import { nonEmptyProps, emptyProps } from '../../EventStatsMocks';
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
-vi.mock('@mui/x-charts/PieChart', async () => ({
+// Mock the modules for PieChart rendering as they require a transformer being used (which is not done by Vitest)
+vi.mock('@mui/x-charts', async () => ({
   PieChart: () => <div data-testid="mocked-pie-chart">Test</div>,
   pieArcClasses: { faded: 'faded-class' },
   pieArcLabelClasses: { root: 'label-root-class', faded: 'label-faded-class' },
