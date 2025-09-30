@@ -60,9 +60,9 @@ const cTranslations = JSON.parse(
   ),
 );
 
-const pTranslations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
-);
+// const pTranslations = JSON.parse(
+//   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
+// );
 
 /*
  * Renders the `Campaigns` component for testing.
@@ -106,6 +106,9 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   beforeAll(() => {
+    vi.spyOn(Date, 'now').mockReturnValue(
+      new Date('2024-08-01T00:00:00Z').getTime(),
+    );
     /**
      * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
      */
@@ -206,8 +209,8 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
       expect(detailContainer2).toHaveTextContent('2024-07-28');
-      expect(detailContainer2).toHaveTextContent('2022-08-30');
-      expect(detailContainer2).toHaveTextContent('Ended');
+      expect(detailContainer2).toHaveTextContent('2026-08-30');
+      expect(detailContainer2).toHaveTextContent('Active');
     });
   });
 

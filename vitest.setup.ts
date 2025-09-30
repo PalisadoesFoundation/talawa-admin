@@ -1,5 +1,17 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
+import React from 'react';
+
+// Mock MUI X Charts to avoid ESM node import issues during tests
+vi.mock('@mui/x-charts', () => {
+  const MockComp = () => null as unknown as React.ReactElement;
+  return {
+    PieChart: MockComp,
+    BarChart: MockComp,
+    LineChart: MockComp,
+    pieArcClasses: {},
+  };
+});
 
 // Basic cleanup after each test
 afterEach(() => {

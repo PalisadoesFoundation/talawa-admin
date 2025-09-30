@@ -5,6 +5,20 @@ import svgrPlugin from 'vite-plugin-svgr';
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  resolve: {
+    alias: [
+      {
+        find: /@mui\/material\/styles$/,
+        replacement:
+          '/Users/bharathchandra/g64/talawa-admin/node_modules/@mui/material/node/styles/index.js',
+      },
+      {
+        find: /^@mui\/x-charts(\/.*)?$/,
+        replacement:
+          '/Users/bharathchandra/g64/talawa-admin/src/test/stubs/mui-x-charts.ts',
+      },
+    ],
+  },
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,

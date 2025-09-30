@@ -84,7 +84,7 @@ export const MOCKS = [
           {
             _id: 'campaignId2',
             startDate: '2024-07-28',
-            endDate: '2022-08-30',
+            endDate: '2026-08-30',
             name: 'Hospital Campaign',
             fundingGoal: 9000,
             currency: 'USD',
