@@ -37,7 +37,7 @@ const renderPaginationList = (props: any = {}) => {
           <PaginationList {...defaultProps} {...props} />
         </I18nextProvider>
       </Provider>
-    </BrowserRouter>
+    </BrowserRouter>,
   );
 };
 
@@ -52,7 +52,9 @@ describe('PaginationList Component', () => {
   describe('Rendering', () => {
     it('should render without crashing', () => {
       renderPaginationList();
-      expect(screen.getAllByTestId('mock-pagination').length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId('mock-pagination').length).toBeGreaterThan(
+        0,
+      );
     });
 
     it('should render TablePagination component', () => {
@@ -115,7 +117,9 @@ describe('PaginationList Component', () => {
       });
 
       // Find the select element (desktop view)
-      const select = container.querySelector('select[aria-label="rows per page"]');
+      const select = container.querySelector(
+        'select[aria-label="rows per page"]',
+      );
 
       if (select) {
         await act(async () => {
@@ -269,7 +273,9 @@ describe('PaginationList Component', () => {
     it('should have SelectProps with aria-label for accessibility', () => {
       const { container } = renderPaginationList();
 
-      const selects = container.querySelectorAll('select[aria-label="rows per page"]');
+      const selects = container.querySelectorAll(
+        'select[aria-label="rows per page"]',
+      );
       expect(selects.length).toBeGreaterThan(0);
     });
 
@@ -298,7 +304,9 @@ describe('PaginationList Component', () => {
     it('should render with correct rowsPerPageOptions for desktop', () => {
       // Desktop view has [5, 10, 30, { label: t('all'), value: Number.MAX_SAFE_INTEGER }]
       const { container } = renderPaginationList();
-      const select = container.querySelector('select[aria-label="rows per page"]');
+      const select = container.querySelector(
+        'select[aria-label="rows per page"]',
+      );
       expect(select).toBeInTheDocument();
     });
 
@@ -337,7 +345,9 @@ describe('PaginationList Component', () => {
         page: 0,
       });
 
-      expect(screen.getAllByTestId('mock-pagination').length).toBeGreaterThanOrEqual(1);
+      expect(
+        screen.getAllByTestId('mock-pagination').length,
+      ).toBeGreaterThanOrEqual(1);
 
       // Rerender with different props
       rerender(
@@ -353,10 +363,12 @@ describe('PaginationList Component', () => {
               />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </BrowserRouter>,
       );
 
-      expect(screen.getAllByTestId('mock-pagination').length).toBeGreaterThanOrEqual(1);
+      expect(
+        screen.getAllByTestId('mock-pagination').length,
+      ).toBeGreaterThanOrEqual(1);
     });
 
     it('should handle rapid prop changes', () => {
@@ -376,11 +388,13 @@ describe('PaginationList Component', () => {
                 />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
+          </BrowserRouter>,
         );
       }
 
-      expect(screen.getAllByTestId('mock-pagination').length).toBeGreaterThanOrEqual(1);
+      expect(
+        screen.getAllByTestId('mock-pagination').length,
+      ).toBeGreaterThanOrEqual(1);
     });
   });
 
@@ -391,7 +405,9 @@ describe('PaginationList Component', () => {
     it('should have accessible select elements with proper labels', () => {
       const { container } = renderPaginationList();
 
-      const selects = container.querySelectorAll('select[aria-label="rows per page"]');
+      const selects = container.querySelectorAll(
+        'select[aria-label="rows per page"]',
+      );
       selects.forEach((select) => {
         expect(select).toHaveAttribute('aria-label', 'rows per page');
       });
@@ -438,7 +454,9 @@ describe('PaginationList Component', () => {
         onRowsPerPageChange: mockOnRowsPerPageChange,
       });
 
-      const select = container.querySelector('select[aria-label="rows per page"]');
+      const select = container.querySelector(
+        'select[aria-label="rows per page"]',
+      );
 
       if (select) {
         await act(async () => {
