@@ -177,11 +177,16 @@ export function useDashboardData({
         fetchMoreMembers({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
+            if (!fetchMoreResult || !fetchMoreResult.organization?.members)
+              return prev;
+            if (!prev?.organization?.members) return fetchMoreResult;
+
+            const prevEdges = prev.organization.members.edges || [];
+            const newEdges = fetchMoreResult.organization.members.edges || [];
 
             console.log('DEBUG: Fetching more - updateQuery called', {
-              prevEdges: prev.organization.members.edges.length,
-              fetchMoreEdges: fetchMoreResult.organization.members.edges.length,
+              prevEdges: prevEdges.length,
+              fetchMoreEdges: newEdges.length,
             });
 
             const updatedData = {
@@ -190,10 +195,7 @@ export function useDashboardData({
                 ...prev.organization,
                 members: {
                   ...prev.organization.members,
-                  edges: [
-                    ...prev.organization.members.edges,
-                    ...fetchMoreResult.organization.members.edges,
-                  ],
+                  edges: [...prevEdges, ...newEdges],
                   pageInfo: fetchMoreResult.organization.members.pageInfo,
                 },
               },
@@ -275,17 +277,20 @@ export function useDashboardData({
         fetchMoreEvents({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
+            if (!fetchMoreResult || !fetchMoreResult.organization?.events)
+              return prev;
+            if (!prev?.organization?.events) return fetchMoreResult;
+
+            const prevEdges = prev.organization.events.edges || [];
+            const newEdges = fetchMoreResult.organization.events.edges || [];
+
             return {
               ...prev,
               organization: {
                 ...prev.organization,
                 events: {
                   ...prev.organization.events,
-                  edges: [
-                    ...prev.organization.events.edges,
-                    ...fetchMoreResult.organization.events.edges,
-                  ],
+                  edges: [...prevEdges, ...newEdges],
                   pageInfo: fetchMoreResult.organization.events.pageInfo,
                 },
               },
@@ -321,17 +326,21 @@ export function useDashboardData({
         fetchMoreBlockedUsers({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
+            if (!fetchMoreResult || !fetchMoreResult.organization?.blockedUsers)
+              return prev;
+            if (!prev?.organization?.blockedUsers) return fetchMoreResult;
+
+            const prevEdges = prev.organization.blockedUsers.edges || [];
+            const newEdges =
+              fetchMoreResult.organization.blockedUsers.edges || [];
+
             return {
               ...prev,
               organization: {
                 ...prev.organization,
                 blockedUsers: {
                   ...prev.organization.blockedUsers,
-                  edges: [
-                    ...prev.organization.blockedUsers.edges,
-                    ...fetchMoreResult.organization.blockedUsers.edges,
-                  ],
+                  edges: [...prevEdges, ...newEdges],
                   pageInfo: fetchMoreResult.organization.blockedUsers.pageInfo,
                 },
               },
@@ -357,17 +366,20 @@ export function useDashboardData({
         fetchMoreVenues({
           variables: { id: orgId, first: 32, after: endCursor },
           updateQuery: (prev, { fetchMoreResult }) => {
-            if (!fetchMoreResult) return prev;
+            if (!fetchMoreResult || !fetchMoreResult.organization?.venues)
+              return prev;
+            if (!prev?.organization?.venues) return fetchMoreResult;
+
+            const prevEdges = prev.organization.venues.edges || [];
+            const newEdges = fetchMoreResult.organization.venues.edges || [];
+
             return {
               ...prev,
               organization: {
                 ...prev.organization,
                 venues: {
                   ...prev.organization.venues,
-                  edges: [
-                    ...prev.organization.venues.edges,
-                    ...fetchMoreResult.organization.venues.edges,
-                  ],
+                  edges: [...prevEdges, ...newEdges],
                   pageInfo: fetchMoreResult.organization.venues.pageInfo,
                 },
               },

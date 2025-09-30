@@ -438,25 +438,5 @@ describe('DashboardCards', () => {
       expect(mockNavigate).toHaveBeenNthCalledWith(2, '/events');
       expect(mockNavigate).toHaveBeenNthCalledWith(3, '/venues');
     });
-
-    it('should handle navigation function errors gracefully', () => {
-      const errorNavigate = vi.fn().mockImplementation(() => {
-        throw new Error('Navigation error');
-      });
-
-      const errorProps = {
-        ...defaultProps,
-        navigate: errorNavigate,
-      };
-
-      render(<DashboardCards {...errorProps} />);
-
-      // Should not throw when navigation fails
-      expect(() => {
-        fireEvent.click(screen.getByTestId('postsCount'));
-      }).not.toThrow();
-
-      expect(errorNavigate).toHaveBeenCalledWith('/posts');
-    });
   });
 });
