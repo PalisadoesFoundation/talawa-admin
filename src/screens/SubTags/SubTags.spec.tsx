@@ -32,8 +32,8 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -79,7 +79,7 @@ const cache = new InMemoryCache({
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider cache={cache} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

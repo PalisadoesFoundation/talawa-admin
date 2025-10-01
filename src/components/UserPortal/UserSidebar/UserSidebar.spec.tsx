@@ -153,7 +153,7 @@ describe('UserSidebar', () => {
 
   const renderComponent = (props: Partial<InterfaceUserSidebarProps> = {}) => {
     return render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <MemoryRouter>
           <UserSidebar {...defaultProps} {...props} />
         </MemoryRouter>
@@ -473,7 +473,7 @@ describe('UserSidebar', () => {
   describe('Active State Styling', () => {
     it('should apply active styles when on organizations route', () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MemoryRouter initialEntries={['/user/organizations']}>
             <UserSidebar {...defaultProps} />
           </MemoryRouter>
@@ -486,7 +486,7 @@ describe('UserSidebar', () => {
 
     it('should apply active styles when on settings route', () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MemoryRouter initialEntries={['/user/settings']}>
             <UserSidebar {...defaultProps} />
           </MemoryRouter>
@@ -499,7 +499,7 @@ describe('UserSidebar', () => {
 
     it('should apply active stroke color to icons when route is active', () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MemoryRouter initialEntries={['/user/organizations']}>
             <UserSidebar {...defaultProps} />
           </MemoryRouter>
@@ -512,7 +512,7 @@ describe('UserSidebar', () => {
 
     it('should apply inactive stroke color to icons when route is not active', () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <MemoryRouter initialEntries={['/user/other']}>
             <UserSidebar {...defaultProps} />
           </MemoryRouter>

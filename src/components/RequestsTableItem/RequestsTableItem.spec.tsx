@@ -8,7 +8,7 @@ import type { InterfaceRequestsListItem } from 'types/Member/interface';
 import { MOCKS, ERROR_MOCKS } from './RequestsTableItemMocks';
 import RequestsTableItem from './RequestsTableItem';
 import { BrowserRouter } from 'react-router-dom';
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -76,7 +76,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -114,7 +114,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -131,7 +131,7 @@ describe('Testing User Table Item', () => {
   });
 
   it('Accept MembershipRequest handles error', async () => {
-    const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+    const errorLink = new StaticMockLink(ERROR_MOCKS);
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -152,7 +152,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -187,7 +187,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -203,7 +203,7 @@ describe('Testing User Table Item', () => {
     expect(resetAndRefetchMock).toHaveBeenCalled();
   });
   it('Reject MembershipRequest handles error', async () => {
-    const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+    const errorLink = new StaticMockLink(ERROR_MOCKS);
     const props: {
       request: InterfaceRequestsListItem;
       index: number;
@@ -224,7 +224,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />

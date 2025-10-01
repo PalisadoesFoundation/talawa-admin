@@ -34,7 +34,7 @@ const MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 afterEach(() => {
   localStorage.clear();
@@ -70,7 +70,7 @@ describe('Testing Event Card In User portal', () => {
 
   it('The card should be rendered properly, and all the details should be displayed correct', async () => {
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -109,7 +109,7 @@ describe('Testing Event Card In User portal', () => {
   it('When the user is already registered', async () => {
     setItem('userId', '234');
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -128,7 +128,7 @@ describe('Testing Event Card In User portal', () => {
   it('Handle register should work properly', async () => {
     setItem('userId', '456');
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -159,10 +159,10 @@ describe('Testing Event Card In User portal', () => {
       },
     ];
 
-    const errorLink = new StaticMockLink(errorMocks, true);
+    const errorLink = new StaticMockLink(errorMocks);
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -214,7 +214,7 @@ describe('Event card when start and end time are not given', () => {
 
   it('Card is rendered correctly', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

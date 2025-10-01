@@ -35,7 +35,7 @@ vi.mock('react-router', async () => {
   return { ...actual, useParams: () => ({ orgId: mockID }) };
 });
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
@@ -50,7 +50,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   it('should be redirected to / if IsLoggedIn is false', async () => {
     setItem('IsLoggedIn', false);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -65,7 +65,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   it('should be redirected to / if ss is false', async () => {
     setItem('IsLoggedIn', true);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -83,7 +83,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
       { _id: '6637904485008f171cf29924', __typename: 'Organization' },
     ]);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -113,7 +113,7 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
   it('should be redirected to / if orgId is undefined', async () => {
     mockID = undefined;
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

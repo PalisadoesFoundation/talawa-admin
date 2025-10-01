@@ -24,7 +24,7 @@ import { type InterfaceDonationCardProps } from 'types/Donation/interface';
  * can be added in the future to validate interactions and state changes based on user actions.
  */
 
-const link = new StaticMockLink([], true);
+const link = new StaticMockLink([]);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -46,7 +46,7 @@ const props: InterfaceDonationCardProps = {
 describe('Testing ContactCard Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

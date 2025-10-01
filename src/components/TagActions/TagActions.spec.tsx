@@ -30,9 +30,9 @@ import {
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY);
+const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY);
 const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -91,7 +91,7 @@ const renderTagActionsModal = (
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

@@ -26,7 +26,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
  * when opening and closing modals, and correctly integrates with its dependencies.
  */
 
-const link = new StaticMockLink(checkInQueryMock, true);
+const link = new StaticMockLink(checkInQueryMock);
 
 describe('Testing CheckIn Wrapper', () => {
   const props = {
@@ -35,7 +35,7 @@ describe('Testing CheckIn Wrapper', () => {
 
   it('The button to open and close the modal should work properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -74,7 +74,7 @@ describe('CheckInWrapper CSS Tests', () => {
 
   const renderComponent = (): ReturnType<typeof render> => {
     return render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

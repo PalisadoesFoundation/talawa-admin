@@ -110,7 +110,7 @@ describe('EventsAttendedByUser Component', () => {
 
   it('renders the component with events', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <EventsAttendedByUser {...mockUserWithEvents} />
       </MockedProvider>,
     );
@@ -121,7 +121,7 @@ describe('EventsAttendedByUser Component', () => {
 
   it('renders no events message when user has no events', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <EventsAttendedByUser {...mockUserWithoutEvents} />
       </MockedProvider>,
     );

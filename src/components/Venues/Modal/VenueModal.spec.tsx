@@ -279,7 +279,7 @@ const renderVenueModal = (
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -299,7 +299,7 @@ describe('VenueModal', () => {
 
   test('creates a new venue successfully', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -343,7 +343,7 @@ describe('VenueModal', () => {
       }),
     }));
 
-    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
     fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
       target: { value: 'Existing Venue' },
@@ -370,7 +370,7 @@ describe('VenueModal', () => {
 
   test('clears image input correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -391,21 +391,18 @@ describe('VenueModal', () => {
   // Basic Rendering Tests
   describe('Rendering', () => {
     test('renders correctly when show is true', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
       expect(screen.getByText('Venue Details')).toBeInTheDocument();
     });
 
     test('does not render when show is false', () => {
       const props = { ...defaultProps, show: false };
-      const { container } = renderVenueModal(
-        props,
-        new StaticMockLink(MOCKS, true),
-      );
+      const { container } = renderVenueModal(props, new StaticMockLink(MOCKS));
       expect(container.firstChild).toBeNull();
     });
 
     test('calls onHide when close button is clicked', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
       fireEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
       expect(defaultProps.onHide).toHaveBeenCalled();
     });
@@ -414,7 +411,7 @@ describe('VenueModal', () => {
   // Form Field Tests
   describe('Form Fields', () => {
     test('populates form fields correctly in edit mode', () => {
-      renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(editProps, new StaticMockLink(MOCKS));
       expect(screen.getByDisplayValue('Venue 1')).toBeInTheDocument();
       expect(
         screen.getByDisplayValue('Updated description for venue 1'),
@@ -423,7 +420,7 @@ describe('VenueModal', () => {
     });
 
     test('form fields are empty in create mode', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
       expect(screen.getByPlaceholderText('Enter Venue Name')).toHaveValue('');
       expect(
         screen.getByPlaceholderText('Enter Venue Description'),
@@ -450,7 +447,7 @@ describe('VenueModal', () => {
 
       // Create a component with the spy link
       const { unmount } = render(
-        <MockedProvider link={mockLink} addTypename={false}>
+        <MockedProvider link={mockLink}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -509,10 +506,7 @@ describe('VenueModal', () => {
         },
       ];
 
-      renderVenueModal(
-        defaultProps,
-        new StaticMockLink(emptyDescriptionMock, true),
-      );
+      renderVenueModal(defaultProps, new StaticMockLink(emptyDescriptionMock));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: '  Test Venue  ' },
@@ -553,7 +547,7 @@ describe('VenueModal', () => {
     });
 
     test('displays image preview and clear button when an image is selected', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
 
@@ -581,7 +575,7 @@ describe('VenueModal', () => {
         return originalUseRef(initialValue);
       });
 
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       const file = new File(['test'], 'test.png', { type: 'image/png' });
       const fileInput = screen.getByTestId('venueImgUrl');
@@ -611,7 +605,7 @@ describe('VenueModal', () => {
     });
 
     test('shows error when uploading file larger than 5MB', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       const largeFile = new File(
         ['x'.repeat(6 * 1024 * 1024)],
@@ -633,7 +627,7 @@ describe('VenueModal', () => {
     });
 
     test('shows error when uploading non-image file', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       const pdfFile = new File(['test content'], 'document.pdf', {
         type: 'application/pdf',
@@ -660,7 +654,7 @@ describe('VenueModal', () => {
         });
 
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal
               {...defaultProps}
@@ -687,7 +681,7 @@ describe('VenueModal', () => {
 
     test('shows error toast when an empty file is selected', async () => {
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -719,7 +713,7 @@ describe('VenueModal', () => {
   // Validation Tests
   describe('Validation', () => {
     test('shows error when venue name is empty', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
         target: { value: '100' },
@@ -737,7 +731,7 @@ describe('VenueModal', () => {
     });
 
     test('shows error when venue capacity is not a positive number', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: 'Test Venue' },
@@ -758,7 +752,7 @@ describe('VenueModal', () => {
     });
 
     test('validates capacity edge cases', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       // Test zero capacity
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
@@ -783,7 +777,7 @@ describe('VenueModal', () => {
   // Mutation Tests
   describe('Mutations', () => {
     test('disables submit button during mutation loading state', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: 'Test Venue' },
@@ -817,7 +811,7 @@ describe('VenueModal', () => {
 
       // Use render with cleanup to properly isolate test renders
       const { unmount } = render(
-        <MockedProvider mocks={mockWithoutData} addTypename={false}>
+        <MockedProvider mocks={mockWithoutData}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -846,7 +840,7 @@ describe('VenueModal', () => {
 
       // Now render with proper data
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -893,7 +887,7 @@ describe('VenueModal', () => {
       ];
 
       // First render with mock that will not trigger success path
-      renderVenueModal(editProps, new StaticMockLink(mockWithoutData, true));
+      renderVenueModal(editProps, new StaticMockLink(mockWithoutData));
 
       fireEvent.change(screen.getByDisplayValue('Venue 1'), {
         target: { value: 'Updated Venue' },
@@ -915,7 +909,7 @@ describe('VenueModal', () => {
     });
 
     test('handles duplicate venue name error', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: 'Existing Venue' },
@@ -939,7 +933,7 @@ describe('VenueModal', () => {
     });
 
     test('handles network error during venue creation', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: 'Network Test Venue' },
@@ -964,7 +958,7 @@ describe('VenueModal', () => {
   // Update Tests
   describe('Venue Updates', () => {
     test('shows success toast when an existing venue is updated', async () => {
-      renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(editProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByDisplayValue('Venue 1'), {
         target: { value: 'Updated Venue' },
@@ -1029,7 +1023,7 @@ describe('VenueModal', () => {
 
       renderVenueModal(
         customEditProps,
-        new StaticMockLink(editMockWithFallbacks, true),
+        new StaticMockLink(editMockWithFallbacks),
       );
 
       fireEvent.change(screen.getByDisplayValue('Venue 1'), {
@@ -1052,7 +1046,7 @@ describe('VenueModal', () => {
     });
 
     test('handles multiple successive updates correctly', async () => {
-      const mockLink = new StaticMockLink(MOCKS, true);
+      const mockLink = new StaticMockLink(MOCKS);
       const onHide = vi.fn();
       const refetchVenues = vi.fn();
 
@@ -1091,7 +1085,7 @@ describe('VenueModal', () => {
     });
 
     test('handles unchanged name in edit mode', async () => {
-      renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(editProps, new StaticMockLink(MOCKS));
 
       fireEvent.change(screen.getByDisplayValue('Venue 1'), {
         target: { value: 'Venue 1' }, // Same name
@@ -1133,7 +1127,7 @@ describe('VenueModal', () => {
           },
         ];
 
-        renderVenueModal(editProps, new StaticMockLink(errorMock, true));
+        renderVenueModal(editProps, new StaticMockLink(errorMock));
 
         fireEvent.change(screen.getByDisplayValue('Venue 1'), {
           target: { value: 'Updated Venue' },
@@ -1167,10 +1161,7 @@ describe('VenueModal', () => {
         error: new Error('alreadyExists'),
       };
 
-      renderVenueModal(
-        defaultProps,
-        new StaticMockLink([duplicateNameMock], true),
-      );
+      renderVenueModal(defaultProps, new StaticMockLink([duplicateNameMock]));
 
       await act(async () => {
         await userEvent.type(
@@ -1211,7 +1202,7 @@ describe('VenueModal', () => {
           error: new Error('Custom error message'),
         };
 
-        renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
+        renderVenueModal(defaultProps, new StaticMockLink([errorMock]));
 
         await act(async () => {
           await userEvent.type(
@@ -1248,7 +1239,7 @@ describe('VenueModal', () => {
           error: new Error('Unexpected error'),
         };
 
-        renderVenueModal(editProps, new StaticMockLink([errorMock], true));
+        renderVenueModal(editProps, new StaticMockLink([errorMock]));
 
         await act(async () => {
           fireEvent.click(screen.getByTestId('updateVenueBtn'));
@@ -1264,7 +1255,7 @@ describe('VenueModal', () => {
     test('resets form state when modal is closed and reopened', async () => {
       const { rerender } = renderVenueModal(
         defaultProps,
-        new StaticMockLink(MOCKS, true),
+        new StaticMockLink(MOCKS),
       );
 
       // Fill in form
@@ -1287,10 +1278,7 @@ describe('VenueModal', () => {
       // Completely unmount by setting show to false
       await act(async () => {
         rerender(
-          <MockedProvider
-            addTypename={false}
-            link={new StaticMockLink(MOCKS, true)}
-          >
+          <MockedProvider link={new StaticMockLink(MOCKS)}>
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>
@@ -1304,7 +1292,7 @@ describe('VenueModal', () => {
       });
 
       // Mount fresh component
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+      renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
       await waitFor(() => {
         const newNameInput = screen.getByPlaceholderText('Enter Venue Name');
@@ -1323,7 +1311,7 @@ describe('VenueModal', () => {
       // Form State Management Tests
       describe('Form State Management', () => {
         test('updates form state when description is changed', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const descInput = screen.getByPlaceholderText(
             'Enter Venue Description',
           );
@@ -1336,7 +1324,7 @@ describe('VenueModal', () => {
         });
 
         test('enforces maximum length for description', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const descInput = screen.getByPlaceholderText(
             'Enter Venue Description',
           );
@@ -1354,7 +1342,7 @@ describe('VenueModal', () => {
       describe('Image Handling Edge Cases', () => {
         // In VenueModal.spec.tsx
         test('handles multiple files selected in image upload', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const fileInput = screen.getByTestId('venueImgUrl');
           const files = [
             new File(['test1'], 'test1.png', { type: 'image/png' }),
@@ -1372,7 +1360,7 @@ describe('VenueModal', () => {
         // Validation Edge Cases
         describe('Validation Edge Cases', () => {
           test('handles empty venue name', async () => {
-            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
 
             fireEvent.change(
               screen.getByPlaceholderText('Enter Venue Capacity'),
@@ -1404,7 +1392,7 @@ describe('VenueModal', () => {
               result: { data: { createVenue: { id: 'newVenue' } } },
             };
 
-            const mockLink = new StaticMockLink([createVenueMock], true);
+            const mockLink = new StaticMockLink([createVenueMock]);
 
             renderVenueModal(defaultProps, mockLink);
 
@@ -1441,7 +1429,7 @@ describe('VenueModal', () => {
               result: { data: { createVenue: { id: 'newVenue' } } },
             };
 
-            const mockLink = new StaticMockLink([createVenueMock], true);
+            const mockLink = new StaticMockLink([createVenueMock]);
 
             renderVenueModal(defaultProps, mockLink);
 
@@ -1483,7 +1471,7 @@ describe('VenueModal', () => {
               error: new Error('alreadyExists'),
             };
 
-            const mockLink = new StaticMockLink([duplicateNameMock], true);
+            const mockLink = new StaticMockLink([duplicateNameMock]);
 
             // Mock toast.error to check the exact message
             const toastErrorSpy = vi.spyOn(toast, 'error');
@@ -1516,7 +1504,7 @@ describe('VenueModal', () => {
         });
 
         test('handles special characters in venue name', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const nameInput = screen.getByPlaceholderText('Enter Venue Name');
 
           await act(async () => {
@@ -1527,7 +1515,7 @@ describe('VenueModal', () => {
         });
 
         test('handles non-numeric input for capacity', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const capacityInput = screen.getByPlaceholderText(
             'Enter Venue Capacity',
           );
@@ -1551,7 +1539,7 @@ describe('VenueModal', () => {
       // Error Boundary Tests
       describe('Error Handling', () => {
         test('handles image upload with no files', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const fileInput = screen.getByTestId('venueImgUrl');
 
           await act(async () => {
@@ -1579,10 +1567,7 @@ describe('VenueModal', () => {
             result: { data: { createVenue: { id: 'newVenue' } } },
           };
 
-          renderVenueModal(
-            defaultProps,
-            new StaticMockLink([createVenueMock], true),
-          );
+          renderVenueModal(defaultProps, new StaticMockLink([createVenueMock]));
 
           await act(async () => {
             await userEvent.type(
@@ -1632,7 +1617,7 @@ describe('VenueModal', () => {
                 },
               },
             },
-            new StaticMockLink([updateMock], true),
+            new StaticMockLink([updateMock]),
           );
 
           await act(async () => {
@@ -1655,7 +1640,7 @@ describe('VenueModal', () => {
             venueData: undefined,
           };
 
-          const mockLink = new StaticMockLink(MOCKS, true);
+          const mockLink = new StaticMockLink(MOCKS);
           renderVenueModal(editPropsWithUndefinedVenueData, mockLink);
 
           // Attempt to submit form
@@ -1668,7 +1653,7 @@ describe('VenueModal', () => {
         });
 
         test('handles description truncation', async () => {
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS));
           const descInput = screen.getByPlaceholderText(
             'Enter Venue Description',
           );
@@ -1697,7 +1682,7 @@ describe('VenueModal', () => {
             error: new Error('Custom error message'),
           };
 
-          renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
+          renderVenueModal(defaultProps, new StaticMockLink([errorMock]));
 
           await act(async () => {
             await userEvent.type(

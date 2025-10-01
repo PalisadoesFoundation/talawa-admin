@@ -16,7 +16,7 @@ vi.mock('react-toastify', () => ({
 describe('CustomTableCell', () => {
   it('renders event details correctly', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -49,7 +49,7 @@ describe('CustomTableCell', () => {
 
   it('displays loading state', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />
@@ -73,7 +73,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
+      <MockedProvider mocks={errorMock}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />
@@ -107,7 +107,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={noEventMock} addTypename={false}>
+      <MockedProvider mocks={noEventMock}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />

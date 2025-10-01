@@ -15,8 +15,8 @@ import { MOCKS_WITHOUT_TIME, MOCKS_WITH_TIME } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, expect, it, describe } from 'vitest';
 
-const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
-const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
+const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME);
+const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME);
 
 // We want to disable all forms of caching so that we do not need to define a custom merge function in testing for the network requests
 const defaultOptions: DefaultOptions = {
@@ -46,11 +46,7 @@ vi.mock('react-router', async () => ({
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   return render(
     <BrowserRouter>
-      <MockedProvider
-        addTypename={false}
-        link={mockLink}
-        defaultOptions={defaultOptions}
-      >
+      <MockedProvider link={mockLink} defaultOptions={defaultOptions}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18nForTest}>
             <ToastContainer />

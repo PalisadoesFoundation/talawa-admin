@@ -191,7 +191,7 @@ beforeEach(() => {
 describe('LeaveOrganization Component', () => {
   test('renders organization details and shows loading spinner', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -209,7 +209,7 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and displays content correctly', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -225,7 +225,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error message when mutation fails', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
           <Routes>
             <Route
@@ -289,7 +289,7 @@ describe('LeaveOrganization Component', () => {
     const toastSuccessMock = vi.fn();
     toast.success = toastSuccessMock;
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -325,7 +325,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email is missing', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -357,7 +357,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email does not match', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -389,7 +389,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when back button pressed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -417,7 +417,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when modal is closed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -438,7 +438,7 @@ describe('LeaveOrganization Component', () => {
       mockNavigate,
     );
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -459,7 +459,7 @@ describe('LeaveOrganization Component', () => {
 
   test('displays an error alert when query fails', async () => {
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <LeaveOrganization />
       </MockedProvider>,
     );
@@ -481,7 +481,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], networkErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -538,7 +538,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], graphQLErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -605,7 +605,6 @@ describe('LeaveOrganization Component', () => {
             },
           },
         ]}
-        addTypename={false}
       >
         <BrowserRouter>
           <LeaveOrganization />
@@ -659,7 +658,7 @@ describe('LeaveOrganization Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[emptyOrgMock]} addTypename={false}>
+      <MockedProvider mocks={[emptyOrgMock]}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>

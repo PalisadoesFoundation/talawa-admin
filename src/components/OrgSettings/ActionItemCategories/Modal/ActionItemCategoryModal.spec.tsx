@@ -88,7 +88,7 @@ const renderCategoryModal = (
   props: IActionItemCategoryModal,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>

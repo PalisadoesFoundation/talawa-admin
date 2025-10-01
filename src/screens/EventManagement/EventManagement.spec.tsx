@@ -40,15 +40,11 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.updater = {
   emailAddress: 'jane.doe@example.com',
 };
 
-const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
+const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME);
 
 const renderEventManagement = (): RenderResult => {
   return render(
-    <MockedProvider
-      addTypename={false}
-      link={mockWithTime}
-      mocks={MOCKS_WITH_FIXED_TIME}
-    >
+    <MockedProvider link={mockWithTime} mocks={MOCKS_WITH_FIXED_TIME}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

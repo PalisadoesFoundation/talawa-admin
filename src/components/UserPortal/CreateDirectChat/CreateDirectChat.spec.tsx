@@ -111,7 +111,28 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
   });
 
   it('Open and close create new direct chat modal', async () => {
-    renderChatWithMocks();
+    const mock = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...CHATS_LIST_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CREATE_CHAT_MUTATION_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_LIST_QUERY_MOCK,
+      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatComp />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await wait();
 
@@ -145,7 +166,28 @@ describe('Testing Create Direct Chat Modal [User Portal]', () => {
 
   it('create new direct chat', async () => {
     setItem('userId', '1');
-    renderChatWithMocks();
+    const mock = [
+      ...GROUP_CHAT_BY_ID_QUERY_MOCK,
+      ...MESSAGE_SENT_TO_CHAT_MOCK,
+      ...UserConnectionListMock,
+      ...CHATS_LIST_MOCK,
+      ...CHAT_BY_ID_QUERY_MOCK,
+      ...CREATE_CHAT_MUTATION_MOCK,
+      ...MARK_CHAT_MESSAGES_AS_READ_MOCK,
+      ...UNREAD_CHAT_LIST_QUERY_MOCK,
+      ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
+    ];
+    render(
+      <MockedProvider addTypename={false} mocks={mock}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatComp />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await wait();
 

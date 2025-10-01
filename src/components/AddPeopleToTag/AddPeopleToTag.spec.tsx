@@ -31,8 +31,8 @@ import {
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR);
 
 async function wait(): Promise<void> {
   await waitFor(() => {
@@ -110,7 +110,7 @@ const renderAddPeopleToTagModal = (
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider cache={cache} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -131,7 +131,7 @@ const renderComponent = (
   customProps?: Partial<InterfaceAddPeopleToTagProps>,
 ): RenderResult =>
   render(
-    <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+    <MockedProvider cache={cache} link={new StaticMockLink(MOCKS)}>
       <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -358,7 +358,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Displays "no more members found" overlay when data is empty', async () => {
-    const link = new StaticMockLink(MOCK_EMPTY, true);
+    const link = new StaticMockLink(MOCK_EMPTY);
     renderAddPeopleToTagModal(props, link);
 
     await waitFor(() => {
@@ -377,7 +377,7 @@ describe('Organisation Tags Page', () => {
 
     act(() => {
       rerender(
-        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS)}>
           <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
@@ -406,7 +406,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('displays the unknownError toast if a non-Error is thrown', async () => {
-    const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR, true);
+    const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR);
 
     const customProps = {
       ...props,
@@ -450,7 +450,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('skips the if(data) block when the mutation returns data = null', async () => {
-    const linkNoData = new StaticMockLink(MOCK_NO_DATA, true);
+    const linkNoData = new StaticMockLink(MOCK_NO_DATA);
     renderAddPeopleToTagModal(props, linkNoData);
 
     await waitFor(() => {

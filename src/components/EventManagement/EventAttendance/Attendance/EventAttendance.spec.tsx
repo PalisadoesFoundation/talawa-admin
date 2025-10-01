@@ -20,7 +20,7 @@ import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 async function wait(): Promise<void> {
   await waitFor(() => {
@@ -35,7 +35,7 @@ vi.mock('react-chartjs-2', () => ({
 
 const renderEventAttendance = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -157,7 +157,7 @@ describe('Event Attendance Component', () => {
 describe('EventAttendance CSS Tests', () => {
   const renderEventAttendance = (): RenderResult => {
     return render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

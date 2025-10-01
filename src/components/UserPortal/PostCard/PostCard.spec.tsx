@@ -156,7 +156,7 @@ const mocks = [
   },
 ];
 
-const link = new StaticMockLink(mocks, true);
+const link = new StaticMockLink(mocks);
 
 const defaultProps = {
   id: '1',
@@ -201,7 +201,7 @@ const defaultProps = {
 
 const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

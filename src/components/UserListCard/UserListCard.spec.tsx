@@ -54,7 +54,7 @@ const MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
@@ -82,7 +82,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -129,13 +129,13 @@ describe('Testing User List Card', () => {
       },
     ];
 
-    const errorLink = new StaticMockLink(errorMock, true);
+    const errorLink = new StaticMockLink(errorMock);
     const props = {
       id: '456',
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />

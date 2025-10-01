@@ -73,7 +73,7 @@ const renderComponent = (
   mockUseParams.mockReturnValue({ orgId, eventId });
 
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={[`/orgactionitems/${orgId}`]}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -111,7 +111,7 @@ describe('OrganizationActionItems Component', () => {
       mockUseParams.mockReturnValue({ orgId: undefined, eventId: 'eventId' });
 
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <MemoryRouter initialEntries={['/']}>
             <Provider store={store}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>

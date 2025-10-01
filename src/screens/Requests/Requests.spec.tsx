@@ -62,13 +62,13 @@ vi.mock('react-toastify', async () => {
 const { setItem, removeItem } = useLocalStorage();
 
 // Create mock links
-const link = new StaticMockLink(UPDATED_MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
-const link4 = new StaticMockLink(MOCKS2, true);
-const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
-const link6 = new StaticMockLink(MOCKS3, true);
-const link7 = new StaticMockLink(MOCKS4, true);
+const link = new StaticMockLink(UPDATED_MOCKS);
+const link2 = new StaticMockLink(EMPTY_MOCKS);
+const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS);
+const link4 = new StaticMockLink(MOCKS2);
+const link5 = new StaticMockLink(MOCKS_WITH_ERROR);
+const link6 = new StaticMockLink(MOCKS3);
+const link7 = new StaticMockLink(MOCKS4);
 
 const NULL_RESPONSE_MOCKS = [
   {
@@ -92,7 +92,7 @@ const NULL_RESPONSE_MOCKS = [
   },
 ];
 
-const linkNullResponse = new StaticMockLink(NULL_RESPONSE_MOCKS, true);
+const linkNullResponse = new StaticMockLink(NULL_RESPONSE_MOCKS);
 
 // Mock data for infinite scroll tests
 const INFINITE_SCROLL_MOCKS = [
@@ -191,7 +191,7 @@ const INFINITE_SCROLL_MOCKS = [
   },
 ];
 
-const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
+const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS);
 
 /**
  * Utility function to wait for a specified amount of time.
@@ -218,7 +218,7 @@ afterEach(() => {
 describe('Testing Requests screen', () => {
   test('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link7}>
+      <MockedProvider link={link7}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -242,7 +242,7 @@ describe('Testing Requests screen', () => {
     removeItem('SuperAdmin');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -260,7 +260,7 @@ describe('Testing Requests screen', () => {
 
   test('Component should be rendered properly when user is Admin', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -279,7 +279,7 @@ describe('Testing Requests screen', () => {
   test('Redirecting on error', async () => {
     setItem('SuperAdmin', true);
     render(
-      <MockedProvider addTypename={false} link={link5}>
+      <MockedProvider link={link5}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -296,7 +296,7 @@ describe('Testing Requests screen', () => {
 
   test('Testing Search requests functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -341,7 +341,7 @@ describe('Testing Requests screen', () => {
 
   test('Testing search not found', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -362,7 +362,7 @@ describe('Testing Requests screen', () => {
 
   test('Testing Request data is not present', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -383,7 +383,7 @@ describe('Testing Requests screen', () => {
 
   test('Should render warning alert when there are no organizations', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -404,7 +404,7 @@ describe('Testing Requests screen', () => {
 
   test('Should not render warning alert when there are organizations present', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -424,7 +424,7 @@ describe('Testing Requests screen', () => {
 
   test('Should render properly when there are no organizations present in requestsData', async () => {
     render(
-      <MockedProvider addTypename={false} link={link6}>
+      <MockedProvider link={link6}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -441,7 +441,7 @@ describe('Testing Requests screen', () => {
 
   test('check for rerendering', async () => {
     const { rerender } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -455,7 +455,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
     rerender(
-      <MockedProvider addTypename={false} link={link4}>
+      <MockedProvider link={link4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -473,7 +473,7 @@ describe('Testing Requests screen', () => {
     const { toast } = await import('react-toastify');
 
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -493,7 +493,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle loading more requests successfully', async () => {
     render(
-      <MockedProvider addTypename={false} link={linkInfiniteScroll}>
+      <MockedProvider link={linkInfiniteScroll}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -527,7 +527,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle loading more requests with search term', async () => {
     render(
-      <MockedProvider addTypename={false} link={linkInfiniteScroll}>
+      <MockedProvider link={linkInfiniteScroll}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -559,7 +559,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle loading more requests when no previous data exists', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -579,7 +579,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle loading more requests with null response', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -610,7 +610,7 @@ describe('Testing Requests screen', () => {
 
   test('should handle null membership requests in response', async () => {
     render(
-      <MockedProvider addTypename={false} link={linkNullResponse}>
+      <MockedProvider link={linkNullResponse}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -630,7 +630,7 @@ describe('Testing Requests screen', () => {
     removeItem('AdminFor');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -647,7 +647,7 @@ describe('Testing Requests screen', () => {
 
   test('Search functionality should reset when empty string is provided', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -752,10 +752,10 @@ describe('Testing Requests screen', () => {
       },
     ];
 
-    const linkNullFetchMore = new StaticMockLink(NULL_FETCH_MORE_MOCKS, true);
+    const linkNullFetchMore = new StaticMockLink(NULL_FETCH_MORE_MOCKS);
 
     render(
-      <MockedProvider addTypename={false} link={linkNullFetchMore}>
+      <MockedProvider link={linkNullFetchMore}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -783,7 +783,7 @@ describe('Testing Requests screen', () => {
 
   test('Search functionality should handle special characters', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -805,7 +805,7 @@ describe('Testing Requests screen', () => {
 
   test('Should handle rapid search input changes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -930,7 +930,7 @@ describe('Testing Requests screen', () => {
     );
 
     render(
-      <MockedProvider addTypename={false} link={correctStructureLink}>
+      <MockedProvider link={correctStructureLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1047,10 +1047,10 @@ describe('Testing Requests screen', () => {
       },
     ];
 
-    const linkSearch = new StaticMockLink(searchMocks, true);
+    const linkSearch = new StaticMockLink(searchMocks);
 
     render(
-      <MockedProvider addTypename={false} link={linkSearch}>
+      <MockedProvider link={linkSearch}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1081,7 +1081,7 @@ describe('Testing Requests screen', () => {
 
   test('Component should clean up effects on unmount', async () => {
     const { unmount } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

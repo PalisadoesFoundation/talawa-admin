@@ -294,7 +294,7 @@ const renderEventActionItems = (
   mocks: any[] = MOCKS,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

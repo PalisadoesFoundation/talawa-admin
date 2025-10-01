@@ -123,7 +123,7 @@ describe('StaticMockLink', () => {
   let mockLink: StaticMockLink;
 
   beforeEach((): void => {
-    mockLink = new StaticMockLink([], true);
+    mockLink = new StaticMockLink([]);
   });
 
   test('should create instance with empty mocked responses', () => {
@@ -522,7 +522,7 @@ describe('mockSingleLink', () => {
       },
     ];
 
-    const mockLink = new StaticMockLink(mockResponses, true);
+    const mockLink = new StaticMockLink(mockResponses);
 
     // Verify responses were added via constructor
     const observable1 = mockLink.request(oper);

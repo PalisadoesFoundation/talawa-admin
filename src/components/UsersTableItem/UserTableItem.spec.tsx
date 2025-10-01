@@ -9,9 +9,9 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 import { BrowserRouter } from 'react-router';
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(MOCKS_UPDATE, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS2);
+const link3 = new StaticMockLink(MOCKS_UPDATE);
 import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -144,7 +144,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -233,7 +233,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
@@ -387,7 +387,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -507,7 +507,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -590,7 +590,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />

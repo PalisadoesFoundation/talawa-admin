@@ -47,9 +47,9 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_QUERY, true);
-// const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR_QUERY);
+// const link3 = new StaticMockLink(MOCKS_ERROR_MUTATION);
 
 const translations = JSON.parse(
   JSON.stringify(i18n.getDataByLanguage('en')?.translation.agendaItems),
@@ -80,7 +80,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('Component loads correctly', async () => {
     const { getByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -97,7 +97,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('render error component on unsuccessful agenda item query', async () => {
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -116,7 +116,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('opens and closes the create agenda item modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -150,7 +150,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('creates new agenda item', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

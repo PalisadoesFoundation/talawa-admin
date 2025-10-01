@@ -28,7 +28,7 @@ const MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -42,7 +42,7 @@ const renderOrgAdminListCard = (props: {
   id: string | undefined;
 }): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgpeople/987']}>
         <I18nextProvider i18n={i18nForTest}>
           <Routes>
@@ -131,7 +131,7 @@ describe('Testing Organization Admin List Card', () => {
       },
     ];
 
-    const noDataLink = new StaticMockLink(noDataMocks, true);
+    const noDataLink = new StaticMockLink(noDataMocks);
 
     const props = {
       toggleRemoveModal: vi.fn(),
@@ -139,7 +139,7 @@ describe('Testing Organization Admin List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={noDataLink}>
+      <MockedProvider link={noDataLink}>
         <MemoryRouter initialEntries={['/orgpeople/987']}>
           <Routes>
             <Route
@@ -173,7 +173,7 @@ describe('Testing Organization Admin List Card', () => {
       },
     ];
 
-    const failingLink = new StaticMockLink(failingMocks, true);
+    const failingLink = new StaticMockLink(failingMocks);
 
     const props = {
       toggleRemoveModal: vi.fn(),
@@ -181,7 +181,7 @@ describe('Testing Organization Admin List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={failingLink}>
+      <MockedProvider link={failingLink}>
         <MemoryRouter initialEntries={['/orgpeople/987']}>
           <Routes>
             <Route

@@ -4374,9 +4374,9 @@ describe('Testing Chat Screen [User Portal]', () => {
         },
       },
     ];
-    const link = new StaticMockLink(mocks, true);
+    const link = new StaticMockLink(mocks);
     render(
-      <MockedProvider link={link} addTypename={false}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4419,7 +4419,7 @@ describe('Testing Chat Screen [User Portal]', () => {
   it('should fetch and set all chats when filterType is "all"', async () => {
     setItem('userId', '1');
     render(
-      <MockedProvider mocks={mock} addTypename={false}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4446,7 +4446,7 @@ describe('Testing Chat Screen [User Portal]', () => {
 
   test('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4461,7 +4461,7 @@ describe('Testing Chat Screen [User Portal]', () => {
 
   test('User is able to select a contact', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4481,7 +4481,7 @@ describe('Testing Chat Screen [User Portal]', () => {
 
   test('create new direct chat', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4513,7 +4513,7 @@ describe('Testing Chat Screen [User Portal]', () => {
 
   test('create new group chat', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4544,7 +4544,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     setItem('userId', '1');
 
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -4576,7 +4576,7 @@ describe('Testing Chat Screen [User Portal]', () => {
     setItem('userId', '1');
 
     render(
-      <MockedProvider mocks={mock} addTypename={false}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

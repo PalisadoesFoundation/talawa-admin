@@ -30,8 +30,8 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -59,7 +59,7 @@ vi.mock('../../components/TagActions/TagActions', async () => {
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

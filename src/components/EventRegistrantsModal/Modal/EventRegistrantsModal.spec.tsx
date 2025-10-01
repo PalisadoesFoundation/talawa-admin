@@ -167,7 +167,6 @@ describe('Testing Event Registrants Modal', () => {
   test('The modal should be rendered, correct text must be displayed when there are no attendees and add attendee mutation must function properly', async () => {
     const { queryByText, queryByLabelText } = render(
       <MockedProvider
-        addTypename={false}
         mocks={[
           ...queryMockWithoutRegistrant,
           ...queryMockOrgMembers,
@@ -232,7 +231,6 @@ describe('Testing Event Registrants Modal', () => {
   test('Add attendee mutation must fail properly', async () => {
     const { queryByText, queryByLabelText } = render(
       <MockedProvider
-        addTypename={false}
         mocks={[
           ...queryMockWithoutRegistrant,
           ...queryMockOrgMembers,
@@ -280,7 +278,6 @@ describe('Testing Event Registrants Modal', () => {
   test('Assigned attendees must be shown with badges and delete attendee mutation must function properly', async () => {
     const { queryByText, queryByTestId } = render(
       <MockedProvider
-        addTypename={false}
         mocks={[
           ...queryMockWithRegistrant,
           ...queryMockOrgMembers,
@@ -320,7 +317,6 @@ describe('Testing Event Registrants Modal', () => {
   test('Delete attendee mutation must fail properly', async () => {
     const { queryByText, getByTestId } = render(
       <MockedProvider
-        addTypename={false}
         mocks={[
           ...queryMockWithRegistrant,
           ...queryMockOrgMembers,
@@ -360,7 +356,6 @@ describe('Testing Event Registrants Modal', () => {
   test('Autocomplete functionality works correctly', async () => {
     const { getByTitle, getByText, getByPlaceholderText } = render(
       <MockedProvider
-        addTypename={false}
         mocks={[...queryMockWithoutRegistrant, ...queryMockWithoutOrgMembers]}
       >
         <BrowserRouter>

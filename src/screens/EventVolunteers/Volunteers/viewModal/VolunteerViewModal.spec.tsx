@@ -69,7 +69,7 @@ const renderVolunteerViewModal = (
   props: InterfaceVolunteerViewModal,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false}>
+    <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider>

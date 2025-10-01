@@ -31,11 +31,11 @@ import { toast } from 'react-toastify';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
 
-const link1 = new StaticMockLink(MOCKS1, true);
-const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(ERROR_MOCK, true);
-const link4 = new StaticMockLink(MOCK_FILE, true);
-const link5 = new StaticMockLink(UPDATE_MOCK, true);
+const link1 = new StaticMockLink(MOCKS1);
+const link2 = new StaticMockLink(MOCKS2);
+const link3 = new StaticMockLink(ERROR_MOCK);
+const link4 = new StaticMockLink(MOCK_FILE);
+const link5 = new StaticMockLink(UPDATE_MOCK);
 
 const mockReload = vi.fn();
 Object.defineProperty(window, 'location', {
@@ -75,7 +75,7 @@ const props = {
 
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -233,7 +233,7 @@ describe('MemberDetail', () => {
     const dicebearUrl = 'mocked-data-uri';
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <MemberDetail id="123" />
         </BrowserRouter>
@@ -276,7 +276,7 @@ describe('MemberDetail', () => {
 
   test('should be redirected to / if member id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -577,7 +577,7 @@ describe('MemberDetail', () => {
       },
     };
 
-    renderMemberDetailScreen(new StaticMockLink([updatedMock], true));
+    renderMemberDetailScreen(new StaticMockLink([updatedMock]));
     await wait();
 
     // Set some fields empty and some with values

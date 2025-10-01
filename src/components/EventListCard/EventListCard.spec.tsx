@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -21,8 +21,8 @@ import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(ERROR_MOCKS, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(ERROR_MOCKS);
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -55,7 +55,7 @@ const renderEventListCard = (
   const { key, ...restProps } = props; // Destructure the key and separate other props
 
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -87,11 +87,6 @@ const renderEventListCard = (
 };
 
 describe('Testing Event List Card', () => {
-  const updateData = {
-    name: 'Updated name',
-    description: 'This is a new update',
-    isPublic: true,
-    isRegisterable: true,
     allDay: false,
     location: 'New Delhi',
     startDate: '2022-03-18',
@@ -113,7 +108,7 @@ describe('Testing Event List Card', () => {
 
   it('Should navigate to "/" if orgId is not defined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <EventListCard
@@ -252,7 +247,7 @@ describe('Testing Event List Card', () => {
     // Destructure key from props[1] and pass it separately to avoid spreading it
     const { key, ...otherProps } = props[4];
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

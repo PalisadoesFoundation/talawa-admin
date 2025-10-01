@@ -14,7 +14,7 @@ import { checkInQueryMock } from '../CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi } from 'vitest';
 
-const link = new StaticMockLink(checkInQueryMock, true);
+const link = new StaticMockLink(checkInQueryMock);
 
 describe('Testing Check In Attendees Modal', () => {
   const props = {
@@ -30,7 +30,7 @@ describe('Testing Check In Attendees Modal', () => {
 
   test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
     const { queryByText, queryByLabelText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

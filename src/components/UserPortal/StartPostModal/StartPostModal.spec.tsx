@@ -46,7 +46,7 @@ const MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 afterEach(() => {
   localStorage.clear();
@@ -105,7 +105,7 @@ const renderStartPostModal = (
   };
 
   return render(
-    <MockedProvider addTypename={false} link={customLink}>
+    <MockedProvider link={customLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -221,7 +221,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(successMocks, true);
+    const customLink = new StaticMockLink(successMocks);
 
     renderStartPostModal(
       true,
@@ -270,7 +270,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(errorMocks, true);
+    const customLink = new StaticMockLink(errorMocks);
 
     renderStartPostModal(true, null, null, vi.fn(), vi.fn(), customLink);
     await wait();
@@ -332,7 +332,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(successMocks, true);
+    const customLink = new StaticMockLink(successMocks);
 
     renderStartPostModal(
       true,
@@ -379,7 +379,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(errorMocks, true);
+    const customLink = new StaticMockLink(errorMocks);
 
     renderStartPostModal(true, null, base64Image, vi.fn(), vi.fn(), customLink);
     await wait();
@@ -481,7 +481,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(successMocks, true);
+    const customLink = new StaticMockLink(successMocks);
 
     renderStartPostModal(
       true,
@@ -572,7 +572,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
       },
     ];
 
-    const customLink = new StaticMockLink(successMocks, true);
+    const customLink = new StaticMockLink(successMocks);
 
     renderStartPostModal(
       true,

@@ -22,7 +22,7 @@ import PeopleCard from './PeopleCard';
  * Mocked GraphQL queries are used to simulate backend behavior, though no queries are required for these tests.
  */
 
-const link = new StaticMockLink([], true);
+const link = new StaticMockLink([]);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -44,7 +44,7 @@ let props = {
 describe('Testing PeopleCard Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -65,7 +65,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

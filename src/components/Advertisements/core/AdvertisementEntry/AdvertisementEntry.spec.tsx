@@ -441,7 +441,7 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={mocks} addTypename={false}>
+              <MockedProvider mocks={mocks}>
                 <AdvertisementEntry
                   advertisement={{
                     endAt: new Date(),
@@ -521,7 +521,7 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
+              <MockedProvider>
                 <AdvertisementEntry
                   advertisement={{
                     endAt: new Date('2030-01-01'),
@@ -579,7 +579,7 @@ describe('Testing Advertisement Entry Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
+              <MockedProvider>
                 <AdvertisementEntry
                   advertisement={{
                     endAt: new Date('2023-02-02'),

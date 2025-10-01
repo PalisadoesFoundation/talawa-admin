@@ -3,13 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -1063,7 +1057,7 @@ const translations = JSON.parse(
 
 const renderMyPledges = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/pledges/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1118,7 +1112,7 @@ describe('Testing User Pledge Screen', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

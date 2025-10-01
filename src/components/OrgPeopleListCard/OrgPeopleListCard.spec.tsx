@@ -99,10 +99,10 @@ describe('Testing Organization People List Card', () => {
   ];
 
   test('should handle null data response from mutation', async () => {
-    const link = new StaticMockLink(NULL_DATA_MOCKS, true);
+    const link = new StaticMockLink(NULL_DATA_MOCKS);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -123,11 +123,10 @@ describe('Testing Organization People List Card', () => {
   });
 
   test('should render modal and handle successful member removal', async () => {
-    const link = new StaticMockLink(MOCKS, true);
+    const link = new StaticMockLink(MOCKS);
 
     render(
       <MockedProvider
-        addTypename={false}
         link={link}
         defaultOptions={{
           mutate: { errorPolicy: 'all' },
@@ -169,10 +168,10 @@ describe('Testing Organization People List Card', () => {
   });
 
   test('should handle failed member removal', async () => {
-    const link = new StaticMockLink(ERROR_MOCKS, true);
+    const link = new StaticMockLink(ERROR_MOCKS);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -196,7 +195,7 @@ describe('Testing Organization People List Card', () => {
 
   test('should handle modal close', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -218,7 +217,7 @@ describe('Testing Organization People List Card', () => {
 
   test('should redirect when id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard id={undefined} toggleRemoveModal={vi.fn()} />

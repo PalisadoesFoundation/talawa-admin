@@ -7,7 +7,6 @@ import { ApolloLink } from '@apollo/client/link/core';
 
 import {
   Observable,
-  addTypenameToDocument,
   removeClientSetsFromDocument,
   removeConnectionDirectiveFromDocument,
   cloneDeep,
@@ -19,11 +18,8 @@ function requestToKey(
   request:
     | Operation
     | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
-  addTypename: boolean,
 ): string {
-  const queryString =
-    request.query &&
-    print(addTypename ? addTypenameToDocument(request.query) : request.query);
+  const queryString = request.query && print(request.query);
   const requestKey = { query: queryString };
   return JSON.stringify(requestKey);
 }
@@ -34,12 +30,10 @@ function requestToKey(
  */
 export class StaticMockLink extends ApolloLink {
   public operation?: Operation;
-  public addTypename = true;
   private _mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
 
-  constructor(mockedResponses: readonly MockedResponse[], addTypename = true) {
+  constructor(mockedResponses: readonly MockedResponse[]) {
     super();
-    this.addTypename = addTypename;
     if (mockedResponses) {
       mockedResponses.forEach((mockedResponse) => {
         this.addMockedResponse(mockedResponse);
@@ -50,10 +44,7 @@ export class StaticMockLink extends ApolloLink {
   public addMockedResponse(mockedResponse: MockedResponse): void {
     const normalizedMockedResponse =
       this._normalizeMockedResponse(mockedResponse);
-    const key = requestToKey(
-      normalizedMockedResponse.request,
-      this.addTypename,
-    );
+    const key = requestToKey(normalizedMockedResponse.request);
     let mockedResponses = this._mockedResponsesByKey[key];
     if (!mockedResponses) {
       mockedResponses = [];
@@ -64,7 +55,7 @@ export class StaticMockLink extends ApolloLink {
 
   public request(operation: Operation): Observable<FetchResult> | null {
     this.operation = operation;
-    const key = requestToKey(operation, this.addTypename);
+    const key = requestToKey(operation);
     let responseIndex = 0;
     const response = (this._mockedResponsesByKey[key] || []).find(
       (res, index) => {
@@ -165,23 +156,8 @@ export interface InterfaceMockApolloLink extends ApolloLink {
 
 // Pass in multiple mocked responses, so that you can test flows that end up
 // making multiple queries to the server.
-// NOTE: The last arg can optionally be an `addTypename` arg.
 export function mockSingleLink(
-  ...mockedResponses: (MockedResponse | boolean)[]
+  ...mockedResponses: MockedResponse[]
 ): InterfaceMockApolloLink {
-  // To pull off the potential typename. If this isn't a boolean, we'll just
-  // set it true later.
-  let maybeTypename = mockedResponses[mockedResponses.length - 1];
-  let mocks = mockedResponses.slice(0, mockedResponses.length - 1);
-
-  if (typeof maybeTypename !== 'boolean') {
-    mocks = mockedResponses;
-    maybeTypename = true;
-  }
-
-  // Ensure mocks is of type MockedResponse[]
-  return new StaticMockLink(
-    mocks as MockedResponse[],
-    maybeTypename as boolean,
-  );
+  return new StaticMockLink(mockedResponses);
 }

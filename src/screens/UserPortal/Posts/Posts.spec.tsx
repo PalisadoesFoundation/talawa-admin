@@ -372,7 +372,7 @@ const MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
+const link = new StaticMockLink(MOCKS);
 
 afterEach(() => {
   localStorage.clear();
@@ -388,7 +388,7 @@ async function wait(ms = 100): Promise<void> {
 
 const renderHomeScreen = (): RenderResult =>
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/organization/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -650,13 +650,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts, true);
+    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+      <MockedProvider link={linkWithPinnedPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -781,13 +781,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithAds = new StaticMockLink(mocksWithAds, true);
+    const linkWithAds = new StaticMockLink(mocksWithAds);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithAds}>
+      <MockedProvider link={linkWithAds}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -890,13 +890,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts, true);
+    const linkWithPinnedPosts = new StaticMockLink(mocksWithPinnedPosts);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+      <MockedProvider link={linkWithPinnedPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -926,7 +926,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1050,13 +1050,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithNoPosts = new StaticMockLink(mockWithNoPosts, true);
+    const linkWithNoPosts = new StaticMockLink(mockWithNoPosts);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithNoPosts}>
+      <MockedProvider link={linkWithNoPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1108,13 +1108,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithErrors = new StaticMockLink(mocksWithErrors, true);
+    const linkWithErrors = new StaticMockLink(mocksWithErrors);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithErrors}>
+      <MockedProvider link={linkWithErrors}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1296,13 +1296,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithComments = new StaticMockLink(mocksWithComments, true);
+    const linkWithComments = new StaticMockLink(mocksWithComments);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithComments}>
+      <MockedProvider link={linkWithComments}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1330,7 +1330,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1501,13 +1501,13 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const linkWithAttachments = new StaticMockLink(mocksWithAttachments, true);
+    const linkWithAttachments = new StaticMockLink(mocksWithAttachments);
 
     mockUseParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithAttachments}>
+      <MockedProvider link={linkWithAttachments}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1660,10 +1660,10 @@ describe('HomeScreen additional scenarios', () => {
       },
     ];
 
-    const singlePageLink = new StaticMockLink(singlePageMocks, true);
+    const singlePageLink = new StaticMockLink(singlePageMocks);
 
     render(
-      <MockedProvider addTypename={false} link={singlePageLink}>
+      <MockedProvider link={singlePageLink}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1698,7 +1698,7 @@ describe('HomeScreen additional scenarios', () => {
 
   it('Redirect to /user when organizationId is falsy', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -40,13 +40,13 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR);
 const link3 = new StaticMockLink([...MOCKS, ...MOCKS_ERROR_ERROR_TAG], true);
-const link4 = new StaticMockLink(MOCKS_EMPTY, true);
-const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS, true);
-const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
-const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
+const link4 = new StaticMockLink(MOCKS_EMPTY);
+const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS);
+const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR);
+const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -65,7 +65,7 @@ vi.mock('react-toastify', () => ({
 
 const renderOrganizationTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

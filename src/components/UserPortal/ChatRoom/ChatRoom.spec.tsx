@@ -5364,7 +5364,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5391,7 +5391,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider addTypename={false} mocks={mocks} link={link}>
+      <MockedProvider mocks={mocks} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5416,9 +5416,9 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...GROUP_CHAT_LIST_QUERY_MOCK,
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
-    const link2 = new StaticMockLink(mocks, true);
+    const link2 = new StaticMockLink(mocks);
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5502,10 +5502,10 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
 
-    const link2 = new StaticMockLink(mocks, true);
+    const link2 = new StaticMockLink(mocks);
 
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5587,7 +5587,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5612,7 +5612,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider addTypename={false} mocks={mocks}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

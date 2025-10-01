@@ -27,7 +27,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
   });
   test('Testing LeftDrawer in page functionality', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

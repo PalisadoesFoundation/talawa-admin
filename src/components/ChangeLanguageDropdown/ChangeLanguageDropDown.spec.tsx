@@ -65,7 +65,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('renders with default language (English)', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -80,7 +80,7 @@ describe('ChangeLanguageDropDown', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -98,7 +98,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('successfully changes language', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -117,7 +117,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('renders all available languages in the dropdown', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
