@@ -442,4 +442,103 @@ describe('OrganizationDashboard', () => {
       });
     });
   });
+
+  describe('Venues functionality', () => {
+    it('displays venues count correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      // Should display venues count of 2 (from MOCKS)
+      const venuesCard = screen.getByTestId('venuesCount');
+      expect(venuesCard).toBeInTheDocument();
+    });
+
+    it('navigates to venues page when clicking on venues card', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      const venuesCard = screen.getByTestId('venuesCount');
+      fireEvent.click(venuesCard);
+
+      await waitFor(() => {
+        expect(mockedNavigate).toHaveBeenCalledWith('/orgvenues/orgId');
+      });
+    });
+
+    it('displays zero venues count when no venues exist', async () => {
+      renderWithProviders({ mocks: EMPTY_MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      const venuesCard = screen.getByTestId('venuesCount');
+      expect(venuesCard).toBeInTheDocument();
+    });
+
+    it('handles venues loading state correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      // Should show loading initially
+      expect(screen.queryAllByTestId('fallback-ui').length).toBeGreaterThan(0);
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+    });
+
+    it('handles venues error state correctly', async () => {
+      renderWithProviders({ mocks: ERROR_MOCKS });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(mockedNavigate).toHaveBeenCalledWith('/');
+      });
+    });
+
+    it('displays venues title correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('venues')).toBeInTheDocument();
+      });
+    });
+
+    it('includes venues loading in overall loading state', async () => {
+      const loadingMocks = MOCKS.map((mock) => ({
+        ...mock,
+        delay: 100, // Add delay to simulate loading
+      }));
+
+      renderWithProviders({ mocks: loadingMocks });
+
+      // Should show loading fallback UI
+      expect(screen.queryAllByTestId('fallback-ui').length).toBeGreaterThan(0);
+    });
+  });
 });

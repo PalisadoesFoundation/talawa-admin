@@ -1240,6 +1240,9 @@ export interface InterfaceOrganizationVenuesConnectionEdgePg {
  * @description Defines the structure for a venue with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the venue.
  * @property {string} name - The name of the venue.
+ * @property {string | null} description - The description of the venue.
+ * @property {number | null} capacity - The capacity of the venue.
+ * @property {Array} attachments - The attachments associated with the venue.
  * @property {string} createdAt - The creation date of the venue record.
  * @property {string} updatedAt - The last update date of the venue record.
  * @property {InterfaceUserPg} creator - The user who created this venue.
@@ -1249,6 +1252,12 @@ export interface InterfaceOrganizationVenuesConnectionEdgePg {
 export interface InterfaceVenuePg {
   id: ID;
   name: string;
+  description?: string | null;
+  capacity?: number | null;
+  attachments?: Array<{
+    url: string;
+    mimeType: string;
+  }>;
   createdAt: string;
   updatedAt: string;
   creator: InterfaceUserPg;

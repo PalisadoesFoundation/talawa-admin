@@ -4,6 +4,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG, // re-enabled!
   GET_ORGANIZATION_POSTS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
+  GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
 
@@ -308,6 +309,23 @@ export const EMPTY_MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          venues: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
 ];
 
 export const MIXED_REQUESTS_MOCK = [
@@ -422,5 +440,12 @@ export const ERROR_MOCKS = [
       variables: { id: 'orgId', first: 32, after: null },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_BLOCKED_USERS_PG Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_VENUES_PG Error'),
   },
 ];
