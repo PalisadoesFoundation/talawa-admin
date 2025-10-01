@@ -1,6 +1,6 @@
-import React from 'react';
+import type { ReactElement } from 'react';
 
-function MockChart(): React.ReactElement | null {
+function MockChart(): ReactElement | null {
   return null;
 }
 
