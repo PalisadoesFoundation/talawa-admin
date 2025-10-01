@@ -81,7 +81,7 @@ export interface InterfaceCreator {
 
 export interface InterfacePost {
   id: string;
-  caption: string;
+  caption?: string | null;
   createdAt: string;
   pinnedAt?: string | null;
   pinned?: boolean; // Add this if you're using it

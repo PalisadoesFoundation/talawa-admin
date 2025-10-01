@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PinnedPostsStory from './PinnedPostsStory';
 import type { InterfacePost } from 'types/Post/interface';
+import AboutImg from 'assets/images/defaultImg.png';
 
 // Mock react-multi-carousel to render children directly
 vi.mock('react-multi-carousel', () => ({
@@ -10,7 +11,6 @@ vi.mock('react-multi-carousel', () => ({
   ),
 }));
 
-// Mock posts
 const mockPosts: InterfacePost[] = [
   {
     id: '1',
@@ -46,10 +46,9 @@ describe('PinnedPostsStory', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders avatars and names when posts are provided', () => {
+  it('renders captions and creator names when posts are provided', () => {
     render(<PinnedPostsStory pinnedPosts={mockPosts} onStoryClick={vi.fn()} />);
 
-    // Use flexible text matcher in case of nested elements
     expect(
       screen.getByText((content) => content.includes('Alice')),
     ).toBeInTheDocument();
@@ -57,7 +56,6 @@ describe('PinnedPostsStory', () => {
       screen.getByText((content) => content.includes('Bob')),
     ).toBeInTheDocument();
 
-    // Check avatars
     expect(screen.getAllByRole('img')).toHaveLength(2);
   });
 
@@ -73,4 +71,30 @@ describe('PinnedPostsStory', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
     expect(handleClick).toHaveBeenCalledWith(mockPosts[0]);
   });
+
+  it('renders Unknown when creator is missing', () => {
+    const posts = [{ ...mockPosts[0], creator: undefined }];
+    render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
+    expect(screen.getByText('Unknown')).toBeInTheDocument();
+  });
+
+  it('uses default image when imageUrl is missing', () => {
+    const posts = [{ ...mockPosts[0], imageUrl: undefined }];
+    render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
+    const img = screen.getByRole('img') as HTMLImageElement;
+    expect(img.src).toContain(AboutImg);
+  });
+
+  it('renders "Untitled" when caption is missing', () => {
+  const posts = [{ ...mockPosts[0], caption: undefined }];
+  render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
+
+  // Strict check for the fallback text
+  expect(screen.getByText('Untitled')).toBeInTheDocument();
+
+  // Ensure no other fallback text like "No Caption" etc. sneaks in
+  expect(screen.queryByText(/No Caption/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/Untitled Post/i)).not.toBeInTheDocument();
+});
+
 });
