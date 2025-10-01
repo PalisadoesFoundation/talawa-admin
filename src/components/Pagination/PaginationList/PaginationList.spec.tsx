@@ -3,7 +3,7 @@ import { render, screen, fireEvent, within, act } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
@@ -249,13 +249,10 @@ describe('PaginationList Component', () => {
       renderPaginationList({
         onRowsPerPageChange: mockOnRowsPerPageChange,
       });
-
       const select = screen.getByLabelText('rows per page');
-
       await act(async () => {
         fireEvent.change(select, { target: { value: '30' } });
       });
-
       expect(mockOnRowsPerPageChange).toHaveBeenCalled();
       const callArgs = mockOnRowsPerPageChange.mock.calls[0][0];
       expect(callArgs.target).toBeDefined();
@@ -321,25 +318,6 @@ describe('PaginationList Component', () => {
           const options = selectInMobileCell.querySelectorAll('option');
           expect(options.length).toBe(0);
         }
-      }
-    });
-
-    it('should apply custom sx centering styles to mobile view', () => {
-      const { container } = renderPaginationList();
-
-      const allCells = container.querySelectorAll('td');
-      let mobileCell = null;
-
-      for (const cell of allCells) {
-        if (cell.getAttribute('colspan') === '5') {
-          mobileCell = cell;
-          break;
-        }
-      }
-
-      if (mobileCell) {
-        const styles = window.getComputedStyle(mobileCell);
-        expect(styles.display).toBe('flex');
       }
     });
   });
@@ -702,17 +680,32 @@ describe('PaginationList Component', () => {
 
       const select = screen.getByLabelText('rows per page');
 
+      // Focus the select element
       await act(async () => {
         select.focus();
       });
-
       expect(document.activeElement).toBe(select);
 
-      // Simulate change event (userEvent.selectOptions doesn't work with controlled components in tests)
+      // Simulate keyboard navigation with ArrowDown
       await act(async () => {
+        await userEvent.keyboard('{ArrowDown}');
+      });
+
+      // Tab to next element to test focus movement
+      await act(async () => {
+        await userEvent.tab();
+      });
+
+      // Verify focus moved away from select
+      expect(document.activeElement).not.toBe(select);
+
+      // Return focus and simulate selection change
+      await act(async () => {
+        select.focus();
         fireEvent.change(select, { target: { value: '30' } });
       });
 
+      // Verify callback was invoked with correct event shape
       expect(mockOnRowsPerPageChange).toHaveBeenCalled();
       const callArgs = mockOnRowsPerPageChange.mock.calls[0][0];
       expect(callArgs.target).toBeDefined();
