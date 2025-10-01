@@ -25,6 +25,7 @@ i18n.init({
       translation: {
         orgUpdate: {
           successfulUpdated: 'Organization updated successfully',
+          failedToUpdateOrg: 'Failed to update organization',
           enterNameOrganization: 'Enter organization name',
           enterOrganizationDescription: 'Enter organization description',
           userRegistrationRequired: 'User registration required',
