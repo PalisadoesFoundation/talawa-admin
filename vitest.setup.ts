@@ -4,12 +4,14 @@ import React from 'react';
 
 // Mock MUI X Charts to avoid ESM node import issues during tests
 vi.mock('@mui/x-charts', () => {
-  const MockComp = () => null as unknown as React.ReactElement;
+  const MockComp: React.FC = () => null;
   return {
     PieChart: MockComp,
     BarChart: MockComp,
     LineChart: MockComp,
     pieArcClasses: {},
+    pieArcLabelClasses: {},
+    default: {},
   };
 });
 
