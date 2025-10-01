@@ -33,6 +33,7 @@ vi.mock('../Navigator/Pagination', () => ({
     return (
       <div data-testid="mock-pagination">
         <button
+          type="button"
           data-testid="firstPage"
           onClick={(e) => onPageChange(e, 0)}
           disabled={page === 0}
@@ -40,6 +41,7 @@ vi.mock('../Navigator/Pagination', () => ({
           First
         </button>
         <button
+          type="button"
           data-testid="previousPage"
           onClick={(e) => onPageChange(e, page - 1)}
           disabled={page === 0}
@@ -47,6 +49,7 @@ vi.mock('../Navigator/Pagination', () => ({
           Previous
         </button>
         <button
+          type="button"
           data-testid="nextPage"
           onClick={(e) => onPageChange(e, page + 1)}
           disabled={page >= lastPage}
@@ -54,6 +57,7 @@ vi.mock('../Navigator/Pagination', () => ({
           Next
         </button>
         <button
+          type="button"
           data-testid="lastPage"
           onClick={(e) => onPageChange(e, lastPage)}
           disabled={page >= lastPage}
@@ -372,11 +376,6 @@ describe('PaginationList Component', () => {
 
       const labelText = screen.getByText(new RegExp(rowsPerPageLabel, 'i'));
       expect(labelText).toBeInTheDocument();
-    });
-
-    it('should use correct translation namespace', () => {
-      const { container } = renderPaginationList();
-      expect(container).toBeInTheDocument();
     });
   });
 
