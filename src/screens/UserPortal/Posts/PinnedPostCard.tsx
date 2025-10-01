@@ -24,18 +24,15 @@ import type { InterfacePostCard } from 'utils/interfaces';
 
 export interface InterfacePinnedPostCardProps {
   post: InterfacePostCard;
-  onClick: () => void;
   'data-testid'?: string;
 }
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   post,
-  onClick,
   'data-testid': dataTestId,
 }) => {
   return (
     <Card
-      onClick={onClick}
       data-testid={dataTestId}
       sx={{
         display: 'flex',
@@ -47,6 +44,11 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         maxWidth: '350px',
         cursor: 'pointer',
         boxShadow: 3,
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        '&:hover': {
+          transform: 'scale(1.05)',
+          boxShadow: 6,
+        },
       }}
     >
       <CardMedia
@@ -78,7 +80,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             sx={{ mb: 1, display: 'block', fontSize: 12 }}
             noWrap
           >
-            {post.text?.substr(0, 50) ?? ''}
+            {post.text?.slice(0, 50) ?? ''}
           </Typography>
         </CardContent>
       </Box>

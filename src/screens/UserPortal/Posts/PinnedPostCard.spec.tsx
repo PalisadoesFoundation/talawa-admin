@@ -1,6 +1,4 @@
-// src/components/UserPortal/PinnedPostCard/PinnedPostCard.test.tsx
-
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import PinnedPostCard, { InterfacePinnedPostCardProps } from './PinnedPostCard';
 
@@ -23,41 +21,15 @@ describe('PinnedPostCard', () => {
   };
 
   it('renders pinned post with title and text', () => {
-    render(
-      <PinnedPostCard
-        post={mockPost}
-        onClick={() => {}}
-        data-testid="pinned-post"
-      />,
-    );
+    render(<PinnedPostCard post={mockPost} data-testid="pinned-post" />);
 
     expect(screen.getByText(/Pinned Post Title/i)).toBeInTheDocument();
     expect(screen.getByText(/This is a test pinned post/i)).toBeInTheDocument();
   });
 
   it('falls back to default image if none provided', () => {
-    render(
-      <PinnedPostCard
-        post={mockPost}
-        onClick={() => {}}
-        data-testid="pinned-post"
-      />,
-    );
+    render(<PinnedPostCard post={mockPost} data-testid="pinned-post" />);
     const img = screen.getByRole('img') as HTMLImageElement;
     expect(img.src).toContain('/src/assets/images/defaultImg.png');
-  });
-
-  it('calls onClick when clicked', () => {
-    const handleClick = vi.fn();
-    render(
-      <PinnedPostCard
-        post={mockPost}
-        onClick={handleClick}
-        data-testid="pinned-post"
-      />,
-    );
-
-    fireEvent.click(screen.getByTestId('pinned-post'));
-    expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });

@@ -61,7 +61,7 @@ import type {
 } from 'utils/interfaces';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Box, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -104,9 +104,9 @@ export default function Home(): JSX.Element {
   const [totalPages, setTotalPages] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [adContent, setAdContent] = useState<Ad[]>([]);
-  const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
-  const [selectedPinnedPost, setSelectedPinnedPost] =
-    useState<InterfacePostCard | null>(null);
+  // const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
+  // const [selectedPinnedPost, setSelectedPinnedPost] =
+  //   useState<InterfacePostCard | null>(null);
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
@@ -315,10 +315,6 @@ export default function Home(): JSX.Element {
                     key={cardProps.id}
                     post={cardProps}
                     data-testid="pinned-post"
-                    onClick={() => {
-                      setSelectedPinnedPost(cardProps);
-                      setShowPinnedPostModal(true);
-                    }}
                   />
                 );
               })}
@@ -425,7 +421,7 @@ export default function Home(): JSX.Element {
         img={postImg}
       />
 
-      {selectedPinnedPost && (
+      {/* {selectedPinnedPost && (
         <Modal
           open={showPinnedPostModal}
           onClose={() => setShowPinnedPostModal(false)}
@@ -452,7 +448,7 @@ export default function Home(): JSX.Element {
             />
           </Box>
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }

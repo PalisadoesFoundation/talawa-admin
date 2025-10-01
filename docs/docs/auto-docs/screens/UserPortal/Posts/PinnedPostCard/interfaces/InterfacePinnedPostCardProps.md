@@ -12,19 +12,7 @@ Defined in: [src/screens/UserPortal/Posts/PinnedPostCard.tsx:25](https://github.
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/screens/UserPortal/Posts/PinnedPostCard.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/PinnedPostCard.tsx#L28)
-
-***
-
-### onClick()
-
-> **onClick**: () => `void`
-
 Defined in: [src/screens/UserPortal/Posts/PinnedPostCard.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/PinnedPostCard.tsx#L27)
-
-#### Returns
-
-`void`
 
 ***
 
