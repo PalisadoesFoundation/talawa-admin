@@ -13,6 +13,7 @@
  * @param props.adminsCount - The number of admins in the organization.
  * @param props.membersCount - The number of members in the organization.
  * @param props.address - The address of the organization, including city and country code.
+ * @param props.membershipRequestStatus - The current membership request status for the user.
  * @param props.userRegistrationRequired - Indicates if user registration is required to join.
  * @param props.membershipRequests - List of membership requests for the organization.
  * @param props.isJoined - Indicates if the user is already a member of the organization.
@@ -34,6 +35,7 @@
  *   adminsCount={5}
  *   membersCount={100}
  *   address={{ city: "New York", countryCode: "US", line1: "123 Main St" }}
+ *   membershipRequestStatus="pending"
  *   userRegistrationRequired={true}
  *   membershipRequests={[]}
  *   isJoined={false}
@@ -68,7 +70,8 @@ function OrganizationCard({
   adminsCount,
   membersCount,
   address,
-  isUserRegistrationRequired,
+  membershipRequestStatus,
+  userRegistrationRequired,
   membershipRequests,
   isJoined,
 }: InterfaceOrganizationCardProps): JSX.Element {
@@ -114,7 +117,7 @@ function OrganizationCard({
    */
   async function joinOrganization(): Promise<void> {
     try {
-      if (isUserRegistrationRequired) {
+      if (userRegistrationRequired) {
         await sendMembershipRequest({ variables: { organizationId: id } });
         toast.success(t('MembershipRequestSent') as string);
       } else {
@@ -145,11 +148,18 @@ function OrganizationCard({
       return;
     }
 
+    const membershipRequest = membershipRequests.find(
+      (request) => request.user.id === userId,
+    );
+
     try {
+      if (!membershipRequest) {
+        toast.error(t('MembershipRequestNotFound') as string);
+        return;
+      }
+
       await cancelMembershipRequest({
-        variables: {
-          membershipRequestId: membershipRequests?.[0]?.membershipRequestId,
-        },
+        variables: { membershipRequestId: membershipRequest.id },
       });
 
       toast.success(t('MembershipRequestWithdrawn') as string);
@@ -218,7 +228,7 @@ function OrganizationCard({
           >
             {t('visit')}
           </Button>
-        ) : membershipRequests?.[0]?.status === 'pending' ? (
+        ) : membershipRequestStatus === 'pending' ? (
           <Button
             variant="danger"
             onClick={withdrawMembershipRequest}

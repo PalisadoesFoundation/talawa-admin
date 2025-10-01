@@ -247,7 +247,6 @@
     "members": "members",
     "orgJoined": "orgJoined",
     "MembershipRequestSent": "MembershipRequestSent",
-    "MembershipRequestWithdrawn": "Membership Request Withdrawn",
     "AlreadyJoined": "AlreadyJoined",
     "errorOccured": "errorOccured"
   },
