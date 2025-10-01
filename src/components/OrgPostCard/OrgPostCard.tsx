@@ -71,7 +71,7 @@ interface InterfacePostAttachment {
 
 interface InterfacePost {
   id: string;
-  caption: string;
+  caption?: string | null;
   createdAt: Date;
   updatedAt?: Date | null;
   pinnedAt?: Date | null;
@@ -92,7 +92,7 @@ export default function OrgPostCard({
   post,
 }: InterfaceOrgPostCardProps): JSX.Element {
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
-    caption: post.caption,
+    caption: post.caption ?? 'Untitled',
     attachments: [],
   });
 

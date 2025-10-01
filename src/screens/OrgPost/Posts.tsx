@@ -108,7 +108,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           key={post.id}
           post={{
             id: post.id,
-            caption: post.caption,
+            caption: post.caption || null,
             createdAt,
             pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
             creatorId: post.creator?.id || null,
@@ -166,13 +166,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
     return (
       <>
-        {/* Pinned Posts Stories */}
-        <PinnedPostsStory
-          pinnedPosts={pinnedPosts}
-          onStoryClick={handleStoryClick}
-          data-testid="story-pinned-post-1"
-        />
-
         <div
           data-testid="filtered-posts-container"
           style={{
@@ -246,13 +239,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
     return (
       <>
-        {/* Pinned Posts Stories */}
-        <PinnedPostsStory
-          pinnedPosts={pinnedPosts}
-          onStoryClick={handleStoryClick}
-          data-testid="story-pinned-post-1"
-        />
-
         <div data-testid="dropdown">
           {displayPosts.map((post) => renderPostCard(post))}
         </div>

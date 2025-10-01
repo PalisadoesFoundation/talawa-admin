@@ -86,15 +86,14 @@ describe('PinnedPostsStory', () => {
   });
 
   it('renders "Untitled" when caption is missing', () => {
-  const posts = [{ ...mockPosts[0], caption: undefined }];
-  render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
+    const posts = [{ ...mockPosts[0], caption: undefined }];
+    render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
 
-  // Strict check for the fallback text
-  expect(screen.getByText('Untitled')).toBeInTheDocument();
+    // Strict check for the fallback text
+    expect(screen.getByText('Untitled')).toBeInTheDocument();
 
-  // Ensure no other fallback text like "No Caption" etc. sneaks in
-  expect(screen.queryByText(/No Caption/i)).not.toBeInTheDocument();
-  expect(screen.queryByText(/Untitled Post/i)).not.toBeInTheDocument();
-});
-
+    // Ensure no other fallback text like "No Caption" etc. sneaks in
+    expect(screen.queryByText(/No Caption/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Untitled Post/i)).not.toBeInTheDocument();
+  });
 });

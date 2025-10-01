@@ -84,9 +84,9 @@ export interface InterfacePost {
   caption?: string | null;
   createdAt: string;
   pinnedAt?: string | null;
-  pinned?: boolean; // Add this if you're using it
+  pinned?: boolean;
   creator?: InterfaceCreator | null;
   attachments?: InterfaceAttachment[];
-  imageUrl?: string | null; // Add these if you're using them directly
-  videoUrl?: string | null; // in your component
+  imageUrl?: string | null;
+  videoUrl?: string | null;
 }
