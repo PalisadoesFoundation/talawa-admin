@@ -601,6 +601,7 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     avatarURL
     createdAt
     updatedAt
+    isUserRegistrationRequired
   }
 `;
 
