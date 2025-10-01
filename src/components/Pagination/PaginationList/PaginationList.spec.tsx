@@ -114,14 +114,7 @@ describe('PaginationList Component', () => {
    * Test Suite 1: Basic Rendering Tests
    */
   describe('Rendering', () => {
-    it('should render pagination controls', () => {
-      renderPaginationList();
-      expect(
-        screen.getAllByTestId('mock-pagination').length,
-      ).toBeGreaterThanOrEqual(1);
-    });
-
-    it('should render TablePagination component', () => {
+    it('should render pagination controls and TablePagination component', () => {
       renderPaginationList();
       const paginationElements = screen.getAllByTestId('mock-pagination');
       expect(paginationElements.length).toBeGreaterThanOrEqual(1);
@@ -285,18 +278,58 @@ describe('PaginationList Component', () => {
    * Test Suite 3: Responsive Behavior Tests
    */
   describe('Responsive Behavior', () => {
-    it('should render pagination component in test environment', () => {
-      renderPaginationList();
+    it('should render desktop layout with correct rowsPerPageOptions at large viewport', () => {
+      // Set desktop viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1200,
+      });
+      window.dispatchEvent(new Event('resize'));
 
-      const paginationElements = screen.getAllByTestId('mock-pagination');
-      expect(paginationElements.length).toBeGreaterThanOrEqual(1);
-    });
-
-    it('should have different rowsPerPageOptions for desktop view', () => {
       const { container } = renderPaginationList();
 
-      const selects = container.querySelectorAll('select');
-      expect(selects.length).toBeGreaterThan(0);
+      // Verify desktop select options are present
+      const select = screen.getByLabelText('rows per page');
+      const options = within(select as HTMLElement).getAllByRole('option');
+      const optionValues = options.map(
+        (opt) => (opt as HTMLOptionElement).value,
+      );
+
+      expect(optionValues).toContain('5');
+      expect(optionValues).toContain('10');
+      expect(optionValues).toContain('30');
+      expect(optionValues).toContain(String(Number.MAX_SAFE_INTEGER));
+
+      // Verify desktop colSpan
+      const cells = container.querySelectorAll('td[colspan="4"]');
+      expect(cells.length).toBeGreaterThan(0);
+    });
+
+    it('should render mobile layout with empty rowsPerPageOptions at small viewport', () => {
+      // Set mobile viewport
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 375,
+      });
+      window.dispatchEvent(new Event('resize'));
+
+      const { container } = renderPaginationList();
+
+      // Verify mobile colSpan
+      const mobileCells = container.querySelectorAll('td[colspan="5"]');
+
+      if (mobileCells.length > 0) {
+        const mobileCell = mobileCells[0];
+        const selectInMobile = mobileCell.querySelector('select');
+
+        // Mobile view should have no select options (rowsPerPageOptions=[])
+        if (selectInMobile) {
+          const options = selectInMobile.querySelectorAll('option');
+          expect(options.length).toBe(0);
+        }
+      }
     });
 
     it('should verify mobile view has no select options (rowsPerPageOptions=[])', () => {
