@@ -91,8 +91,20 @@ export const TableRow = ({
         throw new Error('Invalid or empty name provided');
       }
       inputs.push({ name: data.name.trim() });
+
       const pdf = await generate({ template: tagTemplate, inputs });
-      const blob = new Blob([new Uint8Array(pdf.buffer)], {
+      let arrayBuffer: ArrayBuffer;
+      if (pdf.buffer instanceof ArrayBuffer) {
+        arrayBuffer = pdf.buffer;
+      } else if (pdf.buffer instanceof SharedArrayBuffer) {
+        // Convert SharedArrayBuffer to ArrayBuffer
+        arrayBuffer = new Uint8Array(pdf.buffer).slice().buffer;
+      } else {
+        throw new Error(
+          'pdf.buffer is not an ArrayBuffer or SharedArrayBuffer',
+        );
+      }
+      const blob = new Blob([new Uint8Array(arrayBuffer)], {
         type: 'application/pdf',
       });
       const url = URL.createObjectURL(blob);
