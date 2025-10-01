@@ -11,6 +11,7 @@ import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
+import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
@@ -98,7 +99,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     postalCode: string;
     countryCode: string;
     avatarURL: string | null;
-    isUserRegistrationRequired: boolean | null;
   }
 
   const {
@@ -135,9 +135,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         },
         orgImage: null,
       });
-      setuserRegistrationRequiredChecked(
-        data.organization.isUserRegistrationRequired ?? false,
-      );
     }
     return () => {
       isMounted = false;
@@ -184,7 +181,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         postalCode: formState.address.postalCode,
         countryCode: formState.address?.countryCode,
         ...(formState.avatar ? { avatar: formState.avatar } : {}),
-        userRegistrationRequired: userRegistrationRequiredChecked,
       };
 
       // Filter out empty fields
@@ -304,7 +300,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Switch
                 className="custom-switch"
                 placeholder={t('userRegistrationRequired')}
-                checked={!userRegistrationRequiredChecked}
+                checked={userRegistrationRequiredChecked}
                 onChange={(): void =>
                   setuserRegistrationRequiredChecked(
                     !userRegistrationRequiredChecked,

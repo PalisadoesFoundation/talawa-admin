@@ -244,7 +244,6 @@
     "withdraw": "retirar",
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
-    "MembershipRequestWithdrawn": "Solicitud de membresía retirada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",

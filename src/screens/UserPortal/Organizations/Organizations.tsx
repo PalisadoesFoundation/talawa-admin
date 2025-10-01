@@ -48,7 +48,8 @@ import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
-import { InterfaceMembershipRequestSummary } from 'types/Organization/interface';
+
+const { getItem } = useLocalStorage();
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,8 +79,14 @@ interface IOrganizationCardProps {
     postalCode: string;
     state: string;
   };
-  isUserRegistrationRequired: boolean;
-  membershipRequests?: InterfaceMembershipRequestSummary[];
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
   isJoined: boolean;
   membersCount: number; // Add this
   adminsCount: number; // Add this
@@ -113,7 +120,6 @@ interface IOrganization {
   adminsCount?: number;
   membersCount?: number;
   admins: [];
-  isUserRegistrationRequired: boolean;
   members?: InterfaceMembersConnection; // <-- update this
   address: {
     city: string;
@@ -122,9 +128,13 @@ interface IOrganization {
     postalCode: string;
     state: string;
   };
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
   membershipRequests: {
-    status: string;
-    membershipRequestId: string;
+    id: string;
+    user: {
+      id: string;
+    };
   }[];
 }
 
@@ -135,7 +145,6 @@ interface IOrgData {
   id: string;
   adminsCount: number;
   membersCount: number;
-  isUserRegistrationRequired: boolean;
   members: {
     edges: [
       {
@@ -147,10 +156,6 @@ interface IOrgData {
       },
     ];
   };
-  membershipRequests: {
-    status: string;
-    membershipRequestId: string;
-  }[];
   description: string;
   __typename: string;
   name: string;
@@ -209,7 +214,7 @@ export default function organizations(): React.JSX.Element {
     loading: loadingAll,
     refetch: refetchAll,
   } = useQuery(ORGANIZATION_FILTER_LIST, {
-    variables: { filter: filterName, userId: userId },
+    variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
@@ -293,8 +298,9 @@ export default function organizations(): React.JSX.Element {
             adminsCount: org.adminsCount || 0,
             membersCount: org.membersCount || 0,
             admins: [],
-            isUserRegistrationRequired: org.isUserRegistrationRequired,
-            membershipRequests: org.membershipRequests,
+            membershipRequestStatus: isMember ? 'accepted' : '',
+            userRegistrationRequired: false,
+            membershipRequests: [],
             isJoined: isMember, // Set based on membership check
           };
         });
@@ -309,6 +315,7 @@ export default function organizations(): React.JSX.Element {
               const organization = edge.node;
               return {
                 ...organization,
+                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
                 isJoined: true,
               };
             },
@@ -323,6 +330,7 @@ export default function organizations(): React.JSX.Element {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
             ...org,
+            membershipRequestStatus: 'created',
             isJoined: true,
           }),
         );
@@ -480,10 +488,11 @@ export default function organizations(): React.JSX.Element {
                           description: organization.description,
                           admins: organization.admins,
                           address: organization.address,
-                          isUserRegistrationRequired:
-                            organization.isUserRegistrationRequired,
-                          membershipRequests:
-                            organization.membershipRequests as InterfaceMembershipRequestSummary[],
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,
                           adminsCount: organization.adminsCount || 0,
@@ -494,12 +503,14 @@ export default function organizations(): React.JSX.Element {
                             className="col-md-6 mb-4"
                             data-testid="organization-card"
                             data-organization-name={organization.name}
-                            data-membership-status={organization.isJoined}
+                            data-membership-status={
+                              organization.membershipRequestStatus
+                            }
                             data-cy="orgCard"
                           >
                             <div
                               data-testid={`membership-status-${organization.name}`}
-                              data-status={organization.isJoined}
+                              data-status={organization.membershipRequestStatus}
                               className="visually-hidden"
                             ></div>
 
