@@ -141,9 +141,11 @@ describe('PaginationList Component', () => {
       expect(optionValues).toContain('30');
       expect(optionValues).toContain(String(Number.MAX_SAFE_INTEGER));
 
-      const translations =
-        i18nForTest.getDataByLanguage('en')?.translation?.paginationList;
-      const allLabel = translations?.all ?? 'All';
+      const paginationTranslations = i18nForTest.getDataByLanguage('en')
+        ?.translation?.paginationList as
+        | { all?: string; rowsPerPage?: string }
+        | undefined;
+      const allLabel = paginationTranslations?.all ?? 'All';
       const allOption = options.find((opt) => opt.textContent === allLabel);
       expect(allOption).toBeTruthy();
 
@@ -345,9 +347,11 @@ describe('PaginationList Component', () => {
     it('should display translated "all" option in rowsPerPageOptions', () => {
       renderPaginationList();
 
-      const translations =
-        i18nForTest.getDataByLanguage('en')?.translation?.paginationList;
-      const allLabel = translations?.all ?? 'All';
+      const paginationTranslations = i18nForTest.getDataByLanguage('en')
+        ?.translation?.paginationList as
+        | { all?: string; rowsPerPage?: string }
+        | undefined;
+      const allLabel = paginationTranslations?.all ?? 'All';
 
       const select = screen.getByLabelText('rows per page');
       const options = within(select as HTMLElement).getAllByRole('option');
@@ -359,9 +363,12 @@ describe('PaginationList Component', () => {
     it('should display translated rowsPerPage label', () => {
       renderPaginationList();
 
-      const translations =
-        i18nForTest.getDataByLanguage('en')?.translation?.paginationList;
-      const rowsPerPageLabel = translations?.rowsPerPage ?? 'rows per page:';
+      const paginationTranslations = i18nForTest.getDataByLanguage('en')
+        ?.translation?.paginationList as
+        | { all?: string; rowsPerPage?: string }
+        | undefined;
+      const rowsPerPageLabel =
+        paginationTranslations?.rowsPerPage ?? 'rows per page:';
 
       const labelText = screen.getByText(new RegExp(rowsPerPageLabel, 'i'));
       expect(labelText).toBeInTheDocument();
@@ -539,9 +546,11 @@ describe('PaginationList Component', () => {
       expect(optionValues).toContain('30');
       expect(optionValues).toContain(String(Number.MAX_SAFE_INTEGER));
 
-      const translations =
-        i18nForTest.getDataByLanguage('en')?.translation?.paginationList;
-      const allLabel = translations?.all ?? 'All';
+      const paginationTranslations = i18nForTest.getDataByLanguage('en')
+        ?.translation?.paginationList as
+        | { all?: string; rowsPerPage?: string }
+        | undefined;
+      const allLabel = paginationTranslations?.all ?? 'All';
       const allOption = Array.from(options).find(
         (opt) => opt.textContent === allLabel,
       );
