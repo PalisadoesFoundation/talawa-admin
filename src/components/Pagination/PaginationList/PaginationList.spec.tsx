@@ -5,7 +5,7 @@ import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
@@ -108,6 +108,7 @@ const renderPaginationList = (
 describe('PaginationList Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.clearAllTimers();
   });
 
   /**
@@ -278,6 +279,19 @@ describe('PaginationList Component', () => {
    * Test Suite 3: Responsive Behavior Tests
    */
   describe('Responsive Behavior', () => {
+    let originalInnerWidth: number;
+
+    beforeEach(() => {
+      originalInnerWidth = window.innerWidth;
+    });
+
+    afterEach(() => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: originalInnerWidth,
+      });
+    });
     it('should render desktop layout with correct rowsPerPageOptions at large viewport', () => {
       // Set desktop viewport
       Object.defineProperty(window, 'innerWidth', {
