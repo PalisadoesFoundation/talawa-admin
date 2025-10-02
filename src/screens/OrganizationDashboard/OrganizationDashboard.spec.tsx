@@ -90,13 +90,13 @@ describe('OrganizationDashboard', () => {
 
     const requestsCard = screen.getByText('requests');
 
-    const requestsCardColumn = requestsCard.closest('[role="button"]');
-    expect(requestsCardColumn).not.toBeNull();
+    const requestsCardButton = requestsCard.closest('button');
+    expect(requestsCardButton).not.toBeNull();
 
-    if (requestsCardColumn) {
-      fireEvent.click(requestsCardColumn);
+    if (requestsCardButton) {
+      fireEvent.click(requestsCardButton);
     } else {
-      throw new Error('Membership requests card column not found');
+      throw new Error('Membership requests card button not found');
     }
 
     expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');

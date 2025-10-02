@@ -1,23 +1,50 @@
 /**
- * MembershipRequestsCard Component
+ * Membership requests and volunteer rankings card component for organization dashboard.
  *
- * This component renders a card displaying pending membership requests for an organization.
- * It shows a list of users who have requested to join the organization and provides
- * a "View All" button to navigate to the full requests page.
+ * This component displays a comprehensive overview of pending membership requests and
+ * volunteer rankings for an organization. It presents membership requests with user
+ * details and provides a dedicated section for volunteer rankings. The component
+ * includes loading states, empty states, and navigation functionality to view all
+ * requests or rankings in detail.
  *
- * @param props - The properties object for the component.
- * @param props.membershipRequestData - Object containing membership request data from GraphQL query.
- * @param props.membershipRequestData.organization - Organization object containing membership requests.
- * @param props.membershipRequestData.organization.membershipRequests - Array of membership request objects.
- * @param props.isLoading - Boolean indicating if membership request data is currently loading.
- * @param props.onViewAllClick - Async callback function triggered when "View All" button is clicked.
+ * @component
+ * @param props - The properties for the MembershipRequestsCard component.
+ * @param props.membershipRequestData - The data object containing organization membership requests information.
+ * @param props.membershipRequestData.organization - The organization object containing membership request details.
+ * @param props.membershipRequestData.organization.membershipRequests - Array of pending membership request objects.
+ * @param props.isLoading - Loading state indicator. When true, displays skeleton loaders instead of actual content.
+ * @param props.onViewAllClick - Callback function triggered when the "View All" button for membership requests is clicked.
  *
- * @returns A JSX.Element containing the membership requests card with user list and navigation.
+ * @returns A JSX element representing a styled card component containing membership requests list and volunteer rankings section.
+ *
+ * @example
+ * ```tsx
+ * <MembershipRequestsCard
+ *   membershipRequestData={{
+ *     organization: {
+ *       membershipRequests: [
+ *         {
+ *           status: 'PENDING',
+ *           membershipRequestId: 'req123',
+ *           user: { name: 'John Doe' }
+ *         }
+ *       ]
+ *     }
+ *   }}
+ *   isLoading={false}
+ *   onViewAllClick={() => navigate('/membership-requests')}
+ * />
+ * ```
  *
  * @remarks
- * - Filters and displays only pending membership requests.
- * - Shows loading state with CardItemLoading components when data is being fetched.
- * - Displays "No Requests" message when there are no pending requests.
+ * - The component displays only the first few membership requests for overview purposes.
+ * - When no membership requests are present, it shows a "No membership requests" message.
+ * - The volunteer rankings section currently displays a "Coming Soon" placeholder.
+ * - Loading states use skeleton components to maintain consistent layout.
+ * - The component includes separate "View All" buttons for both membership requests and volunteer rankings.
+ * - Uses react-i18next for internationalization support.
+ *
+ * @file This file defines the MembershipRequestsCard component used in the Talawa Admin organization dashboard.
  * - Uses CardItem components for consistent user display styling.
  * - Includes error handling with toast notifications.
  *
@@ -74,6 +101,11 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
     keyPrefix: 'organizationDashboard',
   });
 
+  const pendingRequests =
+    membershipRequestData?.organization?.membershipRequests?.filter(
+      (r) => r.status === 'pending',
+    ) ?? [];
+
   return (
     <Col xl={4}>
       <Row className="mb-4">
@@ -97,9 +129,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               [...Array(4)].map((_, index) => (
                 <CardItemLoading key={`requestsLoading_${index}`} />
               ))
-            ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                (request: { status: string }) => request.status === 'pending',
-              ).length === 0 ? (
+            ) : pendingRequests.length === 0 ? (
               <div
                 className={styles.emptyContainer}
                 style={{ height: '150px' }}
@@ -107,12 +137,9 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
             ) : (
-              membershipRequestData?.organization?.membershipRequests
-                ?.filter(
-                  (request: { status: string }) => request.status === 'pending',
-                )
-                ?.slice(0, 8)
-                ?.map(
+              pendingRequests
+                .slice(0, 8)
+                .map(
                   (request: {
                     status: string;
                     membershipRequestId: string;
@@ -136,9 +163,9 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
             <Button
               size="sm"
               variant="light"
-              data-testid="viewAllLeadeboard"
-              onClick={async (): Promise<void> => {
-                await Promise.resolve(toast.success(t('comingSoon')));
+              data-testid="viewAllLeaderboard"
+              onClick={() => {
+                toast.success(t('comingSoon'));
               }}
             >
               {t('viewAll')}

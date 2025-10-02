@@ -362,25 +362,26 @@ function OrganizationDashboard(): JSX.Element {
               (request: { status: string }) => request.status === 'pending',
             ).length > 0 && (
               <Row>
-                <Col
-                  xs={6}
-                  sm={4}
-                  role="button"
-                  className="mb-4"
-                  onClick={async (): Promise<void> => {
-                    await navigate(requestLink);
-                  }}
-                >
-                  <DashBoardCard
-                    count={
-                      membershipRequestData?.organization?.membershipRequests?.filter(
-                        (request: { status: string }) =>
-                          request.status === 'pending',
-                      )?.length
-                    }
-                    title={tCommon('requests')}
-                    icon={<UsersIcon fill="#555555" />}
-                  />
+                <Col xs={6} sm={4} className="mb-4">
+                  <button
+                    type="button"
+                    className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+                    onClick={(): void => {
+                      navigate(requestLink);
+                    }}
+                    aria-label={tCommon('requests')}
+                  >
+                    <DashBoardCard
+                      count={
+                        membershipRequestData?.organization?.membershipRequests?.filter(
+                          (request: { status: string }) =>
+                            request.status === 'pending',
+                        )?.length
+                      }
+                      title={tCommon('requests')}
+                      icon={<UsersIcon fill="#555555" />}
+                    />
+                  </button>
                 </Col>
               </Row>
             )}

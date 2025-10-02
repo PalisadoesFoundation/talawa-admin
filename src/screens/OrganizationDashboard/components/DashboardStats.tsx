@@ -1,48 +1,57 @@
 /**
- * DashboardStats Component
+ * Dashboard statistics component for displaying organization metrics and navigation.
  *
- * This component renders dashboard statistics cards displaying organization metrics
- * including member count, admin count, event count, venue count, blocked users count,
- * and posts count. It provides navigation functionality for each statistic.
+ * This component renders a comprehensive dashboard showing key organizational statistics
+ * including member counts, admin counts, event counts, venue counts, blocked user counts,
+ * and post counts. Each statistic is displayed as a clickable card that provides navigation
+ * to the respective detailed view. The component supports loading states and handles
+ * various click interactions through callback functions.
  *
- * @param props - The properties object for the component.
- * @param props.memberCount - Number of members in the organization.
- * @param props.adminCount - Number of administrators in the organization.
- * @param props.eventCount - Number of events in the organization.
- * @param props.venueCount - Number of venues in the organization.
- * @param props.blockedCount - Number of blocked users in the organization.
- * @param props.postsCount - Optional number of posts in the organization.
- * @param props.isLoading - Boolean indicating if data is currently loading.
- * @param props.onPostsClick - Callback function triggered when posts card is clicked.
- * @param props.onMembersClick - Callback function triggered when members card is clicked.
- * @param props.onAdminsClick - Callback function triggered when admins card is clicked.
- * @param props.onBlockedUsersClick - Callback function triggered when blocked users card is clicked.
- * @param props.onEventsClick - Callback function triggered when events card is clicked.
- * @param props.onVenuesClick - Callback function triggered when venues card is clicked.
+ * @component
+ * @param props - The properties for the DashboardStats component.
+ * @param props.memberCount - The total number of members in the organization.
+ * @param props.adminCount - The total number of administrators in the organization.
+ * @param props.eventCount - The total number of events in the organization.
+ * @param props.venueCount - The total number of venues in the organization.
+ * @param props.blockedCount - The total number of blocked users in the organization.
+ * @param props.postsCount - The total number of posts in the organization. Optional parameter.
+ * @param props.isLoading - Loading state indicator. When true, shows skeleton loaders instead of actual counts.
+ * @param props.onMembersClick - Callback function triggered when the members statistics card is clicked.
+ * @param props.onAdminsClick - Callback function triggered when the admins statistics card is clicked.
+ * @param props.onPostsClick - Callback function triggered when the posts statistics card is clicked.
+ * @param props.onEventsClick - Callback function triggered when the events statistics card is clicked.
+ * @param props.onVenuesClick - Callback function triggered when the venues statistics card is clicked.
+ * @param props.onBlockedUsersClick - Callback function triggered when the blocked users statistics card is clicked.
  *
- * @returns A JSX.Element containing dashboard statistics cards with navigation functionality.
- *
- * @remarks
- * - Uses DashBoardCard components for consistent styling across all statistics.
- * - Displays loading state when data is being fetched.
- * - Provides clickable cards that trigger navigation callbacks.
- * - Uses SVG icons for visual representation of each statistic type.
+ * @returns A JSX element containing a grid layout with six clickable dashboard cards displaying organization statistics.
  *
  * @example
  * ```tsx
  * <DashboardStats
  *   memberCount={150}
  *   adminCount={5}
- *   eventCount={25}
- *   venueCount={8}
+ *   eventCount={12}
+ *   venueCount={3}
  *   blockedCount={2}
- *   postsCount={100}
+ *   postsCount={45}
  *   isLoading={false}
- *   onPostsClick={() => navigate('/posts')}
  *   onMembersClick={() => navigate('/members')}
- *   // ... other click handlers
+ *   onAdminsClick={() => navigate('/admins')}
+ *   onPostsClick={() => navigate('/posts')}
+ *   onEventsClick={() => navigate('/events')}
+ *   onVenuesClick={() => navigate('/venues')}
+ *   onBlockedUsersClick={() => navigate('/blocked-users')}
  * />
  * ```
+ *
+ * @remarks
+ * - The component uses react-icons for displaying appropriate icons on each statistics card.
+ * - Cards are styled with hover effects and click animations for better user experience.
+ * - During loading state, skeleton components are displayed to maintain layout consistency.
+ * - The component is fully responsive and adapts to different screen sizes using Bootstrap grid system.
+ * - All callback functions are asynchronous to support navigation and API calls.
+ *
+ * @file This file defines the DashboardStats component used in the Talawa Admin organization dashboard.
  */
 
 import React from 'react';
@@ -88,9 +97,6 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
   onVenuesClick,
   onBlockedUsersClick,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationDashboard',
-  });
   const { t: tCommon } = useTranslation('common');
 
   if (isLoading) {
@@ -113,89 +119,95 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
 
   return (
     <Row style={{ display: 'flex' }}>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="membersCount"
-        onClick={onMembersClick}
-      >
-        <DashBoardCard
-          count={memberCount}
-          title={tCommon('members')}
-          icon={<UsersIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="membersCount"
+          onClick={onMembersClick}
+          aria-label={tCommon('members')}
+        >
+          <DashBoardCard
+            count={memberCount}
+            title={tCommon('members')}
+            icon={<UsersIcon fill="#555555" />}
+          />
+        </button>
       </Col>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="adminsCount"
-        onClick={onAdminsClick}
-      >
-        <DashBoardCard
-          count={adminCount}
-          title={tCommon('admins')}
-          icon={<AdminsIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="adminsCount"
+          onClick={onAdminsClick}
+          aria-label={tCommon('admins')}
+        >
+          <DashBoardCard
+            count={adminCount}
+            title={tCommon('admins')}
+            icon={<AdminsIcon fill="#555555" />}
+          />
+        </button>
       </Col>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="postsCount"
-        onClick={onPostsClick}
-      >
-        <DashBoardCard
-          count={postsCount}
-          title={t('posts')}
-          icon={<PostsIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="postsCount"
+          onClick={onPostsClick}
+          aria-label={tCommon('posts')}
+        >
+          <DashBoardCard
+            count={postsCount ?? 0}
+            title={tCommon('posts')}
+            icon={<PostsIcon fill="#555555" />}
+          />
+        </button>
       </Col>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="eventsCount"
-        onClick={onEventsClick}
-      >
-        <DashBoardCard
-          count={eventCount}
-          title={t('events')}
-          icon={<EventsIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="eventsCount"
+          onClick={onEventsClick}
+          aria-label={tCommon('events')}
+        >
+          <DashBoardCard
+            count={eventCount}
+            title={tCommon('events')}
+            icon={<EventsIcon fill="#555555" />}
+          />
+        </button>
       </Col>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="venuesCount"
-        onClick={onVenuesClick}
-      >
-        <DashBoardCard
-          count={venueCount}
-          title={t('venues')}
-          icon={<VenuesIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="blockedUsersCount"
+          onClick={onBlockedUsersClick}
+          aria-label={tCommon('blockedUsers')}
+        >
+          <DashBoardCard
+            count={blockedCount}
+            title={tCommon('blockedUsers')}
+            icon={<BlockedUsersIcon fill="#555555" />}
+          />
+        </button>
       </Col>
-      <Col
-        xs={6}
-        sm={4}
-        role="button"
-        className="mb-4"
-        data-testid="blockedUsersCount"
-        onClick={onBlockedUsersClick}
-      >
-        <DashBoardCard
-          count={blockedCount}
-          title={t('blockedUsers')}
-          icon={<BlockedUsersIcon fill="#555555" />}
-        />
+      <Col xs={6} sm={4} className="mb-4">
+        <button
+          type="button"
+          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+          data-testid="venuesCount"
+          onClick={onVenuesClick}
+          aria-label={tCommon('venues')}
+        >
+          <DashBoardCard
+            count={venueCount}
+            title={tCommon('venues')}
+            icon={<VenuesIcon fill="#555555" />}
+          />
+        </button>
       </Col>
     </Row>
   );
