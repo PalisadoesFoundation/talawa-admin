@@ -684,14 +684,18 @@ describe('Testing Events Screen [User Portal]', () => {
     const endTime = '10:00 AM';
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+      expect(screen.getAllByLabelText('Start Date').at(-1)).toBeInTheDocument();
+      expect(screen.getAllByLabelText('End Date').at(-1)).toBeInTheDocument();
     });
 
     expect(endDate).not.toBeNull();
-    const endDateDatePicker = screen.getByLabelText('End Date');
+    const endDateDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     expect(startDate).not.toBeNull();
-    const startDateDatePicker = screen.getByLabelText('Start Date');
+    const startDateDatePicker = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
 
     const startDateDayjs = dayjs(startDate);
     const endDateDayjs = dayjs(endDate);
@@ -713,9 +717,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     expect(endTime).not.toBeNull();
-    const endTimePicker = screen.getByLabelText('End Time');
+    const endTimePicker = screen
+      .getAllByLabelText('End Time')
+      .at(-1) as HTMLInputElement;
     expect(startTime).not.toBeNull();
-    const startTimePicker = screen.getByLabelText('Start Time');
+    const startTimePicker = screen
+      .getAllByLabelText('Start Time')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(startTimePicker, {
       target: { value: startTime },
@@ -750,8 +758,12 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    const endDateDatePicker = screen.getByLabelText('End Date');
-    const startDateDatePicker = screen.getByLabelText('Start Date');
+    const endDateDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+    const startDateDatePicker = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(startDateDatePicker, {
       target: { value: null },
@@ -762,8 +774,12 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
-    const endTimePicker = screen.getByLabelText('End Time');
-    const startTimePicker = screen.getByLabelText('Start Time');
+    const endTimePicker = screen
+      .getAllByLabelText('End Time')
+      .at(-1) as HTMLInputElement;
+    const startTimePicker = screen
+      .getAllByLabelText('Start Time')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(startTimePicker, {
       target: { value: null },
