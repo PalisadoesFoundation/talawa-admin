@@ -60,13 +60,13 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
         <TableBody className="bg-primary">
           {event && (
             <TableRow
-              key={event.id ?? event._id}
+              key={event.id}
               className="bg-white rounded"
-              aria-label={`Event: ${event.name ?? event.title}`}
+              aria-label={`Event: ${event.name || 'Unnamed Event'}`}
             >
               <TableCell>
                 <Link
-                  to={`/event/${currentOrg}/${event.id ?? event._id}`}
+                  to={`/event/${currentOrg}/${event.id}`}
                   className="d-flex justify-items-center align-items-center"
                   style={{ color: 'blue', textDecoration: 'none' }}
                 >
@@ -78,10 +78,10 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
                     className="mx-2 rounded-full"
                   />
                   <div>
-                    <div>{event.name ?? event.title}</div>
+                    <div>{event.name || 'Unnamed Event'}</div>
                     <div>
-                      {event.startAt || event.startDate
-                        ? formatDate(event.startAt ?? event.startDate)
+                      {event.startAt
+                        ? formatDate(event.startAt)
                         : 'Date not available'}
                     </div>
                   </div>

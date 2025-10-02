@@ -274,7 +274,7 @@ describe('OrganizationPeople', () => {
     );
 
     // Initially should show loading state
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
   });
 
   test('displays members list correctly', async () => {

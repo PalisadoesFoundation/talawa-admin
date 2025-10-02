@@ -18,6 +18,7 @@ export const mockEventData = {
     isRegisterable: true,
     location: 'Test Location',
     recurring: true,
+    isRecurringEventTemplate: false,
     baseRecurringEvent: { _id: 'base123' },
     organization: {
       id: 'org123',

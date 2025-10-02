@@ -30,7 +30,7 @@ const mocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {

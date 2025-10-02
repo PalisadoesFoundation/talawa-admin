@@ -159,7 +159,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   ): Promise<void> => {
     e.preventDefault();
     try {
-      const updatedFields: { [key: string]: string | number | undefined } = {};
+      const updatedFields: {
+        [key: string]: string | number | undefined | null;
+      } = {};
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName;
       }
@@ -176,6 +178,8 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         ) {
           updatedFields.startAt = dayjs(campaignStartDate).toISOString();
         }
+      } else if (campaign?.startAt) {
+        updatedFields.startAt = null;
       }
       if (campaignEndDate) {
         if (
@@ -184,6 +188,8 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         ) {
           updatedFields.endAt = dayjs(campaignEndDate).toISOString();
         }
+      } else if (campaign?.endAt) {
+        updatedFields.endAt = null;
       }
       await updateCampaign({
         variables: {

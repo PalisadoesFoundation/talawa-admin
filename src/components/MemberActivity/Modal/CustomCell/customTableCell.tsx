@@ -44,7 +44,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     return (
       <TableRow data-testid="loading-state">
         <TableCell colSpan={4}>
-          <CircularProgress />
+          <CircularProgress role="progressbar" />
         </TableCell>
       </TableRow>
     );
