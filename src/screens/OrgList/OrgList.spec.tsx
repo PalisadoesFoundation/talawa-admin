@@ -608,8 +608,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Check if pagination component is rendered (should appear when there are organizations)
-    const paginationElement = screen.getByTestId('table-pagination-desktop');
-    expect(paginationElement).toBeInTheDocument();
+    // Desktop pagination should be visible (test environment defaults to desktop viewport)
+    const desktopPagination = screen.getByTestId('table-pagination-desktop');
+    expect(desktopPagination).toBeInTheDocument();
+
+    // Mobile pagination should not be rendered in desktop viewport
+    const mobilePagination = screen.queryByTestId('table-pagination-mobile');
+    expect(mobilePagination).not.toBeInTheDocument();
   });
 
   test('Testing pagination functionality with multiple organizations', async () => {
@@ -620,8 +625,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Check if pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination-desktop');
-    expect(paginationElement).toBeInTheDocument();
+    // Desktop pagination should be visible (test environment defaults to desktop viewport)
+    const desktopPagination = screen.getByTestId('table-pagination-desktop');
+    expect(desktopPagination).toBeInTheDocument();
+
+    // Mobile pagination should not be rendered in desktop viewport
+    const mobilePagination = screen.queryByTestId('table-pagination-mobile');
+    expect(mobilePagination).not.toBeInTheDocument();
 
     // Check if rows per page selector is present
     const rowsPerPageSelect = screen.getByDisplayValue('5');
