@@ -33,7 +33,7 @@ import { Link } from 'react-router';
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: { id: eventId },
+    variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
@@ -72,21 +72,26 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     <TableRow className="my-6" data-testid="custom-row">
       <TableCell align="left">
         <Link
-          to={`/event/${event.organization._id}/${event._id}`}
+          to={`/event/${event.organization.id ?? event.organization._id}/${event.id ?? event._id}`}
           className={styles.membername}
         >
-          {event.title}
+          {event.name ?? event.title}
         </Link>
       </TableCell>
       <TableCell align="left">
-        {new Date(event.startDate).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          timeZone: 'UTC',
-        })}
+        {new Date(event.startAt ?? event.startDate).toLocaleDateString(
+          undefined,
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            timeZone: 'UTC',
+          },
+        )}
       </TableCell>
-      <TableCell align="left">{event.recurring ? 'Yes' : 'No'}</TableCell>
+      <TableCell align="left">
+        {event.recurring || event.isRecurringEventTemplate ? 'Yes' : 'No'}
+      </TableCell>
       <TableCell align="left">
         <span title="Number of attendees">{event.attendees?.length ?? 0}</span>
       </TableCell>

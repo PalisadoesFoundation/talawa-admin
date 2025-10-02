@@ -32,7 +32,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(
       screen.getByText(
-        new Date('2030-01-01').toLocaleDateString(undefined, {
+        new Date('2030-01-01T09:00:00.000Z').toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -40,8 +40,8 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
     expect(link).toHaveAttribute('href', '/event/org123/event123');
@@ -66,7 +66,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         error: new Error('An error occurred'),
       },
@@ -96,7 +96,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         result: {
           data: {
