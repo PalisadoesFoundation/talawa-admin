@@ -49,6 +49,7 @@ export interface IEvent {
   _id: string;
   location: string;
   name: string;
+  title?: string; // Legacy field, use 'name' instead
   description: string;
   startDate: string;
   endDate: string;

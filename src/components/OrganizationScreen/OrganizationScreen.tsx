@@ -99,7 +99,7 @@ const OrganizationScreen = (): JSX.Element => {
         setEventName(null);
         return;
       }
-      setEventName(event.title);
+      setEventName(event.name ?? event.title ?? null);
     } else {
       setEventName(null);
     }

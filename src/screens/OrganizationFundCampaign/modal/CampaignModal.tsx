@@ -119,16 +119,21 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    // Validate that both dates are present
+    if (!formState.campaignStartDate || !formState.campaignEndDate) {
+      toast.error(t('campaignDatesRequired') as string);
+      return;
+    }
+
     try {
       await createCampaign({
         variables: {
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
           goalAmount: Number.parseInt(formState.campaignGoal.toString()),
-          startAt: dayjs(
-            formState.campaignStartDate ?? new Date(),
-          ).toISOString(),
-          endAt: dayjs(formState.campaignEndDate ?? new Date()).toISOString(),
+          startAt: dayjs(formState.campaignStartDate).toISOString(),
+          endAt: dayjs(formState.campaignEndDate).toISOString(),
           fundId,
         },
       });

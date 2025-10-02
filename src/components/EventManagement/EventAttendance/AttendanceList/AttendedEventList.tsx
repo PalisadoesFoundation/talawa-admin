@@ -62,7 +62,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
             <TableRow
               key={event.id}
               className="bg-white rounded"
-              aria-label={`Event: ${event.name || 'Unnamed Event'}`}
+              aria-label={`Event: ${event.name ?? event.title ?? 'Unnamed Event'}`}
             >
               <TableCell>
                 <Link
@@ -78,12 +78,8 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
                     className="mx-2 rounded-full"
                   />
                   <div>
-                    <div>{event.name || 'Unnamed Event'}</div>
-                    <div>
-                      {event.startAt
-                        ? formatDate(event.startAt)
-                        : 'Date not available'}
-                    </div>
+                    <div>{event.name ?? event.title ?? 'Unnamed Event'}</div>
+                    <div>{formatDate(event.startAt)}</div>
                   </div>
                 </Link>
               </TableCell>

@@ -420,6 +420,7 @@ export interface InterfaceUserInfo {
  */
 export interface InterfaceBaseEvent {
   _id: string;
+  name?: string;
   title: string;
   description: string;
   startDate: string;
@@ -2505,6 +2506,7 @@ export interface InterfaceVolunteerMembership {
   createdAt: string;
   event: {
     _id: string;
+    name?: string;
     title: string;
     startDate: string;
   };

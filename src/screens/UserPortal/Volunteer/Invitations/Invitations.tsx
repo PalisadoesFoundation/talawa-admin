@@ -228,7 +228,7 @@ const Invitations = (): JSX.Element => {
                     size={20}
                   />
                   <span className="text-muted">Event:</span>{' '}
-                  <span>{invite.event.title}</span>
+                  <span>{invite.event.name ?? invite.event.title}</span>
                 </div>
                 |
                 <div>

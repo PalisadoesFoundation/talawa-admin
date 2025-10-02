@@ -91,7 +91,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   ): string => {
     if (!event) return 'No event';
 
-    return event.name || 'No event';
+    return event.name ?? event.title ?? 'No event';
   };
 
   return (
