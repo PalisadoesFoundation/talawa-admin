@@ -57,6 +57,14 @@ export interface InterfaceCampaignModal {
  * @param props - The props for the CampaignModal component.
  * @returns JSX.Element
  */
+type CampaignFormState = {
+  campaignName: string;
+  campaignCurrency: string;
+  campaignGoal: number;
+  campaignStartDate: Date | null;
+  campaignEndDate: Date | null;
+};
+
 const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
@@ -68,21 +76,27 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<CampaignFormState>({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
     campaignGoal: campaign?.goalAmount ?? 0,
-    campaignStartDate: campaign?.startAt ?? new Date(),
-    campaignEndDate: campaign?.endAt ?? new Date(),
+    campaignStartDate: campaign?.startAt
+      ? new Date(campaign.startAt)
+      : new Date(),
+    campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : new Date(),
   });
 
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt ?? new Date(),
+      campaignEndDate: campaign?.endAt
+        ? new Date(campaign.endAt)
+        : new Date(),
       campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startAt ?? new Date(),
+      campaignStartDate: campaign?.startAt
+        ? new Date(campaign.startAt)
+        : new Date(),
     });
   }, [campaign]);
 
@@ -113,8 +127,8 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
           goalAmount: Number.parseInt(formState.campaignGoal.toString()),
-          startAt: dayjs(formState.campaignStartDate).toISOString(),
-          endAt: dayjs(formState.campaignEndDate).toISOString(),
+          startAt: dayjs(formState.campaignStartDate ?? new Date()).toISOString(),
+          endAt: dayjs(formState.campaignEndDate ?? new Date()).toISOString(),
           fundId,
         },
       });
@@ -155,11 +169,15 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startAt !== campaignStartDate) {
-        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
+      if (campaign?.startAt && campaignStartDate) {
+        if (!dayjs(campaign.startAt).isSame(campaignStartDate)) {
+          updatedFields.startAt = dayjs(campaignStartDate).toISOString();
+        }
       }
-      if (campaign?.endAt !== formState.campaignEndDate) {
-        updatedFields.endAt = dayjs(formState.campaignEndDate).toISOString();
+      if (campaign?.endAt && campaignEndDate) {
+        if (!dayjs(campaign.endAt).isSame(campaignEndDate)) {
+          updatedFields.endAt = dayjs(campaignEndDate).toISOString();
+        }
       }
       await updateCampaign({
         variables: {
@@ -226,20 +244,28 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               <DatePicker
                 format="DD/MM/YYYY"
                 label={tCommon('startDate')}
-                value={dayjs(campaignStartDate)}
+                value={
+                  campaignStartDate ? dayjs(campaignStartDate) : null
+                }
                 className={styles.noOutline}
                 onChange={(date: Dayjs | null): void => {
-                  if (date) {
+                  if (!date) {
                     setFormState({
                       ...formState,
-                      campaignStartDate: date.toDate(),
-                      campaignEndDate:
-                        campaignEndDate &&
-                        (campaignEndDate < date?.toDate()
-                          ? date.toDate()
-                          : campaignEndDate),
+                      campaignStartDate: null,
                     });
+                    return;
                   }
+
+                  const nextStartDate = date.toDate();
+                  setFormState({
+                    ...formState,
+                    campaignStartDate: nextStartDate,
+                    campaignEndDate:
+                      campaignEndDate && campaignEndDate < nextStartDate
+                        ? nextStartDate
+                        : campaignEndDate,
+                  });
                 }}
                 minDate={dayjs(new Date())}
               />
@@ -248,16 +274,16 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                 format="DD/MM/YYYY"
                 label={tCommon('endDate')}
                 className={styles.noOutline}
-                value={dayjs(campaignEndDate)}
+                value={campaignEndDate ? dayjs(campaignEndDate) : null}
                 onChange={(date: Dayjs | null): void => {
-                  if (date) {
-                    setFormState({
-                      ...formState,
-                      campaignEndDate: date.toDate(),
-                    });
-                  }
+                  setFormState({
+                    ...formState,
+                    campaignEndDate: date ? date.toDate() : null,
+                  });
                 }}
-                minDate={dayjs(campaignStartDate)}
+                minDate={
+                  campaignStartDate ? dayjs(campaignStartDate) : undefined
+                }
               />
             </Form.Group>
 

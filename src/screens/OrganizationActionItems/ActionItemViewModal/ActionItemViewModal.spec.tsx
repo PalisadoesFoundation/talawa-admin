@@ -52,7 +52,12 @@ const mockMembers = [
     id: 'userId1',
     name: 'John Doe',
     emailAddress: 'john@example.com', // Fixed: changed from emailAddress to emailAddress
+    role: 'MEMBER',
     avatarURL: 'https://example.com/avatar1.jpg',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-02T00:00:00.000Z',
+    firstName: 'John',
+    lastName: 'Doe',
   },
   {
     id: 'userId2',
@@ -60,8 +65,8 @@ const mockMembers = [
     emailAddress: 'jane@example.com',
     role: 'ADMIN',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-05T00:00:00.000Z',
     firstName: 'Jane',
     lastName: 'Smith',
   },
@@ -73,8 +78,8 @@ const mockMembers = [
     emailAddress: 'bob@example.com',
     role: 'REGULAR',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    createdAt: '2024-01-02T00:00:00.000Z',
+    updatedAt: '2024-01-06T00:00:00.000Z',
   },
 ];
 
@@ -626,7 +631,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.assignmentDate)).toBeInTheDocument();
+      expect(screen.getAllByLabelText(t.assignmentDate)[0]).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

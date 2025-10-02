@@ -728,6 +728,8 @@ export const MEMBERS_LIST = gql`
     usersByOrganizationId(organizationId: $organizationId) {
       id
       name
+      firstName
+      lastName
       emailAddress
       role
       avatarURL

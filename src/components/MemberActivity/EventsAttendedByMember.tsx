@@ -40,7 +40,7 @@ function EventsAttendedByMember({
     loading,
     error,
   } = useQuery(EVENT_DETAILS, {
-    variables: { id: eventsId },
+    variables: { eventId: eventsId },
   });
 
   if (loading)
@@ -57,15 +57,23 @@ function EventsAttendedByMember({
       </div>
     );
 
-  const { organization, _id, startDate, title, location } = events.event;
+  const {
+    organization,
+    id: eventId,
+    name,
+    startAt,
+    location,
+  } = events.event;
+
+  const organizationId = organization?.id ?? organization?._id;
 
   return (
     <EventAttendedCard
-      orgId={organization._id}
-      eventId={_id}
-      key={_id}
-      startdate={startDate}
-      title={title}
+      orgId={organizationId}
+      eventId={eventId}
+      key={eventId}
+      startdate={startAt}
+      title={name}
       location={location}
     />
   );
