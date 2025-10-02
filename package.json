@@ -18,7 +18,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/icons-material": "^7.3.2",
-    "@mui/material": "^7.3.2",
+    "@mui/material": "^7.3.3",
     "@mui/private-theming": "^6.3.0",
     "@mui/system": "^7.3.2",
     "@mui/x-charts": "^8.13.0",
