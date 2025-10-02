@@ -79,7 +79,11 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
                   />
                   <div>
                     <div>{event.name ?? event.title}</div>
-                    <div>{formatDate(event.startAt ?? event.startDate)}</div>
+                    <div>
+                      {event.startAt || event.startDate
+                        ? formatDate(event.startAt ?? event.startDate)
+                        : 'Date not available'}
+                    </div>
                   </div>
                 </Link>
               </TableCell>
