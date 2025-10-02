@@ -360,7 +360,7 @@ export const AttendanceStatisticsModal: React.FC<
   };
   useEffect(() => {
     if (eventId) {
-      loadEventDetails({ variables: { id: eventId } });
+      loadEventDetails({ variables: { eventId: eventId } });
     }
   }, [eventId, loadEventDetails]);
   useEffect(() => {

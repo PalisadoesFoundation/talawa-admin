@@ -35,34 +35,35 @@ const mocks = [
     result: {
       data: {
         event: {
-          _id: 'event123',
-          title: 'Test Event',
+          id: 'event123',
+          name: 'Test Event',
           description: 'Test Description',
-          startDate: '2023-01-01',
-          endDate: '2023-01-02',
-          startTime: '09:00',
-          endTime: '17:00',
+          startAt: '2023-01-01T09:00:00.000Z',
+          endAt: '2023-01-02T17:00:00.000Z',
           allDay: false,
           location: 'Test Location',
+          isPublic: true,
+          isRegisterable: true,
           recurring: true,
-          baseRecurringEvent: { _id: 'base123' },
-          organization: {
-            _id: 'org123',
-            members: [
-              { _id: 'user1', firstName: 'John', lastName: 'Doe' },
-              { _id: 'user2', firstName: 'Jane', lastName: 'Smith' },
-            ],
+          baseRecurringEvent: {
+            id: 'base123',
           },
-          attendees: [
-            {
-              _id: 'user1',
-              gender: 'MALE',
-            },
-            {
-              _id: 'user2',
-              gender: 'FEMALE',
-            },
-          ],
+          createdAt: '2023-01-01T00:00:00.000Z',
+          updatedAt: '2023-01-01T00:00:00.000Z',
+          creator: {
+            id: 'creator1',
+            name: 'John Creator',
+            emailAddress: 'creator@example.com',
+          },
+          updater: {
+            id: 'updater1',
+            name: 'Jane Updater',
+            emailAddress: 'updater@example.com',
+          },
+          organization: {
+            id: 'org123',
+            name: 'Test Organization',
+          },
         },
       },
     },

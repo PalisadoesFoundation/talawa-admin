@@ -287,6 +287,10 @@ export const EVENT_DETAILS = gql`
       endAt
       createdAt
       updatedAt
+      recurring
+      baseRecurringEvent {
+        id
+      }
       creator {
         id
         name

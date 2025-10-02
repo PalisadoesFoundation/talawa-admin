@@ -2,13 +2,13 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 /**
  * Mock event data for member activity testing
- * 
+ *
  * LEGACY FIELDS RETAINED FOR BACKWARD COMPATIBILITY:
  * - _id (alias for id)
  * - title (alias for name)
  * - startDate, endDate (deprecated in favor of startAt, endAt)
  * - startTime, endTime (deprecated, use startAt/endAt timestamps)
- * 
+ *
  * These legacy fields will be removed in a future update.
  * Track migration progress: https://github.com/PalisadoesFoundation/talawa-admin/issues/3994
  */
