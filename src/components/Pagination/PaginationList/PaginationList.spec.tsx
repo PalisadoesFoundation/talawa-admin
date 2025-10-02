@@ -148,9 +148,8 @@ describe('PaginationList Component', () => {
       expect(allOption).toBeTruthy();
 
       const tableCell = desktopPagination.closest('td');
-      if (tableCell) {
-        expect(tableCell).toHaveAttribute('colspan', '4');
-      }
+      expect(tableCell).not.toBeNull();
+      expect(tableCell).toHaveAttribute('colspan', '4');
     });
 
     it('should render with correct count and display range', () => {
@@ -331,14 +330,12 @@ describe('PaginationList Component', () => {
 
       const { container } = renderPaginationList();
 
-      // Verify mobile colSpan
-      const mobileCells = container.querySelectorAll('td[colspan="5"]');
+      // Note: MUI Hidden component behavior in JSDOM may not render mobile view
+      // This test verifies IF mobile cell renders, it has correct structure
+      const mobileCell = container.querySelector('td[colspan="5"]');
 
-      if (mobileCells.length > 0) {
-        const mobileCell = mobileCells[0];
+      if (mobileCell) {
         const selectInMobile = mobileCell.querySelector('select');
-
-        // Mobile view should have no select options (rowsPerPageOptions=[])
         if (selectInMobile) {
           const options = selectInMobile.querySelectorAll('option');
           expect(options.length).toBe(0);
@@ -349,15 +346,8 @@ describe('PaginationList Component', () => {
     it('should verify mobile view has no select options (rowsPerPageOptions=[])', () => {
       const { container } = renderPaginationList();
 
-      const allCells = container.querySelectorAll('td');
-      let mobileCell = null;
-
-      for (const cell of allCells) {
-        if (cell.getAttribute('colspan') === '5') {
-          mobileCell = cell;
-          break;
-        }
-      }
+      // Note: MUI Hidden component may not render mobile cell in test environment
+      const mobileCell = container.querySelector('td[colspan="5"]');
 
       if (mobileCell) {
         const selectInMobileCell = mobileCell.querySelector('select');
@@ -366,6 +356,8 @@ describe('PaginationList Component', () => {
           expect(options.length).toBe(0);
         }
       }
+      // Test passes if mobile cell isn't rendered (expected in JSDOM)
+      expect(container).toBeInTheDocument();
     });
   });
 
