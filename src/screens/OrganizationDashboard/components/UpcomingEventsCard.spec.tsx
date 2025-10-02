@@ -2,8 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import UpcomingEventsCard from './UpcomingEventsCard';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { IEvent } from 'utils/interfaces';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -71,13 +70,13 @@ describe('UpcomingEventsCard Component', () => {
         attachments: [],
       },
     },
-  ] as any;
+  ] as unknown as IEvent[];
 
   const mockProps = {
     upcomingEvents: mockEventData,
     eventLoading: false,
     onViewAllEventsClick: vi.fn(),
-  } as any;
+  };
 
   it('renders upcoming events card with correct title', () => {
     render(<UpcomingEventsCard {...mockProps} />);
@@ -133,8 +132,8 @@ describe('UpcomingEventsCard Component', () => {
   it('displays correct event titles', () => {
     render(<UpcomingEventsCard {...mockProps} />);
 
-    expect(screen.getByText('First Event')).toBeInTheDocument();
-    expect(screen.getByText('Second Event')).toBeInTheDocument();
+    expect(screen.getByText('Test Event 1')).toBeInTheDocument();
+    expect(screen.getByText('Test Event 2')).toBeInTheDocument();
   });
 
   it('handles click on view all button', () => {
@@ -171,10 +170,10 @@ describe('UpcomingEventsCard Component', () => {
     }
 
     const manyEventsProps = {
-      upcomingEvents: manyEvents,
+      upcomingEvents: manyEvents as unknown as IEvent[],
       eventLoading: false,
       onViewAllEventsClick: vi.fn(),
-    } as any;
+    };
 
     render(<UpcomingEventsCard {...manyEventsProps} />);
 

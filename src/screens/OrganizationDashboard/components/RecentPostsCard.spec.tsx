@@ -2,8 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { InterfaceOrganizationPg } from 'utils/interfaces';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -69,14 +68,14 @@ describe('RecentPostsCard Component', () => {
         ],
       },
     },
-  } as any;
+  } as unknown as InterfaceOrganizationPg;
 
   const mockProps = {
     postData: mockPostData,
     postsCount: 2,
     isLoading: false,
     onViewAllClick: vi.fn(),
-  } as any;
+  };
 
   it('renders recent posts card with correct title', () => {
     render(<RecentPostsCard {...mockProps} />);
@@ -98,7 +97,7 @@ describe('RecentPostsCard Component', () => {
     const loadingProps = {
       ...mockProps,
       isLoading: true,
-    } as any;
+    };
 
     render(<RecentPostsCard {...loadingProps} />);
 
@@ -112,14 +111,13 @@ describe('RecentPostsCard Component', () => {
           edges: [],
         },
       },
-    } as any;
-
+    } as unknown as InterfaceOrganizationPg;
     const emptyProps = {
       postData: emptyPostData,
       postsCount: 0,
       isLoading: false,
       onViewAllClick: vi.fn(),
-    } as any;
+    };
 
     render(<RecentPostsCard {...emptyProps} />);
 
@@ -132,7 +130,7 @@ describe('RecentPostsCard Component', () => {
       postData: mockPostData,
       isLoading: false,
       onViewAllClick: vi.fn(),
-    } as any;
+    };
 
     render(<RecentPostsCard {...noPosts} />);
 
@@ -181,14 +179,14 @@ describe('RecentPostsCard Component', () => {
       organization: {
         posts: { edges: manyPosts },
       },
-    } as any;
+    } as unknown as InterfaceOrganizationPg;
 
     const manyPostsProps = {
       postData: manyPostsData,
       postsCount: 15,
       isLoading: false,
       onViewAllClick: vi.fn(),
-    } as any;
+    };
 
     render(<RecentPostsCard {...manyPostsProps} />);
 
