@@ -22,10 +22,7 @@ import { ThemeProvider } from 'react-bootstrap';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
-import {
-  GET_ORGANIZATION_EVENTS_PG,
-  GET_ORGANIZATION_DATA_PG,
-} from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { describe, test, expect, vi } from 'vitest';
 
 const theme = createTheme({
@@ -244,8 +241,14 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    const startDatePicker = screen.getByLabelText('Start Date');
+    // MUI X Date Pickers v8 has multiple elements with the same label
+    // Query the hidden input element specifically (last element in the array)
+    const endDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+    const startDatePicker = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -343,8 +346,14 @@ describe('Organisation Events Page', () => {
       invalidFormData.location,
     );
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    const startDatePicker = screen.getByLabelText('Start Date');
+    // MUI X Date Pickers v8 has multiple elements with the same label
+    // Query the hidden input element specifically (last element in the array)
+    const endDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+    const startDatePicker = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(endDatePicker, {
       target: { value: invalidFormData.endDate },
@@ -423,8 +432,14 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    const startDatePicker = screen.getByLabelText('Start Date');
+    // MUI X Date Pickers v8 has multiple elements with the same label
+    // Query the hidden input element specifically (last element in the array)
+    const endDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+    const startDatePicker = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -436,11 +451,19 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument();
+      expect(
+        screen.getAllByLabelText(translations.startTime).length,
+      ).toBeGreaterThan(0);
     });
 
-    const startTimePicker = screen.getByLabelText(translations.startTime);
-    const endTimePicker = screen.getByLabelText(translations.endTime);
+    // MUI X Date Pickers v8 has multiple elements with the same label for time pickers
+    // Query the hidden input element specifically (last element in the array)
+    const startTimePicker = screen
+      .getAllByLabelText(translations.startTime)
+      .at(-1) as HTMLInputElement;
+    const endTimePicker = screen
+      .getAllByLabelText(translations.endTime)
+      .at(-1) as HTMLInputElement;
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },
