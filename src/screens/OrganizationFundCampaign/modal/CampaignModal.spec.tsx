@@ -206,8 +206,12 @@ describe('CampaignModal', () => {
     expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
       'Campaign 1',
     );
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2026');
-    expect(screen.getByLabelText('End Date')).toHaveValue('01/01/2027');
+    expect(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/01/2026');
+    expect(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/01/2027');
     expect(screen.getByLabelText(translations.currency)).toHaveTextContent(
       'USD ($)',
     );
@@ -232,14 +236,18 @@ describe('CampaignModal', () => {
 
   it('should update Start Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
   });
 
   it('Start Date onChange when its null', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     expect(startDateInput).toHaveValue('01/01/2026');
     fireEvent.change(startDateInput, { target: { value: null } });
     expect(startDateInput).toHaveValue('');
@@ -247,14 +255,18 @@ describe('CampaignModal', () => {
 
   it('should update End Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
     expect(endDateInput).toHaveValue('02/01/2024');
   });
 
   it('End Date onChange when its null', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDateInput, { target: { value: null } });
     expect(endDateInput).toHaveValue('');
   });
@@ -265,10 +277,14 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
-    const startDate = screen.getByLabelText('Start Date');
+    const startDate = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
-    const endDate = screen.getByLabelText('End Date');
+    const endDate = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDate, { target: { value: '31/12/2024' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
@@ -291,10 +307,14 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
-    const startDate = screen.getByLabelText('Start Date');
+    const startDate = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
-    const endDate = screen.getByLabelText('End Date');
+    const endDate = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDate, { target: { value: '31/12/2024' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
@@ -317,10 +337,14 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
-    const startDate = screen.getByLabelText('Start Date');
+    const startDate = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
-    const endDate = screen.getByLabelText('End Date');
+    const endDate = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDate, { target: { value: '02/02/2024' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
@@ -340,10 +364,14 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
-    const startDate = screen.getByLabelText('Start Date');
+    const startDate = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
-    const endDate = screen.getByLabelText('End Date');
+    const endDate = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDate, { target: { value: '02/02/2024' } });
 
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
@@ -413,10 +441,14 @@ describe('CampaignModal', () => {
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '500' } });
 
-    const startDate = screen.getByLabelText('Start Date');
+    const startDate = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDate, { target: { value: '01/02/2024' } });
 
-    const endDate = screen.getByLabelText('End Date');
+    const endDate = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDate, { target: { value: '01/03/2024' } });
 
     // Submit the form
@@ -471,16 +503,24 @@ describe('CampaignModal', () => {
     renderCampaignModal(link1, autoUpdateDateProps);
 
     // Verify initial dates
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2025');
-    expect(screen.getByLabelText('End Date')).toHaveValue('01/02/2025');
+    expect(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/01/2025');
+    expect(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/02/2025');
 
     // Change start date to a date AFTER the current end date
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '01/03/2025' } });
 
     // Verify that end date was automatically updated to match the new start date
     await waitFor(() => {
-      expect(screen.getByLabelText('End Date')).toHaveValue('01/03/2025');
+      expect(
+        screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+      ).toHaveValue('01/03/2025');
     });
   });
 
@@ -502,17 +542,27 @@ describe('CampaignModal', () => {
     renderCampaignModal(link1, keepEndDateProps);
 
     // Verify initial dates
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2025');
-    expect(screen.getByLabelText('End Date')).toHaveValue('01/04/2025');
+    expect(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/01/2025');
+    expect(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/04/2025');
 
     // Change start date to a date that is still BEFORE the end date
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '15/02/2025' } });
 
     // Verify that end date was NOT updated and remains the same
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toHaveValue('15/02/2025');
-      expect(screen.getByLabelText('End Date')).toHaveValue('01/04/2025'); // End date should remain unchanged
+      expect(
+        screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+      ).toHaveValue('15/02/2025');
+      expect(
+        screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+      ).toHaveValue('01/04/2025'); // End date should remain unchanged
     });
   });
 

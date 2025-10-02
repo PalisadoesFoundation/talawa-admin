@@ -233,8 +233,12 @@ describe('PledgeModal', () => {
     );
     // Use getAllByText to find the text content anywhere in the component
     expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
-    expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+    expect(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('01/01/2024');
+    expect(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+    ).toHaveValue('10/01/2024');
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
     expect(screen.getByLabelText('Amount')).toHaveValue('100');
   });
@@ -257,7 +261,9 @@ describe('PledgeModal', () => {
 
   it('should update pledgeStartDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
     expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
@@ -265,14 +271,18 @@ describe('PledgeModal', () => {
 
   it('pledgeStartDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: null } });
     expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
   });
 
   it('should update pledgeEndDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('End Date');
+    const startDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
@@ -280,7 +290,9 @@ describe('PledgeModal', () => {
 
   it('pledgeEndDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDateInput, { target: { value: null } });
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
   });
@@ -291,12 +303,18 @@ describe('PledgeModal', () => {
     fireEvent.change(screen.getByLabelText('Amount'), {
       target: { value: '200' },
     });
-    fireEvent.change(screen.getByLabelText('Start Date'), {
-      target: { value: '02/01/2024' },
-    });
-    fireEvent.change(screen.getByLabelText('End Date'), {
-      target: { value: '02/01/2024' },
-    });
+    fireEvent.change(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+      {
+        target: { value: '02/01/2024' },
+      },
+    );
+    fireEvent.change(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+      {
+        target: { value: '02/01/2024' },
+      },
+    );
 
     // Submit the form
     const form = screen.getByTestId('pledgeForm');

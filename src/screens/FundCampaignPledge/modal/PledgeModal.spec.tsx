@@ -277,7 +277,9 @@ describe('PledgeModal', () => {
 
   it('should update pledgeStartDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
     expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
@@ -285,14 +287,18 @@ describe('PledgeModal', () => {
 
   it('pledgeStartDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(startDateInput, { target: { value: null } });
     expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
   });
 
   it('should update pledgeEndDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDateInput, { target: { value: '12/01/2024' } });
     expect(endDateInput).toHaveValue('12/01/2024');
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
@@ -300,7 +306,9 @@ describe('PledgeModal', () => {
 
   it('pledgeEndDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     fireEvent.change(endDateInput, { target: { value: null } });
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
   });
@@ -308,7 +316,9 @@ describe('PledgeModal', () => {
   it('should update end date if start date is after current end date', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     expect(endDateInput).toBeDisabled();
   });
 
@@ -345,8 +355,12 @@ describe('PledgeModal', () => {
   it('should enforce date constraints (start date before end date)', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const startDateInput = screen.getByLabelText('Start Date');
-    const endDateInput = screen.getByLabelText('End Date');
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
 
     expect(startDateInput).toBeDisabled();
     expect(endDateInput).toBeDisabled();
@@ -358,7 +372,9 @@ describe('PledgeModal', () => {
 
     renderPledgeModal(link1, props);
 
-    const endDatePicker = screen.getByLabelText('End Date');
+    const endDatePicker = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
     expect(endDatePicker).toBeInTheDocument();
   });
 
@@ -400,8 +416,12 @@ describe('PledgeModal', () => {
     expect(screen.getByLabelText('Pledgers')).toBeInTheDocument();
     expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(
+      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
+    ).toBeInTheDocument();
   });
 
   it('should show validation error when submitting without required fields', async () => {
@@ -547,8 +567,12 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveAttribute('value', '0');
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
+      const startDateInput = screen
+        .getAllByLabelText('Start Date')
+        .at(-1) as HTMLInputElement;
+      const endDateInput = screen
+        .getAllByLabelText('End Date')
+        .at(-1) as HTMLInputElement;
       expect(startDateInput).toBeDisabled();
       expect(endDateInput).toBeDisabled();
     });
