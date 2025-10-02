@@ -300,7 +300,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             onClick={handlePrevYear}
             data-testid="prevYear"
           >
-            <ChevronLeft />
+            <span>
+              <ChevronLeft />
+            </span>
           </Button>
           <div className={styles.year}>{currentYear}</div>
           <Button
@@ -309,7 +311,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             onClick={handleNextYear}
             data-testid="nextYear"
           >
-            <ChevronRight />
+            <span>
+              <ChevronRight />
+            </span>
           </Button>
         </div>
         <div className={styles.rowYearlyEventCalender}>{renderMonthDays()}</div>

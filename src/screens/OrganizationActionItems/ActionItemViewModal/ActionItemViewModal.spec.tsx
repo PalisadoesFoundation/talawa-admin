@@ -631,7 +631,9 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(screen.getAllByLabelText(t.assignmentDate)[0]).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(t.assignmentDate, { selector: 'input' }),
+      ).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

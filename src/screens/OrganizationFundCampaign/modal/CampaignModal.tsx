@@ -169,13 +169,19 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startAt && campaignStartDate) {
-        if (!dayjs(campaign.startAt).isSame(campaignStartDate)) {
+      if (campaignStartDate) {
+        if (
+          !campaign?.startAt ||
+          !dayjs(campaign.startAt).isSame(campaignStartDate)
+        ) {
           updatedFields.startAt = dayjs(campaignStartDate).toISOString();
         }
       }
-      if (campaign?.endAt && campaignEndDate) {
-        if (!dayjs(campaign.endAt).isSame(campaignEndDate)) {
+      if (campaignEndDate) {
+        if (
+          !campaign?.endAt ||
+          !dayjs(campaign.endAt).isSame(campaignEndDate)
+        ) {
           updatedFields.endAt = dayjs(campaignEndDate).toISOString();
         }
       }
