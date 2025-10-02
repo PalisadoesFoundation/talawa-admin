@@ -277,46 +277,40 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
             {/* Date Calendar Component to select start date of an event */}
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('startDate')}
-              value={dayjs(formState.pledgeStartDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeStartDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
-              slotProps={{
-                textField: {
-                  'data-testid': 'start-date-input',
-                },
-              }}
-            />
-            <DatePicker
-              format="DD/MM/YYYY"
-              label="End Date"
-              value={dayjs(formState.pledgeEndDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
-              slotProps={{
-                textField: {
-                  'data-testid': 'end-date-input',
-                },
-              }}
-            />
+            <div data-testid="start-date-input">
+              <DatePicker
+                format="DD/MM/YYYY"
+                label={tCommon('startDate')}
+                value={dayjs(formState.pledgeStartDate)}
+                className={styles.noOutlinePledge}
+                onChange={(date): void => {
+                  if (date) {
+                    setFormState({
+                      ...formState,
+                      pledgeStartDate: date.toDate(),
+                    });
+                  }
+                }}
+                disabled
+              />
+            </div>
+            <div data-testid="end-date-input">
+              <DatePicker
+                format="DD/MM/YYYY"
+                label="End Date"
+                value={dayjs(formState.pledgeEndDate)}
+                className={styles.noOutlinePledge}
+                onChange={(date): void => {
+                  if (date) {
+                    setFormState({
+                      ...formState,
+                      pledgeEndDate: date.toDate(),
+                    });
+                  }
+                }}
+                disabled
+              />
+            </div>
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
             {/* Dropdown to select the currency in which amount is to be pledged */}
