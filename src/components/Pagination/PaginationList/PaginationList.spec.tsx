@@ -591,12 +591,8 @@ describe('PaginationList Component', () => {
         const styles = window.getComputedStyle(mobileCell);
 
         expect(styles.display).toBe('flex');
-        expect(
-          ['center', 'flex-start', 'flex-end'].includes(styles.alignItems),
-        ).toBe(true);
-        expect(
-          ['center', 'flex-start', 'flex-end'].includes(styles.justifyContent),
-        ).toBe(true);
+        expect(styles.alignItems).toBe('center');
+        expect(styles.justifyContent).toBe('center');
       }
     });
   });
