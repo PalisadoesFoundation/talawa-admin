@@ -50,6 +50,8 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: null,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
         id: 'creatorId1',

@@ -88,6 +88,8 @@ const itemProps: InterfaceGroupModal[] = [
       event: {
         id: 'eventId',
       },
+      isTemplate: true,
+      isInstanceException: false,
     },
   },
   {
@@ -117,6 +119,8 @@ const itemProps: InterfaceGroupModal[] = [
       event: {
         id: 'eventId',
       },
+      isTemplate: true,
+      isInstanceException: false,
     },
   },
 ];

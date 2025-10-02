@@ -109,7 +109,7 @@ const VolunteerGroupDeleteModal: React.FC<
           <p> {t('deleteVolunteerGroupMsg')}</p>
 
           {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
-          {isRecurring && (
+          {group?.isTemplate && !group?.isInstanceException && (
             <Form.Group className="mb-3">
               <Form.Label>{t('applyTo')}</Form.Label>
               <Form.Check

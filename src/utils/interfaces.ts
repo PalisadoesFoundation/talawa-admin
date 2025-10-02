@@ -2384,6 +2384,8 @@ export interface InterfaceEventVolunteerInfo {
   volunteerStatus: 'accepted' | 'rejected' | 'pending';
   hoursVolunteered: number;
   isPublic: boolean;
+  isTemplate: boolean;
+  isInstanceException: boolean;
   createdAt: string;
   updatedAt: string;
   user: InterfaceUserInfoPG;
@@ -2443,6 +2445,8 @@ export interface InterfaceVolunteerGroupInfo {
     id: string;
   };
   volunteersRequired: number | null;
+  isTemplate: boolean;
+  isInstanceException: boolean;
   createdAt: string;
   creator: InterfaceUserInfo;
   leader: InterfaceUserInfo;

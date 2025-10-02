@@ -10,6 +10,9 @@ const group1 = {
   id: 'groupId1',
   name: 'Group 1',
   description: 'desc',
+  volunteersRequired: 2,
+  isTemplate: true,
+  isInstanceException: false,
   createdAt: '2030-10-25T16:16:32.978Z',
   creator: {
     id: 'creatorId1',
@@ -43,6 +46,9 @@ const group2 = {
   id: 'groupId2',
   name: 'Group 2',
   description: 'desc',
+  volunteersRequired: 3,
+  isTemplate: true,
+  isInstanceException: false,
   createdAt: '2030-10-27T15:25:13.044Z',
   creator: {
     id: 'creatorId2',
@@ -64,6 +70,9 @@ const group3 = {
   id: 'groupId3',
   name: 'Group 3',
   description: 'desc',
+  volunteersRequired: 1,
+  isTemplate: true,
+  isInstanceException: false,
   createdAt: '2030-10-27T15:34:15.889Z',
   creator: {
     id: 'creatorId3',

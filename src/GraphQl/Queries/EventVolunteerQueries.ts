@@ -29,6 +29,8 @@ export const GET_EVENT_VOLUNTEERS = gql`
         volunteerStatus
         hoursVolunteered
         isPublic
+        isTemplate
+        isInstanceException
         createdAt
         updatedAt
         user {
@@ -112,6 +114,8 @@ export const GET_EVENT_VOLUNTEER_GROUPS = gql`
         name
         description
         volunteersRequired
+        isTemplate
+        isInstanceException
         createdAt
         creator {
           id

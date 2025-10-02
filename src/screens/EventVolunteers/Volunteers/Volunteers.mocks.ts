@@ -12,6 +12,8 @@ const volunteer1: InterfaceEventVolunteerInfo = {
   volunteerStatus: 'accepted' as const,
   hoursVolunteered: 10,
   isPublic: true,
+  isTemplate: true,
+  isInstanceException: false,
   createdAt: '2023-01-01T00:00:00Z',
   updatedAt: '2023-01-01T00:00:00Z',
   user: {
@@ -51,6 +53,8 @@ const volunteer2: InterfaceEventVolunteerInfo = {
   volunteerStatus: 'pending' as const,
   hoursVolunteered: 0,
   isPublic: true,
+  isTemplate: true,
+  isInstanceException: false,
   createdAt: '2023-01-01T00:00:00Z',
   updatedAt: '2023-01-01T00:00:00Z',
   user: {
