@@ -376,6 +376,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('birthDate')}
                   </label>
                   <DatePicker
+                    format="DD/MM/YYYY"
                     className={`${styles.dateboxMemberDetail} w-100`}
                     value={dayjs(formState.birthDate)}
                     onChange={(date) =>

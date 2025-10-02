@@ -71,6 +71,7 @@ const PaginationList = ({
             justifyContent: 'center',
           }}
           rowsPerPageOptions={[]}
+          data-testid={'table-pagination'}
           colSpan={5}
           count={count}
           rowsPerPage={rowsPerPage}
@@ -78,6 +79,7 @@ const PaginationList = ({
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
+              role: 'combobox',
             },
             native: true,
           }}
@@ -102,6 +104,7 @@ const PaginationList = ({
           SelectProps={{
             inputProps: {
               'aria-label': 'rows per page',
+              role: 'combobox',
             },
             native: true,
           }}

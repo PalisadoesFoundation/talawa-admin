@@ -533,8 +533,8 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
-      startDate: `${currentYear}-01-15`, // Dynamic date format
-      endDate: `${currentYear}-01-15`,
+      startDate: `${currentYear}-01-15T12:00:00.000Z`, // Full ISO format with time
+      endDate: `${currentYear}-01-15T13:00:00.000Z`,
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
