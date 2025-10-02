@@ -57,13 +57,7 @@ function EventsAttendedByMember({
       </div>
     );
 
-  const {
-    organization,
-    id: eventId,
-    name,
-    startAt,
-    location,
-  } = events.event;
+  const { organization, id: eventId, name, startAt, location } = events.event;
 
   const organizationId = organization?.id ?? organization?._id;
 

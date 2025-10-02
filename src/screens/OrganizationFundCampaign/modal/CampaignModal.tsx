@@ -89,9 +89,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt
-        ? new Date(campaign.endAt)
-        : new Date(),
+      campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : new Date(),
       campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
       campaignStartDate: campaign?.startAt
@@ -127,7 +125,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
           goalAmount: Number.parseInt(formState.campaignGoal.toString()),
-          startAt: dayjs(formState.campaignStartDate ?? new Date()).toISOString(),
+          startAt: dayjs(
+            formState.campaignStartDate ?? new Date(),
+          ).toISOString(),
           endAt: dayjs(formState.campaignEndDate ?? new Date()).toISOString(),
           fundId,
         },
@@ -244,9 +244,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               <DatePicker
                 format="DD/MM/YYYY"
                 label={tCommon('startDate')}
-                value={
-                  campaignStartDate ? dayjs(campaignStartDate) : null
-                }
+                value={campaignStartDate ? dayjs(campaignStartDate) : null}
                 className={styles.noOutline}
                 onChange={(date: Dayjs | null): void => {
                   if (!date) {
