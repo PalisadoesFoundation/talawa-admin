@@ -3,15 +3,32 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 
+// Plugin to handle CSS imports in tests
+const cssPlugin = {
+  name: 'vitest-css-mock',
+  transform(code: string, id: string) {
+    if (id.endsWith('.css')) {
+      return {
+        code: 'export default {}',
+        map: null,
+      };
+    }
+  },
+};
+
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  plugins: [react(), tsconfigPaths(), svgrPlugin(), cssPlugin],
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
-    css: false,
+    server: {
+      deps: {
+        inline: ['@mui/x-data-grid'],
+      },
+    },
     coverage: {
       enabled: true,
       provider: 'istanbul',

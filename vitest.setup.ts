@@ -1,10 +1,5 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { vi } from 'vitest';
-
-// Mock CSS modules
-vi.mock('*.css', () => ({}));
-vi.mock('*.module.css', () => ({}));
 
 // Basic cleanup after each test
 afterEach(() => {
