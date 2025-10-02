@@ -1,6 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   act,
   render,
@@ -18,8 +19,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
-import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import {
@@ -90,7 +90,7 @@ const renderWithProviders = (link = mockLinks.superAdmin) => {
 };
 
 // Helper function for rendering with custom mocks
-const renderWithMocks = (mocks: any[]) => {
+const renderWithMocks = (mocks: ReadonlyArray<MockedResponse>) => {
   return render(
     <MockedProvider addTypename={false} mocks={mocks}>
       <BrowserRouter>
@@ -105,7 +105,7 @@ const renderWithMocks = (mocks: any[]) => {
 };
 
 // Mock organization data helpers
-const createOrgMock = (organizations: any[]) => [
+const createOrgMock = (organizations: object[]) => [
   ...MOCKS,
   {
     request: {
