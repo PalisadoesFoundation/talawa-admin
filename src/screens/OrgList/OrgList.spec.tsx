@@ -104,8 +104,26 @@ const renderWithMocks = (mocks: ReadonlyArray<MockedResponse>) => {
   );
 };
 
+// Mock organization interface matching GraphQL ORGANIZATION_LIST query response
+interface InterfaceMockOrganization {
+  id: string;
+  name: string;
+  avatarURL: string;
+  description: string;
+  members: {
+    edges: Array<{
+      node?: {
+        id: string;
+      };
+    }>;
+  };
+  addressLine1: string;
+}
+
 // Mock organization data helpers
-const createOrgMock = (organizations: object[]) => [
+const createOrgMock = (
+  organizations: InterfaceMockOrganization[],
+): ReadonlyArray<MockedResponse> => [
   ...MOCKS,
   {
     request: {
