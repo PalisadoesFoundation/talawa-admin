@@ -812,7 +812,9 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(i18n.t('failedToUpdateOrg'));
+          expect(toast.error).toHaveBeenCalledWith(
+            i18n.t('orgUpdate.failedToUpdateOrg'),
+          );
         },
         { timeout: 2000 },
       );
