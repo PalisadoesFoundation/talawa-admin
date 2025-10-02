@@ -1,34 +1,38 @@
 import { EVENT_ATTENDEES, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 export const MOCKEVENT = {
-  _id: 'event123',
-  title: 'Test Event',
+  id: 'event123',
+  name: 'Test Event',
   description: 'This is a test event description',
-  startDate: '2030-05-01',
-  endDate: '2030-05-02',
-  startTime: '09:00:00',
-  endTime: '17:00:00',
+  startAt: '2030-05-01T09:00:00Z',
+  endAt: '2030-05-02T17:00:00Z',
   allDay: false,
   location: 'Test Location',
-  recurring: true,
-  baseRecurringEvent: {
-    _id: 'recurringEvent123',
+  isPublic: true,
+  isRegisterable: true,
+  createdAt: '2030-04-01T00:00:00Z',
+  updatedAt: '2030-04-01T00:00:00Z',
+  creator: {
+    id: 'creator1',
+    name: 'John Creator',
+    emailAddress: 'creator@example.com',
+  },
+  updater: {
+    id: 'updater1',
+    name: 'Jane Updater',
+    emailAddress: 'updater@example.com',
   },
   organization: {
-    _id: 'org456',
-    members: [
-      { _id: 'member1', firstName: 'John', lastName: 'Doe' },
-      { _id: 'member2', firstName: 'Jane', lastName: 'Smith' },
-    ],
+    id: 'org456',
+    name: 'Test Organization',
   },
-  attendees: [{ _id: 'user1' }, { _id: 'user2' }],
 };
 
 export const MOCKDETAIL = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {

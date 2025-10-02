@@ -30,7 +30,7 @@ describe('Testing AttendedEventList', () => {
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();
-      expect(queryByText(formatDate(MOCKEVENT.startDate))).toBeInTheDocument();
+      expect(queryByText(formatDate(MOCKEVENT.startAt))).toBeInTheDocument();
       expect(queryByTitle('Event Date')).toBeInTheDocument();
     });
   });
@@ -40,7 +40,7 @@ describe('Testing AttendedEventList', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         error: new Error('An error occurred'),
       },

@@ -348,7 +348,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        removeFundraisingCampaignPledge: {
+        deleteFundCampaignPledge: {
           id: '1',
         },
       },
