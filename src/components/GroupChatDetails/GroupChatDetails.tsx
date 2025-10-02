@@ -191,19 +191,16 @@ export default function GroupChatDetails({
         setSelectedImage(objectName);
 
         await updateChat({
-          variables: {
-            input: {
-              _id: chat._id,
-              image: objectName,
-            },
-          },
-        });
+        variables: { input: { _id: chat._id, image: objectName } },
+      });
         await chatRefetch({ id: chat._id });
         toast.success(t('imageUploadSuccess'));
       } catch (error) {
         console.error('Error uploading image:', error);
         toast.error(t('imageUploadFailed'));
       }
+      // allow re-selecting the same file
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 

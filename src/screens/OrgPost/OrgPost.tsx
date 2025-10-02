@@ -99,6 +99,9 @@ function OrgPost(): JSX.Element {
       pinPost: false,
       attachments: [],
     });
+    setFile(null);
+    setVideoFile(null);
+    setVideoPreview('');
   };
 
   const {
@@ -157,6 +160,8 @@ function OrgPost(): JSX.Element {
           attachments: [],
         });
         setFile(null);
+        setVideoFile(null);
+        setVideoPreview('');
         setPostModalIsOpen(false);
       }
     } catch (error: unknown) {
@@ -187,9 +192,13 @@ function OrgPost(): JSX.Element {
       }
 
       try {
+         if (!currentUrl) {
+          toast.error('Organization ID is required');
+          return;
+        }
         const { objectName, fileHash } = await uploadFileToMinio(
           selectedFile,
-          currentUrl!,
+          currentUrl,
         );
         const previewUrl = await getFileFromMinio(objectName, currentUrl!);
         const attachment: InterfacePostAttachment = {
@@ -231,9 +240,13 @@ function OrgPost(): JSX.Element {
         return;
       }
       try {
+        if (!currentUrl) {
+          toast.error('Organization ID is required');
+          return;
+        }
         const { objectName } = await uploadFileToMinio(
           selectedFile,
-          currentUrl!,
+          currentUrl,
         );
         const previewVideo = await getFileFromMinio(objectName, currentUrl!);
         setPostFormState((prev) => ({ ...prev, postVideo: objectName }));
@@ -378,7 +391,6 @@ function OrgPost(): JSX.Element {
       : currentPage < totalPages;
 
   const handleNextPage = (): void => {
-    // Update the totalPages calculation
     if (sortingOption === 'None') {
       const endCursor =
         orgPostListData?.organization?.posts?.pageInfo?.endCursor;

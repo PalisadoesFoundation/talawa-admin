@@ -1129,7 +1129,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Image uploaded successfully',
+        'Uploaded 1 file(s)',
       );
       expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
       expect(screen.getByTestId('mediaPreview')).toHaveAttribute(
@@ -1168,7 +1168,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(toastSuccessSpy).toHaveBeenCalledWith(
-        'Image uploaded successfully',
+        'Uploaded 1 file(s)',
       );
       expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
       expect(screen.getByTestId('mediaPreview')).toHaveAttribute(

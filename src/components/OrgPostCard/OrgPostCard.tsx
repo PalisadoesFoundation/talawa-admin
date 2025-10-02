@@ -259,6 +259,7 @@ export default function OrgPostCard({
             },
           ],
         }));
+        toast.success('File uploaded successfully!');
       } catch (err) {
         console.error(err);
         toast.error('File upload failed.');
@@ -526,6 +527,7 @@ export default function OrgPostCard({
                       <button
                         type="button"
                         className={styles.closeButtonP}
+                        data-testid="clear-image"
                         onClick={() => clearImage(attachment.url)}
                       >
                         ×

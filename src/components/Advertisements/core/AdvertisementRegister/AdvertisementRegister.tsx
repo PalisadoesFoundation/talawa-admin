@@ -147,6 +147,13 @@ function AdvertisementRegister({
   };
 
   const handleShow = (): void => setShow(true);
+  
+  useEffect(() => {
+  const urls = (formState.attachments || [])
+    .map((a: any) => a.previewUrl)
+    .filter(Boolean);
+  return () => urls.forEach((u: string) => URL.revokeObjectURL(u));
+}, [formState.attachments]);
 
   // Handle file uploads with MinIO
   const handleFileUpload = async (
@@ -173,14 +180,16 @@ function AdvertisementRegister({
           const uploaded = await Promise.all(
             validFiles.map(async (file) => {
               const { objectName } = await uploadFileToMinio(file, currentOrg);
-              toast.success('Image uploaded successfully');
+              const previewUrl = URL.createObjectURL(file);
               return {
                 mimeType: file.type,
                 url: objectName,
-                localFile: file, // for preview only
+                localFile: file,
+                previewUrl,
               } as InterfaceAdvertisementAttachment;
             }),
           );
+          toast.success(`Uploaded ${uploaded.length} file(s)`);
 
           setFormState((prev) => ({
             ...prev,
@@ -351,9 +360,9 @@ function AdvertisementRegister({
           <i className="fa fa-plus" /> &nbsp; {t('createAdvertisement')}
         </Button>
       ) : (
-        <div onClick={handleShow} data-testid="editBtn">
-          {tCommon('edit')}
-        </div>
+        <Button variant="link" onClick={handleShow} data-testid="editBtn">
++          {tCommon('edit')}
++        </Button>
       )}
 
       <Modal show={show} onHide={handleClose}>
@@ -419,13 +428,13 @@ function AdvertisementRegister({
                         <video
                           data-testid="mediaPreview"
                           controls
-                          src={URL.createObjectURL(file.localFile)}
+                          src={file.previewUrl}
                           className={styles.previewAdvertisementRegister}
                         />
                       ) : (
                         <img
                           data-testid="mediaPreview"
-                          src={URL.createObjectURL(file.localFile)}
+                          src={file.previewUrl}
                           alt="Preview"
                           className={styles.previewAdvertisementRegister}
                         />

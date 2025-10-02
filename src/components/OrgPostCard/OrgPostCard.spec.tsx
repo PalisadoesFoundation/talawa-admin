@@ -3,7 +3,6 @@ import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing'; // Updated import
 import { I18nextProvider } from 'react-i18next';
-import OrgPostCard from './OrgPostCard';
 import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -35,6 +34,8 @@ vi.mock('utils/MinioDownload', () => ({
 vi.mock('utils/fileValidation', () => ({
   validateFile: vi.fn().mockReturnValue({ isValid: true, errorMessage: '' }),
 }));
+
+import OrgPostCard from './OrgPostCard';
 
 /**
  * Unit Tests for OrgPostCard Component
@@ -85,7 +86,12 @@ interface InterfaceMockedResponse {
         id: string;
         isPinned?: boolean;
         caption?: string;
-        attachments?: any[];
+        attachments?: Array<{
+          fileHash: string;
+          mimeType: string;
+          name: string;
+          objectName: string;
+        }>
       };
     };
   };
@@ -641,7 +647,7 @@ describe('OrgPostCard Component', () => {
         expect(screen.getByAltText('Preview')).toBeInTheDocument();
       });
 
-      const clearButton = screen.getByText('×');
+      const clearButton = screen.getByTestId('clear-image');
       await userEvent.click(clearButton);
 
       await waitFor(() => {
