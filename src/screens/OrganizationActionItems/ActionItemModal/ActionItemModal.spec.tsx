@@ -15,7 +15,12 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { 
+  IActionItemInfo, 
+  IUpdateActionItemForInstanceInput,
+  ICreateActionItemInput,
+  IUpdateActionItemInput 
+} from 'types/ActionItems/interface';
 
 // Mock the toast functions
 vi.mock('react-toastify', () => ({
@@ -1029,7 +1034,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Updated notes'
@@ -1173,7 +1178,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Error test notes'
@@ -1243,7 +1248,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Refetch test notes'
@@ -1320,7 +1325,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Hide test notes'
@@ -1395,7 +1400,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Partial update notes'
@@ -1470,7 +1475,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Prevent default test'
@@ -1547,7 +1552,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&
@@ -1958,7 +1963,7 @@ describe('orgActionItemsRefetch functionality', () => {
       request: {
         query: CREATE_ACTION_ITEM_MUTATION,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: ICreateActionItemInput }) => {
         return (
           variables.input.assigneeId === 'user1' &&
           variables.input.categoryId === 'cat1' &&
@@ -2173,7 +2178,7 @@ describe('orgActionItemsRefetch functionality', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: { input: IUpdateActionItemForInstanceInput }) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&

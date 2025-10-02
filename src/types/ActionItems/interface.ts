@@ -81,3 +81,12 @@ export interface IDeleteActionItemInput {
 export interface IMarkActionItemAsPendingInput {
   id: string;
 }
+
+export interface IUpdateActionItemForInstanceInput {
+  actionId: string;
+  eventId?: string;
+  assigneeId?: string;
+  categoryId?: string;
+  assignedAt?: string;
+  preCompletionNotes?: string;
+}

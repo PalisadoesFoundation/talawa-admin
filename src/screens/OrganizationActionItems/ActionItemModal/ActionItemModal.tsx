@@ -17,6 +17,7 @@ import type {
   IActionItemInfo,
   ICreateActionItemInput,
   IUpdateActionItemInput,
+  IUpdateActionItemForInstanceInput,
 } from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 
@@ -236,7 +237,7 @@ const ItemModal: FC<IItemModalProps> = ({
         return;
       }
 
-      const input: any = {
+      const input: IUpdateActionItemForInstanceInput = {
         actionId: actionItem.id,
         eventId: eventId,
       };
