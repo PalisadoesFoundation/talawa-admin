@@ -291,6 +291,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 }
               }}
               disabled
+              slotProps={{
+                textField: {
+                  'data-testid': 'start-date-input',
+                },
+              }}
             />
             <DatePicker
               format="DD/MM/YYYY"
@@ -306,6 +311,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 }
               }}
               disabled
+              slotProps={{
+                textField: {
+                  'data-testid': 'end-date-input',
+                },
+              }}
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">

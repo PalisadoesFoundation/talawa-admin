@@ -275,51 +275,25 @@ describe('PledgeModal', () => {
     });
   });
 
-  it('should update pledgeStartDate when a new date is selected', async () => {
+  it('should display start date as disabled input', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen
-      .getAllByLabelText('Start Date')
-      .at(-1) as HTMLInputElement;
-    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-    expect(startDateInput).toHaveValue('02/01/2024');
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+    const startDateInput = screen.getByTestId('start-date-input');
+    expect(startDateInput).toBeInTheDocument();
+    expect(startDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
   });
 
-  it('pledgeStartDate onChange when its null', async () => {
+  it('should display end date as disabled input', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen
-      .getAllByLabelText('Start Date')
-      .at(-1) as HTMLInputElement;
-    fireEvent.change(startDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
-  });
-
-  it('should update pledgeEndDate when a new date is selected', async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen
-      .getAllByLabelText('End Date')
-      .at(-1) as HTMLInputElement;
-    fireEvent.change(endDateInput, { target: { value: '12/01/2024' } });
-    expect(endDateInput).toHaveValue('12/01/2024');
-    expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
-  });
-
-  it('pledgeEndDate onChange when its null', async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen
-      .getAllByLabelText('End Date')
-      .at(-1) as HTMLInputElement;
-    fireEvent.change(endDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
+    const endDateInput = screen.getByTestId('end-date-input');
+    expect(endDateInput).toBeInTheDocument();
+    expect(endDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
   });
 
   it('should update end date if start date is after current end date', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const endDateInput = screen
-      .getAllByLabelText('End Date')
-      .at(-1) as HTMLInputElement;
-    expect(endDateInput).toBeDisabled();
+    const endDateInput = screen.getByTestId('end-date-input');
+    expect(endDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
   });
 
   it('should handle create pledge error', async () => {
@@ -355,15 +329,11 @@ describe('PledgeModal', () => {
   it('should enforce date constraints (start date before end date)', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const startDateInput = screen
-      .getAllByLabelText('Start Date')
-      .at(-1) as HTMLInputElement;
-    const endDateInput = screen
-      .getAllByLabelText('End Date')
-      .at(-1) as HTMLInputElement;
+    const startDateInput = screen.getByTestId('start-date-input');
+    const endDateInput = screen.getByTestId('end-date-input');
 
-    expect(startDateInput).toBeDisabled();
-    expect(endDateInput).toBeDisabled();
+    expect(startDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
+    expect(endDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
   });
 
   it('should enforce campaign end date as the max date', async () => {
@@ -372,10 +342,9 @@ describe('PledgeModal', () => {
 
     renderPledgeModal(link1, props);
 
-    const endDatePicker = screen
-      .getAllByLabelText('End Date')
-      .at(-1) as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('end-date-input');
     expect(endDatePicker).toBeInTheDocument();
+    expect(endDatePicker.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
   });
 
   it('should reset form state after successful pledge creation', async () => {
@@ -416,12 +385,8 @@ describe('PledgeModal', () => {
     expect(screen.getByLabelText('Pledgers')).toBeInTheDocument();
     expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-    expect(
-      screen.getAllByLabelText('Start Date').at(-1) as HTMLInputElement,
-    ).toBeInTheDocument();
-    expect(
-      screen.getAllByLabelText('End Date').at(-1) as HTMLInputElement,
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('start-date-input')).toBeInTheDocument();
+    expect(screen.getByTestId('end-date-input')).toBeInTheDocument();
   });
 
   it('should show validation error when submitting without required fields', async () => {
@@ -567,14 +532,10 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveAttribute('value', '0');
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      const startDateInput = screen
-        .getAllByLabelText('Start Date')
-        .at(-1) as HTMLInputElement;
-      const endDateInput = screen
-        .getAllByLabelText('End Date')
-        .at(-1) as HTMLInputElement;
-      expect(startDateInput).toBeDisabled();
-      expect(endDateInput).toBeDisabled();
+      const startDateInput = screen.getByTestId('start-date-input');
+      const endDateInput = screen.getByTestId('end-date-input');
+      expect(startDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
+      expect(endDateInput.closest('.MuiFormControl-root')).toHaveClass('Mui-disabled');
     });
   });
 
