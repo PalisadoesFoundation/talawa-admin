@@ -59,7 +59,6 @@ const PaginationList = ({
   });
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
   return (
     <>
@@ -88,7 +87,7 @@ const PaginationList = ({
           ActionsComponent={Pagination}
         />
       )}
-      {isLargeScreen && (
+      {!isSmallScreen && (
         <TablePagination
           rowsPerPageOptions={[
             5,
