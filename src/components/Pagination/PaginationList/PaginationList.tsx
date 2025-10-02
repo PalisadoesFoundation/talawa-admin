@@ -70,7 +70,7 @@ const PaginationList = ({
             justifyContent: 'center',
           }}
           rowsPerPageOptions={[]}
-          data-testid={'table-pagination'}
+          data-testid={'table-pagination-mobile'}
           colSpan={5}
           count={count}
           rowsPerPage={rowsPerPage}
@@ -95,7 +95,7 @@ const PaginationList = ({
             30,
             { label: t('all'), value: Number.MAX_SAFE_INTEGER },
           ]}
-          data-testid={'table-pagination'}
+          data-testid={'table-pagination-desktop'}
           colSpan={4}
           count={count}
           rowsPerPage={rowsPerPage}

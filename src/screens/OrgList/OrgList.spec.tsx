@@ -590,7 +590,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Check if pagination component is rendered (should appear when there are organizations)
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = screen.getByTestId('table-pagination-desktop');
     expect(paginationElement).toBeInTheDocument();
   });
 
@@ -602,7 +602,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Check if pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = screen.getByTestId('table-pagination-desktop');
     expect(paginationElement).toBeInTheDocument();
 
     // Check if rows per page selector is present
@@ -619,7 +619,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Verify pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = screen.getByTestId('table-pagination-desktop');
     expect(paginationElement).toBeInTheDocument();
 
     // Verify that only the first 5 organizations are displayed initially (default page size)
@@ -670,7 +670,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Verify pagination is present initially
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = screen.getByTestId('table-pagination-desktop');
     expect(paginationElement).toBeInTheDocument();
 
     // Verify all organizations are shown initially
@@ -878,7 +878,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify pagination is shown even with single organization
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = screen.getByTestId('table-pagination-desktop');
     expect(paginationElement).toBeInTheDocument();
 
     // Test pagination with rowsPerPage = 0 edge case
