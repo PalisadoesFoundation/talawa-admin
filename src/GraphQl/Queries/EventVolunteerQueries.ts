@@ -97,6 +97,7 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
       createdAt
       event {
         _id
+        name
         title
         startDate
       }

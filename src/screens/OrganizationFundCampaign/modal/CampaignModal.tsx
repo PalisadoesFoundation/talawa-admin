@@ -80,21 +80,17 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
     campaignGoal: campaign?.goalAmount ?? 0,
-    campaignStartDate: campaign?.startAt
-      ? new Date(campaign.startAt)
-      : new Date(),
-    campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : new Date(),
+    campaignStartDate: campaign?.startAt ? new Date(campaign.startAt) : null,
+    campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : null,
   });
 
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : new Date(),
+      campaignEndDate: campaign?.endAt ? new Date(campaign.endAt) : null,
       campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startAt
-        ? new Date(campaign.startAt)
-        : new Date(),
+      campaignStartDate: campaign?.startAt ? new Date(campaign.startAt) : null,
     });
   }, [campaign]);
 
