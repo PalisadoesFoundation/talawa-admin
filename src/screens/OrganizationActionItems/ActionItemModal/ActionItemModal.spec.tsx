@@ -19,7 +19,6 @@ import type {
   IActionItemInfo,
   IUpdateActionItemForInstanceInput,
   ICreateActionItemInput,
-  IUpdateActionItemInput,
 } from 'types/ActionItems/interface';
 
 // Mock the toast functions
