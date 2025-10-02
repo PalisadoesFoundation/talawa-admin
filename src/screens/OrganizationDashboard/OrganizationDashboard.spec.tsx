@@ -491,7 +491,7 @@ describe('OrganizationDashboard', () => {
       });
 
       const venuesCard = screen.getByTestId('venuesCount');
-      expect(venuesCard).toBeInTheDocument();
+      expect(venuesCard).toHaveTextContent('0');
     });
 
     it('handles venues loading state correctly', async () => {
@@ -539,6 +539,10 @@ describe('OrganizationDashboard', () => {
 
       // Should show loading fallback UI
       expect(screen.queryAllByTestId('fallback-ui').length).toBeGreaterThan(0);
+
+      // Venues card should not be rendered yet during loading
+      const venuesSection = screen.queryByTestId('venuesCount');
+      expect(venuesSection).not.toBeInTheDocument();
     });
   });
 });
