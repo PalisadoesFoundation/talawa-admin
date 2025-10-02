@@ -15,8 +15,6 @@ export class AdminEventPage {
 
   visitEventPage(): void {
     cy.get(this._eventsTabButton).should('be.visible').click();
-    // cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
-    // cy.get('[data-cy="leftDrawerButton-Events"]').should('be.visible').click();
     cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
   }
 
