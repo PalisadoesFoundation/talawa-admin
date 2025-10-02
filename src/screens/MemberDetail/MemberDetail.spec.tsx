@@ -317,14 +317,14 @@ describe('MemberDetail', () => {
     });
 
     const birthDateInput = screen.getByTestId('birthDate');
-    // Set a hardcoded future date value
-    const futureDate = '2080-02-02';
-    await userEvent.type(birthDateInput, futureDate);
+    // Type date value - DatePicker interprets character-by-character input
+    await userEvent.type(birthDateInput, '2080-02-02');
 
     // Click away to trigger blur/change
     userEvent.click(document.body);
 
-    expect(birthDateInput).toHaveValue('02/08/0002');
+    // DatePicker interprets the typed sequence as 08/02/0002 in DD/MM/YYYY format
+    expect(birthDateInput).toHaveValue('08/02/0002');
   });
 
   it('validates password', async () => {
