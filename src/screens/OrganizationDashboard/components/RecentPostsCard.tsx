@@ -1,7 +1,49 @@
 /**
- * @fileoverview Recent posts card component for organization dashboard
- * @author The Talawa Team
- * @see https://github.com/PalisadoesFoundation/talawa-admin
+ * RecentPostsCard Component
+ *
+ * This component renders a card displaying recent posts from the organization.
+ * It shows a list of the most recent posts with their titles, creation dates,
+ * and creator information, along with a "View All" button for navigation.
+ *
+ * @param props - The properties object for the component.
+ * @param props.postData - Object containing posts data from GraphQL query.
+ * @param props.postData.organization - Organization object containing posts.
+ * @param props.postData.organization.posts - Object with edges array containing post nodes.
+ * @param props.isLoading - Boolean indicating if posts data is currently loading.
+ * @param props.onViewAllClick - Callback function triggered when "View All" button is clicked.
+ *
+ * @returns A JSX.Element containing the recent posts card with post list and navigation.
+ *
+ * @remarks
+ * - Displays loading state when data is being fetched.
+ * - Shows "No Posts" message when there are no posts available.
+ * - Posts are displayed with title, creation date, and creator name.
+ * - Uses CardItem components for consistent post display styling.
+ * - Provides navigation to view all posts in the organization.
+ *
+ * @example
+ * ```tsx
+ * <RecentPostsCard
+ *   postData={{
+ *     organization: {
+ *       posts: {
+ *         edges: [
+ *           {
+ *             node: {
+ *               id: '1',
+ *               caption: 'Welcome to our organization',
+ *               createdAt: '2023-01-01T12:00:00Z',
+ *               creator: { id: '1', name: 'John Doe' }
+ *             }
+ *           }
+ *         ]
+ *       }
+ *     }
+ *   }}
+ *   isLoading={false}
+ *   onViewAllClick={() => navigate('/posts')}
+ * />
+ * ```
  */
 
 import React from 'react';

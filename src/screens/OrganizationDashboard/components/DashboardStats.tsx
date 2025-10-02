@@ -1,7 +1,48 @@
 /**
- * @fileoverview Dashboard statistics component displaying organization metrics
- * @author The Talawa Team
- * @see https://github.com/PalisadoesFoundation/talawa-admin
+ * DashboardStats Component
+ *
+ * This component renders dashboard statistics cards displaying organization metrics
+ * including member count, admin count, event count, venue count, blocked users count,
+ * and posts count. It provides navigation functionality for each statistic.
+ *
+ * @param props - The properties object for the component.
+ * @param props.memberCount - Number of members in the organization.
+ * @param props.adminCount - Number of administrators in the organization.
+ * @param props.eventCount - Number of events in the organization.
+ * @param props.venueCount - Number of venues in the organization.
+ * @param props.blockedCount - Number of blocked users in the organization.
+ * @param props.postsCount - Optional number of posts in the organization.
+ * @param props.isLoading - Boolean indicating if data is currently loading.
+ * @param props.onPostsClick - Callback function triggered when posts card is clicked.
+ * @param props.onMembersClick - Callback function triggered when members card is clicked.
+ * @param props.onAdminsClick - Callback function triggered when admins card is clicked.
+ * @param props.onBlockedUsersClick - Callback function triggered when blocked users card is clicked.
+ * @param props.onEventsClick - Callback function triggered when events card is clicked.
+ * @param props.onVenuesClick - Callback function triggered when venues card is clicked.
+ *
+ * @returns A JSX.Element containing dashboard statistics cards with navigation functionality.
+ *
+ * @remarks
+ * - Uses DashBoardCard components for consistent styling across all statistics.
+ * - Displays loading state when data is being fetched.
+ * - Provides clickable cards that trigger navigation callbacks.
+ * - Uses SVG icons for visual representation of each statistic type.
+ *
+ * @example
+ * ```tsx
+ * <DashboardStats
+ *   memberCount={150}
+ *   adminCount={5}
+ *   eventCount={25}
+ *   venueCount={8}
+ *   blockedCount={2}
+ *   postsCount={100}
+ *   isLoading={false}
+ *   onPostsClick={() => navigate('/posts')}
+ *   onMembersClick={() => navigate('/members')}
+ *   // ... other click handlers
+ * />
+ * ```
  */
 
 import React from 'react';

@@ -1,7 +1,46 @@
 /**
- * @fileoverview Membership requests card component for organization dashboard
- * @author The Talawa Team
- * @see https://github.com/PalisadoesFoundation/talawa-admin
+ * MembershipRequestsCard Component
+ *
+ * This component renders a card displaying pending membership requests for an organization.
+ * It shows a list of users who have requested to join the organization and provides
+ * a "View All" button to navigate to the full requests page.
+ *
+ * @param props - The properties object for the component.
+ * @param props.membershipRequestData - Object containing membership request data from GraphQL query.
+ * @param props.membershipRequestData.organization - Organization object containing membership requests.
+ * @param props.membershipRequestData.organization.membershipRequests - Array of membership request objects.
+ * @param props.isLoading - Boolean indicating if membership request data is currently loading.
+ * @param props.onViewAllClick - Async callback function triggered when "View All" button is clicked.
+ *
+ * @returns A JSX.Element containing the membership requests card with user list and navigation.
+ *
+ * @remarks
+ * - Filters and displays only pending membership requests.
+ * - Shows loading state with CardItemLoading components when data is being fetched.
+ * - Displays "No Requests" message when there are no pending requests.
+ * - Uses CardItem components for consistent user display styling.
+ * - Includes error handling with toast notifications.
+ *
+ * @example
+ * ```tsx
+ * <MembershipRequestsCard
+ *   membershipRequestData={{
+ *     organization: {
+ *       membershipRequests: [
+ *         {
+ *           status: 'pending',
+ *           membershipRequestId: '123',
+ *           user: { name: 'John Doe' }
+ *         }
+ *       ]
+ *     }
+ *   }}
+ *   isLoading={false}
+ *   onViewAllClick={async () => {
+ *     await navigate('/requests');
+ *   }}
+ * />
+ * ```
  */
 
 import React from 'react';
