@@ -136,4 +136,30 @@ describe('DashboardStats Component', () => {
     const venuesCard = screen.getByRole('button', { name: 'venues' });
     expect(venuesCard).toBeInTheDocument();
   });
+
+  it('handles edge case with zero counts', () => {
+    const propsWithZeros = {
+      ...mockProps,
+      memberCount: 0,
+      adminCount: 0,
+      eventCount: 0,
+      venueCount: 0,
+      blockedCount: 0,
+      postsCount: 0,
+    };
+    render(<DashboardStats {...propsWithZeros} />);
+
+    // Check that zero values are rendered correctly
+    const zeroElements = screen.getAllByText('0');
+    expect(zeroElements).toHaveLength(6); // Should have 6 zero counts
+    expect(screen.getByText('members')).toBeInTheDocument();
+  });
+
+  it('handles null postsCount correctly', () => {
+    const propsWithNullPosts = { ...mockProps, postsCount: undefined };
+    render(<DashboardStats {...propsWithNullPosts} />);
+
+    // Should still render posts card with count 0
+    expect(screen.getByText('posts')).toBeInTheDocument();
+  });
 });
