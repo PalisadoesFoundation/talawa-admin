@@ -335,7 +335,9 @@ describe('PledgeModal', () => {
     const startDateInput = screen.getByTestId('start-date-input');
     const endDateInput = screen.getByTestId('end-date-input');
 
-    const startDatePicker = startDateInput.querySelector('.MuiFormControl-root');
+    const startDatePicker = startDateInput.querySelector(
+      '.MuiFormControl-root',
+    );
     const endDatePicker = endDateInput.querySelector('.MuiFormControl-root');
 
     expect(startDatePicker).toHaveClass('Mui-disabled');
@@ -541,10 +543,12 @@ describe('PledgeModal', () => {
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
       const startDateInput = screen.getByTestId('start-date-input');
       const endDateInput = screen.getByTestId('end-date-input');
-      
-      const startDatePicker = startDateInput.querySelector('.MuiFormControl-root');
+
+      const startDatePicker = startDateInput.querySelector(
+        '.MuiFormControl-root',
+      );
       const endDatePicker = endDateInput.querySelector('.MuiFormControl-root');
-      
+
       expect(startDatePicker).toHaveClass('Mui-disabled');
       expect(endDatePicker).toHaveClass('Mui-disabled');
     });
