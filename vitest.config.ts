@@ -11,6 +11,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
+    css: false,
     coverage: {
       enabled: true,
       provider: 'istanbul',
