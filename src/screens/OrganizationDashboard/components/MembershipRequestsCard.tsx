@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Membership requests card component for organization dashboard
+ * @author The Talawa Team
+ * @see https://github.com/PalisadoesFoundation/talawa-admin
+ */
+
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Dashboard statistics component displaying organization metrics
+ * @author The Talawa Team
+ * @see https://github.com/PalisadoesFoundation/talawa-admin
+ */
+
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
