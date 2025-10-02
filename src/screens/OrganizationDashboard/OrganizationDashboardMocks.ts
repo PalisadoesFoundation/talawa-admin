@@ -118,49 +118,7 @@ export const MOCKS = [
       loading: false,
     },
   },
-  {
-    request: {
-      query: GET_ORGANIZATION_VENUES_PG,
-      variables: { id: 'orgId', first: 32, after: null },
-    },
-    result: {
-      data: {
-        organization: {
-          venues: {
-            edges: [
-              {
-                node: {
-                  id: 'venue1',
-                  name: 'Main Hall',
-                  description: 'Primary gathering space',
-                  capacity: 200,
-                  attachments: [],
-                  createdAt: '2025-09-01T00:00:00.000Z',
-                  updatedAt: '2025-09-05T00:00:00.000Z',
-                },
-                cursor: 'venueCursor1',
-              },
-              {
-                node: {
-                  id: 'venue2',
-                  name: 'Conference Room',
-                  description: 'Secondary meeting room',
-                  capacity: 80,
-                  attachments: [],
-                  createdAt: '2025-09-02T00:00:00.000Z',
-                  updatedAt: '2025-09-06T00:00:00.000Z',
-                },
-                cursor: 'venueCursor2',
-              },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      },
-      loading: false,
-    },
-  },
-  // Basic venues mock for default test scenarios
+  // Primary venues mock with attachments for comprehensive testing
   {
     request: {
       query: GET_ORGANIZATION_VENUES_PG,
@@ -202,6 +160,37 @@ export const MOCKS = [
               },
             ],
             pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
+  // Pagination edge case mock for testing hasNextPage scenarios
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_PG,
+      variables: { id: 'orgId', first: 1, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          venues: {
+            edges: [
+              {
+                node: {
+                  id: 'venue1',
+                  name: 'Main Hall',
+                  description: 'Primary gathering space',
+                  capacity: 200,
+                  attachments: [],
+                  createdAt: '2025-09-01T00:00:00.000Z',
+                  updatedAt: '2025-09-05T00:00:00.000Z',
+                },
+                cursor: 'venueCursor1',
+              },
+            ],
+            pageInfo: { hasNextPage: true, endCursor: 'venueCursor1' },
           },
         },
       },

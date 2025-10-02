@@ -3,7 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
 
-// Mock react-toastify
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+// Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -23,8 +25,8 @@ vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
   }) => (
     <div data-testid="card-item">
       <div>{title}</div>
-      <div>{time}</div>
-      <div>{creator?.name}</div>
+      {time && <div>{time}</div>}
+      {creator && <div>Author: {creator.name}</div>}
     </div>
   ),
 }));
@@ -33,21 +35,20 @@ vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
 vi.mock(
   'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
-    default: () => <div data-testid="card-loading" />,
+    default: () => <div data-testid="card-item-loading">Loading...</div>,
   }),
 );
 
 describe('RecentPostsCard Component', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const mockPostData: any = {
+  const mockPostData = {
     organization: {
       posts: {
         edges: [
           {
             node: {
               id: 'post1',
-              caption: 'Test post 1',
-              createdAt: '2024-01-01T10:00:00.000Z',
+              caption: 'First Post Caption',
+              createdAt: '2023-01-01T00:00:00Z',
               creator: {
                 id: 'user1',
                 name: 'John Doe',
@@ -57,8 +58,8 @@ describe('RecentPostsCard Component', () => {
           {
             node: {
               id: 'post2',
-              caption: 'Test post 2',
-              createdAt: '2024-01-02T10:00:00.000Z',
+              caption: 'Second Post Caption',
+              createdAt: '2023-01-02T00:00:00Z',
               creator: {
                 id: 'user2',
                 name: 'Jane Smith',
@@ -68,14 +69,14 @@ describe('RecentPostsCard Component', () => {
         ],
       },
     },
-  };
+  } as any;
 
   const mockProps = {
     postData: mockPostData,
-    postsCount: 15,
+    postsCount: 2,
     isLoading: false,
     onViewAllClick: vi.fn(),
-  };
+  } as any;
 
   it('renders recent posts card with correct title', () => {
     render(<RecentPostsCard {...mockProps} />);
@@ -83,101 +84,116 @@ describe('RecentPostsCard Component', () => {
     expect(screen.getByText('latestPosts')).toBeInTheDocument();
   });
 
-  it('displays post list correctly when posts are provided', () => {
+  it('displays view all button and handles click', async () => {
     render(<RecentPostsCard {...mockProps} />);
 
-    expect(screen.getByText('Test post 1')).toBeInTheDocument();
-    expect(screen.getByText('Test post 2')).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-  });
+    const viewAllButton = screen.getByText('viewAll');
+    expect(viewAllButton).toBeInTheDocument();
 
-  it('shows loading state when isLoading is true', () => {
-    const loadingProps = { ...mockProps, isLoading: true };
-    render(<RecentPostsCard {...loadingProps} />);
-
-    const loadingElements = screen.getAllByTestId('card-loading');
-    expect(loadingElements.length).toBeGreaterThan(0);
-  });
-
-  it('calls onViewAllClick when view all button is clicked', async () => {
-    render(<RecentPostsCard {...mockProps} />);
-
-    const viewAllButton = screen.getByRole('button', { name: /viewAll/i });
     fireEvent.click(viewAllButton);
-
     expect(mockProps.onViewAllClick).toHaveBeenCalled();
   });
 
+  it('renders loading state correctly', () => {
+    const loadingProps = {
+      ...mockProps,
+      isLoading: true,
+    } as any;
+
+    render(<RecentPostsCard {...loadingProps} />);
+
+    expect(screen.getAllByTestId('card-item-loading')).toHaveLength(4);
+  });
+
   it('should render empty state when no posts are available', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const emptyPostData: any = {
+    const emptyPostData = {
       organization: {
         posts: {
           edges: [],
         },
       },
-    };
-    const emptyProps = { ...mockProps, postData: emptyPostData };
+    } as any;
+
+    const emptyProps = {
+      postData: emptyPostData,
+      postsCount: 0,
+      isLoading: false,
+      onViewAllClick: vi.fn(),
+    } as any;
+
     render(<RecentPostsCard {...emptyProps} />);
 
-    expect(screen.getByText('latestPosts')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /viewAll/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText('noPostsPresent')).toBeInTheDocument();
   });
 
-  it('shows no posts message when postsCount is 0', () => {
-    const noPosts = { ...mockProps, postsCount: 0 };
+  it('renders zero count empty state correctly', () => {
+    const noPosts = {
+      postsCount: 0,
+      postData: mockPostData,
+      isLoading: false,
+      onViewAllClick: vi.fn(),
+    } as any;
+
     render(<RecentPostsCard {...noPosts} />);
 
     expect(screen.getByText('noPostsPresent')).toBeInTheDocument();
   });
 
-  it('renders with correct card structure', () => {
+  it('displays correct post titles and creators', () => {
     render(<RecentPostsCard {...mockProps} />);
 
-    // Check for card element and title
-    const card = screen.getByText('latestPosts');
-    expect(card).toBeInTheDocument();
-
-    const viewAllButton = screen.getByRole('button', { name: /viewAll/i });
-    expect(viewAllButton).toBeInTheDocument();
+    expect(screen.getByText('First Post Caption')).toBeInTheDocument();
+    expect(screen.getByText('Second Post Caption')).toBeInTheDocument();
+    expect(screen.getByText('Author: John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Author: Jane Smith')).toBeInTheDocument();
   });
 
-  it('displays correct number of posts', () => {
-    render(<RecentPostsCard {...mockProps} />);
+  it('handles click on view all button', () => {
+    const singleCallProps = {
+      ...mockProps,
+      onViewAllClick: vi.fn(),
+    };
+    render(<RecentPostsCard {...singleCallProps} />);
 
-    const cardItems = screen.getAllByTestId('card-item');
-    expect(cardItems).toHaveLength(2);
+    const viewAllButton = screen.getByText('viewAll');
+    fireEvent.click(viewAllButton);
+
+    expect(singleCallProps.onViewAllClick).toHaveBeenCalledTimes(1);
   });
 
-  it('shows only first 10 posts when more than 10 are provided', () => {
+  it('displays correctly when more than 10 posts', () => {
     const manyPosts = [];
-    for (let i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 15; i++) {
       manyPosts.push({
         node: {
           id: `post${i}`,
-          caption: `Post ${i}`,
-          createdAt: `2024-09-${30 - i}T10:00:00Z`,
+          caption: `Post ${i} Caption`,
+          createdAt: `2023-01-${i.toString().padStart(2, '0')}T00:00:00Z`,
           creator: {
-            id: `creator${i}`,
-            name: `Creator ${i}`,
+            id: `user${i}`,
+            name: `User ${i}`,
           },
         },
       });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const manyPostsData: any = {
+    const manyPostsData = {
       organization: {
         posts: { edges: manyPosts },
       },
-    };
-    const manyPostsProps = { ...mockProps, postData: manyPostsData };
+    } as any;
+
+    const manyPostsProps = {
+      postData: manyPostsData,
+      postsCount: 15,
+      isLoading: false,
+      onViewAllClick: vi.fn(),
+    } as any;
+
     render(<RecentPostsCard {...manyPostsProps} />);
 
+    // Should only show first 10 posts
     const cardItems = screen.getAllByTestId('card-item');
-    expect(cardItems).toHaveLength(10); // Should show only first 10
+    expect(cardItems).toHaveLength(10);
   });
 });

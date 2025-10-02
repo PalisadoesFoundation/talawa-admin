@@ -86,30 +86,29 @@ describe('DashboardStats Component', () => {
   it('calls correct handlers when cards are clicked', async () => {
     render(<DashboardStats {...mockProps} />);
 
-    // Find and click each card by its title
-    const membersCard = screen.getByText('members').closest('.card');
-    const adminsCard = screen.getByText('admins').closest('.card');
-    const eventsCard = screen.getByText('events').closest('.card');
-    const venuesCard = screen.getByText('venues').closest('.card');
-    const postsCard = screen.getByText('posts').closest('.card');
-    const blockedCard = screen.getByText('blockedUsers').closest('.card');
-
-    if (membersCard) fireEvent.click(membersCard);
+    // Click each card using accessible button queries
+    const membersCard = screen.getByRole('button', { name: 'members' });
+    fireEvent.click(membersCard);
     expect(mockProps.onMembersClick).toHaveBeenCalled();
 
-    if (adminsCard) fireEvent.click(adminsCard);
+    const adminsCard = screen.getByRole('button', { name: 'admins' });
+    fireEvent.click(adminsCard);
     expect(mockProps.onAdminsClick).toHaveBeenCalled();
 
-    if (eventsCard) fireEvent.click(eventsCard);
+    const eventsCard = screen.getByRole('button', { name: 'events' });
+    fireEvent.click(eventsCard);
     expect(mockProps.onEventsClick).toHaveBeenCalled();
 
-    if (venuesCard) fireEvent.click(venuesCard);
+    const venuesCard = screen.getByRole('button', { name: 'venues' });
+    fireEvent.click(venuesCard);
     expect(mockProps.onVenuesClick).toHaveBeenCalled();
 
-    if (postsCard) fireEvent.click(postsCard);
+    const postsCard = screen.getByRole('button', { name: 'posts' });
+    fireEvent.click(postsCard);
     expect(mockProps.onPostsClick).toHaveBeenCalled();
 
-    if (blockedCard) fireEvent.click(blockedCard);
+    const blockedCard = screen.getByRole('button', { name: 'blockedUsers' });
+    fireEvent.click(blockedCard);
     expect(mockProps.onBlockedUsersClick).toHaveBeenCalled();
   });
 
