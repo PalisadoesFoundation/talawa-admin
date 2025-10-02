@@ -422,18 +422,20 @@ const ItemModal: FC<IItemModalProps> = ({
               </Form.Group>
 
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
-                <DatePicker
-                  format="DD/MM/YYYY"
-                  label={t('assignmentDate')}
-                  className={styles.noOutline}
-                  value={dayjs(assignedAt)}
-                  disabled={editMode}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date && !editMode) {
-                      handleFormChange('assignedAt', date.toDate());
-                    }
-                  }}
-                />
+                <div data-testid="assignment-date-input">
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    label={t('assignmentDate')}
+                    className={styles.noOutline}
+                    value={dayjs(assignedAt)}
+                    disabled={editMode}
+                    onChange={(date: Dayjs | null): void => {
+                      if (date && !editMode) {
+                        handleFormChange('assignedAt', date.toDate());
+                      }
+                    }}
+                  />
+                </div>
               </Form.Group>
 
               <FormControl fullWidth className="mb-2">
@@ -443,7 +445,7 @@ const ItemModal: FC<IItemModalProps> = ({
                   data-cy="preCompletionNotes"
                   className={styles.noOutline}
                   value={preCompletionNotes}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     handleFormChange('preCompletionNotes', e.target.value)
                   }
                 />
@@ -459,7 +461,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 value={postCompletionNotes || ''}
                 multiline
                 maxRows={3}
-                onChange={(e) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   handleFormChange('postCompletionNotes', e.target.value)
                 }
               />

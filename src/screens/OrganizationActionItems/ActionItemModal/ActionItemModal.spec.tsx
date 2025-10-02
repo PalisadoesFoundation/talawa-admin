@@ -643,8 +643,8 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Find date picker input
-      const dateInput = screen.getByLabelText(/assignmentDate/i);
+      // Find date picker input using data-testid
+      const dateInput = screen.getByTestId('assignment-date-input');
       expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction
