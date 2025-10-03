@@ -1,4 +1,5 @@
 export class PeoplePage {
+  private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
   private readonly _searchResult = '[data-field="name"]';
@@ -10,6 +11,11 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
+
+  visitPeoplePage(): void {
+    cy.get(this._peopleTabButton).should('be.visible').click();
+    cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
+  }
 
   searchMemberByName(name: string, timeout = 40000) {
     cy.get(this._searchInput, { timeout })
