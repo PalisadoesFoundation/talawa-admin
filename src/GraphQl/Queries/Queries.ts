@@ -307,7 +307,10 @@ export const EVENT_DETAILS = gql`
       organization {
         id
         name
-        _id
+     organization {
+       id
+       name
+     }
       }
     }
   }
