@@ -172,4 +172,122 @@ describe('Testing OrganizationScreen', () => {
       expect(eventNameElement.tagName).toBe('H4');
     });
   });
+
+  test('displays event title when event has no name property', async () => {
+    const mockWithoutName = [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PG,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            eventsByOrganization: [
+              {
+                _id: 'event456',
+                title: 'Event Without Name',
+                description: 'Test Description',
+                startDate: '2024-01-01',
+                endDate: '2024-01-02',
+                location: 'Test Location',
+                startTime: '09:00',
+                endTime: '17:00',
+                allDay: false,
+                isPublic: true,
+                isRegisterable: true,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithoutName = new StaticMockLink(mockWithoutName, true);
+
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'event456', orgId: '123' },
+    });
+
+    render(
+      <MockedProvider link={linkWithoutName} addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const eventNameElement = screen.getByText('Event Without Name');
+      expect(eventNameElement).toBeInTheDocument();
+    });
+  });
+
+  test('handles event with null name and null title', async () => {
+    const mockWithNullNames = [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PG,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            eventsByOrganization: [
+              {
+                _id: 'event789',
+                name: null,
+                title: null,
+                description: 'Test Description',
+                startDate: '2024-01-01',
+                endDate: '2024-01-02',
+                location: 'Test Location',
+                startTime: '09:00',
+                endTime: '17:00',
+                allDay: false,
+                isPublic: true,
+                isRegisterable: true,
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const linkWithNullNames = new StaticMockLink(mockWithNullNames, true);
+
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue({
+      params: { eventId: 'event789', orgId: '123' },
+    });
+
+    render(
+      <MockedProvider link={linkWithNullNames} addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationScreen />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      // Should not display an event name when both are null
+      // Query instead of get since the heading might be empty
+      const headers = screen.queryAllByRole('heading', { level: 4 });
+      const eventHeader = headers.find((header) =>
+        header.classList.contains('_eventNameHeader_b695a7'),
+      );
+      if (eventHeader) {
+        expect(eventHeader.textContent).toBe('');
+      }
+      // Just verify the component rendered without crashing
+      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+    });
+  });
 });

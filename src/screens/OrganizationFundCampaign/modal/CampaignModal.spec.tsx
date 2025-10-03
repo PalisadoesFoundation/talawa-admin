@@ -681,11 +681,11 @@ describe('CampaignModal', () => {
 
     renderCampaignModal(startDateNullMockLink, editProps);
 
-    // Clear the start date
+    // Clear the start date by setting empty string
     const startDateInput = screen
       .getAllByLabelText('Start Date')
       .at(-1) as HTMLInputElement;
-    fireEvent.change(startDateInput, { target: { value: null } });
+    fireEvent.change(startDateInput, { target: { value: '' } });
 
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
@@ -735,11 +735,11 @@ describe('CampaignModal', () => {
 
     renderCampaignModal(endDateNullMockLink, editProps);
 
-    // Clear the end date
+    // Clear the end date by setting empty string
     const endDateInput = screen
       .getAllByLabelText('End Date')
       .at(-1) as HTMLInputElement;
-    fireEvent.change(endDateInput, { target: { value: null } });
+    fireEvent.change(endDateInput, { target: { value: '' } });
 
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
