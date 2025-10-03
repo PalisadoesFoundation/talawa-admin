@@ -110,7 +110,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     }
 
     if ('firstName' in user || 'lastName' in user) {
-      const fallbackName = `${(user as InterfaceUser).firstName ?? ''} ${(user as InterfaceUser).lastName ?? ''}`.trim();
+      const fallbackName =
+        `${(user as InterfaceUser).firstName ?? ''} ${(user as InterfaceUser).lastName ?? ''}`.trim();
       if (fallbackName) {
         return fallbackName;
       }

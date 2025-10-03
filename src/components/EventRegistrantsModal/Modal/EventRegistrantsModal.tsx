@@ -96,7 +96,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   );
 
   const getAttendeeDisplayName = (attendee: InterfaceUser): string => {
-    const fallbackName = `${attendee.firstName ?? ''} ${attendee.lastName ?? ''}`.trim();
+    const fallbackName =
+      `${attendee.firstName ?? ''} ${attendee.lastName ?? ''}`.trim();
     const name = attendee.name?.trim() || fallbackName;
     return name.length > 0 ? name : 'Unknown';
   };
@@ -232,11 +233,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             }
             options={organizationMembers}
             getOptionLabel={(member: InterfaceUser): string => {
-              const fallbackName = `${member.firstName ?? ''} ${member.lastName ?? ''}`.trim();
+              const fallbackName =
+                `${member.firstName ?? ''} ${member.lastName ?? ''}`.trim();
               const name = member.name?.trim() || fallbackName;
               return name.length > 0 ? name : 'Unknown';
             }}
-            isOptionEqualToValue={(option, value): boolean => option.id === value.id}
+            isOptionEqualToValue={(option, value): boolean =>
+              option.id === value.id
+            }
             renderInput={(params): React.ReactNode => (
               <TextField
                 {...params}

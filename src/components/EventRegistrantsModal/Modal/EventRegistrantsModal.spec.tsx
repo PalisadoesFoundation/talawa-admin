@@ -45,7 +45,7 @@ const queryMockWithRegistrant = [
           attendees: [
             {
               _id: 'user1',
-                  name: 'John Doe',
+              name: 'John Doe',
               firstName: 'John',
               lastName: 'Doe',
               createdAt: '2023-01-01',
