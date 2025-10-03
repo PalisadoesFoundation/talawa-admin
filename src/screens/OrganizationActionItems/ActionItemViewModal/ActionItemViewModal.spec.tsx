@@ -850,4 +850,204 @@ describe('Testing ItemViewModal', () => {
       expect(screen.queryByLabelText(t.completionDate)).not.toBeInTheDocument();
     });
   });
+
+  describe('Additional User Resolution and Assignee Rendering Tests', () => {
+    it('should display assignee from MEMBERS_LIST query when available', async () => {
+      // Testing line 66-69: when memberFromQuery has display name, it's used
+      const item = createActionItem({
+        assignee: {
+          id: 'userId1',
+          name: 'Fallback User',
+          emailAddress: 'fallback@example.com',
+          avatarURL: '',
+        },
+      });
+
+      const customMocks = [
+        {
+          request: {
+            query: GET_ACTION_ITEM_CATEGORY,
+            variables: {
+              input: { id: 'categoryId1' },
+            },
+          },
+          result: {
+            data: {
+              actionItemCategory: mockCategory,
+            },
+          },
+        },
+        {
+          request: {
+            query: MEMBERS_LIST,
+            variables: { organizationId: 'orgId1' },
+          },
+          result: {
+            data: {
+              usersByOrganizationId: [
+                {
+                  id: 'userId1',
+                  name: 'Query Member',
+                  emailAddress: 'query@example.com',
+                  role: 'MEMBER',
+                  avatarURL: '',
+                  createdAt: '2023-01-01',
+                  updatedAt: '2023-01-01',
+                },
+              ],
+            },
+          },
+        },
+      ];
+
+      const linkWithMember = new StaticMockLink(customMocks, true);
+
+      renderItemViewModal(linkWithMember, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        // Should use memberFromQuery (from MEMBERS_LIST)
+        expect(inputElement).toHaveValue('Query Member');
+      });
+    });
+
+    it('should fallback to assignee prop when MEMBERS_LIST member has empty name', async () => {
+      // Testing line 72-75: fallback to assignee when memberFromQuery has no display name
+      const item = createActionItem({
+        assignee: {
+          id: 'userId3',
+          name: 'Fallback User',
+          emailAddress: 'fallback@example.com',
+          avatarURL: '',
+        },
+      });
+
+      const customMocks = [
+        {
+          request: {
+            query: GET_ACTION_ITEM_CATEGORY,
+            variables: {
+              input: { id: 'categoryId1' },
+            },
+          },
+          result: {
+            data: {
+              actionItemCategory: mockCategory,
+            },
+          },
+        },
+        {
+          request: {
+            query: MEMBERS_LIST,
+            variables: { organizationId: 'orgId1' },
+          },
+          result: {
+            data: {
+              usersByOrganizationId: [
+                {
+                  id: 'userId3',
+                  name: '', // Empty name should trigger fallback
+                  emailAddress: 'empty@example.com',
+                  role: 'MEMBER',
+                  avatarURL: '',
+                  createdAt: '2023-01-01',
+                  updatedAt: '2023-01-01',
+                },
+              ],
+            },
+          },
+        },
+      ];
+
+      const linkWithEmptyMember = new StaticMockLink(customMocks, true);
+
+      renderItemViewModal(linkWithEmptyMember, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        // Should use fallback assignee
+        expect(inputElement).toHaveValue('Fallback User');
+      });
+    });
+
+    it('should return null and display Unknown when assignee is null', async () => {
+      // Testing line 79: return null when both are unavailable
+      const item = createActionItem({
+        assignee: null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('Unknown');
+      });
+    });
+
+    it('should correctly render assignee field with resolved user data at line 151', async () => {
+      // Testing line 151: The assignee TextField rendering with getUserDisplayName
+      const item = createActionItem({
+        assignee: {
+          id: 'userId2',
+          name: 'Test Assignee',
+          emailAddress: 'test@example.com',
+          avatarURL: 'http://example.com/image.jpg',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        expect(assigneeInput).toBeInTheDocument();
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('Test Assignee');
+        expect(inputElement).toBeDisabled();
+      });
+    });
+
+    it('should handle assignee with only partial name information', async () => {
+      // Additional edge case for user resolution
+      const item = createActionItem({
+        assignee: {
+          id: 'userId4',
+          name: '   ', // Whitespace-only name
+          emailAddress: 'whitespace@example.com',
+          avatarURL: '',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        // Whitespace-only name should be treated as no display name
+        expect(inputElement).toHaveValue('Unknown');
+      });
+    });
+  });
 });

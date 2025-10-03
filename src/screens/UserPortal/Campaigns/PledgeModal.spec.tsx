@@ -297,6 +297,99 @@ describe('PledgeModal', () => {
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
   });
 
+  it('should adjust pledgeEndDate when pledgeStartDate is changed to after current end date', async () => {
+    // Testing lines 295-302: the logic that adjusts end date when start date changes
+    const testProps = {
+      ...pledgeProps[0],
+      pledge: {
+        id: '1',
+        amount: 100,
+        currency: 'USD',
+        startDate: '2024-01-01',
+        endDate: '2024-01-05',
+        pledger: {
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          name: 'John Doe',
+          avatarURL: undefined,
+        },
+      },
+    };
+
+    renderPledgeModal(link1, testProps);
+
+    // Change start date to after the current end date (2024-01-05)
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
+
+    // Set start date to 2024-01-10, which is after end date 2024-01-05
+    fireEvent.change(startDateInput, { target: { value: '10/01/2024' } });
+
+    // The end date should be automatically adjusted to match the new start date
+    await waitFor(() => {
+      const endDateInput = screen
+        .getAllByLabelText('End Date')
+        .at(-1) as HTMLInputElement;
+      expect(endDateInput.value).toBe('10/01/2024');
+    });
+  });
+
+  it('should keep pledgeEndDate unchanged when pledgeStartDate is changed to before current end date', async () => {
+    // Testing lines 295-302: the else branch that keeps end date unchanged
+    const testProps = {
+      ...pledgeProps[0],
+      pledge: {
+        id: '1',
+        amount: 100,
+        currency: 'USD',
+        startDate: '2024-01-01',
+        endDate: '2024-01-10',
+        pledger: {
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          name: 'John Doe',
+          avatarURL: undefined,
+        },
+      },
+    };
+
+    renderPledgeModal(link1, testProps);
+
+    // Change start date to before the current end date (2024-01-10)
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
+
+    // Set start date to 2024-01-05, which is before end date 2024-01-10
+    fireEvent.change(startDateInput, { target: { value: '05/01/2024' } });
+
+    // The end date should remain unchanged
+    await waitFor(() => {
+      const endDateInput = screen
+        .getAllByLabelText('End Date')
+        .at(-1) as HTMLInputElement;
+      expect(endDateInput.value).toBe('10/01/2024');
+    });
+  });
+
+  it('should update pledgeEndDate directly when changed', async () => {
+    // Testing lines 313-315: the pledgeEndDate onChange handler
+    renderPledgeModal(link1, pledgeProps[0]);
+
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+
+    fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
+
+    await waitFor(() => {
+      expect(endDateInput.value).toBe('15/01/2024');
+    });
+  });
+
   it('should create pledge', async () => {
     renderPledgeModal(link1, pledgeProps[0]);
 
