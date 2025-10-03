@@ -89,11 +89,17 @@ export const areMembersEqual = (
   value: InterfaceUser,
 ): boolean => option.id === value.id;
 
-export const reloadAttendees = (
-  refetch: () => Promise<unknown> | void,
-): void => {
-  void refetch();
-};
+++ b/src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx
+@@ -92,7 +92,6 @@
+-export const reloadAttendees = (
+-  refetch: () => Promise<unknown> | void,
+-): void => {
+-  void refetch();
+-};
+@@ -183,7 +182,7 @@
+         reloadMembers={() => {
+          void attendeesRefetch();
+         }}
 
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
