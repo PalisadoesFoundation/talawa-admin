@@ -34,6 +34,7 @@ import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from 'style/app-fixed.module.css';
+import { getUserDisplayName } from 'utils/userDisplay';
 import {
   CHATS_LIST,
   GROUP_CHAT_LIST,
@@ -229,12 +230,15 @@ export default function chat(): JSX.Element {
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat) => {
+                        const otherUser =
+                          chat.users.find(
+                            (chatUser) => chatUser?._id !== userId,
+                          ) ?? chat.users[0];
+
                         const cardProps: InterfaceContactCardProps = {
                           id: chat._id,
                           title: !chat.isGroup
-                            ? chat.users[0]?._id === userId
-                              ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
-                              : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
+                            ? getUserDisplayName(otherUser, 'Unknown')
                             : (chat.name ?? ''),
                           image: chat.isGroup
                             ? (chat.image ?? '')

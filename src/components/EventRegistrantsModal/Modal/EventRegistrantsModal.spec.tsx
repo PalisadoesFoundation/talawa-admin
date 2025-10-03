@@ -1,6 +1,6 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { EventRegistrantsModal } from './EventRegistrantsModal';
+import * as EventRegistrantsModalModule from './EventRegistrantsModal';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_EVENT_ATTENDEE,
@@ -14,7 +14,16 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { InterfaceUser } from 'types/User/interface';
 import { describe, test, expect, vi } from 'vitest';
+
+const {
+  EventRegistrantsModal,
+  getAttendeeDisplayName,
+  getAttendeeInitials,
+  areMembersEqual,
+  reloadAttendees,
+} = EventRegistrantsModalModule;
 
 vi.mock('./AddOnSpotAttendee', async () => {
   const React = await vi.importActual<typeof import('react')>('react');
@@ -32,9 +41,7 @@ vi.mock('./AddOnSpotAttendee', async () => {
       React.useEffect(() => {
         if (show) {
           reloadMembers();
-          setTimeout(() => {
-            handleClose();
-          }, 0);
+          handleClose();
         }
       }, [show, reloadMembers, handleClose]);
 
@@ -485,5 +492,61 @@ describe('Testing Event Registrants Modal', () => {
     expect(getByText('Add Onspot Registration')).toBeInTheDocument();
     const closeButton = getByTitle('Close');
     fireEvent.click(closeButton);
+  });
+});
+
+describe('Event Registrants helpers', () => {
+  test('getAttendeeDisplayName falls back to full name when name missing', () => {
+    const attendee: InterfaceUser = {
+      id: 'user-1',
+      createdAt: new Date(),
+      email: 'ada@example.com',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+    };
+
+    expect(getAttendeeDisplayName(attendee)).toBe('Ada Lovelace');
+  });
+
+  test('getAttendeeInitials returns fallback when derived initials are empty', () => {
+    const attendee: InterfaceUser = {
+      id: 'user-2',
+      createdAt: new Date(),
+      email: 'placeholder@example.com',
+      name: '   ',
+    };
+
+    expect(getAttendeeInitials(attendee)).toBe('?');
+  });
+
+  test('areMembersEqual compares users by id', () => {
+    const option: InterfaceUser = {
+      id: 'user-3',
+      createdAt: new Date(),
+      email: 'option@example.com',
+    };
+
+    const sameIdValue: InterfaceUser = {
+      id: 'user-3',
+      createdAt: new Date(),
+      email: 'value@example.com',
+    };
+
+    const differentIdValue: InterfaceUser = {
+      id: 'user-4',
+      createdAt: new Date(),
+      email: 'different@example.com',
+    };
+
+    expect(areMembersEqual(option, sameIdValue)).toBe(true);
+    expect(areMembersEqual(option, differentIdValue)).toBe(false);
+  });
+
+  test('reloadAttendees invokes provided refetch function', () => {
+    const refetchMock = vi.fn();
+
+    reloadAttendees(refetchMock);
+
+    expect(refetchMock).toHaveBeenCalledTimes(1);
   });
 });

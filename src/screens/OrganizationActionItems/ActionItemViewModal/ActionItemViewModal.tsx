@@ -17,6 +17,7 @@ import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { getUserDisplayName } from 'utils/userDisplay';
 
 export interface IViewModalProps {
   isOpen: boolean;
@@ -60,26 +61,23 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   type ResolvedUser = InterfaceUser | NonNullable<IActionItemInfo['assignee']>;
 
+  const hasDisplayName = (
+    user: ResolvedUser | IActionItemInfo['assignee'] | undefined | null,
+  ): boolean => getUserDisplayName(user ?? undefined, '').trim().length > 0;
+
   const resolveUser = (
     memberFromQuery: InterfaceUser | undefined,
     fallbackUser: IActionItemInfo['assignee'],
   ): ResolvedUser | null => {
-    if (memberFromQuery) {
-      const hasDisplayName = Boolean(
-        memberFromQuery.name?.trim() ||
-          `${memberFromQuery.firstName ?? ''}${memberFromQuery.lastName ?? ''}`.trim(),
-      );
-
-      if (hasDisplayName) {
-        return memberFromQuery;
-      }
+    if (memberFromQuery && hasDisplayName(memberFromQuery)) {
+      return memberFromQuery;
     }
 
-    if (fallbackUser) {
+    if (fallbackUser && hasDisplayName(fallbackUser)) {
       return fallbackUser;
     }
 
-    return memberFromQuery ?? null;
+    return memberFromQuery ?? fallbackUser ?? null;
   };
 
   const assignee = resolveUser(
@@ -97,28 +95,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   );
 
   const category = categoryData?.actionItemCategory || item.category;
-
-  // Helper function to get display name from user object
-  const getUserDisplayName = (
-    user: ResolvedUser | null | undefined,
-  ): string => {
-    if (!user) return 'Unknown';
-
-    const nameFromField = user.name?.trim();
-    if (nameFromField) {
-      return nameFromField;
-    }
-
-    if ('firstName' in user || 'lastName' in user) {
-      const fallbackName =
-        `${(user as InterfaceUser).firstName ?? ''} ${(user as InterfaceUser).lastName ?? ''}`.trim();
-      if (fallbackName) {
-        return fallbackName;
-      }
-    }
-
-    return 'Unknown';
-  };
 
   const getEventDisplayName = (
     event: InterfaceEvent | null | undefined,
@@ -162,7 +138,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                 variant="outlined"
                 className={styles.noOutline}
                 data-testid="assignee_input"
-                value={getUserDisplayName(assignee)}
+                value={getUserDisplayName(assignee ?? undefined, 'Unknown')}
                 disabled
               />
             </FormControl>
@@ -172,7 +148,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                 label={t('creator')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={getUserDisplayName(creator)}
+                value={getUserDisplayName(creator ?? undefined, 'Unknown')}
                 disabled
               />
             </FormControl>

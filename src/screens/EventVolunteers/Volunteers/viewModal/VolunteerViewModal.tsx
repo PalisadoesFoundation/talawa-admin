@@ -60,6 +60,7 @@ import {
 } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { HistoryToggleOff, TaskAlt } from '@mui/icons-material';
+import { getUserDisplayName } from 'utils/userDisplay';
 
 export interface InterfaceVolunteerViewModal {
   isOpen: boolean;
@@ -76,6 +77,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   const { t: tCommon } = useTranslation('common');
 
   const { user, hasAccepted, hoursVolunteered, groups } = volunteer;
+  const volunteerName = getUserDisplayName(user, 'Unknown');
 
   return (
     <Modal className={styles.volunteerViewModal} onHide={hide} show={isOpen}>
@@ -99,7 +101,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                 label={t('volunteer')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={user.firstName + ' ' + user.lastName}
+                value={volunteerName}
                 disabled
                 InputProps={{
                   startAdornment: (
@@ -118,8 +120,8 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.tableImage}
                             dataTestId="volunteer_avatar"
-                            name={user.firstName + ' ' + user.lastName}
-                            alt={user.firstName + ' ' + user.lastName}
+                            name={volunteerName}
+                            alt={volunteerName}
                           />
                         </div>
                       )}

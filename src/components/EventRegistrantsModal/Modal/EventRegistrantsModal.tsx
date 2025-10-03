@@ -56,12 +56,43 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import type { InterfaceUser } from 'types/User/interface';
+import { getUserDisplayName } from 'utils/userDisplay';
 
 type ModalPropType = {
   show: boolean;
   eventId: string;
   orgId: string;
   handleClose: () => void;
+};
+
+export const getAttendeeDisplayName = (attendee: InterfaceUser): string =>
+  getUserDisplayName(attendee, 'Unknown');
+
+export const getAttendeeInitials = (attendee: InterfaceUser): string => {
+  const name = getAttendeeDisplayName(attendee);
+  if (!name || name === 'Unknown') {
+    return '?';
+  }
+
+  const words = name.split(/\s+/).filter(Boolean);
+  const initials = words
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? '')
+    .filter(Boolean)
+    .join('');
+
+  return initials.length > 0 ? initials : '?';
+};
+
+export const areMembersEqual = (
+  option: InterfaceUser,
+  value: InterfaceUser,
+): boolean => option.id === value.id;
+
+export const reloadAttendees = (
+  refetch: () => Promise<unknown> | void,
+): void => {
+  void refetch();
 };
 
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
@@ -94,32 +125,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     () => memberData?.usersByOrganizationId ?? [],
     [memberData],
   );
-
-  const getAttendeeDisplayName = (attendee: InterfaceUser): string => {
-    const fallbackName =
-      `${attendee.firstName ?? ''} ${attendee.lastName ?? ''}`.trim();
-    const name = attendee.name?.trim() || fallbackName;
-    return name.length > 0 ? name : 'Unknown';
-  };
-
-  const getAttendeeInitials = (attendee: InterfaceUser): string => {
-    const name = getAttendeeDisplayName(attendee);
-    if (!name || name === 'Unknown') {
-      return '?';
-    }
-
-    const words = name.split(/\s+/).filter(Boolean);
-    if (words.length === 0) {
-      return '?';
-    }
-
-    const initials = words
-      .slice(0, 2)
-      .map((word) => word[0]?.toUpperCase() ?? '')
-      .join('');
-
-    return initials || '?';
-  };
 
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
@@ -175,7 +180,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           show={open}
           handleClose={() => setOpen(false)}
           reloadMembers={() => {
-            attendeesRefetch();
+            reloadAttendees(attendeesRefetch);
           }}
         />
         <Modal.Header closeButton className="bg-primary">
@@ -233,15 +238,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               </div>
             }
             options={organizationMembers}
-            getOptionLabel={(member: InterfaceUser): string => {
-              const fallbackName =
-                `${member.firstName ?? ''} ${member.lastName ?? ''}`.trim();
-              const name = member.name?.trim() || fallbackName;
-              return name.length > 0 ? name : 'Unknown';
-            }}
-            isOptionEqualToValue={(option, value): boolean =>
-              option.id === value.id
+            getOptionLabel={(member: InterfaceUser): string =>
+              getUserDisplayName(member, 'Unknown')
             }
+            isOptionEqualToValue={areMembersEqual}
             renderInput={(params): React.ReactNode => (
               <TextField
                 {...params}

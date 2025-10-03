@@ -50,6 +50,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
+import { getUserDisplayName } from 'utils/userDisplay';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -283,7 +284,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+                getUserDisplayName(member, 'Unknown')
               }
               onChange={(_, newLeader): void => {
                 if (newLeader) {
@@ -320,7 +321,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               isOptionEqualToValue={(option, value) => option._id === value._id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+                getUserDisplayName(member, 'Unknown')
               }
               disabled={mode === 'edit'}
               onChange={(_, newUsers): void => {

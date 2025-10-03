@@ -1,3 +1,8 @@
+import type {
+  InterfaceMemberInfo,
+  InterfaceQueryOrganizationEventListItem,
+} from 'utils/interfaces';
+import { getUserDisplayName } from 'utils/userDisplay';
 /**
  * OrganizationSidebar Component
  *
@@ -43,10 +48,6 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import type {
-  InterfaceQueryOrganizationEventListItem,
-  InterfaceMemberInfo,
-} from 'utils/interfaces';
 
 export default function organizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
@@ -126,7 +127,8 @@ export default function organizationSidebar(): JSX.Element {
         <ListGroup variant="flush">
           {members && members.length ? (
             members.map((member: InterfaceMemberInfo) => {
-              const memberName = `${member.firstName} ${member.lastName}`;
+              const memberName = getUserDisplayName(member);
+
               return (
                 <ListGroup.Item
                   key={member._id}
