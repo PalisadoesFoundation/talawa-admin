@@ -174,7 +174,7 @@
     "lint-staged": "^15.3.0",
     "nyc": "^17.1.0",
     "postcss-modules": "^6.0.1",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "sass": "^1.91.0",
     "start-server-and-test": "^2.0.12",
     "tsx": "^4.19.1",
@@ -217,12 +217,6 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "graphql": "^16.5.0"
-  },
-  "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.46.2",
-    "@rollup/rollup-darwin-x64": "^4.46.2",
-    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
   },
   "engines": {
     "node": ">=20.x"
