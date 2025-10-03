@@ -89,13 +89,14 @@
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
-    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node fix-repo-url.js",
-    "generate-docs": "typedoc && npm run postgenerate-docs && node fix-readme-links.js",
+    "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node scripts/docs/fix-repo-url.js",
+    "generate-docs": "typedoc && npm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
     "cypress:run": "cypress run && nyc report --reporter=text-summary",
     "cypress:open": "cypress open",
     "start-server": "start-server-and-test serve http://localhost:4321",
     "cy:open": "npm run start-server cypress:open",
-    "cy:run": "cross-env CYPRESS_COVERAGE=true npm run start-server cypress:run"
+    "cy:run": "cross-env CYPRESS_COVERAGE=true npm run start-server cypress:run",
+    "check:pom": "node scripts/githooks/check_pom.js"
   },
   "eslintConfig": {
     "extends": [
@@ -136,7 +137,7 @@
     "@types/inquirer": "^9.0.7",
     "@types/jest": "^29.5.14",
     "@types/js-cookie": "^3.0.6",
-    "@types/node": "^22.9.0",
+    "@types/node": "^24.3.0",
     "@types/node-fetch": "^2.6.10",
     "@types/react": "^18.3.12",
     "@types/react-beautiful-dnd": "^13.1.8",
@@ -173,7 +174,7 @@
     "lint-staged": "^16.1.5",
     "nyc": "^17.1.0",
     "postcss-modules": "^6.0.1",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "sass": "^1.91.0",
     "start-server-and-test": "^2.0.12",
     "tsx": "^4.19.1",
@@ -217,14 +218,8 @@
     "@types/react-dom": "^18.3.1",
     "graphql": "^16.5.0"
   },
-  "optionalDependencies": {
-    "@rollup/rollup-darwin-arm64": "^4.46.2",
-    "@rollup/rollup-darwin-x64": "^4.46.2",
-    "@rollup/rollup-linux-x64-gnu": "^4.46.2",
-    "@rollup/rollup-win32-x64-msvc": "^4.46.2"
-  },
   "engines": {
-    "node": ">=20.17"
+    "node": ">=24.x"
   },
   "overrides": {
     "whatwg-url": "^14.0.0",
