@@ -713,4 +713,141 @@ describe('Testing ItemViewModal', () => {
       });
     });
   });
+
+  describe('Edge Cases for User Resolution', () => {
+    it('should handle when memberFromQuery exists but has no display name', async () => {
+      const item = createActionItem({
+        assigneeId: 'userId3',
+        assignee: null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        // userId3 has empty name, so should show "Unknown"
+        expect(inputElement).toHaveValue('Unknown');
+      });
+    });
+
+    it('should handle when both fallbackUser and memberFromQuery have no display name', async () => {
+      const item = createActionItem({
+        assigneeId: 'userId3',
+        assignee: {
+          id: 'userId3',
+          name: '',
+          emailAddress: 'empty@example.com',
+          avatarURL: '',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('Unknown');
+      });
+    });
+  });
+
+  describe('Event Name Edge Cases', () => {
+    it('should display "No event" when event has null name and null title', () => {
+      const item = createActionItem({
+        event: {
+          ...mockEvent,
+          name: null as unknown as string,
+          title: null as unknown as string,
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('No event');
+      expect(eventInput).toBeInTheDocument();
+    });
+
+    it('should display "No event" when event has undefined name and title', () => {
+      const item = createActionItem({
+        event: {
+          ...mockEvent,
+          name: undefined as unknown as string,
+          title: undefined as unknown as string,
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('No event');
+      expect(eventInput).toBeInTheDocument();
+    });
+
+    it('should display "No event" when recurringEventInstance is undefined', () => {
+      const item = createActionItem({
+        event: null,
+        recurringEventInstance: undefined as unknown as null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('No event');
+      expect(eventInput).toBeInTheDocument();
+    });
+  });
+
+  describe('Completion Date Edge Cases', () => {
+    it('should not render completion date when isCompleted is true but completionAt is null', () => {
+      const item = createActionItem({
+        isCompleted: true,
+        completionAt: null,
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Only assignment date should be present, not completion date
+      expect(screen.getByDisplayValue('01/01/2024')).toBeInTheDocument();
+      expect(screen.queryByDisplayValue('10/01/2024')).not.toBeInTheDocument();
+    });
+
+    it('should not render completion date when isCompleted is false even if completionAt exists', () => {
+      const item = createActionItem({
+        isCompleted: false,
+        completionAt: new Date('2024-01-10T15:30:00.000Z'),
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      // Completion date should not be rendered
+      expect(screen.queryByLabelText(t.completionDate)).not.toBeInTheDocument();
+    });
+  });
 });
