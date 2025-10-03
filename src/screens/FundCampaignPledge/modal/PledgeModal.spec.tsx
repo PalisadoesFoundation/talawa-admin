@@ -639,4 +639,43 @@ describe('PledgeModal', () => {
       );
     });
   });
+
+  /**
+   * Test case to verify that clearing a selected pledger in create mode works correctly
+   */
+  it('should allow clearing pledger selection in create mode', async () => {
+    const link1 = new StaticMockLink([MEMBERS_MOCK, MOCK_PLEDGE_DATA], true);
+
+    const props = createPledgeProps();
+
+    renderPledgeModal(link1, props);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument(),
+    );
+
+    // Select a pledger first
+    const pledgerSelect = screen.getByTestId('pledgerSelect');
+    const autocomplete = within(pledgerSelect).getByRole('combobox');
+
+    fireEvent.mouseDown(autocomplete);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('John Doe'));
+
+    await waitFor(() => {
+      expect(autocomplete).toHaveValue('John Doe');
+    });
+
+    // Now clear the selection
+    const clearButton = within(pledgerSelect).getByTitle('Clear');
+    fireEvent.click(clearButton);
+
+    await waitFor(() => {
+      expect(autocomplete).toHaveValue('');
+    });
+  });
 });
