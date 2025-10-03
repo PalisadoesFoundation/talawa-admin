@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import AttendedEventList from './AttendedEventList';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
@@ -78,6 +78,46 @@ describe('Testing AttendedEventList', () => {
       const link = container.querySelector('a');
       expect(link).not.toBeNull();
       expect(link).toHaveAttribute('href', expect.stringContaining('/event/'));
+    });
+  });
+
+  it('falls back to "Unnamed Event" when name and title are missing', async () => {
+    const unnamedEvent = {
+      ...MOCKEVENT,
+      name: null,
+      title: null,
+    };
+
+    const fallbackMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: unnamedEvent,
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={fallbackMock} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AttendedEventList {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Unnamed Event')).toBeInTheDocument();
+      const row = screen.getByRole('row', {
+        name: /Event: Unnamed Event/i,
+      });
+      expect(row).toBeInTheDocument();
     });
   });
 });

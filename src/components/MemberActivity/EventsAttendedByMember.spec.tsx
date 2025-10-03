@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
-import { mocks, errorMocks } from './MemberActivityMocks';
+import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { mocks, errorMocks, mockEventData } from './MemberActivityMocks';
 
 describe('EventsAttendedByMember', () => {
   test('renders loading state initially', () => {
@@ -48,5 +49,40 @@ describe('EventsAttendedByMember', () => {
 
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(screen.getByText('Test Location')).toBeInTheDocument();
+  });
+
+  test('uses organization fallback _id when id is missing', async () => {
+    const fallbackOrgMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              ...mockEventData.event,
+              organization: {
+                ...mockEventData.event.organization,
+                id: undefined,
+                _id: 'orgFallback',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <BrowserRouter>
+        <MockedProvider mocks={fallbackOrgMock}>
+          <EventsAttendedByMember eventsId="event123" />
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    const card = await screen.findByTestId('EventsAttendedCard');
+    const link = within(card).getByRole('link');
+    expect(link).toHaveAttribute('href', '/event/orgFallback/event123');
   });
 });

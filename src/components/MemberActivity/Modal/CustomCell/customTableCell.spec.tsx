@@ -135,4 +135,54 @@ describe('CustomTableCell', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('uses fallback fields when primary data is missing', async () => {
+    const fallbackEventMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              ...mockEventData.event,
+              name: null,
+              title: 'Legacy Title',
+              recurring: false,
+              isRecurringEventTemplate: false,
+              attendees: undefined,
+              organization: {
+                ...mockEventData.event.organization,
+                id: undefined,
+                _id: 'legacy-org',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={fallbackEventMock} addTypename={false}>
+        <BrowserRouter>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event123" />
+            </tbody>
+          </table>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Legacy Title')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
+
+    const link = screen.getByRole('link', { name: 'Legacy Title' });
+    expect(link).toHaveAttribute('href', '/event/legacy-org/event123');
+  });
 });
