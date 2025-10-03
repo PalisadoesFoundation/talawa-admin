@@ -13,6 +13,11 @@ export class AdminEventPage {
   private readonly _deleteEventModalBtn = '[data-cy="deleteEventModalBtn"]';
   private readonly _deleteEventBtn = '[data-testid="deleteEventBtn"]';
 
+  visitEventPage(): void {
+    cy.get(this._eventsTabButton).should('be.visible').click();
+    cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
+  }
+
   createEvent(title: string, description: string, location: string): void {
     cy.get(this._createEventModalButton).should('be.visible').click();
     cy.get(this._eventTitleInput).should('be.visible').type(title);
