@@ -47,6 +47,7 @@ const mocks = [
           recurring: true,
           baseRecurringEvent: {
             id: 'base123',
+            _id: 'base123',
           },
           createdAt: '2023-01-01T00:00:00.000Z',
           updatedAt: '2023-01-01T00:00:00.000Z',
@@ -102,6 +103,28 @@ const mocks = [
               { _id: 'user2', gender: 'FEMALE' },
               { _id: 'user3', gender: 'OTHER' },
             ],
+          },
+        ],
+      },
+    },
+  },
+];
+
+const invalidDateMocks = [
+  mocks[0],
+  {
+    request: {
+      query: RECURRING_EVENTS,
+      variables: { baseRecurringEventId: 'base123' },
+    },
+    result: {
+      data: {
+        getRecurringEvents: [
+          {
+            _id: 'event123',
+            startDate: 'invalid-date',
+            title: 'Broken Event',
+            attendees: [{ _id: 'user1', gender: 'MALE' }],
           },
         ],
       },
@@ -259,6 +282,97 @@ describe('AttendanceStatisticsModal', () => {
     });
 
     expect(mockExportToCSV).toHaveBeenCalled();
+  });
+
+  it('logs an error when exporting trends fails', async () => {
+    const mockExportToCSV = vi.fn(() => {
+      throw new Error('boom');
+    });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: 'Export Data' }),
+      ).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Export Data' }),
+      );
+      await userEvent.click(screen.getByTestId('trends-export'));
+    });
+
+    expect(
+      errorSpy.mock.calls.some(
+        ([message]) => message === 'Failed to export trends:',
+      ),
+    ).toBe(true);
+    errorSpy.mockRestore();
+  });
+
+  it('falls back to invalid date label for malformed recurring event dates', async () => {
+    const mockExportToCSV = vi.fn();
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={invalidDateMocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: 'Export Data' }),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('today-button')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      await userEvent.click(
+        screen.getByRole('button', { name: 'Export Data' }),
+      );
+      await userEvent.click(screen.getByTestId('trends-export'));
+    });
+
+    await waitFor(() => {
+      expect(mockExportToCSV).toHaveBeenCalled();
+      const [exportData] = mockExportToCSV.mock.calls[0];
+      expect(Array.isArray(exportData)).toBe(true);
+      expect(exportData.length).toBeGreaterThan(1);
+      const serializedData = JSON.stringify(exportData);
+      expect(serializedData).toContain('Invalid date');
+      expect(serializedData).toContain('→');
+    });
+
+    expect(
+      errorSpy.mock.calls.some(
+        ([message]) =>
+          typeof message === 'string' &&
+          message.includes('Invalid date for event'),
+      ),
+    ).toBe(true);
+    errorSpy.mockRestore();
   });
 
   it('displays recurring event data correctly', async () => {

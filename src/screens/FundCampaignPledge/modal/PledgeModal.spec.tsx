@@ -194,6 +194,10 @@ describe('PledgeModal', () => {
     });
   });
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   afterAll(() => {
     vi.clearAllMocks();
   });
@@ -243,6 +247,16 @@ describe('PledgeModal', () => {
 
     fireEvent.change(amountInput, { target: { value: '200' } });
     expect(amountInput).toHaveAttribute('value', '200');
+  });
+
+  it('should ignore non-numeric amount input', () => {
+    renderPledgeModal(link1, pledgeProps[1]);
+    const amountInput = screen.getByLabelText('Amount');
+    fireEvent.change(amountInput, { target: { value: '150' } });
+    expect(amountInput).toHaveAttribute('value', '150');
+
+    fireEvent.change(amountInput, { target: { value: 'abc' } });
+    expect(amountInput).toHaveAttribute('value', '150');
   });
 
   it('should not update pledgeAmount when input value is less than or equal to 0', async () => {
@@ -310,6 +324,24 @@ describe('PledgeModal', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Failed to create pledge');
+    });
+  });
+
+  it('should surface validation error when submitting without selecting pledger', async () => {
+    const props = { ...pledgeProps[0], refetchPledge: vi.fn(), hide: vi.fn() };
+    renderPledgeModal(link1, props);
+
+    const amountInput = screen.getByLabelText('Amount');
+    fireEvent.change(amountInput, { target: { value: '100' } });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('submitPledgeBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to create pledge');
+      expect(props.refetchPledge).not.toHaveBeenCalled();
+      expect(props.hide).not.toHaveBeenCalled();
     });
   });
 
