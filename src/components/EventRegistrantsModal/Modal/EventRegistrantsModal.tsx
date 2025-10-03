@@ -215,6 +215,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
           <Autocomplete
             id="addRegistrant"
+            value={member}
             onChange={(_, newMember): void => {
               setMember(newMember);
             }}

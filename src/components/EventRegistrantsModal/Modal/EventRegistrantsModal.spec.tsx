@@ -17,24 +17,56 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi } from 'vitest';
 
-const queryMockWithoutRegistrant = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: { id: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          attendees: [],
-        },
-      },
-    },
-  },
-];
+vi.mock('./AddOnSpotAttendee', async () => {
+  const React = await vi.importActual<typeof import('react')>('react');
 
-const queryMockWithRegistrant = [
-  {
+  return {
+    AddOnSpotAttendee: ({
+      show,
+      handleClose,
+      reloadMembers,
+    }: {
+      show: boolean;
+      handleClose: () => void;
+      reloadMembers: () => void;
+    }) => {
+      React.useEffect(() => {
+        if (show) {
+          reloadMembers();
+          setTimeout(() => {
+            handleClose();
+          }, 0);
+        }
+      }, [show, reloadMembers, handleClose]);
+
+      if (!show) {
+        return null;
+      }
+
+      return (
+        <div data-testid="add-onspot-modal">Mock Add Onspot Attendee</div>
+      );
+    },
+  };
+});
+
+const createEventAttendeesMock = (
+  attendees: Array<{
+    _id: string | null;
+    id?: string | null;
+    name?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    createdAt?: string | null;
+    gender?: string | null;
+    birthDate?: string | null;
+    eventsAttended?: {
+      _id: string;
+    } | null;
+  }>,
+  occurrences = 1,
+) =>
+  Array.from({ length: occurrences }, () => ({
     request: {
       query: EVENT_ATTENDEES,
       variables: { id: 'event123' },
@@ -42,25 +74,50 @@ const queryMockWithRegistrant = [
     result: {
       data: {
         event: {
-          attendees: [
-            {
-              _id: 'user1',
-              name: 'John Doe',
-              firstName: 'John',
-              lastName: 'Doe',
-              createdAt: '2023-01-01',
-              gender: 'Male',
-              birthDate: '1990-01-01',
-              eventsAttended: {
-                _id: 'event123',
-              },
-            },
-          ],
+          attendees,
         },
       },
     },
-  },
-];
+  }));
+
+const queryMockWithoutRegistrant = createEventAttendeesMock([], 2);
+
+const queryMockWithRegistrant = createEventAttendeesMock(
+  [
+    {
+      _id: 'user1',
+      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
+      createdAt: '2023-01-01',
+      gender: 'Male',
+      birthDate: '1990-01-01',
+      eventsAttended: {
+        _id: 'event123',
+      },
+    },
+  ],
+  2,
+);
+
+const queryMockWithUnknownRegistrant = createEventAttendeesMock(
+  [
+    {
+      _id: null,
+      id: null,
+      name: null,
+      firstName: null,
+      lastName: null,
+      createdAt: null,
+      gender: null,
+      birthDate: null,
+      eventsAttended: {
+        _id: 'event123',
+      },
+    },
+  ],
+  2,
+);
 
 const queryMockOrgMembers = [
   {
@@ -346,6 +403,47 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() =>
       expect(queryByText('Error removing attendee')).toBeInTheDocument(),
+    );
+  });
+
+  test('Attendee without identifiers uses fallback UI and prevents deletion', async () => {
+    const { queryByText, getByTestId } = render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[
+          ...queryMockWithUnknownRegistrant,
+          ...queryMockOrgMembers,
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => expect(queryByText('Unknown')).toBeInTheDocument());
+    await waitFor(() => expect(queryByText('?')).toBeInTheDocument());
+
+    const deleteButton = getByTestId('CancelIcon');
+    fireEvent.click(deleteButton);
+
+    await waitFor(() =>
+      expect(queryByText('Unable to remove this attendee.')).toBeInTheDocument(),
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Removing the attendee...')).not.toBeInTheDocument(),
     );
   });
   test('Autocomplete functionality works correctly', async () => {
