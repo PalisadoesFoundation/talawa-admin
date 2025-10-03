@@ -28,13 +28,14 @@ const mockedUseMediaQuery = vi.mocked(useMediaQuery);
 describe('PaginationList', () => {
   const theme = createTheme();
 
-  const renderComponent = (): void => {
+  const renderComponent = (overrides = {}): void => {
     const props = {
       count: 25,
       rowsPerPage: 5,
       page: 0,
       onPageChange: vi.fn(),
       onRowsPerPageChange: vi.fn(),
+      ...overrides,
     };
 
     render(
