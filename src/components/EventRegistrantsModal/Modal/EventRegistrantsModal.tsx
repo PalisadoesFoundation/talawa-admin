@@ -89,18 +89,6 @@ export const areMembersEqual = (
   value: InterfaceUser,
 ): boolean => option.id === value.id;
 
-++ b/src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx
-@@ -92,7 +92,6 @@
--export const reloadAttendees = (
--  refetch: () => Promise<unknown> | void,
--): void => {
--  void refetch();
--};
-@@ -183,7 +182,7 @@
-         reloadMembers={() => {
-          void attendeesRefetch();
-         }}
-
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
@@ -186,7 +174,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           show={open}
           handleClose={() => setOpen(false)}
           reloadMembers={() => {
-            reloadAttendees(attendeesRefetch);
+            void attendeesRefetch();
           }}
         />
         <Modal.Header closeButton className="bg-primary">
