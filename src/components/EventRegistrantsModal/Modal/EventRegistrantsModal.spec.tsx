@@ -24,7 +24,7 @@ const {
   areMembersEqual,
 } = EventRegistrantsModalModule;
 
-vi.mock('./AddOnSpotAttendee', async () => {
+vi.mock('./AddOnSpot/AddOnSpotAttendee', async () => {
   const React = await vi.importActual<typeof import('react')>('react');
 
   return {
@@ -52,7 +52,6 @@ vi.mock('./AddOnSpotAttendee', async () => {
     },
   };
 });
-
 const createEventAttendeesMock = (
   attendees: Array<{
     _id: string | null;
