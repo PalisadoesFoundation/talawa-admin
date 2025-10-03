@@ -43,9 +43,7 @@ vi.mock('./AddOnSpotAttendee', async () => {
         return null;
       }
 
-      return (
-        <div data-testid="add-onspot-modal">Mock Add Onspot Attendee</div>
-      );
+      return <div data-testid="add-onspot-modal">Mock Add Onspot Attendee</div>;
     },
   };
 });
@@ -410,10 +408,7 @@ describe('Testing Event Registrants Modal', () => {
     const { queryByText, getByTestId } = render(
       <MockedProvider
         addTypename={false}
-        mocks={[
-          ...queryMockWithUnknownRegistrant,
-          ...queryMockOrgMembers,
-        ]}
+        mocks={[...queryMockWithUnknownRegistrant, ...queryMockOrgMembers]}
       >
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -439,7 +434,9 @@ describe('Testing Event Registrants Modal', () => {
     fireEvent.click(deleteButton);
 
     await waitFor(() =>
-      expect(queryByText('Unable to remove this attendee.')).toBeInTheDocument(),
+      expect(
+        queryByText('Unable to remove this attendee.'),
+      ).toBeInTheDocument(),
     );
 
     await waitFor(() =>
