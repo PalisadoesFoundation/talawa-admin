@@ -764,7 +764,7 @@ describe('CampaignModal', () => {
     renderCampaignModal(link1, createProps);
 
     await waitFor(() => {
-      expect(screen.getByTestId('campaignModalCloseBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('campaignCloseBtn')).toBeInTheDocument();
     });
 
     // Fill in name and goal
@@ -772,7 +772,7 @@ describe('CampaignModal', () => {
       translations.campaignName,
     ) as HTMLInputElement;
     const campaignGoalInput = screen.getByLabelText(
-      translations.goal,
+      translations.fundingGoal,
     ) as HTMLInputElement;
 
     fireEvent.change(campaignNameInput, { target: { value: 'Test Campaign' } });
