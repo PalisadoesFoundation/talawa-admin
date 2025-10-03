@@ -543,4 +543,29 @@ describe('Event Registrants helpers', () => {
     expect(areMembersEqual(option, sameIdValue)).toBe(true);
     expect(areMembersEqual(option, differentIdValue)).toBe(false);
   });
+
+  test('getAttendeeDisplayName returns "Unknown" when all name fields missing', () => {
+    const attendee: InterfaceUser = {
+      id: 'user-x',
+      createdAt: new Date(),
+      email: 'noid@example.com',
+    };
+
+    expect(getAttendeeDisplayName(attendee)).toBe('Unknown');
+  });
+
+  test('areMembersEqual handles null/undefined inputs', () => {
+    const user: InterfaceUser = {
+      id: 'user-3',
+      createdAt: new Date(),
+      email: 'test@example.com',
+    };
+
+    expect(areMembersEqual(null, user)).toBe(false);
+    expect(areMembersEqual(user, null)).toBe(false);
+    expect(areMembersEqual(null, null)).toBe(false);
+    expect(areMembersEqual(undefined, user)).toBe(false);
+    expect(areMembersEqual(user, undefined)).toBe(false);
+    expect(areMembersEqual(undefined, undefined)).toBe(false);
+  });
 });

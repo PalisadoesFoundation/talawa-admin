@@ -749,4 +749,42 @@ describe('CampaignModal', () => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
+
+  it('should show validation error when submitting without required dates in create mode', async () => {
+    const createProps: InterfaceCampaignModal = {
+      isOpen: true,
+      hide: vi.fn(),
+      campaign: null,
+      fundId: 'fundId',
+      orgId: 'orgId',
+      mode: 'create',
+      refetchCampaign: vi.fn(),
+    };
+
+    renderCampaignModal(link1, createProps);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('campaignModalCloseBtn')).toBeInTheDocument();
+    });
+
+    // Fill in name and goal
+    const campaignNameInput = screen.getByLabelText(
+      translations.campaignName,
+    ) as HTMLInputElement;
+    const campaignGoalInput = screen.getByLabelText(
+      translations.goal,
+    ) as HTMLInputElement;
+
+    fireEvent.change(campaignNameInput, { target: { value: 'Test Campaign' } });
+    fireEvent.change(campaignGoalInput, { target: { value: '1000' } });
+
+    // Try to submit without dates (dates are null in create mode by default)
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    // Should show validation error
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
 });

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:760](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L760)
+Defined in: [src/utils/interfaces.ts:761](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L761)
 
 InterfaceOrganizationAdvertisementsConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization advertisements connection 
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:761](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L761)
+Defined in: [src/utils/interfaces.ts:762](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L762)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`InterfaceAdvertisementPg`](InterfaceAdvertisementPg.md)
 
-Defined in: [src/utils/interfaces.ts:762](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L762)
+Defined in: [src/utils/interfaces.ts:763](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L763)
 
 The advertisement node.

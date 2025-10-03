@@ -313,6 +313,32 @@ describe('PledgeModal', () => {
     expect(datePicker).toHaveClass('Mui-disabled');
   });
 
+  it('should verify date input wrappers are rendered', () => {
+    renderPledgeModal(link1, pledgeProps[0]);
+
+    // Verify the wrapper divs with data-testid are in the document
+    expect(screen.getByTestId('start-date-input')).toBeInTheDocument();
+    expect(screen.getByTestId('end-date-input')).toBeInTheDocument();
+  });
+
+  it('should verify date inputs exist within wrappers in edit mode', () => {
+    renderPledgeModal(link1, pledgeProps[1]);
+
+    const startDateWrapper = screen.getByTestId('start-date-input');
+    const endDateWrapper = screen.getByTestId('end-date-input');
+
+    expect(startDateWrapper).toBeInTheDocument();
+    expect(endDateWrapper).toBeInTheDocument();
+
+    // Verify DatePickers are disabled in edit mode
+    expect(startDateWrapper.querySelector('.MuiFormControl-root')).toHaveClass(
+      'Mui-disabled',
+    );
+    expect(endDateWrapper.querySelector('.MuiFormControl-root')).toHaveClass(
+      'Mui-disabled',
+    );
+  });
+
   it('should handle create pledge error', async () => {
     renderPledgeModal(errorLink, pledgeProps[0]);
 

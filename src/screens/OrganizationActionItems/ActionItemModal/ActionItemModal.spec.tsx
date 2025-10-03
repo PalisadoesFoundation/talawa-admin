@@ -676,6 +676,31 @@ describe('ItemModal - Specific Test Coverage', () => {
       // Verify the field is empty
       expect(notesField).toHaveValue('');
     });
+
+    it('should render assignment date input wrapper in create mode', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // Verify the wrapper div with data-testid is rendered
+      const dateInputWrapper = screen.getByTestId('assignment-date-input');
+      expect(dateInputWrapper).toBeInTheDocument();
+      expect(
+        dateInputWrapper.querySelector('.MuiFormControl-root'),
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Modal Structure', () => {
