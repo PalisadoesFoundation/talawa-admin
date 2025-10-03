@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import * as EventRegistrantsModalModule from './EventRegistrantsModal';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {

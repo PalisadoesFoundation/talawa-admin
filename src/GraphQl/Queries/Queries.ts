@@ -292,7 +292,7 @@ export const EVENT_DETAILS = gql`
         id
       }
       attendees {
-        _id
+        id
       }
       creator {
         id
@@ -307,10 +307,6 @@ export const EVENT_DETAILS = gql`
       organization {
         id
         name
-        organization {
-          id
-          name
-        }
       }
     }
   }

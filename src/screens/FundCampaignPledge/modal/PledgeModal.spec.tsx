@@ -293,16 +293,16 @@ describe('PledgeModal', () => {
     renderPledgeModal(link1, pledgeProps[1]);
     const startDateInput = screen.getByTestId('start-date-input');
     expect(startDateInput).toBeInTheDocument();
-    const datePicker = startDateInput.querySelector('.MuiFormControl-root');
-    expect(datePicker).toHaveClass('Mui-disabled');
+    const input = within(startDateInput).getByRole('textbox');
+    expect(input).toBeDisabled();
   });
 
   it('should display end date as disabled input', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
     const endDateInput = screen.getByTestId('end-date-input');
     expect(endDateInput).toBeInTheDocument();
-    const datePicker = endDateInput.querySelector('.MuiFormControl-root');
-    expect(datePicker).toHaveClass('Mui-disabled');
+    const input = within(endDateInput).getByRole('textbox');
+    expect(input).toBeDisabled();
   });
 
   it('should update end date if start date is after current end date', () => {
@@ -331,12 +331,10 @@ describe('PledgeModal', () => {
     expect(endDateWrapper).toBeInTheDocument();
 
     // Verify DatePickers are disabled in edit mode
-    expect(startDateWrapper.querySelector('.MuiFormControl-root')).toHaveClass(
-      'Mui-disabled',
-    );
-    expect(endDateWrapper.querySelector('.MuiFormControl-root')).toHaveClass(
-      'Mui-disabled',
-    );
+    const startInput = within(startDateWrapper).getByRole('textbox');
+    const endInput = within(endDateWrapper).getByRole('textbox');
+    expect(startInput).toBeDisabled();
+    expect(endInput).toBeDisabled();
   });
 
   it('should handle create pledge error', async () => {
@@ -393,13 +391,11 @@ describe('PledgeModal', () => {
     const startDateInput = screen.getByTestId('start-date-input');
     const endDateInput = screen.getByTestId('end-date-input');
 
-    const startDatePicker = startDateInput.querySelector(
-      '.MuiFormControl-root',
-    );
-    const endDatePicker = endDateInput.querySelector('.MuiFormControl-root');
+    const startInput = within(startDateInput).getByRole('textbox');
+    const endInput = within(endDateInput).getByRole('textbox');
 
-    expect(startDatePicker).toHaveClass('Mui-disabled');
-    expect(endDatePicker).toHaveClass('Mui-disabled');
+    expect(startInput).toBeDisabled();
+    expect(endInput).toBeDisabled();
   });
 
   it('should enforce campaign end date as the max date', async () => {

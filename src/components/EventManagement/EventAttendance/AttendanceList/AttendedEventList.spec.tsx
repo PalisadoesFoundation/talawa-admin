@@ -72,11 +72,8 @@ describe('Testing AttendedEventList', () => {
           variables: { eventId: 'event123' },
         },
         result: {
-          data: {
-            error: {
-              message: 'Event not accessible',
-            },
-          },
+          data: null,
+          errors: [{ message: 'Event not accessible' }],
         },
       },
     ];
