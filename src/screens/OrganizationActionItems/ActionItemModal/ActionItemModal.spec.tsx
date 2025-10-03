@@ -77,8 +77,6 @@ const mockQueries = [
         usersByOrganizationId: [
           {
             id: 'user1',
-            firstName: 'John',
-            lastName: 'Doe',
             image: null,
             name: 'John Doe',
             emailAddress: 'john@example.com',
@@ -89,8 +87,6 @@ const mockQueries = [
           },
           {
             id: 'user2',
-            firstName: 'Jane',
-            lastName: 'Smith',
             image: null,
             name: 'Jane Smith',
             emailAddress: 'jane@example.com',

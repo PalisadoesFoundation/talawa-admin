@@ -607,4 +607,146 @@ describe('CampaignModal', () => {
       expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
+
+  it('should show error when trying to create campaign without dates', async () => {
+    const createPropsNoDates = {
+      ...campaignProps[0],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: null as unknown as Date,
+        endAt: null as unknown as Date,
+        currencyCode: 'USD',
+        createdAt: '2021-01-01T00:00:00.000Z',
+      },
+    };
+
+    renderCampaignModal(link1, createPropsNoDates);
+
+    const campaignName = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(campaignName, { target: { value: 'Campaign No Dates' } });
+
+    const fundingGoal = screen.getByLabelText(translations.fundingGoal);
+    fireEvent.change(fundingGoal, { target: { value: '200' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Campaign start and end dates are required',
+      );
+    });
+  });
+
+  it('should set startAt to null when clearing start date in edit mode', async () => {
+    const UPDATE_START_DATE_NULL_MOCK = [
+      {
+        request: {
+          query: UPDATE_CAMPAIGN_MUTATION,
+          variables: {
+            input: {
+              id: 'campaignId1',
+              startAt: null,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateFundCampaign: {
+              id: 'campaignId1',
+            },
+          },
+        },
+      },
+    ];
+
+    const startDateNullMockLink = new StaticMockLink(
+      UPDATE_START_DATE_NULL_MOCK,
+    );
+
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: new Date('2025-01-01T00:00:00.000Z'),
+        endAt: new Date('2026-01-01T00:00:00.000Z'),
+        currencyCode: 'USD',
+        createdAt: '2021-01-01T00:00:00.000Z',
+      },
+    };
+
+    renderCampaignModal(startDateNullMockLink, editProps);
+
+    // Clear the start date
+    const startDateInput = screen
+      .getAllByLabelText('Start Date')
+      .at(-1) as HTMLInputElement;
+    fireEvent.change(startDateInput, { target: { value: null } });
+
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+    });
+  });
+
+  it('should set endAt to null when clearing end date in edit mode', async () => {
+    const UPDATE_END_DATE_NULL_MOCK = [
+      {
+        request: {
+          query: UPDATE_CAMPAIGN_MUTATION,
+          variables: {
+            input: {
+              id: 'campaignId1',
+              endAt: null,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateFundCampaign: {
+              id: 'campaignId1',
+            },
+          },
+        },
+      },
+    ];
+
+    const endDateNullMockLink = new StaticMockLink(UPDATE_END_DATE_NULL_MOCK);
+
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: new Date('2025-01-01T00:00:00.000Z'),
+        endAt: new Date('2026-01-01T00:00:00.000Z'),
+        currencyCode: 'USD',
+        createdAt: '2021-01-01T00:00:00.000Z',
+      },
+    };
+
+    renderCampaignModal(endDateNullMockLink, editProps);
+
+    // Clear the end date
+    const endDateInput = screen
+      .getAllByLabelText('End Date')
+      .at(-1) as HTMLInputElement;
+    fireEvent.change(endDateInput, { target: { value: null } });
+
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+    });
+  });
 });

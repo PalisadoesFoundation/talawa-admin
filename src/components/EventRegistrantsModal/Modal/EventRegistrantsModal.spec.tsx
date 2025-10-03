@@ -45,6 +45,7 @@ const queryMockWithRegistrant = [
           attendees: [
             {
               _id: 'user1',
+                  name: 'John Doe',
               firstName: 'John',
               lastName: 'Doe',
               createdAt: '2023-01-01',
@@ -65,24 +66,19 @@ const queryMockOrgMembers = [
   {
     request: {
       query: MEMBERS_LIST,
-      variables: { id: 'org123' },
+      variables: { organizationId: 'org123' },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'org123',
-            members: [
-              {
-                _id: 'user1',
-                firstName: 'John',
-                lastName: 'Doe',
-                image: null,
-                email: 'johndoe@example.com',
-                createdAt: '2023-01-01',
-                organizationsBlockedBy: [],
-              },
-            ],
+            id: 'user1',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+            role: 'REGULAR',
+            avatarURL: null,
+            createdAt: '2023-01-01',
+            updatedAt: '2023-01-01',
           },
         ],
       },
@@ -93,16 +89,11 @@ const queryMockWithoutOrgMembers = [
   {
     request: {
       query: MEMBERS_LIST,
-      variables: { id: 'org123' },
+      variables: { organizationId: 'org123' },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: 'org123',
-            members: [],
-          },
-        ],
+        usersByOrganizationId: [],
       },
     },
   },

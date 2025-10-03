@@ -30,24 +30,19 @@ const queryMock = [
   {
     request: {
       query: MEMBERS_LIST,
-      variables: { id: 'org123' },
+      variables: { organizationId: 'org123' },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'org123',
-            members: [
-              {
-                _id: 'user1',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@palisadoes.com',
-                image: '',
-                createdAt: '12/12/22',
-                organizationsBlockedBy: [],
-              },
-            ],
+            id: 'user1',
+            name: 'John Doe',
+            emailAddress: 'johndoe@palisadoes.com',
+            role: 'REGULAR',
+            avatarURL: '',
+            createdAt: '12/12/22',
+            updatedAt: '12/12/22',
           },
         ],
       },

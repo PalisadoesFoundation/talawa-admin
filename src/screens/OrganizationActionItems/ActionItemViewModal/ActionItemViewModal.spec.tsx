@@ -56,8 +56,6 @@ const mockMembers = [
     avatarURL: 'https://example.com/avatar1.jpg',
     createdAt: '2024-01-01T00:00:00.000Z',
     updatedAt: '2024-01-02T00:00:00.000Z',
-    firstName: 'John',
-    lastName: 'Doe',
   },
   {
     id: 'userId2',
@@ -67,14 +65,10 @@ const mockMembers = [
     avatarURL: null,
     createdAt: '2024-01-01T00:00:00.000Z',
     updatedAt: '2024-01-05T00:00:00.000Z',
-    firstName: 'Jane',
-    lastName: 'Smith',
   },
   {
     id: 'userId3',
     name: '',
-    firstName: 'Bob',
-    lastName: 'Johnson',
     emailAddress: 'bob@example.com',
     role: 'REGULAR',
     avatarURL: null,
@@ -336,9 +330,15 @@ describe('Testing ItemViewModal', () => {
       expect(inputElement).toHaveValue('Fallback Assignee');
     });
 
-    it('should display name from firstName and lastName when name is not available', async () => {
+    it('should display "Unknown" when member name is missing', async () => {
       const item = createActionItem({
-        assigneeId: 'userId3', // This user has firstName/lastName but no name
+        assigneeId: 'userId3', // Member entry has no display name
+        assignee: {
+          id: 'userId3',
+          name: '',
+          emailAddress: 'bob@example.com',
+          avatarURL: '',
+        },
       });
 
       renderItemViewModal(link1, {
@@ -350,7 +350,7 @@ describe('Testing ItemViewModal', () => {
       await waitFor(() => {
         const assigneeInput = screen.getByTestId('assignee_input');
         const inputElement = assigneeInput.querySelector('input');
-        expect(inputElement).toHaveValue('Bob Johnson');
+        expect(inputElement).toHaveValue('Unknown');
       });
     });
 

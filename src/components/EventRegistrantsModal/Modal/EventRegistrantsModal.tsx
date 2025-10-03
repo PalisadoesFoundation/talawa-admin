@@ -38,7 +38,7 @@
  * - `react-toastify` for toast notifications.
  * - `react-i18next` for translations.
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
@@ -87,8 +87,38 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   } = useQuery(EVENT_ATTENDEES, { variables: { id: eventId } });
 
   const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+    variables: { organizationId: orgId },
   });
+
+  const organizationMembers = useMemo(
+    () => memberData?.usersByOrganizationId ?? [],
+    [memberData],
+  );
+
+  const getAttendeeDisplayName = (attendee: InterfaceUser): string => {
+    const fallbackName = `${attendee.firstName ?? ''} ${attendee.lastName ?? ''}`.trim();
+    const name = attendee.name?.trim() || fallbackName;
+    return name.length > 0 ? name : 'Unknown';
+  };
+
+  const getAttendeeInitials = (attendee: InterfaceUser): string => {
+    const name = getAttendeeDisplayName(attendee);
+    if (!name || name === 'Unknown') {
+      return '?';
+    }
+
+    const words = name.split(/\s+/).filter(Boolean);
+    if (words.length === 0) {
+      return '?';
+    }
+
+    const initials = words
+      .slice(0, 2)
+      .map((word) => word[0]?.toUpperCase() ?? '')
+      .join('');
+
+    return initials || '?';
+  };
 
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
@@ -156,17 +186,29 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             ? `There are no registered attendees for this event.`
             : null}
           <Stack direction="row" className="flex-wrap gap-2">
-            {attendeesData.event.attendees.map((attendee: InterfaceUser) => (
-              <Chip
-                avatar={
-                  <Avatar>{`${attendee.firstName[0]}${attendee.lastName[0]}`}</Avatar>
-                }
-                label={`${attendee.firstName} ${attendee.lastName}`}
-                variant="outlined"
-                key={attendee.id}
-                onDelete={(): void => deleteRegistrant(attendee.id)}
-              />
-            ))}
+            {attendeesData.event.attendees.map(
+              (attendee: InterfaceUser & { _id?: string }, index: number) => {
+                const attendeeId = attendee.id ?? attendee._id ?? '';
+
+                const handleDelete = (): void => {
+                  if (!attendeeId) {
+                    toast.error('Unable to remove this attendee.');
+                    return;
+                  }
+                  deleteRegistrant(attendeeId);
+                };
+
+                return (
+                  <Chip
+                    avatar={<Avatar>{getAttendeeInitials(attendee)}</Avatar>}
+                    label={getAttendeeDisplayName(attendee)}
+                    variant="outlined"
+                    key={attendeeId || `attendee-${index}`}
+                    onDelete={handleDelete}
+                  />
+                );
+              },
+            )}
           </Stack>
           <br />
 
@@ -188,10 +230,13 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 </span>
               </div>
             }
-            options={memberData.organizations[0].members}
-            getOptionLabel={(member: InterfaceUser): string =>
-              `${member.firstName} ${member.lastName}`
-            }
+            options={organizationMembers}
+            getOptionLabel={(member: InterfaceUser): string => {
+              const fallbackName = `${member.firstName ?? ''} ${member.lastName ?? ''}`.trim();
+              const name = member.name?.trim() || fallbackName;
+              return name.length > 0 ? name : 'Unknown';
+            }}
+            isOptionEqualToValue={(option, value): boolean => option.id === value.id}
             renderInput={(params): React.ReactNode => (
               <TextField
                 {...params}

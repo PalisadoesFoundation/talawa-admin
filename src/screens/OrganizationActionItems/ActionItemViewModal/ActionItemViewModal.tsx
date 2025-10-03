@@ -58,32 +58,65 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const members = membersData?.usersByOrganizationId || [];
 
-  const assignee = assigneeId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === assigneeId || member.id === assigneeId,
-      )
-    : item.assignee;
+  type ResolvedUser = InterfaceUser | NonNullable<IActionItemInfo['assignee']>;
 
-  const creator = creatorId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === creatorId || member.id === creatorId,
-      )
-    : item.creator;
+  const resolveUser = (
+    memberFromQuery: InterfaceUser | undefined,
+    fallbackUser: IActionItemInfo['assignee'],
+  ): ResolvedUser | null => {
+    if (memberFromQuery) {
+      const hasDisplayName = Boolean(
+        memberFromQuery.name?.trim() ||
+          `${memberFromQuery.firstName ?? ''}${memberFromQuery.lastName ?? ''}`.trim(),
+      );
+
+      if (hasDisplayName) {
+        return memberFromQuery;
+      }
+    }
+
+    if (fallbackUser) {
+      return fallbackUser;
+    }
+
+    return memberFromQuery ?? null;
+  };
+
+  const assignee = resolveUser(
+    assigneeId
+      ? members.find((member: InterfaceUser) => member.id === assigneeId)
+      : undefined,
+    item.assignee,
+  );
+
+  const creator = resolveUser(
+    creatorId
+      ? members.find((member: InterfaceUser) => member.id === creatorId)
+      : undefined,
+    item.creator,
+  );
 
   const category = categoryData?.actionItemCategory || item.category;
 
   // Helper function to get display name from user object
   const getUserDisplayName = (
-    user: InterfaceUser | null | undefined,
+    user: ResolvedUser | null | undefined,
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
-      return user.name;
+    const nameFromField = user.name?.trim();
+    if (nameFromField) {
+      return nameFromField;
     }
-    return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
+
+    if ('firstName' in user || 'lastName' in user) {
+      const fallbackName = `${(user as InterfaceUser).firstName ?? ''} ${(user as InterfaceUser).lastName ?? ''}`.trim();
+      if (fallbackName) {
+        return fallbackName;
+      }
+    }
+
+    return 'Unknown';
   };
 
   const getEventDisplayName = (
