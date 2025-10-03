@@ -330,6 +330,30 @@ describe('Testing ItemViewModal', () => {
       expect(inputElement).toHaveValue('Fallback Assignee');
     });
 
+    it('should use fallback assignee when member has no display name', async () => {
+      const item = createActionItem({
+        assigneeId: 'userId3',
+        assignee: {
+          id: 'userId3',
+          name: 'Resolved Fallback',
+          emailAddress: 'fallback@example.com',
+          avatarURL: 'https://example.com/fallback-avatar.jpg',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        const assigneeInput = screen.getByTestId('assignee_input');
+        const inputElement = assigneeInput.querySelector('input');
+        expect(inputElement).toHaveValue('Resolved Fallback');
+      });
+    });
+
     it('should display "Unknown" when member name is missing', async () => {
       const item = createActionItem({
         assigneeId: 'userId3', // Member entry has no display name
@@ -469,6 +493,44 @@ describe('Testing ItemViewModal', () => {
       });
 
       const eventInput = screen.getByDisplayValue('No event');
+      expect(eventInput).toBeInTheDocument();
+    });
+
+    it('should use event title when name is missing', () => {
+      const item = createActionItem({
+        event: {
+          ...mockEvent,
+          name: undefined as unknown as string,
+          title: 'Fallback Title',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('Fallback Title');
+      expect(eventInput).toBeInTheDocument();
+    });
+
+    it('should display recurring event name when provided', () => {
+      const item = createActionItem({
+        event: null,
+        recurringEventInstance: {
+          ...mockEvent,
+          name: 'Recurring Event Name',
+        },
+      });
+
+      renderItemViewModal(link1, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      const eventInput = screen.getByDisplayValue('Recurring Event Name');
       expect(eventInput).toBeInTheDocument();
     });
   });

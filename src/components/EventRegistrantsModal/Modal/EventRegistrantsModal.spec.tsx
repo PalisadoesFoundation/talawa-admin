@@ -27,29 +27,33 @@ const {
 vi.mock('./AddOnSpot/AddOnSpotAttendee', async () => {
   const React = await vi.importActual<typeof import('react')>('react');
 
-  return {
-    AddOnSpotAttendee: ({
-      show,
-      handleClose,
-      reloadMembers,
-    }: {
-      show: boolean;
-      handleClose: () => void;
-      reloadMembers: () => void;
-    }) => {
-      React.useEffect(() => {
-        if (show) {
-          reloadMembers();
-          handleClose();
-        }
-      }, [show, reloadMembers, handleClose]);
-
-      if (!show) {
-        return null;
+  const MockAddOnSpotAttendee = ({
+    show,
+    handleClose,
+    reloadMembers,
+  }: {
+    show: boolean;
+    handleClose: () => void;
+    reloadMembers: () => void;
+  }) => {
+    React.useEffect(() => {
+      if (show) {
+        reloadMembers();
+        handleClose();
       }
+    }, [show, reloadMembers, handleClose]);
 
-      return <div data-testid="add-onspot-modal">Mock Add Onspot Attendee</div>;
-    },
+    if (!show) {
+      return null;
+    }
+
+    return <div data-testid="add-onspot-modal">Mock Add Onspot Attendee</div>;
+  };
+
+  return {
+    __esModule: true,
+    default: MockAddOnSpotAttendee,
+    AddOnSpotAttendee: MockAddOnSpotAttendee,
   };
 });
 const createEventAttendeesMock = (

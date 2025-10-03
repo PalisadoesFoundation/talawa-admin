@@ -58,8 +58,46 @@ describe('Testing AttendedEventList', () => {
 
     await waitFor(() => {
       expect(queryByText('Loading...')).not.toBeInTheDocument();
-      // The component doesn't explicitly render an error message, so we just check that the event details are not rendered
-      expect(queryByText('Test Event')).not.toBeInTheDocument();
+      expect(
+        queryByText('Error loading event details. Please try again later.'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('Component handles GraphQL data errors gracefully', async () => {
+    const dataErrorMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            error: {
+              message: 'Event not accessible',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={dataErrorMock} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AttendedEventList {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Error loading event details. Please try again later.',
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText('Test Event')).not.toBeInTheDocument();
     });
   });
 
