@@ -291,6 +291,9 @@ export const EVENT_DETAILS = gql`
       baseRecurringEvent {
         id
       }
+      attendees {
+        _id
+      }
       creator {
         id
         name
@@ -304,6 +307,7 @@ export const EVENT_DETAILS = gql`
       organization {
         id
         name
+        _id
       }
     }
   }

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
-import { mocks } from '../../MemberActivityMocks';
+import { mockEventData, mocks } from '../../MemberActivityMocks';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -47,9 +47,22 @@ describe('CustomTableCell', () => {
     expect(link).toHaveAttribute('href', '/event/org123/event123');
   });
 
-  it('displays loading state', () => {
+  it('displays loading state', async () => {
+    const loadingMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: mockEventData,
+        },
+        delay: 50,
+      },
+    ];
+
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={loadingMock} addTypename={false}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />
@@ -58,7 +71,7 @@ describe('CustomTableCell', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
   });
 
   it('displays error state', async () => {

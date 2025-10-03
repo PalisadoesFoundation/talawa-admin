@@ -8,7 +8,13 @@ import {
 } from '@testing-library/react';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
-import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
+import {
+  BrowserRouter,
+  MemoryRouter,
+  Route,
+  Routes,
+  useParams,
+} from 'react-router-dom';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
 // Helper type for Calendar event items
@@ -78,14 +84,40 @@ vi.mock('@apollo/client', async () => {
   } as unknown as typeof import('@apollo/client');
 });
 
+vi.mock('components/EventListCard/EventListCard', () => ({
+  __esModule: true,
+  default: ({ name }: { name?: string }) => (
+    <div data-testid="event-card">{name ?? ''}</div>
+  ),
+}));
+
 const renderWithRouterAndPath = (
   ui: React.ReactElement,
   { route = '/organization/org1' } = {},
 ): ReturnType<typeof render> => {
   // Use MemoryRouter with initialEntries to set the path in the router context
+  const Wrapper: React.FC = () => ui;
+
   return render(
     <MemoryRouter initialEntries={[route]}>
-      <Suspense fallback={<div>Loading...</div>}>{ui}</Suspense>
+      <Routes>
+        <Route
+          path="/organization/:orgId/*"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Wrapper />
+            </Suspense>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Wrapper />
+            </Suspense>
+          }
+        />
+      </Routes>
     </MemoryRouter>,
   );
 };
@@ -524,14 +556,14 @@ describe('Calendar Component', () => {
   });
 
   it('includes private events for REGULAR users who are org members', async () => {
-    // Use a date format that matches the component's date filtering
-    const currentYear = new Date().getFullYear();
+    // Use today's date to ensure the event appears on the calendar
+    const today = new Date();
     const privateEventToday = {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
-      startDate: `${currentYear}-01-15T12:00:00.000Z`, // Full ISO format with time
-      endDate: `${currentYear}-01-15T13:00:00.000Z`,
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
@@ -566,30 +598,32 @@ describe('Calendar Component', () => {
 
     await findAllByTestId('day');
 
-    // Look specifically for an expand button (events are present)
+    // The key assertion: verify that a REGULAR user who is an org member
+    // can see private events (expand button should exist)
+    await waitFor(
+      () => {
+        const expandButton = container.querySelector(
+          '[data-testid^="expand-btn-"]',
+        );
+        expect(expandButton).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
     const expandButton = container.querySelector(
       '[data-testid^="expand-btn-"]',
     );
-    expect(expandButton).toBeInTheDocument();
 
     if (expandButton) {
       await act(async () => {
         fireEvent.click(expandButton);
       });
+
+      // The private event title should be visible after expanding
+      await waitFor(() => {
+        expect(screen.getByText('Member Private Event')).toBeInTheDocument();
+      });
     }
-
-    // Check that the component renders and the test data structure is correct
-    await waitFor(() => {
-      const expandedList = container.querySelector(
-        '._expand_event_list_d8535b',
-      );
-      expect(expandedList).toBeInTheDocument();
-    });
-
-    // Stronger assertion: the private event title should be visible to a REGULAR member
-    await waitFor(() => {
-      expect(screen.getByText('Member Private Event')).toBeInTheDocument();
-    });
   });
 
   it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
@@ -685,15 +719,15 @@ describe('Calendar Component', () => {
   });
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
-    // Use a date format that matches the component's date filtering
-    const currentYear = new Date().getFullYear();
+    // Use today's date to ensure the event appears on the calendar
+    const today = new Date();
     const eventWithoutAttendees: CalendarEventItem = {
       _id: 'no-attendees',
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
-      startDate: `${currentYear}-01-20`, // Dynamic date format
-      endDate: `${currentYear}-01-20`,
+      startDate: today.toISOString(),
+      endDate: today.toISOString(),
       startTime: '09:00:00',
       endTime: '10:00:00',
       allDay: false,
@@ -712,25 +746,33 @@ describe('Calendar Component', () => {
 
     await findAllByTestId('day');
 
-    // Look specifically for an expand button (events are present)
+    // Verify that the event without attendees still renders an expand button
+    await waitFor(
+      () => {
+        const expandButton = container.querySelector(
+          '[data-testid^="expand-btn-"]',
+        );
+        expect(expandButton).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
     const expandButton = container.querySelector(
       '[data-testid^="expand-btn-"]',
     );
-    expect(expandButton).toBeInTheDocument();
 
     if (expandButton) {
       await act(async () => {
         fireEvent.click(expandButton);
       });
-    }
 
-    // Check that the component renders and the test data structure is correct
-    await waitFor(() => {
-      const expandedList = container.querySelector(
-        '._expand_event_list_d8535b',
-      );
-      expect(expandedList).toBeInTheDocument();
-    });
+      // Verify event name is shown even when attendees is undefined
+      await waitFor(() => {
+        expect(
+          screen.getByText(eventWithoutAttendees.name),
+        ).toBeInTheDocument();
+      });
+    }
   });
 
   test('filters events correctly when userRole is undefined but eventData contains events', async () => {

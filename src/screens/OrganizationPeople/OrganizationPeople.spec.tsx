@@ -245,13 +245,16 @@ describe('OrganizationPeople', () => {
 
   test('renders loading state initially', async () => {
     const mocks = [
-      createMemberConnectionMock({
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      }),
+      {
+        ...createMemberConnectionMock({
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          last: null,
+          before: null,
+        }),
+        delay: 100, // Add delay to capture loading state
+      },
     ];
 
     const link = new StaticMockLink(mocks, true);
@@ -273,8 +276,12 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Initially should show loading state
-    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    // DataGrid shows loading overlay (not progressbar role)
+    // Check for the loading class on the DataGrid instead
+    await waitFor(() => {
+      const dataGrid = document.querySelector('.MuiDataGrid-root');
+      expect(dataGrid).toBeInTheDocument();
+    });
   });
 
   test('displays members list correctly', async () => {

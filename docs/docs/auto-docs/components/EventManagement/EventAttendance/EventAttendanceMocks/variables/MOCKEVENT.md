@@ -10,66 +10,90 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 ## Type declaration
 
-### \_id
-
-> **\_id**: `string` = `'event123'`
-
 ### allDay
 
 > **allDay**: `boolean` = `false`
 
-### attendees
+### createdAt
 
-> **attendees**: `object`[]
+> **createdAt**: `string` = `'2030-04-01T00:00:00Z'`
 
-### baseRecurringEvent
+### creator
 
-> **baseRecurringEvent**: `object`
+> **creator**: `object`
 
-#### baseRecurringEvent.\_id
+#### creator.emailAddress
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **emailAddress**: `string` = `'creator@example.com'`
+
+#### creator.id
+
+> **id**: `string` = `'creator1'`
+
+#### creator.name
+
+> **name**: `string` = `'John Creator'`
 
 ### description
 
 > **description**: `string` = `'This is a test event description'`
 
-### endDate
+### endAt
 
-> **endDate**: `string` = `'2030-05-02'`
+> **endAt**: `string` = `'2030-05-02T17:00:00Z'`
 
-### endTime
+### id
 
-> **endTime**: `string` = `'17:00:00'`
+> **id**: `string` = `'event123'`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 
 > **location**: `string` = `'Test Location'`
 
+### name
+
+> **name**: `string` = `'Test Event'`
+
 ### organization
 
 > **organization**: `object`
 
-#### organization.\_id
+#### organization.id
 
-> **\_id**: `string` = `'org456'`
+> **id**: `string` = `'org456'`
 
-#### organization.members
+#### organization.name
 
-> **members**: `object`[]
+> **name**: `string` = `'Test Organization'`
 
-### recurring
+### startAt
 
-> **recurring**: `boolean` = `true`
+> **startAt**: `string` = `'2030-05-01T09:00:00Z'`
 
-### startDate
+### updatedAt
 
-> **startDate**: `string` = `'2030-05-01'`
+> **updatedAt**: `string` = `'2030-04-01T00:00:00Z'`
 
-### startTime
+### updater
 
-> **startTime**: `string` = `'09:00:00'`
+> **updater**: `object`
 
-### title
+#### updater.emailAddress
 
-> **title**: `string` = `'Test Event'`
+> **emailAddress**: `string` = `'updater@example.com'`
+
+#### updater.id
+
+> **id**: `string` = `'updater1'`
+
+#### updater.name
+
+> **name**: `string` = `'Jane Updater'`
