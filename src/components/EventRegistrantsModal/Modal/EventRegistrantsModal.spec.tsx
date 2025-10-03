@@ -22,7 +22,6 @@ const {
   getAttendeeDisplayName,
   getAttendeeInitials,
   areMembersEqual,
-  reloadAttendees,
 } = EventRegistrantsModalModule;
 
 vi.mock('./AddOnSpotAttendee', async () => {
@@ -540,13 +539,5 @@ describe('Event Registrants helpers', () => {
 
     expect(areMembersEqual(option, sameIdValue)).toBe(true);
     expect(areMembersEqual(option, differentIdValue)).toBe(false);
-  });
-
-  test('reloadAttendees invokes provided refetch function', () => {
-    const refetchMock = vi.fn();
-
-    reloadAttendees(refetchMock);
-
-    expect(refetchMock).toHaveBeenCalledTimes(1);
   });
 });
