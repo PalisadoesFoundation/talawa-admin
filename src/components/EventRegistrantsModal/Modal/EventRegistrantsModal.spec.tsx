@@ -568,4 +568,101 @@ describe('Event Registrants helpers', () => {
     expect(areMembersEqual(user, undefined)).toBe(false);
     expect(areMembersEqual(undefined, undefined)).toBe(false);
   });
+
+  test('areMembersEqual compares users by _id when id is not available', () => {
+    const option = {
+      _id: 'user-legacy-1',
+      createdAt: new Date(),
+      email: 'option@example.com',
+    } as InterfaceUser & { _id: string };
+
+    const sameIdValue = {
+      _id: 'user-legacy-1',
+      createdAt: new Date(),
+      email: 'value@example.com',
+    } as InterfaceUser & { _id: string };
+
+    const differentIdValue = {
+      _id: 'user-legacy-2',
+      createdAt: new Date(),
+      email: 'different@example.com',
+    } as InterfaceUser & { _id: string };
+
+    expect(areMembersEqual(option, sameIdValue)).toBe(true);
+    expect(areMembersEqual(option, differentIdValue)).toBe(false);
+  });
+
+  test('areMembersEqual prefers id over _id when both are present', () => {
+    const option = {
+      id: 'user-new-1',
+      _id: 'user-old-1',
+      createdAt: new Date(),
+      email: 'option@example.com',
+    } as InterfaceUser & { _id: string };
+
+    const sameIdValue = {
+      id: 'user-new-1',
+      _id: 'user-old-different',
+      createdAt: new Date(),
+      email: 'value@example.com',
+    } as InterfaceUser & { _id: string };
+
+    expect(areMembersEqual(option, sameIdValue)).toBe(true);
+  });
+
+  test('areMembersEqual returns false when neither id nor _id is present', () => {
+    const option = {
+      createdAt: new Date(),
+      email: 'option@example.com',
+    } as InterfaceUser;
+
+    const value = {
+      createdAt: new Date(),
+      email: 'value@example.com',
+    } as InterfaceUser;
+
+    expect(areMembersEqual(option, value)).toBe(false);
+  });
+
+  test('areMembersEqual returns false when only one user has an ID', () => {
+    const userWithId: InterfaceUser = {
+      id: 'user-1',
+      createdAt: new Date(),
+      email: 'withid@example.com',
+    };
+
+    const userWithoutId = {
+      createdAt: new Date(),
+      email: 'withoutid@example.com',
+    } as InterfaceUser;
+
+    expect(areMembersEqual(userWithId, userWithoutId)).toBe(false);
+    expect(areMembersEqual(userWithoutId, userWithId)).toBe(false);
+  });
+
+  test('areMembersEqual handles mixed id and _id scenarios', () => {
+    const userWithId: InterfaceUser = {
+      id: 'user-new',
+      createdAt: new Date(),
+      email: 'new@example.com',
+    };
+
+    const userWithUnderscoreId = {
+      _id: 'user-old',
+      createdAt: new Date(),
+      email: 'old@example.com',
+    } as InterfaceUser & { _id: string };
+
+    // Different users with different ID types should not be equal
+    expect(areMembersEqual(userWithId, userWithUnderscoreId)).toBe(false);
+
+    // But if the _id matches the id value, they should be equal
+    const matchingUser = {
+      _id: 'user-new',
+      createdAt: new Date(),
+      email: 'matching@example.com',
+    } as InterfaceUser & { _id: string };
+
+    expect(areMembersEqual(userWithId, matchingUser)).toBe(true);
+  });
 });
