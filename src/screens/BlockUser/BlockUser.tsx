@@ -68,6 +68,7 @@ import type {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -306,7 +307,7 @@ const BlockUser = (): JSX.Element => {
                           data-testid={`blockUser${user.id}`}
                         >
                           <FontAwesomeIcon
-                            icon={faBan}
+                            icon={faBan as IconProp}
                             className={styles.banIcon}
                           />
                           {t('block')}
@@ -347,7 +348,7 @@ const BlockUser = (): JSX.Element => {
                         data-testid={`blockUser${user.id}`}
                       >
                         <FontAwesomeIcon
-                          icon={faUserPlus}
+                          icon={faUserPlus as IconProp}
                           className={styles.unbanIcon}
                         />
                         {t('unblock')}
