@@ -313,68 +313,6 @@ describe('PaginationList Component', () => {
         window.dispatchEvent(new Event('resize'));
       }
     });
-
-    it('should render mobile layout with empty rowsPerPageOptions at small viewport', () => {
-      // Set mobile viewport
-      const originalInnerWidth = window.innerWidth;
-      try {
-        // Set mobile viewport
-        Object.defineProperty(window, 'innerWidth', {
-          writable: true,
-          configurable: true,
-          value: 375,
-        });
-        window.dispatchEvent(new Event('resize'));
-
-        const { container } = renderPaginationList();
-
-        // Verify mobile colSpan
-        const mobileCells = container.querySelectorAll('td[colspan="5"]');
-
-        // Note: MUI Hidden removes mobile elements (colspan="5") in JSDOM test environment
-        // Conditional guard prevents false failures when mobile view is not rendered
-        if (mobileCells.length > 0) {
-          const mobileCell = mobileCells[0];
-          const selectInMobile = mobileCell.querySelector('select');
-
-          // Mobile view should have no select options (rowsPerPageOptions=[])
-          if (selectInMobile) {
-            const options = selectInMobile.querySelectorAll('option');
-            expect(options.length).toBe(0);
-          }
-        }
-      } finally {
-        Object.defineProperty(window, 'innerWidth', {
-          writable: true,
-          configurable: true,
-          value: originalInnerWidth,
-        });
-        window.dispatchEvent(new Event('resize'));
-      }
-    });
-  });
-
-  it('should verify mobile view has no select options (rowsPerPageOptions=[])', () => {
-    const { container } = renderPaginationList();
-
-    const allCells = container.querySelectorAll('td');
-    let mobileCell = null;
-
-    for (const cell of allCells) {
-      if (cell.getAttribute('colspan') === '5') {
-        mobileCell = cell;
-        break;
-      }
-    }
-    // Note: MUI Hidden removes mobile elements in JSDOM test environment
-    // Conditional is intentional - validates behavior when mobile cell exists
-    if (mobileCell) {
-      const selectInMobileCell = mobileCell.querySelector('select');
-      if (selectInMobileCell) {
-        const options = selectInMobileCell.querySelectorAll('option');
-        expect(options.length).toBe(0);
-      }
-    }
   });
 });
 
