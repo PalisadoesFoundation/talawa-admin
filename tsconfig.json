@@ -1,6 +1,13 @@
 {
   "compilerOptions": {
-    "types": ["vite/client", "vite-plugin-svgr/client", "node"],
+    "types": [
+      "react",
+      "react-dom",
+      "vite/client",
+      "vite-plugin-svgr/client",
+      "node",
+      "vitest/globals"
+    ],
     "baseUrl": "src",
     "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
