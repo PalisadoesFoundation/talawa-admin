@@ -147,9 +147,8 @@ describe('PaginationList Component', () => {
       expect(allOption).toBeTruthy();
 
       const tableCell = desktopPagination.closest('td');
-      if (tableCell) {
-        expect(tableCell).toHaveAttribute('colspan', '4');
-      }
+      expect(tableCell).not.toBeNull();
+      expect(tableCell).toHaveAttribute('colspan', '4');
     });
 
     it('should render with correct count and display range', () => {
