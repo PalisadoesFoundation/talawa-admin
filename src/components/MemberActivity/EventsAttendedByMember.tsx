@@ -59,7 +59,7 @@ function EventsAttendedByMember({
 
   const { organization, id: eventId, name, startAt, location } = events.event;
 
-  const organizationId = organization?.id;
+  const organizationId = organization?.id ?? organization?._id;
 
   return (
     <EventAttendedCard
