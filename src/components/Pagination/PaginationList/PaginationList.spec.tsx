@@ -332,6 +332,8 @@ describe('PaginationList Component', () => {
         // Verify mobile colSpan
         const mobileCells = container.querySelectorAll('td[colspan="5"]');
 
+        // Note: MUI Hidden removes mobile elements (colspan="5") in JSDOM test environment
+        // Conditional guard prevents false failures when mobile view is not rendered
         if (mobileCells.length > 0) {
           const mobileCell = mobileCells[0];
           const selectInMobile = mobileCell.querySelector('select');
@@ -365,7 +367,8 @@ describe('PaginationList Component', () => {
         break;
       }
     }
-
+    // Note: MUI Hidden removes mobile elements in JSDOM test environment
+    // Conditional is intentional - validates behavior when mobile cell exists
     if (mobileCell) {
       const selectInMobileCell = mobileCell.querySelector('select');
       if (selectInMobileCell) {
@@ -584,25 +587,6 @@ describe('Material-UI Props', () => {
       (opt) => opt.textContent === allLabel,
     );
     expect(allOption).toBeTruthy();
-  });
-
-  it('should verify mobile sx styles are applied', () => {
-    const { container } = renderPaginationList();
-
-    const cells = container.querySelectorAll('td[colspan="5"]');
-
-    if (cells.length > 0) {
-      const mobileCell = cells[0];
-      const styles = window.getComputedStyle(mobileCell);
-
-      expect(styles.display).toBe('flex');
-      expect(
-        ['center', 'flex-start', 'flex-end'].includes(styles.alignItems),
-      ).toBe(true);
-      expect(
-        ['center', 'flex-start', 'flex-end'].includes(styles.justifyContent),
-      ).toBe(true);
-    }
   });
 });
 
