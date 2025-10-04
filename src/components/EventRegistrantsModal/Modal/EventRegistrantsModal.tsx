@@ -87,7 +87,20 @@ export const getAttendeeInitials = (attendee: InterfaceUser): string => {
 export const areMembersEqual = (
   option?: InterfaceUser | null,
   value?: InterfaceUser | null,
-): boolean => !!option && !!value && option.id === value.id;
+): boolean => {
+  if (!option || !value) {
+    return false;
+  }
+  const optionId = option.id ?? (option as { _id?: string })?._id;
+  const valueId = value.id ?? (value as { _id?: string })?._id;
+
+  if (!optionId || !valueId) {
+    return false;
+  }
+
+  return optionId === valueId;
+};
+
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);

@@ -155,7 +155,7 @@
     "babel-plugin-istanbul": "^7.0.0",
     "babel-plugin-transform-import-meta": "~2.3.3",
     "cross-env": "^7.0.3",
-    "cypress": "14.3.0",
+    "cypress": "14.4.1",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-import": "^2.31.0",

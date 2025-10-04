@@ -24,10 +24,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
-    server: {
-      deps: {
-        inline: ['@mui/x-data-grid'],
-      },
+    deps: {
+      inline: ['@mui/x-data-grid'],
     },
     coverage: {
       enabled: true,
