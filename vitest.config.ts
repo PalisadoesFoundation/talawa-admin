@@ -7,9 +7,12 @@ import svgrPlugin from 'vite-plugin-svgr';
 const cssPlugin = {
   name: 'vitest-css-mock',
   transform(code: string, id: string) {
-    if (id.endsWith('.css')) {
+    if (/\.(css|scss|sass|less)$/.test(id)) {
+      const isModule = /\.module\.(css|scss|sass|less)$/.test(id);
       return {
-        code: 'export default {}',
+        code: isModule
+          ? 'export default new Proxy({}, { get: (_, key) => key })'
+          : 'export default {}',
         map: null,
       };
     }

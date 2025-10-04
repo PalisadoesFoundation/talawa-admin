@@ -822,8 +822,8 @@ describe('EventListCardPreviewModal', () => {
     };
 
     const timeToDayJs = (time: string): dayjs.Dayjs => {
-      const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-      return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+      const dateTimeString = `${dayjs().format('YYYY-MM-DD')} ${time}`;
+      return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');
     };
 
     // Simulate the onChange handler logic from the actual component
@@ -884,8 +884,8 @@ describe('EventListCardPreviewModal', () => {
 
   test('timeToDayJs utility function works correctly', () => {
     const timeToDayJs = (time: string): dayjs.Dayjs => {
-      const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-      return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+      const dateTimeString = `${dayjs().format('YYYY-MM-DD')} ${time}`;
+      return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');
     };
 
     const result = timeToDayJs('14:30:00');
