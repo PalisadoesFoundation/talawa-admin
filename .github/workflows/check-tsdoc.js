@@ -66,10 +66,10 @@ async function run(directory = process.argv[2] || './src') {
   }
 }
 
-const modulePath = fileURLToPath(import.meta.url);
+ const modulePath = fileURLToPath(import.meta.url);
 
-if (process.argv[1] && path.resolve(process.argv[1]) === modulePath) {
-  run();
-}
+if (process.argv[1] && fs.realpathSync(path.resolve(process.argv[1])) === fs.realpathSync(modulePath)) {
+   run();
+ }
 
 export { filesToSkip, findTsxFiles, containsTsDocComment, run };
