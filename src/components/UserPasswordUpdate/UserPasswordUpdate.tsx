@@ -42,6 +42,50 @@ import styles from '../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
 
+type MaybeWindow = {
+  location?: {
+    reload?: () => void;
+  };
+};
+
+const getClientWindow = (): Window | undefined =>
+  typeof window === 'undefined' ? undefined : window;
+
+type ScheduleFn = (callback: () => void, delay: number) => unknown;
+
+export const reloadIfClient = (
+  clientWindow?: MaybeWindow | Window,
+): boolean => {
+  const location = clientWindow?.location;
+  const reloadFn = location?.reload;
+
+  if (typeof reloadFn !== 'function') {
+    return false;
+  }
+
+  reloadFn.call(location);
+  return true;
+};
+
+export const handleSuccessfulPasswordUpdate = (
+  data: unknown,
+  notify: (message: string) => void,
+  successMessage: string,
+  reload: () => boolean,
+  schedule: ScheduleFn = (callback, delay) => setTimeout(callback, delay),
+): boolean => {
+  if (!data) {
+    return false;
+  }
+
+  notify(successMessage);
+  schedule(() => {
+    reload();
+  }, 2000);
+
+  return true;
+};
+
 interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
@@ -84,16 +128,12 @@ const UserUpdate: React.FC<
           confirmNewPassword: formState.confirmNewPassword,
         },
       });
-      if (data) {
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Password' }) as string,
-        );
-        setTimeout(() => {
-          if (typeof window !== 'undefined') {
-            window.location.reload();
-          }
-        }, 2000);
-      }
+      handleSuccessfulPasswordUpdate(
+        data,
+        (message) => toast.success(message),
+        tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+        () => reloadIfClient(getClientWindow()),
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.toString());
@@ -106,9 +146,7 @@ const UserUpdate: React.FC<
    * It reloads the page to reset any changes.
    */
   const cancelUpdate = (): void => {
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
+    reloadIfClient(getClientWindow());
   };
 
   return (

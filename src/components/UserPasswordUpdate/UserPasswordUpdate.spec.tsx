@@ -4,7 +4,10 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import UserPasswordUpdate from './UserPasswordUpdate';
+import UserPasswordUpdate, {
+  handleSuccessfulPasswordUpdate,
+  reloadIfClient,
+} from './UserPasswordUpdate';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast as mockToast } from 'react-toastify';
 import { MOCKS } from './UserPasswordUpdateMocks';
@@ -265,5 +268,64 @@ describe('Testing User Password Update', () => {
 
     await userEvent.click(screen.getByText(/Cancel/i));
     expect(mockReload).toHaveBeenCalled();
+  });
+});
+
+describe('reloadIfClient helper', () => {
+  it('returns false when no reload function is available', () => {
+    expect(reloadIfClient(undefined)).toBe(false);
+    expect(reloadIfClient({ location: {} } as unknown as Window)).toBe(false);
+  });
+
+  it('invokes reload when provided', () => {
+    const reload = vi.fn();
+    const mockWindow = {
+      location: {
+        reload,
+      },
+    } as unknown as Window;
+
+    expect(reloadIfClient(mockWindow)).toBe(true);
+    expect(reload).toHaveBeenCalled();
+  });
+});
+
+describe('handleSuccessfulPasswordUpdate helper', () => {
+  it('skips notification when data is falsy', () => {
+    const notify = vi.fn();
+    const reload = vi.fn();
+    const schedule = vi.fn();
+
+    const result = handleSuccessfulPasswordUpdate(
+      undefined,
+      notify,
+      'Success message',
+      reload,
+      schedule,
+    );
+
+    expect(result).toBe(false);
+    expect(notify).not.toHaveBeenCalled();
+    expect(schedule).not.toHaveBeenCalled();
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  it('notifies and schedules reload when data is present', () => {
+    const notify = vi.fn();
+    const reload = vi.fn().mockReturnValue(true);
+    const schedule = vi.fn((callback: () => void) => callback());
+
+    const result = handleSuccessfulPasswordUpdate(
+      { users: [] },
+      notify,
+      'Success message',
+      reload,
+      schedule,
+    );
+
+    expect(result).toBe(true);
+    expect(notify).toHaveBeenCalledWith('Success message');
+    expect(schedule).toHaveBeenCalled();
+    expect(reload).toHaveBeenCalled();
   });
 });
