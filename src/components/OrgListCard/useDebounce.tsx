@@ -32,20 +32,24 @@ function useDebounce<T extends (...args: unknown[]) => void>(
   callback: T,
   delay: number,
 ): { debouncedCallback: (...args: Parameters<T>) => void; cancel: () => void } {
-  const timeoutRef = useRef<number | undefined>();
+  const timeoutRef = useRef<number | null>(null);
 
   const debouncedCallback = useCallback(
     (...args: Parameters<T>) => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(() => {
         callback(...args);
+        timeoutRef.current = null;
       }, delay);
     },
     [callback, delay],
   );
 
   const cancel = useCallback(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
   }, []);
 
   return { debouncedCallback, cancel };

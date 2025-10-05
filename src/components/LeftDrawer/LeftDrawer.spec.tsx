@@ -223,6 +223,19 @@ describe('LeftDrawer Component', () => {
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
     });
 
+    it('renders navigation buttons as non-submitting buttons', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('organizationsBtn')).toHaveAttribute(
+        'type',
+        'button',
+      );
+      expect(screen.getByTestId('pluginStoreBtn')).toHaveAttribute(
+        'type',
+        'button',
+      );
+    });
+
     it('does not hide drawer on desktop view navigation button clicks', () => {
       // Mock window.innerWidth for desktop view
       Object.defineProperty(window, 'innerWidth', {
