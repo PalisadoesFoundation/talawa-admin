@@ -89,7 +89,9 @@ const UserUpdate: React.FC<
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
         );
         setTimeout(() => {
-          window.location.reload();
+          if (typeof window !== 'undefined') {
+            window.location.reload();
+          }
         }, 2000);
       }
     } catch (error: unknown) {
@@ -104,7 +106,9 @@ const UserUpdate: React.FC<
    * It reloads the page to reset any changes.
    */
   const cancelUpdate = (): void => {
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   return (
