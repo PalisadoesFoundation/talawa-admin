@@ -164,6 +164,7 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
     manifest.extensionPoints?.G1,
     manifest.extensionPoints?.G2,
     manifest.extensionPoints?.G3,
+    manifest.extensionPoints?.G4,
   ];
 
   injectorArrays.forEach((injectors, index) => {

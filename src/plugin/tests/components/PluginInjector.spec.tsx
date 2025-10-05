@@ -16,6 +16,12 @@ vi.mock('../../registry', () => ({
 
 const MockComponent = () => <div>Mock Component</div>;
 const MockFallback = () => <div>Mock Fallback</div>;
+const MockComponentWithProps = ({ content, postId }: any) => (
+  <div>
+    <span>Content: {content}</span>
+    <span>PostId: {postId}</span>
+  </div>
+);
 
 describe('PluginInjector', () => {
   beforeEach(() => {
@@ -226,5 +232,77 @@ describe('PluginInjector', () => {
 
     render(<PluginInjector injectorType="G1" />);
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
+  });
+
+  it('should pass data prop to injected components', () => {
+    const mockInjectors = [
+      {
+        pluginId: 'test-plugin',
+        injector: 'TestComponent',
+        description: 'Test injector',
+      },
+    ];
+
+    const testData = {
+      content: 'This is a test post content',
+      postId: '12345',
+    };
+
+    vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
+    vi.mocked(getPluginComponent).mockReturnValue(MockComponentWithProps);
+
+    render(<PluginInjector injectorType="G1" data={testData} />);
+
+    expect(
+      screen.getByText('Content: This is a test post content'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('PostId: 12345')).toBeInTheDocument();
+  });
+
+  it('should work without data prop (backward compatibility)', () => {
+    const mockInjectors = [
+      {
+        pluginId: 'test-plugin',
+        injector: 'TestComponent',
+        description: 'Test injector',
+      },
+    ];
+
+    vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
+    vi.mocked(getPluginComponent).mockReturnValue(MockComponent);
+
+    render(<PluginInjector injectorType="G1" />);
+
+    expect(screen.getByText('Mock Component')).toBeInTheDocument();
+  });
+
+  it('should pass complex data objects to injected components', () => {
+    const mockInjectors = [
+      {
+        pluginId: 'ai-summarizer',
+        injector: 'SummarizeButton',
+        description: 'AI Summarize Button',
+      },
+    ];
+
+    const complexData = {
+      content: 'Long post content to summarize',
+      postId: 'abc123',
+      userId: 'user456',
+      metadata: {
+        timestamp: '2025-10-05',
+        tags: ['ai', 'summary'],
+      },
+      callbacks: {
+        onSummarize: vi.fn(),
+      },
+    };
+
+    vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
+    vi.mocked(getPluginComponent).mockReturnValue(MockComponentWithProps);
+
+    render(<PluginInjector injectorType="G2" data={complexData} />);
+
+    expect(usePluginInjectors).toHaveBeenCalledWith('G2');
   });
 });

@@ -22,7 +22,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 > **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
-Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L232)
+Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L245)
 
 #### Type Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/P
 
 > **getExtensionRegistry**(): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
 
-Defined in: [src/plugin/managers/extension-registry.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L29)
+Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L30)
 
 #### Returns
 
@@ -70,7 +70,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:29](https://github.com/Pa
 
 > **registerExtensionPoints**(`pluginId`, `manifest`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L33)
+Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L34)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:33](https://github.com/Pa
 
 > **unregisterExtensionPoints**(`pluginId`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L226)
+Defined in: [src/plugin/managers/extension-registry.ts:239](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L239)
 
 #### Parameters
 

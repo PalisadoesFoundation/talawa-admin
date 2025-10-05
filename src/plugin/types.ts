@@ -57,7 +57,8 @@ export interface IExtensionPoints {
   // Injector extensions with descriptive IDs and descriptions
   G1?: IInjectorExtension[]; // General Injector 1 - Code injection for general components
   G2?: IInjectorExtension[]; // General Injector 2 - Code injection for general components
-  G3?: IInjectorExtension[]; // General Injector 3 - Code injection for general components
+  G3?: IInjectorExtension[]; // General Injector 3 - Organization posts
+  G4?: IInjectorExtension[]; // General Injector 4 - User portal posts
 }
 
 export interface IRouteExtension {
@@ -139,9 +140,10 @@ export interface IExtensionRegistry {
   DU1: IDrawerExtension[]; // Drawer User Org
   DU2: IDrawerExtension[]; // Drawer User Global
   // Injector extensions with descriptive IDs
-  G1: IInjectorExtension[]; // General Injector 1
-  G2: IInjectorExtension[]; // General Injector 2
-  G3: IInjectorExtension[]; // General Injector 3
+  G1: IInjectorExtension[]; // General Injector 1 - User transactions
+  G2: IInjectorExtension[]; // General Injector 2 - Organization transactions
+  G3: IInjectorExtension[]; // General Injector 3 - Organization posts
+  G4: IInjectorExtension[]; // General Injector 4 - User portal posts
 }
 
 // Enums

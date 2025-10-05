@@ -193,7 +193,7 @@ export function useLoadedPlugins() {
  * Hook to get plugin injector extensions
  */
 export function usePluginInjectors(
-  injectorType: 'G1' | 'G2' | 'G3' = 'G1',
+  injectorType: 'G1' | 'G2' | 'G3' | 'G4' = 'G1',
 ): any[] {
   const [injectors, setInjectors] = useState<any[]>([]);
 

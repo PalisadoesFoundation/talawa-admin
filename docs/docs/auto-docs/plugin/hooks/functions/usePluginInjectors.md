@@ -14,7 +14,7 @@ Hook to get plugin injector extensions
 
 ### injectorType
 
-`"G1"` | `"G2"` | `"G3"`
+`"G1"` | `"G2"` | `"G3"` | `"G4"`
 
 ## Returns
 
