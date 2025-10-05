@@ -137,10 +137,10 @@
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.3.0",
     "@types/node-fetch": "^2.6.10",
-    "@types/react": "^18.3.12",
+    "@types/react": "^19.1.1",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-bootstrap": "^1.0.1",
-    "@types/react-dom": "^18.3.1",
+    "@types/react-dom": "^19.1.1",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/react-router-dom": "^5.1.8",
     "@types/sanitize-html": "^2.16.0",
@@ -169,7 +169,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-localstorage-mock": "^2.4.19",
     "jest-location-mock": "^2.0.0",
-    "lint-staged": "^16.1.5",
+    "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
     "postcss-modules": "^6.0.1",
     "prettier": "^3.6.2",
@@ -211,15 +211,14 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "^3.4.0-beta.19",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "graphql": "^16.5.0"
+    "@apollo/client": "^3.4.0-beta.19"
   },
   "engines": {
     "node": ">=24.x"
   },
   "overrides": {
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.1",
     "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "rc-color-picker": {
