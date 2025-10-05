@@ -1,4 +1,5 @@
-import fs from 'fs/promises'; // Import fs.promises for async operations
+import { readdir, stat, readFile } from 'fs/promises';
+import { realpathSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -15,11 +16,11 @@ const filesToSkip = [
 async function findTsxFiles(dir) {
   let results = [];
   try {
-    const list = await fs.readdir(dir);
+  const list = await readdir(dir);
     for (const file of list) {
       const filePath = path.join(dir, file);
-      const stat = await fs.stat(filePath);
-      if (stat.isDirectory()) {
+  const fileStat = await stat(filePath);
+  if (fileStat.isDirectory()) {
         results = results.concat(await findTsxFiles(filePath));
       } else if (
         filePath.endsWith('.tsx') &&
@@ -39,7 +40,7 @@ async function findTsxFiles(dir) {
 // Check if a file contains at least one TSDoc comment
 async function containsTsDocComment(filePath) {
   try {
-    const content = await fs.readFile(filePath, 'utf8');
+  const content = await readFile(filePath, 'utf8');
     return /\/\*\*[\s\S]*?\*\//.test(content);
   } catch (err) {
     console.error(`Error reading file ${filePath}: ${err.message}`);
@@ -66,10 +67,22 @@ async function run(directory = process.argv[2] || './src') {
   }
 }
 
- const modulePath = fileURLToPath(import.meta.url);
+const modulePath = realpathSync(fileURLToPath(import.meta.url));
 
-if (process.argv[1] && fs.realpathSync(path.resolve(process.argv[1])) === fs.realpathSync(modulePath)) {
-   run();
- }
+if (process.argv[1]) {
+  let invokedPath;
+  try {
+    invokedPath = realpathSync(path.resolve(process.argv[1]));
+  } catch {
+    invokedPath = null;
+  }
+
+  if (invokedPath && invokedPath === modulePath) {
+    run().catch((error) => {
+      console.error(`check-tsdoc failed: ${error instanceof Error ? error.message : error}`);
+      process.exit(1);
+    });
+  }
+}
 
 export { filesToSkip, findTsxFiles, containsTsDocComment, run };
