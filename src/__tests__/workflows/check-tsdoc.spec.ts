@@ -1,3 +1,4 @@
+import { realpathSync as realpathSyncFn } from 'fs';
 import { mkdtemp, mkdir, writeFile, rm } from 'fs/promises';
 import path from 'path';
 import { tmpdir } from 'os';
@@ -6,6 +7,8 @@ import {
   findTsxFiles,
   containsTsDocComment,
   run,
+  shouldRunCli,
+  handleCliInvocation,
 } from '../../../.github/workflows/check-tsdoc.js';
 
 let tempDir: string;
@@ -45,6 +48,21 @@ describe('check-tsdoc workflow script', () => {
     );
   });
 
+  it('findTsxFiles logs an error when a directory cannot be read', async () => {
+    const missingDir = path.join(tempDir, 'does-not-exist');
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      const files = await findTsxFiles(missingDir);
+      expect(files).toEqual([]);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`Error reading directory ${missingDir}`),
+      );
+    } finally {
+      consoleSpy.mockRestore();
+    }
+  });
+
   it('containsTsDocComment detects presence of TSDoc blocks', async () => {
     const withDoc = path.join(tempDir, 'WithDoc.tsx');
     const withoutDoc = path.join(tempDir, 'WithoutDoc.tsx');
@@ -57,6 +75,20 @@ describe('check-tsdoc workflow script', () => {
 
     await expect(containsTsDocComment(withDoc)).resolves.toBe(true);
     await expect(containsTsDocComment(withoutDoc)).resolves.toBe(false);
+  });
+
+  it('containsTsDocComment logs and returns false when file read fails', async () => {
+    const missingFile = path.join(tempDir, 'missing.tsx');
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      await expect(containsTsDocComment(missingFile)).resolves.toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining(`Error reading file ${missingFile}`),
+      );
+    } finally {
+      consoleSpy.mockRestore();
+    }
   });
 
   it('run exits with failure when files lack TSDoc comments', async () => {
@@ -100,6 +132,115 @@ describe('check-tsdoc workflow script', () => {
       await expect(run(tempDir)).resolves.toBeUndefined();
       expect(exitSpy).not.toHaveBeenCalled();
       expect(errorSpy).not.toHaveBeenCalled();
+    } finally {
+      exitSpy.mockRestore();
+      errorSpy.mockRestore();
+    }
+  });
+});
+
+describe('shouldRunCli', () => {
+  type Resolver = typeof realpathSyncFn;
+
+  const makeResolver = (fn: (path: string) => string): Resolver => {
+    const resolver = fn as unknown as Resolver;
+    (resolver as unknown as { native: Resolver }).native = resolver;
+    return resolver;
+  };
+
+  it('returns true when invoked path resolves to module path', () => {
+    const fakePath = '/tmp/script.js';
+    const resolver = makeResolver(() => fakePath);
+    const result = shouldRunCli(['node', fakePath], resolver, fakePath);
+
+    expect(result).toBe(true);
+  });
+
+  it('returns false when resolver throws or paths do not match', () => {
+    const fakePath = '/tmp/script.js';
+
+    expect(
+      shouldRunCli(
+        ['node', fakePath],
+        makeResolver(() => {
+          throw new Error('boom');
+        }),
+        fakePath,
+      ),
+    ).toBe(false);
+
+    expect(
+      shouldRunCli(
+        ['node', fakePath],
+        makeResolver(() => '/other/path'),
+        fakePath,
+      ),
+    ).toBe(false);
+  });
+
+  it('returns false when no invocation argument is supplied', () => {
+    expect(shouldRunCli(['node'])).toBe(false);
+  });
+});
+
+describe('handleCliInvocation', () => {
+  type Resolver = typeof realpathSyncFn;
+
+  const makeResolver = (fn: (path: string) => string): Resolver => {
+    const resolver = fn as unknown as Resolver;
+    (resolver as unknown as { native: Resolver }).native = resolver;
+    return resolver;
+  };
+
+  const modulePath = '/tmp/check-tsdoc.js';
+  const resolver = makeResolver(() => modulePath);
+
+  it('does nothing when script is not executed directly', async () => {
+    const runSpy = vi.fn();
+
+    await expect(
+      handleCliInvocation(runSpy, ['node'], resolver, modulePath),
+    ).resolves.toBeUndefined();
+
+    expect(runSpy).not.toHaveBeenCalled();
+  });
+
+  it('runs CLI and allows success without exiting', async () => {
+    const runSpy = vi.fn().mockResolvedValue(undefined);
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
+      throw new Error('exit');
+    }) as never);
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      await expect(
+        handleCliInvocation(runSpy, ['node', modulePath], resolver, modulePath),
+      ).resolves.toBeUndefined();
+
+      expect(runSpy).toHaveBeenCalledTimes(1);
+      expect(exitSpy).not.toHaveBeenCalled();
+      expect(errorSpy).not.toHaveBeenCalled();
+    } finally {
+      exitSpy.mockRestore();
+      errorSpy.mockRestore();
+    }
+  });
+
+  it('logs and exits when the CLI run fails', async () => {
+    const runSpy = vi.fn().mockRejectedValue(new Error('boom'));
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
+      throw new Error('exit');
+    }) as never);
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    try {
+      await expect(
+        handleCliInvocation(runSpy, ['node', modulePath], resolver, modulePath),
+      ).rejects.toThrow('exit');
+
+      expect(runSpy).toHaveBeenCalledTimes(1);
+      expect(errorSpy).toHaveBeenCalledWith('check-tsdoc failed: boom');
+      expect(exitSpy).toHaveBeenCalledWith(1);
     } finally {
       exitSpy.mockRestore();
       errorSpy.mockRestore();

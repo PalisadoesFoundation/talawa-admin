@@ -5,22 +5,22 @@ import { fileURLToPath } from 'url';
 
 // List of files to skip
 const filesToSkip = [
-    'index.tsx', 
-    'EventActionItems.tsx',
-    'OrgPostCard.tsx',
-    'UsersTableItem.tsx',
-    'FundCampaignPledge.tsx'
+  'index.tsx',
+  'EventActionItems.tsx',
+  'OrgPostCard.tsx',
+  'UsersTableItem.tsx',
+  'FundCampaignPledge.tsx',
 ];
 
 // Recursively find all .tsx files, excluding files listed in filesToSkip
 async function findTsxFiles(dir) {
   let results = [];
   try {
-  const list = await readdir(dir);
+    const list = await readdir(dir);
     for (const file of list) {
       const filePath = path.join(dir, file);
-  const fileStat = await stat(filePath);
-  if (fileStat.isDirectory()) {
+      const fileStat = await stat(filePath);
+      if (fileStat.isDirectory()) {
         results = results.concat(await findTsxFiles(filePath));
       } else if (
         filePath.endsWith('.tsx') &&
@@ -40,7 +40,7 @@ async function findTsxFiles(dir) {
 // Check if a file contains at least one TSDoc comment
 async function containsTsDocComment(filePath) {
   try {
-  const content = await readFile(filePath, 'utf8');
+    const content = await readFile(filePath, 'utf8');
     return /\/\*\*[\s\S]*?\*\//.test(content);
   } catch (err) {
     console.error(`Error reading file ${filePath}: ${err.message}`);
@@ -54,13 +54,13 @@ async function run(directory = process.argv[2] || './src') {
   const filesWithoutTsDoc = [];
 
   for (const file of files) {
-    if (!await containsTsDocComment(file)) {
+    if (!(await containsTsDocComment(file))) {
       filesWithoutTsDoc.push(file);
     }
   }
 
   if (filesWithoutTsDoc.length > 0) {
-    filesWithoutTsDoc.forEach(file => {
+    filesWithoutTsDoc.forEach((file) => {
       console.error(`No TSDoc comment found in file: ${file}`);
     });
     process.exit(1);
@@ -69,20 +69,51 @@ async function run(directory = process.argv[2] || './src') {
 
 const modulePath = realpathSync(fileURLToPath(import.meta.url));
 
-if (process.argv[1]) {
-  let invokedPath;
-  try {
-    invokedPath = realpathSync(path.resolve(process.argv[1]));
-  } catch {
-    invokedPath = null;
+function shouldRunCli(
+  argv = process.argv,
+  resolver = realpathSync,
+  currentModulePath = modulePath,
+) {
+  const invoked = argv[1];
+  if (!invoked) {
+    return false;
   }
 
-  if (invokedPath && invokedPath === modulePath) {
-    run().catch((error) => {
-      console.error(`check-tsdoc failed: ${error instanceof Error ? error.message : error}`);
-      process.exit(1);
-    });
+  try {
+    const resolved = resolver(path.resolve(invoked));
+    return resolved === currentModulePath;
+  } catch {
+    return false;
   }
 }
 
-export { filesToSkip, findTsxFiles, containsTsDocComment, run };
+async function handleCliInvocation(
+  runFn = run,
+  argv = process.argv,
+  resolver = realpathSync,
+  currentModulePath = modulePath,
+) {
+  if (!shouldRunCli(argv, resolver, currentModulePath)) {
+    return;
+  }
+
+  try {
+    await runFn();
+  } catch (error) {
+    console.error(
+      `check-tsdoc failed: ${error instanceof Error ? error.message : error}`,
+    );
+    process.exit(1);
+  }
+}
+
+handleCliInvocation();
+
+export {
+  filesToSkip,
+  findTsxFiles,
+  containsTsDocComment,
+  run,
+  shouldRunCli,
+  handleCliInvocation,
+};
