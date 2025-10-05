@@ -59,25 +59,34 @@ const leftDrawer = ({
   const renderDrawerItem = useCallback(
     (to: string, icon: React.ReactNode, label: string, testId: string) => (
       <NavLink key={to} to={to} onClick={handleLinkClick}>
-        {({ isActive }) => (
-          <button
-            className={`${
-              isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-            }`}
-            data-testid={testId}
-          >
-            <div className={styles.iconWrapper}>
-              {React.cloneElement(icon as React.ReactElement, {
-                fill: 'none',
-                fontSize: 25,
-                stroke: isActive
-                  ? 'var(--sidebar-icon-stroke-active)'
-                  : 'var(--sidebar-icon-stroke-inactive)',
-              })}
-            </div>
-            {!hideDrawer && label}
-          </button>
-        )}
+        {({ isActive }) => {
+          const styledIcon =
+            React.isValidElement(icon) && typeof icon.type !== 'string'
+              ? React.cloneElement<React.SVGProps<SVGSVGElement>>(
+                  icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
+                  {
+                    fill: 'none',
+                    fontSize: 25,
+                    stroke: isActive
+                      ? 'var(--sidebar-icon-stroke-active)'
+                      : 'var(--sidebar-icon-stroke-inactive)',
+                  },
+                )
+              : icon;
+
+          return (
+            <button
+              className={`${
+                isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+              }`}
+              data-testid={testId}
+              type="button"
+            >
+              <div className={styles.iconWrapper}>{styledIcon}</div>
+              {!hideDrawer && label}
+            </button>
+          );
+        }}
       </NavLink>
     ),
     [handleLinkClick, hideDrawer],
@@ -112,7 +121,6 @@ const leftDrawer = ({
 
   // Memoize the user permissions and admin status
   const userPermissions = useMemo(() => [], []);
-  const isAdmin = useMemo(() => superAdmin, [superAdmin]);
 
   // Get plugin drawer items for admin global (settings only)
   const pluginDrawerItems = usePluginDrawerItems(userPermissions, true, false);
