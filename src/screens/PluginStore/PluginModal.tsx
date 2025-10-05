@@ -41,7 +41,9 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
-  const [installingStartedAt, setInstallingStartedAt] = useState<number | null>(null);
+  const [installingStartedAt, setInstallingStartedAt] = useState<number | null>(
+    null,
+  );
   const [installElapsed, setInstallElapsed] = useState<string>('00:00');
   const [screenshotViewer, setScreenshotViewer] = useState<{
     open: boolean;
