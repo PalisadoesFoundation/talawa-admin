@@ -451,8 +451,8 @@ describe('Organisation Events Page', () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByLabelText(translations.startTime).length,
-      ).toBeGreaterThan(0);
+        screen.getAllByLabelText(translations.startTime).at(-1),
+      ).toBeInTheDocument();
     });
 
     // MUI X Date Pickers v8 has multiple elements with the same label for time pickers

@@ -1,5 +1,6 @@
 import fs from 'fs/promises'; // Import fs.promises for async operations
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // List of files to skip
 const filesToSkip = [
@@ -47,9 +48,8 @@ async function containsTsDocComment(filePath) {
 }
 
 // Main function to run the validation
-async function run() {
-  const dir = process.argv[2] || './src'; // Allow directory path as a command-line argument
-  const files = await findTsxFiles(dir);
+async function run(directory = process.argv[2] || './src') {
+  const files = await findTsxFiles(directory);
   const filesWithoutTsDoc = [];
 
   for (const file of files) {
@@ -66,4 +66,10 @@ async function run() {
   }
 }
 
-run();
+const modulePath = fileURLToPath(import.meta.url);
+
+if (process.argv[1] && path.resolve(process.argv[1]) === modulePath) {
+  run();
+}
+
+export { filesToSkip, findTsxFiles, containsTsDocComment, run };
