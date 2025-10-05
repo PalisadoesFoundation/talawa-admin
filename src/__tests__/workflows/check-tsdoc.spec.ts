@@ -3,7 +3,6 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
-  filesToSkip,
   findTsxFiles,
   containsTsDocComment,
   run,
