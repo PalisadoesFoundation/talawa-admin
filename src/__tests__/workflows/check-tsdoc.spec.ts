@@ -23,7 +23,7 @@ describe('check-tsdoc workflow script', () => {
   it('findTsxFiles gathers .tsx files recursively while skipping tests and configured files', async () => {
     const componentPath = path.join(tempDir, 'Component.tsx');
     const specPath = path.join(tempDir, 'Component.spec.tsx');
-    const skippedPath = path.join(tempDir, filesToSkip[0] ?? 'index.tsx');
+    const skippedPath = path.join(tempDir, 'index.tsx');
 
     const nestedDir = path.join(tempDir, 'nested');
     await mkdir(nestedDir, { recursive: true });
