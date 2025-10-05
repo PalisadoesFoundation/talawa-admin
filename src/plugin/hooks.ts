@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { getPluginManager } from './manager';
-import { IDrawerExtension, IRouteExtension } from './types';
+import { IDrawerExtension, IRouteExtension, IInjectorExtension } from './types';
 
 export function usePluginDrawerItems(
   userPermissions: string[] = [],
@@ -194,8 +194,8 @@ export function useLoadedPlugins() {
  */
 export function usePluginInjectors(
   injectorType: 'G1' | 'G2' | 'G3' | 'G4' = 'G1',
-): any[] {
-  const [injectors, setInjectors] = useState<any[]>([]);
+): IInjectorExtension[] {
+  const [injectors, setInjectors] = useState<IInjectorExtension[]>([]);
 
   useEffect(() => {
     const updateInjectors = () => {

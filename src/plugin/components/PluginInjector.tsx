@@ -3,11 +3,11 @@ import { usePluginInjectors } from '../hooks';
 import { getPluginComponent } from '../registry';
 import type { IInjectorExtension } from '../types';
 
-interface PluginInjectorProps {
+interface IPluginInjectorProps {
   injectorType: 'G1' | 'G2' | 'G3' | 'G4';
   className?: string;
   style?: React.CSSProperties;
-  data?: any; // Props to pass to injected components
+  data?: Record<string, unknown>; // Props to pass to injected components
 }
 
 /**
@@ -23,7 +23,7 @@ interface PluginInjectorProps {
  * />
  * ```
  */
-const PluginInjector: React.FC<PluginInjectorProps> = ({
+const PluginInjector: React.FC<IPluginInjectorProps> = ({
   injectorType,
   className,
   style,
