@@ -6,7 +6,7 @@
 
 > **shouldRunCli**(`argv`, `resolver`, `currentModulePath`?): `boolean`
 
-Defined in: [src/utils/tsdocChecker.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L74)
+Defined in: [src/utils/tsdocChecker.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L77)
 
 ## Parameters
 

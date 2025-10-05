@@ -6,7 +6,7 @@
 
 > **containsTsDocComment**(`filePath`): `Promise`\<`boolean`\>
 
-Defined in: [src/utils/tsdocChecker.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L45)
+Defined in: [src/utils/tsdocChecker.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L46)
 
 ## Parameters
 

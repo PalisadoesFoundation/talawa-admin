@@ -6,7 +6,7 @@
 
 > **handleCliInvocation**(`runFn`, `argv`, `resolver`, `currentModulePath`?): `Promise`\<`void`\>
 
-Defined in: [src/utils/tsdocChecker.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L93)
+Defined in: [src/utils/tsdocChecker.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tsdocChecker.ts#L96)
 
 ## Parameters
 
