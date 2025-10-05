@@ -1,10 +1,11 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 const directory = 'docs/docs/auto-docs';
 
-function deleteReadmeFiles(dir) {
+export function deleteReadmeFiles(dir) {
   if (!fs.existsSync(dir)) {
     console.log(`Directory not found: ${dir}`);
     return;
@@ -25,4 +26,17 @@ function deleteReadmeFiles(dir) {
   });
 }
 
-deleteReadmeFiles(directory);
+const isExecutedDirectly = (() => {
+  if (typeof process === 'undefined' || !Array.isArray(process.argv)) {
+    return false;
+  }
+
+  const currentFilePath = fileURLToPath(import.meta.url);
+  const executedPath = process.argv[1] ? path.resolve(process.argv[1]) : '';
+
+  return currentFilePath === executedPath;
+})();
+
+if (isExecutedDirectly) {
+  deleteReadmeFiles(directory);
+}
