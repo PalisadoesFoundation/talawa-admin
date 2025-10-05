@@ -9,9 +9,17 @@ import {
   run,
   shouldRunCli,
   handleCliInvocation,
-} from '../../../.github/workflows/check-tsdoc.js';
+} from 'utils/tsdocChecker';
 
 let tempDir: string;
+
+type Resolver = typeof realpathSyncFn;
+
+const makeResolver = (fn: (filePath: string) => string): Resolver => {
+  const resolver = fn as unknown as Resolver;
+  (resolver as unknown as { native: Resolver }).native = resolver;
+  return resolver;
+};
 
 beforeEach(async () => {
   tempDir = await mkdtemp(path.join(tmpdir(), 'check-tsdoc-'));
@@ -140,14 +148,6 @@ describe('check-tsdoc workflow script', () => {
 });
 
 describe('shouldRunCli', () => {
-  type Resolver = typeof realpathSyncFn;
-
-  const makeResolver = (fn: (path: string) => string): Resolver => {
-    const resolver = fn as unknown as Resolver;
-    (resolver as unknown as { native: Resolver }).native = resolver;
-    return resolver;
-  };
-
   it('returns true when invoked path resolves to module path', () => {
     const fakePath = '/tmp/script.js';
     const resolver = makeResolver(() => fakePath);
@@ -184,14 +184,6 @@ describe('shouldRunCli', () => {
 });
 
 describe('handleCliInvocation', () => {
-  type Resolver = typeof realpathSyncFn;
-
-  const makeResolver = (fn: (path: string) => string): Resolver => {
-    const resolver = fn as unknown as Resolver;
-    (resolver as unknown as { native: Resolver }).native = resolver;
-    return resolver;
-  };
-
   const modulePath = '/tmp/check-tsdoc.js';
   const resolver = makeResolver(() => modulePath);
 

@@ -79,7 +79,7 @@
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,scss,css,graphql}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,scss,css,graphql}\"",
-    "check-tsdoc": "node .github/workflows/check-tsdoc.js",
+    "check-tsdoc": "tsx .github/workflows/check-tsdoc.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
     "jest-preview": "jest-preview",
