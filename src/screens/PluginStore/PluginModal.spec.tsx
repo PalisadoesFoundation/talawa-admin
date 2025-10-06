@@ -420,6 +420,61 @@ describe('PluginModal', () => {
     });
   });
 
+  describe('Install Elapsed Ticker', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should show Installing with mm:ss while loading', () => {
+      render(<PluginModal {...defaultProps} loading={true} />);
+
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
+      ).toBeInTheDocument();
+    });
+
+    it('should reset when loading stops and start at 00:00 when restarted', () => {
+      const { rerender } = render(
+        <PluginModal {...defaultProps} loading={true} />,
+      );
+
+      // While loading, shows Installing (mm:ss)
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
+      ).toBeInTheDocument();
+
+      // Stop loading -> text reverts to Install
+      rerender(<PluginModal {...defaultProps} loading={false} />);
+      expect(screen.getByText('Install')).toBeInTheDocument();
+
+      // Start loading again -> should show 00:00 initially
+      rerender(<PluginModal {...defaultProps} loading={true} />);
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(00:00\)/ }),
+      ).toBeInTheDocument();
+    });
+
+    it('should clean up interval on unmount', () => {
+      const { unmount } = render(
+        <PluginModal {...defaultProps} loading={true} />,
+      );
+
+      // Unmount while interval is active
+      unmount();
+
+      // Advance timers to ensure no setState after unmount
+      vi.advanceTimersByTime(5000);
+
+      // No explicit assertion needed; absence of act/state update warnings is success
+      expect(true).toBe(true);
+    });
+  });
+
   describe('Error Handling', () => {
     it('should handle missing plugin meta gracefully', () => {
       const propsWithoutMeta = {

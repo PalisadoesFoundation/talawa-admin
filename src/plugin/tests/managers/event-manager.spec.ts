@@ -57,6 +57,17 @@ describe('EventManager', () => {
       expect(eventManager.getEvents()).toContain('event-2');
     });
 
+    it('should create new entry when adding first listener for an event', () => {
+      // This explicitly targets the branch that initializes the array in the map
+      const callback = vi.fn();
+      expect(eventManager.getListenerCount('fresh-event')).toBe(0);
+
+      eventManager.on('fresh-event', callback);
+
+      expect(eventManager.getListenerCount('fresh-event')).toBe(1);
+      expect(eventManager.getEvents()).toContain('fresh-event');
+    });
+
     it('should handle invalid event name', () => {
       const callback = vi.fn();
       const consoleSpy = vi

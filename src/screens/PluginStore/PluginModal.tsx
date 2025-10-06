@@ -16,6 +16,7 @@ import {
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
 import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
+import { useInstallTimer } from './hooks/useInstallTimer';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -35,10 +36,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
-  const [installingStartedAt, setInstallingStartedAt] = useState<number | null>(
-    null,
-  );
-  const [installElapsed, setInstallElapsed] = useState<string>('00:00');
+  const installElapsed = useInstallTimer(loading);
   const [screenshotViewer, setScreenshotViewer] = useState<{
     open: boolean;
     currentIndex: number;
@@ -74,31 +72,16 @@ const PluginModal: React.FC<IPluginModalProps> = ({
       setDetails(null);
       setFetching(false);
       setScreenshotViewer({ open: false, currentIndex: 0, screenshots: [] });
-      setInstallingStartedAt(null);
-      setInstallElapsed('00:00');
     }
   }, [show, pluginId]);
 
   // Ticker for elapsed install time while loading
   useEffect(() => {
     if (!loading) {
-      setInstallingStartedAt(null);
-      setInstallElapsed('00:00');
+      // Reset handled by useInstallTimer when loading becomes false
       return;
     }
-    if (loading && installingStartedAt === null) {
-      setInstallingStartedAt(Date.now());
-    }
-    if (!loading || installingStartedAt === null) return;
-    const id = setInterval(() => {
-      const ms = Date.now() - (installingStartedAt || Date.now());
-      const totalSeconds = Math.floor(ms / 1000);
-      const mm = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-      const ss = String(totalSeconds % 60).padStart(2, '0');
-      setInstallElapsed(`${mm}:${ss}`);
-    }, 500);
-    return () => clearInterval(id);
-  }, [loading, installingStartedAt]);
+  }, [loading]);
 
   // Use details if loaded, else fallback to meta
   const plugin = details || meta;

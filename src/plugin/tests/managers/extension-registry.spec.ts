@@ -128,6 +128,15 @@ describe('ExtensionRegistryManager', () => {
           order: 3,
         },
       ],
+      // Add G4 to cover new registry type
+      G4: [
+        {
+          injector: 'TestInjector4',
+          description: 'Test injector 4',
+          target: 'content',
+          order: 4,
+        },
+      ],
     },
   };
 
@@ -200,6 +209,7 @@ describe('ExtensionRegistryManager', () => {
       expect(registry.G1).toHaveLength(1);
       expect(registry.G2).toHaveLength(1);
       expect(registry.G3).toHaveLength(1);
+      expect(registry.G4).toHaveLength(1);
     });
 
     it('should handle manifest without extension points', () => {
@@ -261,6 +271,8 @@ describe('ExtensionRegistryManager', () => {
       expect(registry.routes).toEqual([]);
       expect(registry.drawer).toEqual([]);
       expect(registry.RA2).toEqual([]);
+      // Ensure G4 remains empty when not provided
+      expect(registry.G4).toEqual([]);
     });
 
     it('should clear existing extensions before registering new ones', () => {
@@ -275,6 +287,11 @@ describe('ExtensionRegistryManager', () => {
             {
               path: '/new-admin-global',
               component: 'NewAdminGlobalComponent',
+            },
+          ],
+          G4: [
+            {
+              injector: 'ModifiedG4',
             },
           ],
         },
@@ -293,6 +310,8 @@ describe('ExtensionRegistryManager', () => {
       expect(registry.drawer).toEqual([]);
       expect(registry.RA2).toEqual([]);
       expect(registry.G1).toEqual([]);
+      // G4 should now reflect the new registration
+      expect(registry.G4).toHaveLength(1);
     });
 
     it('should handle multiple extensions of the same type', () => {
@@ -325,6 +344,7 @@ describe('ExtensionRegistryManager', () => {
               injector: 'Injector3',
             },
           ],
+          G4: [{ injector: 'G4-1' }, { injector: 'G4-2' }],
         },
       };
 
@@ -333,6 +353,7 @@ describe('ExtensionRegistryManager', () => {
 
       expect(registry.RA1).toHaveLength(2);
       expect(registry.G1).toHaveLength(3);
+      expect(registry.G4).toHaveLength(2);
     });
   });
 
@@ -358,6 +379,7 @@ describe('ExtensionRegistryManager', () => {
       expect(registry.G1).toEqual([]);
       expect(registry.G2).toEqual([]);
       expect(registry.G3).toEqual([]);
+      expect(registry.G4).toEqual([]);
     });
 
     it('should only unregister extensions for specified plugin', () => {
@@ -417,6 +439,8 @@ describe('ExtensionRegistryManager', () => {
       expect(manager.getExtensionPoints('G1')).toHaveLength(1);
       expect(manager.getExtensionPoints('G2')).toHaveLength(1);
       expect(manager.getExtensionPoints('G3')).toHaveLength(1);
+      // Explicitly cover special-case branch for G4
+      expect(manager.getExtensionPoints('G4')).toHaveLength(1);
     });
 
     it('should handle legacy route extension point type', () => {
@@ -447,6 +471,16 @@ describe('ExtensionRegistryManager', () => {
         description: 'Test injector 1',
         target: 'header',
         order: 1,
+        pluginId: 'test-plugin',
+      });
+
+      // Verify G4 branch returns correct data
+      const g4Extensions = manager.getExtensionPoints('G4');
+      expect(g4Extensions[0]).toEqual({
+        injector: 'TestInjector4',
+        description: 'Test injector 4',
+        target: 'content',
+        order: 4,
         pluginId: 'test-plugin',
       });
     });
