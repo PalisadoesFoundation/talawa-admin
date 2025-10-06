@@ -297,7 +297,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" />);
