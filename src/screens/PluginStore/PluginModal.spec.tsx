@@ -534,9 +534,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to next screenshot', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -552,9 +552,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to previous screenshot', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -573,9 +573,9 @@ describe('PluginModal', () => {
     });
 
     it('should close screenshot viewer when back button is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -592,9 +592,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to specific screenshot when dot is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -612,9 +612,9 @@ describe('PluginModal', () => {
 
   describe('Keyboard Navigation', () => {
     it('should close screenshot viewer on Escape key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -629,9 +629,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to next screenshot on ArrowRight key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -646,9 +646,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to previous screenshot on ArrowLeft key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -674,9 +674,9 @@ describe('PluginModal', () => {
         changelog: [],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithEmptyChangelog,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithEmptyChangelog);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -695,9 +695,9 @@ describe('PluginModal', () => {
         screenshots: ['screenshot1.png'],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithSingleScreenshot,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithSingleScreenshot);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -725,9 +725,9 @@ describe('PluginModal', () => {
         ],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithManyScreenshots,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithManyScreenshots);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -754,9 +754,9 @@ describe('PluginModal', () => {
           'Some content\nFeatures:\n- Feature 1\n- Feature 2\n- Feature 3\nMore content',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadme,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadme);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -782,9 +782,9 @@ describe('PluginModal', () => {
           'Some content without Features section\n- This should not be extracted',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadmeNoFeatures,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadmeNoFeatures);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -809,9 +809,9 @@ describe('PluginModal', () => {
         readme: 'Some content\nFeatures:\nNo bullet points here\nMore content',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadmeNoBullets,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadmeNoBullets);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -837,9 +837,9 @@ describe('PluginModal', () => {
           'Some content\nFeatures:\n- Feature 1\nRegular text\n- Feature 2\nMore text\n- Feature 3',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithMixedContent,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithMixedContent);
 
       render(<PluginModal {...defaultProps} />);
 
