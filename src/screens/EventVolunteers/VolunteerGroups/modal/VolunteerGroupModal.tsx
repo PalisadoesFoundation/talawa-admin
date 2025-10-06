@@ -41,11 +41,12 @@ import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceUserInfo,
+  InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
+import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
 import styles from 'style/app-fixed.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -65,6 +66,10 @@ export interface InterfaceVolunteerGroupModal {
   group: InterfaceVolunteerGroupInfo | null;
   refetchGroups: () => void;
   mode: 'create' | 'edit';
+  // New props for recurring events
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
+  recurringEventInstanceId?: string;
 }
 
 /**
@@ -107,6 +112,8 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   group,
   refetchGroups,
   mode,
+  isRecurring = false,
+  baseEvent = null,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventVolunteers',
@@ -117,17 +124,23 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     name: group?.name ?? '',
     description: group?.description ?? '',
     leader: group?.leader ?? null,
-    volunteerUsers: group?.volunteers.map((volunteer) => volunteer.user) ?? [],
+    volunteerUsers: group?.volunteers?.map((volunteer) => volunteer.user) ?? [],
     volunteersRequired: group?.volunteersRequired ?? null,
   });
-  const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
+
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
+    variables: { organizationId: orgId },
   });
+
+  const members = useMemo(
+    () => membersData?.usersByOrganizationId || [],
+    [membersData],
+  );
 
   useEffect(() => {
     setFormState({
@@ -139,12 +152,6 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       volunteersRequired: group?.volunteersRequired ?? null,
     });
   }, [group]);
-
-  useEffect(() => {
-    if (memberData) {
-      setMembers(memberData.organizations[0].members);
-    }
-  }, [memberData]);
 
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
@@ -169,7 +176,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       try {
         await updateVolunteerGroup({
           variables: {
-            id: group?._id,
+            id: group?.id,
             data: { ...updatedFields, eventId },
           },
         });
@@ -188,16 +195,33 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
+
+        // Template-First Hierarchy: Use scope-based approach
+        const mutationData: InterfaceCreateVolunteerGroupData = {
+          eventId: isRecurring
+            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
+            : eventId, // Use eventId for non-recurring events
+          leaderId: leader?.id,
+          name,
+          description,
+          volunteersRequired,
+          volunteerUserIds: volunteerUsers.map((user) => user.id),
+        };
+
+        // Add Template-First recurring event logic
+        if (isRecurring) {
+          if (applyTo === 'series') {
+            mutationData.scope = 'ENTIRE_SERIES';
+            // No recurringEventInstanceId needed - template appears on all instances
+          } else {
+            mutationData.scope = 'THIS_INSTANCE_ONLY';
+            mutationData.recurringEventInstanceId = eventId; // Current instance ID
+          }
+        }
+
         await createVolunteerGroup({
           variables: {
-            data: {
-              eventId,
-              leaderId: leader?._id,
-              name,
-              description,
-              volunteersRequired,
-              volunteerUserIds: volunteerUsers.map((user) => user._id),
-            },
+            data: mutationData,
           },
         });
 
@@ -210,12 +234,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           volunteerUsers: [],
           volunteersRequired: null,
         });
+        setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
         toast.error((error as Error).message);
       }
     },
-    [formState, eventId],
+    [formState, eventId, isRecurring, applyTo, baseEvent],
   );
 
   return (
@@ -240,6 +265,29 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           }
           className="p-3"
         >
+          {/* Radio buttons for recurring events - only show in create mode */}
+          {isRecurring && mode === 'create' ? (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          ) : null}
+
           {/* Input field to enter the group name */}
           <Form.Group className="mb-3">
             <FormControl fullWidth>
@@ -280,10 +328,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               options={members}
               value={leader}
               disabled={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
               onChange={(_, newLeader): void => {
                 if (newLeader) {
@@ -297,7 +345,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                     ...formState,
                     leader: null,
                     volunteerUsers: volunteerUsers.filter(
-                      (user) => user._id !== leader?._id,
+                      (user) => user.id !== leader?.id,
                     ),
                   });
                 }
@@ -317,10 +365,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               data-testid="volunteerSelect"
               options={members}
               value={volunteerUsers}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
               disabled={mode === 'edit'}
               onChange={(_, newUsers): void => {

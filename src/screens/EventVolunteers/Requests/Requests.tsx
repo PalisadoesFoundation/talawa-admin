@@ -93,6 +93,9 @@ function requests(): JSX.Element {
   const [sortBy, setSortBy] = useState<
     'createdAt_ASC' | 'createdAt_DESC' | null
   >(null);
+  const [filterBy, setFilterBy] = useState<'all' | 'individual' | 'group'>(
+    'all',
+  );
 
   const debouncedSearch = useMemo(
     () => debounce((value: string) => setSearchTerm(value), 300),
@@ -144,8 +147,18 @@ function requests(): JSX.Element {
 
   const requests = useMemo(() => {
     if (!requestsData) return [];
-    return requestsData.getVolunteerMembership;
-  }, [requestsData]);
+
+    let filteredRequests = requestsData.getVolunteerMembership;
+
+    // Apply filter by request type
+    if (filterBy === 'individual') {
+      filteredRequests = filteredRequests.filter((request) => !request.group);
+    } else if (filterBy === 'group') {
+      filteredRequests = filteredRequests.filter((request) => request.group);
+    }
+
+    return filteredRequests;
+  }, [requestsData, filterBy]);
 
   // loads the requests when the component mounts
   if (requestsLoading) return <Loader size="xl" />;
@@ -174,7 +187,7 @@ function requests(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.id;
+        return params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1;
       },
     },
     {
@@ -187,15 +200,15 @@ function requests(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { firstName, lastName, image } = params.row.volunteer.user;
+        const { name, avatarURL } = params.row.volunteer.user;
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="volunteerName"
           >
-            {image ? (
+            {avatarURL ? (
               <img
-                src={image}
+                src={avatarURL}
                 alt="volunteer"
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
@@ -206,12 +219,33 @@ function requests(): JSX.Element {
                   key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImages}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
+                  name={name}
+                  alt={name}
                 />
               </div>
             )}
-            {firstName + ' ' + lastName}
+            {name}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'requestType',
+      headerName: 'Request Type',
+      flex: 2,
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const { group } = params.row;
+        return (
+          <div className="d-flex flex-column align-items-center">
+            <span className="fw-bold">
+              {group ? t('groups') : t('individuals')}
+            </span>
+            {group && <small className="text-muted">{group.name}</small>}
           </div>
         );
       },
@@ -247,7 +281,7 @@ function requests(): JSX.Element {
               style={{ minWidth: '32px' }}
               className="me-2 rounded"
               data-testid="acceptBtn"
-              onClick={() => updateMembershipStatus(params.row._id, 'accepted')}
+              onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
               <i className="fa fa-check" />
             </Button>
@@ -256,7 +290,7 @@ function requests(): JSX.Element {
               variant="danger"
               className="rounded"
               data-testid={`rejectBtn`}
-              onClick={() => updateMembershipStatus(params.row._id, 'rejected')}
+              onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
               <FaXmark size={18} fontWeight={900} />
             </Button>
@@ -290,6 +324,21 @@ function requests(): JSX.Element {
               dataTestIdPrefix="sort"
               buttonLabel={tCommon('sort')}
             />
+
+            <SortingButton
+              type="filter"
+              sortingOptions={[
+                { label: tCommon('all'), value: 'all' },
+                { label: t('individuals'), value: 'individual' },
+                { label: t('groups'), value: 'group' },
+              ]}
+              selectedOption={filterBy}
+              onSortChange={(value) =>
+                setFilterBy(value as 'all' | 'individual' | 'group')
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('filter')}
+            />
           </div>
         </div>
       </div>
@@ -301,15 +350,12 @@ function requests(): JSX.Element {
           disableColumnMenu
           columnBufferPx={5}
           hideFooter={true}
-          getRowId={(row) => row._id}
+          getRowId={(row) => row.id}
           sx={dataGridStyle}
           getRowClassName={() => `${styles.rowBackgrounds}`}
           autoHeight
           rowHeight={65}
-          rows={requests.map((request, index) => ({
-            id: index + 1,
-            ...request,
-          }))}
+          rows={requests}
           columns={columns}
           isRowSelectable={() => false}
         />

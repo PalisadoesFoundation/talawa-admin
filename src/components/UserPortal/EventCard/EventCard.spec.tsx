@@ -55,13 +55,15 @@ describe('Testing Event Card In User portal', () => {
     recurring: false,
     allDay: true,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '234',
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
       },
     ],
     recurrenceRule: null,
@@ -199,13 +201,15 @@ describe('Event card when start and end time are not given', () => {
     recurring: false,
     allDay: true,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '234',
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
       },
     ],
     recurrenceRule: null,
