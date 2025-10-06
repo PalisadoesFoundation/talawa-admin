@@ -4,7 +4,7 @@
 
 # Class: PluginManager
 
-Defined in: [src/plugin/manager.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L14)
+Defined in: [src/plugin/manager.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L15)
 
 ## Constructors
 
@@ -12,13 +12,13 @@ Defined in: [src/plugin/manager.ts:14](https://github.com/PalisadoesFoundation/t
 
 > **new PluginManager**(`apolloClient`?): `PluginManager`
 
-Defined in: [src/plugin/manager.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L21)
+Defined in: [src/plugin/manager.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L22)
 
 #### Parameters
 
 ##### apolloClient?
 
-`any`
+`ApolloClient`\<`unknown`\>
 
 #### Returns
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/manager.ts:21](https://github.com/PalisadoesFoundation/t
 
 > **activatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L102)
+Defined in: [src/plugin/manager.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L103)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/manager.ts:102](https://github.com/PalisadoesFoundation/
 
 > **deactivatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L106)
+Defined in: [src/plugin/manager.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L107)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/manager.ts:106](https://github.com/PalisadoesFoundation/
 
 > **getActivePluginCount**(): `number`
 
-Defined in: [src/plugin/manager.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L142)
+Defined in: [src/plugin/manager.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L143)
 
 #### Returns
 
@@ -76,9 +76,9 @@ Defined in: [src/plugin/manager.ts:142](https://github.com/PalisadoesFoundation/
 
 ### getExtensionPoints()
 
-> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
+> **getExtensionPoints**\<`T`\>(`type`): [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
-Defined in: [src/plugin/manager.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L147)
+Defined in: [src/plugin/manager.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L148)
 
 #### Type Parameters
 
@@ -92,18 +92,6 @@ Defined in: [src/plugin/manager.ts:147](https://github.com/PalisadoesFoundation/
 
 `T`
 
-##### userPermissions
-
-`string`[] = `[]`
-
-##### isAdmin
-
-`boolean` = `false`
-
-##### isOrg?
-
-`boolean`
-
 #### Returns
 
 [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
@@ -114,7 +102,7 @@ Defined in: [src/plugin/manager.ts:147](https://github.com/PalisadoesFoundation/
 
 > **getLoadedPlugin**(`pluginId`): [`ILoadedPlugin`](../../types/interfaces/ILoadedPlugin.md)
 
-Defined in: [src/plugin/manager.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L127)
+Defined in: [src/plugin/manager.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L128)
 
 #### Parameters
 
@@ -132,7 +120,7 @@ Defined in: [src/plugin/manager.ts:127](https://github.com/PalisadoesFoundation/
 
 > **getLoadedPlugins**(): [`ILoadedPlugin`](../../types/interfaces/ILoadedPlugin.md)[]
 
-Defined in: [src/plugin/manager.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L123)
+Defined in: [src/plugin/manager.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L124)
 
 #### Returns
 
@@ -144,7 +132,7 @@ Defined in: [src/plugin/manager.ts:123](https://github.com/PalisadoesFoundation/
 
 > **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
 
-Defined in: [src/plugin/manager.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L131)
+Defined in: [src/plugin/manager.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L132)
 
 #### Parameters
 
@@ -166,7 +154,7 @@ Defined in: [src/plugin/manager.ts:131](https://github.com/PalisadoesFoundation/
 
 > **getPluginCount**(): `number`
 
-Defined in: [src/plugin/manager.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L138)
+Defined in: [src/plugin/manager.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L139)
 
 #### Returns
 
@@ -178,7 +166,7 @@ Defined in: [src/plugin/manager.ts:138](https://github.com/PalisadoesFoundation/
 
 > **initializePluginSystem**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/manager.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L171)
+Defined in: [src/plugin/manager.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L164)
 
 #### Returns
 
@@ -190,7 +178,7 @@ Defined in: [src/plugin/manager.ts:171](https://github.com/PalisadoesFoundation/
 
 > **installPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L94)
+Defined in: [src/plugin/manager.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L95)
 
 #### Parameters
 
@@ -208,7 +196,7 @@ Defined in: [src/plugin/manager.ts:94](https://github.com/PalisadoesFoundation/t
 
 > **isSystemInitialized**(): `boolean`
 
-Defined in: [src/plugin/manager.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L180)
+Defined in: [src/plugin/manager.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L173)
 
 #### Returns
 
@@ -220,7 +208,7 @@ Defined in: [src/plugin/manager.ts:180](https://github.com/PalisadoesFoundation/
 
 > **loadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L86)
+Defined in: [src/plugin/manager.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L87)
 
 #### Parameters
 
@@ -238,7 +226,7 @@ Defined in: [src/plugin/manager.ts:86](https://github.com/PalisadoesFoundation/t
 
 > **off**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/manager.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L166)
+Defined in: [src/plugin/manager.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L159)
 
 #### Parameters
 
@@ -248,7 +236,7 @@ Defined in: [src/plugin/manager.ts:166](https://github.com/PalisadoesFoundation/
 
 ##### callback
 
-`Function`
+(...`args`) => `void`
 
 #### Returns
 
@@ -260,7 +248,7 @@ Defined in: [src/plugin/manager.ts:166](https://github.com/PalisadoesFoundation/
 
 > **on**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/manager.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L162)
+Defined in: [src/plugin/manager.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L155)
 
 #### Parameters
 
@@ -270,7 +258,7 @@ Defined in: [src/plugin/manager.ts:162](https://github.com/PalisadoesFoundation/
 
 ##### callback
 
-`Function`
+(...`args`) => `void`
 
 #### Returns
 
@@ -282,7 +270,7 @@ Defined in: [src/plugin/manager.ts:162](https://github.com/PalisadoesFoundation/
 
 > **refreshPluginDiscovery**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/manager.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L118)
+Defined in: [src/plugin/manager.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L119)
 
 #### Returns
 
@@ -294,13 +282,13 @@ Defined in: [src/plugin/manager.ts:118](https://github.com/PalisadoesFoundation/
 
 > **setApolloClient**(`apolloClient`): `void`
 
-Defined in: [src/plugin/manager.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L42)
+Defined in: [src/plugin/manager.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L43)
 
 #### Parameters
 
 ##### apolloClient
 
-`any`
+`ApolloClient`\<`unknown`\>
 
 #### Returns
 
@@ -312,7 +300,7 @@ Defined in: [src/plugin/manager.ts:42](https://github.com/PalisadoesFoundation/t
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L110)
+Defined in: [src/plugin/manager.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L111)
 
 #### Parameters
 
@@ -334,7 +322,7 @@ Defined in: [src/plugin/manager.ts:110](https://github.com/PalisadoesFoundation/
 
 > **uninstallPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L98)
+Defined in: [src/plugin/manager.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L99)
 
 #### Parameters
 
@@ -352,7 +340,7 @@ Defined in: [src/plugin/manager.ts:98](https://github.com/PalisadoesFoundation/t
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L90)
+Defined in: [src/plugin/manager.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L91)
 
 #### Parameters
 

@@ -6,7 +6,7 @@
 
 > **discoverAndRegisterAllPlugins**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/registry.tsx:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L220)
+Defined in: [src/plugin/registry.tsx:219](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L219)
 
 Discover and register all plugins from plugin manager
 

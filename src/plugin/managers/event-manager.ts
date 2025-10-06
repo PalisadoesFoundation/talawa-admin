@@ -16,7 +16,12 @@ export class EventManager {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
-    this.eventListeners.get(event)!.push(callback);
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.push(callback);
+    } else {
+      this.eventListeners.set(event, [callback]);
+    }
   }
 
   off(event: string, callback: (...args: unknown[]) => void): void {

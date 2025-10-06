@@ -6,7 +6,7 @@
 
 > **createErrorComponent**(`pluginId`, `componentName`, `error`): `ComponentType`
 
-Defined in: [src/plugin/registry.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L33)
+Defined in: [src/plugin/registry.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L32)
 
 Create an error component for failed plugin loads
 

@@ -4,9 +4,9 @@
 
 # Function: usePluginInjectors()
 
-> **usePluginInjectors**(`injectorType`): `any`[]
+> **usePluginInjectors**(`injectorType`): [`IInjectorExtension`](../../types/interfaces/IInjectorExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L195)
+Defined in: [src/plugin/hooks.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L155)
 
 Hook to get plugin injector extensions
 
@@ -18,4 +18,4 @@ Hook to get plugin injector extensions
 
 ## Returns
 
-`any`[]
+[`IInjectorExtension`](../../types/interfaces/IInjectorExtension.md)[]

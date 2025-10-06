@@ -54,7 +54,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" />);
@@ -82,7 +82,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G2" />);
@@ -151,7 +151,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" className="custom-class" />);
@@ -172,7 +172,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" style={customStyle} />);
@@ -190,7 +190,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" />);
@@ -209,7 +209,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" />);
@@ -252,7 +252,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" />);
@@ -275,7 +275,7 @@ describe('PluginInjector', () => {
 
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
-      TestComponent as unknown as ComponentType<{}>,
+      TestComponent as unknown as ComponentType<object>,
     );
 
     render(<PluginInjector injectorType="G1" data={testData} />);

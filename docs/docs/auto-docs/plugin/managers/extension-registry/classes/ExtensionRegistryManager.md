@@ -20,7 +20,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 ### getExtensionPoints()
 
-> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
+> **getExtensionPoints**\<`T`\>(`type`): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
 Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L245)
 
@@ -35,18 +35,6 @@ Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/P
 ##### type
 
 `T`
-
-##### userPermissions
-
-`string`[] = `[]`
-
-##### isAdmin
-
-`boolean` = `false`
-
-##### isOrg?
-
-`boolean`
 
 #### Returns
 
