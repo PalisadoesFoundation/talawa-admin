@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { ApolloClient } from '@apollo/client';
 import {
   PluginManager,
   getPluginManager,
@@ -85,7 +86,7 @@ vi.mock('../graphql-service', () => ({
 const mockApolloClient = {
   query: vi.fn(),
   mutate: vi.fn(),
-};
+} as unknown as ApolloClient<unknown>;
 
 describe('PluginManager', () => {
   let pluginManager: PluginManager;
@@ -126,16 +127,16 @@ describe('PluginManager', () => {
 
     it('should throw error when Apollo client is null', () => {
       pluginManager = new PluginManager();
-      expect(() => pluginManager.setApolloClient(null as any)).toThrow(
-        'Apollo client cannot be null or undefined',
-      );
+      expect(() =>
+        pluginManager.setApolloClient(null as unknown as never),
+      ).toThrow('Apollo client cannot be null or undefined');
     });
 
     it('should throw error when Apollo client is undefined', () => {
       pluginManager = new PluginManager();
-      expect(() => pluginManager.setApolloClient(undefined as any)).toThrow(
-        'Apollo client cannot be null or undefined',
-      );
+      expect(() =>
+        pluginManager.setApolloClient(undefined as unknown as never),
+      ).toThrow('Apollo client cannot be null or undefined');
     });
   });
 
@@ -213,27 +214,22 @@ describe('PluginManager', () => {
     });
 
     it('should get extension points for routes', () => {
-      const routes = pluginManager.getExtensionPoints('routes', [], false);
+      const routes = pluginManager.getExtensionPoints('routes');
       expect(Array.isArray(routes)).toBe(true);
     });
 
     it('should get extension points for drawer items', () => {
-      const drawerItems = pluginManager.getExtensionPoints('drawer', [], false);
+      const drawerItems = pluginManager.getExtensionPoints('drawer');
       expect(Array.isArray(drawerItems)).toBe(true);
     });
 
     it('should get extension points with admin permissions', () => {
-      const routes = pluginManager.getExtensionPoints('RA1', ['admin'], true);
+      const routes = pluginManager.getExtensionPoints('RA1');
       expect(Array.isArray(routes)).toBe(true);
     });
 
     it('should get extension points with user permissions', () => {
-      const routes = pluginManager.getExtensionPoints(
-        'RU1',
-        ['user'],
-        false,
-        true,
-      );
+      const routes = pluginManager.getExtensionPoints('RU1');
       expect(Array.isArray(routes)).toBe(true);
     });
   });

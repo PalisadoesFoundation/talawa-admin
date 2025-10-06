@@ -4,9 +4,10 @@
  */
 
 export class EventManager {
-  private eventListeners: Map<string, Function[]> = new Map();
+  private eventListeners: Map<string, Array<(...args: unknown[]) => void>> =
+    new Map();
 
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     if (!event || typeof callback !== 'function') {
       console.error('Invalid event name or callback provided');
       return;
@@ -15,10 +16,15 @@ export class EventManager {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
     }
-    this.eventListeners.get(event)!.push(callback);
+    const listeners = this.eventListeners.get(event);
+    if (listeners) {
+      listeners.push(callback);
+    } else {
+      this.eventListeners.set(event, [callback]);
+    }
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     if (!event || typeof callback !== 'function') {
       console.error('Invalid event name or callback provided');
       return;
@@ -36,7 +42,7 @@ export class EventManager {
     }
   }
 
-  emit(event: string, ...args: any[]): void {
+  emit(event: string, ...args: unknown[]): void {
     if (!event) {
       console.error('Invalid event name provided for emission');
       return;

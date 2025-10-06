@@ -72,6 +72,14 @@ Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/tal
 
 ***
 
+### G4?
+
+> `optional` **G4**: [`IInjectorExtension`](IInjectorExtension.md)[]
+
+Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L61)
+
+***
+
 ### RA1?
 
 > `optional` **RA1**: [`IRouteExtension`](IRouteExtension.md)[]
