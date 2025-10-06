@@ -213,27 +213,22 @@ describe('PluginManager', () => {
     });
 
     it('should get extension points for routes', () => {
-      const routes = pluginManager.getExtensionPoints('routes', [], false);
+      const routes = pluginManager.getExtensionPoints('routes');
       expect(Array.isArray(routes)).toBe(true);
     });
 
     it('should get extension points for drawer items', () => {
-      const drawerItems = pluginManager.getExtensionPoints('drawer', [], false);
+      const drawerItems = pluginManager.getExtensionPoints('drawer');
       expect(Array.isArray(drawerItems)).toBe(true);
     });
 
     it('should get extension points with admin permissions', () => {
-      const routes = pluginManager.getExtensionPoints('RA1', ['admin'], true);
+      const routes = pluginManager.getExtensionPoints('RA1');
       expect(Array.isArray(routes)).toBe(true);
     });
 
     it('should get extension points with user permissions', () => {
-      const routes = pluginManager.getExtensionPoints(
-        'RU1',
-        ['user'],
-        false,
-        true,
-      );
+      const routes = pluginManager.getExtensionPoints('RU1');
       expect(Array.isArray(routes)).toBe(true);
     });
   });

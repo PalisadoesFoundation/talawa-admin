@@ -15,7 +15,6 @@ vi.mock('../../registry', () => ({
 }));
 
 const MockComponent = () => <div>Mock Component</div>;
-const MockFallback = () => <div>Mock Fallback</div>;
 const MockComponentWithProps = ({ content, postId }: any) => (
   <div>
     <span>Content: {content}</span>

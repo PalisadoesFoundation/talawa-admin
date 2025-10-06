@@ -1,8 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ExtensionRegistryManager } from '../../managers/extension-registry';
 import {
   IPluginManifest,
-  IExtensionRegistry,
   ExtensionPointType,
   IRouteExtension,
   IDrawerExtension,

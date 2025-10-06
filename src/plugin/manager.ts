@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ILoadedPlugin, IExtensionRegistry, PluginStatus } from './types';
+import { ILoadedPlugin, IExtensionRegistry } from './types';
 import { PluginGraphQLService } from './graphql-service';
 import { DiscoveryManager } from './managers/discovery';
 import { ExtensionRegistryManager } from './managers/extension-registry';
@@ -146,9 +146,6 @@ export class PluginManager {
   // Public API - Extension Points
   getExtensionPoints<T extends keyof IExtensionRegistry>(
     type: T,
-    userPermissions: string[] = [],
-    isAdmin: boolean = false,
-    isOrg?: boolean,
   ): IExtensionRegistry[T] {
     return this.extensionRegistry.getExtensionPoints(type);
   }
