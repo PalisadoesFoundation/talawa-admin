@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.1">
 <title data-rh="true">EventManager | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/auto-docs/plugin/managers/event-manager/classes/EventManager"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="EventManager | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Admin Docs"><meta data-rh="true" property="og:description" content="Admin Docs"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/auto-docs/plugin/managers/event-manager/classes/EventManager"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/plugin/managers/event-manager/classes/EventManager" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/auto-docs/plugin/managers/event-manager/classes/EventManager" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"EventManager","item":"https://docs-admin.talawa.io/docs/auto-docs/plugin/managers/event-manager/classes/EventManager"}]}</script><link rel="stylesheet" href="/assets/css/styles.c029e76b.css">
-<script src="/assets/js/runtime~main.75c77266.js" defer="defer"></script>
-<script src="/assets/js/main.d232f208.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f9ebead1.js" defer="defer"></script>
+<script src="/assets/js/main.d99f70a5.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -29,12 +29,12 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>emit</strong>(<code>event</code>, ...<code>args</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L39" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:39</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L45" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:45</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters">Parameters<a href="#parameters" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="event">event<a href="#event" class="hash-link" aria-label="Direct link to event" title="Direct link to event" translate="no">​</a></h5>
 <p><code>string</code></p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="args">args<a href="#args" class="hash-link" aria-label="Direct link to args" title="Direct link to args" translate="no">​</a></h5>
-<p>...<code>any</code>[]</p>
+<p>...<code>unknown</code>[]</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-1">Returns<a href="#returns-1" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -42,7 +42,7 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>getEvents</strong>(): <code>string</code>[]</p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L70" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:70</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L76" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:76</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-2">Returns<a href="#returns-2" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>string</code>[]</p>
 <hr>
@@ -50,7 +50,7 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>getListenerCount</strong>(<code>event</code>): <code>number</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L65" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:65</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L71" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:71</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-1">Parameters<a href="#parameters-1" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="event-1">event<a href="#event-1" class="hash-link" aria-label="Direct link to event" title="Direct link to event" translate="no">​</a></h5>
 <p><code>string</code></p>
@@ -61,12 +61,12 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>off</strong>(<code>event</code>, <code>callback</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L21" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:21</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L27" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:27</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-2">Parameters<a href="#parameters-2" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="event-2">event<a href="#event-2" class="hash-link" aria-label="Direct link to event" title="Direct link to event" translate="no">​</a></h5>
 <p><code>string</code></p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="callback">callback<a href="#callback" class="hash-link" aria-label="Direct link to callback" title="Direct link to callback" translate="no">​</a></h5>
-<p><code>Function</code></p>
+<p>(...<code>args</code>) =&gt; <code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-4">Returns<a href="#returns-4" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -74,12 +74,12 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>on</strong>(<code>event</code>, <code>callback</code>): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L9" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:9</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L10" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:10</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-3">Parameters<a href="#parameters-3" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="event-3">event<a href="#event-3" class="hash-link" aria-label="Direct link to event" title="Direct link to event" translate="no">​</a></h5>
 <p><code>string</code></p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="callback-1">callback<a href="#callback-1" class="hash-link" aria-label="Direct link to callback" title="Direct link to callback" translate="no">​</a></h5>
-<p><code>Function</code></p>
+<p>(...<code>args</code>) =&gt; <code>void</code></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="returns-5">Returns<a href="#returns-5" class="hash-link" aria-label="Direct link to Returns" title="Direct link to Returns" translate="no">​</a></h4>
 <p><code>void</code></p>
 <hr>
@@ -87,7 +87,7 @@ Handles event listeners and event emission for the plugin system</p>
 <blockquote>
 <p><strong>removeAllListeners</strong>(<code>event</code>?): <code>void</code></p>
 </blockquote>
-<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L57" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:57</a></p>
+<p>Defined in: <a href="https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L63" target="_blank" rel="noopener noreferrer">src/plugin/managers/event-manager.ts:63</a></p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="parameters-4">Parameters<a href="#parameters-4" class="hash-link" aria-label="Direct link to Parameters" title="Direct link to Parameters" translate="no">​</a></h4>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="event-4">event?<a href="#event-4" class="hash-link" aria-label="Direct link to event?" title="Direct link to event?" translate="no">​</a></h5>
 <p><code>string</code></p>
