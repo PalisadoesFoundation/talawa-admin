@@ -1159,6 +1159,7 @@ export {
 
 // display posts
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
+export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
