@@ -110,7 +110,7 @@ export default [
           selector: 'memberLike',
           modifiers: ['private'],
           format: ['camelCase'],
-          leadingUnderscore: 'require',
+          leadingUnderscore: 'allow',
         },
         { selector: 'variable', modifiers: ['exported'], format: null },
       ],

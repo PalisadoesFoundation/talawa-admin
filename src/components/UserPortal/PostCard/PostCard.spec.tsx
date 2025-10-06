@@ -213,6 +213,13 @@ const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   );
 };
 
+// Mock plugin injector used by PostCard (injectorType G4)
+vi.mock('plugin', () => ({
+  PluginInjector: vi.fn(() => (
+    <div data-testid="plugin-injector-g4">Mock Plugin Injector G4</div>
+  )),
+}));
+
 describe('PostCard Component', () => {
   beforeEach(() => {
     const { setItem } = useLocalStorage();
@@ -282,6 +289,11 @@ describe('PostCard Component', () => {
     renderPostCard({ pinnedAt: null });
     expect(screen.queryByTestId('pinned-icon')).not.toBeInTheDocument();
   });
+
+  test('renders G4 plugin injector in PostCard', () => {
+    renderPostCard();
+    expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
+  });
 });
 
 // Mock toast
@@ -292,13 +304,14 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Mock apollo useMutation
-vi.mock('@apollo/client', () => ({
-  useMutation: () => [
-    vi.fn().mockResolvedValue({}), // mock mutation function
-    { loading: false },
-  ],
-}));
+// Mock apollo client exports used in this test: provide gql and useMutation
+vi.mock('@apollo/client', () => {
+  const gql = (strings: TemplateStringsArray): string => strings.join('');
+  return {
+    gql,
+    useMutation: () => [vi.fn().mockResolvedValue({}), { loading: false }],
+  };
+});
 
 describe('PostCard', () => {
   beforeEach(() => {
