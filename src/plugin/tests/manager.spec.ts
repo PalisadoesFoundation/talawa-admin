@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { ApolloClient } from '@apollo/client';
 import {
   PluginManager,
   getPluginManager,
@@ -85,7 +86,7 @@ vi.mock('../graphql-service', () => ({
 const mockApolloClient = {
   query: vi.fn(),
   mutate: vi.fn(),
-};
+} as unknown as ApolloClient<unknown>;
 
 describe('PluginManager', () => {
   let pluginManager: PluginManager;
