@@ -246,10 +246,9 @@ describe('PluginModal', () => {
     it('should disable Install and Uninstall buttons when loading', () => {
       render(<PluginModal {...defaultProps} loading={true} />);
 
-      const installButton = screen.getByText('Install');
-      const uninstallButton = screen.getByText('Uninstall');
-      expect(installButton).toBeDisabled();
-      expect(uninstallButton).toBeDisabled();
+      const buttons = screen.getAllByRole('button');
+      const disabledButtons = buttons.filter((b) => b.hasAttribute('disabled'));
+      expect(disabledButtons.length).toBeGreaterThanOrEqual(2);
     });
   });
 

@@ -292,13 +292,15 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Mock apollo useMutation
-vi.mock('@apollo/client', () => ({
-  useMutation: () => [
-    vi.fn().mockResolvedValue({}), // mock mutation function
-    { loading: false },
-  ],
-}));
+// Mock apollo client exports used in this test: provide gql and useMutation
+vi.mock('@apollo/client', () => {
+  const gql = (strings: TemplateStringsArray, ..._expr: unknown[]): string =>
+    strings.join('');
+  return {
+    gql,
+    useMutation: () => [vi.fn().mockResolvedValue({}), { loading: false }],
+  };
+});
 
 describe('PostCard', () => {
   beforeEach(() => {
