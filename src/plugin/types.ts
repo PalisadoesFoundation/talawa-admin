@@ -123,7 +123,7 @@ export interface ILoadedPlugin {
   status: 'active' | 'inactive' | 'error';
   error?: string;
   errorMessage?: string; // Additional error message property
-  components?: Record<string, React.ComponentType<any>>; // Plugin components
+  components?: Record<string, React.ComponentType<Record<string, unknown>>>; // Plugin components
 }
 
 export interface IExtensionRegistry {

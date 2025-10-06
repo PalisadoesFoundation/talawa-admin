@@ -244,9 +244,6 @@ export class ExtensionRegistryManager {
 
   getExtensionPoints<T extends keyof IExtensionRegistry>(
     type: T,
-    userPermissions: string[] = [],
-    isAdmin: boolean = false,
-    isOrg?: boolean,
   ): IExtensionRegistry[T] {
     // Return the appropriate array based on type
     if (type === 'RA1') {

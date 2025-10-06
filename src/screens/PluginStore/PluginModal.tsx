@@ -10,17 +10,11 @@ import {
   FaPowerOff,
   FaTrash,
   FaSpinner,
-  FaTimes,
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
-import type {
-  IPluginMeta,
-  IPluginDetails,
-  IInstalledPlugin,
-  IPluginModalProps,
-} from 'plugin';
+import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
