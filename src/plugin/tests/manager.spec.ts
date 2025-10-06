@@ -126,16 +126,16 @@ describe('PluginManager', () => {
 
     it('should throw error when Apollo client is null', () => {
       pluginManager = new PluginManager();
-      expect(() => pluginManager.setApolloClient(null as any)).toThrow(
-        'Apollo client cannot be null or undefined',
-      );
+      expect(() =>
+        pluginManager.setApolloClient(null as unknown as never),
+      ).toThrow('Apollo client cannot be null or undefined');
     });
 
     it('should throw error when Apollo client is undefined', () => {
       pluginManager = new PluginManager();
-      expect(() => pluginManager.setApolloClient(undefined as any)).toThrow(
-        'Apollo client cannot be null or undefined',
-      );
+      expect(() =>
+        pluginManager.setApolloClient(undefined as unknown as never),
+      ).toThrow('Apollo client cannot be null or undefined');
     });
   });
 

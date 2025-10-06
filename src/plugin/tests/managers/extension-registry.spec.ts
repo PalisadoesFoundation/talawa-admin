@@ -171,21 +171,21 @@ describe('ExtensionRegistryManager', () => {
       // Check routes
       expect(registry.routes).toHaveLength(1);
       expect(registry.routes[0]).toEqual({
-        ...mockManifest.extensionPoints!.routes![0],
+        ...mockManifest.extensionPoints?.routes?.[0],
         pluginId: 'test-plugin',
       });
 
       // Check drawer
       expect(registry.drawer).toHaveLength(1);
       expect(registry.drawer[0]).toEqual({
-        ...mockManifest.extensionPoints!.drawer![0],
+        ...mockManifest.extensionPoints?.drawer?.[0],
         pluginId: 'test-plugin',
       });
 
       // Check RA1
       expect(registry.RA1).toHaveLength(1);
       expect(registry.RA1[0]).toEqual({
-        ...mockManifest.extensionPoints!.RA1![0],
+        ...mockManifest.extensionPoints?.RA1?.[0],
         pluginId: 'test-plugin',
       });
 

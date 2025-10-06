@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import type { ApolloClient } from '@apollo/client';
 import { ILoadedPlugin, IExtensionRegistry } from './types';
 import { PluginGraphQLService } from './graphql-service';
 import { DiscoveryManager } from './managers/discovery';
@@ -18,7 +19,7 @@ export class PluginManager {
   private lifecycleManager: LifecycleManager;
   private isInitialized: boolean = false;
 
-  constructor(apolloClient?: any) {
+  constructor(apolloClient?: ApolloClient<unknown>) {
     // Initialize managers
     this.eventManager = new EventManager();
     this.extensionRegistry = new ExtensionRegistryManager();
@@ -39,7 +40,7 @@ export class PluginManager {
     this.initializePlugins();
   }
 
-  setApolloClient(apolloClient: any): void {
+  setApolloClient(apolloClient: ApolloClient<unknown>): void {
     if (!apolloClient) {
       throw new Error('Apollo client cannot be null or undefined');
     }
@@ -151,11 +152,11 @@ export class PluginManager {
   }
 
   // Public API - Event Management
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     this.eventManager.on(event, callback);
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     this.eventManager.off(event, callback);
   }
 
@@ -177,7 +178,9 @@ export class PluginManager {
 // Create and export singleton instance
 let pluginManagerInstance: PluginManager | null = null;
 
-export function getPluginManager(apolloClient?: any): PluginManager {
+export function getPluginManager(
+  apolloClient?: ApolloClient<unknown>,
+): PluginManager {
   if (!pluginManagerInstance) {
     pluginManagerInstance = new PluginManager(apolloClient);
   } else if (apolloClient) {
