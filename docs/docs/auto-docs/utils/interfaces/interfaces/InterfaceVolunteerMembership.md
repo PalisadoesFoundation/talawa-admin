@@ -14,16 +14,6 @@ Defines the structure for volunteer membership information.
 
 ## Properties
 
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:2503](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2503)
-
-The unique identifier of the volunteer membership.
-
-***
-
 ### createdAt
 
 > **createdAt**: `string`
@@ -34,43 +24,79 @@ The creation date of the volunteer membership record.
 
 ***
 
-### event
+### createdBy
 
-> **event**: `object`
+> **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2506](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2506)
+Defined in: [src/utils/interfaces.ts:2531](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2531)
 
-The event associated with the volunteer membership.
+#### id
 
-#### \_id
-
-> **\_id**: `string`
-
-#### startDate
-
-> **startDate**: `string`
-
-#### title
-
-> **title**: `string`
-
-***
-
-### group
-
-> **group**: `object`
-
-Defined in: [src/utils/interfaces.ts:2515](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2515)
-
-The group associated with the membership.
-
-#### \_id
-
-> **\_id**: `string`
+> **id**: `string`
 
 #### name
 
 > **name**: `string`
+
+***
+
+### event
+
+> **event**: `object`
+
+Defined in: [src/utils/interfaces.ts:2507](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2507)
+
+The event associated with the volunteer membership.
+
+#### endAt
+
+> **endAt**: `string`
+
+#### id
+
+> **id**: `string`
+
+#### name
+
+> **name**: `string`
+
+#### recurrenceRule?
+
+> `optional` **recurrenceRule**: `object`
+
+##### recurrenceRule.id
+
+> **id**: `string`
+
+#### startAt
+
+> **startAt**: `string`
+
+***
+
+### group?
+
+> `optional` **group**: `object`
+
+Defined in: [src/utils/interfaces.ts:2527](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2527)
+
+The group associated with the membership.
+
+#### id
+
+> **id**: `string`
+
+#### name
+
+> **name**: `string`
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:2503](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2503)
 
 ***
 
@@ -84,18 +110,66 @@ The status of the volunteer membership.
 
 ***
 
+### updatedAt
+
+> **updatedAt**: `string`
+
+Defined in: [src/utils/interfaces.ts:2506](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2506)
+
+***
+
+### updatedBy
+
+> **updatedBy**: `object`
+
+Defined in: [src/utils/interfaces.ts:2535](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2535)
+
+#### id
+
+> **id**: `string`
+
+#### name
+
+> **name**: `string`
+
+***
+
 ### volunteer
 
 > **volunteer**: `object`
 
-Defined in: [src/utils/interfaces.ts:2511](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2511)
+Defined in: [src/utils/interfaces.ts:2516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2516)
 
 The volunteer associated with the membership.
 
-#### \_id
+#### hasAccepted
 
-> **\_id**: `string`
+> **hasAccepted**: `boolean`
+
+#### hoursVolunteered
+
+> **hoursVolunteered**: `number`
+
+#### id
+
+> **id**: `string`
 
 #### user
 
-> **user**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
+> **user**: `object`
+
+##### user.avatarURL?
+
+> `optional` **avatarURL**: `string`
+
+##### user.emailAddress
+
+> **emailAddress**: `string`
+
+##### user.id
+
+> **id**: `string`
+
+##### user.name
+
+> **name**: `string`

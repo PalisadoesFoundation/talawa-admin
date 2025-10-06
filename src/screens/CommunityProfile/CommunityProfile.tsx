@@ -14,7 +14,7 @@
  * - Provides form validation and disables buttons when inputs are empty.
  *
  * Dependencies:
- * - React, React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
+ * - React,React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *

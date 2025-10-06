@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import dayjs from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
 
 import PreviewModal from './EventListCardPreviewModal';
@@ -46,9 +46,9 @@ const mockEventListCardProps = {
   isRegisterable: true,
   attendees: [],
   creator: {
-    _id: 'creator123',
-    firstName: 'John',
-    lastName: 'Doe',
+    id: 'creator123',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
   },
   userRole: UserRole.ADMINISTRATOR,
   isRecurringTemplate: false,
@@ -167,7 +167,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        creator: { _id: 'user123' },
+        creator: { id: 'user123' },
         userRole: UserRole.REGULAR,
       },
       userId: 'user123',
@@ -748,27 +748,20 @@ describe('EventListCardPreviewModal', () => {
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
 
-    // Create a component reference to access the handlers
-    const TestComponent = () => {
-      // Simulate the onChange handler logic from the actual component
-      const handleStartDateChange = (date: any) => {
-        if (date) {
-          mockSetEventStartDate(date.toDate());
-          // Simulate the logic: if end date is before new start date, update end date
-          const currentEndDate = new Date('2024-01-10');
-          if (currentEndDate < date.toDate()) {
-            mockSetEventEndDate(date.toDate());
-          }
+    // Simulate the onChange handler logic from the actual component
+    const handleStartDateChange = (date: Dayjs | null) => {
+      if (date) {
+        mockSetEventStartDate(date.toDate());
+        // Simulate the logic: if end date is before new start date, update end date
+        const currentEndDate = new Date('2024-01-10');
+        if (currentEndDate < date.toDate()) {
+          mockSetEventEndDate(date.toDate());
         }
-      };
-
-      // Trigger the handler with a new date
-      handleStartDateChange(dayjs('2024-01-20'));
-
-      return null;
+      }
     };
 
-    render(<TestComponent />);
+    // Trigger the handler with a new date
+    handleStartDateChange(dayjs('2024-01-20'));
 
     // Check that the functions were called and verify the date values
     expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -790,21 +783,15 @@ describe('EventListCardPreviewModal', () => {
   test('end date picker onChange updates end date correctly', () => {
     const mockSetEventEndDate = vi.fn();
 
-    const TestComponent = () => {
-      // Simulate the onChange handler logic from the actual component
-      const handleEndDateChange = (date: any) => {
-        if (date) {
-          mockSetEventEndDate(date.toDate());
-        }
-      };
-
-      // Trigger the handler with a new date
-      handleEndDateChange(dayjs('2024-01-25'));
-
-      return null;
+    // Simulate the onChange handler logic from the actual component
+    const handleEndDateChange = (date: Dayjs | null) => {
+      if (date) {
+        mockSetEventEndDate(date.toDate());
+      }
     };
 
-    render(<TestComponent />);
+    // Trigger the handler with a new date
+    handleEndDateChange(dayjs('2024-01-25'));
 
     expect(mockSetEventEndDate).toHaveBeenCalled();
 
@@ -826,34 +813,28 @@ describe('EventListCardPreviewModal', () => {
       endTime: '09:00:00', // End time before start time
     };
 
-    const TestComponent = () => {
-      const timeToDayJs = (time: string) => {
-        const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-        return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
-      };
-
-      // Simulate the onChange handler logic from the actual component
-      const handleStartTimeChange = (time: any) => {
-        if (time) {
-          const newStartTime = time.format('HH:mm:ss');
-          const endTimeAsDayjs = timeToDayJs(currentFormState.endTime);
-
-          mockSetFormState({
-            ...currentFormState,
-            startTime: newStartTime,
-            endTime:
-              endTimeAsDayjs < time ? newStartTime : currentFormState.endTime,
-          });
-        }
-      };
-
-      // Trigger the handler with a new time
-      handleStartTimeChange(dayjs().hour(14).minute(30).second(0));
-
-      return null;
+    const timeToDayJs = (time: string) => {
+      const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+      return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
     };
 
-    render(<TestComponent />);
+    // Simulate the onChange handler logic from the actual component
+    const handleStartTimeChange = (time: Dayjs | null) => {
+      if (time) {
+        const newStartTime = time.format('HH:mm:ss');
+        const endTimeAsDayjs = timeToDayJs(currentFormState.endTime);
+
+        mockSetFormState({
+          ...currentFormState,
+          startTime: newStartTime,
+          endTime:
+            endTimeAsDayjs < time ? newStartTime : currentFormState.endTime,
+        });
+      }
+    };
+
+    // Trigger the handler with a new time
+    handleStartTimeChange(dayjs().hour(14).minute(30).second(0));
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -873,24 +854,18 @@ describe('EventListCardPreviewModal', () => {
       endTime: '12:00:00',
     };
 
-    const TestComponent = () => {
-      // Simulate the onChange handler logic from the actual component
-      const handleEndTimeChange = (time: any) => {
-        if (time) {
-          mockSetFormState({
-            ...currentFormState,
-            endTime: time.format('HH:mm:ss'),
-          });
-        }
-      };
-
-      // Trigger the handler with a new time
-      handleEndTimeChange(dayjs().hour(16).minute(45).second(0));
-
-      return null;
+    // Simulate the onChange handler logic from the actual component
+    const handleEndTimeChange = (time: Dayjs | null) => {
+      if (time) {
+        mockSetFormState({
+          ...currentFormState,
+          endTime: time.format('HH:mm:ss'),
+        });
+      }
     };
 
-    render(<TestComponent />);
+    // Trigger the handler with a new time
+    handleEndTimeChange(dayjs().hour(16).minute(45).second(0));
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -900,21 +875,15 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('timeToDayJs utility function works correctly', () => {
-    const TestComponent = () => {
-      const timeToDayJs = (time: string) => {
-        const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-        return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
-      };
-
-      const result = timeToDayJs('14:30:00');
-      expect(result.hour()).toBe(14);
-      expect(result.minute()).toBe(30);
-      expect(result.second()).toBe(0);
-
-      return null;
+    const timeToDayJs = (time: string) => {
+      const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+      return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
     };
 
-    render(<TestComponent />);
+    const result = timeToDayJs('14:30:00');
+    expect(result.hour()).toBe(14);
+    expect(result.minute()).toBe(30);
+    expect(result.second()).toBe(0);
   });
 
   describe('getCurrentRecurrenceLabel', () => {
@@ -1126,27 +1095,21 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      const TestComponent = () => {
-        // Simulate the simplified onChange handler logic from the actual component
-        const handleStartDateChange = (date: any) => {
-          if (date) {
-            const newStartDate = date.toDate();
-            mockSetEventStartDate(newStartDate);
-            // Auto-adjust end date if it's before the new start date
-            const currentEndDate = new Date('2024-01-15');
-            if (currentEndDate < newStartDate) {
-              mockSetEventEndDate(newStartDate);
-            }
+      // Simulate the simplified onChange handler logic from the actual component
+      const handleStartDateChange = (date: Dayjs | null) => {
+        if (date) {
+          const newStartDate = date.toDate();
+          mockSetEventStartDate(newStartDate);
+          // Auto-adjust end date if it's before the new start date
+          const currentEndDate = new Date('2024-01-15');
+          if (currentEndDate < newStartDate) {
+            mockSetEventEndDate(newStartDate);
           }
-        };
-
-        // Trigger the handler with null to test the if (date) condition
-        handleStartDateChange(null);
-
-        return null;
+        }
       };
 
-      render(<TestComponent />);
+      // Trigger the handler with null to test the if (date) condition
+      handleStartDateChange(null);
 
       // Verify that functions are not called when date is null
       expect(mockSetEventStartDate).not.toHaveBeenCalled();
@@ -1156,21 +1119,15 @@ describe('EventListCardPreviewModal', () => {
     test('handles null date in end date picker onChange', () => {
       const mockSetEventEndDate = vi.fn();
 
-      const TestComponent = () => {
-        // Simulate the onChange handler logic from the actual component
-        const handleEndDateChange = (date: any) => {
-          if (date) {
-            mockSetEventEndDate(date.toDate());
-          }
-        };
-
-        // Trigger the handler with null to test the if (date) condition
-        handleEndDateChange(null);
-
-        return null;
+      // Simulate the onChange handler logic from the actual component
+      const handleEndDateChange = (date: Dayjs | null) => {
+        if (date) {
+          mockSetEventEndDate(date.toDate());
+        }
       };
 
-      render(<TestComponent />);
+      // Trigger the handler with null to test the if (date) condition
+      handleEndDateChange(null);
 
       // Verify that function is not called when date is null
       expect(mockSetEventEndDate).not.toHaveBeenCalled();
@@ -1180,27 +1137,21 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      const TestComponent = () => {
-        // Simulate the simplified onChange handler logic from the actual component
-        const handleStartDateChange = (date: any) => {
-          if (date) {
-            const newStartDate = date.toDate();
-            mockSetEventStartDate(newStartDate);
-            // Auto-adjust end date if it's before the new start date
-            const currentEndDate = new Date('2024-01-20'); // Later than the new start date
-            if (currentEndDate < newStartDate) {
-              mockSetEventEndDate(newStartDate);
-            }
+      // Simulate the simplified onChange handler logic from the actual component
+      const handleStartDateChange = (date: Dayjs | null) => {
+        if (date) {
+          const newStartDate = date.toDate();
+          mockSetEventStartDate(newStartDate);
+          // Auto-adjust end date if it's before the new start date
+          const currentEndDate = new Date('2024-01-20'); // Later than the new start date
+          if (currentEndDate < newStartDate) {
+            mockSetEventEndDate(newStartDate);
           }
-        };
-
-        // Trigger the handler with a date that's before the current end date
-        handleStartDateChange(dayjs('2024-01-15'));
-
-        return null;
+        }
       };
 
-      render(<TestComponent />);
+      // Trigger the handler with a date that's before the current end date
+      handleStartDateChange(dayjs('2024-01-15'));
 
       // Verify that start date is updated but end date is not
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1211,27 +1162,21 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      const TestComponent = () => {
-        // Simulate the simplified onChange handler logic from the actual component
-        const handleStartDateChange = (date: any) => {
-          if (date) {
-            const newStartDate = date.toDate();
-            mockSetEventStartDate(newStartDate);
-            // Auto-adjust end date if it's before the new start date
-            const currentEndDate = new Date('2024-01-10'); // Earlier than the new start date
-            if (currentEndDate < newStartDate) {
-              mockSetEventEndDate(newStartDate);
-            }
+      // Simulate the simplified onChange handler logic from the actual component
+      const handleStartDateChange = (date: Dayjs | null) => {
+        if (date) {
+          const newStartDate = date.toDate();
+          mockSetEventStartDate(newStartDate);
+          // Auto-adjust end date if it's before the new start date
+          const currentEndDate = new Date('2024-01-10'); // Earlier than the new start date
+          if (currentEndDate < newStartDate) {
+            mockSetEventEndDate(newStartDate);
           }
-        };
-
-        // Trigger the handler with a date that's after the current end date
-        handleStartDateChange(dayjs('2024-01-15'));
-
-        return null;
+        }
       };
 
-      render(<TestComponent />);
+      // Trigger the handler with a date that's after the current end date
+      handleStartDateChange(dayjs('2024-01-15'));
 
       // Verify that both start date and end date are updated
       expect(mockSetEventStartDate).toHaveBeenCalled();
