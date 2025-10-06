@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
@@ -76,7 +77,9 @@ describe('PluginModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock implementation
-    (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(null);
+    (
+      AdminPluginFileService.getPluginDetails as unknown as Mock
+    ).mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -153,9 +156,9 @@ describe('PluginModal', () => {
 
   describe('Plugin Details Loading', () => {
     it('should load plugin details when modal opens', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -167,9 +170,9 @@ describe('PluginModal', () => {
     });
 
     it('should display detailed plugin information when loaded', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -179,9 +182,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle loading error gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockRejectedValueOnce(
-        new Error('File not found'),
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(new Error('File not found'));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -194,9 +197,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle null response gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        null,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(null);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -209,9 +212,9 @@ describe('PluginModal', () => {
     });
 
     it('should show loading state while fetching', () => {
-      (AdminPluginFileService.getPluginDetails as any).mockImplementationOnce(
-        () => new Promise(() => {}),
-      ); // Never resolves
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
 
       render(<PluginModal {...defaultProps} />);
 
@@ -343,9 +346,9 @@ describe('PluginModal', () => {
     });
 
     it('should display screenshots when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -359,9 +362,9 @@ describe('PluginModal', () => {
 
   describe('Content Display - Features Tab', () => {
     it('should display features when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -388,9 +391,9 @@ describe('PluginModal', () => {
 
   describe('Content Display - Changelog Tab', () => {
     it('should display changelog when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -421,7 +424,7 @@ describe('PluginModal', () => {
     it('should handle missing plugin meta gracefully', () => {
       const propsWithoutMeta = {
         ...defaultProps,
-        meta: null as any,
+        meta: null as unknown as IPluginMeta,
       };
 
       render(<PluginModal {...propsWithoutMeta} />);
@@ -431,9 +434,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle missing plugin details gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        null,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(null);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -442,9 +445,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle network errors gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockRejectedValueOnce(
-        new Error('Network error'),
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(new Error('Network error'));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -479,9 +482,9 @@ describe('PluginModal', () => {
 
   describe('Screenshot Viewer', () => {
     it('should open screenshot viewer when screenshot is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -495,9 +498,9 @@ describe('PluginModal', () => {
     });
 
     it('should show navigation buttons when multiple screenshots', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -514,9 +517,9 @@ describe('PluginModal', () => {
     });
 
     it('should show dot indicators for multiple screenshots', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 

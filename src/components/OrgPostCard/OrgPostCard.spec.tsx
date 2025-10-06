@@ -18,6 +18,13 @@ import type { DocumentNode } from 'graphql';
 import * as errorHandlerModule from 'utils/errorHandler';
 import type { MockedResponse } from '@apollo/client/testing';
 
+// Mock plugin injector similar to Transactions tests
+vi.mock('plugin', () => ({
+  PluginInjector: vi.fn(() => (
+    <div data-testid="plugin-injector-g3">Mock Plugin Injector G3</div>
+  )),
+}));
+
 /**
  * Unit Tests for OrgPostCard Component
  *
@@ -319,6 +326,10 @@ describe('OrgPostCard Component', () => {
     );
   };
   describe('Tests', () => {
+    it('renders the G3 plugin injector below caption', () => {
+      renderComponent();
+      expect(screen.getByTestId('plugin-injector-g3')).toBeInTheDocument();
+    });
     it('renders the post card with basic information', () => {
       renderComponent();
 

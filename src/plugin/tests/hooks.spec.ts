@@ -6,7 +6,7 @@ import {
   useLoadedPlugins,
   usePluginInjectors,
 } from '../hooks';
-import { getPluginManager, resetPluginManager } from '../manager';
+import { resetPluginManager } from '../manager';
 
 // Create a singleton mockPluginManager
 const mockPluginManager = {
@@ -113,7 +113,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(undefined as any, false, false),
+        usePluginDrawerItems(undefined as unknown as string[], false, false),
       );
       expect(result.current).toEqual(mockItems);
     });
@@ -314,7 +314,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(undefined as any, false, false),
+        usePluginRoutes(undefined as unknown as string[], false, false),
       );
       expect(result.current).toEqual(mockRoutes);
     });
