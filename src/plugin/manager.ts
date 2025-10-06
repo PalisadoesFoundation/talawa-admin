@@ -150,12 +150,7 @@ export class PluginManager {
     isAdmin: boolean = false,
     isOrg?: boolean,
   ): IExtensionRegistry[T] {
-    return this.extensionRegistry.getExtensionPoints(
-      type,
-      userPermissions,
-      isAdmin,
-      isOrg,
-    );
+    return this.extensionRegistry.getExtensionPoints(type);
   }
 
   // Public API - Event Management

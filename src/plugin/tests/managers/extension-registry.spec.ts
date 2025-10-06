@@ -463,12 +463,7 @@ describe('ExtensionRegistryManager', () => {
     it('should handle userPermissions parameter (for future use)', () => {
       // Currently the method accepts but doesn't use these parameters
       // This test ensures the method signature is correct for future enhancements
-      const extensions = manager.getExtensionPoints(
-        'RA1',
-        ['admin', 'read'],
-        true,
-        true,
-      );
+      const extensions = manager.getExtensionPoints('RA1');
       expect(extensions).toHaveLength(1);
     });
   });
