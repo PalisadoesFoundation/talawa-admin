@@ -1503,7 +1503,10 @@
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
-    "leastVolunteers": "最少的志愿者"
+    "leastVolunteers": "最少的志愿者",
+    "applyTo": "适用于",
+    "entireSeries": "整个系列",
+    "thisEventOnly": "仅限本次活动"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -1535,7 +1538,12 @@
     "volunteerSuccess": "志愿请求成功",
     "recurring": "重复",
     "groupInvitationSubject": "邀请加入志愿者小组",
-    "eventInvitationSubject": "邀请参加活动志愿服务"
+    "eventInvitationSubject": "邀请参加活动志愿服务",
+    "groupInvitationRecurringSubject": "邀请加入重复事件系列志愿者小组",
+    "eventInvitationRecurringSubject": "邀请参加重复事件系列志愿服务",
+    "pending": "待处理",
+    "accepted": "已接受",
+    "rejected": "已拒绝"
   },
   "pluginStore": {
     "title": "插件商店",

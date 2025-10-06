@@ -392,22 +392,25 @@ export interface InterfaceCurrentUserTypePG {
 /**
  * @interface InterfaceUserInfo
  * @description Defines the basic information for a user.
- * @property {string} firstName - The first name of the user.
- * @property {string} lastName - The last name of the user.
- * @property {string} _id - The unique identifier of the user.
- * @property {string | null} [image] - The URL of the user's image, or null if not available.
+ * @property {string} id - The unique identifier of the user.
+ * @property {string} name - The full name of the user.
+ * @property {string} emailAddress - The email address of the user.
+ * @property {string | null} [avatarURL] - The URL of the user's avatar, or null if not available.
  */
 export interface InterfaceUserInfo {
-  firstName: string;
-  lastName: string;
-  _id: string;
-  image?: string | null;
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL?: string | null;
+  role?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 /**
  * @interface InterfaceBaseEvent
  * @description Base interface for common event properties.
- * @property {string} _id - The unique identifier of the event.
+ * @property {string} id - The unique identifier of the event.
  * @property {string} title - The title of the event.
  * @property {string} description - The description of the event.
  * @property {string} startDate - The start date of the event.
@@ -419,7 +422,7 @@ export interface InterfaceUserInfo {
  * @property {boolean} recurring - Indicates if the event is a recurring event.
  */
 export interface InterfaceBaseEvent {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   startDate: string;
@@ -2355,31 +2358,48 @@ export interface InterfaceCustomFieldData {
 /**
  * @interface InterfaceEventVolunteerInfo
  * @description Defines the structure for event volunteer information.
- * @property {string} _id - The unique identifier of the event volunteer.
+ * @property {string} id - The unique identifier of the event volunteer.
  * @property {boolean} hasAccepted - Indicates if the volunteer has accepted.
- * @property {number | null} hoursVolunteered - The number of hours volunteered, or null.
- * @property {InterfaceUserInfo} user - The user information of the volunteer.
- * @property {object[]} assignments - An array of assignments for the volunteer.
- * @property {string} assignments._id - The unique identifier of the assignment.
- * @property {object[]} groups - An array of groups the volunteer belongs to.
- * @property {string} groups._id - The unique identifier of the group.
- * @property {string} groups.name - The name of the group.
- * @property {object[]} groups.volunteers - An array of volunteers in the group.
- * @property {string} groups.volunteers._id - The unique identifier of the volunteer in the group.
+ * @property {number} hoursVolunteered - The number of hours volunteered.
+ * @property {boolean} isPublic - Indicates if the volunteer profile is public.
+ * @property {string} createdAt - The creation date of the volunteer record.
+ * @property {string} updatedAt - The last update date of the volunteer record.
+ * @property {InterfaceUserInfoPG} user - The user information of the volunteer.
+ * @property {object} event - The event associated with the volunteer.
+ * @property {string} event.id - The unique identifier of the event.
+ * @property {string} event.name - The name of the event.
+ * @property {InterfaceUserInfoPG} creator - The user who created this volunteer record.
+ * @property {InterfaceUserInfoPG} updater - The user who last updated this volunteer record.
  */
 export interface InterfaceEventVolunteerInfo {
-  _id: string;
+  id: string;
   hasAccepted: boolean;
-  hoursVolunteered: number | null;
-  user: InterfaceUserInfo;
-  assignments: {
-    _id: string;
-  }[];
-  groups: {
-    _id: string;
+  volunteerStatus: 'accepted' | 'rejected' | 'pending';
+  hoursVolunteered: number;
+  isPublic: boolean;
+  isTemplate: boolean;
+  isInstanceException: boolean;
+  createdAt: string;
+  updatedAt: string;
+  user: InterfaceUserInfoPG;
+  event: {
+    id: string;
     name: string;
+    recurrenceRule?: {
+      id: string;
+    } | null;
+    baseEvent?: {
+      id: string;
+    } | null;
+  };
+  creator: InterfaceUserInfoPG;
+  updater: InterfaceUserInfoPG;
+  groups: {
+    id: string;
+    name: string;
+    description: string | null;
     volunteers: {
-      _id: string;
+      id: string;
     }[];
   }[];
 }
@@ -2387,49 +2407,48 @@ export interface InterfaceEventVolunteerInfo {
 /**
  * @interface InterfaceVolunteerGroupInfo
  * @description Defines the structure for volunteer group information.
- * @property {string} _id - The unique identifier of the volunteer group.
+ * @property {string} id - The unique identifier of the volunteer group.
  * @property {string} name - The name of the volunteer group.
  * @property {string | null} description - The description of the volunteer group, or null.
  * @property {object} event - The event associated with the volunteer group.
- * @property {string} event._id - The unique identifier of the event.
+ * @property {string} event.id - The unique identifier of the event.
  * @property {number | null} volunteersRequired - The number of volunteers required for the group, or null.
  * @property {string} createdAt - The creation date of the volunteer group record.
  * @property {InterfaceUserInfo} creator - The user who created this volunteer group.
  * @property {InterfaceUserInfo} leader - The leader of the volunteer group.
  * @property {object[]} volunteers - An array of volunteers in the group.
- * @property {string} volunteers._id - The unique identifier of the volunteer.
- * @property {InterfaceUserInfo} volunteers.user - The user information of the volunteer.
+ * @property {string} volunteers.id - The unique identifier of the volunteer.
+ * @property {boolean} volunteers.hasAccepted - Whether the volunteer has accepted.
+ * @property {number} volunteers.hoursVolunteered - Hours volunteered by the volunteer.
+ * @property {boolean} volunteers.isPublic - Whether the volunteer profile is public.
+ * @property {InterfaceUserInfoPG} volunteers.user - The user information of the volunteer.
  * @property {object[]} assignments - An array of assignments for the group.
- * @property {string} assignments._id - The unique identifier of the assignment.
+ * @property {string} assignments.id - The unique identifier of the assignment.
  * @property {object} assignments.actionItemCategory - The action item category for the assignment.
- * @property {string} assignments.actionItemCategory._id - The unique identifier of the action item category.
+ * @property {string} assignments.actionItemCategory.id - The unique identifier of the action item category.
  * @property {string} assignments.actionItemCategory.name - The name of the action item category.
  * @property {number} assignments.allottedHours - The allotted hours for the assignment.
  * @property {boolean} assignments.isCompleted - Indicates if the assignment is completed.
  */
 export interface InterfaceVolunteerGroupInfo {
-  _id: string;
+  id: string;
   name: string;
   description: string | null;
   event: {
-    _id: string;
+    id: string;
   };
   volunteersRequired: number | null;
+  isTemplate: boolean;
+  isInstanceException: boolean;
   createdAt: string;
   creator: InterfaceUserInfo;
   leader: InterfaceUserInfo;
   volunteers: {
-    _id: string;
-    user: InterfaceUserInfo;
-  }[];
-  assignments: {
-    _id: string;
-    actionItemCategory: {
-      _id: string;
-      name: string;
-    };
-    allottedHours: number;
-    isCompleted: boolean;
+    id: string;
+    hasAccepted: boolean;
+    hoursVolunteered: number;
+    isPublic: boolean;
+    user: InterfaceUserInfoPG;
   }[];
 }
 
@@ -2440,47 +2459,28 @@ export interface InterfaceVolunteerGroupInfo {
  * @property {string | null} description - The description of the volunteer group, or null.
  * @property {InterfaceUserInfo | null} leader - The leader of the volunteer group, or null.
  * @property {number | null} volunteersRequired - The number of volunteers required for the group, or null.
- * @property {InterfaceUserInfo[]} volunteerUsers - An array of user information for the volunteers in the group.
+ * @property {InterfaceUserInfoPG[]} volunteerUsers - An array of user information for the volunteers in the group.
  */
 export interface InterfaceCreateVolunteerGroup {
   name: string;
   description: string | null;
   leader: InterfaceUserInfo | null;
   volunteersRequired: number | null;
-  volunteerUsers: InterfaceUserInfo[];
+  volunteerUsers: InterfaceUserInfoPG[];
 }
 
 /**
  * @interface InterfaceUserEvents
- * @description Extends `InterfaceBaseEvent` with additional properties for user-related events.
- * @augments {InterfaceBaseEvent}
- * @property {object[]} volunteerGroups - An array of volunteer groups associated with the event.
- * @property {string} volunteerGroups._id - The unique identifier of the volunteer group.
- * @property {string} volunteerGroups.name - The name of the volunteer group.
- * @property {number} volunteerGroups.volunteersRequired - The number of volunteers required for the group.
- * @property {string} volunteerGroups.description - The description of the volunteer group.
- * @property {object[]} volunteerGroups.volunteers - An array of volunteers in the group.
- * @property {string} volunteerGroups.volunteers._id - The unique identifier of the volunteer.
- * @property {object[]} volunteers - An array of volunteers associated with the event.
- * @property {string} volunteers._id - The unique identifier of the volunteer.
- * @property {object} volunteers.user - The user information of the volunteer.
- * @property {string} volunteers.user._id - The unique identifier of the user.
+ * @description Defines the structure for user-related events with volunteer information.
+ * @property {string} id - The unique identifier of the event.
+ * @property {string} name - The name of the event.
+ * @property {string | null} description - The description of the event, or null.
+ * @property {string} startAt - The start date and time of the event.
+ * @property {string} endAt - The end date and time of the event.
+ * @property {string | null} location - The location of the event, or null.
+ * @property {InterfaceVolunteerGroupInfo[]} volunteerGroups - An array of volunteer groups associated with the event.
+ * @property {InterfaceEventVolunteerInfo[]} volunteers - An array of volunteers associated with the event.
  */
-export interface InterfaceUserEvents extends InterfaceBaseEvent {
-  volunteerGroups: {
-    _id: string;
-    name: string;
-    volunteersRequired: number;
-    description: string;
-    volunteers: { _id: string }[];
-  }[];
-  volunteers: {
-    _id: string;
-    user: {
-      _id: string;
-    };
-  }[];
-}
 
 /**
  * @interface InterfaceVolunteerMembership
@@ -2500,20 +2500,40 @@ export interface InterfaceUserEvents extends InterfaceBaseEvent {
  * @property {string} group.name - The name of the group.
  */
 export interface InterfaceVolunteerMembership {
-  _id: string;
+  id: string;
   status: string;
   createdAt: string;
+  updatedAt: string;
   event: {
-    _id: string;
-    title: string;
-    startDate: string;
+    id: string;
+    name: string;
+    startAt: string;
+    endAt: string;
+    recurrenceRule?: {
+      id: string;
+    } | null;
   };
   volunteer: {
-    _id: string;
-    user: InterfaceUserInfo;
+    id: string;
+    hasAccepted: boolean;
+    hoursVolunteered: number;
+    user: {
+      id: string;
+      name: string;
+      emailAddress: string;
+      avatarURL?: string | null;
+    };
   };
-  group: {
-    _id: string;
+  group?: {
+    id: string;
+    name: string;
+  } | null;
+  createdBy: {
+    id: string;
+    name: string;
+  };
+  updatedBy: {
+    id: string;
     name: string;
   };
 }
@@ -2524,20 +2544,27 @@ export interface InterfaceVolunteerMembership {
  * @property {number} rank - The rank of the volunteer.
  * @property {number} hoursVolunteered - The number of hours volunteered.
  * @property {object} user - The user information of the volunteer.
- * @property {string} user._id - The unique identifier of the user.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.emailAddress - The email address of the user.
- * @property {string | null} user.image - The URL of the user's image, or null.
+ * @property {string} user.id - The unique identifier of the user.
+ * @property {string} user.name - The name of the user.
+ * @property {string | null} user.avatarURL - The URL of the user's avatar, or null.
  */
 export interface InterfaceVolunteerRank {
   rank: number;
   hoursVolunteered: number;
   user: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    image: string | null;
+    id: string;
+    name: string;
+    avatarURL: string | null;
   };
+}
+
+export interface InterfaceUserEvents {
+  id: string;
+  name: string;
+  description: string | null;
+  startAt: string;
+  endAt: string;
+  location: string | null;
+  volunteerGroups: InterfaceVolunteerGroupInfo[];
+  volunteers: InterfaceEventVolunteerInfo[];
 }

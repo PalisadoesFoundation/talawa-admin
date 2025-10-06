@@ -5895,6 +5895,14 @@ input QueryPostInput {
   id: String!
 }
 
+input CreateAssociationExceptionInput {
+  associationId: String!
+  associationType: String!
+  overriddenData: String
+  recurringEventInstanceId: String!
+  status: String!
+}
+
 """
 """
 input QuerySignInInput {

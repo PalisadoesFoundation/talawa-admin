@@ -16,7 +16,7 @@
  * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
  * - The `useTranslation` hook is used for internationalization.
  * - Displays leader and creator information with avatars or fallback initials.
- * - Includes a table to list associated volunteers with their names.
+ * - Volunteer count is available through the volunteers resolver in the API.
  *
  * @example
  * ```tsx
@@ -24,15 +24,14 @@
  *   isOpen={true}
  *   hide={() => setShowModal(false)}
  *   group={{
+ *     id: "group-123",
  *     name: "Group A",
  *     description: "This is a test group.",
- *     leader: { firstName: "John", lastName: "Doe", image: null, _id: "1" },
- *     creator: { firstName: "Jane", lastName: "Smith", image: null, _id: "2" },
+ *     leader: { id: "1", name: "John Doe", avatarURL: null },
+ *     creator: { id: "2", name: "Jane Smith", avatarURL: null },
  *     volunteersRequired: 5,
- *     volunteers: [
- *       { user: { firstName: "Alice", lastName: "Brown" } },
- *       { user: { firstName: "Bob", lastName: "White" } },
- *     ],
+ *     createdAt: "2024-01-01T00:00:00Z",
+ *     event: { id: "event-123" }
  *   }}
  * />
  * ```
@@ -134,14 +133,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 label={t('leader')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={leader.firstName + ' ' + leader.lastName}
+                value={leader.name}
                 disabled
                 InputProps={{
                   startAdornment: (
                     <>
-                      {leader.image ? (
+                      {leader.avatarURL ? (
                         <img
-                          src={leader.image}
+                          src={leader.avatarURL}
                           alt="Volunteer"
                           data-testid="leader_image"
                           className={styles.TableImages}
@@ -149,12 +148,12 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={leader._id + '1'}
+                            key={leader.id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImages}
                             dataTestId="leader_avatar"
-                            name={leader.firstName + ' ' + leader.lastName}
-                            alt={leader.firstName + ' ' + leader.lastName}
+                            name={leader.name}
+                            alt={leader.name}
                           />
                         </div>
                       )}
@@ -169,14 +168,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 label={t('creator')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={creator.firstName + ' ' + creator.lastName}
+                value={creator.name}
                 disabled
                 InputProps={{
                   startAdornment: (
                     <>
-                      {creator.image ? (
+                      {creator.avatarURL ? (
                         <img
-                          src={creator.image}
+                          src={creator.avatarURL}
                           alt="Volunteer"
                           data-testid="creator_image"
                           className={styles.TableImages}
@@ -184,12 +183,12 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={creator._id + '1'}
+                            key={creator.id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.TableImages}
                             dataTestId="creator_avatar"
-                            name={creator.firstName + ' ' + creator.lastName}
-                            alt={creator.firstName + ' ' + creator.lastName}
+                            name={creator.name}
+                            alt={creator.name}
                           />
                         </div>
                       )}
@@ -226,10 +225,10 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                   </TableHead>
                   <TableBody>
                     {volunteers.map((volunteer, index) => {
-                      const { firstName, lastName } = volunteer.user;
+                      const { name: volunteerName } = volunteer.user;
                       return (
                         <TableRow
-                          key={index + 1}
+                          key={volunteer.id}
                           sx={{
                             '&:last-child td, &:last-child th': { border: 0 },
                           }}
@@ -238,7 +237,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                             {index + 1}
                           </TableCell>
                           <TableCell component="th" scope="row">
-                            {firstName + ' ' + lastName}
+                            {volunteerName}
                           </TableCell>
                         </TableRow>
                       );

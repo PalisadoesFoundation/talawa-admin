@@ -72,13 +72,15 @@ export const props: IEventListCardProps[] = [
     isPublic: true,
     isRegisterable: false,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '234',
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
       },
     ],
     refetchEvents: (): void => {
@@ -107,13 +109,15 @@ export const props: IEventListCardProps[] = [
     isPublic: true,
     isRegisterable: false,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '456',
+        id: '456',
+        name: 'Attendee 2',
+        emailAddress: 'attendee2@example.com',
       },
     ],
     refetchEvents: (): void => {

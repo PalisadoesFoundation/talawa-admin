@@ -1,4 +1,4 @@
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -54,7 +54,15 @@ vi.mock('components/Avatar/Avatar', () => ({
 }));
 
 vi.mock('subComponents/SortingButton', () => ({
-  default: ({ onSortChange, dataTestIdPrefix, buttonLabel }: any) => (
+  default: ({
+    onSortChange,
+    dataTestIdPrefix,
+    buttonLabel,
+  }: {
+    onSortChange: (value: string) => void;
+    dataTestIdPrefix: string;
+    buttonLabel: string;
+  }) => (
     <button
       data-testid={`${dataTestIdPrefix}Btn`}
       onClick={() => {
@@ -72,7 +80,15 @@ vi.mock('subComponents/SortingButton', () => ({
 }));
 
 vi.mock('subComponents/SearchBar', () => ({
-  default: ({ onSearch, inputTestId, buttonTestId }: any) => (
+  default: ({
+    onSearch,
+    inputTestId,
+    buttonTestId,
+  }: {
+    onSearch: (value: string) => void;
+    inputTestId: string;
+    buttonTestId: string;
+  }) => (
     <div>
       <input
         data-testid={inputTestId}
@@ -164,10 +180,9 @@ const mockActionItem: IActionItemInfo = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'userId2',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
+      id: 'userId2',
+      name: 'Jane Smith',
+      emailAddress: 'jane@example.com',
       createdAt: new Date('2024-01-01T00:00:00.000Z'),
     },
   },
@@ -291,7 +306,7 @@ const MOCKS_ERROR = [
 
 const renderEventActionItems = (
   eventId: string = 'eventId1',
-  mocks: any[] = MOCKS,
+  mocks: MockedResponse[] = MOCKS,
 ) => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
