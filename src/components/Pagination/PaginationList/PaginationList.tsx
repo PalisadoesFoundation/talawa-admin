@@ -58,9 +58,7 @@ const PaginationList = ({
     keyPrefix: 'paginationList',
   });
 
-  const isSmallScreen = useMediaQuery((theme) =>
-    theme ? theme.breakpoints.down('sm') : '(max-width: 0px)',
-  );
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
   return (
     <>

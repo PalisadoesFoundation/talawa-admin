@@ -9,6 +9,7 @@ import {
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
 import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
 // Helper type for Calendar event items
@@ -86,9 +87,11 @@ const renderWithRouterAndPath = (
 ): ReturnType<typeof render> => {
   // Use MemoryRouter with initialEntries to set the path in the router context
   return render(
-    <MemoryRouter initialEntries={[route]}>
-      <Suspense fallback={<div>Loading...</div>}>{ui}</Suspense>
-    </MemoryRouter>,
+    <ThemeProvider theme={createTheme()}>
+      <MemoryRouter initialEntries={[route]}>
+        <Suspense fallback={<div>Loading...</div>}>{ui}</Suspense>
+      </MemoryRouter>
+    </ThemeProvider>,
   );
 };
 
@@ -536,8 +539,8 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
-      startDate: `${currentYear}-01-15`, // Dynamic date format
-      endDate: `${currentYear}-01-15`,
+      startDate: new Date().toISOString(), // Use today's date
+      endDate: new Date().toISOString(),
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
@@ -573,8 +576,8 @@ describe('Calendar Component', () => {
     await findAllByTestId('day');
 
     // Look specifically for an expand button (events are present)
-    const expandButton = container.querySelector(
-      '[data-testid^="expand-btn-"]',
+    const expandButton = await waitFor(() =>
+      container.querySelector('[data-testid^="expand-btn-"]'),
     );
     expect(expandButton).toBeInTheDocument();
 
@@ -698,8 +701,8 @@ describe('Calendar Component', () => {
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
-      startDate: `${currentYear}-01-20`, // Dynamic date format
-      endDate: `${currentYear}-01-20`,
+      startDate: new Date().toISOString(), // Use today's date
+      endDate: new Date().toISOString(),
       startTime: '09:00:00',
       endTime: '10:00:00',
       allDay: false,
@@ -719,8 +722,8 @@ describe('Calendar Component', () => {
     await findAllByTestId('day');
 
     // Look specifically for an expand button (events are present)
-    const expandButton = container.querySelector(
-      '[data-testid^="expand-btn-"]',
+    const expandButton = await waitFor(() =>
+      container.querySelector('[data-testid^="expand-btn-"]'),
     );
     expect(expandButton).toBeInTheDocument();
 
