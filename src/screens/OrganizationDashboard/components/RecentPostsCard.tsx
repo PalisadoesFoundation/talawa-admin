@@ -83,6 +83,8 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
     keyPrefix: 'organizationDashboard',
   });
 
+  const edges = postData?.organization?.posts?.edges ?? [];
+
   return (
     <Col lg={6} className="mb-4 ">
       <Card className="rounded-4 border-2 border-gray-300">
@@ -107,7 +109,7 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
               <h6>{t('noPostsPresent')}</h6>
             </div>
           ) : (
-            postData?.organization?.posts?.edges?.slice(0, 10)?.map((edge) => {
+            edges.slice(0, 10).map((edge) => {
               const post = edge.node;
               return (
                 <CardItem

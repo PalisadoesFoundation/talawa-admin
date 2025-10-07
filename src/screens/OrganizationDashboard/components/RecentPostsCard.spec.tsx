@@ -4,6 +4,9 @@ import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
 import type { InterfaceOrganizationPg } from 'utils/interfaces';
 
+// Narrow type that only includes the fields the component uses
+type MinimalOrgPg = Pick<InterfaceOrganizationPg, 'organization'>;
+
 // Mock interfaces for test data - simplified types that match our test needs
 interface TestInterfaceUser {
   id: string;
@@ -100,7 +103,7 @@ describe('RecentPostsCard Component', () => {
   };
 
   const mockProps = {
-    postData: mockPostData as InterfaceOrganizationPg,
+    postData: mockPostData as MinimalOrgPg,
     postsCount: 2,
     isLoading: false,
     onViewAllClick: vi.fn(),
@@ -142,7 +145,7 @@ describe('RecentPostsCard Component', () => {
       },
     };
     const emptyProps = {
-      postData: emptyPostData as InterfaceOrganizationPg,
+      postData: emptyPostData as MinimalOrgPg,
       postsCount: 0,
       isLoading: false,
       onViewAllClick: vi.fn(),
@@ -156,7 +159,7 @@ describe('RecentPostsCard Component', () => {
   it('renders zero count empty state correctly', () => {
     const noPosts = {
       postsCount: 0,
-      postData: mockPostData as InterfaceOrganizationPg,
+      postData: mockPostData as MinimalOrgPg,
       isLoading: false,
       onViewAllClick: vi.fn(),
     };
@@ -211,7 +214,7 @@ describe('RecentPostsCard Component', () => {
     };
 
     const manyPostsProps = {
-      postData: manyPostsData as InterfaceOrganizationPg,
+      postData: manyPostsData as MinimalOrgPg,
       postsCount: 15,
       isLoading: false,
       onViewAllClick: vi.fn(),

@@ -155,13 +155,13 @@ describe('MembershipRequestsCard Component', () => {
   });
 
   it('shows toast when clicking volunteer rankings view all', async () => {
-    const toast = await import('react-toastify');
+    const toastModule = await import('react-toastify');
     render(<MembershipRequestsCard {...mockProps} />);
 
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
     fireEvent.click(leaderboardButton);
 
-    expect(toast.toast.success).toHaveBeenCalledWith('comingSoon');
+    expect(toastModule.toast.success).toHaveBeenCalledWith('comingSoon');
   });
 
   it('handles async onViewAllClick correctly', async () => {
