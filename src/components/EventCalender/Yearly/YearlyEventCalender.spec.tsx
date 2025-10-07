@@ -185,7 +185,7 @@ describe('Calendar Component', () => {
   });
 
   it('renders correctly with basic props', async () => {
-    const { getByText, getAllByTestId, container } = renderWithRouterAndPath(
+    const { getByText, getAllByTestId } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
@@ -548,7 +548,6 @@ describe('Calendar Component', () => {
 
   it('includes private events for REGULAR users who are org members', async () => {
     // Use a date format that matches the component's date filtering
-    const currentYear = new Date().getFullYear();
     const privateEventToday = {
       ...mockEventData[1],
       name: 'Member Private Event',
@@ -705,7 +704,6 @@ describe('Calendar Component', () => {
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
     // Use a date format that matches the component's date filtering
-    const currentYear = new Date().getFullYear();
     const eventWithoutAttendees: CalendarEventItem = {
       _id: 'no-attendees',
       location: 'Loc',
