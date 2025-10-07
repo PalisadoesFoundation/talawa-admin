@@ -3,9 +3,14 @@ import { EVENT_ATTENDEES, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 export const MOCKEVENT = {
   _id: 'event123',
   title: 'Test Event',
+  // Also provide current schema-compatible fields for components/queries that expect them
+  name: 'Test Event',
   description: 'This is a test event description',
   startDate: '2030-05-01',
   endDate: '2030-05-02',
+  // Duplicate date-time fields for newer queries expecting startAt/endAt
+  startAt: '2030-05-01T09:00:00.000Z',
+  endAt: '2030-05-02T17:00:00.000Z',
   startTime: '09:00:00',
   endTime: '17:00:00',
   allDay: false,
@@ -28,7 +33,8 @@ export const MOCKDETAIL = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      // Align variable name with query definition: GetEvent($eventId: String!)
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
@@ -42,7 +48,8 @@ export const MOCKS = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      variables: {}, // Removed id since it's not required based on error
+      // EVENT_ATTENDEES($id: ID!) requires an id variable
+      variables: { id: 'event123' },
     },
     result: {
       data: {
@@ -93,7 +100,7 @@ export const MOCKS_ERROR = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      variables: {},
+      variables: { id: 'event123' },
     },
     error: new Error('An error occurred'),
   },

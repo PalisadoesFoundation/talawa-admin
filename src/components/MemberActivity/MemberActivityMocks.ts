@@ -4,9 +4,13 @@ export const mockEventData = {
   event: {
     _id: 'event123',
     title: 'Test Event',
+    // Provide name/startAt/endAt to align with EVENT_DETAILS fields
+    name: 'Test Event',
     description: 'Test Description',
     startDate: '2030-01-01',
     endDate: '2030-01-02',
+    startAt: '2030-01-01T09:00:00.000Z',
+    endAt: '2030-01-02T17:00:00.000Z',
     startTime: '09:00',
     endTime: '17:00',
     allDay: false,
@@ -31,7 +35,8 @@ export const mocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      // EVENT_DETAILS($eventId: String!) expects eventId
+      variables: { eventId: 'event123' },
     },
     result: {
       data: mockEventData,
@@ -43,7 +48,7 @@ export const errorMocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     error: new Error('An error occurred'),
   },
