@@ -539,8 +539,8 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
-      startDate: new Date().toISOString(), // Use today's date
-      endDate: new Date().toISOString(),
+      startDate: `${currentYear}-01-15`, // Dynamic date format
+      endDate: `${currentYear}-01-15`,
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
@@ -701,8 +701,8 @@ describe('Calendar Component', () => {
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
-      startDate: new Date().toISOString(), // Use today's date
-      endDate: new Date().toISOString(),
+      startDate: `${currentYear}-01-20`, // Dynamic date format
+      endDate: `${currentYear}-01-20`,
       startTime: '09:00:00',
       endTime: '10:00:00',
       allDay: false,
