@@ -254,34 +254,6 @@ export default function OrgPostCard({
   }
 
   const getMimeTypeEnum = (url: string): string => {
-    // Check for base64 data URI
-    if (url.startsWith('data:')) {
-      const mimeMatch = url.match(/data:([^;]+)/);
-      if (!mimeMatch) {
-        return 'IMAGE_JPEG'; // fallback for malformed data URI
-      }
-
-      const mime = mimeMatch[1];
-
-      if (mime === 'image/jpeg') {
-        return 'IMAGE_JPEG';
-      } else if (mime === 'image/png') {
-        return 'IMAGE_PNG';
-      } else if (mime === 'image/webp') {
-        return 'IMAGE_WEBP';
-      } else if (mime === 'image/avif') {
-        return 'IMAGE_AVIF';
-      } else if (mime === 'video/mp4') {
-        return 'VIDEO_MP4';
-      } else if (mime === 'video/webm') {
-        return 'VIDEO_WEBM';
-      } else {
-        return 'IMAGE_JPEG'; // fallback for unknown mime types
-      }
-    }
-
-    // Fallback for file URLs (e.g., https://.../file.png)
-    // Remove query parameters and fragments before extracting extension
     const cleanUrl = url.split('?')[0].split('#')[0];
     const ext = cleanUrl.split('.').pop()?.toLowerCase();
 
