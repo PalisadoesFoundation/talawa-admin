@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { toast } from 'react-toastify';
 import MembershipRequestsCard from './MembershipRequestsCard';
 
 // Mock react-i18next
@@ -155,13 +156,12 @@ describe('MembershipRequestsCard Component', () => {
   });
 
   it('shows toast when clicking volunteer rankings view all', async () => {
-    const toastModule = await import('react-toastify');
     render(<MembershipRequestsCard {...mockProps} />);
 
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
     fireEvent.click(leaderboardButton);
 
-    expect(toastModule.toast.success).toHaveBeenCalledWith('comingSoon');
+    expect(toast.success).toHaveBeenCalledWith('comingSoon');
   });
 
   it('handles async onViewAllClick correctly', async () => {
