@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -81,7 +82,9 @@ const renderWithProviders = (link = mockLinks.superAdmin) => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgList />
+            <ThemeProvider theme={createTheme()}>
+              <OrgList />
+            </ThemeProvider>
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
@@ -96,7 +99,9 @@ const renderWithMocks = (mocks: any[]) => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgList />
+            <ThemeProvider theme={createTheme()}>
+              <OrgList />
+            </ThemeProvider>
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
@@ -786,7 +791,9 @@ describe('Plugin Modal Tests', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
+              <ThemeProvider theme={createTheme()}>
+                <OrgList />
+              </ThemeProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -869,7 +876,9 @@ describe('Advanced Component Functionality Tests', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <OrgList />
+              <ThemeProvider theme={createTheme()}>
+                <OrgList />
+              </ThemeProvider>
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
