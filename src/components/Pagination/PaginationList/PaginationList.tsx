@@ -59,7 +59,7 @@ const PaginationList = ({
   });
 
   const isSmallScreen = useMediaQuery((theme) =>
-    theme ? theme.breakpoints.down('sm') : '(max-width: 0px)'
+    theme ? theme.breakpoints.down('sm') : '(max-width: 0px)',
   );
 
   return (
