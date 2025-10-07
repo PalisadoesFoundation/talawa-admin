@@ -80,7 +80,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             sx={{ mb: 1, display: 'block', fontSize: 12 }}
             noWrap
           >
-            {post.text?.slice(0, 50) ?? ''}
+            {post.text.slice(0, 50)}
           </Typography>
         </CardContent>
       </Box>
