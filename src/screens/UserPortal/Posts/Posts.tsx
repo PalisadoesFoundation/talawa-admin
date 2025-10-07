@@ -104,9 +104,6 @@ export default function Home(): JSX.Element {
   const [totalPages, setTotalPages] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [adContent, setAdContent] = useState<Ad[]>([]);
-  // const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
-  // const [selectedPinnedPost, setSelectedPinnedPost] =
-  //   useState<InterfacePostCard | null>(null);
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
@@ -420,35 +417,6 @@ export default function Home(): JSX.Element {
         organizationId={orgId}
         img={postImg}
       />
-
-      {/* {selectedPinnedPost && (
-        <Modal
-          open={showPinnedPostModal}
-          onClose={() => setShowPinnedPostModal(false)}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(3px)',
-          }}
-        >
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: 600,
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              outline: 'none',
-            }}
-          >
-            <PostCard
-              {...selectedPinnedPost}
-              isModalView={true}
-              data-testid="pinned-post-card"
-            />
-          </Box>
-        </Modal>
-      )} */}
     </div>
   );
 }
