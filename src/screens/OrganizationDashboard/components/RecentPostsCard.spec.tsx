@@ -4,6 +4,35 @@ import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
 import type { InterfaceOrganizationPg } from 'utils/interfaces';
 
+// Mock interfaces for test data - simplified types that match our test needs
+interface TestInterfaceUser {
+  id: string;
+  name: string;
+}
+
+interface TestInterfacePost {
+  id: string;
+  caption: string;
+  createdAt: string;
+  creator: TestInterfaceUser;
+}
+
+interface TestInterfacePostEdge {
+  node: TestInterfacePost;
+}
+
+interface TestInterfacePostsConnection {
+  edges: TestInterfacePostEdge[];
+}
+
+interface TestInterfaceOrganizationData {
+  posts: TestInterfacePostsConnection;
+}
+
+interface TestInterfacePostData {
+  organization: TestInterfaceOrganizationData;
+}
+
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -39,7 +68,7 @@ vi.mock(
 );
 
 describe('RecentPostsCard Component', () => {
-  const mockPostData = {
+  const mockPostData: TestInterfacePostData = {
     organization: {
       posts: {
         edges: [
@@ -68,10 +97,10 @@ describe('RecentPostsCard Component', () => {
         ],
       },
     },
-  } as unknown as InterfaceOrganizationPg;
+  };
 
   const mockProps = {
-    postData: mockPostData,
+    postData: mockPostData as InterfaceOrganizationPg,
     postsCount: 2,
     isLoading: false,
     onViewAllClick: vi.fn(),
@@ -105,15 +134,15 @@ describe('RecentPostsCard Component', () => {
   });
 
   it('should render empty state when no posts are available', () => {
-    const emptyPostData = {
+    const emptyPostData: TestInterfacePostData = {
       organization: {
         posts: {
           edges: [],
         },
       },
-    } as unknown as InterfaceOrganizationPg;
+    };
     const emptyProps = {
-      postData: emptyPostData,
+      postData: emptyPostData as InterfaceOrganizationPg,
       postsCount: 0,
       isLoading: false,
       onViewAllClick: vi.fn(),
@@ -127,7 +156,7 @@ describe('RecentPostsCard Component', () => {
   it('renders zero count empty state correctly', () => {
     const noPosts = {
       postsCount: 0,
-      postData: mockPostData,
+      postData: mockPostData as InterfaceOrganizationPg,
       isLoading: false,
       onViewAllClick: vi.fn(),
     };
@@ -160,7 +189,7 @@ describe('RecentPostsCard Component', () => {
   });
 
   it('displays correctly when more than 10 posts', () => {
-    const manyPosts = [];
+    const manyPosts: TestInterfacePostEdge[] = [];
     for (let i = 1; i <= 15; i++) {
       manyPosts.push({
         node: {
@@ -175,14 +204,14 @@ describe('RecentPostsCard Component', () => {
       });
     }
 
-    const manyPostsData = {
+    const manyPostsData: TestInterfacePostData = {
       organization: {
         posts: { edges: manyPosts },
       },
-    } as unknown as InterfaceOrganizationPg;
+    };
 
     const manyPostsProps = {
-      postData: manyPostsData,
+      postData: manyPostsData as InterfaceOrganizationPg,
       postsCount: 15,
       isLoading: false,
       onViewAllClick: vi.fn(),

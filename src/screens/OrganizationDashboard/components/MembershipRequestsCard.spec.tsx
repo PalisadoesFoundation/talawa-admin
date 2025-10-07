@@ -153,4 +153,25 @@ describe('MembershipRequestsCard Component', () => {
     expect(screen.getByTestId('viewAllMembershipRequests')).toBeInTheDocument();
     expect(screen.getByTestId('viewAllLeaderboard')).toBeInTheDocument();
   });
+
+  it('shows toast when clicking volunteer rankings view all', async () => {
+    const toast = await import('react-toastify');
+    render(<MembershipRequestsCard {...mockProps} />);
+
+    const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
+    fireEvent.click(leaderboardButton);
+
+    expect(toast.toast.success).toHaveBeenCalledWith('comingSoon');
+  });
+
+  it('handles async onViewAllClick correctly', async () => {
+    const asyncClickHandler = vi.fn().mockResolvedValue(undefined);
+    const asyncProps = { ...mockProps, onViewAllClick: asyncClickHandler };
+    render(<MembershipRequestsCard {...asyncProps} />);
+
+    const viewAllButton = screen.getByTestId('viewAllMembershipRequests');
+    fireEvent.click(viewAllButton);
+
+    expect(asyncClickHandler).toHaveBeenCalled();
+  });
 });

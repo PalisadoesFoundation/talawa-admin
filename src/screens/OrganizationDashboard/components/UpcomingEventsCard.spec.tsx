@@ -4,6 +4,42 @@ import { describe, it, expect, vi } from 'vitest';
 import UpcomingEventsCard from './UpcomingEventsCard';
 import type { IEvent } from 'utils/interfaces';
 
+// Mock interfaces for test data - properly typed structures
+interface TestInterfaceUser {
+  id: string;
+  name: string;
+}
+
+interface TestInterfaceOrganization {
+  id: string;
+  name: string;
+}
+
+interface TestInterfaceEventNode {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: TestInterfaceUser;
+  updater: TestInterfaceUser;
+  organization: TestInterfaceOrganization;
+  attachments: never[]; // Empty array for tests
+}
+
+interface TestInterfaceEvent {
+  node: TestInterfaceEventNode;
+}
+
+// Props interface matching the component's expected props
+interface TestInterfaceUpcomingEventsCardProps {
+  upcomingEvents: IEvent[];
+  eventLoading: boolean;
+  onViewAllEventsClick: () => void;
+}
+
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -39,7 +75,7 @@ vi.mock(
 );
 
 describe('UpcomingEventsCard Component', () => {
-  const mockEventData = [
+  const mockEventData: TestInterfaceEvent[] = [
     {
       node: {
         id: 'event1',
@@ -70,10 +106,10 @@ describe('UpcomingEventsCard Component', () => {
         attachments: [],
       },
     },
-  ] as unknown as IEvent[];
+  ];
 
-  const mockProps = {
-    upcomingEvents: mockEventData,
+  const mockProps: TestInterfaceUpcomingEventsCardProps = {
+    upcomingEvents: mockEventData as unknown as IEvent[],
     eventLoading: false,
     onViewAllEventsClick: vi.fn(),
   };
@@ -92,10 +128,11 @@ describe('UpcomingEventsCard Component', () => {
 
     fireEvent.click(viewAllButton);
     expect(mockProps.onViewAllEventsClick).toHaveBeenCalled();
+    expect(mockProps.onViewAllEventsClick).toHaveBeenCalledTimes(1);
   });
 
   it('renders loading state correctly', () => {
-    const loadingProps = {
+    const loadingProps: TestInterfaceUpcomingEventsCardProps = {
       ...mockProps,
       eventLoading: true,
     };
@@ -105,26 +142,14 @@ describe('UpcomingEventsCard Component', () => {
     expect(screen.getAllByTestId('card-item-loading')).toHaveLength(4);
   });
 
-  it('should render empty state when no events are available', () => {
-    const emptyProps = {
+  it('renders empty state when no events are available', () => {
+    const emptyProps: TestInterfaceUpcomingEventsCardProps = {
       upcomingEvents: [],
       eventLoading: false,
       onViewAllEventsClick: vi.fn(),
     };
 
     render(<UpcomingEventsCard {...emptyProps} />);
-
-    expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
-  });
-
-  it('renders empty state when no events', () => {
-    const noEvents = {
-      upcomingEvents: [],
-      eventLoading: false,
-      onViewAllEventsClick: vi.fn(),
-    };
-
-    render(<UpcomingEventsCard {...noEvents} />);
 
     expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
   });
@@ -136,21 +161,8 @@ describe('UpcomingEventsCard Component', () => {
     expect(screen.getByText('Test Event 2')).toBeInTheDocument();
   });
 
-  it('handles click on view all button', () => {
-    const singleCallProps = {
-      ...mockProps,
-      onViewAllEventsClick: vi.fn(),
-    };
-    render(<UpcomingEventsCard {...singleCallProps} />);
-
-    const viewAllButton = screen.getByText('viewAll');
-    fireEvent.click(viewAllButton);
-
-    expect(singleCallProps.onViewAllEventsClick).toHaveBeenCalledTimes(1);
-  });
-
   it('displays correctly when more than 10 events', () => {
-    const manyEvents = [];
+    const manyEvents: TestInterfaceEvent[] = [];
     for (let i = 1; i <= 15; i++) {
       manyEvents.push({
         node: {
@@ -169,7 +181,7 @@ describe('UpcomingEventsCard Component', () => {
       });
     }
 
-    const manyEventsProps = {
+    const manyEventsProps: TestInterfaceUpcomingEventsCardProps = {
       upcomingEvents: manyEvents as unknown as IEvent[],
       eventLoading: false,
       onViewAllEventsClick: vi.fn(),

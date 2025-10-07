@@ -537,12 +537,10 @@ describe('OrganizationDashboard', () => {
 
       renderWithProviders({ mocks: loadingMocks });
 
-      // Should show loading fallback UI
-      expect(screen.queryAllByTestId('fallback-ui').length).toBeGreaterThan(0);
-
-      // Venues card should not be rendered yet during loading
-      const venuesSection = screen.queryByTestId('venuesCount');
-      expect(venuesSection).not.toBeInTheDocument();
+      // Should show loading fallback UI (DashboardStats shows 6 loading cards)
+      const fallbackUIs = screen.getAllByTestId('fallback-ui');
+      expect(fallbackUIs.length).toBeGreaterThan(0);
+      expect(fallbackUIs.length).toBe(6);
     });
   });
 });

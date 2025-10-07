@@ -189,16 +189,18 @@ function OrganizationDashboard(): JSX.Element {
 
       const allEvents = orgEventsData.organization.events.edges;
 
-      const newTotalEventCount = allEvents.length;
+      const currentTotalEventCount = allEvents.length;
 
       const upcomingEvents = allEvents.filter((event: IEvent) => {
         // Filter events that start after the current date
         return new Date(event?.node?.startAt) > now;
       });
 
-      setEventCount((prevCount) => prevCount + newTotalEventCount);
+      // Set to actual total count since fetchMore accumulates results
+      setEventCount(currentTotalEventCount);
 
-      setUpcomingEvents((prevEvents) => [...prevEvents, ...upcomingEvents]);
+      // For upcoming events, we need to replace with new filtered results
+      setUpcomingEvents(upcomingEvents);
 
       if (orgEventsData.organization.events.pageInfo.hasNextPage) {
         fetchMore({
@@ -216,10 +218,11 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
-      const newBlockedUserCount =
+      const currentBlockedUserCount =
         orgBlockedUsersData.organization.blockedUsers.edges.length;
 
-      setBlockedCount((prevCount) => prevCount + newBlockedUserCount);
+      // Set to actual total count since fetchMore accumulates results
+      setBlockedCount(currentBlockedUserCount);
 
       if (orgBlockedUsersData.organization.blockedUsers.pageInfo.hasNextPage) {
         fetchMoreBlockedUsers({
@@ -238,9 +241,10 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgVenuesData && !hasFetchedAllVenues.current) {
-      const newVenueCount = orgVenuesData.organization.venues.edges.length;
+      const currentVenueCount = orgVenuesData.organization.venues.edges.length;
 
-      setVenueCount((prevCount) => prevCount + newVenueCount);
+      // Set to actual total count since fetchMore accumulates results
+      setVenueCount(currentVenueCount);
 
       if (orgVenuesData.organization.venues.pageInfo.hasNextPage) {
         fetchMoreVenues({
