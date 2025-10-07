@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerGroupInfo
 
-Defined in: [src/utils/interfaces.ts:2417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2417)
+Defined in: [src/utils/interfaces.ts:2433](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2433)
 
 InterfaceVolunteerGroupInfo
 
@@ -14,55 +14,11 @@ Defines the structure for volunteer group information.
 
 ## Properties
 
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:2418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2418)
-
-The unique identifier of the volunteer group.
-
-***
-
-### assignments
-
-> **assignments**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:2432](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2432)
-
-An array of assignments for the group.
-
-#### \_id
-
-> **\_id**: `string`
-
-#### actionItemCategory
-
-> **actionItemCategory**: `object`
-
-##### actionItemCategory.\_id
-
-> **\_id**: `string`
-
-##### actionItemCategory.name
-
-> **name**: `string`
-
-#### allottedHours
-
-> **allottedHours**: `number`
-
-#### isCompleted
-
-> **isCompleted**: `boolean`
-
-***
-
 ### createdAt
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2425)
+Defined in: [src/utils/interfaces.ts:2443](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2443)
 
 The creation date of the volunteer group record.
 
@@ -72,7 +28,7 @@ The creation date of the volunteer group record.
 
 > **creator**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:2426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2426)
+Defined in: [src/utils/interfaces.ts:2444](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2444)
 
 The user who created this volunteer group.
 
@@ -82,7 +38,7 @@ The user who created this volunteer group.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2420](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2420)
+Defined in: [src/utils/interfaces.ts:2436](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2436)
 
 The description of the volunteer group, or null.
 
@@ -92,13 +48,39 @@ The description of the volunteer group, or null.
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2421](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2421)
+Defined in: [src/utils/interfaces.ts:2437](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2437)
 
 The event associated with the volunteer group.
 
-#### \_id
+#### id
 
-> **\_id**: `string`
+> **id**: `string`
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:2434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2434)
+
+The unique identifier of the volunteer group.
+
+***
+
+### isInstanceException
+
+> **isInstanceException**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:2442](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2442)
+
+***
+
+### isTemplate
+
+> **isTemplate**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:2441](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2441)
 
 ***
 
@@ -106,7 +88,7 @@ The event associated with the volunteer group.
 
 > **leader**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:2427](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2427)
+Defined in: [src/utils/interfaces.ts:2445](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2445)
 
 The leader of the volunteer group.
 
@@ -116,7 +98,7 @@ The leader of the volunteer group.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2419)
+Defined in: [src/utils/interfaces.ts:2435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2435)
 
 The name of the volunteer group.
 
@@ -126,17 +108,29 @@ The name of the volunteer group.
 
 > **volunteers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2428](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2428)
+Defined in: [src/utils/interfaces.ts:2446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2446)
 
 An array of volunteers in the group.
 
-#### \_id
+#### hasAccepted
 
-> **\_id**: `string`
+> **hasAccepted**: `boolean`
+
+#### hoursVolunteered
+
+> **hoursVolunteered**: `number`
+
+#### id
+
+> **id**: `string`
+
+#### isPublic
+
+> **isPublic**: `boolean`
 
 #### user
 
-> **user**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
+> **user**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
 ***
 
@@ -144,6 +138,6 @@ An array of volunteers in the group.
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/utils/interfaces.ts:2424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2424)
+Defined in: [src/utils/interfaces.ts:2440](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2440)
 
 The number of volunteers required for the group, or null.

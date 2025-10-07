@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostForm
 
-Defined in: [src/utils/interfaces.ts:1376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1376)
+Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1379)
 
 InterfacePostForm
 
@@ -18,7 +18,7 @@ Defines the structure for a post form.
 
 > **pinned**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1381](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1381)
+Defined in: [src/utils/interfaces.ts:1384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1384)
 
 Indicates if the post is pinned.
 
@@ -28,7 +28,7 @@ Indicates if the post is pinned.
 
 > **postinfo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
+Defined in: [src/utils/interfaces.ts:1381](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1381)
 
 The information/content of the post.
 
@@ -38,7 +38,7 @@ The information/content of the post.
 
 > **postphoto**: `string`
 
-Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1379)
+Defined in: [src/utils/interfaces.ts:1382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1382)
 
 The URL of the post's photo, or null.
 
@@ -48,7 +48,7 @@ The URL of the post's photo, or null.
 
 > **posttitle**: `string`
 
-Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
+Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1380)
 
 The title of the post.
 
@@ -58,6 +58,6 @@ The title of the post.
 
 > **postvideo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1380)
+Defined in: [src/utils/interfaces.ts:1383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1383)
 
 The URL of the post's video, or null.

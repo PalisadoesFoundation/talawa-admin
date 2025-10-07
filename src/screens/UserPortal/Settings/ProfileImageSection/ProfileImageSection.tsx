@@ -50,7 +50,7 @@ interface InterfaceProfileImageSectionProps {
   /**
    * Reference to the file input element
    */
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   /**
    * Handler function for file upload events
    */

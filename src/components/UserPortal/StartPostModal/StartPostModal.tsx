@@ -207,6 +207,7 @@ const startPostModal = ({
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImageUserPost}>
               <Image
+                crossOrigin="anonymous"
                 src={userData?.avatarURL || UserDefault}
                 roundedCircle
                 className="mt-2"

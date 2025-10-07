@@ -1,3 +1,4 @@
+import type { VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
 import type { User } from '../User/type';
 import type { Organization } from 'types/Organization/type';
@@ -10,7 +11,6 @@ export type Post = {
   creator?: User; // Optional
   imageUrl?: string; // Optional
   likeCount?: number; // Optional
-  upVoters?: User[]; // Optional
   organization: Organization;
   pinned?: boolean; // Optional
   text: string;
@@ -90,9 +90,6 @@ export type PostComments = {
   };
 
   likeCount: number;
-  upVoters: {
-    id: string;
-  }[];
   text: string;
 }[];
 
@@ -112,21 +109,10 @@ export type PostNode = {
     emailAddress: string;
     avatarURL?: string | null;
   };
+  hasUserVoted: VoteState;
   upVotesCount: number;
   downVotesCount: number;
   pinnedAt: string | null;
-
-  upVoters: {
-    edges: {
-      node: {
-        id: string;
-        creator: {
-          id: string;
-          name: string;
-        };
-      };
-    }[];
-  };
   downVoters: {
     edges: {
       node: {
@@ -156,12 +142,11 @@ export type PostNode = {
           id: string;
           name: string;
           emailAddress: string;
+          avatarURL?: string | null;
         };
+        hasUserVoted: VoteState;
         downVotesCount: number;
         upVotesCount: number;
-        upVoters: {
-          id: string;
-        }[];
         text: string;
       };
     }[];

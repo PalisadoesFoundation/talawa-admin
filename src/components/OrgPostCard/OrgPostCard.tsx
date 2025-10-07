@@ -51,6 +51,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import DeletePostModal from './DeleteModal/DeletePostModal';
+import { PluginInjector } from 'plugin';
 import {
   DELETE_POST_MUTATION,
   TOGGLE_PINNED_POST,
@@ -348,11 +349,23 @@ export default function OrgPostCard({
     <>
       <div
         className="col-xl-4 col-lg-4 col-md-6"
+        style={{
+          width: '100%',
+          maxWidth: '600px',
+          margin: '20px auto', // center horizontally + spacing between posts
+        }}
         data-testid="post-item"
         onClick={handleCardClick}
       >
         <div className={styles.cardsOrgPostCard}>
-          <Card className={styles.cardOrgPostCard}>
+          <Card
+            className={styles.cardOrgPostCard}
+            style={{
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            }}
+          >
             {videoAttachment ? (
               <video
                 ref={videoRef}
@@ -393,6 +406,20 @@ export default function OrgPostCard({
               <Card.Title className={styles.titleOrgPostCard}>
                 {post.caption}
               </Card.Title>
+
+              {/* Plugin Extension Point G3 - Inject plugins below caption */}
+              <PluginInjector
+                injectorType="G3"
+                data={{
+                  caption: post.caption,
+                  postId: post.id,
+                  createdAt: post.createdAt,
+                  creatorId: post.creatorId,
+                  attachments: post.attachments,
+                  isPinned: isPinned,
+                }}
+              />
+
               <Card.Text className={styles.textOrgPostCard}>
                 Created: {new Date(post.createdAt).toLocaleDateString()}
               </Card.Text>

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -83,7 +83,7 @@ const mockEventListCardProps = {
   isPublic: true,
   isRegisterable: true,
   attendees: [],
-  creator: { _id: 'user1' },
+  creator: { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
   userRole: UserRole.ADMINISTRATOR,
   isRecurringTemplate: false,
   baseEventId: null,
@@ -169,7 +169,7 @@ describe('EventListCardModals', () => {
     mockUseLocalStorage.mockReturnValue({ getItem: () => 'user1' });
 
     // Mock the preview modal to render nothing and capture props
-    MockPreviewModal.mockImplementation((props) => {
+    MockPreviewModal.mockImplementation(() => {
       // Store the props for testing but don't render anything
       return null;
     });
@@ -208,7 +208,7 @@ describe('EventListCardModals', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        attendees: [{ _id: 'user1' }],
+        attendees: [{ id: 'user1' }],
       },
     });
     const previewProps = MockPreviewModal.mock.calls[0][0];

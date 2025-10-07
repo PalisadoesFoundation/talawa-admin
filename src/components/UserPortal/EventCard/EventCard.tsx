@@ -68,11 +68,11 @@ function eventCard(props: InterfaceEvent): JSX.Element {
   const userId = getItem('userId');
 
   // Create a full name for the event creator
-  const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
+  const creatorName = props.creator.name;
 
   // Check if the user is initially registered for the event
   const isInitiallyRegistered = props.attendees.some(
-    (attendee) => attendee._id === userId,
+    (attendee) => attendee.id === userId,
   );
 
   // Set up the mutation for registering for the event

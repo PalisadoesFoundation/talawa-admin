@@ -3,12 +3,14 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 
 const membership1 = {
   _id: 'membershipId1',
+  id: 'membershipId1',
   status: 'invited',
   createdAt: '2024-10-29T10:18:05.851Z',
   event: {
     _id: 'eventId',
-    title: 'Event 1',
+    name: 'Event 1',
     startDate: '2044-10-31',
+    recurrenceRule: null,
   },
   volunteer: {
     _id: 'volunteerId1',
@@ -24,12 +26,14 @@ const membership1 = {
 
 const membership2 = {
   _id: 'membershipId2',
+  id: 'membershipId2',
   status: 'invited',
   createdAt: '2024-10-30T10:18:05.851Z',
   event: {
     _id: 'eventId',
-    title: 'Event 2',
+    name: 'Event 2',
     startDate: '2044-11-31',
+    recurrenceRule: null,
   },
   volunteer: {
     _id: 'volunteerId1',
@@ -42,6 +46,7 @@ const membership2 = {
   },
   group: {
     _id: 'groupId1',
+    id: 'groupId1',
     name: 'Group 1',
   },
 };
@@ -54,7 +59,6 @@ export const MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
       },
     },
@@ -71,7 +75,6 @@ export const MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
         orderBy: 'createdAt_DESC',
       },
@@ -89,7 +92,6 @@ export const MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
         orderBy: 'createdAt_ASC',
       },
@@ -141,7 +143,6 @@ export const MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
           eventTitle: '1',
         },
       },
@@ -194,7 +195,6 @@ export const EMPTY_MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
       },
     },
@@ -214,7 +214,6 @@ export const ERROR_MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
       },
     },
@@ -240,7 +239,6 @@ export const UPDATE_ERROR_MOCKS = [
         where: {
           userId: 'userId',
           status: 'invited',
-          filter: null,
         },
       },
     },

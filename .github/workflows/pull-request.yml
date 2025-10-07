@@ -32,7 +32,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
 
       - name: Install Dependencies
         run: npm install
@@ -262,7 +262,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
 
       - name: Install Dependencies
         run: npm ci
@@ -309,6 +309,7 @@ jobs:
           files: ./coverage/vitest/lcov.info
           flags: vitest
           fail_ci_if_error: true
+          verbose: true
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
@@ -327,7 +328,7 @@ jobs:
   #     - name: Set up Node.js
   #       uses: actions/setup-node@v4
   #       with:
-  #         node-version: '22.x'
+  #         node-version: '24.x'
 
   #     - name: resolve dependency
   #       run: npm install -g @graphql-inspector/cli
@@ -356,7 +357,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '24.x'
 
       - name: Install Dependencies
         run: npm install
@@ -476,7 +477,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x' 
+          node-version: '24.x' 
       - name: Install dependencies
         working-directory: ./docs
         run: npm install
@@ -631,7 +632,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
 
       - name: Install Frontend Dependencies
         working-directory: frontend

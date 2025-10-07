@@ -6,7 +6,7 @@
 
 > **EventAttendeeInput** = `object`
 
-Defined in: [src/types/Event/type.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L81)
+Defined in: [src/types/Event/type.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L78)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:81](https://github.com/PalisadoesFoundation
 
 > **eventId**: `string`
 
-Defined in: [src/types/Event/type.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L82)
+Defined in: [src/types/Event/type.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L79)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/Event/type.ts:82](https://github.com/PalisadoesFoundation
 
 > **userId**: `string`
 
-Defined in: [src/types/Event/type.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L83)
+Defined in: [src/types/Event/type.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L80)

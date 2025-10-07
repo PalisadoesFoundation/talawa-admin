@@ -8,8 +8,7 @@ describe('Admin Event Tab', () => {
   beforeEach(() => {
     cy.loginByApi('admin');
     dashboard.visit().verifyOnDashboard().openFirstOrganization();
-    cy.get('[data-cy="leftDrawerButton-Events"]').should('be.visible').click();
-    cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
+    eventPage.visitEventPage();
   });
 
   it('create an event with all fields', () => {

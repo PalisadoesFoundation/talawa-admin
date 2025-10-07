@@ -51,13 +51,12 @@ vi.mock('react-router-dom', async () => {
 vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
-  const MockNavigate = () => null;
   const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
     useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
-    Navigate: MockNavigate,
+    Navigate: () => null,
   } as unknown as typeof import('react-router');
 });
 
@@ -110,11 +109,13 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
-      attendees: [{ _id: 'user1' }],
+      attendees: [
+        { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
+      ],
       creator: {
-        firstName: 'John',
-        lastName: 'Doe',
-        _id: 'creator1',
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
       },
     },
     {
@@ -129,11 +130,13 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
-      attendees: [{ _id: 'user2' }],
+      attendees: [
+        { id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' },
+      ],
       creator: {
-        firstName: 'Jane',
-        lastName: 'Doe',
-        _id: 'creator2',
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
       },
     },
   ];
@@ -703,7 +706,7 @@ describe('Calendar Component', () => {
       isPublic: true,
       isRegisterable: true,
       attendees: undefined as unknown as CalendarEventItem['attendees'],
-      creator: { firstName: 'A', lastName: 'B', _id: 'creator-x' },
+      creator: { id: 'creator-x', name: 'A B', emailAddress: 'a@example.com' },
     };
 
     const { container, findAllByTestId } = renderWithRouterAndPath(
@@ -750,7 +753,11 @@ describe('Calendar Component', () => {
       isPublic: true,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
     };
 
     const privateEvent: CalendarEventItem = {
@@ -766,7 +773,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
     };
 
     // Test with undefined userRole - should only show public events
@@ -828,7 +839,11 @@ describe('Calendar Component', () => {
       isPublic: true,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
     };
 
     const privateEvent: CalendarEventItem = {
@@ -844,7 +859,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
     };
 
     // Test with undefined userId - should only show public events
@@ -908,7 +927,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
     };
 
     // Test with undefined orgData
@@ -955,7 +978,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
     };
 
     const orgDataWithEmptyEdges = {
@@ -1011,7 +1038,11 @@ describe('Calendar Component', () => {
       isPublic: true,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'John', lastName: 'Doe', _id: 'creator1' },
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
     };
 
     const privateEvent1: CalendarEventItem = {
@@ -1027,7 +1058,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Jane', lastName: 'Doe', _id: 'creator2' },
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
     };
 
     const privateEvent2: CalendarEventItem = {
@@ -1043,7 +1078,11 @@ describe('Calendar Component', () => {
       isPublic: false,
       isRegisterable: true,
       attendees: [],
-      creator: { firstName: 'Bob', lastName: 'Smith', _id: 'creator3' },
+      creator: {
+        id: 'creator3',
+        name: 'Bob Smith',
+        emailAddress: 'bob@example.com',
+      },
     };
 
     const memberOrgData = {
