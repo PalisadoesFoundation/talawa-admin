@@ -313,7 +313,9 @@ describe('Calendar Component', () => {
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('[data-testid^="expand-btn-"]');
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
@@ -375,15 +377,18 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    const expandButtons = container.querySelectorAll('[data-testid^="expand-btn-"]');
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
 
     for (const button of Array.from(expandButtons)) {
       fireEvent.click(button);
       // Expect one of the event names to appear when expanded
-      if (screen.queryByText('New Test Event') || screen.queryByText('Test Event')) {
-        expect(
-          screen.queryByText(/New Test Event|Test Event/),
-        ).toBeTruthy();
+      if (
+        screen.queryByText('New Test Event') ||
+        screen.queryByText('Test Event')
+      ) {
+        expect(screen.queryByText(/New Test Event|Test Event/)).toBeTruthy();
         break;
       }
     }
@@ -446,11 +451,15 @@ describe('Calendar Component', () => {
 
     // Wait a bit for all components to be fully mounted
     await waitFor(() => {
-      const buttons = container.querySelectorAll('[data-testid^="expand-btn-"]');
+      const buttons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    const expandButtons = container.querySelectorAll('[data-testid^="expand-btn-"]');
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
 
     // Test with only the first button to avoid potential navigation issues
     if (expandButtons.length > 0) {
@@ -514,7 +523,9 @@ describe('Calendar Component', () => {
       />,
     );
 
-    const expandButton = container.querySelector('[data-testid^="expand-btn-"]');
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
     expect(expandButton).toBeInTheDocument();
     if (expandButton) {
       await act(async () => {
