@@ -6,7 +6,7 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L32)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L27)
 
 ## Type declaration
 
@@ -22,9 +22,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **variables**: `object`
 
-#### request.variables.eventId
+#### request.variables.id
 
-> **eventId**: `string` = `'event123'`
+> **id**: `string` = `'event123'`
 
 ### result
 
@@ -62,10 +62,6 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **description**: `string` = `'This is a test event description'`
 
-#### result.data.event.endAt
-
-> **endAt**: `string` = `'2030-05-02T17:00:00.000Z'`
-
 #### result.data.event.endDate
 
 > **endDate**: `string` = `'2030-05-02'`
@@ -77,10 +73,6 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 #### result.data.event.location
 
 > **location**: `string` = `'Test Location'`
-
-#### result.data.event.name
-
-> **name**: `string` = `'Test Event'`
 
 #### result.data.event.organization
 
@@ -97,10 +89,6 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 #### result.data.event.recurring
 
 > **recurring**: `boolean` = `true`
-
-#### result.data.event.startAt
-
-> **startAt**: `string` = `'2030-05-01T09:00:00.000Z'`
 
 #### result.data.event.startDate
 

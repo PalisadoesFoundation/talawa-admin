@@ -38,10 +38,6 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **description**: `string` = `'Test Description'`
 
-#### event.endAt
-
-> **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
-
 #### event.endDate
 
 > **endDate**: `string` = `'2030-01-02'`
@@ -53,10 +49,6 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 #### event.location
 
 > **location**: `string` = `'Test Location'`
-
-#### event.name
-
-> **name**: `string` = `'Test Event'`
 
 #### event.organization
 
@@ -73,10 +65,6 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 #### event.recurring
 
 > **recurring**: `boolean` = `true`
-
-#### event.startAt
-
-> **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
 
 #### event.startDate
 

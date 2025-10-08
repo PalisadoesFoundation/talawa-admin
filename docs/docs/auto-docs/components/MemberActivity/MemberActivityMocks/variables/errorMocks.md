@@ -6,7 +6,7 @@
 
 > `const` **errorMocks**: `object`[]
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L47)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L42)
 
 ## Type declaration
 
@@ -26,6 +26,6 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:47](https://gi
 
 > **variables**: `object`
 
-#### request.variables.eventId
+#### request.variables.id
 
-> **eventId**: `string` = `'event123'`
+> **id**: `string` = `'event123'`
