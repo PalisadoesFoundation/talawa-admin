@@ -224,3 +224,20 @@
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
+
+.carousel-item-spacing {
+  margin-right: 20px; /* controls spacing */
+}
+
+.carousel-item-spacing:last-child {
+  margin-right: 0; /* remove gap after last card */
+}
+
+.pinned-posts-carousel-container {
+  display: flex;
+  gap: 10px; /* space between items */
+  overflow-x: auto;
+}
+.pinned-posts-carousel-item {
+  margin-right: 10px;
+}

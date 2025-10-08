@@ -61,7 +61,7 @@ import type {
 } from 'utils/interfaces';
 import StartPostModal from 'components/UserPortal/StartPostModal/StartPostModal';
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Modal, Box } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -73,13 +73,7 @@ import postStyles from './Posts.module.css';
 import styles from 'style/app-fixed.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { Col, Form, Row } from 'react-bootstrap';
-
-// Instagram-like stories carousel responsive settings
-const storiesResponsive = {
-  desktop: { breakpoint: { max: 3000, min: 1024 }, items: 7, slidesToSlide: 3 },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 5, slidesToSlide: 2 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 4, slidesToSlide: 1 },
-};
+import PinnedPostCard from './PinnedPostCard';
 
 // Instagram-like posts settings
 export const POSTS_PER_PAGE = 5;
@@ -110,9 +104,6 @@ export default function Home(): JSX.Element {
   const [totalPages, setTotalPages] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [adContent, setAdContent] = useState<Ad[]>([]);
-  const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
-  const [selectedPinnedPost, setSelectedPinnedPost] =
-    useState<InterfacePostCard | null>(null);
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
@@ -264,38 +255,52 @@ export default function Home(): JSX.Element {
     setCurrentPage((prev) => prev - 1);
   };
 
-  const handleStoryClick = (post: InterfacePostCard) => {
-    setSelectedPinnedPost(post);
-    setShowPinnedPostModal(true);
-  };
-
-  // const fileInputRef = React.useRef<HTMLInputElement | null>(null);
-
   const handlePostButtonClick = (): void => {
     setShowModal(true);
   };
-
-  // const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     const imgURL = URL.createObjectURL(file);
-  //     setPostImg(imgURL);
-  //     setShowModal(true); // open modal after selecting image
-  //   }
-  // };
 
   return (
     <div className={postStyles.instagramContainer}>
       <div className={postStyles.instagramContent}>
         {/* Stories */}
         {pinnedPosts.length > 0 && (
-          <div className={postStyles.storiesContainer}>
+          <div style={{ marginBottom: 16 }}>
+            <Typography
+              sx={{
+                color: '#030303ff',
+                fontWeight: 'bold',
+                fontSize: 18,
+                letterSpacing: 1,
+                mb: 2,
+                textTransform: 'uppercase',
+                textAlign: 'center',
+              }}
+            >
+              {t('pinnedPosts')}
+            </Typography>
             <Carousel
-              responsive={storiesResponsive}
+              responsive={{
+                desktop: {
+                  breakpoint: { max: 3000, min: 1024 },
+                  items: 4,
+                  slidesToSlide: 1,
+                },
+                tablet: {
+                  breakpoint: { max: 1024, min: 464 },
+                  items: 2,
+                  slidesToSlide: 1,
+                },
+                mobile: {
+                  breakpoint: { max: 464, min: 0 },
+                  items: 2,
+                  slidesToSlide: 1,
+                },
+              }}
               swipeable
               draggable
               showDots={false}
               infinite={false}
+              partialVisible={false}
               keyBoardControl
               containerClass={postStyles.storiesCarousel}
               itemClass={postStyles.storyItem}
@@ -303,31 +308,16 @@ export default function Home(): JSX.Element {
               {pinnedPosts.map((node) => {
                 const cardProps = getCardProps(node);
                 return (
-                  <div
+                  <PinnedPostCard
                     key={cardProps.id}
-                    className={postStyles.instagramStory}
-                    onClick={() => handleStoryClick(cardProps)} // make clickable
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className={postStyles.storyBorder}>
-                      <Avatar
-                        src={
-                          cardProps.creator.avatarURL ||
-                          '/static/images/avatar/1.jpg'
-                        }
-                        className={postStyles.storyAvatar}
-                      />
-                    </div>
-                    <span className={postStyles.storyUsername}>
-                      {cardProps.creator.name.split(' ')[0]}
-                    </span>
-                  </div>
+                    post={cardProps}
+                    data-testid="pinned-post"
+                  />
                 );
               })}
             </Carousel>
           </div>
         )}
-
         <div className={`${styles.heading}`}>{t('startPost')}</div>
         <div className={styles.postInputContainer}>
           <Row className="d-flex gap-1">
@@ -427,35 +417,6 @@ export default function Home(): JSX.Element {
         organizationId={orgId}
         img={postImg}
       />
-
-      {selectedPinnedPost && (
-        <Modal
-          open={showPinnedPostModal}
-          onClose={() => setShowPinnedPostModal(false)}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(3px)',
-          }}
-        >
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: 600,
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              outline: 'none',
-            }}
-          >
-            <PostCard
-              {...selectedPinnedPost}
-              isModalView={true}
-              data-testid="pinned-post-card"
-            />
-          </Box>
-        </Modal>
-      )}
     </div>
   );
 }
