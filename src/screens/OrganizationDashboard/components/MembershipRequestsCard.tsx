@@ -3,50 +3,15 @@
  *
  * This component displays a comprehensive overview of pending membership requests and
  * volunteer rankings for an organization. It presents membership requests with user
- * details and provides a dedicated section for volunteer rankings. The component
- * includes loading states, empty states, and navigation functionality to view all
- * requests or rankings in detail.
+ * details and provides a dedicated section for volunteer rankings (currently a placeholder).
  *
  * @component
  * @param props - The properties for the MembershipRequestsCard component.
- * @param props.membershipRequestData - The data object containing organization membership requests information.
- * @param props.membershipRequestData.organization - The organization object containing membership request details.
- * @param props.membershipRequestData.organization.membershipRequests - Array of pending membership request objects.
- * @param props.isLoading - Loading state indicator. When true, displays skeleton loaders instead of actual content.
- * @param props.onViewAllClick - Callback function triggered when the "View All" button for membership requests is clicked.
+ * @param props.membershipRequestData - Organization membership requests data
+ * @param props.isLoading - Loading state indicator
+ * @param props.onViewAllClick - Callback for "View All" button click
  *
- * @returns A JSX element representing a styled card component containing membership requests list and volunteer rankings section.
- *
- * @example
- * ```tsx
- * <MembershipRequestsCard
- *   membershipRequestData={{
- *     organization: {
- *       membershipRequests: [
- *         {
- *           status: 'PENDING',
- *           membershipRequestId: 'req123',
- *           user: { name: 'John Doe' }
- *         }
- *       ]
- *     }
- *   }}
- *   isLoading={false}
- *   onViewAllClick={() => navigate('/membership-requests')}
- * />
- * ```
- *
- * @remarks
- * - The component displays only the first few membership requests for overview purposes.
- * - When no membership requests are present, it shows a "No membership requests" message.
- * - The volunteer rankings section currently displays a "Coming Soon" placeholder.
- * - Loading states use skeleton components to maintain consistent layout.
- * - The component includes separate "View All" buttons for both membership requests and volunteer rankings.
- * - Uses react-i18next for internationalization support.
- *
- * @file This file defines the MembershipRequestsCard component used in the Talawa Admin organization dashboard.
- * - Uses CardItem components for consistent user display styling.
- * - Includes error handling with toast notifications.
+ * @returns Styled card with membership requests list and volunteer rankings section
  *
  * @example
  * ```tsx
@@ -56,16 +21,14 @@
  *       membershipRequests: [
  *         {
  *           status: 'pending',
- *           membershipRequestId: '123',
+ *           membershipRequestId: 'req123',
  *           user: { name: 'John Doe' }
  *         }
  *       ]
  *     }
  *   }}
  *   isLoading={false}
- *   onViewAllClick={async () => {
- *     await navigate('/requests');
- *   }}
+ *   onViewAllClick={() => navigate('/membership-requests')}
  * />
  * ```
  */
@@ -82,7 +45,7 @@ interface InterfaceMembershipRequestsProps {
   membershipRequestData: {
     organization?: {
       membershipRequests?: Array<{
-        status: string;
+        status: 'pending' | 'approved' | 'rejected';
         membershipRequestId: string;
         user: { name: string };
       }>;

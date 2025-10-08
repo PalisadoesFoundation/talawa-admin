@@ -39,7 +39,7 @@
  *
  * @remarks
  * - Events are automatically sorted by start date in ascending order (earliest events first).
- * - The component uses dayjs for formatting event dates in a consistent, user-friendly format.
+ * - Date formatting is delegated to the CardItem component for consistent presentation.
  * - When no upcoming events exist, the card still displays with appropriate empty state messaging.
  * - Loading states use skeleton components that maintain the same layout structure as actual events.
  * - Each event is rendered using the CardItem component with event-specific formatting for dates.
@@ -107,12 +107,11 @@ const UpcomingEventsCard: React.FC<InterfaceUpcomingEventsCardProps> = ({
               .map((event) => {
                 return (
                   <CardItem
-                    data-testid="cardItem"
                     type="Event"
                     key={event.node.id}
-                    startdate={event?.node.startAt}
-                    enddate={event?.node.endAt}
-                    title={event?.node.name}
+                    startdate={event.node.startAt}
+                    enddate={event.node.endAt}
+                    title={event.node.name}
                   />
                 );
               })

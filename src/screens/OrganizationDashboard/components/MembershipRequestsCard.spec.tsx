@@ -48,17 +48,17 @@ describe('MembershipRequestsCard Component', () => {
     organization: {
       membershipRequests: [
         {
-          status: 'PENDING',
+          status: 'pending' as const,
           membershipRequestId: 'request1',
           user: { name: 'John Doe' },
         },
         {
-          status: 'PENDING',
+          status: 'pending' as const,
           membershipRequestId: 'request2',
           user: { name: 'Jane Smith' },
         },
         {
-          status: 'PENDING',
+          status: 'pending' as const,
           membershipRequestId: 'request3',
           user: { name: 'Bob Johnson' },
         },
