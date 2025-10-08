@@ -2284,7 +2284,7 @@ const createPostMock = {
     variables: {
       input: {
         caption: 'Test Title',
-        organizationId: 'org123',
+        organizationId: '123',
         isPinned: false,
         attachments: [],
       },
@@ -2295,6 +2295,8 @@ const createPostMock = {
       createPost: {
         id: 'post1',
         caption: 'Test Title',
+        pinnedAt: null,
+        attachments: [],
       },
     },
   },
@@ -2303,7 +2305,7 @@ const createPostMock = {
 const getPostsMock2 = {
   request: {
     query: GET_POSTS_BY_ORG,
-    variables: { input: { organizationId: 'org123' } },
+    variables: { input: { organizationId: '123' } },
   },
   result: {
     data: {

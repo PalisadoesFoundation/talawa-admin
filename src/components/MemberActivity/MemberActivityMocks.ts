@@ -35,7 +35,7 @@ export const mocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      // EVENT_DETAILS($eventId: String!) expects eventId
+      // EVENT_DETAILS query parameter is $eventId
       variables: { eventId: 'event123' },
     },
     result: {
