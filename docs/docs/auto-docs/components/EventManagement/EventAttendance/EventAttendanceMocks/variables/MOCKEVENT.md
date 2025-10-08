@@ -34,6 +34,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **description**: `string` = `'This is a test event description'`
 
+### endAt
+
+> **endAt**: `string` = `'2030-05-02T17:00:00.000Z'`
+
 ### endDate
 
 > **endDate**: `string` = `'2030-05-02'`
@@ -45,6 +49,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 ### location
 
 > **location**: `string` = `'Test Location'`
+
+### name
+
+> **name**: `string` = `'Test Event'`
 
 ### organization
 
@@ -61,6 +69,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 ### recurring
 
 > **recurring**: `boolean` = `true`
+
+### startAt
+
+> **startAt**: `string` = `'2030-05-01T09:00:00.000Z'`
 
 ### startDate
 
