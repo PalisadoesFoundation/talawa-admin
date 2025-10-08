@@ -133,7 +133,7 @@ describe('RecentPostsCard Component', () => {
 
     render(<RecentPostsCard {...loadingProps} />);
 
-    expect(screen.getAllByTestId('card-item-loading')).toHaveLength(4);
+    expect(screen.getAllByTestId('card-item-loading')).toHaveLength(5);
   });
 
   it('should render empty state when no posts are available', () => {
@@ -222,8 +222,8 @@ describe('RecentPostsCard Component', () => {
 
     render(<RecentPostsCard {...manyPostsProps} />);
 
-    // Should only show first 10 posts
+    // Should only show first 5 posts
     const cardItems = screen.getAllByTestId('card-item');
-    expect(cardItems).toHaveLength(10);
+    expect(cardItems).toHaveLength(5);
   });
 });
