@@ -98,7 +98,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
   onViewAllClick,
 }) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationDashboard',
+    keyPrefix: 'dashboard',
   });
 
   const pendingRequests =

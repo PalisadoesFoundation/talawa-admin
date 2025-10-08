@@ -70,7 +70,7 @@ const UpcomingEventsCard: React.FC<InterfaceUpcomingEventsCardProps> = ({
   onViewAllEventsClick,
 }) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationDashboard',
+    keyPrefix: 'dashboard',
   });
 
   return (

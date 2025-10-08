@@ -80,7 +80,7 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
   onViewAllClick,
 }) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationDashboard',
+    keyPrefix: 'dashboard',
   });
 
   const edges = postData?.organization?.posts?.edges ?? [];
