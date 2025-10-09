@@ -17,7 +17,7 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
-import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
+import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 
 const link = new StaticMockLink(MOCKS, true);
@@ -32,6 +32,14 @@ vi.mock('react-chartjs-2', () => ({
   Bar: () => null,
   Pie: () => null,
 }));
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: () => ({ eventId: 'event123', orgId: 'org456' }),
+  };
+});
 
 const renderEventAttendance = (): RenderResult => {
   return render(
@@ -48,12 +56,6 @@ const renderEventAttendance = (): RenderResult => {
 };
 
 describe('Event Attendance Component', () => {
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-    }));
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -168,12 +170,6 @@ describe('EventAttendance CSS Tests', () => {
       </MockedProvider>,
     );
   };
-
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-    }));
-  });
 
   afterEach(() => {
     vi.clearAllMocks();
