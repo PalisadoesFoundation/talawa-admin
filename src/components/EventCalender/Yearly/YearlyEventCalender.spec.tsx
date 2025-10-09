@@ -15,30 +15,6 @@ import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
-// Helper to click through expand buttons until one shows expanded content
-async function clickAnyExpandAndWait(
-  container: HTMLElement,
-): Promise<HTMLButtonElement | null> {
-  // Wait until at least one expand button is rendered
-  await waitFor(() => {
-    const any = container.querySelector('[data-testid^="expand-btn-"]');
-    expect(any).not.toBeNull();
-  });
-
-  const buttons = container.querySelectorAll('[data-testid^="expand-btn-"]');
-  for (const btn of Array.from(buttons)) {
-    await act(async () => {
-      fireEvent.click(btn as HTMLButtonElement);
-    });
-
-    // Consider expanded if the button shows "Close" or at least one card rendered
-    const hasClose = within(btn as HTMLElement).queryByText(/Close/i);
-    const hasCard = screen.queryAllByTestId('card').length > 0;
-    if (hasClose || hasCard) return btn as HTMLButtonElement;
-  }
-  return null;
-}
-
 // Helper to get specific expand button for a given Date based on component's indexing
 function getExpandButtonForDate(
   container: HTMLElement,
@@ -372,7 +348,7 @@ describe('Calendar Component', () => {
       endDate: todayDate.toISOString(),
     };
 
-    const { container } = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
@@ -568,7 +544,7 @@ describe('Calendar Component', () => {
       endDate: todayDate.toISOString(),
     };
 
-    const { container } = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
@@ -621,7 +597,7 @@ describe('Calendar Component', () => {
       },
     };
 
-    const { container } = renderWithRouterAndPath(
+    const {} = renderWithRouterAndPath(
       <Calendar
         eventData={[privateEventToday]}
         refetchEvents={mockRefetchEvents}
@@ -754,7 +730,7 @@ describe('Calendar Component', () => {
       creator: { id: 'creator-x', name: 'A B', emailAddress: 'a@example.com' },
     };
 
-    const { container } = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[eventWithoutAttendees]}
         refetchEvents={mockRefetchEvents}
