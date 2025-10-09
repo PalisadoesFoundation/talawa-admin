@@ -159,7 +159,12 @@ describe('PaginationList', () => {
   it('disables Next button on last page', () => {
     mockMatchMedia(false); // false = large screen
 
-    renderWithProviders({ ...defaultProps, page: 9, count: 100, rowsPerPage: 10 });
+    renderWithProviders({
+      ...defaultProps,
+      page: 9,
+      count: 100,
+      rowsPerPage: 10,
+    });
     expect(screen.getByTestId('prev-button')).not.toBeDisabled();
     expect(screen.getByTestId('next-button')).toBeDisabled();
   });
