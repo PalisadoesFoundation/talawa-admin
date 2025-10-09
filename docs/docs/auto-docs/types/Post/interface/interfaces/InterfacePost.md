@@ -16,9 +16,9 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFounda
 
 ***
 
-### caption
+### caption?
 
-> **caption**: `string`
+> `optional` **caption**: `string`
 
 Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L84)
 

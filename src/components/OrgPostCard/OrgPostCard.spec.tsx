@@ -18,6 +18,18 @@ import type { DocumentNode } from 'graphql';
 import * as errorHandlerModule from 'utils/errorHandler';
 import type { MockedResponse } from '@apollo/client/testing';
 
+// Mock plugin injector similar to Transactions tests
+vi.mock('plugin', () => ({
+  PluginInjector: vi.fn(() => (
+    <div data-testid="plugin-injector-g3">Mock Plugin Injector G3</div>
+  )),
+}));
+
+// src/components/OrgPostCard/OrgPostCard.spec.tsx
+beforeAll(() => {
+  global.URL.createObjectURL = vi.fn(() => 'mocked-url');
+});
+
 /**
  * Unit Tests for OrgPostCard Component
  *
@@ -319,6 +331,10 @@ describe('OrgPostCard Component', () => {
     );
   };
   describe('Tests', () => {
+    it('renders the G3 plugin injector below caption', () => {
+      renderComponent();
+      expect(screen.getByTestId('plugin-injector-g3')).toBeInTheDocument();
+    });
     it('renders the post card with basic information', () => {
       renderComponent();
 
@@ -459,7 +475,7 @@ describe('OrgPostCard Component', () => {
       const fileInput = await screen.findByTestId('image-upload');
       expect(fileInput).toBeInTheDocument();
 
-      const file = new File(['dummy content'], 'dummy-image.jpg', {
+      const file = new File(['dummy content'], 'dummy-image.jpeg', {
         type: 'image/jpeg',
       });
       await userEvent.upload(fileInput, file);
@@ -1048,6 +1064,15 @@ describe('getMimeTypeEnum', () => {
   it('should return IMAGE_JPEG as fallback for unknown extension', () => {
     expect(getMimeTypeEnum('file.unknown')).toBe('IMAGE_JPEG');
     expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
+  });
+
+  it('detects correct MIME type when uploading different files', () => {
+    const urls = ['test.jpg', 'test.png', 'test.mp4'];
+    const mimeTypes = urls.map((url) => getMimeTypeEnum(url));
+
+    expect(mimeTypes[0]).toMatch(/^IMAGE_/);
+    expect(mimeTypes[1]).toMatch(/^IMAGE_/);
+    expect(mimeTypes[2]).toMatch(/^VIDEO_/);
   });
 });
 

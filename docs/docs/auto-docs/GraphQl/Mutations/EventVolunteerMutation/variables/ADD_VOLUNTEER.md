@@ -16,4 +16,4 @@ The data required to create an event volunteer.
 
 ## Returns
 
-The ID of the created event volunteer.
+The created event volunteer with full details.

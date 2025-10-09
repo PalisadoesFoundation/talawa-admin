@@ -23,7 +23,8 @@ export class ExtensionRegistryManager {
     DU2: [], // Drawer User Global
     G1: [], // General Injector 1
     G2: [], // General Injector 2
-    G3: [], // General Injector 3
+    G3: [], // General Injector 3 - Organization posts
+    G4: [], // General Injector 4 - User portal posts
   };
 
   getExtensionRegistry(): IExtensionRegistry {
@@ -189,6 +190,9 @@ export class ExtensionRegistryManager {
     this.extensionRegistry.G3 = this.extensionRegistry.G3.filter(
       (item) => item.pluginId !== pluginId,
     );
+    this.extensionRegistry.G4 = this.extensionRegistry.G4.filter(
+      (item) => item.pluginId !== pluginId,
+    );
   }
 
   private registerInjectorExtensions(
@@ -221,6 +225,15 @@ export class ExtensionRegistryManager {
         });
       });
     }
+
+    if (manifest.extensionPoints?.G4) {
+      manifest.extensionPoints.G4.forEach((item) => {
+        this.extensionRegistry.G4.push({
+          ...item,
+          pluginId,
+        });
+      });
+    }
   }
 
   unregisterExtensionPoints(pluginId: string): void {
@@ -231,9 +244,6 @@ export class ExtensionRegistryManager {
 
   getExtensionPoints<T extends keyof IExtensionRegistry>(
     type: T,
-    userPermissions: string[] = [],
-    isAdmin: boolean = false,
-    isOrg?: boolean,
   ): IExtensionRegistry[T] {
     // Return the appropriate array based on type
     if (type === 'RA1') {
@@ -268,6 +278,9 @@ export class ExtensionRegistryManager {
     }
     if (type === 'G3') {
       return this.extensionRegistry.G3 as IExtensionRegistry[T];
+    }
+    if (type === 'G4') {
+      return this.extensionRegistry.G4 as IExtensionRegistry[T];
     }
 
     // Legacy support for routes and drawer

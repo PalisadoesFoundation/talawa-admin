@@ -59,6 +59,7 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
 import styles from '../../../style/app-fixed.module.css';
+import { PluginInjector } from 'plugin';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -349,6 +350,26 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           </Typography>{' '}
           {props.title}
         </Caption>
+
+        {/* Plugin Extension Point G3 - Inject plugins below caption */}
+        <PluginInjector
+          injectorType="G4"
+          data={{
+            caption: props.title,
+            postId: props.id,
+            text: props.text,
+            creator: props.creator,
+            upVoteCount: props.upVoteCount,
+            downVoteCount: props.downVoteCount,
+            comments: props.comments,
+            commentCount: props.commentCount,
+            postedAt: props.postedAt,
+            pinnedAt: props.pinnedAt,
+            image: props.image,
+            video: props.video,
+            hasUserVoted: props.hasUserVoted,
+          }}
+        />
       </PostContent>
 
       {/* Comments Section */}
