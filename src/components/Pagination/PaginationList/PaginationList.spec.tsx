@@ -143,6 +143,8 @@ describe('PaginationList', () => {
   });
 
   it('handles edge case with count less than rowsPerPage', () => {
+    mockMatchMedia(false); // false = large screen
+
     renderWithProviders({ ...defaultProps, count: 5, rowsPerPage: 10 });
 
     expect(screen.getByText('Page 1 of 1')).toBeInTheDocument();
