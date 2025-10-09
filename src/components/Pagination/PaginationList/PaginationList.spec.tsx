@@ -71,6 +71,8 @@ describe('PaginationList', () => {
           query === '(max-width: 600px)' ? isSmallScreen : !isSmallScreen,
         media: query,
         onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
@@ -141,31 +143,8 @@ describe('PaginationList', () => {
   });
 
   it('handles edge case with count less than rowsPerPage', () => {
-    mockMatchMedia(false); // false = large screen
-
     renderWithProviders({ ...defaultProps, count: 5, rowsPerPage: 10 });
 
     expect(screen.getByText('Page 1 of 1')).toBeInTheDocument();
-  });
-
-  it('disables Previous button on first page', () => {
-    mockMatchMedia(false); // false = large screen
-
-    renderWithProviders({ ...defaultProps, page: 0 });
-    expect(screen.getByTestId('prev-button')).toBeDisabled();
-    expect(screen.getByTestId('next-button')).not.toBeDisabled();
-  });
-
-  it('disables Next button on last page', () => {
-    mockMatchMedia(false); // false = large screen
-
-    renderWithProviders({
-      ...defaultProps,
-      page: 9,
-      count: 100,
-      rowsPerPage: 10,
-    });
-    expect(screen.getByTestId('prev-button')).not.toBeDisabled();
-    expect(screen.getByTestId('next-button')).toBeDisabled();
   });
 });

@@ -80,7 +80,12 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
                   />
                   <div>
                     <div>{event.title ?? event.name}</div>
-                    <div>{formatDate(event.startDate ?? event.startAt)}</div>
+                    <div>
+                      {(() => {
+                        const rawDate = event.startDate ?? event.startAt;
+                        return rawDate ? formatDate(rawDate) : '-';
+                      })()}
+                    </div>
                   </div>
                 </Link>
               </TableCell>
