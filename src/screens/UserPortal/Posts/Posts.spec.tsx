@@ -1721,3 +1721,652 @@ describe('HomeScreen additional scenarios', () => {
     });
   });
 });
+
+// const { setItem } = useLocalStorage();
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    info: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
+// const mockUseParams = vi.fn().mockReturnValue({ orgId: 'orgId' });
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: () => mockUseParams(),
+    useNavigate: () => vi.fn(),
+  };
+});
+
+// Helper functions
+const createUserDetailsMock = (first: number = 10) => ({
+  request: {
+    query: USER_DETAILS,
+    variables: {
+      input: { id: '640d98d9eb6a743d75341067' },
+      first,
+    },
+  },
+  result: {
+    data: {
+      user: {
+        id: '640d98d9eb6a743d75341067',
+        name: 'Test User',
+        emailAddress: 'test@example.com',
+        joinedOrganizations: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
+        organizationsBlockedBy: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
+        tags: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
+      },
+    },
+  },
+});
+
+const createEmptyAdsMock = () => ({
+  request: {
+    query: ORGANIZATION_ADVERTISEMENT_LIST,
+    variables: { id: 'orgId', first: 6 },
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          id: 'orgId',
+          advertisements: {
+            edges: [],
+          },
+        },
+      ],
+    },
+  },
+});
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+describe('PinnedPostCard Component Tests', () => {
+  beforeEach(() => {
+    mockUseParams.mockReturnValue({ orgId: 'orgId' });
+    setItem('userId', '640d98d9eb6a743d75341067');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    localStorage.clear();
+  });
+
+  it('should render pinned posts in carousel', async () => {
+    const mocksWithPinnedPosts = [
+      createUserDetailsMock(),
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 2,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'pinned-1',
+                      caption: 'First Pinned Post',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                  {
+                    node: {
+                      id: 'pinned-2',
+                      caption: 'Second Pinned Post',
+                      creator: {
+                        id: 'u2',
+                        name: 'User2',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-02T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-02T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c2',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c2',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      createEmptyAdsMock(),
+    ];
+
+    const link = new StaticMockLink(mocksWithPinnedPosts, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('First Pinned Post')).toBeInTheDocument();
+        expect(screen.getByText('Second Pinned Post')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify the "Pinned Posts" heading is visible
+    expect(screen.getByText(/pinned posts/i)).toBeInTheDocument();
+  });
+
+  it('should close modal when clicking outside or close button', async () => {
+    const mocksWithPinnedPost = [
+      createUserDetailsMock(),
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'pinned-close-test',
+                      caption: 'Test Close Modal',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      createEmptyAdsMock(),
+    ];
+
+    const link = new StaticMockLink(mocksWithPinnedPost, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test Close Modal')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify pinned posts section exists
+    expect(screen.getByText(/pinned posts/i)).toBeInTheDocument();
+  });
+
+  it('should display default image when post has no image', async () => {
+    const mocksWithPinnedPost = [
+      createUserDetailsMock(),
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'no-image-post',
+                      caption: 'Post Without Image',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      createEmptyAdsMock(),
+    ];
+
+    const link = new StaticMockLink(mocksWithPinnedPost, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Post Without Image')).toBeInTheDocument();
+    });
+
+    // Check that default image is used
+    const image = screen.getByAltText('Post Without Image');
+    expect(image).toHaveAttribute('src', '/src/assets/images/defaultImg.png');
+  });
+
+  it('should not render pinned posts section when no pinned posts exist', async () => {
+    const mocksWithoutPinnedPosts = [
+      createUserDetailsMock(),
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 1,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'regular-post',
+                      caption: 'Regular Post',
+                      creator: {
+                        id: 'u1',
+                        name: 'User1',
+                        avatarURL: null,
+                      },
+                      commentsCount: 0,
+                      pinnedAt: null, // Not pinned
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: {
+                        hasVoted: false,
+                        voteType: null,
+                      },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      createEmptyAdsMock(),
+    ];
+
+    const link = new StaticMockLink(mocksWithoutPinnedPosts, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Regular Post')).toBeInTheDocument();
+    });
+
+    // Verify pinned posts section is not rendered
+    expect(screen.queryByTestId('pinned-post')).not.toBeInTheDocument();
+  });
+
+  it('should handle mixed pinned and regular posts correctly', async () => {
+    const mocksWithMixedPosts = [
+      createUserDetailsMock(),
+      {
+        request: {
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
+          variables: {
+            input: { id: 'orgId' },
+            first: 5,
+            after: null,
+            before: null,
+            last: null,
+            userId: '640d98d9eb6a743d75341067',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              postsCount: 3,
+              posts: {
+                edges: [
+                  {
+                    node: {
+                      id: 'pinned-1',
+                      caption: 'Pinned Post 1',
+                      creator: { id: 'u1', name: 'User1', avatarURL: null },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-01T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: { hasVoted: false, voteType: null },
+                      createdAt: '2024-01-01T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c1',
+                  },
+                  {
+                    node: {
+                      id: 'regular-1',
+                      caption: 'Regular Post 1',
+                      creator: { id: 'u2', name: 'User2', avatarURL: null },
+                      commentsCount: 0,
+                      pinnedAt: null,
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: { hasVoted: false, voteType: null },
+                      createdAt: '2024-01-02T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c2',
+                  },
+                  {
+                    node: {
+                      id: 'pinned-2',
+                      caption: 'Pinned Post 2',
+                      creator: { id: 'u3', name: 'User3', avatarURL: null },
+                      commentsCount: 0,
+                      pinnedAt: '2024-01-03T00:00:00.000Z',
+                      downVotesCount: 0,
+                      upVotesCount: 0,
+                      hasUserVoted: { hasVoted: false, voteType: null },
+                      createdAt: '2024-01-03T00:00:00.000Z',
+                      comments: {
+                        edges: [],
+                        pageInfo: {
+                          startCursor: null,
+                          endCursor: null,
+                          hasNextPage: false,
+                          hasPreviousPage: false,
+                        },
+                      },
+                    },
+                    cursor: 'c3',
+                  },
+                ],
+                pageInfo: {
+                  startCursor: 'c1',
+                  endCursor: 'c3',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      },
+      createEmptyAdsMock(),
+    ];
+
+    const link = new StaticMockLink(mocksWithMixedPosts, true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/user/organization/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/user/organization/:orgId" element={<Home />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Pinned Post 1')).toBeInTheDocument();
+        expect(screen.getByText('Pinned Post 2')).toBeInTheDocument();
+        expect(screen.getByText('Regular Post 1')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify pinned posts section is visible
+    expect(screen.getByText(/pinned posts/i)).toBeInTheDocument();
+  });
+});

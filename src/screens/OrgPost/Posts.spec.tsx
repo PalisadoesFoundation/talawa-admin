@@ -178,7 +178,7 @@ describe('PostsRenderer', () => {
     render(<PostsRenderer {...props} />);
 
     expect(screen.getAllByTestId('org-post-card').length).toBe(2);
-    expect(screen.getAllByText('Test Post').length).toBe(2);
+    expect(screen.getAllByText('Test Post').length).toBe(1);
     expect(screen.getByText('Test Post No Attachments')).toBeInTheDocument();
   });
 

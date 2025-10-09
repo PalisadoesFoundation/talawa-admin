@@ -44,7 +44,6 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
-import { useMinioUpload } from 'utils/MinioUpload';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -76,8 +75,6 @@ const VenueModal = ({
     keyPrefix: 'organizationVenues',
   });
   const { t: tCommon } = useTranslation('common');
-
-  const { uploadFileToMinio } = useMinioUpload();
 
   // State to manage image preview and form data
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
