@@ -63,7 +63,6 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
             <TableRow
               key={event._id ?? event.id}
               className="bg-white rounded"
-              role="row"
               aria-label={`Event: ${event.title}`}
             >
               <TableCell>
