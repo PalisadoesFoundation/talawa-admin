@@ -5,7 +5,6 @@ import {
   act,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
@@ -597,7 +596,7 @@ describe('Calendar Component', () => {
       },
     };
 
-    const {} = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[privateEventToday]}
         refetchEvents={mockRefetchEvents}
