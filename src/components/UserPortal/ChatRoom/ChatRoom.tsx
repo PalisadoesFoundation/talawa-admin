@@ -28,7 +28,7 @@
  * ```
  */
 
-import React, { useEffect, useRef, useState } from 'react'; // TODO: Remove useCallback when attachment functionality is re-enabled
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -47,12 +47,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
-// import { GrAttachment } from 'react-icons/gr'; // TODO: Remove when attachment functionality is re-enabled
-// import { useMinioUpload } from 'utils/MinioUpload'; // TODO: Remove when attachment functionality is re-enabled
-// import { useMinioDownload } from 'utils/MinioDownload'; // TODO: Remove when attachment functionality is re-enabled
+import { GrAttachment } from 'react-icons/gr';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
-// import { toast } from 'react-toastify'; // TODO: Remove when attachment functionality is re-enabled
-// import { validateFile } from 'utils/fileValidation'; // TODO: Remove when attachment functionality is re-enabled
+// import { toast } from 'react-toastify';
+// import { validateFile } from 'utils/fileValidation';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -128,7 +128,6 @@ interface INewChat {
   };
 }
 
-// Helper component to handle MinIO image loading
 interface IMessageImageProps {
   media: string;
   organizationId?: string;
@@ -138,7 +137,7 @@ interface IMessageImageProps {
   ) => Promise<string>;
 }
 
-export const MessageImage: React.FC<IMessageImageProps> = ({
+const MessageImageBase: React.FC<IMessageImageProps> = ({
   media,
   organizationId,
   getFileFromMinio,
@@ -149,15 +148,11 @@ export const MessageImage: React.FC<IMessageImageProps> = ({
     error: boolean;
   }>({
     url: null,
-    loading: !!media && !media.startsWith('data:'),
+    loading: !!media,
     error: false,
   });
 
   useEffect(() => {
-    // If it's a Base64 image, no need to fetch
-    if (media.startsWith('data:')) return;
-
-    // If no media provided, set error state
     if (!media) {
       setImageState((prev) => ({ ...prev, error: true, loading: false }));
       return;
@@ -184,29 +179,14 @@ export const MessageImage: React.FC<IMessageImageProps> = ({
     };
   }, [media, organizationId, getFileFromMinio]);
 
-  // If it's a Base64 image, use it directly
-  if (media.startsWith('data:')) {
-    return (
-      <img
-        className={styles.messageAttachment}
-        src={media}
-        alt="attachment"
-        onError={() => setImageState((prev) => ({ ...prev, error: true }))}
-      />
-    );
-  }
-
-  // If loading, show placeholder
   if (imageState.loading) {
     return <div className={styles.messageAttachment}>Loading image...</div>;
   }
 
-  // If error or no URL, show fallback
   if (imageState.error || !imageState.url) {
     return <div className={styles.messageAttachment}>Image not available</div>;
   }
 
-  // Show the MinIO image
   return (
     <img
       className={styles.messageAttachment}
@@ -216,6 +196,8 @@ export const MessageImage: React.FC<IMessageImageProps> = ({
     />
   );
 };
+
+export const MessageImage = React.memo(MessageImageBase);
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -245,14 +227,22 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
-  // TODO: Re-enable attachment state when schema supports media field
-  // const [attachment, setAttachment] = useState<string | null>(null);
-  // const [attachmentObjectName, setAttachmentObjectName] = useState<
-  //   string | null
-  // >(null);
-  // const { uploadFileToMinio } = useMinioUpload();
-  // const { getFileFromMinio: unstableGetFile } = useMinioDownload();
-  // const getFileFromMinio = useCallback(unstableGetFile, [unstableGetFile]);
+  const [attachment, setAttachment] = useState<string | null>(null);
+  const [attachmentObjectName, setAttachmentObjectName] = useState<
+    string | null
+  >(null);
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
+  const getFileFromMinioRef = useRef(unstableGetFile);
+  useEffect(() => {
+    getFileFromMinioRef.current = unstableGetFile;
+  }, [unstableGetFile]);
+  const getFileFromMinio = useCallback(
+    (objectName: string, organizationId: string) =>
+      getFileFromMinioRef.current(objectName, organizationId),
+    [],
+  );
+
   const openGroupChatDetails = (): void => {
     setGroupChatDetailsModalisOpen(true);
   };
@@ -351,16 +341,39 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   }, [chatData]);
 
   const sendMessage = async (): Promise<void> => {
-    if (editMessage) {
-      await editChatMessage();
-    } else {
-      await sendMessageToChat();
+    let messageBody = newMessage;
+    if (attachmentObjectName) {
+      // If there's an attachment, send the object ID as the body
+      messageBody = attachmentObjectName;
     }
+
+    if (editMessage) {
+      await editChatMessage({
+        variables: {
+          input: {
+            id: editMessage.id,
+            body: messageBody,
+          },
+        },
+      });
+    } else {
+      await sendMessageToChat({
+        variables: {
+          input: {
+            chatId: props.selectedContact,
+            parentMessageId: replyToDirectMessage?.id,
+            body: messageBody,
+          },
+        },
+      });
+    }
+
     await chatRefetch();
     setReplyToDirectMessage(null);
-    setEditMessage(null); // Clear edit mode after sending
+    setEditMessage(null);
     setNewMessage('');
-    // setAttachment(null); // TODO: Re-enable when attachment functionality is supported
+    setAttachment(null);
+    setAttachmentObjectName(null);
     await props.chatListRefetch({ id: userId as string });
   };
 
@@ -389,58 +402,34 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     document
       .getElementById('chat-area')
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
-  });
+  }, [chat?.messages?.edges?.length]);
 
-  // TODO: Re-enable file input ref when attachment functionality is supported
-  // const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Re-enable attachment functionality when schema supports media field
-  // const handleAddAttachment = (): void => {
-  //   fileInputRef?.current?.click();
-  // };
+  const handleAddAttachment = (): void => {
+    fileInputRef?.current?.click();
+  };
 
-  // const handleImageChange = async (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  // ): Promise<void> => {
-  //   const file = e.target.files?.[0];
-  //   if (!file) return;
-
-  //   // Use the fileValidation utility for validation
-  //   const validation = validateFile(file);
-
-  //   if (!validation.isValid) {
-  //     toast.error(validation.errorMessage);
-  //     if (fileInputRef.current) fileInputRef.current.value = '';
-  //     return;
-  //   }
-
-  //   try {
-  //     // Get current organization ID from the chat data
-  //     const organizationId = chat?.organization?.id || 'organization';
-
-  //     // Use MinIO for file uploads regardless of organization context
-  //     // If there's no organization specific ID, use 'organization' as default
-  //     const { objectName } = await uploadFileToMinio(file, organizationId);
-
-  //     // Store the object name for sending with the message
-  //     setAttachmentObjectName(objectName);
-
-  //     // Get a presigned URL to display the image preview
-  //     const presignedUrl = await getFileFromMinio(objectName, organizationId);
-  //     setAttachment(presignedUrl);
-
-  //     // Allow re-selecting the same file
-  //     if (fileInputRef.current) fileInputRef.current.value = '';
-  //   } catch (error) {
-  //     console.error('Error uploading file:', error);
-  //     toast.error('Error uploading image. Please try again.');
-
-  //     // Clear any partial data
-  //     setAttachment(null);
-  //     setAttachmentObjectName(null);
-  //     if (fileInputRef.current) fileInputRef.current.value = '';
-  //   }
-  // };
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const organizationId = chat?.organization?.id || 'organization';
+      console.log('orgid', organizationId);
+      const { objectName } = await uploadFileToMinio(file, organizationId);
+      setAttachmentObjectName(objectName);
+      const presignedUrl = await getFileFromMinio(objectName, organizationId);
+      setAttachment(presignedUrl);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setAttachment(null);
+      setAttachmentObjectName(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div
@@ -489,6 +478,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                       node: INewChat['messages']['edges'][0]['node'];
                     }) => {
                       const message = edge.node;
+                      const isFile = message.body.startsWith('uploads/'); // Check if it's a file reference
+
                       return (
                         <div
                           className={
@@ -540,7 +531,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                   </div>
                                 </a>
                               )}
-                              {message.body}
+                              {isFile ? (
+                                <MessageImage
+                                  media={message.body}
+                                  organizationId={chat?.organization?.id}
+                                  getFileFromMinio={getFileFromMinio}
+                                />
+                              ) : (
+                                message.body
+                              )}
                             </span>
                             <div className={styles.messageAttributes}>
                               <Dropdown
@@ -592,15 +591,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div id="messageInput">
-            {/* TODO: Re-enable file input when schema supports media field */}
-            {/* <input
+            <input
               type="file"
               accept="image/*"
               ref={fileInputRef}
               style={{ display: 'none' }} // Hide the input
               onChange={handleImageChange}
               data-testid="hidden-file-input"
-            /> */}
+            />
             {!!replyToDirectMessage?.id && (
               <div data-testid="replyMsg" className={styles.replyTo}>
                 <div className={styles.replyToMessageContainer}>
@@ -624,8 +622,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 </Button>
               </div>
             )}
-            {/* TODO: Re-enable attachment display when schema supports media field */}
-            {/* {attachment && (
+            {attachment && (
               <div className={styles.attachment}>
                 <img src={attachment} alt="attachment" />
 
@@ -641,16 +638,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   <Close />
                 </Button>
               </div>
-            )} */}
+            )}
 
             <InputGroup>
-              {/* TODO: Re-enable attachment button when schema supports media field */}
-              {/* <button
+              <button
                 onClick={handleAddAttachment}
                 className={styles.addAttachmentBtn}
               >
                 <GrAttachment />
-              </button> */}
+              </button>
               <Form.Control
                 placeholder={t('sendMessage')}
                 aria-label="Send Message"
