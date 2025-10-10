@@ -461,7 +461,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
 
-    const { container } = render(
+    render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -474,24 +474,22 @@ describe('Testing User Table Item', () => {
     await wait();
 
     // Check that the table row exists
-    const tableRow = container.querySelector('tr');
+    const tableRow = screen.getByRole('row');
     expect(tableRow).toBeInTheDocument();
 
     // Check that the index cell exists and has a class containing 'requestsTableItemIndex'
-    const indexCell = container.querySelector('th');
+    const indexCell = screen.getByText('2.');
     expect(indexCell).toBeInTheDocument();
-    expect(indexCell?.className).toContain('requestsTableItemIndex');
+    expect(indexCell.className).toContain('requestsTableItemIndex');
 
     // Check that name cell exists and has a class containing 'requestsTableItemName'
-    const nameCell = container.querySelector('td');
+    const nameCell = screen.getByText('John Doe');
     expect(nameCell).toBeInTheDocument();
-    expect(nameCell?.className).toContain('requestsTableItemName');
+    expect(nameCell.className).toContain('requestsTableItemName');
 
     // Check that email cell exists and has a class containing 'requestsTableItemEmail'
-    const emailCells = container.querySelectorAll('td');
-    const emailCell = Array.from(emailCells).find((cell) =>
-      cell.className.includes('requestsTableItemEmail'),
-    );
+    const emailCell = screen.getByText('john@example.com');
     expect(emailCell).toBeInTheDocument();
+    expect(emailCell.className).toContain('requestsTableItemEmail');
   });
 });
