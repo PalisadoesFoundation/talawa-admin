@@ -33,7 +33,7 @@ import { Link } from 'react-router';
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: { id: eventId },
+    variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',

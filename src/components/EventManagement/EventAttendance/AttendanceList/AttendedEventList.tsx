@@ -42,7 +42,8 @@ import type { InterfaceEvent } from 'types/Event/interface';
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
   const { orgId: currentOrg } = useParams();
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: { id: _id },
+    // EVENT_DETAILS expects { eventId }
+    variables: { eventId: _id },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
   });
@@ -60,14 +61,13 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
         <TableBody className="bg-primary">
           {event && (
             <TableRow
-              key={event._id}
+              key={event._id ?? event.id}
               className="bg-white rounded"
-              role="row"
               aria-label={`Event: ${event.title}`}
             >
               <TableCell>
                 <Link
-                  to={`/event/${currentOrg}/${event._id}`}
+                  to={`/event/${currentOrg}/${event._id ?? event.id}`}
                   className="d-flex justify-items-center align-items-center"
                   style={{ color: 'blue', textDecoration: 'none' }}
                 >
@@ -79,8 +79,13 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ _id }) => {
                     className="mx-2 rounded-full"
                   />
                   <div>
-                    <div>{event.title}</div>
-                    <div>{formatDate(event.startDate)}</div>
+                    <div>{event.title ?? event.name}</div>
+                    <div>
+                      {(() => {
+                        const rawDate = event.startDate ?? event.startAt;
+                        return rawDate ? formatDate(rawDate) : '-';
+                      })()}
+                    </div>
                   </div>
                 </Link>
               </TableCell>

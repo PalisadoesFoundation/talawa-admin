@@ -66,7 +66,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         error: new Error('An error occurred'),
       },
@@ -96,7 +96,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         result: {
           data: {

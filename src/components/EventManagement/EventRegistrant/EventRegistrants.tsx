@@ -151,7 +151,7 @@ function EventRegistrants(): JSX.Element {
       >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
-            <TableRow role="row">
+            <TableRow>
               <TableCell
                 data-testid="table-header-serial"
                 className={styles.customcell}

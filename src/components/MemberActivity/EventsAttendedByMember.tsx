@@ -40,7 +40,8 @@ function EventsAttendedByMember({
     loading,
     error,
   } = useQuery(EVENT_DETAILS, {
-    variables: { id: eventsId },
+    // EVENT_DETAILS expects { eventId }
+    variables: { eventId: eventsId },
   });
 
   if (loading)
@@ -57,15 +58,17 @@ function EventsAttendedByMember({
       </div>
     );
 
-  const { organization, _id, startDate, title, location } = events.event;
+  // Support both legacy and current schema fields from EVENT_DETAILS
+  const { organization, id, _id, startAt, startDate, name, title, location } =
+    events.event;
 
   return (
     <EventAttendedCard
-      orgId={organization._id}
-      eventId={_id}
-      key={_id}
-      startdate={startDate}
-      title={title}
+      orgId={organization._id ?? organization.id}
+      eventId={_id ?? id}
+      key={_id ?? id}
+      startdate={startDate ?? startAt}
+      title={title ?? name}
       location={location}
     />
   );
