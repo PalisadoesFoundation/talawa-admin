@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 
 // Mock the AddOnSpotAttendee component
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
@@ -308,7 +308,7 @@ describe('Testing Event Registrants Modal', () => {
   });
 
   test('Assigned attendees must be shown with badges and delete attendee mutation must function properly', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText } = render(
       <MockedProvider
         addTypename={false}
         mocks={[
