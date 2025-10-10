@@ -163,8 +163,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 }
                 label={`${attendee.firstName} ${attendee.lastName}`}
                 variant="outlined"
-                key={attendee.id}
-                onDelete={(): void => deleteRegistrant(attendee.id)}
+                key={(attendee as any)._id || attendee.id}
+                onDelete={(): void =>
+                  deleteRegistrant((attendee as any)._id || attendee.id)
+                }
               />
             ))}
           </Stack>
