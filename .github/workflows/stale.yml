@@ -24,7 +24,7 @@ jobs:
     name: Process Stale Issues and PRs 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'This issue did not get any activity in the past 10 days and will be closed in 180 days if no update occurs. Please check if the develop branch has fixed it and report again or close the issue.'
@@ -35,6 +35,7 @@ jobs:
           stale-pr-label: 'no-pr-activity'
           days-before-stale: 7
           days-before-close: 180
+          operations-per-run: 50
           remove-stale-when-updated: true
           exempt-all-milestones: true
           exempt-pr-labels: 'wip'
