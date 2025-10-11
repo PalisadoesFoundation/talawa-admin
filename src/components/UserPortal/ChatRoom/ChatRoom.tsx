@@ -246,6 +246,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const backfillAttemptsRef = useRef<number>(0);
 
   const [attachment, setAttachment] = useState<string | null>(null);
   const [attachmentObjectName, setAttachmentObjectName] = useState<
@@ -357,6 +358,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     const pageInfo = chat.messages.pageInfo;
     if (!pageInfo.hasPreviousPage) {
       setHasMoreMessages(false);
+      console.log('[ChatRoom] No previous page');
       return;
     }
 
@@ -364,9 +366,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     const currentScrollHeight = messagesContainerRef.current?.scrollHeight || 0;
 
     try {
+      console.log('[ChatRoom] loadMoreMessages start', {
+        currentEdges: chat.messages.edges.length,
+        pageInfo,
+      });
       const firstMessageCursor = chat.messages.edges[0]?.cursor;
       if (!firstMessageCursor) {
         setHasMoreMessages(false);
+        console.log(
+          '[ChatRoom] No firstMessageCursor to use for beforeMessages',
+        );
         return;
       }
 
@@ -380,6 +389,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
       if (result.data?.chat?.messages) {
         const newMessages = result.data.chat.messages.edges;
+        console.log('[ChatRoom] Fetched older messages:', {
+          count: newMessages.length,
+          pageInfo: result.data.chat.messages.pageInfo,
+        });
 
         if (newMessages.length > 0) {
           const existingMessageIds = new Set(
@@ -416,9 +429,11 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             );
           } else {
             setHasMoreMessages(false);
+            console.log('[ChatRoom] No unique messages to add');
           }
         } else {
           setHasMoreMessages(false);
+          console.log('[ChatRoom] 0 messages returned from server');
         }
       }
     } catch (error) {
@@ -431,7 +446,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const handleScroll = (): void => {
     if (!messagesContainerRef.current) return;
 
-    const { scrollTop } = messagesContainerRef.current;
+    const el = messagesContainerRef.current;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[ChatRoom] onScroll', {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+      });
+    }
 
     if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
       loadMoreMessages();
@@ -453,7 +476,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (chatData?.chat?.messages?.edges?.length) {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      // Best-effort mark-as-read; UI must continue regardless of failure.
       markReadIfSupported(props.selectedContact, lastMessage.node.id)
         .catch(() => {})
         .finally(() => {
@@ -465,10 +487,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (chatData) {
+      console.log('[ChatRoom] Initial chatData received:', {
+        edges: chatData.chat?.messages?.edges?.length,
+        pageInfo: chatData.chat?.messages?.pageInfo,
+      });
       const chat = chatData.chat;
       setChat(chat);
 
-      // Update pagination state based on current data
       setHasMoreMessages(chat.messages?.pageInfo?.hasPreviousPage ?? false);
 
       if (chat.members?.edges?.length === 2) {
@@ -603,6 +628,23 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       ?.lastElementChild?.scrollIntoView({ block: 'end' });
   }, [chat?.messages?.edges?.length]);
 
+  // If the container isn't scrollable yet but there are more messages,
+  // automatically backfill a few pages so the user can scroll.
+  useEffect(() => {
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    if (loadingMoreMessages) return;
+    if (!hasMoreMessages) return;
+
+    const { scrollHeight, clientHeight } = el;
+    const notScrollable = scrollHeight <= clientHeight + 24;
+    if (notScrollable && backfillAttemptsRef.current < 3) {
+      backfillAttemptsRef.current += 1;
+      console.log('[ChatRoom] Backfill attempt', backfillAttemptsRef.current);
+      loadMoreMessages();
+    }
+  }, [chat?.messages?.edges?.length, hasMoreMessages, loadingMoreMessages]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddAttachment = (): void => {
@@ -674,6 +716,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               ref={messagesContainerRef}
               onScroll={handleScroll}
             >
+              {hasMoreMessages && (
+                <div className={styles.loadMoreBar}>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    onClick={loadMoreMessages}
+                    disabled={loadingMoreMessages}
+                  >
+                    {loadingMoreMessages ? 'Loading…' : 'Load older messages'}
+                  </Button>
+                </div>
+              )}
               {loadingMoreMessages && (
                 <div className={styles.loadingMore}>
                   Loading more messages...

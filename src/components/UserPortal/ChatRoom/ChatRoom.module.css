@@ -139,6 +139,16 @@
 
 .chatMessages {
   margin: 10px 0;
+  flex: 1; /* take up available space within the flex column */
+  min-height: 0; /* allow the child to shrink and become scrollable in flex */
+  overflow-y: auto; /* enable vertical scrolling */
+  display: flex;
+  flex-direction: column;
+}
+
+.loadMoreBar {
+  text-align: center;
+  padding: 6px;
 }
 
 .userDetails .subtitle {
