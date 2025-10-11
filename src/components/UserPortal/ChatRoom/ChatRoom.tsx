@@ -42,6 +42,7 @@ import {
   EDIT_CHAT_MESSAGE,
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
+  MARK_CHAT_MESSAGES_AS_READ,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
@@ -281,13 +282,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     },
   });
 
-  // TODO: Update markChatMessagesAsRead to match new schema
-  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-  //   variables: {
-  //     chatId: props.selectedContact,
-  //     userId: userId,
-  //   },
-  // });
+  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ);
 
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
@@ -311,12 +306,22 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   });
 
   useEffect(() => {
-    // TODO: Update markChatMessagesAsRead to match new schema
-    // markChatMessagesAsRead().then(() => {
-    //   props.chatListRefetch();
-    //   unreadChatListRefetch();
-    // });
-  }, [props.selectedContact]);
+    if (chatData?.chat?.messages?.edges?.length) {
+      const lastMessage =
+        chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
+      markChatMessagesAsRead({
+        variables: {
+          input: {
+            chatId: props.selectedContact,
+            messageId: lastMessage.node.id,
+          },
+        },
+      }).then(() => {
+        props.chatListRefetch();
+        unreadChatListRefetch();
+      });
+    }
+  }, [props.selectedContact, chatData]);
 
   useEffect(() => {
     if (chatData) {
@@ -389,8 +394,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
           props.selectedContact
       ) {
-        // TODO: Update markChatMessagesAsRead to match new schema
-        // await markChatMessagesAsRead();
+        const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
+        await markChatMessagesAsRead({
+          variables: {
+            input: {
+              chatId: props.selectedContact,
+              messageId: newMessage.id,
+            },
+          },
+        });
         chatRefetch();
       }
       props.chatListRefetch();
@@ -653,6 +665,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                  }
+                }}
                 className={styles.sendMessageInput}
               />
               <Button

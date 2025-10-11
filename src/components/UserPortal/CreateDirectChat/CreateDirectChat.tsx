@@ -151,6 +151,7 @@ export const handleCreateDirectChat = async (
     (): Promise<ApolloQueryResult<unknown>>;
   },
   toggleCreateDirectChatModal: { (): void; (): void },
+  existingUser: { name: string },
 ): Promise<void> => {
   const existingChat = chats.find(
     (chat) =>
@@ -170,7 +171,7 @@ export const handleCreateDirectChat = async (
         variables: {
           input: {
             organizationId,
-            name: 'Direct Chat',
+            name: existingUser?.name,
             description: 'A direct chat conversation',
             avatar: null,
           },
@@ -349,6 +350,7 @@ export default function createDirectChatModal({
                                       userId,
                                       chatsListRefetch,
                                       toggleCreateDirectChatModal,
+                                      { name: userDetails.name },
                                     );
                                   }}
                                   data-testid="addBtn"

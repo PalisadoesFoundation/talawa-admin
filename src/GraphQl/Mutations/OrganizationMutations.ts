@@ -210,6 +210,12 @@ export const MESSAGE_SENT_TO_CHAT = gql`
   }
 `;
 
+export const MARK_CHAT_MESSAGES_AS_READ = gql`
+  mutation MarkChatAsRead($input: MutationMarkChatAsReadInput!) {
+    markChatAsRead(input: $input)
+  }
+`;
+
 /**
  * GraphQL mutation to toggle the pinned status of a post.
  *
