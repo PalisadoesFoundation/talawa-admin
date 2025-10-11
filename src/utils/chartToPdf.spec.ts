@@ -130,10 +130,10 @@ describe('CSV Export Functions', () => {
       ['Value1', undefined],
       [0, ''],
     ];
-    
+
     // Convert to valid CSVData
-    const validData: (string | number)[][] = data.map(row =>
-      row.map(cell => (cell == null ? '' : cell))
+    const validData: (string | number)[][] = data.map((row) =>
+      row.map((cell) => (cell == null ? '' : cell)),
     );
 
     exportToCSV(validData, 'test.csv');
@@ -149,10 +149,10 @@ describe('CSV Export Functions', () => {
       [true, false, 'Value'],
       [123, 'String', 0],
     ];
-    
+
     // Convert to valid CSVData
-    const validData: (string | number)[][] = data.map(row =>
-      row.map(cell => typeof cell === 'boolean' ? String(cell) : cell)
+    const validData: (string | number)[][] = data.map((row) =>
+      row.map((cell) => (typeof cell === 'boolean' ? String(cell) : cell)),
     );
 
     exportToCSV(validData, 'test.csv');
