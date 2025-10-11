@@ -303,6 +303,7 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * UseEffect to handle errors and navigate if necessary.
    */
+  console.log(membershipRequestData);
   useEffect(() => {
     if (
       errorPost ||
@@ -497,12 +498,13 @@ function OrganizationDashboard(): JSX.Element {
                       (request: {
                         status: string;
                         membershipRequestId: string;
-                        user: { name: string };
+                        user: { name: string; avatarURL?: string };
                       }) => (
                         <CardItem
                           type="MembershipRequest"
                           key={request.membershipRequestId}
                           title={request.user.name}
+                          image={request.user.avatarURL}
                         />
                       ),
                     )

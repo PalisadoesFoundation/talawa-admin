@@ -3834,9 +3834,9 @@ form label,
 
 .CardItemImage {
   background-color: #eaebef;
-  height: 3.5rem;
-  min-width: 3.5rem;
-  border: 3.25rem solid transparent;
+  height: 6.75rem;
+  min-width: 6.75rem;
+  /* border: 3.25rem solid transparent; */
   border-radius: 8px;
 }
 

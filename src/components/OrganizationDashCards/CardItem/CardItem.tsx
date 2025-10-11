@@ -45,16 +45,27 @@ export interface InterfaceCardItem {
   enddate?: string;
   creator?: { id: string | number; name: string };
   location?: string;
+  image?: string;
 }
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
-  const { creator, type, title, startdate, enddate, time, location } = props;
+  const { creator, type, title, startdate, enddate, time, location, image } =
+    props;
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
         {type != 'Event' && (
           <div className={`${styles.CardItemImage}`}>
-            <img src="" alt="" />
+            <img
+              src={image}
+              alt=""
+              crossOrigin="anonymous"
+              style={{
+                height: '6.75rem',
+                width: '6.75rem',
+                borderRadius: '8px',
+              }}
+            />
           </div>
         )}
 
