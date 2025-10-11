@@ -130,8 +130,13 @@ describe('CSV Export Functions', () => {
       ['Value1', undefined],
       [0, ''],
     ];
+    
+    // Convert to valid CSVData
+    const validData: (string | number)[][] = data.map(row =>
+      row.map(cell => (cell == null ? '' : cell))
+    );
 
-    exportToCSV(data, 'test.csv');
+    exportToCSV(validData, 'test.csv');
 
     expect(mockCreateElement).toHaveBeenCalledWith('a');
     expect(mockClick).toHaveBeenCalled();
@@ -144,8 +149,13 @@ describe('CSV Export Functions', () => {
       [true, false, 'Value'],
       [123, 'String', 0],
     ];
+    
+    // Convert to valid CSVData
+    const validData: (string | number)[][] = data.map(row =>
+      row.map(cell => typeof cell === 'boolean' ? String(cell) : cell)
+    );
 
-    exportToCSV(data, 'test.csv');
+    exportToCSV(validData, 'test.csv');
 
     expect(mockCreateElement).toHaveBeenCalledWith('a');
     expect(mockClick).toHaveBeenCalled();
