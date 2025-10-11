@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagData
 
-Defined in: [src/utils/interfaces.ts:1443](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1443)
+Defined in: [src/utils/interfaces.ts:1452](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1452)
 
 InterfaceTagData
 
@@ -18,7 +18,7 @@ Defines the structure for tag data.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1444](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1444)
+Defined in: [src/utils/interfaces.ts:1453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1453)
 
 The unique identifier of the tag.
 
@@ -28,7 +28,7 @@ The unique identifier of the tag.
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1453)
+Defined in: [src/utils/interfaces.ts:1462](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1462)
 
 An array of ancestor tags.
 
@@ -46,7 +46,7 @@ An array of ancestor tags.
 
 > **childTags**: `object`
 
-Defined in: [src/utils/interfaces.ts:1450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1450)
+Defined in: [src/utils/interfaces.ts:1459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1459)
 
 Information about child tags.
 
@@ -60,7 +60,7 @@ Information about child tags.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1445](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1445)
+Defined in: [src/utils/interfaces.ts:1454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1454)
 
 The name of the tag.
 
@@ -70,7 +70,7 @@ The name of the tag.
 
 > **parentTag**: `object`
 
-Defined in: [src/utils/interfaces.ts:1446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1446)
+Defined in: [src/utils/interfaces.ts:1455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1455)
 
 The parent tag object.
 
@@ -84,7 +84,7 @@ The parent tag object.
 
 > **usersAssignedTo**: `object`
 
-Defined in: [src/utils/interfaces.ts:1447](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1447)
+Defined in: [src/utils/interfaces.ts:1456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1456)
 
 Information about users assigned to this tag.
 
