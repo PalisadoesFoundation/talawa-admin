@@ -710,7 +710,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
           </div>
-          <div className={`d-flex flex-grow-1 flex-column`}>
+          <div
+            className={`d-flex flex-grow-1 flex-column`}
+            style={{ minHeight: 0 }}
+          >
             <div
               className={styles.chatMessages}
               ref={messagesContainerRef}

@@ -1,6 +1,10 @@
 .chatAreaContainer {
   padding: 10px;
   flex-grow: 1;
+  height: 100%;
+  min-height: 0; /* allow inner flex children to shrink and scroll */
+  display: flex;
+  flex-direction: column;
   /* background-color: rgba(196, 255, 211, 0.3); */
 }
 
