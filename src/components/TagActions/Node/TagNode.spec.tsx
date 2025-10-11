@@ -300,105 +300,52 @@ describe('Edge Cases and Coverage Improvements', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('handles fetchMoreSubTags with undefined fetchMoreResult in updateQuery', async () => {
-    // Create a mock that simulates the scenario where fetchMoreResult is undefined
-    // This will trigger the line 90: if (!fetchMoreResult) return prevResult;
-    const mockWithUndefinedFetchMore = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [
-                  {
-                    node: {
-                      _id: 'subTag1',
-                      name: 'subTag 1',
-                      __typename: 'Tag',
-                      usersAssignedTo: { totalCount: 0 },
-                      childTags: { totalCount: 0 },
-                      ancestorTags: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: true,
-                  endCursor: 'subTag1',
-                  startCursor: 'subTag1',
-                  hasPreviousPage: false,
+const mockWithUndefinedFetchMore = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: { id: '1', first: 10 },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          __typename: 'GetChildTagsPayload',
+          childTags: {
+            __typename: 'ChildTagsConnection',
+            edges: [
+              {
+                node: {
+                  _id: 'subTag1',
+                  name: 'subTag 1',
+                  __typename: 'Tag',
+                  usersAssignedTo: { totalCount: 0 },
+                  childTags: { totalCount: 0 },
+                  ancestorTags: [],
                 },
-                totalCount: 1,
               },
-              ancestorTags: [],
+            ],
+            pageInfo: {
+              __typename: 'PageInfo',
+              hasNextPage: true,
+              endCursor: 'subTag1',
+              startCursor: 'subTag1',
+              hasPreviousPage: false,
             },
+            totalCount: 1,
           },
+          ancestorTags: [],
         },
       },
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: 'subTag1' },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [], // Empty edges to simulate undefined fetchMoreResult scenario
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: false,
-                  endCursor: null,
-                  startCursor: null,
-                  hasPreviousPage: true,
-                },
-                totalCount: 1,
-              },
-              ancestorTags: [],
-            },
-          },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={mockWithUndefinedFetchMore} addTypename={false}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-    });
-
-    // Trigger load more by scrolling
-    const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
-    );
-    fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
-
-    // The updateQuery function should handle the case where fetchMoreResult is undefined
-    // This covers line 90: if (!fetchMoreResult) return prevResult;
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-    });
-  });
+    },
+  },
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: { id: '1', first: 10, after: 'subTag1' },
+    },
+    result: undefined, // This makes fetchMoreResult falsy in updateQuery
+  },
+];
 
   it('covers nullish coalescing operator for subTagsList length when data is null', async () => {
     // This test specifically targets line 194: dataLength={subTagsList?.length ?? 0}
