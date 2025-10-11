@@ -7,6 +7,7 @@ import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption
 import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
@@ -80,7 +81,7 @@ export async function main(): Promise<void> {
 
     await askAndSetRecaptcha();
     await askAndSetLogErrors();
-
+    await backupEnvFile();
     console.log(
       '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
     );
