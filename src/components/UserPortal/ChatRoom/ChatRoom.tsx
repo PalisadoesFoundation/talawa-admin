@@ -43,6 +43,7 @@ import {
   MESSAGE_SENT_TO_CHAT,
   SEND_MESSAGE_TO_CHAT,
   MARK_CHAT_MESSAGES_AS_READ,
+  DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
@@ -104,6 +105,7 @@ interface INewChat {
   };
   messages: {
     edges: Array<{
+      cursor: string;
       node: {
         id: string;
         body: string;
@@ -126,6 +128,12 @@ interface INewChat {
         };
       };
     }>;
+    pageInfo: {
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor: string;
+      endCursor: string;
+    };
   };
 }
 
@@ -159,7 +167,6 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
       return;
     }
 
-    // In direct messages, there is no organization ID, so use 'organization' as a fallback.
     const orgId = organizationId || 'organization';
 
     let stillMounted = true;
@@ -212,8 +219,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     };
   }, []);
 
-  const { getItem } = useLocalStorage();
+  const { getItem, setItem } = useLocalStorage();
   const userId = getItem('userId');
+
+  useEffect(() => {
+    if (props.selectedContact) {
+      setItem('selectedChatId', props.selectedContact);
+      setHasMoreMessages(true);
+      setLoadingMoreMessages(false);
+    }
+  }, [props.selectedContact, setItem]);
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
@@ -227,6 +242,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   >(null);
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
+
+  const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
+  const [hasMoreMessages, setHasMoreMessages] = useState(true);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const [attachment, setAttachment] = useState<string | null>(null);
   const [attachmentObjectName, setAttachmentObjectName] = useState<
@@ -284,15 +303,140 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ);
 
+  const [deleteChatMessage] = useMutation(DELETE_CHAT_MESSAGE);
+
+  const [supportsMarkRead, setSupportsMarkRead] = useState(true);
+  const markReadIfSupported = useCallback(
+    async (chatId: string, messageId: string): Promise<void> => {
+      if (!supportsMarkRead) return;
+      try {
+        await markChatMessagesAsRead({
+          variables: {
+            input: {
+              chatId,
+              messageId,
+            },
+          },
+        });
+      } catch (err) {
+        console.debug('markChatMessagesAsRead not supported; skipping.', err);
+        setSupportsMarkRead(false);
+      }
+    },
+    [markChatMessagesAsRead, supportsMarkRead],
+  );
+
+  const deleteMessage = async (messageId: string): Promise<void> => {
+    try {
+      await deleteChatMessage({
+        variables: {
+          input: {
+            id: messageId,
+          },
+        },
+      });
+      await chatRefetch();
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
+
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
       input: { id: props.selectedContact },
       first: 10,
       after: null,
-      firstMessages: 10,
-      afterMessages: null,
+      lastMessages: 10,
+      beforeMessages: null,
     },
   });
+
+  const loadMoreMessages = async (): Promise<void> => {
+    if (loadingMoreMessages || !hasMoreMessages || !chat) return;
+
+    const pageInfo = chat.messages.pageInfo;
+    if (!pageInfo.hasPreviousPage) {
+      setHasMoreMessages(false);
+      return;
+    }
+
+    setLoadingMoreMessages(true);
+    const currentScrollHeight = messagesContainerRef.current?.scrollHeight || 0;
+
+    try {
+      const firstMessageCursor = chat.messages.edges[0]?.cursor;
+      if (!firstMessageCursor) {
+        setHasMoreMessages(false);
+        return;
+      }
+
+      const result = await chatRefetch({
+        input: { id: props.selectedContact },
+        first: 10,
+        after: null,
+        lastMessages: 10,
+        beforeMessages: firstMessageCursor,
+      });
+
+      if (result.data?.chat?.messages) {
+        const newMessages = result.data.chat.messages.edges;
+
+        if (newMessages.length > 0) {
+          const existingMessageIds = new Set(
+            chat.messages.edges.map((edge) => edge.node.id),
+          );
+          const uniqueNewMessages = newMessages.filter(
+            (edge: INewChat['messages']['edges'][0]) =>
+              !existingMessageIds.has(edge.node.id),
+          );
+
+          if (uniqueNewMessages.length > 0) {
+            const updatedChat = {
+              ...chat,
+              messages: {
+                ...result.data.chat.messages,
+                edges: [...uniqueNewMessages, ...chat.messages.edges],
+                pageInfo: result.data.chat.messages.pageInfo,
+              },
+            };
+
+            setChat(updatedChat);
+
+            setTimeout(() => {
+              if (messagesContainerRef.current) {
+                const newScrollHeight =
+                  messagesContainerRef.current.scrollHeight;
+                messagesContainerRef.current.scrollTop =
+                  newScrollHeight - currentScrollHeight;
+              }
+            }, 0);
+
+            setHasMoreMessages(
+              result.data.chat.messages.pageInfo.hasPreviousPage,
+            );
+          } else {
+            setHasMoreMessages(false);
+          }
+        } else {
+          setHasMoreMessages(false);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading more messages:', error);
+    } finally {
+      setLoadingMoreMessages(false);
+    }
+  };
+
+  const handleScroll = (): void => {
+    if (!messagesContainerRef.current) return;
+
+    const { scrollTop } = messagesContainerRef.current;
+
+    if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
+      loadMoreMessages();
+    }
+  };
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
   //   variables: {
   //     id: userId,
@@ -309,17 +453,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (chatData?.chat?.messages?.edges?.length) {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      markChatMessagesAsRead({
-        variables: {
-          input: {
-            chatId: props.selectedContact,
-            messageId: lastMessage.node.id,
-          },
-        },
-      }).then(() => {
-        props.chatListRefetch();
-        unreadChatListRefetch();
-      });
+      // Best-effort mark-as-read; UI must continue regardless of failure.
+      markReadIfSupported(props.selectedContact, lastMessage.node.id)
+        .catch(() => {})
+        .finally(() => {
+          props.chatListRefetch();
+          unreadChatListRefetch();
+        });
     }
   }, [props.selectedContact, chatData]);
 
@@ -327,6 +467,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (chatData) {
       const chat = chatData.chat;
       setChat(chat);
+
+      // Update pagination state based on current data
+      setHasMoreMessages(chat.messages?.pageInfo?.hasPreviousPage ?? false);
 
       if (chat.members?.edges?.length === 2) {
         const otherUser = chat.members.edges.find(
@@ -395,15 +538,59 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
-        await markChatMessagesAsRead({
-          variables: {
-            input: {
-              chatId: props.selectedContact,
-              messageId: newMessage.id,
-            },
-          },
+        // Do not fail the subscription flow if mark-as-read is unsupported
+        await markReadIfSupported(props.selectedContact, newMessage.id).catch(
+          () => {},
+        );
+
+        // Soft-append the new message to local state to avoid pagination issues
+        setChat((prev: INewChat | undefined) => {
+          if (!prev) return prev;
+          try {
+            const newEdge = {
+              cursor: newMessage.id, // synthetic cursor; sufficient for rendering
+              node: {
+                id: newMessage.id,
+                body: newMessage.body,
+                createdAt: newMessage.createdAt,
+                updatedAt: newMessage.updatedAt,
+                creator: {
+                  id: newMessage.creator?.id,
+                  name: newMessage.creator?.name,
+                  avatarMimeType: newMessage.creator?.avatarMimeType,
+                  avatarURL: newMessage.creator?.avatarURL,
+                },
+                parentMessage: newMessage.parentMessage
+                  ? {
+                      id: newMessage.parentMessage.id,
+                      body: newMessage.parentMessage.body,
+                      createdAt: newMessage.parentMessage.createdAt,
+                      creator: {
+                        id: newMessage.parentMessage.creator.id,
+                        name: newMessage.parentMessage.creator.name,
+                      },
+                    }
+                  : undefined,
+              },
+            } as INewChat['messages']['edges'][0];
+
+            // Avoid duplicates
+            const exists = prev.messages.edges.some(
+              (e) => e.node.id === newEdge.node.id,
+            );
+            if (exists) return prev;
+
+            return {
+              ...prev,
+              messages: {
+                ...prev.messages,
+                edges: [...prev.messages.edges, newEdge],
+              },
+            } as INewChat;
+          } catch {
+            return prev;
+          }
         });
-        chatRefetch();
       }
       props.chatListRefetch();
       unreadChatListRefetch();
@@ -482,7 +669,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div className={`d-flex flex-grow-1 flex-column`}>
-            <div className={styles.chatMessages}>
+            <div
+              className={styles.chatMessages}
+              ref={messagesContainerRef}
+              onScroll={handleScroll}
+            >
+              {loadingMoreMessages && (
+                <div className={styles.loadingMore}>
+                  Loading more messages...
+                </div>
+              )}
               {!!chat?.messages?.edges?.length && (
                 <div id="messages">
                   {chat?.messages.edges.map(
@@ -573,15 +769,30 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                   >
                                     {t('reply')}
                                   </Dropdown.Item>
-                                  <Dropdown.Item
-                                    onClick={() => {
-                                      setEditMessage(message);
-                                      setNewMessage(message.body);
-                                    }}
-                                    data-testid="replyToMessage"
-                                  >
-                                    Edit
-                                  </Dropdown.Item>
+                                  {message.creator.id === userId && (
+                                    <>
+                                      {!message.body.startsWith('uploads/') && (
+                                        <Dropdown.Item
+                                          onClick={() => {
+                                            setEditMessage(message);
+                                            setNewMessage(message.body);
+                                          }}
+                                          data-testid="replyToMessage"
+                                        >
+                                          Edit
+                                        </Dropdown.Item>
+                                      )}
+                                      <Dropdown.Item
+                                        onClick={() =>
+                                          deleteMessage(message.id)
+                                        }
+                                        data-testid="deleteMessage"
+                                        style={{ color: 'red' }}
+                                      >
+                                        Delete
+                                      </Dropdown.Item>
+                                    </>
+                                  )}
                                 </Dropdown.Menu>
                               </Dropdown>
                               <span className={styles.messageTime}>

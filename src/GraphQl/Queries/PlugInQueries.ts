@@ -181,6 +181,8 @@ export const CHAT_BY_ID = gql`
     $after: String
     $firstMessages: Int
     $afterMessages: String
+    $lastMessages: Int
+    $beforeMessages: String
   ) {
     chat(input: $input) {
       id
@@ -224,7 +226,12 @@ export const CHAT_BY_ID = gql`
           startCursor
         }
       }
-      messages(first: $firstMessages, after: $afterMessages) {
+      messages(
+        first: $firstMessages
+        after: $afterMessages
+        last: $lastMessages
+        before: $beforeMessages
+      ) {
         edges {
           cursor
           node {

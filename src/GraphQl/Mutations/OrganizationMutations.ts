@@ -25,6 +25,15 @@ export const UPDATE_USER_ROLE_IN_ORG_MUTATION = gql`
   }
 `;
 
+export const DELETE_CHAT_MESSAGE = gql`
+  mutation DeleteChatMessage($input: MutationDeleteChatMessageInput!) {
+    deleteChatMessage(input: $input) {
+      id
+      body
+      createdAt
+    }
+  }
+`;
 /**
  * GraphQL mutation to create a sample organization.
  *
