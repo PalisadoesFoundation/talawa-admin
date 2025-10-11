@@ -247,6 +247,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const backfillAttemptsRef = useRef<number>(0);
+  const shouldAutoScrollRef = useRef<boolean>(false);
 
   const [attachment, setAttachment] = useState<string | null>(null);
   const [attachmentObjectName, setAttachmentObjectName] = useState<
@@ -358,7 +359,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     const pageInfo = chat.messages.pageInfo;
     if (!pageInfo.hasPreviousPage) {
       setHasMoreMessages(false);
-      console.log('[ChatRoom] No previous page');
       return;
     }
 
@@ -366,16 +366,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     const currentScrollHeight = messagesContainerRef.current?.scrollHeight || 0;
 
     try {
-      console.log('[ChatRoom] loadMoreMessages start', {
-        currentEdges: chat.messages.edges.length,
-        pageInfo,
-      });
       const firstMessageCursor = chat.messages.edges[0]?.cursor;
       if (!firstMessageCursor) {
         setHasMoreMessages(false);
-        console.log(
-          '[ChatRoom] No firstMessageCursor to use for beforeMessages',
-        );
         return;
       }
 
@@ -389,10 +382,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
       if (result.data?.chat?.messages) {
         const newMessages = result.data.chat.messages.edges;
-        console.log('[ChatRoom] Fetched older messages:', {
-          count: newMessages.length,
-          pageInfo: result.data.chat.messages.pageInfo,
-        });
 
         if (newMessages.length > 0) {
           const existingMessageIds = new Set(
@@ -429,11 +418,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             );
           } else {
             setHasMoreMessages(false);
-            console.log('[ChatRoom] No unique messages to add');
           }
         } else {
           setHasMoreMessages(false);
-          console.log('[ChatRoom] 0 messages returned from server');
         }
       }
     } catch (error) {
@@ -447,14 +434,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (!messagesContainerRef.current) return;
 
     const el = messagesContainerRef.current;
-    const { scrollTop, scrollHeight, clientHeight } = el;
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[ChatRoom] onScroll', {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      });
-    }
+    const { scrollTop } = el;
 
     if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
       loadMoreMessages();
@@ -487,12 +467,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   useEffect(() => {
     if (chatData) {
-      console.log('[ChatRoom] Initial chatData received:', {
-        edges: chatData.chat?.messages?.edges?.length,
-        pageInfo: chatData.chat?.messages?.pageInfo,
-      });
       const chat = chatData.chat;
-      setChat(chat);
+      const derivedIsGroup =
+        (chat?.members?.edges?.length ?? 0) > 2 ? true : false;
+      setChat({ ...chat, isGroup: derivedIsGroup });
 
       setHasMoreMessages(chat.messages?.pageInfo?.hasPreviousPage ?? false);
 
@@ -541,6 +519,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       });
     }
 
+    // ensure we auto-scroll to bottom after sending
+    shouldAutoScrollRef.current = true;
     await chatRefetch();
     setReplyToDirectMessage(null);
     setEditMessage(null);
@@ -550,7 +530,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     await props.chatListRefetch({ id: userId as string });
   };
 
-  const subscription = useSubscription(MESSAGE_SENT_TO_CHAT, {
+  useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
         id: props.selectedContact,
@@ -563,6 +543,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
+        // If the incoming message is from the current user, we should stick to bottom
+        if (newMessage?.creator?.id === userId) {
+          shouldAutoScrollRef.current = true;
+        }
         // Do not fail the subscription flow if mark-as-read is unsupported
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
           () => {},
@@ -621,11 +605,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       unreadChatListRefetch();
     },
   });
-  console.log('subscription', subscription);
+  // Guarded auto-scroll: only when user is near bottom or we've explicitly requested it
   useEffect(() => {
-    document
-      .getElementById('chat-area')
-      ?.lastElementChild?.scrollIntoView({ block: 'end' });
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    const nearBottom = el.scrollHeight - (el.scrollTop + el.clientHeight) < 100;
+    if (shouldAutoScrollRef.current || nearBottom) {
+      el.scrollTop = el.scrollHeight;
+      shouldAutoScrollRef.current = false;
+    }
   }, [chat?.messages?.edges?.length]);
 
   // If the container isn't scrollable yet but there are more messages,
@@ -640,7 +628,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     const notScrollable = scrollHeight <= clientHeight + 24;
     if (notScrollable && backfillAttemptsRef.current < 3) {
       backfillAttemptsRef.current += 1;
-      console.log('[ChatRoom] Backfill attempt', backfillAttemptsRef.current);
       loadMoreMessages();
     }
   }, [chat?.messages?.edges?.length, hasMoreMessages, loadingMoreMessages]);
@@ -658,7 +645,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (!file) return;
     try {
       const organizationId = chat?.organization?.id || 'organization';
-      console.log('orgid', organizationId);
       const { objectName } = await uploadFileToMinio(file, organizationId);
       setAttachmentObjectName(objectName);
       const presignedUrl = await getFileFromMinio(objectName, organizationId);

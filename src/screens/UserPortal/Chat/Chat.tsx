@@ -35,6 +35,7 @@
  * @returns  The rendered `chat` component.
  */
 import React, { useEffect, useState } from 'react';
+import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
@@ -43,11 +44,7 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
-import {
-  CHATS_LIST,
-  GROUP_CHAT_LIST,
-  UNREAD_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
@@ -73,8 +70,9 @@ interface InterfaceContactCardProps {
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
+  const { getItem, setItem } = useLocalStorage();
 
-  const [chats, setChats] = useState<GroupChat[]>([]);
+  const [chats, setChats] = useState<Array<GroupChat | NewChatType>>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -108,12 +106,7 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  console.log('chatsListData', chatsListData);
-  const { data: groupChatListData, refetch: groupChatListRefetch } =
-    useQuery(GROUP_CHAT_LIST);
-
-  const { data: unreadChatListData, refetch: unreadChatListRefetch } =
-    useQuery(UNREAD_CHAT_LIST);
+  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST);
 
   // TODO: Update markChatMessagesAsRead to match new schema
   // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
@@ -130,45 +123,64 @@ export default function chat(): JSX.Element {
   React.useEffect(() => {
     async function getChats(): Promise<void> {
       if (filterType === 'all') {
-        await chatsListRefetch();
-        if (chatsListData && chatsListData.chatsByUser) {
-          setChats(chatsListData.chatsByUser);
+        const { data } = await chatsListRefetch();
+        if (data && data.chatsByUser) {
+          setChats(data.chatsByUser);
         }
       } else if (filterType === 'unread') {
-        await unreadChatListRefetch();
-        if (unreadChatListData && unreadChatListData.chatsByUser) {
-          setChats(unreadChatListData.chatsByUser);
+        const { data } = await unreadChatListRefetch();
+        if (data && data.chatsByUser) {
+          setChats(data.chatsByUser);
         }
       } else if (filterType === 'group') {
-        await groupChatListRefetch();
-        if (groupChatListData && groupChatListData.chatsByUser) {
-          setChats(
-            groupChatListData.chatsByUser.filter(
-              (chat: GroupChat | NewChatType) => chat.isGroup,
-            ),
-          );
-        }
+        const { data } = await chatsListRefetch();
+        const list: Array<GroupChat | NewChatType> =
+          (data && data.chatsByUser) || [];
+        const groups = list.filter((chat: GroupChat | NewChatType) => {
+          if (isNewChatType(chat)) {
+            return (chat.members?.edges?.length || 0) > 2;
+          }
+          const legacy = chat as GroupChat;
+          return !!legacy.isGroup || (legacy.users?.length || 0) > 2;
+        });
+        setChats(groups);
       }
     }
     getChats();
   }, [filterType]);
 
   React.useEffect(() => {
-    if (chatsListData && chatsListData?.chatsByUser?.length) {
+    if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
       setChats(chatsListData.chatsByUser);
     }
-  }, [chatsListData]);
+  }, [chatsListData, filterType]);
 
-  // Auto-select the first chat when chats are loaded and no contact is selected
   React.useEffect(() => {
-    if (chats.length > 0 && !selectedContact) {
+    if (chats.length === 0) return;
+    const stored = getItem('selectedChatId') as string | null;
+    if (stored && !selectedContact) {
+      const exists = chats.some((c) =>
+        isNewChatType(c) ? c.id === stored : c._id === stored,
+      );
+      if (exists) {
+        setSelectedContact(stored);
+        return;
+      }
+    }
+    if (!selectedContact) {
       const firstChat = chats[0];
       const firstChatId = isNewChatType(firstChat)
         ? firstChat.id
         : firstChat._id;
       setSelectedContact(firstChatId);
     }
-  }, [chats, selectedContact]);
+  }, [chats, selectedContact, getItem]);
+
+  React.useEffect(() => {
+    if (selectedContact) {
+      setItem('selectedChatId', selectedContact);
+    }
+  }, [selectedContact, setItem]);
 
   return (
     <>
@@ -272,11 +284,10 @@ export default function chat(): JSX.Element {
                             : chat.image || '',
                           setSelectedContact,
                           selectedContact,
-                          isGroup:
-                            chat.isGroup ||
-                            (isNewChatType(chat)
-                              ? (chat.members?.edges?.length || 0) > 2
-                              : false),
+                          isGroup: isNewChatType(chat)
+                            ? (chat.members?.edges?.length || 0) > 2
+                            : (chat as GroupChat).isGroup ||
+                              ((chat as GroupChat).users?.length || 0) > 2,
                           unseenMessages: 0, // TODO: Update when unseen messages are available in new schema
                           lastMessage: '', // Messages are not fetched in the chat list query
                         };
@@ -312,7 +323,7 @@ export default function chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
-          chats={chats}
+          chats={chats.filter((c) => !isNewChatType(c)) as GroupChat[]}
         ></CreateDirectChat>
       )}
     </>
