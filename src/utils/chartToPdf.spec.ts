@@ -176,13 +176,13 @@ describe('CSV Export Functions', () => {
   });
 
   test('throws error if data is null', () => {
-    expect(() => exportToCSV(null as any, 'test.csv')).toThrow(
+    expect(() => exportToCSV(null as unknown as (string | number)[][], 'test.csv')).toThrow(
       'Data cannot be empty',
     );
   });
 
   test('throws error if data is undefined', () => {
-    expect(() => exportToCSV(undefined as any, 'test.csv')).toThrow(
+    expect(() => exportToCSV(undefined as unknown as (string | number)[][], 'test.csv')).toThrow(
       'Data cannot be empty',
     );
   });
