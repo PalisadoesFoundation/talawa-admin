@@ -359,7 +359,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
-      // The InfiniteScroll should render and the dataLength={subTagsList?.length ?? 0} 
+      // The InfiniteScroll should render and the dataLength={subTagsList?.length ?? 0}
       // expression on line 194 will be evaluated
       // This covers the nullish coalescing operator when subTagsList has a valid length
       expect(
