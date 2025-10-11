@@ -80,6 +80,103 @@ describe('CSV Export Functions', () => {
     expect(mockSetAttribute).toHaveBeenCalledWith('download', 'filename.csv');
   });
 
+  test('handles cleanup when link is not appended to document.body', () => {
+    const data = [['test']];
+
+    // Mock link with parentNode not equal to document.body
+    const mockLinkWithoutParent = {
+      setAttribute: mockSetAttribute,
+      click: mockClick,
+      parentNode: null, // This will make the condition false
+    } as unknown as HTMLAnchorElement;
+
+    mockCreateElement = vi.fn().mockReturnValue(mockLinkWithoutParent);
+    document.createElement =
+      mockCreateElement as unknown as typeof document.createElement;
+
+    exportToCSV(data, 'test.csv');
+
+    // Should still call URL.revokeObjectURL but not removeChild
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+    expect(mockRemoveChild).not.toHaveBeenCalled();
+  });
+
+  test('handles cleanup when link.parentNode is different element', () => {
+    const data = [['test']];
+
+    // Mock link with parentNode as a different element (not document.body)
+    const mockDifferentParent = document.createElement('div');
+    const mockLinkWithDifferentParent = {
+      setAttribute: mockSetAttribute,
+      click: mockClick,
+      parentNode: mockDifferentParent, // Different from document.body
+    } as unknown as HTMLAnchorElement;
+
+    mockCreateElement = vi.fn().mockReturnValue(mockLinkWithDifferentParent);
+    document.createElement =
+      mockCreateElement as unknown as typeof document.createElement;
+
+    exportToCSV(data, 'test.csv');
+
+    // Should still call URL.revokeObjectURL but not removeChild from document.body
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+    expect(mockRemoveChild).not.toHaveBeenCalled();
+  });
+
+  test('handles data with null and undefined values', () => {
+    const data: (string | number | null | undefined)[][] = [
+      ['Header1', 'Header2'],
+      [null, 'Value2'],
+      ['Value1', undefined],
+      [0, ''],
+    ];
+
+    exportToCSV(data, 'test.csv');
+
+    expect(mockCreateElement).toHaveBeenCalledWith('a');
+    expect(mockClick).toHaveBeenCalled();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+  });
+
+  test('handles data with mixed types including booleans', () => {
+    const data: (string | number | boolean)[][] = [
+      ['Header1', 'Header2', 'Header3'],
+      [true, false, 'Value'],
+      [123, 'String', 0],
+    ];
+
+    exportToCSV(data, 'test.csv');
+
+    expect(mockCreateElement).toHaveBeenCalledWith('a');
+    expect(mockClick).toHaveBeenCalled();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+  });
+
+  test('handles data with special characters and newlines', () => {
+    const data: string[][] = [
+      ['Header with "quotes"', 'Header with\nnewline'],
+      ['Value with, comma', 'Value with "quotes" and\nnewline'],
+    ];
+
+    exportToCSV(data, 'test.csv');
+
+    expect(mockCreateElement).toHaveBeenCalledWith('a');
+    expect(mockClick).toHaveBeenCalled();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+  });
+
+  test('throws error if data is null', () => {
+    expect(() => exportToCSV(null as any, 'test.csv')).toThrow(
+      'Data cannot be empty',
+    );
+  });
+
+  test('throws error if data is undefined', () => {
+    expect(() => exportToCSV(undefined as any, 'test.csv')).toThrow(
+      'Data cannot be empty',
+    );
+  });
+
   describe('exportTrendsToCSV', () => {
     test('exports attendance trends data correctly', () => {
       const eventLabels: string[] = ['Event1', 'Event2'];
@@ -148,6 +245,22 @@ describe('CSV Export Functions', () => {
       );
       expect(downloadCalls[0][1]).toBe(expectedFilename);
       vi.useRealTimers();
+    });
+
+    test('handles whitespace-only selected category', () => {
+      expect(() => exportDemographicsToCSV('   ', ['label'], [1])).toThrow(
+        'Selected category is required',
+      );
+    });
+
+    test('handles empty arrays with same length', () => {
+      const selectedCategory = 'Test Category';
+      const categoryLabels: string[] = [];
+      const categoryData: number[] = [];
+
+      expect(() =>
+        exportDemographicsToCSV(selectedCategory, categoryLabels, categoryData),
+      ).not.toThrow();
     });
   });
 });
