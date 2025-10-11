@@ -147,6 +147,14 @@ describe('CSV Export Functions', () => {
       [123, 'String', 0],
     ];
 
+    // Capture the CSV content by mocking Blob
+    let capturedCsvContent = '';
+    const mockBlob = new Blob([''], { type: 'text/csv' });
+    global.Blob = vi.fn().mockImplementation((content) => {
+      capturedCsvContent = content[0];
+      return mockBlob;
+    });
+
     // Test the actual production behavior by passing the raw data
     // The production code will convert boolean using String(cell)
     exportToCSV(data as unknown as (string | number)[][], 'test.csv');
@@ -154,6 +162,12 @@ describe('CSV Export Functions', () => {
     expect(mockCreateElement).toHaveBeenCalledWith('a');
     expect(mockClick).toHaveBeenCalled();
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+
+    // Verify boolean coercion in CSV output
+    expect(capturedCsvContent).toContain('true');
+    expect(capturedCsvContent).toContain('false');
+    expect(capturedCsvContent).toContain('Header1,Header2,Header3');
+    expect(capturedCsvContent).toContain('123,String,0');
   });
 
   test('handles data with special characters and newlines', () => {
@@ -162,11 +176,27 @@ describe('CSV Export Functions', () => {
       ['Value with, comma', 'Value with "quotes" and\nnewline'],
     ];
 
+    // Capture the CSV content by mocking Blob
+    let capturedCsvContent = '';
+    const mockBlob = new Blob([''], { type: 'text/csv' });
+    global.Blob = vi.fn().mockImplementation((content) => {
+      capturedCsvContent = content[0];
+      return mockBlob;
+    });
+
     exportToCSV(data, 'test.csv');
 
     expect(mockCreateElement).toHaveBeenCalledWith('a');
     expect(mockClick).toHaveBeenCalled();
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
+
+    // Verify CSV escaping works correctly
+    expect(capturedCsvContent).toContain(
+      '"Header with ""quotes""","Header with\nnewline"',
+    );
+    expect(capturedCsvContent).toContain(
+      '"Value with, comma","Value with ""quotes"" and\nnewline"',
+    );
   });
 
   test('throws error if data is null', () => {
@@ -265,6 +295,11 @@ describe('CSV Export Functions', () => {
       expect(() =>
         exportDemographicsToCSV(selectedCategory, categoryLabels, categoryData),
       ).not.toThrow();
+
+      // Verify that the export flow completed successfully
+      expect(mockCreateElement).toHaveBeenCalledWith('a');
+      expect(mockClick).toHaveBeenCalled();
+      expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
     });
   });
 });
