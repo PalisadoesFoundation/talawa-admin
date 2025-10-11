@@ -300,23 +300,52 @@ describe('Edge Cases and Coverage Improvements', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('covers nullish coalescing operator for subTagsList length when data is null', async () => {
-    // This test specifically targets line 194: dataLength={subTagsList?.length ?? 0}
-    // by creating a scenario where the GraphQL query returns null data
-    const mockWithNullData = [
+  it('exercises nullish coalescing operator for subTagsList length when dataLength is evaluated', async () => {
+    // This test exercises line 194: dataLength={subTagsList?.length ?? 0}
+    // by creating a scenario where InfiniteScroll renders and the dataLength calculation is executed
+    // We provide valid data with one subtag to ensure InfiniteScroll renders
+    const mockWithValidData = [
       {
         request: {
           query: USER_TAG_SUB_TAGS,
           variables: { id: '1', first: 10 },
         },
         result: {
-          data: null, // This will make subTagsData null, so subTagsList will be []
+          data: {
+            getChildTags: {
+              __typename: 'GetChildTagsPayload',
+              childTags: {
+                __typename: 'ChildTagsConnection',
+                edges: [
+                  {
+                    node: {
+                      _id: 'subTag1',
+                      name: 'subTag 1',
+                      __typename: 'Tag',
+                      usersAssignedTo: { totalCount: 0 },
+                      childTags: { totalCount: 0 },
+                      ancestorTags: [],
+                    },
+                  },
+                ],
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: 'subTag1',
+                  startCursor: 'subTag1',
+                  hasPreviousPage: false,
+                },
+                totalCount: 1,
+              },
+              ancestorTags: [],
+            },
+          },
         },
       },
     ];
 
     render(
-      <MockedProvider mocks={mockWithNullData} addTypename={false}>
+      <MockedProvider mocks={mockWithValidData} addTypename={false}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -330,12 +359,12 @@ describe('Edge Cases and Coverage Improvements', () => {
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
-      // When data is null, subTagsList will be [] (empty array), so the InfiniteScroll won't render
-      // due to the condition: {expanded && subTagsList?.length && (...)}
-      // This still covers the ?? 0 fallback in the dataLength prop
+      // The InfiniteScroll should render and the dataLength={subTagsList?.length ?? 0} 
+      // expression on line 194 will be evaluated
+      // This covers the nullish coalescing operator when subTagsList has a valid length
       expect(
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).not.toBeInTheDocument();
+      ).toBeInTheDocument();
     });
   });
 
