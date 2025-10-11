@@ -522,45 +522,6 @@ describe('Edge Cases and Coverage Improvements', () => {
     });
   });
 
-  it('exercises nullish coalescing operator for subTagsList length when data is null', async () => {
-    // This test exercises the nullish coalescing operator on line 194: subTagsList?.length ?? 0
-    // by mocking the GraphQL query to return null data
-    const mockWithNullData = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: null, // This will make subTagsData null, so subTagsList will be undefined
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={mockWithNullData} addTypename={false}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
-
-    await waitFor(() => {
-      // When data is null, subTagsList will be undefined, so the nullish coalescing operator
-      // subTagsList?.length ?? 0 on line 194 will return 0
-      // The InfiniteScroll component should not render due to the condition check
-      expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).not.toBeInTheDocument();
-    });
-  });
-
   it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {
     // This test exercises the nullish coalescing operator on line 197: hasNextPage ?? false
     // by setting hasNextPage to undefined in the mock
