@@ -15,13 +15,12 @@ export const backupEnvFile = async (): Promise<void> => {
 
     if (shouldBackup) {
       // Create .backup directory if it doesn't exist
+      // Create .backup directory if it doesn't exist
       const backupDir = path.join(process.cwd(), '.backup');
-      if (!fs.existsSync(backupDir)) {
-        fs.mkdirSync(backupDir, { recursive: true });
-      }
+      fs.mkdirSync(backupDir, { recursive: true });
 
       // Generate epoch timestamp
-      const epochTimestamp = Math.floor(Date.now() / 1000);
+      const epochTimestamp = Date.now();
       const backupFileName = `.env.${epochTimestamp}`;
       const backupFilePath = path.join(backupDir, backupFileName);
 

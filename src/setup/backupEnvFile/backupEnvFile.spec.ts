@@ -27,14 +27,16 @@ describe('backupEnvFile', () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
     vi.mocked(fs.existsSync).mockReturnValue(true); // Both .backup dir and .env exist
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
+    vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
 
-    const mockEpoch = 1234567890;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch * 1000);
+    const mockEpoch = 1234567890000;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
 
     await backupEnvFile();
 
-    // Should NOT call mkdirSync since directory already exists
-    expect(fs.mkdirSync).not.toHaveBeenCalled();
+    expect(fs.mkdirSync).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
+      recursive: true,
+    });
     expect(fs.copyFileSync).toHaveBeenCalledWith(
       path.join(mockCwd, '.env'),
       path.join(mockCwd, '.backup', `.env.${mockEpoch}`),
@@ -55,11 +57,12 @@ describe('backupEnvFile', () => {
 
   it('should create .backup directory if it does not exist', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync)
-      .mockReturnValueOnce(false) // .backup dir doesn't exist
-      .mockReturnValueOnce(true); // .env file exists
+    vi.mocked(fs.existsSync).mockReturnValueOnce(true);
     vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
+
+    const mockEpoch = 1234567890000;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
 
     await backupEnvFile();
 
@@ -70,9 +73,7 @@ describe('backupEnvFile', () => {
 
   it('should handle missing .env file gracefully', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync)
-      .mockReturnValueOnce(true) // .backup dir exists
-      .mockReturnValueOnce(false); // .env file doesn't exist
+    vi.mocked(fs.existsSync).mockReturnValueOnce(false);
 
     await backupEnvFile();
 
@@ -98,9 +99,10 @@ describe('backupEnvFile', () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
     vi.mocked(fs.existsSync).mockReturnValue(true);
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
+    vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
 
-    const mockEpoch = 1609459200; // 2021-01-01 00:00:00 UTC
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch * 1000);
+    const mockEpoch = 1609459200000;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
 
     await backupEnvFile();
 

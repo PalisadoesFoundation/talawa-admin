@@ -68,6 +68,8 @@ export async function main(): Promise<void> {
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
+    await backupEnvFile();
+
     modifyEnvFile();
     await askAndSetDockerOption();
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
@@ -81,7 +83,7 @@ export async function main(): Promise<void> {
 
     await askAndSetRecaptcha();
     await askAndSetLogErrors();
-    await backupEnvFile();
+
     console.log(
       '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
     );
