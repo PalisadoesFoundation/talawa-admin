@@ -13,7 +13,7 @@ name: Mark stale issues and pull requests
 
 on:
   schedule:
-    - cron: "*/15 0 * * *"
+    - cron: "*/20 0 * * *"
 
 permissions:
   issues: write
