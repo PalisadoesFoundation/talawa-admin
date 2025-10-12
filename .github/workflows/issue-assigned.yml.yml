@@ -18,11 +18,6 @@ jobs:
     name: Remove Unapproved Label when issue is assigned
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            .github/workflows/auto-label.json5
-          sparse-checkout-cone-mode: false
       - uses: actions/github-script@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
