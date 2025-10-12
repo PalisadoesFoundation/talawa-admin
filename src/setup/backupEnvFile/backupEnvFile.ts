@@ -8,14 +8,14 @@ export const backupEnvFile = async (): Promise<void> => {
       {
         type: 'confirm',
         name: 'shouldBackup',
-        message: 'Would you like to backup the .env file?',
+        message:
+          'Would you like to back up the current .env file before setup modifies it?',
         default: true,
       },
     ]);
 
     if (shouldBackup) {
-      // Create .backup directory if it doesn't exist
-      // Create .backup directory if it doesn't exist
+      // Create .backup directory
       const backupDir = path.join(process.cwd(), '.backup');
       fs.mkdirSync(backupDir, { recursive: true });
 

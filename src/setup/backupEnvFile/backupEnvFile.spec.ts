@@ -25,7 +25,7 @@ describe('backupEnvFile', () => {
 
   it('should create backup when user confirms', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValue(true); // Both .backup dir and .env exist
+    vi.mocked(fs.existsSync).mockReturnValue(true);
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
     vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
 
