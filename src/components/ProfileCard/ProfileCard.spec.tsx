@@ -108,6 +108,111 @@ describe('ProfileDropdown Component', () => {
     );
     expect(screen.getByText('Admin')).toBeInTheDocument();
   });
+
+  test('handles image load error', () => {
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const image = screen.getByAltText('profile picture');
+    act(() => {
+      image.dispatchEvent(new Event('error'));
+    });
+
+    expect(image.style.display).toBe('none');
+    expect(image.onerror).toBeNull();
+  });
+
+  test('renders Avatar when userImage is null string', () => {
+    setItem('UserImage', 'null');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+  });
+
+  test('truncates long names', () => {
+    setItem('name', 'This is a very long name that should be truncated');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toMatch(/\.\.\.$/);
+  });
+
+  test('handles null name', () => {
+    setItem('name', null);
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe(' ');
+  });
+
+  test('handles empty string name', () => {
+    setItem('name', '');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe(' ');
+  });
+
+  test('handles single name', () => {
+    setItem('name', 'John');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe('John ');
+  });
 });
 
 describe('Member screen routing testing', () => {
