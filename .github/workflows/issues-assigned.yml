@@ -1,0 +1,59 @@
+##############################################################################
+##############################################################################
+#
+# NOTE!
+#
+# Please read the README.md file in this directory that defines what should 
+# be placed in this file
+#
+##############################################################################
+##############################################################################
+
+name: Issue Assignment Workflow
+on:
+  issues:
+      types: ['assigned']
+jobs:
+  Remove-Unapproved-Label:
+    name: Remove Unapproved Label when issue is assigned
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github/workflows/auto-label.json5
+          sparse-checkout-cone-mode: false
+      - uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const apiParams = {
+              owner,
+              repo,
+              issue_number
+            };
+            
+            // Get current labels on the issue
+            const labels = await github.rest.issues.listLabelsOnIssue(apiParams);
+            const hasUnapprovedLabel = labels.data.some(label => 
+              label.name.toLowerCase().includes('unapproved') || 
+              label.name.toLowerCase().includes('unapprov')
+            );
+            
+            // Remove unapproved label if it exists
+            if (hasUnapprovedLabel) {
+              const unapprovedLabel = labels.data.find(label => 
+                label.name.toLowerCase().includes('unapproved') || 
+                label.name.toLowerCase().includes('unapprov')
+              );
+              
+              await github.rest.issues.removeLabel({
+                owner,
+                repo,
+                issue_number,
+                name: unapprovedLabel.name
+              });
+            }
