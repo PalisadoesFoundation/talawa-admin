@@ -97,6 +97,7 @@ const { getItem } = useLocalStorage();
 
 export const handleCreateDirectChat = async (
   id: string,
+  userName: string,
   chats: GroupChat[],
   t: TFunction<'translation', 'userChat'>,
   createChat: {
@@ -144,6 +145,7 @@ export const handleCreateDirectChat = async (
   },
   organizationId: string | undefined,
   userId: string | null,
+  currentUserName: string,
   chatsListRefetch: {
     (
       variables?: Partial<{ id: string }> | undefined,
@@ -170,7 +172,7 @@ export const handleCreateDirectChat = async (
         variables: {
           input: {
             organizationId,
-            name: 'Direct Chat',
+            name: `${currentUserName} & ${userName}`,
             description: 'A direct chat conversation',
             avatar: null,
           },
@@ -240,6 +242,12 @@ export default function createDirectChatModal({
       where: {},
     },
   });
+  const currentUser = allUsersData?.organization?.members?.edges?.find(
+    (edge: { node: InterfaceOrganizationMember }) => edge.node.id === userId,
+  )?.node;
+
+  const currentUserName = currentUser?.name || 'You';
+
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
     const trimmedName = userName.trim();
@@ -341,12 +349,14 @@ export default function createDirectChatModal({
                                   onClick={() => {
                                     handleCreateDirectChat(
                                       userDetails.id,
+                                      userDetails.name,
                                       chats,
                                       t,
                                       createChat,
                                       createChatMembership,
                                       organizationId,
                                       userId,
+                                      currentUserName,
                                       chatsListRefetch,
                                       toggleCreateDirectChatModal,
                                     );

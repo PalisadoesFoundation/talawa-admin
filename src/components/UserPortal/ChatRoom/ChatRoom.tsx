@@ -483,8 +483,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
       if (chat.members?.edges?.length === 2) {
         const otherUser = chat.members.edges.find(
-          (edge: { node: { id: string } }) => edge.node.id !== userId,
-        )?.node;
+          (edge: INewChat['members']['edges'][0]) =>
+            edge.node.user.id !== userId,
+        )?.node.user;
         if (otherUser) {
           setChatTitle(`${otherUser.name}`);
           setChatSubtitle('');

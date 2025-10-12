@@ -218,7 +218,7 @@ export default function chat(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <div className={styles.contactListContainer}>
+            <div className={`${styles.contactListContainer} d-flex flex-column`}>
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
@@ -274,6 +274,11 @@ export default function chat(): JSX.Element {
                   <div
                     data-testid="contactCardContainer"
                     className={styles.contactCardContainer}
+                    style={{
+                      maxHeight: 'calc(100vh - 200px)',
+                      overflowY: 'auto',
+                      flex: 1,
+                    }}
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {
