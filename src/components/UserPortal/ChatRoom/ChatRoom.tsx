@@ -292,6 +292,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         body: newMessage,
       },
     },
+    // TODO(caching): When enabling Apollo cache, add optimisticResponse and
+    // an update(cache) handler here to append the optimistic message edge to
+    // Chat.messages and to refresh unread lists for other chats if needed.
   });
 
   const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
@@ -306,6 +309,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ);
 
   const [deleteChatMessage] = useMutation(DELETE_CHAT_MESSAGE);
+  // TODO(caching): After enabling cache policies, implement update(cache)
+  // here to remove the message edge from Chat.messages when deletion succeeds.
 
   const [supportsMarkRead, setSupportsMarkRead] = useState(true);
   const markReadIfSupported = useCallback(
@@ -447,6 +452,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   // });
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
+  // NOTE(caching): With cache policies, unread chats list can be updated via
+  // cache.modify on Query.unreadChats instead of refetching.
 
   useEffect(() => {
     if (chatData?.chat?.messages?.edges?.length) {
@@ -548,7 +555,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           () => {},
         );
 
-        // Soft-append the new message to local state to avoid pagination issues
+        // Soft-append the new message to local state to avoid pagination issues.
+        // TODO(caching): With cache policies, prefer cache.modify on Chat.messages
+        //               to append if the message is not present (dedupe by node.id).
         setChat((prev: INewChat | undefined) => {
           if (!prev) return prev;
           try {
@@ -599,6 +608,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       }
       props.chatListRefetch();
       unreadChatListRefetch();
+      // TODO(caching): Replace refetches above with targeted cache updates once
+      // cache policies are enabled (e.g., bump lastMessage and unread count).
     },
   });
   // Guarded auto-scroll: only when user is near bottom or we've explicitly requested it
