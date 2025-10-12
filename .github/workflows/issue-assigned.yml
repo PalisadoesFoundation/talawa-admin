@@ -34,18 +34,13 @@ jobs:
             };
             
             // Get current labels on the issue
-            const labels = await github.rest.issues.listLabelsOnIssue(apiParams);
-            const hasUnapprovedLabel = labels.data.some(label => 
-              label.name.toLowerCase().includes('unapproved') || 
-              label.name.toLowerCase().includes('unapprov')
+            const { data: labelList } = await github.rest.issues.listLabelsOnIssue(apiParams);
+            const unapprovedLabel = labelList.find(l =>
+              l.name.toLowerCase().includes('unapprov') // matches 'unapproved' too
             );
-            
+
             // Remove unapproved label if it exists
-            if (hasUnapprovedLabel) {
-              const unapprovedLabel = labels.data.find(label => 
-                label.name.toLowerCase().includes('unapproved') || 
-                label.name.toLowerCase().includes('unapprov')
-              );
+            if (unapprovedLabel) {
               
               try {
                 await github.rest.issues.removeLabel({
