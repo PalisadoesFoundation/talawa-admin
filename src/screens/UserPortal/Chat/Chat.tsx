@@ -218,7 +218,9 @@ export default function chat(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <div className={`${styles.contactListContainer} d-flex flex-column`}>
+            <div
+              className={`${styles.contactListContainer} d-flex flex-column`}
+            >
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>{tCommon('loading')}</span>

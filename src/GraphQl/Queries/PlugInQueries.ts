@@ -390,6 +390,28 @@ export const CHATS_LIST = gql`
           endCursor
         }
       }
+      lastMessage {
+        id
+        body
+        createdAt
+        updatedAt
+        creator {
+          id
+          name
+          avatarMimeType
+          avatarURL
+        }
+        parentMessage {
+          id
+          body
+          createdAt
+          creator {
+            id
+            name
+          }
+        }
+      }
+      unreadMessagesCount
     }
   }
 `;
