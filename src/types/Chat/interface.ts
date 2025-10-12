@@ -1,5 +1,4 @@
 import type { ApolloQueryResult } from '@apollo/client';
-import { type GroupChat } from 'types/Chat/type';
 
 export type NewChatType = {
   id: string;
@@ -9,7 +8,7 @@ export type NewChatType = {
   avatarURL?: string;
   isGroup: boolean;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null;
   // Optional unread/computed fields (provided by unreadChats or when opting-in)
   unreadMessagesCount?: number;
   hasUnread?: boolean;
@@ -18,7 +17,7 @@ export type NewChatType = {
     id: string;
     body: string;
     createdAt: string;
-    updatedAt?: string;
+    updatedAt?: string | null;
     creator: {
       id: string;
       name: string;
@@ -64,26 +63,31 @@ export type NewChatType = {
   };
   messages: {
     edges: Array<{
+      __typename?: string;
       node: {
+        __typename?: string;
         id: string;
         body: string;
         createdAt: string;
-        updatedAt: string;
+        updatedAt: string | null;
         creator: {
+          __typename?: string;
           id: string;
           name: string;
-          avatarMimeType?: string;
-          avatarURL?: string;
+          avatarMimeType?: string | null;
+          avatarURL?: string | null;
         };
         parentMessage?: {
+          __typename?: string;
           id: string;
           body: string;
           createdAt: string;
           creator: {
+            __typename?: string;
             id: string;
             name: string;
           };
-        };
+        } | null;
       };
     }>;
   };
@@ -92,14 +96,18 @@ export type NewChatType = {
 export interface InterfaceGroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
   groupChatDetailsModalisOpen: boolean;
-  chat: GroupChat | NewChatType;
+  chat: NewChatType;
   chatRefetch: (
     variables?:
       | Partial<{
-          id: string;
+          input: { id: string };
+          first?: number;
+          after?: string | null;
+          lastMessages?: number;
+          beforeMessages?: string | null;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: GroupChat }>>;
+  ) => Promise<ApolloQueryResult<{ chat: NewChatType }>>;
 }
 
 export interface InterfaceContactCardProps {

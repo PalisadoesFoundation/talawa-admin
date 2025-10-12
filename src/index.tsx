@@ -155,6 +155,13 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
           },
         },
       },
+      // Normalize chat entities for stable references (non-breaking)
+      Chat: {
+        keyFields: ['id'],
+      },
+      ChatMessage: {
+        keyFields: ['id'],
+      },
     },
   }),
   link: combinedLink,

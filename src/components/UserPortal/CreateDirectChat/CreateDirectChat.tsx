@@ -170,7 +170,7 @@ export const handleCreateDirectChat = async (
         variables: {
           input: {
             organizationId,
-            name: existingUser?.name,
+            name: 'Direct Chat',
             description: 'A direct chat conversation',
             avatar: null,
           },

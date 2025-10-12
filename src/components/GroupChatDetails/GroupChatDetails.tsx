@@ -122,7 +122,7 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [selectedImage, setSelectedImage] = useState(chat?.image || '');
+  const [selectedImage, setSelectedImage] = useState(chat?.avatarURL || '');
 
   //mutations
 
@@ -149,7 +149,7 @@ export default function groupChatDetails({
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({ variables: { userId, chatId: chat._id } });
+    await addUser({ variables: { userId, chatId: chat.id } });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
@@ -181,13 +181,13 @@ export default function groupChatDetails({
       await updateChat({
         variables: {
           input: {
-            _id: chat._id,
-            image: base64,
+            id: chat.id,
+            avatarURL: base64,
             name: chatName,
           },
         },
       });
-      await chatRefetch();
+      await chatRefetch({ input: { id: chat.id } });
       setSelectedImage('');
     } else {
       setSelectedImage('');
@@ -215,8 +215,8 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {chat?.image ? (
-              <img className={styles.chatImage} src={chat?.image} alt="" />
+            {chat?.avatarURL ? (
+              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
@@ -245,14 +245,14 @@ export default function groupChatDetails({
                     await updateChat({
                       variables: {
                         input: {
-                          _id: chat._id,
-                          image: selectedImage ? selectedImage : '',
+                          id: chat.id,
+                          avatarURL: selectedImage ? selectedImage : '',
                           name: chatName,
                         },
                       },
                     });
                     setEditChatTitle(false);
-                    await chatRefetch();
+                    await chatRefetch({ input: { id: chat.id } });
                   }}
                 />
                 <FaX
@@ -277,57 +277,42 @@ export default function groupChatDetails({
             )}
 
             <p>
-              {chat?.users.length} {t('members')}
+              {chat?.members.edges.length} {t('members')}
             </p>
             <p>{chat?.description}</p>
           </div>
 
           <div>
             <h5>
-              {chat.users.length} {t('members')}
+              {chat.members.edges.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
-              {chat.admins
-                .map((admin) => admin._id)
-                .includes(userId as string) && (
-                <ListGroup.Item
-                  data-testid="addMembers"
-                  className={styles.listItem}
-                  onClick={() => {
-                    openAddUserModal();
-                  }}
-                >
-                  <Add /> {t('addMembers')}
-                </ListGroup.Item>
-              )}
-              {chat.users.map(
-                (user: {
-                  _id: string;
-                  firstName: string;
-                  lastName: string;
-                }) => (
+              <ListGroup.Item
+                data-testid="addMembers"
+                className={styles.listItem}
+                onClick={() => {
+                  openAddUserModal();
+                }}
+              >
+                <Add /> {t('addMembers')}
+              </ListGroup.Item>
+              {chat.members.edges.map((edge) => {
+                const user = edge.node;
+                return (
                   <ListGroup.Item
                     className={styles.groupMembersList}
-                    key={user._id}
+                    key={user.id}
                   >
                     <div className={styles.chatUserDetails}>
                       <Avatar
                         avatarStyle={styles.membersImage}
-                        name={user.firstName + ' ' + user.lastName}
+                        name={user.name}
                       />
-                      {user.firstName} {user.lastName}
-                    </div>
-
-                    <div>
-                      {chat.admins
-                        .map((admin) => admin._id)
-                        .includes(user._id) && (
-                        <p key={`admin-${user._id}`}>Admin</p>
-                      )}
+                      {user.name}
                     </div>
                   </ListGroup.Item>
-                ),
-              )}
+                );
+              })}
             </ListGroup>
           </div>
         </Modal.Body>
@@ -408,7 +393,7 @@ export default function groupChatDetails({
                                 onClick={async () => {
                                   await addUserToGroupChat(userDetails.id);
                                   toggleAddUserModal();
-                                  chatRefetch({ id: chat._id });
+                                  chatRefetch({ input: { id: chat.id } });
                                 }}
                                 data-testid="addUserBtn"
                               >
