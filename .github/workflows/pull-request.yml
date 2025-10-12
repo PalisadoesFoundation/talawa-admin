@@ -302,15 +302,20 @@ jobs:
         run: |
           npm run test:coverage
 
-      - name: Upload Coverage to Codecov
+      #######################################################################
+      # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+      # section. They are required for accurate caluclations
+      #######################################################################
+      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
+          name: "${{env.CODECOV_UNIQUE_NAME}}"
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
           exclude: 'docs/'
           files: ./coverage/vitest/lcov.info
           flags: vitest
-          fail_ci_if_error: true
-          verbose: true
 
       - name: Test acceptable level of code coverage
         uses: VeryGoodOpenSource/very_good_coverage@v3
