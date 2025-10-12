@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddress
 
-Defined in: [src/utils/interfaces.ts:2058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2058)
+Defined in: [src/utils/interfaces.ts:2070](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2070)
 
 InterfaceAddress
 
@@ -18,7 +18,7 @@ Defines the structure for an address.
 
 > **city**: `string`
 
-Defined in: [src/utils/interfaces.ts:2059](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2059)
+Defined in: [src/utils/interfaces.ts:2071](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2071)
 
 The city.
 
@@ -28,7 +28,7 @@ The city.
 
 > **countryCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:2060](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2060)
+Defined in: [src/utils/interfaces.ts:2072](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2072)
 
 The country code.
 
@@ -38,7 +38,7 @@ The country code.
 
 > **dependentLocality**: `string`
 
-Defined in: [src/utils/interfaces.ts:2061](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2061)
+Defined in: [src/utils/interfaces.ts:2073](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2073)
 
 The dependent locality.
 
@@ -48,7 +48,7 @@ The dependent locality.
 
 > **line1**: `string`
 
-Defined in: [src/utils/interfaces.ts:2062](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2062)
+Defined in: [src/utils/interfaces.ts:2074](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2074)
 
 The first line of the address.
 
@@ -58,7 +58,7 @@ The first line of the address.
 
 > **line2**: `string`
 
-Defined in: [src/utils/interfaces.ts:2063](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2063)
+Defined in: [src/utils/interfaces.ts:2075](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2075)
 
 The second line of the address.
 
@@ -68,7 +68,7 @@ The second line of the address.
 
 > **postalCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:2064](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2064)
+Defined in: [src/utils/interfaces.ts:2076](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2076)
 
 The postal code.
 
@@ -78,7 +78,7 @@ The postal code.
 
 > **sortingCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:2065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2065)
+Defined in: [src/utils/interfaces.ts:2077](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2077)
 
 The sorting code.
 
@@ -88,6 +88,6 @@ The sorting code.
 
 > **state**: `string`
 
-Defined in: [src/utils/interfaces.ts:2066](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2066)
+Defined in: [src/utils/interfaces.ts:2078](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2078)
 
 The state.

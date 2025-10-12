@@ -33,13 +33,13 @@ describe('EventManager', () => {
     });
 
     it('should register multiple listeners for the same event', () => {
-      const callback1 = vi.fn();
-      const callback2 = vi.fn();
-      const callback3 = vi.fn();
+      const callbackA = vi.fn();
+      const callbackB = vi.fn();
+      const callbackC = vi.fn();
 
-      eventManager.on('test-event', callback1);
-      eventManager.on('test-event', callback2);
-      eventManager.on('test-event', callback3);
+      eventManager.on('test-event', callbackA);
+      eventManager.on('test-event', callbackB);
+      eventManager.on('test-event', callbackC);
 
       expect(eventManager.getListenerCount('test-event')).toBe(3);
     });
@@ -57,6 +57,17 @@ describe('EventManager', () => {
       expect(eventManager.getEvents()).toContain('event-2');
     });
 
+    it('should create new entry when adding first listener for an event', () => {
+      // This explicitly targets the branch that initializes the array in the map
+      const callback = vi.fn();
+      expect(eventManager.getListenerCount('fresh-event')).toBe(0);
+
+      eventManager.on('fresh-event', callback);
+
+      expect(eventManager.getListenerCount('fresh-event')).toBe(1);
+      expect(eventManager.getEvents()).toContain('fresh-event');
+    });
+
     it('should handle invalid event name', () => {
       const callback = vi.fn();
       const consoleSpy = vi
@@ -64,8 +75,9 @@ describe('EventManager', () => {
         .mockImplementation(() => {});
 
       eventManager.on('', callback);
-      eventManager.on(null as any, callback);
-      eventManager.on(undefined as any, callback);
+      // Intentionally pass invalid values at runtime without using 'any'
+      eventManager.on(null as unknown as string, callback);
+      eventManager.on(undefined as unknown as string, callback);
 
       expect(eventManager.getListenerCount('')).toBe(0);
       expect(consoleSpy).toHaveBeenCalledTimes(3);
@@ -78,9 +90,9 @@ describe('EventManager', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      eventManager.on('test-event', null as any);
-      eventManager.on('test-event', undefined as any);
-      eventManager.on('test-event', 'not-a-function' as any);
+      eventManager.on('test-event', null as unknown as never);
+      eventManager.on('test-event', undefined as unknown as never);
+      eventManager.on('test-event', 'not-a-function' as unknown as never);
 
       expect(eventManager.getListenerCount('test-event')).toBe(0);
       expect(consoleSpy).toHaveBeenCalledTimes(3);
@@ -137,8 +149,8 @@ describe('EventManager', () => {
         .mockImplementation(() => {});
 
       eventManager.off('', callback);
-      eventManager.off(null as any, callback);
-      eventManager.off(undefined as any, callback);
+      eventManager.off(null as unknown as string, callback);
+      eventManager.off(undefined as unknown as string, callback);
 
       expect(consoleSpy).toHaveBeenCalledTimes(3);
 
@@ -150,9 +162,9 @@ describe('EventManager', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      eventManager.off('test-event', null as any);
-      eventManager.off('test-event', undefined as any);
-      eventManager.off('test-event', 'not-a-function' as any);
+      eventManager.off('test-event', null as unknown as never);
+      eventManager.off('test-event', undefined as unknown as never);
+      eventManager.off('test-event', 'not-a-function' as unknown as never);
 
       expect(consoleSpy).toHaveBeenCalledTimes(3);
 
@@ -237,8 +249,8 @@ describe('EventManager', () => {
         .mockImplementation(() => {});
 
       eventManager.emit('');
-      eventManager.emit(null as any);
-      eventManager.emit(undefined as any);
+      eventManager.emit(null as unknown as string);
+      eventManager.emit(undefined as unknown as string);
 
       expect(consoleSpy).toHaveBeenCalledTimes(3);
 
@@ -248,13 +260,13 @@ describe('EventManager', () => {
 
   describe('removeAllListeners', () => {
     it('should remove all listeners for a specific event', () => {
-      const callback1 = vi.fn();
-      const callback2 = vi.fn();
-      const callback3 = vi.fn();
+      const callbackA = vi.fn();
+      const callbackB = vi.fn();
+      const callbackC = vi.fn();
 
-      eventManager.on('event-1', callback1);
-      eventManager.on('event-1', callback2);
-      eventManager.on('event-2', callback3);
+      eventManager.on('event-1', callbackA);
+      eventManager.on('event-1', callbackB);
+      eventManager.on('event-2', callbackC);
 
       eventManager.removeAllListeners('event-1');
 
@@ -386,7 +398,6 @@ describe('EventManager', () => {
     });
 
     it('should handle listeners that add/remove other listeners', () => {
-      const callback1 = vi.fn();
       const callback2 = vi.fn();
       const callback3 = vi.fn();
 

@@ -35,7 +35,7 @@
  * <Invitations />
  * ```
  */
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -123,7 +123,7 @@ const Invitations = (): JSX.Element => {
       where: {
         userId: userId,
         status: 'invited',
-        filter: filter,
+        ...(filter && { filter }),
         eventTitle: searchTerm ? searchTerm : undefined,
       },
       orderBy: sortBy ? sortBy : undefined,
@@ -200,18 +200,32 @@ const Invitations = (): JSX.Element => {
         invitations.map((invite: InterfaceVolunteerMembership) => (
           <div
             className="bg-white p-4  rounded shadow-sm d-flex justify-content-between mb-3"
-            key={invite._id}
+            key={invite.id}
           >
             <div className="d-flex flex-column gap-2">
               <div className="fw-bold" data-testid="inviteSubject">
-                {invite.group ? (
-                  <>{t('groupInvitationSubject')}</>
+                {invite.group && invite.group.id ? (
+                  // Group invitation
+                  <>
+                    {invite.event.recurrenceRule ? (
+                      <>{t('groupInvitationRecurringSubject')}</>
+                    ) : (
+                      <>{t('groupInvitationSubject')}</>
+                    )}
+                  </>
                 ) : (
-                  <>{t('eventInvitationSubject')}</>
+                  // Individual invitation
+                  <>
+                    {invite.event.recurrenceRule ? (
+                      <>{t('eventInvitationRecurringSubject')}</>
+                    ) : (
+                      <>{t('eventInvitationSubject')}</>
+                    )}
+                  </>
                 )}
               </div>
               <div className="d-flex gap-3">
-                {invite.group && (
+                {invite.group && invite.group.id && (
                   <>
                     <div>
                       <FaUserGroup className="mb-1 me-1" color="grey" />
@@ -228,7 +242,7 @@ const Invitations = (): JSX.Element => {
                     size={20}
                   />
                   <span className="text-muted">Event:</span>{' '}
-                  <span>{invite.event.title}</span>
+                  <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
@@ -243,7 +257,7 @@ const Invitations = (): JSX.Element => {
                 variant="outline-success"
                 size="sm"
                 data-testid="acceptBtn"
-                onClick={() => updateMembershipStatus(invite._id, 'accepted')}
+                onClick={() => updateMembershipStatus(invite.id, 'accepted')}
               >
                 {t('accept')}
               </Button>
@@ -251,7 +265,7 @@ const Invitations = (): JSX.Element => {
                 variant="outline-danger"
                 size="sm"
                 data-testid="rejectBtn"
-                onClick={() => updateMembershipStatus(invite._id, 'rejected')}
+                onClick={() => updateMembershipStatus(invite.id, 'rejected')}
               >
                 {t('reject')}
               </Button>

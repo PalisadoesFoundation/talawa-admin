@@ -270,6 +270,7 @@
     "posts": "Des postes",
     "events": "Événements",
     "blockedUsers": "Utilisateurs bloqués",
+    "venues": "Lieux",
     "viewAll": "Voir tout",
     "upcomingEvents": "évènements à venir",
     "noUpcomingEvents": "Aucun événement à venir",
@@ -1503,7 +1504,10 @@
     "details": "Détails",
     "manageGroup": "Gérer le Groupe",
     "mostVolunteers": "Le plus de bénévoles",
-    "leastVolunteers": "Le moins de bénévoles"
+    "leastVolunteers": "Le moins de bénévoles",
+    "applyTo": "Appliquer à",
+    "entireSeries": "Série entière",
+    "thisEventOnly": "Cet événement uniquement"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -1535,7 +1539,12 @@
     "volunteerSuccess": "Demande de bénévolat envoyée avec succès",
     "recurring": "Récurrent",
     "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
-    "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement"
+    "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement",
+    "groupInvitationRecurringSubject": "Invitation à rejoindre le groupe de bénévoles pour la série d'événements récurrents",
+    "eventInvitationRecurringSubject": "Invitation à faire du bénévolat pour la série d'événements récurrents",
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "rejected": "Rejeté"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

@@ -39,6 +39,7 @@ export interface IActionItemInfo {
   isCompleted: boolean;
   preCompletionNotes: string | null;
   postCompletionNotes: string | null;
+  hasExceptions?: boolean;
   isInstanceException?: boolean;
   isTemplate?: boolean;
 

@@ -28,62 +28,68 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
     isOpen: true,
     hide: vi.fn(),
     group: {
-      _id: 'groupId',
+      id: 'groupId',
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: null,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
-        _id: 'creatorId1',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: null,
+        id: 'creatorId1',
+        name: 'Wilt Shepherd',
+        emailAddress: 'wilt@example.com',
+        avatarURL: 'img-url',
       },
       leader: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId',
+        name: 'Teresa Bradley',
+        emailAddress: 'teresa@example.com',
+        avatarURL: 'img-url',
       },
       volunteers: [
         {
-          _id: 'volunteerId1',
+          id: 'volunteerId1',
+          hasAccepted: true,
+          hoursVolunteered: 5,
+          isPublic: true,
           user: {
-            _id: 'userId',
+            id: 'userId',
             firstName: 'Teresa',
             lastName: 'Bradley',
-            image: null,
+            name: 'Teresa Bradley',
+            avatarURL: null,
           },
         },
       ],
-      assignments: [],
-      event: { _id: 'eventId' },
+      event: { id: 'eventId' },
     },
   },
   {
     isOpen: true,
     hide: vi.fn(),
     group: {
-      _id: 'groupId',
+      id: 'groupId',
       name: 'Group 1',
       description: null,
       volunteersRequired: 10,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
-        _id: 'creatorId1',
-        firstName: 'Wilt',
-        lastName: 'Shepherd',
-        image: 'img--url',
+        id: 'creatorId1',
+        name: 'Wilt Shepherd',
+        emailAddress: 'wilt@example.com',
+        avatarURL: null,
       },
       leader: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: 'img-url',
+        id: 'userId',
+        name: 'Teresa Bradley',
+        emailAddress: 'teresa@example.com',
+        avatarURL: null,
       },
       volunteers: [],
-      assignments: [],
-      event: { _id: 'eventId' },
+      event: { id: 'eventId' },
     },
   },
 ];
@@ -110,14 +116,14 @@ describe('Testing VolunteerGroupViewModal', () => {
   it('Render VolunteerGroupViewModal (variation 1)', async () => {
     renderGroupViewModal(itemProps[0]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
-    expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('leader_image')).toBeInTheDocument();
+    expect(screen.getByTestId('creator_image')).toBeInTheDocument();
   });
 
   it('Render VolunteerGroupViewModal (variation 2)', async () => {
     renderGroupViewModal(itemProps[1]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('leader_image')).toBeInTheDocument();
-    expect(screen.getByTestId('creator_image')).toBeInTheDocument();
+    expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
   });
 });

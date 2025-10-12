@@ -34,7 +34,6 @@
  *   `.inActiveTab` (for tabs which are not selected)
  *
  */
-
 :root {
   --primary-theme-color: #1778f2;
 
@@ -1322,14 +1321,14 @@ form label,
 }
 
 .dropdown:is(
-    :hover,
-    :focus,
-    :active,
-    :focus-visible,
-    .show,
-    :disabled,
-    :checked
-  ) {
+  :hover,
+  :focus,
+  :active,
+  :focus-visible,
+  .show,
+  :disabled,
+  :checked
+) {
   box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
   color: var(--dropdown-font-color) !important;
@@ -3192,6 +3191,7 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
@@ -3885,6 +3885,7 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
@@ -3990,6 +3991,7 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
@@ -4145,9 +4147,9 @@ form label,
 .postimageOrgPostCard {
   border-radius: 0px;
   width: 100%;
-  height: 12rem;
+  height: 27rem;
   max-width: 100%;
-  max-height: 12rem;
+  max-height: 27rem;
   object-fit: cover;
   position: relative;
   color: var(--postimageOrgPostCard-color);
@@ -4167,15 +4169,15 @@ form label,
 
 .cardOrgPostCard {
   width: 100%;
-  height: 20rem;
+  height: 33rem;
   margin-bottom: 2rem;
 }
 
 .nopostimage {
   border-radius: 0px;
   width: 100%;
-  height: 12rem;
-  max-height: 12rem;
+  height: 25rem;
+  max-height: 25rem;
   object-fit: cover;
   position: relative;
 }
@@ -5204,6 +5206,7 @@ form {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
@@ -5237,15 +5240,13 @@ form {
 .primaryText {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--primaryText-color));
-  @extend .reusable-text-ellipsis;
 }
 
 .secondaryText {
   font-size: 0.9rem;
+  font-size: 0.9rem;
   color: var(--secondText-color);
-  @extend .reusable-text-ellipsis;
 }
-
 /* -- ProfileDropdown.tsx -- */
 
 /* -- CustomRecurrenceModal.tsx -- */
@@ -5764,9 +5765,10 @@ form {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
-
+  line-clamp: var(--max-lines);
   font-size: 1.3rem !important;
   font-weight: 600;
+  line-clamp: var(--max-lines);
 }
 
 .date {
@@ -5779,6 +5781,7 @@ form {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
+  line-clamp: var(--max-lines);
   padding-top: 0;
   font-weight: 300;
   margin-top: 0.7rem !important;
@@ -5928,7 +5931,28 @@ form {
   top: 0;
   left: 0;
   width: 100%;
-  scale: 1.5;
+  transform: scale(1.5);
+}
+
+.userImageUserComment {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserComment img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
 }
 
 .previewImage {
@@ -5955,18 +5979,12 @@ form {
 
 .inactiveDrawer {
   transform: translateX(-100%);
-
-  &[data-hidden='true'] {
-    /* Specific styles for inactive drawers if needed */
-  }
 }
 
 .activeDrawer {
   transform: translateX(0);
 
-  &[data-hidden='false'] {
-    /* Specific styles for active drawers if needed */
-  }
+  /* Removed empty ruleset for [data-hidden='false'] */
 }
 
 .leftbarcompheight {
@@ -6155,6 +6173,7 @@ form {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;

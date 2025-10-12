@@ -23,6 +23,7 @@ export const ORGANIZATION_POST_LIST = gql`
   ) {
     organization(input: $input) {
       id
+      postsCount
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
@@ -31,23 +32,11 @@ export const ORGANIZATION_POST_LIST = gql`
             commentsCount
             pinnedAt
             downVotesCount
-            upVoters(first: 10) {
-              edges {
-                node {
-                  id
-                }
-              }
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-            }
             upVotesCount
             creator {
               id
               name
+              avatarURL
             }
             createdAt
             comments(first: 10) {
@@ -58,6 +47,77 @@ export const ORGANIZATION_POST_LIST = gql`
                   creator {
                     id
                     name
+                    avatarURL
+                  }
+                  downVotesCount
+                  upVotesCount
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
+export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
+  query OrganizationPostList(
+    $input: QueryOrganizationInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+    $userId: ID!
+  ) {
+    organization(input: $input) {
+      id
+      postsCount
+      posts(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            hasUserVoted(userId: $userId) {
+              hasVoted
+              voteType
+            }
+            id
+            caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVotesCount
+            creator {
+              id
+              name
+              avatarURL
+            }
+            createdAt
+            comments(first: 10) {
+              edges {
+                node {
+                  hasUserVoted(userId: $userId) {
+                    hasVoted
+                    voteType
+                  }
+                  id
+                  body
+                  creator {
+                    id
+                    name
+                    avatarURL
                   }
                   downVotesCount
                   upVotesCount

@@ -270,6 +270,7 @@
     "posts": "पोस्ट",
     "events": "घटनाएँ",
     "blockedUsers": "अवरुद्ध उपयोगकर्ता",
+    "venues": "स्थान",
     "viewAll": "सभी देखें",
     "upcomingEvents": "आगामी घटनाएँ",
     "noUpcomingEvents": "कोई आगामी घटनाएँ नहीं हैं",
@@ -1503,7 +1504,10 @@
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
-    "leastVolunteers": "सबसे कम स्वयंसेवक"
+    "leastVolunteers": "सबसे कम स्वयंसेवक",
+    "applyTo": "लागू करें",
+    "entireSeries": "पूरी श्रृंखला",
+    "thisEventOnly": "केवल यह घटना"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -1535,7 +1539,12 @@
     "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
-    "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण"
+    "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण",
+    "groupInvitationRecurringSubject": "पुनरावर्ती घटना श्रृंखला के लिए स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
+    "eventInvitationRecurringSubject": "पुनरावर्ती घटना श्रृंखला के लिए स्वयंसेवक बनने का निमंत्रण",
+    "pending": "लंबित",
+    "accepted": "स्वीकृत",
+    "rejected": "अस्वीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

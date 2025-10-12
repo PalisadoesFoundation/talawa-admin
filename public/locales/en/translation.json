@@ -269,6 +269,7 @@
     "statistics": "Statistics",
     "posts": "Posts",
     "events": "Events",
+    "venues": "Venues",
     "blockedUsers": "Blocked Users",
     "viewAll": "View All",
     "upcomingEvents": "Upcoming Events",
@@ -1503,7 +1504,10 @@
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
-    "leastVolunteers": "Least Volunteers"
+    "leastVolunteers": "Least Volunteers",
+    "applyTo": "Apply To",
+    "entireSeries": "Entire Series",
+    "thisEventOnly": "This Event Only"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1521,6 +1525,9 @@
     "volunteered": "Volunteered",
     "join": "Join",
     "joined": "Joined",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "rejected": "Rejected",
     "searchByEventName": "Search by Event title",
     "filter": "Filter",
     "groupInvite": "Group Invite",
@@ -1535,7 +1542,9 @@
     "volunteerSuccess": "Requested to volunteer successfully",
     "recurring": "Recurring",
     "groupInvitationSubject": "Invitation to join volunteer group",
-    "eventInvitationSubject": "Invitation to volunteer for event"
+    "eventInvitationSubject": "Invitation to volunteer for event",
+    "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
+    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series"
   },
   "pluginStore": {
     "title": "Plugin Store",

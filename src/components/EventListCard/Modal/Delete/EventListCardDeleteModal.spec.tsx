@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -23,10 +23,9 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Standalone event fields
     isRecurringTemplate: false,
@@ -59,10 +58,9 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Recurring instance fields
     isRecurringTemplate: false,

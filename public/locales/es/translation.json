@@ -273,6 +273,7 @@
     "posts": "Publicaciones",
     "events": "Eventos",
     "blockedUsers": "Usuarios bloqueados",
+    "venues": "Lugares",
     "requests": "Solicitudes",
     "viewAll": "Ver Todo",
     "upcomingEvents": "Próximos Eventos",
@@ -1506,7 +1507,10 @@
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
-    "leastVolunteers": "Menos voluntarios"
+    "leastVolunteers": "Menos voluntarios",
+    "applyTo": "Aplicar a",
+    "entireSeries": "Serie completa",
+    "thisEventOnly": "Solo este evento"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -1538,7 +1542,12 @@
     "volunteerSuccess": "Solicitud de voluntariado realizada con éxito",
     "recurring": "Recurrente",
     "groupInvitationSubject": "Invitación a unirse al grupo de voluntarios",
-    "eventInvitationSubject": "Invitación a ser voluntario para el evento"
+    "eventInvitationSubject": "Invitación a ser voluntario para el evento",
+    "groupInvitationRecurringSubject": "Invitación a unirse al grupo de voluntarios para serie de eventos recurrentes",
+    "eventInvitationRecurringSubject": "Invitación a ser voluntario para serie de eventos recurrentes",
+    "pending": "Pendiente",
+    "accepted": "Aceptado",
+    "rejected": "Rechazado"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",

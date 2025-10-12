@@ -24,7 +24,6 @@ import { I18nextProvider } from 'react-i18next';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
-import { StaticMockLink } from 'utils/StaticMockLink';
 
 vi.mock('utils/convertToBase64');
 vi.mock('react-toastify', () => ({
@@ -71,55 +70,6 @@ vi.mock('react-i18next', () => ({
 vi.mock('utils/convertToBase64', () => ({
   default: vi.fn().mockResolvedValue('base64String'),
 }));
-
-const eightPosts = Array.from({ length: 8 }, (_, i) => ({
-  id: `${i + 1}`,
-  caption: `Post ${i + 1}`,
-  createdAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(), // For ordering
-  updatedAt: new Date(2024, 1, i + 1, 10, 0, 0).toISOString(),
-  pinned: false,
-  creator: { id: '123' },
-  imageUrl: null,
-  videoUrl: null,
-}));
-
-const firstPageOrgList = {
-  organization: {
-    posts: {
-      edges: eightPosts.slice(0, 6).map((post) => ({ node: post })),
-      pageInfo: {
-        hasNextPage: true,
-        hasPreviousPage: false,
-        startCursor: 'cursor-start',
-        endCursor: 'cursor-end',
-      },
-      totalCount: 8,
-    },
-  },
-};
-
-const secondPageOrgList = {
-  organization: {
-    posts: {
-      edges: eightPosts.slice(6).map((post) => ({ node: post })),
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: true,
-        startCursor: 'cursor-new-start',
-        endCursor: 'cursor-new-end',
-      },
-      totalCount: 8,
-    },
-  },
-};
-
-const getPostsMock: MockedResponse = {
-  request: {
-    query: GET_POSTS_BY_ORG,
-    variables: { input: { organizationId: '123' } },
-  },
-  result: { data: { postsByOrganization: eightPosts } },
-};
 
 const samplePosts = [
   {
@@ -204,55 +154,6 @@ const getPostsByOrgSearchMock = {
   result: { data: { postsByOrganization: samplePosts } },
 };
 
-const orgListFirstPageMock: MockedResponse = {
-  request: {
-    query: ORGANIZATION_POST_LIST,
-    variables: {
-      input: { id: '123' },
-      after: null,
-      before: null,
-      first: 6,
-      last: null,
-    },
-  },
-  result: { data: firstPageOrgList },
-};
-
-const orgListSecondPageMock: MockedResponse = {
-  request: {
-    query: ORGANIZATION_POST_LIST,
-    variables: {
-      input: { id: '123' },
-      after: 'cursor-end',
-      before: null,
-      first: 6,
-      last: null,
-    },
-  },
-  result: { data: secondPageOrgList },
-};
-
-const orgListFirstPageBackMock: MockedResponse = {
-  request: {
-    query: ORGANIZATION_POST_LIST,
-    variables: {
-      input: { id: '123' },
-      after: null,
-      before: null,
-      first: 6,
-      last: null,
-    },
-  },
-  result: { data: firstPageOrgList },
-};
-
-const paginationMocks: MockedResponse[] = [
-  getPostsMock,
-  orgListFirstPageMock,
-  orgListSecondPageMock,
-  orgListFirstPageBackMock,
-];
-
 const mockPosts = {
   postsByOrganization: [
     {
@@ -274,32 +175,6 @@ const mockPosts = {
       isPinned: true,
     },
   ],
-};
-
-const createPostWithFileMock = {
-  request: {
-    query: CREATE_POST_MUTATION,
-    variables: {
-      input: expect.objectContaining({
-        caption: 'Test Post Title with File',
-        organizationId: '123',
-        isPinned: false,
-        attachments: expect.any(Array),
-      }),
-    },
-  },
-  result: {
-    data: {
-      createPost: {
-        id: '4',
-        caption: 'Test Post Title with File',
-        pinnedAt: null,
-        attachments: [{ url: 'base64String' }],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    },
-  },
 };
 
 const mockOrgPostList = {
@@ -1739,14 +1614,12 @@ describe('OrgPost component - Post Creation Tests', () => {
 
   // Then in your test, remove the actual implementation and just test the structure
   it('should create valid FileMetadataInput', async () => {
-    const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
-
     // Mock the hash function directly in the test
     vi.spyOn(global, 'crypto', 'get').mockReturnValue({
       subtle: {
         digest: vi.fn().mockResolvedValue(new Uint8Array([1, 2, 3, 4])),
       },
-    } as any);
+    } as unknown as Crypto);
 
     const attachment = {
       fileHash: 'mock-hash-value',
@@ -2148,8 +2021,8 @@ describe('pagination handlers', () => {
   let setCurrentPage: ReturnType<typeof vi.fn>;
 
   let postsPerPage: number;
-  let orgPostListData: any;
-  let sortedPosts: any[];
+  let orgPostListData: unknown;
+  let sortedPosts: unknown[];
   let currentPage: number;
   let sortingOption: string;
 
@@ -2179,11 +2052,13 @@ describe('pagination handlers', () => {
       },
     };
 
-    // re-declare handlers inside beforeEach
     handleNextPage = (): void => {
       if (sortingOption === 'None') {
-        const endCursor =
-          orgPostListData?.organization?.posts?.pageInfo?.endCursor;
+        const endCursor = (
+          orgPostListData as {
+            organization: { posts: { pageInfo: { endCursor: string } } };
+          }
+        ).organization.posts.pageInfo.endCursor;
         if (endCursor) {
           setAfter(endCursor);
           setBefore(null);
@@ -2201,8 +2076,11 @@ describe('pagination handlers', () => {
 
     handlePreviousPage = (): void => {
       if (sortingOption === 'None') {
-        const startCursor =
-          orgPostListData?.organization?.posts?.pageInfo?.startCursor;
+        const startCursor = (
+          orgPostListData as {
+            organization: { posts: { pageInfo: { startCursor: string } } };
+          }
+        ).organization.posts.pageInfo.startCursor;
         if (startCursor) {
           setBefore(startCursor);
           setAfter(null);
@@ -2272,192 +2150,6 @@ describe('pagination handlers', () => {
   });
 
   it('handles pagination with Next and Previous buttons', async () => {
-    // const mocks = [
-    //   // Page 1
-    //   {
-    //     request: {
-    //       query: ORGANIZATION_POST_LIST,
-    //       variables: {
-    //         input: { id: 'orgId' },
-    //         first: 5,
-    //         after: null,
-    //         before: null,
-    //         last: null,
-    //       },
-    //     },
-    //     result: {
-    //       data: {
-    //         organization: {
-    //           id: 'orgId',
-    //           posts: {
-    //             edges: [
-    //               {
-    //                 node: {
-    //                   id: '1-1',
-    //                   caption: 'Post 1-1',
-    //                   creator: { id: 'u1', name: 'User1' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-01T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c1',
-    //               },
-    //               {
-    //                 node: {
-    //                   id: '1-2',
-    //                   caption: 'Post 1-2',
-    //                   creator: { id: 'u2', name: 'User2' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-01T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c2',
-    //               },
-    //             ],
-    //             pageInfo: {
-    //               startCursor: 'c1',
-    //               endCursor: 'c2',
-    //               hasNextPage: true,
-    //               hasPreviousPage: false,
-    //             },
-    //             totalCount: 4,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    //   // Page 2
-    //   {
-    //     request: {
-    //       query: ORGANIZATION_POST_LIST,
-    //       variables: {
-    //         input: { id: 'orgId' },
-    //         after: 'c2',
-    //         first: 5,
-    //         before: null,
-    //         last: null,
-    //       },
-    //     },
-    //     result: {
-    //       data: {
-    //         organization: {
-    //           id: 'orgId',
-    //           posts: {
-    //             edges: [
-    //               {
-    //                 node: {
-    //                   id: '2-1',
-    //                   caption: 'Post 2-1',
-    //                   creator: { id: 'u3', name: 'User3' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-02T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c3',
-    //               },
-    //               {
-    //                 node: {
-    //                   id: '2-2',
-    //                   caption: 'Post 2-2',
-    //                   creator: { id: 'u4', name: 'User4' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-02T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c4',
-    //               },
-    //             ],
-    //             pageInfo: {
-    //               startCursor: 'c3',
-    //               endCursor: 'c4',
-    //               hasNextPage: false,
-    //               hasPreviousPage: true,
-    //             },
-    //             totalCount: 4,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    //   // Back to Page 1
-    //   {
-    //     request: {
-    //       query: ORGANIZATION_POST_LIST,
-    //       variables: {
-    //         input: { id: 'orgId' },
-    //         before: 'c3',
-    //         last: 5,
-    //         after: null,
-    //         first: null,
-    //       },
-    //     },
-    //     result: {
-    //       data: {
-    //         organization: {
-    //           id: 'orgId',
-    //           posts: {
-    //             edges: [
-    //               {
-    //                 node: {
-    //                   id: '1-1',
-    //                   caption: 'Post 1-1',
-    //                   creator: { id: 'u1', name: 'User1' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-01T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c1',
-    //               },
-    //               {
-    //                 node: {
-    //                   id: '1-2',
-    //                   caption: 'Post 1-2',
-    //                   creator: { id: 'u2', name: 'User2' },
-    //                   commentsCount: 0,
-    //                   pinnedAt: null,
-    //                   downVotesCount: 0,
-    //                   upVotesCount: 0,
-    //                   upVoters: { edges: [], pageInfo: {} },
-    //                   createdAt: '2024-01-01T00:00:00.000Z',
-    //                   comments: { edges: [], pageInfo: {} },
-    //                 },
-    //                 cursor: 'c2',
-    //               },
-    //             ],
-    //             pageInfo: {
-    //               startCursor: 'c1',
-    //               endCursor: 'c2',
-    //               hasNextPage: true,
-    //               hasPreviousPage: false,
-    //             },
-    //             totalCount: 4,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // ];
-
     const mockOrgId = '123';
     const renderComponent = () =>
       render(
@@ -2568,5 +2260,114 @@ describe('getMimeTypeEnum', () => {
   it('should return IMAGE_JPEG as fallback for unknown extension', () => {
     expect(getMimeTypeEnum('file.unknown')).toBe('IMAGE_JPEG');
     expect(getMimeTypeEnum('file')).toBe('IMAGE_JPEG'); // no extension
+  });
+});
+
+const createPostErrorMock = {
+  request: {
+    query: CREATE_POST_MUTATION,
+    variables: {
+      input: {
+        caption: 'Test Title',
+        organizationId: 'org123',
+        isPinned: false,
+        attachments: [],
+      },
+    },
+  },
+  error: new Error('Mutation failed'),
+};
+
+const createPostMock = {
+  request: {
+    query: CREATE_POST_MUTATION,
+    variables: {
+      input: {
+        caption: 'Test Title',
+        organizationId: '123',
+        isPinned: false,
+        attachments: [],
+      },
+    },
+  },
+  result: {
+    data: {
+      createPost: {
+        id: 'post1',
+        caption: 'Test Title',
+        pinnedAt: null,
+        attachments: [],
+      },
+    },
+  },
+};
+
+const getPostsMock2 = {
+  request: {
+    query: GET_POSTS_BY_ORG,
+    variables: { input: { organizationId: '123' } },
+  },
+  result: {
+    data: {
+      postsByOrganization: [],
+    },
+  },
+};
+
+describe('OrgPost createPost', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('submits createPost and handles success', async () => {
+    render(
+      <MockedProvider
+        mocks={[getPostsMock2, orgPostListMock, createPostMock]}
+        addTypename={false}
+      >
+        <OrgPost />
+      </MockedProvider>,
+    );
+
+    fireEvent.click(await screen.findByTestId('createPostModalBtn'));
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Test Title' },
+    });
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Test Info' },
+    });
+
+    await act(async () => {
+      fireEvent.submit(screen.getByTestId('createPostBtn'));
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('modalOrganizationHeader'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('submits createPost and handles error', async () => {
+    render(
+      <MockedProvider
+        mocks={[getPostsMock2, orgPostListMock, createPostErrorMock]}
+        addTypename={false}
+      >
+        <OrgPost />
+      </MockedProvider>,
+    );
+
+    fireEvent.click(await screen.findByTestId('createPostModalBtn'));
+    fireEvent.change(screen.getByTestId('modalTitle'), {
+      target: { value: 'Test Title' },
+    });
+    fireEvent.change(screen.getByTestId('modalinfo'), {
+      target: { value: 'Test Info' },
+    });
+
+    await act(async () => {
+      fireEvent.submit(screen.getByTestId('createPostBtn'));
+    });
   });
 });
