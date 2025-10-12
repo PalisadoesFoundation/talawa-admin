@@ -192,9 +192,7 @@ export const handleCreateDirectChat = async (
             },
           },
         });
-        console.log(id, 'id');
-        console.log(userId, 'userId');
-        const result = await createChatMembership({
+        await createChatMembership({
           variables: {
             input: {
               memberId: id,
@@ -203,7 +201,6 @@ export const handleCreateDirectChat = async (
             },
           },
         });
-        console.log(result, 'result');
       }
 
       await chatsListRefetch();
