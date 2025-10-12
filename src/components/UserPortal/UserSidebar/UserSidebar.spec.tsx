@@ -484,6 +484,27 @@ describe('UserSidebar', () => {
       expect(screen.getByAltText('Plugin One')).toBeInTheDocument();
       expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
     });
+
+    it('should apply active stroke color to plugin icon when plugin route is active', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: '', // No custom icon, so it uses PluginLogo
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      // Render on the plugin route to make it active
+      renderWithRoute('/user/plugin/test');
+
+      const pluginIcon = screen.getByTestId('plugin-icon');
+      expect(pluginIcon).toHaveAttribute(
+        'data-stroke',
+        'var(--sidebar-icon-stroke-active)',
+      );
+    });
   });
 
   describe('Internationalization', () => {

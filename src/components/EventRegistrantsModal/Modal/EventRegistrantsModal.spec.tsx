@@ -17,6 +17,28 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi } from 'vitest';
 
+// Mock the AddOnSpotAttendee component
+vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
+  default: ({
+    show,
+    handleClose,
+    reloadMembers,
+  }: {
+    show: boolean;
+    handleClose: () => void;
+    reloadMembers: () => void;
+  }) => {
+    return show ? (
+      <div data-testid="add-onspot-modal">
+        <button onClick={handleClose}>Close Modal</button>
+        <button onClick={reloadMembers} data-testid="reload-members-btn">
+          Reload Members
+        </button>
+      </div>
+    ) : null;
+  },
+}));
+
 const queryMockWithoutRegistrant = [
   {
     request: {
@@ -42,17 +64,23 @@ const queryMockWithRegistrant = [
     result: {
       data: {
         event: {
+          __typename: 'Event',
           attendees: [
             {
+              __typename: 'User',
+              id: 'user1',
               _id: 'user1',
               firstName: 'John',
               lastName: 'Doe',
               createdAt: '2023-01-01',
               gender: 'Male',
               birthDate: '1990-01-01',
-              eventsAttended: {
-                _id: 'event123',
-              },
+              eventsAttended: [
+                {
+                  __typename: 'Event',
+                  _id: 'event123',
+                },
+              ],
             },
           ],
         },
@@ -74,6 +102,7 @@ const queryMockOrgMembers = [
             _id: 'org123',
             members: [
               {
+                id: 'user1',
                 _id: 'user1',
                 firstName: 'John',
                 lastName: 'Doe',
@@ -172,6 +201,7 @@ describe('Testing Event Registrants Modal', () => {
           ...queryMockWithoutRegistrant,
           ...queryMockOrgMembers,
           ...successfulAddRegistrantMock,
+          ...queryMockWithRegistrant,
         ]}
       >
         <BrowserRouter>
@@ -225,7 +255,7 @@ describe('Testing Event Registrants Modal', () => {
     );
 
     await waitFor(() => {
-      expect(true).toBe(true);
+      expect(queryByText('Attendee added Successfully')).toBeInTheDocument();
     });
   });
 
@@ -278,13 +308,14 @@ describe('Testing Event Registrants Modal', () => {
   });
 
   test('Assigned attendees must be shown with badges and delete attendee mutation must function properly', async () => {
-    const { queryByText, queryByTestId } = render(
+    const { queryByText } = render(
       <MockedProvider
         addTypename={false}
         mocks={[
           ...queryMockWithRegistrant,
           ...queryMockOrgMembers,
           ...successfulRemoveRegistrantMock,
+          ...queryMockWithoutRegistrant,
         ]}
       >
         <BrowserRouter>
@@ -306,14 +337,22 @@ describe('Testing Event Registrants Modal', () => {
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
 
-    fireEvent.click(queryByTestId('CancelIcon') as Element);
+    // Get all CancelIcon elements (MUI Chip delete icons)
+    const cancelIcons = document.querySelectorAll('[data-testid="CancelIcon"]');
+
+    // The first CancelIcon should be the delete icon for the "John Doe" chip
+    // (assuming there are no other cancel icons before it)
+    const deleteIcon = cancelIcons[0];
+    expect(deleteIcon).toBeTruthy();
+
+    fireEvent.click(deleteIcon as Element);
 
     await waitFor(() =>
       expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
     );
 
     await waitFor(() => {
-      expect(true).toBe(true);
+      expect(queryByText('Attendee removed Successfully')).toBeInTheDocument();
     });
   });
 
@@ -400,5 +439,257 @@ describe('Testing Event Registrants Modal', () => {
     expect(getByText('Add Onspot Registration')).toBeInTheDocument();
     const closeButton = getByTitle('Close');
     fireEvent.click(closeButton);
+  });
+
+  test('Loading state is rendered correctly', async () => {
+    // Create delayed mocks that never resolve to keep the component in loading state
+    const delayedMocks = [
+      {
+        request: {
+          query: EVENT_ATTENDEES,
+          variables: { id: 'event123' },
+        },
+        delay: Infinity, // Keep in loading state
+        result: {
+          data: {
+            event: {
+              attendees: [],
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERS_LIST,
+          variables: { id: 'org123' },
+        },
+        delay: Infinity, // Keep in loading state
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: 'org123',
+                members: [],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const { container } = render(
+      <MockedProvider addTypename={false} mocks={delayedMocks}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait a bit to ensure component has mounted and is showing loader
+    await waitFor(() => {
+      // The loader uses CSS modules, so the class name will be hashed (e.g., "_loader_d8535b")
+      // We need to check for any div with a class that contains "loader"
+      const loaderDiv = container.querySelector('[class*="loader"]');
+      expect(loaderDiv).toBeInTheDocument();
+    });
+  });
+
+  test('Modal close functionality works correctly', async () => {
+    const handleClose = vi.fn();
+    const customProps = {
+      ...props,
+      handleClose: handleClose,
+    };
+
+    const { getByRole } = render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[...queryMockWithoutRegistrant, ...queryMockOrgMembers]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...customProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(getByRole('button', { name: /close/i })).toBeInTheDocument();
+    });
+
+    const closeButton = getByRole('button', { name: /close/i });
+    fireEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  test('AddOnSpotAttendee modal reloadMembers callback is triggered', async () => {
+    const { getByText, getByPlaceholderText, getByTestId } = render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[
+          ...queryMockWithoutRegistrant,
+          ...queryMockWithoutOrgMembers,
+          ...queryMockWithoutRegistrant, // refetch mock
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for loading state to finish
+    await waitFor(() => {
+      const autocomplete = getByPlaceholderText(
+        'Choose the user that you want to add',
+      );
+      expect(autocomplete).toBeInTheDocument();
+    });
+
+    // Open the AddOnSpotAttendee modal
+    const autocomplete = getByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+    fireEvent.change(autocomplete, { target: { value: 'NonexistentUser' } });
+
+    await waitFor(() => {
+      expect(getByText('Add Onspot Registration')).toBeInTheDocument();
+    });
+
+    fireEvent.click(getByText('Add Onspot Registration'));
+
+    // The AddOnSpotAttendee modal should be shown
+    await waitFor(() => {
+      expect(getByTestId('add-onspot-modal')).toBeInTheDocument();
+    });
+
+    // Click the reload members button which should trigger the reloadMembers callback
+    const reloadButton = getByTestId('reload-members-btn');
+    fireEvent.click(reloadButton);
+
+    // Close the modal
+    fireEvent.click(getByText('Close Modal'));
+
+    // Verify modal is closed
+    await waitFor(() => {
+      expect(() => getByTestId('add-onspot-modal')).toThrow();
+    });
+  });
+
+  test('Attendee with only id field (no _id) works correctly', async () => {
+    // Mock with an attendee that has id but no _id to test the fallback branch
+    const queryMockWithIdOnly = [
+      {
+        request: {
+          query: EVENT_ATTENDEES,
+          variables: { id: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              __typename: 'Event',
+              attendees: [
+                {
+                  __typename: 'User',
+                  id: 'user2',
+                  // Intentionally no _id to test the fallback
+                  firstName: 'Jane',
+                  lastName: 'Smith',
+                  createdAt: '2023-02-01',
+                  gender: 'Female',
+                  birthDate: '1992-02-02',
+                  eventsAttended: [
+                    {
+                      __typename: 'Event',
+                      _id: 'event123',
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+    ];
+
+    const successfulRemoveWithIdOnly = [
+      {
+        request: {
+          query: REMOVE_EVENT_ATTENDEE,
+          variables: { userId: 'user2', eventId: 'event123' },
+        },
+        result: {
+          data: {
+            removeEventAttendee: { _id: 'user2' },
+          },
+        },
+      },
+    ];
+
+    const { queryByText } = render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[
+          ...queryMockWithIdOnly,
+          ...queryMockOrgMembers,
+          ...successfulRemoveWithIdOnly,
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <ToastContainer />
+                <EventRegistrantsModal {...props} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() =>
+      expect(queryByText('Registered Registrants')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => expect(queryByText('Jane Smith')).toBeInTheDocument());
+
+    // Get all CancelIcon elements (MUI Chip delete icons)
+    const cancelIcons = document.querySelectorAll('[data-testid="CancelIcon"]');
+
+    // Click the delete icon
+    const deleteIcon = cancelIcons[0];
+    expect(deleteIcon).toBeTruthy();
+
+    fireEvent.click(deleteIcon as Element);
+
+    await waitFor(() =>
+      expect(queryByText('Removing the attendee...')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => {
+      expect(queryByText('Attendee removed Successfully')).toBeInTheDocument();
+    });
   });
 });
