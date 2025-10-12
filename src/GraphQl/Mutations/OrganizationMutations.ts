@@ -280,3 +280,84 @@ export const UPDATE_CHAT_MEMBERSHIP = gql`
     }
   }
 `;
+
+export const DELETE_CHAT = gql`
+  mutation DeleteChat($input: MutationDeleteChatInput!) {
+    deleteChat(input: $input) {
+      id
+      name
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
+      organization {
+        id
+        name
+        countryCode
+      }
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+    }
+  }
+`;
+
+export const DELETE_CHAT_MEMBERSHIP = gql`
+  mutation DeleteChatMembership($input: MutationDeleteChatMembershipInput!) {
+    deleteChatMembership(input: $input) {
+      id
+      name
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
+      organization {
+        id
+        name
+        countryCode
+      }
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      members(first: 10) {
+        edges {
+          node {
+            user {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
+            role
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
+        }
+      }
+    }
+  }
+`;

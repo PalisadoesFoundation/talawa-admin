@@ -44,13 +44,15 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT_MEMBERSHIP,
+  DELETE_CHAT,
+  DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -64,7 +66,8 @@ import { Search, Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
-import { FaCheck, FaX } from 'react-icons/fa6';
+import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
@@ -133,6 +136,8 @@ export default function groupChatDetails({
   const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
   const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
+  const [deleteChat] = useMutation(DELETE_CHAT);
+  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
 
   const currentUserRole = chat.members.edges.find(
     (edge) => edge.node.user.id === userId,
@@ -153,6 +158,24 @@ export default function groupChatDetails({
       toast.success('Role updated successfully');
     } catch (error) {
       toast.error('Failed to update role');
+      console.error(error);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    try {
+      await deleteChatMembership({
+        variables: {
+          input: {
+            memberId,
+            chatId: chat.id,
+          },
+        },
+      });
+      await chatRefetch();
+      toast.success('Member removed successfully');
+    } catch (error) {
+      toast.error('Failed to remove member');
       console.error(error);
     }
   };
@@ -243,7 +266,34 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="groupChatDetails">
-          <Modal.Title>{t('groupInfo')}</Modal.Title>
+          <div className="d-flex justify-content-between w-100">
+            <Modal.Title>{t('groupInfo')}</Modal.Title>
+            {currentUserRole === 'administrator' && (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={async () => {
+                  if (
+                    window.confirm('Are you sure you want to delete this chat?')
+                  ) {
+                    try {
+                      await deleteChat({
+                        variables: { input: { id: chat.id } },
+                      });
+                      toast.success('Chat deleted successfully');
+                      toggleGroupChatDetailsModal();
+                      // Maybe navigate away or refetch chats
+                    } catch (error) {
+                      toast.error('Failed to delete chat');
+                      console.error(error);
+                    }
+                  }
+                }}
+              >
+                <FaTrash />
+              </Button>
+            )}
+          </div>
         </Modal.Header>
         <Modal.Body>
           <input
@@ -339,33 +389,79 @@ export default function groupChatDetails({
                 const user = edge.node.user;
                 const role = edge.node.role;
                 const isCurrentUser = user.id === userId;
-                const canChangeRole =
+                const canManage =
                   currentUserRole === 'administrator' && !isCurrentUser;
+                const canRemove = canManage && role === 'regular';
                 return (
                   <ListGroup.Item
                     className={styles.groupMembersList}
                     key={user.id}
                   >
-                    <div className={styles.chatUserDetails}>
-                      <Avatar
-                        avatarStyle={styles.membersImage}
-                        name={user.name}
-                      />
-                      <span>
-                        {user.name} ({role})
-                      </span>
-                      {canChangeRole && (
-                        <Form.Select
-                          size="sm"
-                          value={role}
-                          onChange={(e) =>
-                            handleRoleChange(user.id, e.target.value)
-                          }
-                          style={{ width: 'auto', marginLeft: '10px' }}
+                    <div
+                      className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
+                    >
+                      <div className="d-flex align-items-center flex-grow-1">
+                        <Avatar
+                          avatarStyle={styles.membersImage}
+                          name={user.name}
+                        />
+                        <span className="ms-2">{user.name}</span>
+                        <span
+                          className="badge bg-success text-dark ms-2"
+                          style={{ fontSize: '0.75rem' }}
                         >
-                          <option value="regular">Regular</option>
-                          <option value="administrator">Admin</option>
-                        </Form.Select>
+                          {role}
+                        </span>
+                      </div>
+                      {canManage && (
+                        <Dropdown className="ms-auto">
+                          <Dropdown.Toggle
+                            variant="link"
+                            id={`dropdown-${user.id}`}
+                            style={{
+                              color: 'black',
+                              border: 'none',
+                              padding: '0',
+                              background: 'none',
+                              boxShadow: 'none',
+                            }}
+                            className="btn-sm"
+                          >
+                            <BsThreeDotsVertical />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu align="end">
+                            <Dropdown.Item
+                              onClick={() =>
+                                handleRoleChange(
+                                  user.id,
+                                  role === 'administrator'
+                                    ? 'regular'
+                                    : 'administrator',
+                                )
+                              }
+                            >
+                              {role === 'administrator'
+                                ? 'Demote to Regular'
+                                : 'Promote to Admin'}
+                            </Dropdown.Item>
+                            {canRemove && (
+                              <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => {
+                                  if (
+                                    window.confirm(
+                                      `Remove ${user.name} from the chat?`,
+                                    )
+                                  ) {
+                                    handleRemoveMember(user.id);
+                                  }
+                                }}
+                              >
+                                Remove
+                              </Dropdown.Item>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
                       )}
                     </div>
                   </ListGroup.Item>
