@@ -113,26 +113,8 @@ export const UPDATE_CHAT = gql`
       id
       name
       description
-      avatarMimeType
-      avatarURL
-      createdAt
-      updatedAt
-      organization {
-        id
-        name
-        countryCode
-      }
-      creator {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-      updater {
-        id
-        name
-        avatarMimeType
-        avatarURL
+      avatar {
+        uri
       }
     }
   }
@@ -285,6 +267,16 @@ export const CANCEL_MEMBERSHIP_REQUEST = gql`
   mutation ($membershipRequestId: ID!) {
     cancelMembershipRequest(membershipRequestId: $membershipRequestId) {
       _id
+    }
+  }
+`;
+
+export const UPDATE_CHAT_MEMBERSHIP = gql`
+  mutation UpdateChatMembership($input: MutationUpdateChatMembershipInput!) {
+    updateChatMembership(input: $input) {
+      id
+      name
+      description
     }
   }
 `;

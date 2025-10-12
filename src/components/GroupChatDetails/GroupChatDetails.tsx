@@ -48,8 +48,8 @@ import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  ADD_USER_TO_GROUP_CHAT,
   UPDATE_CHAT,
+  CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -57,18 +57,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Search, Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX } from 'react-icons/fa6';
-import convertToBase64 from 'utils/convertToBase64';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -122,11 +122,14 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [selectedImage, setSelectedImage] = useState(chat?.avatarURL || '');
+  const [, setSelectedImage] = useState(chat?.avatarURL || '');
+
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   //mutations
 
-  const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
+  const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
 
   //modal
@@ -144,24 +147,33 @@ export default function groupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+  } = useQuery(ORGANIZATION_MEMBERS, {
+    variables: {
+      input: { id: chat.organization?.id },
+      first: 20,
+      after: null,
+      where: {},
+    },
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({ variables: { userId, chatId: chat.id } });
+    await addUser({
+      variables: {
+        input: { memberId: userId, chatId: chat.id, role: 'regular' },
+      },
+    });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    const [firstName, lastName] = userName.split(' ');
+    const trimmedName = userName.trim();
 
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
-    };
-
-    allUsersRefetch({ ...newFilterData });
+    allUsersRefetch({
+      input: { id: chat.organization?.id },
+      first: 20,
+      after: null,
+      where: trimmedName ? { name_contains: trimmedName } : {},
+    });
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -174,15 +186,18 @@ export default function groupChatDetails({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
-      // Add variables to updateChat call
+    if (file && chat.organization?.id) {
+      const { objectName } = await uploadFileToMinio(
+        file,
+        chat.organization.id,
+      );
+      const url = await getFileFromMinio(objectName, chat.organization.id);
+      setSelectedImage(url);
       await updateChat({
         variables: {
           input: {
             id: chat.id,
-            avatarURL: base64,
+            avatar: { uri: objectName },
             name: chatName,
           },
         },
@@ -246,7 +261,6 @@ export default function groupChatDetails({
                       variables: {
                         input: {
                           id: chat.id,
-                          avatarURL: selectedImage ? selectedImage : '',
                           name: chatName,
                         },
                       },
@@ -368,41 +382,66 @@ export default function groupChatDetails({
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
-                    {console.log(allUsersData)}
                     {allUsersData &&
-                      allUsersData.users.length > 0 &&
-                      allUsersData.users.map(
-                        (
-                          userDetails: InterfaceQueryUserListItem,
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.name}
-                              <br />
-                              {userDetails.emailAddress}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                onClick={async () => {
-                                  await addUserToGroupChat(userDetails.id);
-                                  toggleAddUserModal();
-                                  chatRefetch({ input: { id: chat.id } });
-                                }}
-                                data-testid="addUserBtn"
-                              >
-                                {t('add')}
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                      allUsersData.organization?.members?.edges?.length > 0 &&
+                      allUsersData.organization.members.edges
+                        .filter(
+                          ({
+                            node: userDetails,
+                          }: {
+                            node: {
+                              id: string;
+                              name: string;
+                              avatarURL?: string;
+                              role: string;
+                            };
+                          }) =>
+                            userDetails.id !== userId &&
+                            !chat.members.edges.some(
+                              (edge) => edge.node.id === userDetails.id,
+                            ),
+                        )
+                        .map(
+                          (
+                            {
+                              node: userDetails,
+                            }: {
+                              node: {
+                                id: string;
+                                name: string;
+                                avatarURL?: string;
+                                role: string;
+                              };
+                            },
+                            index: number,
+                          ) => (
+                            <StyledTableRow
+                              data-testid="user"
+                              key={userDetails.id}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {index + 1}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userDetails.name}
+                                <br />
+                                {userDetails.role || 'Member'}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <Button
+                                  onClick={async () => {
+                                    await addUserToGroupChat(userDetails.id);
+                                    toggleAddUserModal();
+                                    chatRefetch({ input: { id: chat.id } });
+                                  }}
+                                  data-testid="addUserBtn"
+                                >
+                                  {t('add')}
+                                </Button>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ),
+                        )}
                   </TableBody>
                 </Table>
               </TableContainer>
