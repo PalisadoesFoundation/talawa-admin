@@ -1,10 +1,10 @@
-import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
+import { mkdir, copyFile, access } from 'fs/promises';
 import { backupEnvFile } from './backupEnvFile';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('fs');
+vi.mock('fs/promises');
 vi.mock('inquirer');
 
 describe('backupEnvFile', () => {
@@ -25,9 +25,9 @@ describe('backupEnvFile', () => {
 
   it('should create backup when user confirms', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValue(true);
-    vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
-    vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockResolvedValue(undefined);
+    vi.mocked(copyFile).mockResolvedValue(undefined);
 
     const mockEpochMs = 1234567890000;
     const mockEpochSec = 1234567890;
@@ -35,10 +35,10 @@ describe('backupEnvFile', () => {
 
     await backupEnvFile();
 
-    expect(fs.mkdirSync).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
+    expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
       recursive: true,
     });
-    expect(fs.copyFileSync).toHaveBeenCalledWith(
+    expect(copyFile).toHaveBeenCalledWith(
       path.join(mockCwd, '.env'),
       path.join(mockCwd, '.backup', `.env.${mockEpochSec}`),
     );
@@ -52,33 +52,34 @@ describe('backupEnvFile', () => {
 
     await backupEnvFile();
 
-    expect(fs.mkdirSync).not.toHaveBeenCalled();
-    expect(fs.copyFileSync).not.toHaveBeenCalled();
+    expect(mkdir).not.toHaveBeenCalled();
+    expect(copyFile).not.toHaveBeenCalled();
   });
 
   it('should ensure .backup directory exists when backing up', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValueOnce(true);
-    vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
-    vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockResolvedValue(undefined);
+    vi.mocked(copyFile).mockResolvedValue(undefined);
 
     const mockEpochMs = 1234567890000;
     vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
     await backupEnvFile();
 
-    expect(fs.mkdirSync).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
+    expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
       recursive: true,
     });
   });
 
   it('should handle missing .env file gracefully', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValueOnce(false);
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockRejectedValue(new Error('File not found'));
 
     await backupEnvFile();
 
-    expect(fs.copyFileSync).not.toHaveBeenCalled();
+    expect(copyFile).not.toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('No .env file found'),
     );
@@ -86,10 +87,8 @@ describe('backupEnvFile', () => {
 
   it('should throw error when backup fails', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValue(true);
-    vi.mocked(fs.copyFileSync).mockImplementation(() => {
-      throw new Error('Permission denied');
-    });
+    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied')); // Fail at mkdir instead
+    vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
 
     await expect(backupEnvFile()).rejects.toThrow(
       'Failed to backup .env file: Permission denied',
@@ -98,9 +97,8 @@ describe('backupEnvFile', () => {
 
   it('should throw error when directory creation fails', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.mkdirSync).mockImplementation(() => {
-      throw new Error('Permission denied');
-    });
+    vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
+    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied'));
 
     await expect(backupEnvFile()).rejects.toThrow(
       'Failed to backup .env file: Permission denied',
@@ -109,9 +107,9 @@ describe('backupEnvFile', () => {
 
   it('should use correct epoch timestamp format', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(fs.existsSync).mockReturnValue(true);
-    vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
-    vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockResolvedValue(undefined);
+    vi.mocked(copyFile).mockResolvedValue(undefined);
 
     const mockEpochMs = 1609459200000;
     const mockEpochSec = 1609459200;
@@ -119,7 +117,7 @@ describe('backupEnvFile', () => {
 
     await backupEnvFile();
 
-    expect(fs.copyFileSync).toHaveBeenCalledWith(
+    expect(copyFile).toHaveBeenCalledWith(
       expect.any(String),
       expect.stringContaining(`.env.${mockEpochSec}`),
     );

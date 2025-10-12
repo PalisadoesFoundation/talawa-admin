@@ -1,4 +1,5 @@
-import fs from 'fs';
+import { mkdir, copyFile, access } from 'fs/promises';
+import { constants } from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
 
@@ -17,7 +18,7 @@ export const backupEnvFile = async (): Promise<void> => {
     if (shouldBackup) {
       // Create .backup directory
       const backupDir = path.join(process.cwd(), '.backup');
-      fs.mkdirSync(backupDir, { recursive: true });
+      await mkdir(backupDir, { recursive: true });
 
       // Generate epoch timestamp
       const epochTimestamp = Math.floor(Date.now() / 1000);
@@ -26,11 +27,12 @@ export const backupEnvFile = async (): Promise<void> => {
 
       // Copy .env to backup location
       const envPath = path.join(process.cwd(), '.env');
-      if (fs.existsSync(envPath)) {
-        fs.copyFileSync(envPath, backupFilePath);
+      try {
+        await access(envPath, constants.F_OK);
+        await copyFile(envPath, backupFilePath);
         console.log(`\n✅ Backup created: ${backupFileName}`);
         console.log(`   Location: ${backupFilePath}`);
-      } else {
+      } catch {
         console.log('\n⚠️  No .env file found to backup.');
       }
     }
