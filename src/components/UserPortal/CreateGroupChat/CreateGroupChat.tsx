@@ -170,11 +170,10 @@ export default function CreateGroupChat({
           input: {
             memberId: userId,
             chatId,
-            role: 'regular',
+            role: 'admin',
           },
         },
       });
-      console.log(userIds, 'userIds');
       for (const memberId of userIds) {
         await createChatMembership({
           variables: {

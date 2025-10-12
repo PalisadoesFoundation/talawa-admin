@@ -95,11 +95,15 @@ interface INewChat {
   };
   members: {
     edges: Array<{
+      cursor: string;
       node: {
-        id: string;
-        name: string;
-        avatarMimeType?: string;
-        avatarURL?: string;
+        user: {
+          id: string;
+          name: string;
+          avatarMimeType?: string;
+          avatarURL?: string;
+        };
+        role: string;
       };
     }>;
   };

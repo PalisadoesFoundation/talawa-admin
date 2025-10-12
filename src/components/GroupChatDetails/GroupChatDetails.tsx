@@ -311,7 +311,8 @@ export default function groupChatDetails({
                 <Add /> {t('addMembers')}
               </ListGroup.Item>
               {chat.members.edges.map((edge) => {
-                const user = edge.node;
+                const user = edge.node.user;
+                const role = edge.node.role;
                 return (
                   <ListGroup.Item
                     className={styles.groupMembersList}
@@ -322,7 +323,7 @@ export default function groupChatDetails({
                         avatarStyle={styles.membersImage}
                         name={user.name}
                       />
-                      {user.name}
+                      {user.name} ({role})
                     </div>
                   </ListGroup.Item>
                 );
@@ -398,7 +399,7 @@ export default function groupChatDetails({
                           }) =>
                             userDetails.id !== userId &&
                             !chat.members.edges.some(
-                              (edge) => edge.node.id === userDetails.id,
+                              (edge) => edge.node.user.id === userDetails.id,
                             ),
                         )
                         .map(

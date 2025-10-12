@@ -213,10 +213,13 @@ export const CHAT_BY_ID = gql`
         edges {
           cursor
           node {
-            id
-            name
-            avatarMimeType
-            avatarURL
+            user {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
+            role
           }
         }
         pageInfo {
@@ -286,8 +289,12 @@ export const GROUP_CHAT_LIST = gql`
       members(first: 10) {
         edges {
           node {
-            id
-            name
+            user {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
             role
           }
         }
@@ -327,8 +334,12 @@ export const UNREAD_CHAT_LIST = gql`
       members(first: 10) {
         edges {
           node {
-            id
-            name
+            user {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
             role
           }
         }
@@ -363,8 +374,12 @@ export const CHATS_LIST = gql`
       members(first: $first, after: $after) {
         edges {
           node {
-            id
-            name
+            user {
+              id
+              name
+              avatarMimeType
+              avatarURL
+            }
             role
           }
         }
