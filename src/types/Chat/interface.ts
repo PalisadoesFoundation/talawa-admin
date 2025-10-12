@@ -10,24 +10,7 @@ export type NewChatType = {
   isGroup: boolean;
   createdAt: string;
   updatedAt: string;
-  organization?: {
-    id: string;
-    name: string;
-    countryCode?: string;
-  };
-  creator?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  updater?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  // Optional, provided by unreadChats or when requesting unread fields
+  // Optional unread/computed fields (provided by unreadChats or when opting-in)
   unreadMessagesCount?: number;
   hasUnread?: boolean;
   firstUnreadMessageId?: string;
@@ -51,6 +34,23 @@ export type NewChatType = {
         name: string;
       };
     };
+  };
+  organization?: {
+    id: string;
+    name: string;
+    countryCode?: string;
+  };
+  creator?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  updater?: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
   };
   members: {
     edges: Array<{
