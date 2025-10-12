@@ -45,7 +45,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Overlay, Popover } from 'react-bootstrap';
 import { type ApolloQueryResult, useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -473,44 +473,54 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+      <Overlay
+        show={open}
+        target={anchor}
+        placement="bottom"
+        rootClose
+        onHide={() => setAnchor(null)}
       >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={index}
-            data-testid={`extra${index + 1}`}
+        {(props) => (
+          <Popover
+            id={id}
+            {...props}
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
           >
-            {user.image ? (
-              <img
-                src={user.image}
-                alt="pledger"
-                data-testid={`extraImage${index + 1}`}
-                className={styles.TableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={user.id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
-                  name={user.firstName + ' ' + user.lastName}
-                  alt={user.firstName + ' ' + user.lastName}
-                  dataTestId={`extraAvatar${index + 1}`}
-                />
-              </div>
-            )}
-            <span key={user.id + '2'}>
-              {user.firstName + ' ' + user.lastName}
-            </span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Body>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={index}
+                  data-testid={`extra${index + 1}`}
+                >
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt="pledger"
+                      data-testid={`extraImage${index + 1}`}
+                      className={styles.TableImage}
+                    />
+                  ) : (
+                    <div className={styles.avatarContainer}>
+                      <Avatar
+                        key={user.id + '1'}
+                        containerStyle={styles.imageContainer}
+                        avatarStyle={styles.TableImage}
+                        name={user.firstName + ' ' + user.lastName}
+                        alt={user.firstName + ' ' + user.lastName}
+                        dataTestId={`extraAvatar${index + 1}`}
+                      />
+                    </div>
+                  )}
+                  <span key={user.id + '2'}>
+                    {user.firstName + ' ' + user.lastName}
+                  </span>
+                </div>
+              ))}
+            </Popover.Body>
+          </Popover>
+        )}
+      </Overlay>
     </div>
   );
 };

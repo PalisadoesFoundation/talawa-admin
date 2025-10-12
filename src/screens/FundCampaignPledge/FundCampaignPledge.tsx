@@ -2,7 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup';
+import { Overlay, Popover } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -588,38 +588,48 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <BasePopup
-        id={id}
-        open={open}
-        anchor={anchor}
-        disablePortal
-        className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-        data-testid="extra-users-popup"
+      <Overlay
+        show={open}
+        target={anchor}
+        placement="bottom"
+        rootClose
+        onHide={() => setAnchor(null)}
       >
-        {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-          <div
-            className={styles.pledgerContainer}
-            key={user.id}
-            data-testid={`extraUser-${index}`}
+        {(props) => (
+          <Popover
+            id={id}
+            {...props}
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
           >
-            {user.image ? (
-              <img
-                src={user.image}
-                alt={user.name}
-                className={styles.TableImagePledge}
-              />
-            ) : (
-              <Avatar
-                containerStyle={styles.imageContainerPledge}
-                avatarStyle={styles.TableImagePledge}
-                name={user.name}
-                alt={user.name}
-              />
-            )}
-            <span>{user.name}</span>
-          </div>
-        ))}
-      </BasePopup>
+            <Popover.Body>
+              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+                <div
+                  className={styles.pledgerContainer}
+                  key={user.id}
+                  data-testid={`extraUser-${index}`}
+                >
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt={user.name}
+                      className={styles.TableImagePledge}
+                    />
+                  ) : (
+                    <Avatar
+                      containerStyle={styles.imageContainerPledge}
+                      avatarStyle={styles.TableImagePledge}
+                      name={user.name}
+                      alt={user.name}
+                    />
+                  )}
+                  <span>{user.name}</span>
+                </div>
+              ))}
+            </Popover.Body>
+          </Popover>
+        )}
+      </Overlay>
     </div>
   );
 };
