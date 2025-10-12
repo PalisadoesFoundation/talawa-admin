@@ -7,11 +7,11 @@ on:
 jobs:
   add-unapproved-label:
     runs-on: ubuntu-latest
-    
+
     permissions:
       issues: write
       contents: read
-    
+
     steps:
       - name: Add unapproved label
         uses: actions/github-script@v7
@@ -19,7 +19,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
-            
+
             try {
               // Get the complete issue object (includes ALL labels, no pagination issues)
               const { data: issue } = await github.rest.issues.get({
