@@ -96,6 +96,17 @@ describe('backupEnvFile', () => {
     );
   });
 
+  it('should throw error when directory creation fails', async () => {
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
+    vi.mocked(fs.mkdirSync).mockImplementation(() => {
+      throw new Error('Permission denied');
+    });
+
+    await expect(backupEnvFile()).rejects.toThrow(
+      'Failed to backup .env file: Permission denied',
+    );
+  });
+
   it('should use correct epoch timestamp format', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
     vi.mocked(fs.existsSync).mockReturnValue(true);
