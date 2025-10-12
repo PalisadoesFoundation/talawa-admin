@@ -1,6 +1,6 @@
 name: Add Unapproved Label on Unassignment
 
-on:
+'on':
   issues:
     types: [unassigned]
 
@@ -44,7 +44,7 @@ jobs:
                 
                 console.log(`Added 'unapproved' label to issue #${issue_number}`);
               } else {
-                console.log(`ℹIssue #${issue_number} already has 'unapproved' label - skipping`);
+                console.log(`Issue #${issue_number} already has 'unapproved' label - skipping`);
               }
             } catch (error) {
               console.error(`Error processing issue #${issue_number}:`, error.message);
