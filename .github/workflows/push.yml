@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -14,11 +14,11 @@ name: PUSH Workflow - All Branches
 on:
   push:
     branches:
-      - '**'   
-      
+      - '**'
+
 env:
-    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
-  
+  CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+
 jobs:
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -47,17 +47,17 @@ jobs:
             ${{ runner.os }}-code-coverage-${{ env.cache-name }}-
             ${{ runner.os }}-code-coverage-
             ${{ runner.os }}-
-      
+
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         name: List the state of node modules
         run: npm install
-        
+
       - name: Run Vitest Tests
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
           npm run test:coverage
-        
+
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
