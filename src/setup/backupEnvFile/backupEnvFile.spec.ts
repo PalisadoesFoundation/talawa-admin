@@ -29,8 +29,9 @@ describe('backupEnvFile', () => {
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
     vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
 
-    const mockEpoch = 1234567890000;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
+    const mockEpochMs = 1234567890000;
+    const mockEpochSec = 1234567890;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
     await backupEnvFile();
 
@@ -39,10 +40,10 @@ describe('backupEnvFile', () => {
     });
     expect(fs.copyFileSync).toHaveBeenCalledWith(
       path.join(mockCwd, '.env'),
-      path.join(mockCwd, '.backup', `.env.${mockEpoch}`),
+      path.join(mockCwd, '.backup', `.env.${mockEpochSec}`),
     );
     expect(console.log).toHaveBeenCalledWith(
-      expect.stringContaining(`.env.${mockEpoch}`),
+      expect.stringContaining(`.env.${mockEpochSec}`),
     );
   });
 
@@ -55,14 +56,14 @@ describe('backupEnvFile', () => {
     expect(fs.copyFileSync).not.toHaveBeenCalled();
   });
 
-  it('should create .backup directory if it does not exist', async () => {
+  it('should ensure .backup directory exists when backing up', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
     vi.mocked(fs.existsSync).mockReturnValueOnce(true);
     vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
 
-    const mockEpoch = 1234567890000;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
+    const mockEpochMs = 1234567890000;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
     await backupEnvFile();
 
@@ -101,14 +102,15 @@ describe('backupEnvFile', () => {
     vi.mocked(fs.copyFileSync).mockReturnValue(undefined);
     vi.mocked(fs.mkdirSync).mockReturnValue(undefined);
 
-    const mockEpoch = 1609459200000;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpoch);
+    const mockEpochMs = 1609459200000;
+    const mockEpochSec = 1609459200;
+    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
     await backupEnvFile();
 
     expect(fs.copyFileSync).toHaveBeenCalledWith(
       expect.any(String),
-      expect.stringContaining(`.env.${mockEpoch}`),
+      expect.stringContaining(`.env.${mockEpochSec}`),
     );
   });
 });

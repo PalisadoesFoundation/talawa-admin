@@ -20,7 +20,7 @@ export const backupEnvFile = async (): Promise<void> => {
       fs.mkdirSync(backupDir, { recursive: true });
 
       // Generate epoch timestamp
-      const epochTimestamp = Date.now();
+      const epochTimestamp = Math.floor(Date.now() / 1000);
       const backupFileName = `.env.${epochTimestamp}`;
       const backupFilePath = path.join(backupDir, backupFileName);
 
