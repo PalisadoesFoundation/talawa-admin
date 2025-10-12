@@ -75,7 +75,10 @@ describe('backupEnvFile', () => {
   it('should handle missing .env file gracefully', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
     vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(access).mockRejectedValue(new Error('File not found'));
+    const enoentError = Object.assign(new Error('File not found'), {
+      code: 'ENOENT',
+    });
+    vi.mocked(access).mockRejectedValue(enoentError);
 
     await backupEnvFile();
 
@@ -85,9 +88,9 @@ describe('backupEnvFile', () => {
     );
   });
 
-  it('should throw error when backup fails', async () => {
+  it('should throw error when directory creation fails', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied')); // Fail at mkdir instead
+    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied'));
     vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
 
     await expect(backupEnvFile()).rejects.toThrow(
@@ -95,13 +98,15 @@ describe('backupEnvFile', () => {
     );
   });
 
-  it('should throw error when directory creation fails', async () => {
+  it('should throw error when file copy fails', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockResolvedValue(undefined);
+    vi.mocked(copyFile).mockRejectedValue(new Error('Disk full'));
     vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
-    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied'));
 
     await expect(backupEnvFile()).rejects.toThrow(
-      'Failed to backup .env file: Permission denied',
+      'Failed to backup .env file: Disk full',
     );
   });
 

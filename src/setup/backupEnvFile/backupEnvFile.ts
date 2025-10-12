@@ -32,8 +32,13 @@ export const backupEnvFile = async (): Promise<void> => {
         await copyFile(envPath, backupFilePath);
         console.log(`\n✅ Backup created: ${backupFileName}`);
         console.log(`   Location: ${backupFilePath}`);
-      } catch {
-        console.log('\n⚠️  No .env file found to backup.');
+      } catch (error) {
+        const err = error as NodeJS.ErrnoException;
+        if (err.code === 'ENOENT') {
+          console.log('\n⚠️  No .env file found to backup.');
+        } else {
+          throw error;
+        }
       }
     }
   } catch (error) {
