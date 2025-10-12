@@ -44,7 +44,7 @@ import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import NewChat from 'assets/svgs/newChat.svg?react';
 import styles from './Chat.module.css';
-import { CHATS_LIST, UNREAD_CHAT_LIST } from 'GraphQl/Queries/PlugInQueries';
+import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
@@ -106,7 +106,8 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHAT_LIST);
+  // Use new unreadChats endpoint implemented in backend; keep old as fallback if needed
+  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
 
   // TODO: Update markChatMessagesAsRead to match new schema
   // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
@@ -129,8 +130,8 @@ export default function chat(): JSX.Element {
         }
       } else if (filterType === 'unread') {
         const { data } = await unreadChatListRefetch();
-        if (data && data.chatsByUser) {
-          setChats(data.chatsByUser);
+        if (data && data.unreadChats) {
+          setChats(data.unreadChats);
         }
       } else if (filterType === 'group') {
         const { data } = await chatsListRefetch();
@@ -276,6 +277,14 @@ export default function chat(): JSX.Element {
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {
+                        // Derive unread count and last message if present (from unreadChats)
+                        const unreadCount = isNewChatType(chat)
+                          ? (chat.unreadMessagesCount ?? 0)
+                          : 0;
+                        const lastMsgBody = isNewChatType(chat)
+                          ? (chat.lastMessage?.body ?? '')
+                          : '';
+
                         const cardProps: InterfaceContactCardProps = {
                           id: isNewChatType(chat) ? chat.id : chat._id,
                           title: chat.name || 'Chat',
@@ -288,8 +297,8 @@ export default function chat(): JSX.Element {
                             ? (chat.members?.edges?.length || 0) > 2
                             : (chat as GroupChat).isGroup ||
                               ((chat as GroupChat).users?.length || 0) > 2,
-                          unseenMessages: 0, // TODO: Update when unseen messages are available in new schema
-                          lastMessage: '', // Messages are not fetched in the chat list query
+                          unseenMessages: unreadCount,
+                          lastMessage: lastMsgBody,
                         };
                         return (
                           <ContactCard

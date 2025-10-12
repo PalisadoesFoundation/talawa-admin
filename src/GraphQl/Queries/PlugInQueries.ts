@@ -378,6 +378,62 @@ export const CHATS_LIST = gql`
     }
   }
 `;
+
+// New: Unread chats list leveraging backend computed fields
+export const UNREAD_CHATS = gql`
+  query UnreadChats {
+    unreadChats {
+      id
+      name
+      description
+      avatarMimeType
+      avatarURL
+      createdAt
+      updatedAt
+      organization {
+        id
+        name
+        countryCode
+      }
+      creator {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      updater {
+        id
+        name
+        avatarMimeType
+        avatarURL
+      }
+      unreadMessagesCount
+      hasUnread
+      firstUnreadMessageId
+      lastMessage {
+        id
+        body
+        createdAt
+        updatedAt
+        creator {
+          id
+          name
+          avatarMimeType
+          avatarURL
+        }
+        parentMessage {
+          id
+          body
+          createdAt
+          creator {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
 /**
  * GraphQL query to check if an organization is a sample organization.
  *

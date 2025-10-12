@@ -27,6 +27,31 @@ export type NewChatType = {
     avatarMimeType?: string;
     avatarURL?: string;
   };
+  // Optional, provided by unreadChats or when requesting unread fields
+  unreadMessagesCount?: number;
+  hasUnread?: boolean;
+  firstUnreadMessageId?: string;
+  lastMessage?: {
+    id: string;
+    body: string;
+    createdAt: string;
+    updatedAt?: string;
+    creator: {
+      id: string;
+      name: string;
+      avatarMimeType?: string;
+      avatarURL?: string;
+    };
+    parentMessage?: {
+      id: string;
+      body: string;
+      createdAt: string;
+      creator: {
+        id: string;
+        name: string;
+      };
+    };
+  };
   members: {
     edges: Array<{
       node: {
