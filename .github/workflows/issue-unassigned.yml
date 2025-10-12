@@ -48,5 +48,5 @@ jobs:
               }
             } catch (error) {
               console.error(`Error processing issue #${issue_number}:`, error.message);
-              // Don't throw - let the workflow succeed even if label operation fails
+              throw error; // Re-throw to fail the workflow and alert maintainers
             }
