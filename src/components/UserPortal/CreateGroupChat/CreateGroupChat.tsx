@@ -170,7 +170,7 @@ export default function CreateGroupChat({
           input: {
             memberId: userId,
             chatId,
-            role: 'admin',
+            role: 'administrator',
           },
         },
       });

@@ -50,6 +50,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
+  UPDATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -131,6 +132,30 @@ export default function groupChatDetails({
 
   const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
+  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
+
+  const currentUserRole = chat.members.edges.find(
+    (edge) => edge.node.user.id === userId,
+  )?.node.role;
+
+  const handleRoleChange = async (memberId: string, newRole: string) => {
+    try {
+      await updateChatMembership({
+        variables: {
+          input: {
+            memberId,
+            chatId: chat.id,
+            role: newRole,
+          },
+        },
+      });
+      await chatRefetch();
+      toast.success('Role updated successfully');
+    } catch (error) {
+      toast.error('Failed to update role');
+      console.error(error);
+    }
+  };
 
   //modal
 
@@ -313,6 +338,9 @@ export default function groupChatDetails({
               {chat.members.edges.map((edge) => {
                 const user = edge.node.user;
                 const role = edge.node.role;
+                const isCurrentUser = user.id === userId;
+                const canChangeRole =
+                  currentUserRole === 'administrator' && !isCurrentUser;
                 return (
                   <ListGroup.Item
                     className={styles.groupMembersList}
@@ -323,7 +351,22 @@ export default function groupChatDetails({
                         avatarStyle={styles.membersImage}
                         name={user.name}
                       />
-                      {user.name} ({role})
+                      <span>
+                        {user.name} ({role})
+                      </span>
+                      {canChangeRole && (
+                        <Form.Select
+                          size="sm"
+                          value={role}
+                          onChange={(e) =>
+                            handleRoleChange(user.id, e.target.value)
+                          }
+                          style={{ width: 'auto', marginLeft: '10px' }}
+                        >
+                          <option value="regular">Regular</option>
+                          <option value="administrator">Admin</option>
+                        </Form.Select>
+                      )}
                     </div>
                   </ListGroup.Item>
                 );
