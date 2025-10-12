@@ -13,14 +13,16 @@ name: Issue Assignment Workflow
 on:
   issues:
       types: ['assigned']
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   Remove-Unapproved-Label:
     name: Remove Unapproved Label when issue is assigned
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -45,10 +47,14 @@ jobs:
                 label.name.toLowerCase().includes('unapprov')
               );
               
-              await github.rest.issues.removeLabel({
-                owner,
-                repo,
-                issue_number,
-                name: unapprovedLabel.name
-              });
+              try {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number,
+                  name: unapprovedLabel.name,
+                });
+              } catch (err) {
+                if (err.status !== 404) throw err;
+              }
             }

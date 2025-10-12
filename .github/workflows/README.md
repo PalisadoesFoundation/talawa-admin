@@ -34,7 +34,7 @@ There are some exceptions to these rules in which jobs can be placed in dedicate
 1. Jobs that require unique `cron:` schedules 
 1. Jobs that require unique `paths:` statements that operate only when files in a specific path are updated.
 1. Jobs only work correctly if they have a dedicated file (eg. `CodeQL`)
-1. Workflows isolated to specific issue activity types (e.g., `issue: [assigned]`) to avoid side effects on the unified issue workflow (e.g., `issue-assigned.yml`)
+1. Workflows isolated to specific issue activity types (e.g., `issues: [assigned]`) to avoid side effects on the unified issue workflow (e.g., `issue-assigned.yml`)
 
 ## Scripts
 
