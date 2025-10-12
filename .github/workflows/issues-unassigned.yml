@@ -1,6 +1,6 @@
 name: Add Unapproved Label on Unassignment
 
-'on':
+on:
   issues:
     types: [unassigned]
 
