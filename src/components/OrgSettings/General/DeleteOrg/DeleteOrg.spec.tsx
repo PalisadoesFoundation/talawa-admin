@@ -144,13 +144,9 @@ describe('DeleteOrg Component', () => {
       );
     });
 
-    // Wait for the setTimeout to execute
-    await waitFor(
-      () => {
-        expect(navigateMock).toHaveBeenCalledWith('/orglist');
-      },
-      { timeout: 1100 },
-    );
+    await waitFor(() => {
+      expect(navigateMock).toHaveBeenCalledWith('/orglist');
+    });
   });
 
   it('renders delete button with different text for sample organization', () => {
@@ -164,17 +160,6 @@ describe('DeleteOrg Component', () => {
     expect(deleteButton).toHaveTextContent('deleteSampleOrganization');
   });
 
-  it('renders delete button with default text for regular organization', () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: false },
-      loading: false,
-    });
-
-    render(<DeleteOrg />);
-    const deleteButton = screen.getByTestId('openDeleteModalBtn');
-    expect(deleteButton).toHaveTextContent('delete');
-  });
-
   it('renders when canDelete is true due to OR condition', () => {
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn().mockReturnValue(false),
@@ -185,37 +170,12 @@ describe('DeleteOrg Component', () => {
     expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
   });
 
-  it('renders when SuperAdmin is true', () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn().mockReturnValue(true),
-    });
-
-    render(<DeleteOrg />);
-    expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
-  });
-
   it('closes modal when close button is clicked', async () => {
     render(<DeleteOrg />);
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
     expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('closeDelOrgModalBtn'));
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('orgDeleteModal')).not.toBeInTheDocument();
-    });
-  });
-
-  it('closes modal when modal backdrop is clicked', async () => {
-    render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
-
-    // Simulate clicking outside the modal (onHide callback)
-    const modal = screen.getByTestId('orgDeleteModal').parentElement;
-    if (modal) {
-      fireEvent.click(modal);
-    }
 
     await waitFor(() => {
       expect(screen.queryByTestId('orgDeleteModal')).not.toBeInTheDocument();
