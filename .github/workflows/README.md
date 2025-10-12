@@ -19,6 +19,7 @@ Follow these guidelines when creating new YAML defined GitHub actions. This is d
 
 1. `Issue` Workflows:
    1. Place all actions related to issues in the `issues.yml` file.
+   1. `issues-assigned.yml` - Removes unapproved labels when issues are assigned to contributors.
 1. `Pull Request` workflows to be run by:
    1. Workflows to run **First Time** repo contributors:
       1. Place all actions related to to this in the `pull-request-target.yml` file.
