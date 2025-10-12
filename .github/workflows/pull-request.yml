@@ -314,6 +314,7 @@ jobs:
           fail_ci_if_error: true
           verbose: true
           exclude: 'docs/'
+          gcov_ignore: 'docs/'
           files: ./coverage/vitest/lcov.info
           flags: vitest
 
