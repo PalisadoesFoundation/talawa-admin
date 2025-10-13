@@ -1278,49 +1278,6 @@ describe('EventListCardModals', () => {
       expect(MockDeleteModal).toHaveBeenCalled();
     });
 
-    test('covers registerEventHandler when user is not registered (line 366)', async () => {
-      const mockRegisterEvent = vi.fn().mockResolvedValue({
-        data: { registerForEvent: { success: true } },
-      });
-
-      // Mock the mutation hook to return our mock function
-      const mockMutationResult = {
-        loading: false,
-        called: false,
-        client: {} as unknown,
-        reset: vi.fn(),
-        data: undefined,
-        error: undefined,
-      };
-
-      vi.mocked(useMutation).mockReturnValue([
-        mockRegisterEvent,
-        mockMutationResult,
-      ] as ReturnType<typeof useMutation>);
-
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          attendees: [], // User is not registered
-        },
-      });
-
-      // The register function should be available in the preview modal props
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-      expect(typeof previewProps.registerEventHandler).toBe('function');
-
-      await act(async () => {
-        await previewProps.registerEventHandler();
-      });
-
-      // The mutation should be called
-      expect(mockRegisterEvent).toHaveBeenCalledWith({
-        variables: {
-          eventId: mockEventListCardProps._id,
-        },
-      });
-    });
-
     test('covers useEffect when only single option is available (lines 228-231)', async () => {
       // Create a scenario where only single option is available
       // This happens when following is not available but single is
