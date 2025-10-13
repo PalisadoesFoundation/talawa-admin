@@ -1344,5 +1344,329 @@ describe('EventListCardModals', () => {
       const entireSeriesOption = screen.queryByLabelText('updateEntireSeries');
       expect(entireSeriesOption).toBeInTheDocument();
     });
+
+    test('covers useEffect when only single option is available (lines 228-231)', async () => {
+      // Create a scenario where only single option is available
+      // This happens when following is not available but single is
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields that make following unavailable but single available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          location: 'Updated Location', // This makes following unavailable
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'single' option should be available and checked (covers line 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers useEffect when only entireSeries option is available (lines 230-231)', async () => {
+      // Create a scenario where only entireSeries is available
+      // This happens when both following and single are not available
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change only name/description to make only entireSeries available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name Only',
+          eventdescrip: 'Updated Description Only',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'entireSeries' option should be available (covers line 230-231)
+      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+      expect(entireSeriesRadio).toBeInTheDocument();
+    });
+
+    test('covers onChange handler for update single radio button (line 464)', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Event',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'single' option should be available and clickable
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+
+      // Click the radio button to trigger the onChange handler (covers line 464)
+      await userEvent.click(singleRadio);
+
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers useEffect when updateOption becomes invalid (lines 228-231)', async () => {
+      // Create a scenario where the current updateOption becomes invalid
+      // and the useEffect needs to set a new valid option
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // First, set up a scenario where 'following' is available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // Now change the form to make 'following' unavailable but 'single' available
+      // This should trigger the useEffect to switch from 'following' to 'single'
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          location: 'Updated Location', // This makes 'following' unavailable
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have switched to 'single' option (covers lines 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers useEffect when only single option is available (lines 228-229)', async () => {
+      // Create a scenario where only single option is available
+      // This should trigger the useEffect to set 'single'
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields that make only 'single' available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          location: 'Updated Location', // This makes 'following' unavailable
+          eventdescrip: 'Updated Description', // This makes 'entireSeries' unavailable
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have set 'single' option (covers lines 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers useEffect when only entireSeries is available (lines 230-231)', async () => {
+      // Create a scenario where only entireSeries is available
+      // This should trigger the useEffect to set 'entireSeries'
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change only name/description to make only entireSeries available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name Only',
+          eventdescrip: 'Updated Description Only',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have set 'entireSeries' option (covers lines 230-231)
+      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+      expect(entireSeriesRadio).toBeInTheDocument();
+    });
+
+    test('covers onChange handler for update single radio button (line 464)', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Event',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // Find the single radio button and click it to trigger onChange (covers line 464)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+
+      // Verify the radio button is now checked
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers useEffect when updateOption is invalid and only single is available (lines 228-231)', async () => {
+      // This test creates a scenario where the current updateOption becomes invalid
+      // and only 'single' option is available, triggering the useEffect
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set up a scenario where only 'single' is available by changing only name
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name Only', // Only name change
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have set 'single' option (covers lines 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeInTheDocument();
+    });
+
+    test('covers useEffect when updateOption is invalid and only entireSeries is available (lines 228-231)', async () => {
+      // This test creates a scenario where the current updateOption becomes invalid
+      // and only 'entireSeries' option is available, triggering the useEffect
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set up a scenario where only 'entireSeries' is available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          eventdescrip: 'Updated Description',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have set 'entireSeries' option (covers lines 230-231)
+      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+      expect(entireSeriesRadio).toBeInTheDocument();
+    });
   });
 });
