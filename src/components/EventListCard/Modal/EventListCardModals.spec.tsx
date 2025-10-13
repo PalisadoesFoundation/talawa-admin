@@ -1280,7 +1280,7 @@ describe('EventListCardModals', () => {
 
     test('selects "This instance" when only single option is valid', async () => {
       // Create a scenario where only single option is available
-      // This happens when following is not available but single is
+      // This happens when recurrence hasn't changed but other fields have changed
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
@@ -1296,12 +1296,12 @@ describe('EventListCardModals', () => {
 
       const previewProps = MockPreviewModal.mock.calls[0][0];
 
-      // Change fields that make following unavailable but single available
+      // Change fields that make entireSeries unavailable but single and following available
       act(() => {
         previewProps.setFormState({
           ...previewProps.formState,
           name: 'Updated Name',
-          location: 'Updated Location', // This makes following unavailable
+          location: 'Updated Location', // This makes entireSeries unavailable
         });
       });
 
@@ -1312,6 +1312,14 @@ describe('EventListCardModals', () => {
       // The 'single' option should be available and checked (covers line 228-229)
       const singleRadio = screen.getByLabelText('updateThisInstance');
       expect(singleRadio).toBeChecked();
+      // The 'following' option should also be available (always available in current logic)
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+      // The 'entireSeries' option should not be available (only when only name/description changed)
+      expect(
+        screen.queryByLabelText('updateEntireSeries'),
+      ).not.toBeInTheDocument();
     });
 
     test('shows "Entire series" only when single and following are invalid', async () => {
@@ -1348,6 +1356,10 @@ describe('EventListCardModals', () => {
       // The 'entireSeries' option should be available (covers line 230-231)
       const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
       expect(entireSeriesRadio).toBeInTheDocument();
+
+      // Note: 'following' option is always available (hardcoded to true in availableUpdateOptions)
+      // 'single' option is available when recurrence hasn't changed
+      // This test verifies that 'entireSeries' is available when only name/description changed
     });
 
     test('switches selection when current update option becomes invalid', async () => {
