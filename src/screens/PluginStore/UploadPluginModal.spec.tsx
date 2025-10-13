@@ -1593,8 +1593,14 @@ describe('UploadPluginModal Component', () => {
         const [selectedFile, setSelectedFile] = React.useState<File | null>(
           null,
         );
-        const [manifest, setManifest] = React.useState<Record<string, unknown> | null>(null);
-        const [pluginStructure, setPluginStructure] = React.useState<Record<string, unknown> | null>(null);
+        const [manifest, setManifest] = React.useState<Record<
+          string,
+          unknown
+        > | null>(null);
+        const [pluginStructure, setPluginStructure] = React.useState<Record<
+          string,
+          unknown
+        > | null>(null);
 
         const handleAddPlugin = async () => {
           // This is the exact early return logic from line 94
@@ -1610,24 +1616,28 @@ describe('UploadPluginModal Component', () => {
         return (
           <div>
             <button
+              type="button"
               onClick={handleAddPlugin}
               data-testid="test-handle-add-plugin"
             >
               Test Handle Add Plugin
             </button>
             <button
+              type="button"
               onClick={() => setSelectedFile(new File(['test'], 'test.zip'))}
               data-testid="set-file"
             >
               Set File
             </button>
             <button
+              type="button"
               onClick={() => setManifest({ name: 'test' })}
               data-testid="set-manifest"
             >
               Set Manifest
             </button>
             <button
+              type="button"
               onClick={() => setPluginStructure({ files: {} })}
               data-testid="set-structure"
             >
