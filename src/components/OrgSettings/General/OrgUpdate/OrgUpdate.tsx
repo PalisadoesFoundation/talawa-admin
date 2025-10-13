@@ -184,7 +184,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         postalCode: formState.address.postalCode,
         countryCode: formState.address?.countryCode,
         ...(formState.avatar ? { avatar: formState.avatar } : {}),
-        userRegistrationRequired: userRegistrationRequiredChecked,
+        isUserRegistrationRequired: userRegistrationRequiredChecked,
       };
 
       // Filter out empty fields
