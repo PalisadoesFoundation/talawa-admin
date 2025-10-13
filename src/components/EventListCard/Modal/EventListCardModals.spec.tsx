@@ -1088,7 +1088,7 @@ describe('EventListCardModals', () => {
       expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
     });
 
-    test('handles onChange for update single radio button', async () => {
+    test('allows user to select "Update this instance only" when updating a single occurrence', async () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
