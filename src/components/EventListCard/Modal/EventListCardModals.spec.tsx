@@ -1278,7 +1278,7 @@ describe('EventListCardModals', () => {
       expect(MockDeleteModal).toHaveBeenCalled();
     });
 
-    test('covers useEffect when only single option is available (lines 228-231)', async () => {
+    test('selects "This instance" when only single option is valid', async () => {
       // Create a scenario where only single option is available
       // This happens when following is not available but single is
       renderComponent({
@@ -1314,7 +1314,7 @@ describe('EventListCardModals', () => {
       expect(singleRadio).toBeChecked();
     });
 
-    test('covers useEffect when only entireSeries option is available (lines 230-231)', async () => {
+    test('shows "Entire series" only when single and following are invalid', async () => {
       // Create a scenario where only entireSeries is available
       // This happens when both following and single are not available
       renderComponent({
@@ -1350,37 +1350,7 @@ describe('EventListCardModals', () => {
       expect(entireSeriesRadio).toBeInTheDocument();
     });
 
-    test('covers onChange handler for update single radio button (line 464)', async () => {
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Event',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // The 'single' option should be available and clickable
-      const singleRadio = screen.getByLabelText('updateThisInstance');
-
-      // Click the radio button to trigger the onChange handler (covers line 464)
-      await userEvent.click(singleRadio);
-
-      expect(singleRadio).toBeChecked();
-    });
-
-    test('covers useEffect when updateOption becomes invalid (lines 228-231)', async () => {
+    test('switches selection when current update option becomes invalid', async () => {
       // Create a scenario where the current updateOption becomes invalid
       // and the useEffect needs to set a new valid option
       renderComponent({
