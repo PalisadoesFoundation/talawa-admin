@@ -1125,7 +1125,7 @@ describe('EventListCardModals', () => {
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteStandaloneEvent,
         {},
-      ] as any);
+      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
@@ -1152,7 +1152,7 @@ describe('EventListCardModals', () => {
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteSingleInstance,
         {},
-      ] as any);
+      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
@@ -1177,7 +1177,7 @@ describe('EventListCardModals', () => {
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteFollowingInstances,
         {},
-      ] as any);
+      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
@@ -1202,7 +1202,7 @@ describe('EventListCardModals', () => {
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteAllInstances,
         {},
-      ] as any);
+      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
@@ -1248,7 +1248,10 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
-      vi.mocked(useMutation).mockReturnValue([mockRegisterEvent, {}] as any);
+      vi.mocked(useMutation).mockReturnValue([
+        mockRegisterEvent,
+        {},
+      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
