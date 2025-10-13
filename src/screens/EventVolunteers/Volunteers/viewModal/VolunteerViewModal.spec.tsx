@@ -67,6 +67,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
           volunteers: [{ id: 'volunteerId1' }],
         },
       ],
+      isTemplate: true,
+      isInstanceException: false,
     },
   },
   {
@@ -106,6 +108,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
         avatarURL: null,
       },
       groups: [],
+      isTemplate: true,
+      isInstanceException: false,
     },
   },
 ];

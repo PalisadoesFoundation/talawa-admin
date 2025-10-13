@@ -71,6 +71,8 @@ const itemProps: InterfaceVolunteerGroupModal[] = [
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: 2,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
         id: 'creatorId1',
@@ -113,6 +115,8 @@ const itemProps: InterfaceVolunteerGroupModal[] = [
       name: 'Group 1',
       description: null,
       volunteersRequired: null,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
         id: 'creatorId1',
@@ -470,6 +474,8 @@ describe('Testing VolunteerGroupModal', () => {
           name: 'Group 1',
           description: 'desc',
           volunteersRequired: 2,
+          isTemplate: true,
+          isInstanceException: false,
           createdAt: '2024-10-25T16:16:32.978Z',
           creator: {
             id: 'creatorId1',

@@ -85,6 +85,8 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
           volunteers: [{ id: 'volunteerId1' }],
         },
       ],
+      isTemplate: true,
+      isInstanceException: false,
     },
   },
 ];

@@ -57,8 +57,9 @@ import {
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
 import CommentCard from '../CommentCard/CommentCard';
+import styles from '../../../style/app-fixed.module.css';
+import { PluginInjector } from 'plugin';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -157,22 +158,10 @@ const RightModalActions = styled(Box)({
   gap: 8,
 });
 
-export default function PostCard({
-  isModalView = false,
-  ...props
-}: InterfacePostCard): JSX.Element {
+export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
-  const { getItem } = useLocalStorage();
-  const userId: string | null = getItem('userId');
-  const isLikedByUser = props.upVoters?.edges.some(
-    (edge) => edge.node.id === userId,
-  );
-  const upVoters =
-    props.upVoters?.edges.map((edge) => ({
-      id: edge.node.id,
-      node: { id: edge.node.id },
-    })) || [];
+  const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
 
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
@@ -228,7 +217,7 @@ export default function PostCard({
       setCommentInput('');
       props.fetchPosts();
     } catch (error: unknown) {
-      toast.error(t('unexpectedError'));
+      errorHandler(t, error);
     }
   };
   const toggleEditPost = (): void => setShowEditPost(!showEditPost);
@@ -280,8 +269,15 @@ export default function PostCard({
       <PostHeader>
         <UserInfo>
           <Avatar
-            src={props.creator.avatarURL || '/static/images/avatar/1.jpg'}
+            className={styles.userImageUserPost}
+            src={props.creator.avatarURL || UserDefault}
             alt={props.creator.name}
+            slotProps={{
+              img: {
+                crossOrigin: 'anonymous',
+                loading: 'lazy',
+              },
+            }}
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
@@ -354,6 +350,26 @@ export default function PostCard({
           </Typography>{' '}
           {props.title}
         </Caption>
+
+        {/* Plugin Extension Point G3 - Inject plugins below caption */}
+        <PluginInjector
+          injectorType="G4"
+          data={{
+            caption: props.title,
+            postId: props.id,
+            text: props.text,
+            creator: props.creator,
+            upVoteCount: props.upVoteCount,
+            downVoteCount: props.downVoteCount,
+            comments: props.comments,
+            commentCount: props.commentCount,
+            postedAt: props.postedAt,
+            pinnedAt: props.pinnedAt,
+            image: props.image,
+            video: props.video,
+            hasUserVoted: props.hasUserVoted,
+          }}
+        />
       </PostContent>
 
       {/* Comments Section */}
@@ -368,10 +384,8 @@ export default function PostCard({
                 creator={comment.creator}
                 text={comment.body}
                 upVoteCount={comment.upVoteCount}
-                downVoteCount={comment.downVoteCount}
-                upVoters={{
-                  edges: upVoters,
-                }}
+                // downVoteCount={comment.downVoteCount}
+                hasUserVoted={comment.hasUserVoted}
                 fetchComments={props.fetchPosts}
               />
             ))}

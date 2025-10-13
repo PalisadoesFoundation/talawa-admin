@@ -11,7 +11,6 @@ import { getPluginManager } from './manager';
 import type {
   IPluginManifest,
   IRouteExtension,
-  IDrawerExtension,
   IInjectorExtension,
 } from './types';
 
@@ -149,7 +148,7 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
     manifest.extensionPoints?.RU2,
   ];
 
-  routeArrays.forEach((routes, index) => {
+  routeArrays.forEach((routes) => {
     if (routes) {
       routes.forEach((route: IRouteExtension) => {
         if (route.component) {
@@ -164,9 +163,10 @@ function extractComponentNames(manifest: IPluginManifest): Set<string> {
     manifest.extensionPoints?.G1,
     manifest.extensionPoints?.G2,
     manifest.extensionPoints?.G3,
+    manifest.extensionPoints?.G4,
   ];
 
-  injectorArrays.forEach((injectors, index) => {
+  injectorArrays.forEach((injectors) => {
     if (injectors) {
       injectors.forEach((injector: IInjectorExtension) => {
         if (injector.injector) {

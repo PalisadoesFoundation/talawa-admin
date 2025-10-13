@@ -1310,6 +1310,34 @@ export const GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG = gql`
   }
 `;
 
+export const GET_ORGANIZATION_VENUES_PG = gql`
+  query GetOrganizationVenues($id: String!, $first: Int, $after: String) {
+    organization(input: { id: $id }) {
+      venues(first: $first, after: $after) {
+        edges {
+          node {
+            id
+            name
+            description
+            capacity
+            attachments {
+              url
+              mimeType
+            }
+            createdAt
+            updatedAt
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
@@ -1331,6 +1359,7 @@ export {
 
 // display posts
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
+export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 

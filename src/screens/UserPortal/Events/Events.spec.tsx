@@ -16,8 +16,7 @@ import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { ThemeProvider } from 'react-bootstrap';
-import { createTheme } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 

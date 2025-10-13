@@ -19,6 +19,7 @@ Follow these guidelines when creating new YAML defined GitHub actions. This is d
 
 1. `Issue` Workflows:
    1. Place all actions related to issues in the `issues.yml` file.
+   1. `issue-assigned.yml` - Removes unapproved labels when issues are assigned to contributors (exception; see “File Role Exceptions”).
 1. `Pull Request` workflows to be run by:
    1. Workflows to run **First Time** repo contributors:
       1. Place all actions related to to this in the `pull-request-target.yml` file.
@@ -33,6 +34,7 @@ There are some exceptions to these rules in which jobs can be placed in dedicate
 1. Jobs that require unique `cron:` schedules 
 1. Jobs that require unique `paths:` statements that operate only when files in a specific path are updated.
 1. Jobs only work correctly if they have a dedicated file (eg. `CodeQL`)
+1. Workflows isolated to specific issue activity types (e.g., `issues: [assigned]`) to avoid side effects on the unified issue workflow (e.g., `issue-assigned.yml`)
 
 ## Scripts
 

@@ -14,6 +14,10 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **event**: `object`
 
+#### event.\_id
+
+> **\_id**: `string` = `'event123'`
+
 #### event.allDay
 
 > **allDay**: `boolean` = `false`
@@ -48,11 +52,15 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.endAt
 
-> **endAt**: `string` = `'2030-01-02T17:00:00Z'`
+> **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
 
-#### event.id
+#### event.endDate
 
-> **id**: `string` = `'event123'`
+> **endDate**: `string` = `'2030-01-02'`
+
+#### event.endTime
+
+> **endTime**: `string` = `'17:00'`
 
 #### event.isPublic
 
@@ -96,7 +104,19 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.startAt
 
-> **startAt**: `string` = `'2030-01-01T09:00:00Z'`
+> **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
+
+#### event.startDate
+
+> **startDate**: `string` = `'2030-01-01'`
+
+#### event.startTime
+
+> **startTime**: `string` = `'09:00'`
+
+#### event.title
+
+> **title**: `string` = `'Test Event'`
 
 #### event.updatedAt
 

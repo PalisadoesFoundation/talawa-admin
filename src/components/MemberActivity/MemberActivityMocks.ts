@@ -2,15 +2,20 @@ import { EVENT_DETAILS, EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 
 export const mockEventData = {
   event: {
+    _id: 'event123',
     id: 'event123',
+    title: 'Test Event',
+    // Provide name/startAt/endAt to align with EVENT_DETAILS fields
     name: 'Test Event',
     description: 'Test Description',
-    location: 'Test Location',
+    startAt: '2030-01-01T09:00:00.000Z',
+    endAt: '2030-01-02T17:00:00.000Z',
+    startTime: '09:00',
+    endTime: '17:00',
     allDay: false,
+    location: 'Test Location',
     isPublic: true,
     isRegisterable: true,
-    startAt: '2030-01-01T09:00:00Z',
-    endAt: '2030-01-02T17:00:00Z',
     createdAt: '2030-01-01T00:00:00Z',
     updatedAt: '2030-01-01T00:00:00Z',
     recurrenceRule: { id: 'rule123' },
@@ -47,6 +52,7 @@ export const mocks = [
   {
     request: {
       query: EVENT_DETAILS,
+      // EVENT_DETAILS query parameter is $eventId
       variables: { eventId: 'event123' },
     },
     result: {
@@ -68,13 +74,6 @@ export const errorMocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
-    },
-    error: new Error('An error occurred'),
-  },
-  {
-    request: {
-      query: EVENT_DETAILS_BASIC,
       variables: { eventId: 'event123' },
     },
     error: new Error('An error occurred'),

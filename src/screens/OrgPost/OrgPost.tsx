@@ -25,7 +25,6 @@ import SearchBar from 'subComponents/SearchBar';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,
-  InterfaceMutationCreatePostInput,
   InterfacePost,
 } from '../../types/Post/interface';
 
@@ -57,7 +56,7 @@ function OrgPost(): JSX.Element {
   const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const [showTitle, setShowTitle] = useState(true);
+  const [showTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
@@ -143,7 +142,6 @@ function OrgPost(): JSX.Element {
       let attachment = null;
       if (file && typeof file !== 'string') {
         const fileName = file.name.split('/').pop() || 'defaultFileName';
-        const mimeType = file.type;
         const objectName = 'uploads/' + fileName;
         const fileHash = await getFileHashFromFile(file);
 
@@ -320,7 +318,7 @@ function OrgPost(): JSX.Element {
       const { data: searchData } = await refetchPosts({
         input: { organizationId: currentUrl },
       });
-
+      console.log(filteredPosts);
       if (!term.trim()) {
         setIsFiltering(false);
         setFilteredPosts([]);
@@ -332,11 +330,11 @@ function OrgPost(): JSX.Element {
 
         const filtered = searchData.postsByOrganization.filter(
           (post: InterfacePost) =>
-            post.caption.toLowerCase().includes(term.toLowerCase()),
+            post.caption?.toLowerCase().includes(term.toLowerCase()),
         );
         setFilteredPosts(filtered);
       }
-    } catch (error) {
+    } catch {
       toast.error('Error searching posts');
       setIsFiltering(false);
     }

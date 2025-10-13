@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
-import { vi, describe, beforeEach, afterEach, expect, it } from 'vitest';
+import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 
 // Mock chart.js to avoid canvas errors

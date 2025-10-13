@@ -32,6 +32,8 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: null,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
         id: 'creatorId1',
@@ -71,6 +73,8 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
       name: 'Group 1',
       description: null,
       volunteersRequired: 10,
+      isTemplate: true,
+      isInstanceException: false,
       createdAt: '2024-10-25T16:16:32.978Z',
       creator: {
         id: 'creatorId1',

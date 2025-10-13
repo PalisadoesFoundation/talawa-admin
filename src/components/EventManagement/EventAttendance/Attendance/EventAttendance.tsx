@@ -226,7 +226,7 @@ function EventAttendance(): JSX.Element {
       >
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
-            <TableRow className="" data-testid="table-header-row" role="row">
+            <TableRow className="" data-testid="table-header-row">
               <TableCell
                 className={styles.customcell}
                 data-testid="header-index"

@@ -281,50 +281,46 @@ describe('Organisation Venues', () => {
 
   test('renders venue name with ellipsis if name is longer than 25 characters', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
 
-    // Find the venue with the long name using text content
-    const longNameVenue = screen.getByText(/Venue with a name longer/);
+    await screen.findByTestId('venue-item3');
+
+    const longNameVenue = await screen.findByText(/Venue with a name longer/i);
     expect(longNameVenue).toBeInTheDocument();
   });
 
   test('renders full venue name if name is less than or equal to 25 characters', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
 
-    // Find venues with short names using text content
-    const shortNameVenue1 = screen.getByText('Updated Venue 1');
-    const shortNameVenue2 = screen.getByText('Updated Venue 2');
+    await screen.findByTestId('venue-item1');
+
+    const shortNameVenue1 = await screen.findByText('Updated Venue 1');
+    const shortNameVenue2 = await screen.findByText('Updated Venue 2');
     expect(shortNameVenue1).toBeInTheDocument();
     expect(shortNameVenue2).toBeInTheDocument();
   });
 
   test('renders venue description with ellipsis if description is longer than 40 characters', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
 
-    // Find the venue with the long description using partial text content
-    const longDescText = screen.getByText(
-      /Venue description that should be truncat.../,
+    await screen.findByTestId('venue-item3');
+
+    const longDescText = await screen.findByText(
+      /Venue description that should be truncat.../i,
     );
     expect(longDescText).toBeInTheDocument();
   });
 
   test('renders full venue description if description is less than or equal to 75 characters', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
 
-    // Find venues with short descriptions using text content
-    const shortDesc1 = screen.getByText('Updated description for venue 1');
-    const shortDesc2 = screen.getByText('Updated description for venue 2');
+    await screen.findByTestId('venue-item1');
+
+    const shortDesc1 = await screen.findByText(
+      'Updated description for venue 1',
+    );
+    const shortDesc2 = await screen.findByText(
+      'Updated description for venue 2',
+    );
     expect(shortDesc1).toBeInTheDocument();
     expect(shortDesc2).toBeInTheDocument();
   });

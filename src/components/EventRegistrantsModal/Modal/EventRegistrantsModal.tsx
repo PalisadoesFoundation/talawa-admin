@@ -193,8 +193,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 }
                 label={attendee.name || 'Unknown User'}
                 variant="outlined"
-                key={attendee.id}
-                onDelete={(): void => deleteRegistrant(attendee.id)}
+                key={
+                  (attendee as InterfaceUser & { _id?: string })._id ||
+                  attendee.id
+                }
+                onDelete={(): void =>
+                  deleteRegistrant(
+                    (attendee as InterfaceUser & { _id?: string })._id ||
+                      attendee.id,
+                  )
+                }
               />
             )) || []}
           </Stack>

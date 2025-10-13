@@ -57,15 +57,17 @@ function EventsAttendedByMember({
       </div>
     );
 
-  const { organization, id, startAt, name, location } = events.event;
+  // Support both legacy and current schema fields from EVENT_DETAILS
+  const { organization, id, _id, startAt, startDate, name, title, location } =
+    events.event;
 
   return (
     <EventAttendedCard
-      orgId={organization.id}
-      eventId={id}
-      key={id}
-      startdate={startAt}
-      title={name}
+      orgId={organization._id ?? organization.id}
+      eventId={_id ?? id}
+      key={_id ?? id}
+      startdate={startDate ?? startAt}
+      title={title ?? name}
       location={location}
     />
   );

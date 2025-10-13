@@ -80,4 +80,74 @@ describe('Testing AttendedEventList', () => {
       expect(link).toHaveAttribute('href', expect.stringContaining('/event/'));
     });
   });
+
+  it('Component handles fallback fields correctly (id instead of _id)', async () => {
+    const fallbackMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123', // Using id instead of _id
+              name: 'Fallback Event', // Using name instead of title
+              startAt: '2030-05-01T09:00:00.000Z', // Using startAt instead of startDate
+              location: 'Fallback Location',
+            },
+          },
+        },
+      },
+    ];
+
+    const { queryByText } = render(
+      <MockedProvider mocks={fallbackMock} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AttendedEventList {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(queryByText('Fallback Event')).toBeInTheDocument();
+      expect(
+        queryByText(formatDate('2030-05-01T09:00:00.000Z')),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('Component handles data.error gracefully', async () => {
+    const errorDataMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            error: 'GraphQL error occurred',
+          },
+        },
+      },
+    ];
+
+    const { queryByText } = render(
+      <MockedProvider mocks={errorDataMock} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AttendedEventList {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        queryByText('Error loading event details. Please try again later.'),
+      ).toBeInTheDocument();
+    });
+  });
 });

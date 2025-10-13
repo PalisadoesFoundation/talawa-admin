@@ -1240,6 +1240,9 @@ export interface InterfaceOrganizationVenuesConnectionEdgePg {
  * @description Defines the structure for a venue with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the venue.
  * @property {string} name - The name of the venue.
+ * @property {string | null} description - The description of the venue.
+ * @property {number | null} capacity - The capacity of the venue.
+ * @property {Array} attachments - The attachments associated with the venue.
  * @property {string} createdAt - The creation date of the venue record.
  * @property {string} updatedAt - The last update date of the venue record.
  * @property {InterfaceUserPg} creator - The user who created this venue.
@@ -1249,6 +1252,12 @@ export interface InterfaceOrganizationVenuesConnectionEdgePg {
 export interface InterfaceVenuePg {
   id: ID;
   name: string;
+  description?: string | null;
+  capacity?: number | null;
+  attachments?: Array<{
+    url: string;
+    mimeType: string;
+  }>;
   createdAt: string;
   updatedAt: string;
   creator: InterfaceUserPg;
@@ -2118,15 +2127,19 @@ export interface InterfaceCreateFund {
  * @property {string} upVoters.id - The unique identifier of the user who liked the post.
  * @property {function} fetchPosts - A function to fetch posts.
  */
+
+export type VoteType = 'up_vote' | 'down_vote' | null;
+export type VoteState = { hasVoted: boolean; voteType: VoteType };
+
 export interface InterfacePostCard {
   id: string;
   isModalView?: boolean;
   creator: {
     id: string;
     name: string;
-    email: string;
-    avatarURL?: string;
+    avatarURL?: string | null;
   };
+  hasUserVoted: VoteState;
   postedAt: string;
   pinnedAt?: string | null;
   image: string | null;
@@ -2134,17 +2147,6 @@ export interface InterfacePostCard {
   title: string;
   text: string;
   commentCount: number;
-  upVoters: {
-    edges: {
-      node: {
-        id: string;
-        creator: {
-          id: string;
-          name: string;
-        } | null;
-      };
-    }[];
-  };
   upVoteCount: number;
   downVoteCount: number;
   comments: {
@@ -2153,11 +2155,11 @@ export interface InterfacePostCard {
     creator: {
       id: string;
       name: string;
-      email: string;
+      avatarURL?: string | null;
     };
+    hasUserVoted: VoteState;
     downVoteCount: number;
     upVoteCount: number;
-    upVoters: { id: string }[];
     text: string;
   }[];
   fetchPosts: () => void;
@@ -2384,6 +2386,8 @@ export interface InterfaceEventVolunteerInfo {
   volunteerStatus: 'accepted' | 'rejected' | 'pending';
   hoursVolunteered: number;
   isPublic: boolean;
+  isTemplate: boolean;
+  isInstanceException: boolean;
   createdAt: string;
   updatedAt: string;
   user: InterfaceUserInfoPG;
@@ -2443,6 +2447,8 @@ export interface InterfaceVolunteerGroupInfo {
     id: string;
   };
   volunteersRequired: number | null;
+  isTemplate: boolean;
+  isInstanceException: boolean;
   createdAt: string;
   creator: InterfaceUserInfo;
   leader: InterfaceUserInfo;

@@ -4,64 +4,6 @@
 
 # Variable: mocks
 
-> `const` **mocks**: `object`[]
+> `const` **mocks**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `eventId`: `string`; \}; \}; `result`: \{ `data`: \{ `event`: \{ `_id`: `string`; `allDay`: `boolean`; `attendees`: `object`[]; `createdAt`: `string`; `creator`: \{ `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `description`: `string`; `endAt`: `string`; `endDate`: `string`; `endTime`: `string`; `isPublic`: `boolean`; `isRecurringEventTemplate`: `boolean`; `isRegisterable`: `boolean`; `location`: `string`; `name`: `string`; `organization`: \{ `id`: `string`; `name`: `string`; \}; `recurrenceRule`: \{ `id`: `string`; \}; `startAt`: `string`; `startDate`: `string`; `startTime`: `string`; `title`: `string`; `updatedAt`: `string`; `updater`: \{ `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `eventId`: `string`; \}; \}; `result`: \{ `data`: \{ `event`: \{ `id`: `string`; `location`: `string`; `name`: `string`; `organization`: \{ `id`: `string`; `name`: `string`; \}; `startAt`: `string`; \}; \}; \}; \})[]
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L46)
-
-## Type declaration
-
-### request
-
-> **request**: `object`
-
-#### request.query
-
-> **query**: `DocumentNode` = `EVENT_DETAILS_BASIC`
-
-#### request.variables
-
-> **variables**: `object`
-
-#### request.variables.eventId
-
-> **eventId**: `string` = `'event123'`
-
-### result
-
-> **result**: `object`
-
-#### result.data
-
-> **data**: `object` = `mockEventBasicData`
-
-#### result.data.event
-
-> **event**: `object`
-
-#### result.data.event.id
-
-> **id**: `string` = `'event123'`
-
-#### result.data.event.location
-
-> **location**: `string` = `'Test Location'`
-
-#### result.data.event.name
-
-> **name**: `string` = `'Test Event'`
-
-#### result.data.event.organization
-
-> **organization**: `object`
-
-#### result.data.event.organization.id
-
-> **id**: `string` = `'org123'`
-
-#### result.data.event.organization.name
-
-> **name**: `string` = `'Test Org'`
-
-#### result.data.event.startAt
-
-> **startAt**: `string` = `'2030-01-01T09:00:00Z'`
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L55)
