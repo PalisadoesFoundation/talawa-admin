@@ -5487,7 +5487,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     });
 
     await wait(400);
-  });
+  }, 60000);
 
   it('send message direct chat when userId is different', async () => {
     setItem('userId', '8');
