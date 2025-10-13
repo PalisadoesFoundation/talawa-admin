@@ -27,47 +27,7 @@ vi.mock('../../GraphQl/Mutations/PluginMutations', () => ({
   UPLOAD_PLUGIN_ZIP_MUTATION: 'UPLOAD_PLUGIN_ZIP_MUTATION',
 }));
 
-// Mock GraphQL responses
-const createPluginSuccessMock = {
-  request: {
-    query: 'CREATE_PLUGIN_MUTATION',
-    variables: {
-      input: {
-        pluginId: 'test-plugin',
-        isInstalled: false,
-        isActivated: false,
-      },
-    },
-  },
-  result: {
-    data: {
-      createPlugin: {
-        id: '1',
-        pluginId: 'test-plugin',
-        isActivated: false,
-        isInstalled: false,
-        backup: null,
-        createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z',
-        __typename: 'Plugin',
-      },
-    },
-  },
-};
-
-const createPluginErrorMock = {
-  request: {
-    query: 'CREATE_PLUGIN_MUTATION',
-    variables: {
-      input: {
-        pluginId: 'test-plugin',
-        isInstalled: false,
-        isActivated: false,
-      },
-    },
-  },
-  error: new Error('Database error'),
-};
+// Mock GraphQL responses removed as they were unused
 
 const defaultProps = {
   show: true,
@@ -159,7 +119,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -201,7 +163,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(
         new Error(
           "Zip file must contain either 'admin' or 'api' folder with valid plugin structure",
         ),
@@ -235,9 +199,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
-        new Error('Invalid ZIP file'),
-      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Invalid ZIP file'));
 
       render(
         <MockedProvider>
@@ -265,7 +229,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -361,9 +327,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
-        new Error('Invalid admin manifest.json'),
-      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Invalid admin manifest.json'));
 
       render(
         <MockedProvider>
@@ -391,7 +357,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(
         new Error(
           'Missing required fields in admin manifest.json: pluginId, version',
         ),
@@ -425,7 +393,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -448,7 +418,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -498,7 +470,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: false,
         pluginId: 'test-plugin',
         manifest: {
@@ -546,9 +520,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockRejectedValue(
-        new Error('Network error'),
-      );
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Network error'));
 
       render(
         <MockedProvider>
@@ -635,7 +609,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue('String error');
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue('String error');
 
       render(
         <MockedProvider>
@@ -662,7 +638,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle non-Error exceptions in plugin installation', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -679,7 +657,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockRejectedValue('String error');
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue('String error');
 
       render(
         <MockedProvider>
@@ -835,7 +815,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with null result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -852,7 +834,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(null);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(null);
 
       render(
         <MockedProvider>
@@ -889,7 +873,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with undefined error', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -906,7 +892,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: false,
         error: undefined,
       });
@@ -971,7 +959,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: false,
         hasApiFolder: true,
         apiManifest: {
@@ -1011,7 +1001,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: true,
         adminManifest: {
@@ -1082,7 +1074,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with empty installedComponents array', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1099,7 +1093,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1148,7 +1144,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with single component', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1165,7 +1163,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1214,7 +1214,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with multiple components', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: true,
         adminManifest: {
@@ -1231,7 +1233,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1353,7 +1357,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with missing apolloClient', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1370,7 +1376,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1419,7 +1427,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with undefined result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1436,7 +1446,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(undefined);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(undefined);
 
       render(
         <MockedProvider>
@@ -1472,7 +1484,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with null result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1489,7 +1503,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(null);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(null);
 
       render(
         <MockedProvider>
