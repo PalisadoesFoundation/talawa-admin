@@ -798,6 +798,25 @@ describe('UploadPluginModal Component', () => {
       expect(screen.queryByText('Test Plugin')).not.toBeInTheDocument();
     });
 
+    it('should call handleClose when modal is closed via backdrop click', () => {
+      const mockOnHide = vi.fn();
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal show={true} onHide={mockOnHide} />
+        </MockedProvider>,
+      );
+
+      // Get the modal backdrop and click it to trigger handleClose
+      const modal = screen.getByRole('dialog');
+      const backdrop = modal.closest('.modal');
+
+      if (backdrop) {
+        fireEvent.click(backdrop);
+        expect(mockOnHide).toHaveBeenCalled();
+      }
+    });
+
     it('should handle close when modal is hidden', async () => {
       const mockOnHide = vi.fn();
       render(
@@ -1564,25 +1583,329 @@ describe('UploadPluginModal Component', () => {
       expect(installAdminPluginFromZip).not.toHaveBeenCalled();
     });
 
-    it('should handle modal close and reset all state', () => {
-      const mockOnHide = vi.fn();
+    it('should handle API manifest when admin manifest is not available', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: false,
+        hasApiFolder: true,
+        adminManifest: null,
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-api-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+        files: {},
+      });
 
       render(
         <MockedProvider>
-          <UploadPluginModal show={true} onHide={mockOnHide} />
+          <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
 
-      // Get the modal element
-      const modal = screen.getByRole('dialog');
-      expect(modal).toBeInTheDocument();
+      const fileInput = getFileInput();
+      const file = createMockFile('test-api-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
 
-      // Simulate modal close by calling onHide directly
-      // This tests the handleClose function (lines 121-127)
-      mockOnHide();
+      fireEvent.change(fileInput);
 
-      // Verify onHide was called
-      expect(mockOnHide).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(screen.getByText('Test API Plugin')).toBeInTheDocument();
+        expect(screen.getByText('test-api-plugin')).toBeInTheDocument();
+      });
+    });
+
+    it('should show detected files when pluginFiles are available', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+          'pages/ComponentA.tsx': 'content',
+        },
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(screen.getByText('Detected Files')).toBeInTheDocument();
+        expect(screen.getByText(/admin\//)).toBeInTheDocument();
+        expect(screen.getByText(/manifest\.json/)).toBeInTheDocument();
+        expect(screen.getByText(/index\.tsx/)).toBeInTheDocument();
+      });
+    });
+
+    it('should show expected structure when no pluginFiles are available', () => {
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      expect(
+        screen.getByText('Expected Directory Structure'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('Required manifest.json Fields'),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/plugin\.zip/)).toBeInTheDocument();
+    });
+
+    it('should handle both admin and API components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: true,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+        },
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Admin Dashboard Components'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('API Backend Components')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle only admin components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+        },
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Admin Dashboard Components'),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByText('API Backend Components'),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle only API components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: false,
+        hasApiFolder: true,
+        adminManifest: null,
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-api-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+        files: {},
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-api-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(screen.getByText('API Backend Components')).toBeInTheDocument();
+        expect(
+          screen.queryByText('Admin Dashboard Components'),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle installation with single component in installedComponents', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        success: true,
+        pluginId: 'test-plugin',
+        manifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        installedComponents: ['Admin'], // Single component
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
+        });
+        expect(uploadButton).not.toBeDisabled();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
+        );
+        expect(defaultProps.onHide).toHaveBeenCalled();
+      });
     });
   });
 });
