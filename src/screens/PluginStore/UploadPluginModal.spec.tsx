@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -1613,8 +1613,7 @@ describe('UploadPluginModal Component', () => {
 
       // Mock the component state to simulate selectedFile being null
       // We'll trigger the handleAddPlugin function directly through a custom test
-      const component = screen.getByRole('dialog');
-
+      
       // Simulate the early return condition by ensuring selectedFile is null
       // This should trigger the early return on line 94
       const uploadButton = screen.getByRole('button', {
