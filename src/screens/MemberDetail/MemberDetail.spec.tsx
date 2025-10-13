@@ -30,6 +30,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
+import styles from 'style/app-fixed.module.css';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -771,5 +772,77 @@ describe('MemberDetail', () => {
     // Simulate changing the country selection
     fireEvent.change(countrySelect, { target: { value: 'us' } });
     expect(countrySelect).toHaveValue('us');
+  });
+
+  test('should render Overview tab by default', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Overview tab should be active by default
+    const overviewTab = screen.getByTestId('overviewTab');
+    expect(overviewTab).toHaveClass(styles.activeTab);
+
+    // Personal Details card should be visible
+    expect(screen.getByText('Profile Details')).toBeInTheDocument();
+
+    // Contact Info card should be visible - check for email field as unique identifier
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+  });
+
+  test('should switch to Events tab when clicked', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Click on Events tab
+    const eventsTab = screen.getByTestId('eventsTab');
+    fireEvent.click(eventsTab);
+
+    // Events tab should be active
+    expect(eventsTab).toHaveClass(styles.activeTab);
+
+    // EventsAttendedMemberModal should be visible in Events tab
+    expect(screen.getByText('Events Attended List')).toBeInTheDocument();
+  });
+
+  test('should switch to Tags tab when clicked', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Click on Tags tab
+    const tagsTab = screen.getByTestId('tagsTab');
+    fireEvent.click(tagsTab);
+
+    // Tags tab should be active
+    expect(tagsTab).toHaveClass(styles.activeTab);
+
+    // Tags Assigned card should be visible using testid
+    expect(screen.getByTestId('tagsAssigned-title')).toBeInTheDocument();
+  });
+
+  test('should switch between tabs correctly', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const overviewTab = screen.getByTestId('overviewTab');
+    const eventsTab = screen.getByTestId('eventsTab');
+    const tagsTab = screen.getByTestId('tagsTab');
+
+    // Start at Overview
+    expect(overviewTab).toHaveClass(styles.activeTab);
+
+    // Switch to Events
+    fireEvent.click(eventsTab);
+    expect(eventsTab).toHaveClass(styles.activeTab);
+    expect(overviewTab).toHaveClass(styles.inActiveTab);
+
+    // Switch to Tags
+    fireEvent.click(tagsTab);
+    expect(tagsTab).toHaveClass(styles.activeTab);
+    expect(eventsTab).toHaveClass(styles.inActiveTab);
+
+    // Switch back to Overview
+    fireEvent.click(overviewTab);
+    expect(overviewTab).toHaveClass(styles.activeTab);
+    expect(tagsTab).toHaveClass(styles.inActiveTab);
   });
 });

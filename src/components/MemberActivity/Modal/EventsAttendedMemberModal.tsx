@@ -81,7 +81,7 @@ const EventsAttendedMemberModal: React.FC<
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title>Events Attended List</Modal.Title>
       </Modal.Header>
       <Modal.Body>

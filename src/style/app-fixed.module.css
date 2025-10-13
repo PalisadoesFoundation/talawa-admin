@@ -6526,6 +6526,11 @@ form {
   font-size: 1.5rem;
 }
 
+.memberDetailCardHeader {
+  background-color: var(--tableHeader-bg);
+  color: var(--tableHeader-color);
+}
+
 .formLabel {
   font-weight: normal;
   padding-bottom: 0;
