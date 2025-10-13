@@ -118,17 +118,22 @@ describe('Testing Feedback Statistics Card', () => {
       expect(mockedPieChart).toHaveBeenCalled();
     });
 
-    expect(mockedPieChart.mock.calls.length).toBeGreaterThan(0);
     const pieChartProps = mockedPieChart.mock
       .calls[0][0] as InterfacePieChartProps;
     expect(pieChartProps).toBeDefined();
 
     const arcLabel = pieChartProps.series[0].arcLabel;
-
     expect(arcLabel).toBeDefined();
-    expect(arcLabel({ id: 5, value: 10 })).toBe('5 (10)');
-    expect(arcLabel({ id: 0, value: 1 })).toBe('0 (1)');
-    expect(arcLabel({ id: 3, value: 25 })).toBe('3 (25)');
+
+    const seriesData = pieChartProps.series[0].data;
+    const rating5Item = seriesData.find((item) => item.id === 5);
+    expect(rating5Item).toBeDefined();
+    // diverseRatingsProps has one rating of 5, so value should be 1
+    if (rating5Item) {
+      const realValue = rating5Item.value;
+      expect(realValue).toBe(1);
+      expect(arcLabel({ id: 5, value: realValue })).toBe('5 (1)');
+    }
   });
 
   it('should correctly aggregate feedback ratings into chart data', async () => {
