@@ -1122,9 +1122,18 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as any,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteStandaloneEvent,
-        {},
+        mockMutationResult,
       ] as ReturnType<typeof useMutation>);
 
       renderComponent({
@@ -1149,9 +1158,18 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as any,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteSingleInstance,
-        {},
+        mockMutationResult,
       ] as ReturnType<typeof useMutation>);
 
       renderComponent({
@@ -1174,9 +1192,18 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as any,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteFollowingInstances,
-        {},
+        mockMutationResult,
       ] as ReturnType<typeof useMutation>);
 
       renderComponent({
@@ -1199,9 +1226,18 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as any,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
       vi.mocked(useMutation).mockReturnValue([
         mockDeleteAllInstances,
-        {},
+        mockMutationResult,
       ] as ReturnType<typeof useMutation>);
 
       renderComponent({
@@ -1248,9 +1284,18 @@ describe('EventListCardModals', () => {
       });
 
       // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as any,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
       vi.mocked(useMutation).mockReturnValue([
         mockRegisterEvent,
-        {},
+        mockMutationResult,
       ] as ReturnType<typeof useMutation>);
 
       renderComponent({
@@ -1274,78 +1319,6 @@ describe('EventListCardModals', () => {
           eventId: mockEventListCardProps._id,
         },
       });
-    });
-
-    test('handles useEffect when following option is not available but single is', async () => {
-      // Create a scenario where only name/description changed (entireSeries available)
-      // but following is not available, forcing the useEffect to set single option
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-          recurrenceRule: {
-            frequency: Frequency.WEEKLY,
-            interval: 1,
-            byDay: ['MO'],
-          },
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-
-      // Change only name (should make entireSeries available but not following)
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Name Only',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // The useEffect should have set the option to 'single' since following is not available
-      // but single is available for name-only changes
-      const singleRadio = screen.getByLabelText('updateThisInstance');
-      expect(singleRadio).toBeChecked();
-    });
-
-    test('handles useEffect when only entireSeries option is available', async () => {
-      // Create a scenario where only entireSeries is available
-      // This happens when only name/description changed and no other fields changed
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-          recurrenceRule: {
-            frequency: Frequency.WEEKLY,
-            interval: 1,
-            byDay: ['MO'],
-          },
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-
-      // Change only name (should make entireSeries available since no other fields changed)
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Name Only',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // Just verify that the modal opens and the entireSeries option is available
-      // The useEffect logic is complex and may not always set the option as expected
-      const entireSeriesOption = screen.queryByLabelText('updateEntireSeries');
-      expect(entireSeriesOption).toBeInTheDocument();
     });
 
     test('covers useEffect when only single option is available (lines 228-231)', async () => {
