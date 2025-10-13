@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import VenueCard from './VenueCard';
 import {
   MOCK_VENUE_ITEM,
@@ -13,7 +13,11 @@ import i18n from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 
 describe('VenueCard Component', () => {
-  test('renders venue details correctly', (): void => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders venue details correctly', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -25,12 +29,13 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     expect(screen.getByText('Grand Hall')).toBeInTheDocument();
+    expect(screen.getByText('Capacity: 500')).toBeInTheDocument();
     expect(
-      screen.getByText('A spacious venue for large events.'),
+      screen.getByText('A spacious venue for large events and gatherings.'),
     ).toBeInTheDocument();
   });
 
-  test('displays default image when venue has no image', (): void => {
+  it('displays default image when venue has no image', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -48,7 +53,7 @@ describe('VenueCard Component', () => {
     expect(imgElement.src).toContain('defaultImg.png');
   });
 
-  test('displays provided image when available', (): void => {
+  it('displays provided image when available', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -66,7 +71,7 @@ describe('VenueCard Component', () => {
     expect(imgElement.src).toBe('https://surl.li/odyiad');
   });
 
-  test('handles edit button click', (): void => {
+  it('handles edit button click', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -82,7 +87,7 @@ describe('VenueCard Component', () => {
     expect(MOCK_HANDLE_EDIT).toHaveBeenCalledWith(MOCK_VENUE_ITEM);
   });
 
-  test('handles delete button click', (): void => {
+  it('handles delete button click', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -98,7 +103,7 @@ describe('VenueCard Component', () => {
     expect(MOCK_HANDLE_DELETE).toHaveBeenCalledWith('1');
   });
 
-  test('truncates long venue name correctly', (): void => {
+  it('truncates long venue name correctly', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -120,7 +125,7 @@ describe('VenueCard Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('displays short name and description without truncation', (): void => {
+  it('displays short name and description without truncation', (): void => {
     render(
       <I18nextProvider i18n={i18n}>
         <VenueCard
@@ -134,7 +139,7 @@ describe('VenueCard Component', () => {
 
     expect(screen.getByText('Grand Hall')).toBeInTheDocument();
     expect(
-      screen.getByText('A spacious venue for large events.'),
+      screen.getByText('A spacious venue for large events and gatherings.'),
     ).toBeInTheDocument();
   });
 });
