@@ -1,8 +1,16 @@
 {
-  "labelsSynonyms": {
-    "dependencies": ["dependabot", "dependency", "dependencies"],
-    "security": ["security"],
-    "ui/ux": ["layout", "screen", "design", "figma"]
+  labelsSynonyms: {
+    'ci/cd': ['GitHub Action', 'Workflow', 'ci/cd'],
+    dependencies: [
+      'dependabot',
+      'dependency',
+      'dependencies',
+      'package',
+      'packages',
+    ],
+    security: ['security'],
+    'ui/ux': ['layout', 'screen', 'design', 'figma'],
   },
-  "defaultLabels": ["unapproved"],
+  defaultLabels: ['unapproved'],
 }
+
