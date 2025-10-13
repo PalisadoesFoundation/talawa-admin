@@ -1125,7 +1125,7 @@ describe('EventListCardModals', () => {
       const mockMutationResult = {
         loading: false,
         called: false,
-        client: {} as any,
+        client: {} as unknown,
         reset: vi.fn(),
         data: undefined,
         error: undefined,
@@ -1161,7 +1161,7 @@ describe('EventListCardModals', () => {
       const mockMutationResult = {
         loading: false,
         called: false,
-        client: {} as any,
+        client: {} as unknown,
         reset: vi.fn(),
         data: undefined,
         error: undefined,
@@ -1195,7 +1195,7 @@ describe('EventListCardModals', () => {
       const mockMutationResult = {
         loading: false,
         called: false,
-        client: {} as any,
+        client: {} as unknown,
         reset: vi.fn(),
         data: undefined,
         error: undefined,
@@ -1229,7 +1229,7 @@ describe('EventListCardModals', () => {
       const mockMutationResult = {
         loading: false,
         called: false,
-        client: {} as any,
+        client: {} as unknown,
         reset: vi.fn(),
         data: undefined,
         error: undefined,
@@ -1287,7 +1287,7 @@ describe('EventListCardModals', () => {
       const mockMutationResult = {
         loading: false,
         called: false,
-        client: {} as any,
+        client: {} as unknown,
         reset: vi.fn(),
         data: undefined,
         error: undefined,
