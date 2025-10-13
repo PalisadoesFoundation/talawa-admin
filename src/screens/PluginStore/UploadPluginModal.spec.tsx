@@ -1593,8 +1593,8 @@ describe('UploadPluginModal Component', () => {
         const [selectedFile, setSelectedFile] = React.useState<File | null>(
           null,
         );
-        const [manifest, setManifest] = React.useState<any>(null);
-        const [pluginStructure, setPluginStructure] = React.useState<any>(null);
+        const [manifest, setManifest] = React.useState<Record<string, unknown> | null>(null);
+        const [pluginStructure, setPluginStructure] = React.useState<Record<string, unknown> | null>(null);
 
         const handleAddPlugin = async () => {
           // This is the exact early return logic from line 94
@@ -1664,7 +1664,7 @@ describe('UploadPluginModal Component', () => {
       expect(installAdminPluginFromZip).toHaveBeenCalled();
     });
 
-    it('should test actual UploadPluginModal early return by mocking component state', async () => {
+    it('should test actual UploadPluginModal with valid data', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
 
@@ -1688,31 +1688,9 @@ describe('UploadPluginModal Component', () => {
         },
       });
 
-      // Create a wrapper component that can manipulate the UploadPluginModal's internal state
-      const TestWrapper = () => {
-        const [showModal, setShowModal] = React.useState(true);
-        const [forceEarlyReturn, setForceEarlyReturn] = React.useState(false);
-
-        return (
-          <div>
-            <button
-              onClick={() => setForceEarlyReturn(true)}
-              data-testid="force-early-return"
-            >
-              Force Early Return
-            </button>
-            <UploadPluginModal
-              show={showModal}
-              onHide={() => setShowModal(false)}
-              // Pass a prop that could trigger early return if we could access internal state
-            />
-          </div>
-        );
-      };
-
       render(
         <MockedProvider>
-          <TestWrapper />
+          <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
 
