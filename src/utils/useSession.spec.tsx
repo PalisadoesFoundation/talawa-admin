@@ -686,7 +686,9 @@ test('should handle session timeout data updates', async () => {
   vi.useRealTimers();
 });
 
-test('should handle edge case when visibility state is neither visible nor hidden', () => {
+test('should handle edge case when visibility state is neither visible nor hidden', async () => {
+  vi.useFakeTimers();
+
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
       <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -707,4 +709,13 @@ test('should handle edge case when visibility state is neither visible nor hidde
   expect(() => {
     document.dispatchEvent(new Event('visibilitychange'));
   }).not.toThrow();
+
+  // Verify session continues to function - timers remain active
+  vi.advanceTimersByTime(15 * 60 * 1000);
+
+  await vi.waitFor(() => {
+    expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+  });
+
+  vi.useRealTimers();
 });
