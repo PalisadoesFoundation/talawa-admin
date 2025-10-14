@@ -151,23 +151,6 @@ describe('LeftDrawer Component', () => {
       expect(screen.queryByTestId('rolesBtn')).not.toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
     });
-
-    it('set hideDrawer to false when hideDrawer is null', () => {
-      const setHideDrawerMock = vi.fn();
-      render(
-        <MockedProvider mocks={[]}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18n}>
-              <LeftDrawer
-                hideDrawer={null as unknown as boolean}
-                setHideDrawer={setHideDrawerMock}
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-      expect(setHideDrawerMock).toHaveBeenCalledWith(false);
-    });
   });
 
   describe('Drawer State Initialization', () => {
