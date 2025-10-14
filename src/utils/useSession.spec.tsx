@@ -685,3 +685,26 @@ test('should handle session timeout data updates', async () => {
   setTimeoutSpy.mockRestore();
   vi.useRealTimers();
 });
+
+test('should handle edge case when visibility state is neither visible nor hidden', () => {
+  const { result } = renderHook(() => useSession(), {
+    wrapper: ({ children }: { children?: ReactNode }) => (
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </MockedProvider>
+    ),
+  });
+
+  result.current.startSession();
+
+  // Set visibility state to an unexpected value
+  Object.defineProperty(document, 'visibilityState', {
+    value: 'prerender' as any, // Some browsers use 'prerender' state
+    writable: true,
+  });
+
+  // This should not throw an error and should handle gracefully
+  expect(() => {
+    document.dispatchEvent(new Event('visibilitychange'));
+  }).not.toThrow();
+});
