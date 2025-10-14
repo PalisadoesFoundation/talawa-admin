@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: EMPTY\_MOCKS
+# Variable: INDIVIDUAL\_NON\_RECURRING\_MOCKS
 
-> `const` **EMPTY\_MOCKS**: `object`[]
+> `const` **INDIVIDUAL\_NON\_RECURRING\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L264)
+Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:395](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L395)
 
 ## Type declaration
 
@@ -44,4 +44,4 @@ Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:2
 
 #### result.data.getVolunteerMembership
 
-> **getVolunteerMembership**: `any`[] = `[]`
+> **getVolunteerMembership**: `object`[]
