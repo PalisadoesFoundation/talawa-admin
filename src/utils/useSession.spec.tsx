@@ -699,7 +699,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
 
   // Set visibility state to an unexpected value
   Object.defineProperty(document, 'visibilityState', {
-    value: 'prerender' as any, // Some browsers use 'prerender' state
+    value: 'prerender' as DocumentVisibilityState, // Some browsers use 'prerender' state
     writable: true,
   });
 
