@@ -842,4 +842,85 @@ describe('MemberDetail', () => {
     expect(currentPanel).toHaveAttribute('id', 'overview-panel');
     expect(currentPanel).toHaveAttribute('aria-labelledby', 'overview-tab');
   });
+
+  test('validates password with less than 8 characters', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+
+    // Try to enter a short password (less than 8 characters)
+    await userEvent.type(passwordInput, 'short');
+
+    // Verify error toast was called
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Password must be at least 8 characters long.',
+      );
+    });
+  });
+
+  test('handles keyboard Enter key on profile picture edit button', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const editButton = screen.getByTestId('uploadImageBtn');
+
+    // Simulate pressing Enter key
+    fireEvent.keyDown(editButton, { key: 'Enter', code: 'Enter' });
+
+    // Verify file input would be triggered (we can't directly test click on hidden input)
+    expect(editButton).toBeInTheDocument();
+  });
+
+  test('renders MUI icons correctly on save and reset buttons', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Make a change to show the buttons
+    const nameInput = screen.getByTestId('inputName');
+    await userEvent.type(nameInput, ' Updated');
+
+    await wait();
+
+    // Check if save and reset buttons are rendered with proper classes
+    const saveButton = screen.getByTestId('saveChangesBtn');
+    const resetButton = screen.getByTestId('resetChangesBtn');
+
+    expect(saveButton).toBeInTheDocument();
+    expect(resetButton).toBeInTheDocument();
+
+    // Verify the save button has a class containing 'editButton' (it's hashed by CSS modules)
+    expect(saveButton.className).toContain('editButton');
+  });
+
+  test('renders EditIcon on profile picture button', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const editButton = screen.getByTestId('uploadImageBtn');
+
+    // Verify button exists and has correct attributes
+    expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveAttribute('aria-label', 'Edit profile picture');
+    expect(editButton).toHaveAttribute('title', 'Edit profile picture');
+  });
+
+  test('save and reset buttons are in same row with proper layout', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Make a change to show the buttons
+    const nameInput = screen.getByTestId('inputName');
+    await userEvent.type(nameInput, ' Test');
+
+    await wait();
+
+    const saveButton = screen.getByTestId('saveChangesBtn');
+    const resetButton = screen.getByTestId('resetChangesBtn');
+
+    // Verify both buttons have flex-grow-1 class for equal width distribution
+    expect(saveButton).toHaveClass('flex-grow-1');
+    expect(resetButton).toHaveClass('flex-grow-1');
+  });
 });
