@@ -69,6 +69,18 @@ vi.mock('utils/urlToFile', () => ({
   urlToFile: vi.fn(),
 }));
 
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
+  ToastContainer: vi
+    .fn()
+    .mockImplementation(() => <div data-testid="toast-container" />),
+}));
+
 const props = {
   id: 'rishav-jha-mech',
 };
@@ -168,7 +180,7 @@ describe('MemberDetail', () => {
 
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getByText('User')).toBeInTheDocument();
+    expect(screen.getByText('USER')).toBeInTheDocument();
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
@@ -176,10 +188,8 @@ describe('MemberDetail', () => {
 
     userEvent.type(screen.getByTestId(/inputName/i), formData.name);
     userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
-    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
     userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
     userEvent.type(screen.getByTestId(/inputState/i), formData.state);
-    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
     userEvent.type(
       screen.getByTestId(/inputDescription/i),
       formData.description,
@@ -195,14 +205,8 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
       formData.addressLine1,
     );
-    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
-      formData.addressLine2,
-    );
     expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
     expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
-    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
-      formData.postalCode,
-    );
     expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
       formData.description,
     );
@@ -215,19 +219,13 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
       formData.mobilePhoneNumber,
     );
-    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
-      formData.homePhoneNumber,
-    );
-    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
-      formData.workPhoneNumber,
-    );
   });
 
   test('display admin', async () => {
     renderMemberDetailScreen(link1);
     await wait();
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
+    expect(screen.getByText('ADMIN')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
@@ -329,7 +327,6 @@ describe('MemberDetail', () => {
   });
 
   it('validates password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
@@ -340,7 +337,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toastErrorSpy).toHaveBeenCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });
@@ -441,24 +438,35 @@ describe('MemberDetail', () => {
 
     await wait();
 
-    // Test invalid file type
-    const invalidFile = new File(['test'], 'test.md', { type: 'image/plain' });
-    const fileInput = screen.getByTestId('fileInput');
-    await userEvent.upload(fileInput, invalidFile);
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    expect(toast.error).toHaveBeenCalledWith(
-      'Invalid file type. Please upload a JPEG, PNG, or GIF.',
-    );
+    // Test invalid file type
+    const invalidFile = new File(['test'], 'test.md', { type: 'text/plain' });
+
+    fireEvent.change(fileInput, {
+      target: { files: [invalidFile] },
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+      );
+    });
 
     // Test file size limit
     const largeFile = new File(['test'.repeat(10000000)], 'test.jpg', {
-      type: 'image/png',
+      type: 'image/jpeg',
     });
-    await userEvent.upload(fileInput, largeFile);
 
-    expect(toast.error).toHaveBeenCalledWith(
-      'File is too large. Maximum size is 5MB.',
-    );
+    fireEvent.change(fileInput, {
+      target: { files: [largeFile] },
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'File is too large. Maximum size is 5MB.',
+      );
+    });
   });
 
   it('handles all form field changes', async () => {
@@ -470,14 +478,10 @@ describe('MemberDetail', () => {
     const fields = [
       { id: 'inputName', value: 'New Name' },
       { id: 'addressLine1', value: 'New Address 1' },
-      { id: 'addressLine2', value: 'New Address 2' },
       { id: 'inputCity', value: 'New City' },
       { id: 'inputState', value: 'New State' },
-      { id: 'inputPostalCode', value: '12345' },
       { id: 'inputDescription', value: 'New Description' },
       { id: 'inputMobilePhoneNumber', value: '+1234567890' },
-      { id: 'inputHomePhoneNumber', value: '+1234567891' },
-      { id: 'inputWorkPhoneNumber', value: '+1234567892' },
     ];
 
     for (const field of fields) {
@@ -530,26 +534,12 @@ describe('MemberDetail', () => {
     await wait();
 
     const mobilePhoneInput = screen.getByTestId('inputMobilePhoneNumber');
-    const workPhoneInput = screen.getByTestId('inputWorkPhoneNumber');
-    const homePhoneInput = screen.getByTestId('inputHomePhoneNumber');
 
     // Test mobile phone
     await fireEvent.change(mobilePhoneInput, {
       target: { value: '+1234567890' },
     });
     expect(mobilePhoneInput).toHaveValue('+1234567890');
-
-    // Test work phone
-    await fireEvent.change(workPhoneInput, {
-      target: { value: '+1987654321' },
-    });
-    expect(workPhoneInput).toHaveValue('+1987654321');
-
-    // Test home phone
-    await fireEvent.change(homePhoneInput, {
-      target: { value: '+1555555555' },
-    });
-    expect(homePhoneInput).toHaveValue('+1555555555');
   });
 
   // Test for empty fields removal (Lines 397-425)

@@ -59,6 +59,9 @@ import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
+import SaveIcon from '@mui/icons-material/Save';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import EditIcon from '@mui/icons-material/Edit';
 
 type MemberDetailProps = { id?: string };
 
@@ -260,6 +263,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           aria-label="Member details tabs"
         >
           <button
+            type="button"
             className={`btn ${activeTab === 'overview' ? styles.activeTab : styles.inActiveTab}`}
             onClick={() => setActiveTab('overview')}
             data-testid="overviewTab"
@@ -272,6 +276,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             {t('personalDetailsHeading')}
           </button>
           <button
+            type="button"
             className={`btn ${activeTab === 'tags' ? styles.activeTab : styles.inActiveTab}`}
             onClick={() => setActiveTab('tags')}
             data-testid="tagsTab"
@@ -290,22 +295,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       {activeTab === 'overview' && (
         <div role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
           <Row className="g-4 mt-1">
-            <Col md={6}>
+            <Col md={8}>
               <Card className={`${styles.allRound}`}>
                 <Card.Header
-                  className={`${styles.memberDetailCardHeader} py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+                  className={`${styles.memberDetailCardHeader} py-3 px-4 ${styles.topRadius}`}
                 >
-                  <h3 className="m-0">{t('personalDetailsHeading')}</h3>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    disabled
-                    className="rounded-pill fw-bolder"
-                  >
-                    {userData?.currentUser?.role === 'administrator'
-                      ? 'Admin'
-                      : 'User'}
-                  </Button>
+                  <h3 className="m-0">{t('personalInfoHeading')}</h3>
                 </Card.Header>
                 <Card.Body className="py-3 px-3">
                   <Col lg={12} className="mb-2">
@@ -338,23 +333,23 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         )}
                         <button
                           type="button"
-                          className="position-absolute bottom-0 right-0 p-2 bg-white rounded-circle border-0"
-                          onClick={() => fileInputRef.current?.click()}
+                          className="position-absolute bottom-0 end-0 p-2 bg-white rounded-circle border-0 shadow-sm"
                           data-testid="uploadImageBtn"
-                          style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                          style={{ cursor: 'pointer' }}
                           title="Edit profile picture"
                           aria-label="Edit profile picture"
                           tabIndex={0}
+                          onClick={() => fileInputRef.current?.click()}
                           onKeyDown={(e) =>
                             e.key === 'Enter' && fileInputRef.current?.click()
                           }
                         >
-                          <i className="fas fa-edit" />
+                          <EditIcon sx={{ fontSize: 16, color: '#1976d2' }} />
                         </button>
                       </div>
                     </div>
                     <Form.Control
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/gif"
                       id="postphoto"
                       name="photo"
                       type="file"
@@ -504,9 +499,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   </Row>
                 </Card.Body>
               </Card>
-            </Col>
-            <Col md={6}>
-              <Card className={`${styles.allRound}`}>
+
+              {/* Contact Information Card */}
+              <Card className={`${styles.allRound} mt-4`}>
                 <Card.Header
                   className={`${styles.memberDetailCardHeader} py-3 px-4 ${styles.topRadius}`}
                 >
@@ -514,23 +509,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Card.Header>
                 <Card.Body className="py-3 px-3">
                   <Row className="g-3">
-                    <Col md={12}>
-                      <label htmlFor="email" className="form-label">
-                        {tCommon('email')}
-                      </label>
-                      <input
-                        id="email"
-                        value={userData?.currentUser?.emailAddress}
-                        className={`form-control ${styles.inputColor}`}
-                        type="email"
-                        name="email"
-                        data-testid="inputEmail"
-                        disabled
-                        placeholder={tCommon('email')}
-                      />
-                    </Col>
-                    <Col md={12}>
-                      <label htmlFor="phoneNumber" className="form-label">
+                    <Col md={6}>
+                      <label htmlFor="mobilePhoneNumber" className="form-label">
                         {t('mobilePhoneNumber')}
                       </label>
                       <input
@@ -546,38 +526,19 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         placeholder="Ex. +1234567890"
                       />
                     </Col>
-                    <Col md={12}>
-                      <label htmlFor="phoneNumber" className="form-label">
-                        {t('workPhoneNumber')}
+                    <Col md={6}>
+                      <label htmlFor="email" className="form-label">
+                        {tCommon('email')}
                       </label>
                       <input
-                        id="workPhoneNumber"
-                        value={formState.workPhoneNumber}
+                        id="email"
+                        value={userData?.currentUser?.emailAddress}
                         className={`form-control ${styles.inputColor}`}
-                        type="tel"
-                        data-testid="inputWorkPhoneNumber"
-                        name="workPhoneNumber"
-                        onChange={(e) =>
-                          handleFieldChange('workPhoneNumber', e.target.value)
-                        }
-                        placeholder="Ex. +1234567890"
-                      />
-                    </Col>
-                    <Col md={12}>
-                      <label htmlFor="phoneNumber" className="form-label">
-                        {t('homePhoneNumber')}
-                      </label>
-                      <input
-                        id="homePhoneNumber"
-                        value={formState.homePhoneNumber}
-                        className={`form-control ${styles.inputColor}`}
-                        type="tel"
-                        data-testid="inputHomePhoneNumber"
-                        name="homePhoneNumber"
-                        onChange={(e) =>
-                          handleFieldChange('homePhoneNumber', e.target.value)
-                        }
-                        placeholder="Ex. +1234567890"
+                        type="email"
+                        name="email"
+                        data-testid="inputEmail"
+                        disabled
+                        placeholder={tCommon('email')}
                       />
                     </Col>
                     <Col md={12}>
@@ -597,41 +558,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         placeholder="Ex. Lane 2"
                       />
                     </Col>
-                    <Col md={12}>
-                      <label htmlFor="address" className="form-label">
-                        {t('addressLine2')}
-                      </label>
-                      <input
-                        id="addressLine2"
-                        value={formState.addressLine2}
-                        className={`form-control ${styles.inputColor}`}
-                        type="text"
-                        name="addressLine2"
-                        data-testid="addressLine2"
-                        onChange={(e) =>
-                          handleFieldChange('addressLine2', e.target.value)
-                        }
-                        placeholder="Ex. Lane 2"
-                      />
-                    </Col>
-                    <Col md={12}>
-                      <label htmlFor="address" className="form-label">
-                        {t('postalCode')}
-                      </label>
-                      <input
-                        id="postalCode"
-                        value={formState.postalCode}
-                        className={`form-control ${styles.inputColor}`}
-                        type="text"
-                        name="postalCode"
-                        data-testid="inputPostalCode"
-                        onChange={(e) =>
-                          handleFieldChange('postalCode', e.target.value)
-                        }
-                        placeholder="Ex. 12345"
-                      />
-                    </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <label htmlFor="city" className="form-label">
                         {t('city')}
                       </label>
@@ -648,7 +575,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         placeholder="Enter city name"
                       />
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
                       <label htmlFor="state" className="form-label">
                         {t('state')}
                       </label>
@@ -665,7 +592,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         placeholder="Enter state name"
                       />
                     </Col>
-                    <Col md={12}>
+                    <Col md={4}>
                       <Form.Label htmlFor="country" className="form-label">
                         {tCommon('country')}
                       </Form.Label>
@@ -679,7 +606,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         }
                       >
                         <option value="" disabled>
-                          Select {tCommon('country')}
+                          Select
                         </option>
                         {[...countryOptions]
                           .sort((a, b) => a.label.localeCompare(b.label))
@@ -698,26 +625,118 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Card.Body>
               </Card>
             </Col>
-            {isUpdated && (
-              <Col md={12}>
-                <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+
+            <Col md={4}>
+              {/* Profile Details Card */}
+              <Card className={`${styles.allRound} mb-4`}>
+                <Card.Header
+                  className={`${styles.memberDetailCardHeader} py-3 px-4 ${styles.topRadius}`}
+                >
+                  <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+                </Card.Header>
+                <Card.Body className="py-3 px-3">
+                  <div className="d-flex align-items-center mb-3">
+                    <span className="me-2">Status:</span>
+                    <Button
+                      variant="light"
+                      size="sm"
+                      disabled
+                      className="rounded-pill fw-bolder"
+                      data-testid="roleButton"
+                    >
+                      {userData?.currentUser?.role === 'administrator'
+                        ? tCommon('admin') || 'Admin'
+                        : tCommon('user') || 'User'}
+                    </Button>
+                  </div>
+                </Card.Body>
+              </Card>
+
+              {/* Actions Card */}
+              <Card className={`${styles.allRound}`}>
+                <Card.Header
+                  className={`${styles.memberDetailCardHeader} py-3 px-4 ${styles.topRadius}`}
+                >
+                  <h3 className="m-0">{t('actionsHeading')}</h3>
+                </Card.Header>
+                <Card.Body className="py-3 px-3">
+                  <div className="mb-3">
+                    <div className="form-check mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="pluginCreation"
+                        disabled
+                        checked={false}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="pluginCreation"
+                      >
+                        Plugin Creation Allowed
+                      </label>
+                    </div>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="adminApproved"
+                        disabled
+                        checked={false}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="adminApproved"
+                      >
+                        Admin Approved
+                      </label>
+                    </div>
+                  </div>
+                  <div className="d-flex gap-2 mb-3">
+                    <Button
+                      variant="outline-secondary"
+                      size="sm"
+                      className="flex-grow-1"
+                    >
+                      <i className="fas fa-language me-2"></i>
+                      Choose Language
+                    </Button>
+                  </div>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="w-100"
+                    data-testid="deleteUserBtn"
+                  >
+                    <i className="fas fa-trash me-2"></i>
+                    Delete User
+                  </Button>
+                </Card.Body>
+              </Card>
+
+              {/* Save/Reset Changes Buttons */}
+              {isUpdated && (
+                <div className="d-flex gap-2 mt-4">
                   <Button
                     variant="outline-secondary"
                     onClick={resetChanges}
                     data-testid="resetChangesBtn"
+                    className="d-flex align-items-center justify-content-center gap-2 py-2 flex-grow-1"
                   >
+                    <RestartAltIcon sx={{ fontSize: 20 }} />
                     {tCommon('resetChanges')}
                   </Button>
                   <Button
-                    variant="outline-success"
                     onClick={handleUserUpdate}
                     data-testid="saveChangesBtn"
+                    className={`${styles.editButton} d-flex align-items-center justify-content-center gap-2 py-2 flex-grow-1`}
                   >
+                    <SaveIcon sx={{ fontSize: 20 }} />
                     {tCommon('saveChanges')}
                   </Button>
-                </Card.Footer>
-              </Col>
-            )}
+                </div>
+              )}
+            </Col>
           </Row>
         </div>
       )}
