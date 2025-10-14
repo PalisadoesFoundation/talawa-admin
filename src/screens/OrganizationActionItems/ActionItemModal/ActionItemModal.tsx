@@ -18,6 +18,15 @@ import type {
   ICreateActionItemInput,
   IUpdateActionItemInput,
 } from 'types/ActionItems/interface';
+
+interface IUpdateActionForInstanceInput {
+  actionId: string;
+  eventId?: string;
+  assigneeId?: string;
+  categoryId?: string;
+  assignedAt?: string;
+  preCompletionNotes?: string;
+}
 import type { InterfaceUser } from 'types/User/interface';
 
 import { useTranslation } from 'react-i18next';
@@ -236,7 +245,7 @@ const ItemModal: FC<IItemModalProps> = ({
         return;
       }
 
-      const input: any = {
+      const input: IUpdateActionForInstanceInput = {
         actionId: actionItem.id,
         eventId: eventId,
       };

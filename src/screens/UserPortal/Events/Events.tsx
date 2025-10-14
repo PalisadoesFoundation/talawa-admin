@@ -65,6 +65,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import styles from 'style/app-fixed.module.css';
 
 const timeToDayJs = (time: string): Dayjs => {
@@ -96,7 +97,7 @@ interface IEventEdge {
     progressLabel?: string | null;
     // New recurrence description fields
     recurrenceDescription?: string | null;
-    recurrenceRule?: any; // InterfaceRecurrenceRule
+    recurrenceRule?: InterfaceRecurrenceRule | null;
     creator?: {
       id: string;
       name: string;

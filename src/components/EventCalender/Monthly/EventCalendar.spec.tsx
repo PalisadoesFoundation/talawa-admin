@@ -465,7 +465,7 @@ describe('Calendar', () => {
     const mockOnMonthChange = vi.fn();
 
     // Test navigation at month boundaries
-    const { rerender } = render(
+    render(
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
@@ -546,17 +546,18 @@ describe('Calendar', () => {
 
     // Mock today's date to be January 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 0, 1); // January 1st, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
 
     render(
       <Router>
@@ -598,17 +599,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 5, 1); // June 1st, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>
@@ -649,17 +652,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be December 31st to ensure currentDate starts at 31
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 11, 31); // December 31st, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>
@@ -700,17 +705,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 30th to ensure currentDate starts at 30
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 5, 30); // June 30th, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>

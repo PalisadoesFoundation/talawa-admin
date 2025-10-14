@@ -19,7 +19,21 @@ interface IEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
 
-interface FormState {
+interface IEventUpdateInput {
+  id: string;
+  name?: string;
+  description?: string;
+  location?: string;
+  isPublic?: boolean;
+  isRegisterable?: boolean;
+  allDay?: boolean;
+  startAt?: string;
+  endAt?: string;
+  recurrenceRule?: InterfaceRecurrenceRule | null;
+  recurrence?: InterfaceRecurrenceRule | null;
+}
+
+interface IFormState {
   name: string;
   eventdescrip: string;
   location: string;
@@ -27,9 +41,9 @@ interface FormState {
   endTime: string;
 }
 
-interface UpdateEventHandlerProps {
+interface IUpdateEventHandlerProps {
   eventListCardProps: IEventListCard;
-  formState: FormState;
+  formState: IFormState;
   alldaychecked: boolean;
   publicchecked: boolean;
   registrablechecked: boolean;
@@ -71,14 +85,14 @@ export const useUpdateEventHandler = () => {
     hideViewModal,
     setEventUpdateModalIsOpen,
     refetchEvents,
-  }: UpdateEventHandlerProps): Promise<void> => {
+  }: IUpdateEventHandlerProps): Promise<void> => {
     const isRecurringInstance =
       !eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id;
 
     try {
       let data;
-      const updateInput: any = { id: eventListCardProps.id };
+      const updateInput: IEventUpdateInput = { id: eventListCardProps.id };
 
       // Only include fields that have actually changed
       if (formState.name !== eventListCardProps.name) {
@@ -184,20 +198,24 @@ export const useUpdateEventHandler = () => {
         data = result.data;
       } else {
         switch (updateOption) {
-          case 'single':
+          case 'single': {
             const singleResult = await updateSingleRecurringEventInstance({
               variables: { input: updateInput },
             });
             data = singleResult.data;
             break;
-          case 'following':
+          }
+          case 'following': {
             const followingResult = await updateThisAndFollowingEvents({
               variables: { input: updateInput },
             });
             data = followingResult.data;
             break;
-          case 'entireSeries':
-            const entireSeriesInput: any = { id: eventListCardProps.id };
+          }
+          case 'entireSeries': {
+            const entireSeriesInput: IEventUpdateInput = {
+              id: eventListCardProps.id,
+            };
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }
@@ -209,6 +227,7 @@ export const useUpdateEventHandler = () => {
             });
             data = entireSeriesResult.data;
             break;
+          }
         }
       }
 
