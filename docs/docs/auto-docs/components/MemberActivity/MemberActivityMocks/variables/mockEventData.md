@@ -54,13 +54,13 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
 
-#### event.endDate
-
-> **endDate**: `string` = `'2030-01-02'`
-
 #### event.endTime
 
 > **endTime**: `string` = `'17:00'`
+
+#### event.id
+
+> **id**: `string` = `'event123'`
 
 #### event.isPublic
 
@@ -105,10 +105,6 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 #### event.startAt
 
 > **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
-
-#### event.startDate
-
-> **startDate**: `string` = `'2030-01-01'`
 
 #### event.startTime
 
