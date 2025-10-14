@@ -685,3 +685,37 @@ test('should handle session timeout data updates', async () => {
   setTimeoutSpy.mockRestore();
   vi.useRealTimers();
 });
+
+test('should handle edge case when visibility state is neither visible nor hidden', async () => {
+  vi.useFakeTimers();
+
+  const { result } = renderHook(() => useSession(), {
+    wrapper: ({ children }: { children?: ReactNode }) => (
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </MockedProvider>
+    ),
+  });
+
+  result.current.startSession();
+
+  // Simulate a rare visibility state (e.g., 'prerender')
+  Object.defineProperty(document, 'visibilityState', {
+    value: 'prerender' as DocumentVisibilityState,
+    writable: true,
+  });
+
+  // Trigger visibility change event
+  expect(() =>
+    document.dispatchEvent(new Event('visibilitychange')),
+  ).not.toThrow();
+
+  // Fast forward time to trigger session warning
+  vi.advanceTimersByTime(15 * 60 * 1000);
+
+  await vi.waitFor(() => {
+    expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+  });
+
+  vi.useRealTimers();
+});
