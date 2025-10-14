@@ -67,7 +67,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
-  const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
   const [isUpdated, setisUpdated] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'tags'>('overview');
@@ -113,13 +112,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       originalImageState.current = userData.currentUser.avatarURL || '';
     }
   }, [userData]);
-
-  useEffect(() => {
-    // check component is mounted or not
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   // Function to handle the click on the edit icon
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -259,11 +251,19 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {/* Custom Tabs */}
       <div className="bg-white p-4 rounded shadow-sm mb-4">
-        <div className="d-flex gap-3 mb-4">
+        <div
+          className="d-flex gap-3 mb-4"
+          role="tablist"
+          aria-label="Member details tabs"
+        >
           <button
             className={`btn ${activeTab === 'overview' ? styles.activeTab : styles.inActiveTab}`}
             onClick={() => setActiveTab('overview')}
             data-testid="overviewTab"
+            role="tab"
+            aria-selected={activeTab === 'overview' ? 'true' : 'false'}
+            aria-controls="overview-panel"
+            id="overview-tab"
           >
             <i className="fas fa-th-large me-2"></i>
             Personal Details
@@ -272,14 +272,20 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             className={`btn ${activeTab === 'tags' ? styles.activeTab : styles.inActiveTab}`}
             onClick={() => setActiveTab('tags')}
             data-testid="tagsTab"
+            role="tab"
+            aria-selected={activeTab === 'tags' ? 'true' : 'false'}
+            aria-controls="tags-panel"
+            id="tags-tab"
           >
             <i className="fas fa-tags me-2"></i>
             Tags Assigned
           </button>
         </div>
+      </div>
 
-        {/* Overview Tab Content */}
-        {activeTab === 'overview' && (
+      {/* Overview Tab Content */}
+      {activeTab === 'overview' && (
+        <div role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
           <Row className="g-4 mt-1">
             <Col md={6}>
               <Card className={`${styles.allRound}`}>
@@ -707,10 +713,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Col>
             )}
           </Row>
-        )}
+        </div>
+      )}
 
-        {/* Tags Tab Content */}
-        {activeTab === 'tags' && (
+      {/* Tags Tab Content */}
+      {activeTab === 'tags' && (
+        <div role="tabpanel" id="tags-panel" aria-labelledby="tags-tab">
           <Card className={`${styles.contact} ${styles.allRound}`}>
             <Card.Header
               className={`${styles.memberDetailCardHeader} d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
@@ -725,8 +733,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               className={`${styles.cardBody} pe-0`}
             ></Card.Body>
           </Card>
-        )}
-      </div>
+        </div>
+      )}
     </LocalizationProvider>
   );
 };
