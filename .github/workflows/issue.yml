@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -12,7 +12,7 @@
 name: Issue Workflow
 on:
   issues:
-      types: ['opened']
+    types: ['opened']
 jobs:
   Opened-issue-label:
     name: Adding Issue Label
@@ -46,14 +46,13 @@ jobs:
                 issue_number: context.issue.number,
                 labels: ["good first issue", "security"]
               });
-            else if(labels.data.reduce((a, c)=>a||["security", "ui/ux"].includes(c.name), false))
+            else if(labels.data.reduce((a, c)=>a||["security", "ui/ux", "test", "ci/cd"].includes(c.name), false))
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
                 labels: ["good first issue"]
               });
-
 
   Issue-Greeting:
     name: Greeting Message to User
@@ -63,4 +62,3 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: "Congratulations on making your first Issue! :confetti_ball: If you haven't already, check out our [Contributing Guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/CONTRIBUTING.md) and [Issue Reporting Guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/develop/ISSUE_GUIDELINES.md) to ensure that you are following our guidelines for contributing and making issues."
-
