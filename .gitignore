@@ -57,3 +57,8 @@ cypress/screenshots
 
 # Redis related
 dump.rdb
+
+# Docusaurus
+docs/.docusaurus/
+docs/build/
+docs/.cache/

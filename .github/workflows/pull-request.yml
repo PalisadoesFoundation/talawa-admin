@@ -104,6 +104,33 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
+  Docs-Quality-Checks:
+    name: Check TypeScript and ESLint in docs/src directory
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Install Root Dependencies
+        run: npm ci
+
+      - name: Install Docs Dependencies
+        working-directory: ./docs
+        run: npm ci
+
+      - name: TypeCheck docs/src directory
+        working-directory: ./docs
+        run: npx tsc --noEmit
+
+      - name: Lint docs/src directory
+        working-directory: ./docs
+        run: npx eslint src/ --max-warnings=0        
+
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.labels.*.name, 'ignore-sensitive-files-pr') }}
     name: Checks if sensitive files have been changed without authorization

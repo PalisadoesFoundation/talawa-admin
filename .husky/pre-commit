@@ -7,4 +7,17 @@ npm run typecheck
 npm run update:toc
 npm run check:pom
 
+# Check docs/src directory for TypeScript and ESLint errors
+echo "Checking docs/src directory..."
+cd docs
+if ! npx tsc --noEmit; then
+  echo "❌ TypeScript check failed in docs/src"
+  exit 1
+fi
+if ! npx eslint src/ --max-warnings=0; then
+  echo "❌ ESLint check failed in docs/src"
+  exit 1
+fi
+cd ..
+
 git add .
