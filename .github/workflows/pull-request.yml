@@ -147,11 +147,11 @@ jobs:
         if: steps.check-labels.outputs.skip != 'true'
         id: changed-unauth-files
         run: |
-          # Get the base branch ref (with fallback for non-PR)
+          # Determine base and head commits for comparison
           HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
           BASE_SHA=$(git merge-base "${{ github.event.pull_request.base.sha }}" "$HEAD_SHA")
 
-          # Define sensitive files patterns as a bash array (proper ERE for grep -E)
+          # Define sensitive files patterns as a bash array
           SENSITIVE_PATTERNS=(
             '\.flake8$'
             '\.pydocstyle$'
