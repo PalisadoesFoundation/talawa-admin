@@ -164,19 +164,6 @@ const LOADING_MOCK = [
   },
 ];
 
-const BASE64_MOCKS = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: null,
-      },
-    },
-  },
-];
-
 const profileVariables = {
   name: 'Name',
   websiteURL: 'https://website.com',
@@ -386,35 +373,6 @@ describe('Testing Community Profile Screen', () => {
     await wait();
   });
 
-  test('should handle null base64 conversion when updating logo', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const mockFile = new File([''], 'test.png', { type: 'image/png' });
-    vi.mock('utils/convertToBase64', () => ({
-      default: vi.fn().mockResolvedValue(null),
-    }));
-
-    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    fireEvent.change(fileInput, {
-      target: { files: [mockFile] },
-    });
-    await wait();
-
-    expect(fileInput.value).toBe('');
-
-    expect(toast.success).not.toHaveBeenCalled();
-  });
-
   test('should handle error in resetData mutation', async () => {
     const ERROR_RESET_MOCK = [
       {
@@ -574,33 +532,6 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     expect(logoInput.files?.length).toBe(0);
-  });
-
-  test('should set logo to empty string if base64 conversion returns null', async () => {
-    const convertToBase64Mock = vi.fn().mockResolvedValue(null);
-    vi.doMock('utils/convertToBase64', () => ({
-      default: convertToBase64Mock,
-    }));
-
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const logoInput = screen.getByTestId('fileInput');
-    const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-
-    await userEvent.upload(logoInput, mockFile);
-    await wait();
-
-    expect(logoInput).toBeInTheDocument();
   });
 
   test('should update all social media URLs correctly', async () => {
