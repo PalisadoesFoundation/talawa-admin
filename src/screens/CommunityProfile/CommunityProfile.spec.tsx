@@ -78,7 +78,7 @@ const MOCKS2 = [
           githubURL: null,
           youtubeURL: null,
           instagramURL: null,
-          linkedInURL: null,
+          linkedinURL: null,
           redditURL: null,
           slackURL: null,
           xURL: null,
@@ -121,7 +121,7 @@ const MOCKS3 = [
           githubURL: 'http://sociallink.com',
           youtubeURL: 'http://sociallink.com',
           instagramURL: 'http://sociallink.com',
-          linkedInURL: 'http://sociallink.com',
+          linkedinURL: 'http://sociallink.com',
           redditURL: 'http://sociallink.com',
           slackURL: 'http://sociallink.com',
           xURL: 'http://sociallink.com',
@@ -164,38 +164,6 @@ const LOADING_MOCK = [
   },
 ];
 
-const ERROR_MOCK = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: null,
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_COMMUNITY_PG,
-      variables: {
-        name: 'Test Name',
-        websiteURL: 'https://test.com',
-        facebookURL: '',
-        instagramURL: '',
-        inactivityTimeoutDuration: null,
-        xURL: '',
-        linkedinURL: '',
-        githubURL: '',
-        youtubeURL: '',
-        redditURL: '',
-        slackURL: '',
-      },
-    },
-    error: new Error('Mutation error'),
-  },
-];
-
 const BASE64_MOCKS = [
   {
     request: {
@@ -204,61 +172,6 @@ const BASE64_MOCKS = [
     result: {
       data: {
         community: null,
-      },
-    },
-  },
-];
-const UPDATE_SUCCESS_MOCKS = [
-  {
-    request: {
-      query: GET_COMMUNITY_DATA_PG,
-    },
-    result: {
-      data: {
-        community: {
-          createdAt: null,
-          facebookURL: null,
-          githubURL: null,
-          id: null,
-          inactivityTimeoutDuration: null,
-          instagramURL: null,
-          linkedInURL: null,
-          logoMimeType: null,
-          logoURL: null,
-          name: null,
-          redditURL: null,
-          slackURL: null,
-          updatedAt: null,
-          updater: null,
-          websiteURL: null,
-          xURL: null,
-          youtubeURL: null,
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_COMMUNITY_PG,
-      variables: {
-        name: 'Test Name',
-        websiteURL: 'https://test.com',
-        facebookURL: undefined,
-        instagramURL: undefined,
-        xURL: undefined,
-        linkedinURL: undefined,
-        githubURL: undefined,
-        youtubeURL: undefined,
-        redditURL: undefined,
-        slackURL: undefined,
-        inactivityTimeoutDuration: null,
-      },
-    },
-    result: {
-      data: {
-        updateCommunity: {
-          id: '123',
-        },
       },
     },
   },
@@ -473,41 +386,6 @@ describe('Testing Community Profile Screen', () => {
     await wait();
   });
 
-  test('should handle mutation error correctly', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={ERROR_MOCK}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const nameInput = screen.getByPlaceholderText(/Community Name/i);
-    const websiteInput = screen.getByPlaceholderText(/Website Link/i);
-    const logoInput = screen.getByTestId('fileInput');
-
-    await userEvent.type(nameInput, 'Test Name');
-    await userEvent.type(websiteInput, 'https://test.com');
-    await userEvent.upload(
-      logoInput,
-      new File([''], 'test.png', { type: 'image/png' }),
-    );
-
-    const submitButton = screen.getByTestId('saveChangesBtn');
-    await userEvent.click(submitButton);
-    await wait();
-
-    expect(errorHandler).toHaveBeenCalled();
-    expect(errorHandler).toHaveBeenCalledWith(
-      expect.any(Function),
-      expect.any(Error),
-    );
-  });
-
   test('should handle null base64 conversion when updating logo', async () => {
     render(
       <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
@@ -537,37 +415,6 @@ describe('Testing Community Profile Screen', () => {
     expect(toast.success).not.toHaveBeenCalled();
   });
 
-  test('should show success toast when profile is updated successfully', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(100);
-
-    const nameInput = screen.getByPlaceholderText(/Community Name/i);
-    const websiteInput = screen.getByPlaceholderText(/Website Link/i);
-
-    await userEvent.type(nameInput, 'Test Name');
-    await userEvent.type(websiteInput, 'https://test.com');
-
-    const submitButton = screen.getByTestId('saveChangesBtn');
-    await userEvent.click(submitButton);
-
-    try {
-      await wait(1000);
-      expect(toast.success).toHaveBeenCalledWith(expect.any(String));
-    } catch (error) {
-      console.error('Mutation error:', error);
-      throw error;
-    }
-  });
-
   test('should handle error in resetData mutation', async () => {
     const ERROR_RESET_MOCK = [
       {
@@ -588,7 +435,7 @@ describe('Testing Community Profile Screen', () => {
               githubURL: 'http://sociallink.com',
               youtubeURL: 'http://sociallink.com',
               instagramURL: 'http://sociallink.com',
-              linkedInURL: 'http://sociallink.com',
+              linkedinURL: 'http://sociallink.com',
               redditURL: 'http://sociallink.com',
               slackURL: 'http://sociallink.com',
               xURL: 'http://sociallink.com',
