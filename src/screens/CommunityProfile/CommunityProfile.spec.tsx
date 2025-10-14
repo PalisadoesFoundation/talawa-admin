@@ -90,9 +90,6 @@ const MOCKS2 = [
   {
     request: {
       query: RESET_COMMUNITY,
-      variables: {
-        resetPreLoginImageryId: 'communityId',
-      },
     },
     result: {
       data: {
@@ -134,9 +131,6 @@ const MOCKS3 = [
   {
     request: {
       query: RESET_COMMUNITY,
-      variables: {
-        resetPreLoginImageryId: 'communityId',
-      },
     },
     result: {
       data: {
@@ -406,9 +400,6 @@ describe('Testing Community Profile Screen', () => {
       {
         request: {
           query: RESET_COMMUNITY,
-          variables: {
-            resetPreLoginImageryId: 'communityId',
-          },
         },
         error: new Error('Reset mutation error'),
       },
@@ -619,7 +610,7 @@ describe('Testing Community Profile Screen', () => {
 
     await wait();
 
-    const logoInput = screen.getByTestId('fileInput');
+    const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['test content'], 'test.png', {
       type: 'image/png',
     });
@@ -627,12 +618,18 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.upload(logoInput, mockFile);
     await wait();
 
+    expect(logoInput.files).toHaveLength(1);
+    expect(logoInput.files?.[0].name).toBe('test.png');
+    expect(logoInput.files?.[0].size).toBe(12);
+
     const mockFile2 = new File(['test content 2'], 'test2.png', {
       type: 'image/png',
     });
     await userEvent.upload(logoInput, mockFile2);
     await wait();
 
-    expect(logoInput).toBeInTheDocument();
+    expect(logoInput.files).toHaveLength(1);
+    expect(logoInput.files?.[0].name).toBe('test2.png');
+    expect(logoInput.files?.[0].size).toBe(14);
   });
 });
