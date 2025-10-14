@@ -701,7 +701,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
 
   // Simulate a rare visibility state (e.g., 'prerender')
   Object.defineProperty(document, 'visibilityState', {
-    value: 'prerender' as DocumentVisibilityState,
+    value: 'prerender' as DocumentVisibilityState, // Type assertion needed for edge-case value
     writable: true,
   });
 
