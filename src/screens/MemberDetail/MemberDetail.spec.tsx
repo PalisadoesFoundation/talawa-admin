@@ -30,7 +30,6 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
-import styles from 'style/app-fixed.module.css';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -115,7 +114,8 @@ describe('MemberDetail', () => {
     expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
     expect(screen.getAllByText(/Gender/i)).toBeTruthy();
     expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
-    expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
+    // "Profile Details" appears twice: once in the tab button and once in the card header
+    expect(screen.getAllByText(/Profile Details/i)).toHaveLength(2);
     expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
   });
 
@@ -780,10 +780,17 @@ describe('MemberDetail', () => {
 
     // Overview tab should be active by default
     const overviewTab = screen.getByTestId('overviewTab');
-    expect(overviewTab).toHaveClass(styles.activeTab);
+    expect(overviewTab).toHaveAttribute('aria-selected', 'true');
 
-    // Personal Details card should be visible
-    expect(screen.getByText('Profile Details')).toBeInTheDocument();
+    // Verify the overview panel is present and linked correctly
+    const overviewPanel = screen.getByRole('tabpanel');
+    expect(overviewPanel).toHaveAttribute('id', 'overview-panel');
+    expect(overviewPanel).toHaveAttribute('aria-labelledby', 'overview-tab');
+
+    // Personal Details card should be visible - using heading role for the card title
+    expect(
+      screen.getByRole('heading', { name: 'Profile Details' }),
+    ).toBeInTheDocument();
 
     // Contact Info card should be visible - check for email field as unique identifier
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -798,7 +805,12 @@ describe('MemberDetail', () => {
     fireEvent.click(tagsTab);
 
     // Tags tab should be active
-    expect(tagsTab).toHaveClass(styles.activeTab);
+    expect(tagsTab).toHaveAttribute('aria-selected', 'true');
+
+    // Verify the tags panel is present and linked correctly
+    const tagsPanel = screen.getByRole('tabpanel');
+    expect(tagsPanel).toHaveAttribute('id', 'tags-panel');
+    expect(tagsPanel).toHaveAttribute('aria-labelledby', 'tags-tab');
 
     // Tags Assigned card should be visible using testid
     expect(screen.getByTestId('tagsAssigned-title')).toBeInTheDocument();
@@ -812,16 +824,32 @@ describe('MemberDetail', () => {
     const tagsTab = screen.getByTestId('tagsTab');
 
     // Start at Overview
-    expect(overviewTab).toHaveClass(styles.activeTab);
+    expect(overviewTab).toHaveAttribute('aria-selected', 'true');
+    expect(tagsTab).toHaveAttribute('aria-selected', 'false');
+
+    // Verify overview panel is shown and linked correctly
+    let currentPanel = screen.getByRole('tabpanel');
+    expect(currentPanel).toHaveAttribute('id', 'overview-panel');
+    expect(currentPanel).toHaveAttribute('aria-labelledby', 'overview-tab');
 
     // Switch to Tags
     fireEvent.click(tagsTab);
-    expect(tagsTab).toHaveClass(styles.activeTab);
-    expect(overviewTab).toHaveClass(styles.inActiveTab);
+    expect(tagsTab).toHaveAttribute('aria-selected', 'true');
+    expect(overviewTab).toHaveAttribute('aria-selected', 'false');
+
+    // Verify tags panel is shown and linked correctly
+    currentPanel = screen.getByRole('tabpanel');
+    expect(currentPanel).toHaveAttribute('id', 'tags-panel');
+    expect(currentPanel).toHaveAttribute('aria-labelledby', 'tags-tab');
 
     // Switch back to Overview
     fireEvent.click(overviewTab);
-    expect(overviewTab).toHaveClass(styles.activeTab);
-    expect(tagsTab).toHaveClass(styles.inActiveTab);
+    expect(overviewTab).toHaveAttribute('aria-selected', 'true');
+    expect(tagsTab).toHaveAttribute('aria-selected', 'false');
+
+    // Verify overview panel is shown again and linked correctly
+    currentPanel = screen.getByRole('tabpanel');
+    expect(currentPanel).toHaveAttribute('id', 'overview-panel');
+    expect(currentPanel).toHaveAttribute('aria-labelledby', 'overview-tab');
   });
 });

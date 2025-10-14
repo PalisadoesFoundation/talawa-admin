@@ -140,7 +140,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   // to handle the change in the form fields
   const handleFieldChange = (fieldName: string, value: string): void => {
-    // future birthdates are not possible to select.
+    // Prevent future birthdates
+    if (fieldName === 'birthDate' && value) {
+      if (dayjs(value).isAfter(dayjs(), 'day')) return;
+    }
 
     // password validation
     if (fieldName === 'password' && value) {
@@ -266,7 +269,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             id="overview-tab"
           >
             <i className="fas fa-th-large me-2"></i>
-            Personal Details
+            {t('personalDetailsHeading')}
           </button>
           <button
             className={`btn ${activeTab === 'tags' ? styles.activeTab : styles.inActiveTab}`}
@@ -278,7 +281,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
             id="tags-tab"
           >
             <i className="fas fa-tags me-2"></i>
-            Tags Assigned
+            {t('tagsAssigned')}
           </button>
         </div>
       </div>
@@ -333,19 +336,21 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                             radius={150}
                           />
                         )}
-                        <i
-                          className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                        <button
+                          type="button"
+                          className="position-absolute bottom-0 right-0 p-2 bg-white rounded-circle border-0"
                           onClick={() => fileInputRef.current?.click()}
                           data-testid="uploadImageBtn"
                           style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                           title="Edit profile picture"
-                          role="button"
                           aria-label="Edit profile picture"
                           tabIndex={0}
                           onKeyDown={(e) =>
                             e.key === 'Enter' && fileInputRef.current?.click()
                           }
-                        />
+                        >
+                          <i className="fas fa-edit" />
+                        </button>
                       </div>
                     </div>
                     <Form.Control
@@ -401,6 +406,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       <DatePicker
                         className={`${styles.dateboxMemberDetail} w-100`}
                         value={dayjs(formState.birthDate)}
+                        disableFuture
                         onChange={(date) =>
                           handleFieldChange(
                             'birthDate',
