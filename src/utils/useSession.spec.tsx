@@ -706,9 +706,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
   });
 
   // Trigger visibility change event
-  expect(() =>
-    document.dispatchEvent(new Event('visibilitychange')),
-  ).not.toThrow();
+  document.dispatchEvent(new Event('visibilitychange'));
 
   // Fast forward time to trigger session warning
   vi.advanceTimersByTime(15 * 60 * 1000);
