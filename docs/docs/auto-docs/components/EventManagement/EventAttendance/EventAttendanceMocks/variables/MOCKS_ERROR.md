@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L99)
 
-## Type declaration
+## Type Declaration
 
 ### error
 

@@ -219,7 +219,7 @@ const CommunityProfile = (): JSX.Element => {
   };
 
   if (loading) {
-    <Loader />;
+    return <Loader />;
   }
 
   return (

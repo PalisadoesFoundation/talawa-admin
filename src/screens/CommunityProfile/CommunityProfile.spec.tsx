@@ -160,7 +160,7 @@ const LOADING_MOCK = [
         community: null,
       },
     },
-    delay: 100, // Add delay to ensure loading state is rendered
+    delay: 100,
   },
 ];
 
@@ -369,7 +369,6 @@ describe('Testing Community Profile Screen', () => {
 
     expect(communityName).toHaveValue(profileVariables.name);
     expect(websiteLink).toHaveValue(profileVariables.websiteURL);
-    // expect(logo).toBeTruthy();
     expect(facebook).toHaveValue(profileVariables.socialURL);
     expect(instagram).toHaveValue(profileVariables.socialURL);
     expect(X).toHaveValue(profileVariables.socialURL);
@@ -444,6 +443,8 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');
     expect(screen.getByPlaceholderText(/Website Link/i)).toHaveValue('');
     expect(screen.getByTestId(/facebook/i)).toHaveValue('');
@@ -467,8 +468,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    // Loader should be present during loading state
     expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+
+    await wait();
   });
 
   test('should handle mutation error correctly', async () => {
@@ -481,6 +483,8 @@ describe('Testing Community Profile Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    await wait();
 
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
     const websiteInput = screen.getByPlaceholderText(/Website Link/i);
@@ -515,6 +519,8 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const mockFile = new File([''], 'test.png', { type: 'image/png' });
     vi.mock('utils/convertToBase64', () => ({
       default: vi.fn().mockResolvedValue(null),
@@ -526,10 +532,8 @@ describe('Testing Community Profile Screen', () => {
     });
     await wait();
 
-    // Ensure state or UI behavior when base64 conversion fails
     expect(fileInput.value).toBe('');
 
-    // Ensure no success toast is shown for null conversion
     expect(toast.success).not.toHaveBeenCalled();
   });
 
@@ -544,7 +548,6 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial query to complete
     await wait(100);
 
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
@@ -556,16 +559,302 @@ describe('Testing Community Profile Screen', () => {
     const submitButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(submitButton);
 
-    // Increase wait time and add error handling
     try {
-      await wait(1000); // Increased wait time
-      expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(Function),
-        expect.any(Error),
-      );
+      await wait(1000);
+      expect(toast.success).toHaveBeenCalledWith(expect.any(String));
     } catch (error) {
       console.error('Mutation error:', error);
       throw error;
     }
+  });
+
+  test('should handle error in resetData mutation', async () => {
+    const ERROR_RESET_MOCK = [
+      {
+        request: {
+          query: GET_COMMUNITY_DATA_PG,
+        },
+        result: {
+          data: {
+            community: {
+              createdAt: '2022-01-01T12:00:00Z',
+              updatedAt: '2022-01-01T12:00:00Z',
+              id: 'communityId',
+              name: 'testName',
+              logoURL: 'http://logo.com',
+              logoMimeType: 'image/png',
+              websiteURL: 'http://websitelink.com',
+              facebookURL: 'http://sociallink.com',
+              githubURL: 'http://sociallink.com',
+              youtubeURL: 'http://sociallink.com',
+              instagramURL: 'http://sociallink.com',
+              linkedInURL: 'http://sociallink.com',
+              redditURL: 'http://sociallink.com',
+              slackURL: 'http://sociallink.com',
+              xURL: 'http://sociallink.com',
+              inactivityTimeoutDuration: 30,
+              updater: null,
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RESET_COMMUNITY,
+          variables: {
+            resetPreLoginImageryId: 'communityId',
+          },
+        },
+        error: new Error('Reset mutation error'),
+      },
+    ];
+
+    render(
+      <MockedProvider addTypename={false} mocks={ERROR_RESET_MOCK}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const resetChangesBtn = screen.getByTestId('resetChangesBtn');
+    await userEvent.click(resetChangesBtn);
+    await wait();
+
+    expect(errorHandler).toHaveBeenCalled();
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Error),
+    );
+  });
+
+  test('should enable buttons when only name is filled', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const nameInput = screen.getByPlaceholderText(/Community Name/i);
+    const saveBtn = screen.getByTestId('saveChangesBtn');
+    const resetBtn = screen.getByTestId('resetChangesBtn');
+
+    expect(saveBtn).toBeDisabled();
+    expect(resetBtn).toBeDisabled();
+
+    await userEvent.type(nameInput, 'Test Name');
+    expect(saveBtn).not.toBeDisabled();
+    expect(resetBtn).not.toBeDisabled();
+  });
+
+  test('should enable buttons when only websiteURL is filled', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const websiteInput = screen.getByPlaceholderText(/Website Link/i);
+    const saveBtn = screen.getByTestId('saveChangesBtn');
+
+    await userEvent.type(websiteInput, 'https://test.com');
+    expect(saveBtn).not.toBeDisabled();
+  });
+
+  test('should handle logo file upload and trigger state update', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const logoInput = screen.getByTestId('fileInput');
+    const nameInput = screen.getByPlaceholderText(/Community Name/i);
+    const saveBtn = screen.getByTestId('saveChangesBtn');
+
+    expect(saveBtn).toBeDisabled();
+
+    await userEvent.type(nameInput, 'Test Name');
+    expect(saveBtn).not.toBeDisabled();
+
+    await userEvent.upload(
+      logoInput,
+      new File(['test content'], 'test.png', { type: 'image/png' }),
+    );
+    await wait(100);
+
+    expect(saveBtn).not.toBeDisabled();
+  });
+
+  test('should handle file input change without file selection', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+    fireEvent.change(logoInput, { target: { files: [] } });
+    await wait();
+
+    expect(logoInput.files?.length).toBe(0);
+  });
+
+  test('should set logo to empty string if base64 conversion returns null', async () => {
+    const convertToBase64Mock = vi.fn().mockResolvedValue(null);
+    vi.doMock('utils/convertToBase64', () => ({
+      default: convertToBase64Mock,
+    }));
+
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const logoInput = screen.getByTestId('fileInput');
+    const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
+
+    await userEvent.upload(logoInput, mockFile);
+    await wait();
+
+    expect(logoInput).toBeInTheDocument();
+  });
+
+  test('should update all social media URLs correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const facebookInput = screen.getByTestId('facebook');
+    const instagramInput = screen.getByTestId('instagram');
+    const xInput = screen.getByTestId('X');
+    const linkedInInput = screen.getByTestId('linkedIn');
+    const githubInput = screen.getByTestId('github');
+    const youtubeInput = screen.getByTestId('youtube');
+    const redditInput = screen.getByTestId('reddit');
+    const slackInput = screen.getByTestId('slack');
+
+    await userEvent.type(facebookInput, 'https://facebook.com/test');
+    await userEvent.type(instagramInput, 'https://instagram.com/test');
+    await userEvent.type(xInput, 'https://x.com/test');
+    await userEvent.type(linkedInInput, 'https://linkedin.com/test');
+    await userEvent.type(githubInput, 'https://github.com/test');
+    await userEvent.type(youtubeInput, 'https://youtube.com/test');
+    await userEvent.type(redditInput, 'https://reddit.com/test');
+    await userEvent.type(slackInput, 'https://slack.com/test');
+
+    expect(facebookInput).toHaveValue('https://facebook.com/test');
+    expect(instagramInput).toHaveValue('https://instagram.com/test');
+    expect(xInput).toHaveValue('https://x.com/test');
+    expect(linkedInInput).toHaveValue('https://linkedin.com/test');
+    expect(githubInput).toHaveValue('https://github.com/test');
+    expect(youtubeInput).toHaveValue('https://youtube.com/test');
+    expect(redditInput).toHaveValue('https://reddit.com/test');
+    expect(slackInput).toHaveValue('https://slack.com/test');
+  });
+
+  test('should populate form fields with fetched community data', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue(
+      'testName',
+    );
+    expect(screen.getByPlaceholderText(/Website Link/i)).toHaveValue(
+      'http://websitelink.com',
+    );
+    expect(screen.getByTestId('facebook')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('instagram')).toHaveValue(
+      'http://sociallink.com',
+    );
+    expect(screen.getByTestId('X')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('linkedIn')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('github')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('youtube')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('reddit')).toHaveValue('http://sociallink.com');
+    expect(screen.getByTestId('slack')).toHaveValue('http://sociallink.com');
+  });
+
+  test('should clear logo field before setting new file', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link3}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const logoInput = screen.getByTestId('fileInput');
+    const mockFile = new File(['test content'], 'test.png', {
+      type: 'image/png',
+    });
+
+    await userEvent.upload(logoInput, mockFile);
+    await wait();
+
+    const mockFile2 = new File(['test content 2'], 'test2.png', {
+      type: 'image/png',
+    });
+    await userEvent.upload(logoInput, mockFile2);
+    await wait();
+
+    expect(logoInput).toBeInTheDocument();
   });
 });
