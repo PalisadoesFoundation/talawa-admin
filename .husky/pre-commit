@@ -1,3 +1,4 @@
+#!/bin/sh
 
 npm run generate-docs
 npm run format:fix
@@ -9,15 +10,25 @@ npm run check:pom
 
 # Check docs/src directory for TypeScript and ESLint errors
 echo "Checking docs/src directory..."
-cd docs
-if ! npx tsc --noEmit; then
-  echo "❌ TypeScript check failed in docs/src"
-  exit 1
+
+# Verify docs directory exists
+if [ ! -d "docs" ]; then
+  echo "⚠️  docs directory not found, skipping docs checks"
+else
+  # Use subshell to ensure directory is reset even on failure
+  (
+    cd docs || exit 1
+    
+    if ! npx tsc --noEmit; then
+      echo "❌ TypeScript check failed in docs/src"
+      exit 1
+    fi
+    
+    if ! npx eslint src/ --max-warnings=0; then
+      echo "❌ ESLint check failed in docs/src"
+      exit 1
+    fi
+  ) || exit 1
 fi
-if ! npx eslint src/ --max-warnings=0; then
-  echo "❌ ESLint check failed in docs/src"
-  exit 1
-fi
-cd ..
 
 git add .

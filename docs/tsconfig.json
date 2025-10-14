@@ -1,21 +1,26 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-      "jsx": "react-jsx",
-      "module": "esnext",
-      "moduleResolution": "bundler",
-      "lib": ["dom", "dom.iterable", "esnext"],
-      "types": ["@docusaurus/module-type-aliases", "@docusaurus/types", "react", "react-dom"],
-      "noEmit": true,
-      "skipLibCheck": true,
-      "strict": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "forceConsistentCasingInFileNames": true,
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "baseUrl": "."
-    },
-    "include": ["src/**/*", "docusaurus.config.ts", "sidebars.ts"],
-    "exclude": ["node_modules", "build", ".docusaurus"]
-  }
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": [
+      "@docusaurus/module-type-aliases",
+      "@docusaurus/types",
+      "react",
+      "react-dom"
+    ],
+    "noEmit": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": "."
+  },
+  "include": ["src/**/*", "docusaurus.config.ts", "sidebars.ts"],
+  "exclude": ["node_modules", "build", ".docusaurus"]
+}
