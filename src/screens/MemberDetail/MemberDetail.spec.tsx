@@ -789,21 +789,6 @@ describe('MemberDetail', () => {
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
   });
 
-  test('should switch to Events tab when clicked', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    // Click on Events tab
-    const eventsTab = screen.getByTestId('eventsTab');
-    fireEvent.click(eventsTab);
-
-    // Events tab should be active
-    expect(eventsTab).toHaveClass(styles.activeTab);
-
-    // EventsAttendedMemberModal should be visible in Events tab
-    expect(screen.getByText('Events Attended List')).toBeInTheDocument();
-  });
-
   test('should switch to Tags tab when clicked', async () => {
     renderMemberDetailScreen(link1);
     await wait();
@@ -824,21 +809,15 @@ describe('MemberDetail', () => {
     await wait();
 
     const overviewTab = screen.getByTestId('overviewTab');
-    const eventsTab = screen.getByTestId('eventsTab');
     const tagsTab = screen.getByTestId('tagsTab');
 
     // Start at Overview
     expect(overviewTab).toHaveClass(styles.activeTab);
 
-    // Switch to Events
-    fireEvent.click(eventsTab);
-    expect(eventsTab).toHaveClass(styles.activeTab);
-    expect(overviewTab).toHaveClass(styles.inActiveTab);
-
     // Switch to Tags
     fireEvent.click(tagsTab);
     expect(tagsTab).toHaveClass(styles.activeTab);
-    expect(eventsTab).toHaveClass(styles.inActiveTab);
+    expect(overviewTab).toHaveClass(styles.inActiveTab);
 
     // Switch back to Overview
     fireEvent.click(overviewTab);

@@ -45,7 +45,6 @@ import { Card, Row, Col, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -70,11 +69,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const location = useLocation();
   const isMounted = useRef(true);
   const { getItem, setItem } = useLocalStorage();
-  const [show, setShow] = useState(false);
   const [isUpdated, setisUpdated] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'tags'>(
-    'overview',
-  );
+  const [activeTab, setActiveTab] = useState<'overview' | 'tags'>('overview');
   const currentId = location.state?.id || getItem('id') || id;
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
@@ -261,14 +257,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {show && (
-        <MemberAttendedEventsModal
-          eventsAttended={userData?.user?.eventsAttended}
-          show={show}
-          setShow={setShow}
-        />
-      )}
-
       {/* Custom Tabs */}
       <div className="bg-white p-4 rounded shadow-sm mb-4">
         <div className="d-flex gap-3 mb-4">
@@ -279,14 +267,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           >
             <i className="fas fa-th-large me-2"></i>
             Personal Details
-          </button>
-          <button
-            className={`btn ${activeTab === 'events' ? styles.activeTab : styles.inActiveTab}`}
-            onClick={() => setActiveTab('events')}
-            data-testid="eventsTab"
-          >
-            <i className="fas fa-calendar-alt me-2"></i>
-            Events
           </button>
           <button
             className={`btn ${activeTab === 'tags' ? styles.activeTab : styles.inActiveTab}`}
@@ -727,17 +707,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Col>
             )}
           </Row>
-        )}
-
-        {/* Events Tab Content */}
-        {activeTab === 'events' && (
-          <div>
-            <MemberAttendedEventsModal
-              eventsAttended={userData?.user?.eventsAttended || []}
-              show={true}
-              setShow={() => {}}
-            />
-          </div>
         )}
 
         {/* Tags Tab Content */}
