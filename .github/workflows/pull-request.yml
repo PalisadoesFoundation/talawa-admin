@@ -231,7 +231,7 @@ jobs:
         env:
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
-          echo "Unauthorized changes detected in sensitive files:"
+          echo "::error::Unauthorized changes detected in sensitive files:"
           echo ""
           for file in $CHANGED_UNAUTH_FILES; do
             echo "- $file"
