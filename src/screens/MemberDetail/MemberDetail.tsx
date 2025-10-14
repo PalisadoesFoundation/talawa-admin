@@ -252,7 +252,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       {/* Custom Tabs */}
       <div className="bg-white p-4 rounded shadow-sm mb-4">
         <div
-          className="d-flex gap-3 mb-4"
+          className="d-flex gap-3"
           role="tablist"
           aria-label="Member details tabs"
         >
