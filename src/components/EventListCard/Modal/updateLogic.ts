@@ -73,12 +73,12 @@ export const useUpdateEventHandler = () => {
     refetchEvents,
   }: UpdateEventHandlerProps): Promise<void> => {
     const isRecurringInstance =
-      !eventListCardProps.isRecurringTemplate &&
-      !!eventListCardProps.baseEventId;
+      !eventListCardProps.isRecurringEventTemplate &&
+      !!eventListCardProps.baseEvent?.id;
 
     try {
       let data;
-      const updateInput: any = { id: eventListCardProps._id };
+      const updateInput: any = { id: eventListCardProps.id };
 
       // Only include fields that have actually changed
       if (formState.name !== eventListCardProps.name) {
@@ -125,26 +125,26 @@ export const useUpdateEventHandler = () => {
           : '';
 
       const originalStartAt = eventListCardProps.allDay
-        ? dayjs.utc(eventListCardProps.startDate).isValid()
-          ? dayjs.utc(eventListCardProps.startDate).startOf('day').toISOString()
+        ? dayjs.utc(eventListCardProps.startAt).isValid()
+          ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : dayjs(
-              `${eventListCardProps.startDate}T${eventListCardProps.startTime}`,
+              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
             ).isValid()
           ? dayjs(
-              `${eventListCardProps.startDate}T${eventListCardProps.startTime}`,
+              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
             ).toISOString()
           : '';
 
       const originalEndAt = eventListCardProps.allDay
-        ? dayjs.utc(eventListCardProps.endDate).isValid()
-          ? dayjs.utc(eventListCardProps.endDate).endOf('day').toISOString()
+        ? dayjs.utc(eventListCardProps.endAt).isValid()
+          ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
         : dayjs(
-              `${eventListCardProps.endDate}T${eventListCardProps.endTime}`,
+              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
             ).isValid()
           ? dayjs(
-              `${eventListCardProps.endDate}T${eventListCardProps.endTime}`,
+              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
             ).toISOString()
           : '';
 
@@ -197,7 +197,7 @@ export const useUpdateEventHandler = () => {
             data = followingResult.data;
             break;
           case 'entireSeries':
-            const entireSeriesInput: any = { id: eventListCardProps._id };
+            const entireSeriesInput: any = { id: eventListCardProps.id };
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }

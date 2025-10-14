@@ -124,11 +124,7 @@ export const CheckInModal = ({
       width: 400,
       renderCell: (props) => (
         // Render a custom row component for check-in status
-        <TableRow
-          data={props.value}
-          refetch={checkInRefetch}
-          isRecurring={isRecurring}
-        />
+        <TableRow data={props.value} refetch={checkInRefetch} />
       ),
     },
   ];

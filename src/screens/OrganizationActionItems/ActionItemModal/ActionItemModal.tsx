@@ -63,7 +63,7 @@ const initializeFormState = (
     : new Date(),
   categoryId: actionItem?.category?.id || '',
   assigneeId: actionItem?.assignee?.id || '',
-  eventId: actionItem?.event?._id || undefined,
+  eventId: actionItem?.event?.id || undefined,
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
   isCompleted: actionItem?.isCompleted || false,

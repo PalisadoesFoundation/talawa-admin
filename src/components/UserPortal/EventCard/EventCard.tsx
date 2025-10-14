@@ -89,7 +89,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: props._id,
+            eventId: props.id,
           },
         });
         if (data) {
@@ -127,7 +127,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}
-        <b> {dayjs(props.startDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.startAt).format("D MMMM 'YY")}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
@@ -138,7 +138,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}{' '}
-        <b> {dayjs(props.endDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.endAt).format("D MMMM 'YY")}</b>
       </div>
       <span>
         {`${t('creator')} `}

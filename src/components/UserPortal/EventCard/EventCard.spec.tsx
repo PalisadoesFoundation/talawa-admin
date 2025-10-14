@@ -42,12 +42,12 @@ afterEach(() => {
 
 describe('Testing Event Card In User portal', () => {
   const props = {
-    _id: '123',
+    id: '123',
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startDate: '2023-04-13',
-    endDate: '2023-04-15',
+    startAt: '2023-04-13T17:49:12Z',
+    endAt: '2023-04-15T19:49:12Z',
     isRegisterable: true,
     isPublic: true,
     endTime: '19:49:12',
@@ -69,7 +69,6 @@ describe('Testing Event Card In User portal', () => {
     recurrenceRule: null,
     isRecurringEventException: false,
   };
-
   it('The card should be rendered properly, and all the details should be displayed correct', async () => {
     const { queryByText } = render(
       <MockedProvider addTypename={false} link={link}>
@@ -188,12 +187,12 @@ describe('Testing Event Card In User portal', () => {
 
 describe('Event card when start and end time are not given', () => {
   const props = {
-    _id: '123',
+    id: '123',
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startDate: '2023-04-13',
-    endDate: '2023-04-15',
+    startAt: '2023-04-13T00:00:00Z',
+    endAt: '2023-04-15T23:59:59Z',
     isRegisterable: true,
     isPublic: true,
     endTime: '',

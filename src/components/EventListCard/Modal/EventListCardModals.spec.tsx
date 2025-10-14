@@ -71,12 +71,12 @@ const MockDeleteModal = EventListCardDeleteModal as Mock;
 const mockT = (key: string) => key;
 
 const mockEventListCardProps = {
-  _id: 'event1',
+  id: 'event1',
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startDate: '2024-01-01',
-  endDate: '2024-01-01',
+  startAt: '2024-01-01T10:00:00Z',
+  endAt: '2024-01-01T12:00:00Z',
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -85,8 +85,8 @@ const mockEventListCardProps = {
   attendees: [],
   creator: { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
   userRole: UserRole.ADMINISTRATOR,
-  isRecurringTemplate: false,
-  baseEventId: null,
+  isRecurringEventTemplate: false,
+  baseEvent: null,
   refetchEvents: vi.fn(),
 };
 

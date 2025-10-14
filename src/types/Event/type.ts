@@ -10,7 +10,7 @@ export type User = {
   role?: string;
   createdAt?: Date;
   updatedAt?: Date;
-  gender?: string;
+  natalSex?: string;
 };
 
 export type Event = {

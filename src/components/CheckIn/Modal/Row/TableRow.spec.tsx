@@ -66,8 +66,9 @@ describe('Testing Table Row for CheckIn Table', () => {
         name: 'John Doe',
         userId: 'user123',
         checkIn: {
-          _id: '123',
+          id: '123',
           time: '12:00:00',
+          feedbackSubmitted: false,
         },
         eventId: 'event123',
       },
@@ -146,8 +147,9 @@ describe('Testing Table Row for CheckIn Table', () => {
         name: '',
         userId: `user123`,
         checkIn: {
-          _id: '123',
+          id: '123',
           time: '12:00:00',
+          feedbackSubmitted: false,
         },
         eventId: `event123`,
       },

@@ -33,12 +33,12 @@ const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
 const mockEventListCardProps = {
-  _id: 'event123',
+  id: 'event123',
   name: 'Test Event',
   description: 'Test event description',
   location: 'Test Location',
-  startDate: '2024-01-15',
-  endDate: '2024-01-15',
+  startAt: '2024-01-15T10:00:00Z',
+  endAt: '2024-01-15T12:00:00Z',
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -51,8 +51,8 @@ const mockEventListCardProps = {
     emailAddress: 'john@example.com',
   },
   userRole: UserRole.ADMINISTRATOR,
-  isRecurringTemplate: false,
-  baseEventId: null,
+  isRecurringEventTemplate: false,
+  baseEvent: null,
 };
 
 const mockFormState = {
