@@ -667,18 +667,23 @@ describe('Testing VolunteerGroups Screen', () => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
       });
 
-      // Verify the DataGrid is rendered with volunteer groups
-      const dataGrid = screen.getByRole('grid');
-      expect(dataGrid).toBeInTheDocument();
-
       // Verify that all 3 groups are rendered (from mock data)
       const groupRows = await screen.findAllByTestId('groupName');
       expect(groupRows.length).toBe(3);
 
       // Group 1 has 1 volunteer, Group 2 has 0 volunteers, Group 3 has 1 volunteer
-      // Verify the volunteer count column is rendering data (numbers should be visible)
-      const allCells = screen.getAllByRole('gridcell');
-      expect(allCells.length).toBeGreaterThan(0);
+      // Verify the actual volunteer count values are displayed in the DataGrid
+      await waitFor(() => {
+        // Group 2 has 0 volunteers
+        expect(screen.getByText('0')).toBeInTheDocument();
+        
+        // Groups 1 and 3 each have 1 volunteer, so we expect at least 2 cells with "1"
+        const volunteerCounts = screen.getAllByText(/^1$/);
+        const countsInVolunteerColumn = volunteerCounts.filter((el) =>
+          el.className.includes('d-flex justify-content-center fw-bold'),
+        );
+        expect(countsInVolunteerColumn.length).toBeGreaterThanOrEqual(2);
+      });
     });
   });
 });
