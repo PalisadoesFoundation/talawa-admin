@@ -259,9 +259,15 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    // Group 1 has a leader with an image
-    const images = screen.queryAllByRole('img', { name: /Assignee/i });
-    expect(images.length).toBeGreaterThan(0);
+    // Group 1 has a leader with an image (Teresa Bradley with img-url)
+    const leaderImages = screen.queryAllByRole('img', { name: /Assignee/i });
+    expect(leaderImages.length).toBeGreaterThan(0);
+    
+    // Verify at least one image has the expected source
+    const hasImageSource = leaderImages.some(
+      (img) => img.getAttribute('src') === 'img-url',
+    );
+    expect(hasImageSource).toBe(true);
   });
 
   it('should render leader without image using Avatar component', async () => {
@@ -272,9 +278,16 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    // Group 2 and Group 3 have leaders without images, should use Avatar
+    // Verify assigneeName elements exist for all groups
     const assigneeNames = screen.getAllByTestId('assigneeName');
     expect(assigneeNames.length).toBeGreaterThan(0);
+    
+    // Group 2 and Group 3 have leaders without images (null)
+    // These should render Avatar component instead of img tag
+    // Verify the leader names are displayed (Teresa Bradley appears twice, Bruce once)
+    const teresaBradleyElements = screen.getAllByText(/Teresa Bradley/i);
+    expect(teresaBradleyElements.length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText(/Bruce Garza/i)).toBeInTheDocument();
   });
 
   it('should display correct number of actions completed', async () => {
@@ -285,9 +298,14 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    // All groups have empty assignments array
+    // All groups have empty assignments array (0 actions completed)
     const groupRows = await screen.findAllByTestId('groupName');
     expect(groupRows.length).toBeGreaterThan(0);
+    
+    // According to mock data, all groups have assignments: []
+    // The actions column should display 0 for each group
+    // Since we have 3 groups rendered, verify they all exist
+    expect(groupRows.length).toBe(3);
   });
 
   it('should display correct number of volunteers in each group', async () => {
@@ -298,8 +316,16 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    // Verify volunteer count is displayed
+    // Verify volunteer count is displayed for each group
     const groupRows = await screen.findAllByTestId('groupName');
-    expect(groupRows.length).toBeGreaterThan(0);
+    
+    // All three groups should be rendered
+    expect(groupRows.length).toBe(3);
+    
+    // Each group in mock data has 1 volunteer in the volunteers array
+    // Verify group names are displayed correctly
+    expect(screen.getByText('Group 1')).toBeInTheDocument();
+    expect(screen.getByText('Group 2')).toBeInTheDocument();
+    expect(screen.getByText('Group 3')).toBeInTheDocument();
   });
 });
