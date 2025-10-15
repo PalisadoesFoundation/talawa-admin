@@ -1410,5 +1410,119 @@ describe('EventListCardModals', () => {
       const singleRadio = screen.getByLabelText('updateThisInstance');
       expect(singleRadio).toBeChecked();
     });
+
+    test('covers onChange handler for single update option (line 464)', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields that make single option available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // Find the single radio button and click it to test onChange handler (covers line 464)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('covers radio button onChange handlers to increase coverage', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields to make options available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // Test clicking different radio buttons to cover onChange handlers
+      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      await userEvent.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+
+      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+      if (entireSeriesRadio) {
+        await userEvent.click(entireSeriesRadio);
+        expect(entireSeriesRadio).toBeChecked();
+      }
+    });
+
+    test('covers single radio button onChange handler (line 464)', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields to make single option available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // First click another option to deselect single
+      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      await userEvent.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+
+      // Now click the single radio button to trigger its onChange handler (covers line 464)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+      expect(singleRadio).toBeChecked();
+    });
   });
 });
