@@ -940,8 +940,7 @@ describe('MemberDetail', () => {
 
     // Test null and undefined cases
     expect(testNullDate(null)).toBe('');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(testNullDate(undefined as any)).toBe('');
+    expect(testNullDate(undefined as unknown as Date | null)).toBe('');
 
     // With a valid date, it should return formatted string in YYYY-MM-DD format
     const validDate = new Date(Date.UTC(1990, 0, 15, 12, 0, 0));
@@ -953,15 +952,19 @@ describe('MemberDetail', () => {
     renderMemberDetailScreen(link1);
     await wait();
 
-    const birthDateInput = screen.getByTestId('birthDate');
-    expect(birthDateInput).toBeInTheDocument();
+    const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
+    const futureDate = dayjs().add(1, 'year').format('YYYY-MM-DD');
+    const originalValue = birthDateInput.value;
 
-    // The component has validation: if (dayjs(value).isAfter(dayjs(), 'day')) return;
-    // This prevents the state update when future dates are attempted
+    // Attempt to set a future date
+    fireEvent.change(birthDateInput, {
+      target: { value: futureDate },
+    });
 
-    // Verify the DatePicker has disableFuture prop which also prevents future dates
-    const datePickerParent = birthDateInput.closest('.MuiFormControl-root');
-    expect(datePickerParent).toBeInTheDocument();
+    // Verify the validation prevented the update
+    await waitFor(() => {
+      expect(birthDateInput.value).toBe(originalValue);
+    });
   });
 
   test('should allow past dates through validation logic', async () => {
@@ -991,7 +994,7 @@ describe('MemberDetail', () => {
   });
 
   // Test to cover remaining branches including line 148
-  test('should handle edge cases in form field changes', async () => {
+  test('should handle basic form field updates', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
