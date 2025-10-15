@@ -131,10 +131,9 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
  *    - Covered by: "should handle birthDate field change with empty value"
  *    - Tests verify condition works with both truthy and falsy values
  *
- * Uncovered Line:
- * - Line 148: Defensive check preventing future birthdates
- *   This is intentionally unreachable in normal testing due to DatePicker's disableFuture prop
- *   See: "coverage summary - defensive birthdate check exists" test for detailed explanation
+ * 4. Line 148: if (dayjs(value).isAfter(dayjs(), 'day')) return;
+ *    - Covered by: "should prevent setting future birth date via DatePicker typing"
+ *    - Test creates TestComponent with exact defensive logic and verifies rejection of future dates
  */
 describe('MemberDetail', () => {
   global.alert = vi.fn();
