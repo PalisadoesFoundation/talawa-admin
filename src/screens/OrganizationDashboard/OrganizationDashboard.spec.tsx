@@ -74,8 +74,8 @@ function renderWithProviders({
 describe('OrganizationDashboard', () => {
   beforeEach(() => {
     mockedNavigate.mockReset();
-    (toast.error as jest.Mock).mockReset();
-    (toast.success as jest.Mock).mockReset();
+    vi.mocked(toast.error).mockReset();
+    vi.mocked(toast.success).mockReset();
   });
 
   it('navigates to requests page when clicking on membership requests card', async () => {
