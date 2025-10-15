@@ -495,11 +495,12 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(nameInput, 'Test Name');
     expect(saveBtn).not.toBeDisabled();
 
-    await userEvent.upload(
-      logoInput,
-      new File(['test content'], 'test.png', { type: 'image/png' }),
-    );
-    await wait(100);
+    const mockFile = new File(['test content'], 'test.png', {
+      type: 'image/png',
+    });
+    fireEvent.change(logoInput, {
+      target: { files: [mockFile] },
+    });
 
     expect(saveBtn).not.toBeDisabled();
   });
@@ -615,8 +616,9 @@ describe('Testing Community Profile Screen', () => {
       type: 'image/png',
     });
 
-    await userEvent.upload(logoInput, mockFile);
-    await wait();
+    fireEvent.change(logoInput, {
+      target: { files: [mockFile] },
+    });
 
     expect(logoInput.files).toHaveLength(1);
     expect(logoInput.files?.[0].name).toBe('test.png');
@@ -625,8 +627,9 @@ describe('Testing Community Profile Screen', () => {
     const mockFile2 = new File(['test content 2'], 'test2.png', {
       type: 'image/png',
     });
-    await userEvent.upload(logoInput, mockFile2);
-    await wait();
+    fireEvent.change(logoInput, {
+      target: { files: [mockFile2] },
+    });
 
     expect(logoInput.files).toHaveLength(1);
     expect(logoInput.files?.[0].name).toBe('test2.png');
