@@ -32,7 +32,7 @@ const membership2 = {
   event: {
     _id: 'eventId',
     name: 'Event 2',
-    startDate: '2044-11-31',
+    startDate: '2044-11-30',
     recurrenceRule: null,
   },
   volunteer: {
@@ -58,7 +58,7 @@ const membership3 = {
   event: {
     _id: 'eventId',
     name: 'Event 2',
-    startDate: '2044-11-31',
+    startDate: '2044-11-30',
     recurrenceRule: {
       id: 'recurrenceRuleId3',
     },
@@ -86,7 +86,7 @@ const membership4 = {
   event: {
     _id: 'eventId',
     name: 'Event 2',
-    startDate: '2044-11-31',
+    startDate: '2044-11-30',
     recurrenceRule: null,
   },
   volunteer: {
@@ -108,7 +108,7 @@ const membership5 = {
   event: {
     _id: 'eventId',
     name: 'Event 2',
-    startDate: '2044-11-31',
+    startDate: '2044-11-30',
     recurrenceRule: {
       id: 'recurrenceRuleId5',
     },
