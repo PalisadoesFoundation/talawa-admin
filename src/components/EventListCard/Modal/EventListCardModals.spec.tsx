@@ -1588,5 +1588,44 @@ describe('EventListCardModals', () => {
       // Should not show success toast since data is falsy
       expect(toast.success).not.toHaveBeenCalled();
     });
+
+    test('handles single radio button onChange handler', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields to make options available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // First click the "following" radio button to deselect single
+      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      await userEvent.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+
+      // Now click the single radio button to trigger its onChange handler (covers line 464)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+      expect(singleRadio).toBeChecked();
+    });
   });
 });
