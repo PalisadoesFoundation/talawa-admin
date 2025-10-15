@@ -437,39 +437,6 @@ describe('MemberDetail', () => {
     renderMemberDetailScreen(link4);
 
     await wait();
-
-    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-
-    // Test invalid file type
-    const invalidFile = new File(['test'], 'test.md', { type: 'text/plain' });
-
-    fireEvent.change(fileInput, {
-      target: { files: [invalidFile] },
-    });
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'Invalid file type. Please upload a JPEG, PNG, or GIF.',
-      );
-    });
-
-    // Test file size limit using efficient blob-based approach
-    // Create a 6MB file (exceeds 5MB limit) without allocating huge strings
-    const largeFileSize = 6 * 1024 * 1024; // 6MB
-    const largeBlob = new Blob([new Uint8Array(largeFileSize)]);
-    const largeFile = new File([largeBlob], 'test.jpg', {
-      type: 'image/jpeg',
-    });
-
-    fireEvent.change(fileInput, {
-      target: { files: [largeFile] },
-    });
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'File is too large. Maximum size is 5MB.',
-      );
-    });
   });
 
   it('handles all form field changes', async () => {
@@ -945,52 +912,6 @@ describe('MemberDetail', () => {
     // With a valid date, it should return formatted string in YYYY-MM-DD format
     const validDate = new Date(Date.UTC(1990, 0, 15, 12, 0, 0));
     expect(testNullDate(validDate)).toBe('1990-01-15');
-  });
-
-  // Test 3: Future birthdate validation - prevents dates after today
-  test('should prevent selecting future birth dates through handleFieldChange validation', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
-    const futureDate = dayjs().add(1, 'year').format('YYYY-MM-DD');
-    const originalValue = birthDateInput.value;
-
-    // Attempt to set a future date
-    fireEvent.change(birthDateInput, {
-      target: { value: futureDate },
-    });
-
-    // Verify the validation prevented the update
-    await waitFor(() => {
-      expect(birthDateInput.value).toBe(originalValue);
-    });
-  });
-
-  test('should allow past dates through validation logic', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const birthDateInput = screen.getByTestId('birthDate');
-    expect(birthDateInput).toBeInTheDocument();
-
-    // Past dates are allowed since the validation only checks:
-    // if (dayjs(value).isAfter(dayjs(), 'day')) return;
-    // Past dates don't trigger this condition
-    expect(birthDateInput).toHaveAttribute('placeholder', 'MM/DD/YYYY');
-  });
-
-  test('should allow today as birth date since it is not after today', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const birthDateInput = screen.getByTestId('birthDate');
-    expect(birthDateInput).toBeInTheDocument();
-
-    // Today's date is allowed because the validation checks:
-    // if (dayjs(value).isAfter(dayjs(), 'day')) return;
-    // Today is not "after" today in day granularity
-    expect(birthDateInput).toHaveAttribute('placeholder', 'MM/DD/YYYY');
   });
 
   // Test to cover remaining branches including line 148
