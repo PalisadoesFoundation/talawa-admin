@@ -1524,5 +1524,172 @@ describe('EventListCardModals', () => {
       await userEvent.click(singleRadio);
       expect(singleRadio).toBeChecked();
     });
+
+    test('covers hasRecurrenceChanged when only one recurrence exists (line 138)', async () => {
+      // Test case where originalRecurrence is null but recurrence exists
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: null, // No original recurrence
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set a recurrence rule (only recurrence exists, no originalRecurrence)
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          recurrence: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // This should trigger the branch where !originalRecurrence || !recurrence returns true
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+    });
+
+    test('covers delete handler when data is falsy (line 337)', async () => {
+      // Mock delete mutation to return falsy data
+      const mockDeleteEventWithFalsyData = vi.fn().mockResolvedValue({
+        data: null, // Falsy data
+      });
+
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        error: undefined,
+        data: undefined,
+        reset: vi.fn(),
+        refetch: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockDeleteEventWithFalsyData,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+        },
+      });
+
+      // Open delete modal and trigger delete
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.toggleDeleteModal();
+      });
+
+      // Get the delete modal props and trigger delete
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+
+      // Should not show success toast since data is falsy
+      expect(toast.success).not.toHaveBeenCalled();
+    });
+
+    test('covers delete handler when refetchEvents is not provided (line 341)', async () => {
+      // Test with component that doesn't have refetchEvents prop
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+        },
+        refetchEvents: undefined, // No refetchEvents provided
+      });
+
+      // Open delete modal and trigger delete
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.toggleDeleteModal();
+      });
+
+      // Get the delete modal props and trigger delete
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+
+      // Should still show success toast but not call refetchEvents
+      expect(toast.success).toHaveBeenCalled();
+    });
+
+    test('covers registerEventHandler when user is already registered (line 365)', async () => {
+      // Test with user already registered
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          attendees: [{ id: 'user1', firstName: 'John', lastName: 'Doe' }], // User is already registered
+        },
+        userId: 'user1',
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Try to register when already registered
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+
+      // Should not call the mutation since user is already registered
+      expect(mockRegisterEvent).not.toHaveBeenCalled();
+    });
+
+    test('covers registerEventHandler when data is falsy (line 373)', async () => {
+      // Mock register mutation to return falsy data
+      const mockRegisterEventWithFalsyData = vi.fn().mockResolvedValue({
+        data: null, // Falsy data
+      });
+
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        error: undefined,
+        data: undefined,
+        reset: vi.fn(),
+        refetch: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockRegisterEventWithFalsyData,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          attendees: [], // User is not registered
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Trigger registration
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+
+      // Should not show success toast since data is falsy
+      expect(toast.success).not.toHaveBeenCalled();
+    });
   });
 });
