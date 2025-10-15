@@ -619,12 +619,12 @@ describe('Testing VolunteerGroups Screen', () => {
       const assigneeNames = screen.getAllByTestId('assigneeName');
       expect(assigneeNames.length).toBeGreaterThan(0);
 
-      // Group 2 and Group 3 have leaders without images (null)
+      // Group 2 and Group 3 have leaders without images (avatarURL: null)
       // These should render Avatar component instead of img tag
-      // Verify the leader names are displayed (Teresa Bradley appears twice, Bruce once)
-      const teresaBradleyElements = screen.getAllByText(/Teresa Bradley/i);
-      expect(teresaBradleyElements.length).toBeGreaterThanOrEqual(2);
-      expect(screen.getByText(/Bruce Garza/i)).toBeInTheDocument();
+      // Verify the leader names are displayed (Bruce Garza appears twice as leader in groups 2 & 3)
+      const bruceGarzaElements = screen.getAllByText(/Bruce Garza/i);
+      expect(bruceGarzaElements.length).toBeGreaterThanOrEqual(2);
+      expect(screen.getByText(/Bruce Trainer/i)).toBeInTheDocument();
     });
 
     it('should display correct number of actions completed', async () => {
