@@ -175,6 +175,7 @@ const CommunityProfile = (): JSX.Element => {
    * Resets profile data to initial values and performs a reset operation.
    */
   const resetData = async (): Promise<void> => {
+    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
     try {
       setProfileVariable({
         name: '',
@@ -191,7 +192,9 @@ const CommunityProfile = (): JSX.Element => {
         slackURL: '',
       });
 
-      await resetPreLoginImagery();
+      await resetPreLoginImagery({
+        variables: { resetPreLoginImageryId: preLoginData?.id },
+      });
       toast.success(t(`resetData`) as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
@@ -216,7 +219,7 @@ const CommunityProfile = (): JSX.Element => {
   };
 
   if (loading) {
-    return <Loader />;
+    <Loader />;
   }
 
   return (
