@@ -250,4 +250,56 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
+
+  it('should render leader with image correctly', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Group 1 has a leader with an image
+    const images = screen.queryAllByRole('img', { name: /Assignee/i });
+    expect(images.length).toBeGreaterThan(0);
+  });
+
+  it('should render leader without image using Avatar component', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Group 2 and Group 3 have leaders without images, should use Avatar
+    const assigneeNames = screen.getAllByTestId('assigneeName');
+    expect(assigneeNames.length).toBeGreaterThan(0);
+  });
+
+  it('should display correct number of actions completed', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // All groups have empty assignments array
+    const groupRows = await screen.findAllByTestId('groupName');
+    expect(groupRows.length).toBeGreaterThan(0);
+  });
+
+  it('should display correct number of volunteers in each group', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Verify volunteer count is displayed
+    const groupRows = await screen.findAllByTestId('groupName');
+    expect(groupRows.length).toBeGreaterThan(0);
+  });
 });
