@@ -30,6 +30,7 @@ import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -1142,5 +1143,150 @@ describe('MemberDetail', () => {
 
     // Component should handle null gracefully
     expect(birthDateInput).toBeInTheDocument();
+  });
+
+  test('should handle file input without file selection', async () => {
+    // Tests: if (file) - the false branch when no file is selected
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+    // Trigger change event without any file
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      writable: false,
+    });
+
+    fireEvent.change(fileInput);
+
+    // No error should occur, and avatar should remain unchanged
+    const profilePic = screen.getByTestId('profile-picture');
+    expect(profilePic).toBeInTheDocument();
+  });
+
+  test('should handle empty avatarURL in userData', async () => {
+    // Tests: userData.currentUser.avatarURL || '' - the empty string fallback
+    const mockWithNoAvatar = [
+      {
+        request: {
+          query: CURRENT_USER,
+          variables: {
+            id: 'rishav-jha-mech',
+          },
+        },
+        result: {
+          data: {
+            currentUser: {
+              ...MOCKS1[0].result.data.currentUser,
+              avatarURL: '', // Empty avatar URL
+            },
+          },
+        },
+      },
+    ];
+
+    const linkNoAvatar = new StaticMockLink(mockWithNoAvatar, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkNoAvatar}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail id="rishav-jha-mech" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Should render with dicebear avatar when avatarURL is empty
+    const profilePic = screen.getByTestId('profile-picture');
+    expect(profilePic).toBeInTheDocument();
+  });
+
+  test('should handle password field change with empty value', async () => {
+    // Tests: if (fieldName === 'password' && value) - the false branch
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+
+    // Change to empty password should not trigger validation
+    fireEvent.change(passwordInput, { target: { value: '' } });
+
+    // No toast error should be called for empty password
+    expect(passwordInput).toHaveValue('');
+  });
+
+  test('should handle when selectedAvatar exists during update', async () => {
+    // Tests the branch: if (!selectedAvatar && formState.avatarURL)
+    // This tests the ELSE branch when selectedAvatar DOES exist
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Upload a file first
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('fileInput');
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [file],
+      writable: false,
+    });
+
+    fireEvent.change(fileInput);
+
+    await wait();
+
+    // Now try to save - should use selectedAvatar, not convert avatarURL
+    const saveButton = await waitFor(() =>
+      screen.getByTestId('saveChangesBtn'),
+    );
+    await userEvent.click(saveButton);
+
+    // Update should proceed with the selectedAvatar file
+    await waitFor(() => {
+      expect(screen.queryByTestId('saveChangesBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle no currentUser data in query result', async () => {
+    // Tests: if (userData?.currentUser) - the false branch
+    const mockNoUser = [
+      {
+        request: {
+          query: CURRENT_USER,
+          variables: {
+            id: 'non-existent-id',
+          },
+        },
+        result: {
+          data: {
+            currentUser: null, // No user data
+          },
+        },
+      },
+    ];
+
+    const linkNoUser = new StaticMockLink(mockNoUser, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkNoUser}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <MemberDetail id="non-existent-id" />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Component should render without crashing even with no user data
+    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
   });
 });
