@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L78)
 
-## Type declaration
+## Type Declaration
 
 ### error
 
