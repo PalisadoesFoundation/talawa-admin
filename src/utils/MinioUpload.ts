@@ -24,7 +24,6 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
   ): Promise<{ objectName: string; fileHash: string }> => {
     try {
       const fileHash = await calculateFileHash(file);
-      console.log('Computed file hash:', fileHash);
       const { data } = await generatePresignedUrl({
         variables: {
           input: {

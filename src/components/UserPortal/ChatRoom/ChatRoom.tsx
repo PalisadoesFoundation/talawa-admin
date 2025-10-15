@@ -567,7 +567,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           if (!prev) return prev;
           try {
             const newEdge = {
-              cursor: newMessage.id, // synthetic cursor; sufficient for rendering
+              cursor: newMessage.id,
               node: {
                 id: newMessage.id,
                 body: newMessage.body,
@@ -593,7 +593,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               },
             } as INewChat['messages']['edges'][0];
 
-            // Avoid duplicates
             const exists = prev.messages.edges.some(
               (e) => e.node.id === newEdge.node.id,
             );

@@ -158,9 +158,6 @@ export default function CreateGroupChat({
         },
       },
     });
-    console.log(chatResult, 'chatResult');
-    console.log(title, 'title');
-
     const chatId = (chatResult.data as { createChat: { id: string } })
       ?.createChat?.id;
 
