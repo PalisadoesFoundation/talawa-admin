@@ -1539,6 +1539,7 @@ describe('EventListCardModals', () => {
       const previewProps = MockPreviewModal.mock.calls[0][0];
 
       // Set a recurrence rule (only recurrence exists, no originalRecurrence)
+      // This will trigger hasRecurrenceChanged() which calls the line 138 condition
       act(() => {
         previewProps.setFormState({
           ...previewProps.formState,
@@ -1550,11 +1551,12 @@ describe('EventListCardModals', () => {
         });
       });
 
+      // Trigger the update to call hasRecurrenceChanged function
       await act(async () => {
         await previewProps.handleEventUpdate();
       });
 
-      // This should trigger the branch where !originalRecurrence || !recurrence returns true
+      // The hasRecurrenceChanged function should be called and the branch where !originalRecurrence || !recurrence returns true
       expect(
         screen.getByLabelText('updateThisAndFollowing'),
       ).toBeInTheDocument();
@@ -1610,8 +1612,8 @@ describe('EventListCardModals', () => {
         eventListCardProps: {
           ...mockEventListCardProps,
           isRecurringTemplate: false,
+          refetchEvents: undefined, // No refetchEvents provided in eventListCardProps
         },
-        refetchEvents: undefined, // No refetchEvents provided
       });
 
       // Open delete modal and trigger delete
@@ -1628,6 +1630,8 @@ describe('EventListCardModals', () => {
 
       // Should still show success toast but not call refetchEvents
       expect(toast.success).toHaveBeenCalled();
+      // Ensure refetchEvents was not called if not provided
+      expect(mockEventListCardProps.refetchEvents).not.toHaveBeenCalled();
     });
 
     test('covers registerEventHandler when user is already registered (line 365)', async () => {
