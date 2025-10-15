@@ -354,7 +354,7 @@ export const GROUP_RECURRING_MOCKS = [
     },
     result: {
       data: {
-        getVolunteerMembership: [membership3], // Group with recurrenceRule: true
+        getVolunteerMembership: [membership3], // Group with recurring event
       },
     },
   },
@@ -392,7 +392,7 @@ export const INDIVIDUAL_RECURRING_MOCKS = [
     },
     result: {
       data: {
-        getVolunteerMembership: [membership5], // Individual with recurrenceRule: true
+        getVolunteerMembership: [membership5], // Individual with recurring event
       },
     },
   },
@@ -411,7 +411,7 @@ export const INDIVIDUAL_NON_RECURRING_MOCKS = [
     },
     result: {
       data: {
-        getVolunteerMembership: [membership4], // Individual with recurrenceRule: false
+        getVolunteerMembership: [membership4], // Individual with recurrenceRule: null
       },
     },
   },
