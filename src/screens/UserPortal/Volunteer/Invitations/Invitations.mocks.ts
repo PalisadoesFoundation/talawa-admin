@@ -59,7 +59,9 @@ const membership3 = {
     _id: 'eventId',
     name: 'Event 2',
     startDate: '2044-11-31',
-    recurrenceRule: true,
+    recurrenceRule: {
+      id: 'recurrenceRuleId3',
+    },
   },
   volunteer: {
     _id: 'volunteerId1',
@@ -85,7 +87,7 @@ const membership4 = {
     _id: 'eventId',
     name: 'Event 2',
     startDate: '2044-11-31',
-    recurrenceRule: false,
+    recurrenceRule: null,
   },
   volunteer: {
     _id: 'volunteerId1',
@@ -96,6 +98,7 @@ const membership4 = {
       image: null,
     },
   },
+  group: null,
 };
 const membership5 = {
   _id: 'membershipId5',
@@ -106,7 +109,9 @@ const membership5 = {
     _id: 'eventId',
     name: 'Event 2',
     startDate: '2044-11-31',
-    recurrenceRule: true,
+    recurrenceRule: {
+      id: 'recurrenceRuleId5',
+    },
   },
   volunteer: {
     _id: 'volunteerId1',
@@ -117,6 +122,7 @@ const membership5 = {
       image: null,
     },
   },
+  group: null,
 };
 
 export const MOCKS = [
