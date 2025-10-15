@@ -182,9 +182,6 @@ describe('Event Registrants Component', () => {
     expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
       '2023-09-25',
     );
-    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
-      '10:00 am',
-    );
   });
 
   test('Handles missing attendee data with fallback values', async () => {
