@@ -154,7 +154,7 @@ const LOADING_MOCK = [
         community: null,
       },
     },
-    delay: 100, // Add delay to ensure loading state is rendered
+    delay: 100,
   },
 ];
 
@@ -363,7 +363,6 @@ describe('Testing Community Profile Screen', () => {
 
     expect(communityName).toHaveValue(profileVariables.name);
     expect(websiteLink).toHaveValue(profileVariables.websiteURL);
-    // expect(logo).toBeTruthy();
     expect(facebook).toHaveValue(profileVariables.socialURL);
     expect(instagram).toHaveValue(profileVariables.socialURL);
     expect(X).toHaveValue(profileVariables.socialURL);
@@ -466,7 +465,6 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    // Loader should be present during loading state
     expect(await screen.findByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
@@ -524,10 +522,7 @@ describe('Testing Community Profile Screen', () => {
     });
     await wait();
 
-    // Ensure state or UI behavior when base64 conversion fails
     expect(fileInput.value).toBe('');
-
-    // Ensure no success toast is shown for null conversion
     expect(toast.success).not.toHaveBeenCalled();
   });
 
@@ -542,7 +537,6 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial query to complete
     await wait();
 
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
@@ -554,7 +548,10 @@ describe('Testing Community Profile Screen', () => {
     const submitButton = screen.getByTestId('saveChangesBtn');
     expect(submitButton).not.toBeDisabled();
     await userEvent.click(submitButton);
+
     await wait();
+
+    expect(submitButton).toBeInTheDocument();
   });
 
   test('should handle error in resetData mutation', async () => {
