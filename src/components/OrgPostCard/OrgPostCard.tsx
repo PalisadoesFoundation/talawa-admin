@@ -43,7 +43,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef } from 'react';
-import { Form, Button, Card, Modal } from 'react-bootstrap';
+import { Form, Button, Card, Modal, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';
@@ -72,7 +72,7 @@ interface InterfacePostAttachment {
 
 interface InterfacePost {
   id: string;
-  caption: string;
+  caption?: string | null;
   createdAt: Date;
   updatedAt?: Date | null;
   pinnedAt?: Date | null;
@@ -93,14 +93,13 @@ export default function OrgPostCard({
   post,
 }: InterfaceOrgPostCardProps): JSX.Element {
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
-    caption: post.caption,
+    caption: post.caption ?? 'Untitled',
     attachments: [],
   });
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -134,7 +133,6 @@ export default function OrgPostCard({
 
       if (response.data?.updatePost) {
         setModalVisible(false);
-        setMenuVisible(false);
         toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
         setTimeout(() => {
           window.location.reload();
@@ -148,17 +146,12 @@ export default function OrgPostCard({
   };
 
   const handleCardClick = (): void => setModalVisible(true);
-  const handleMoreOptionsClick = (): void => setMenuVisible(true);
   const toggleShowEditModal = (): void => setShowEditModal((prev) => !prev);
   const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
 
   const handleVideoPlay = (): void => {
     setPlaying(true);
     videoRef.current?.play();
-  };
-  const handleCloseModal = (e: React.MouseEvent): void => {
-    e.stopPropagation();
-    setModalVisible(false);
   };
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
@@ -254,34 +247,6 @@ export default function OrgPostCard({
   }
 
   const getMimeTypeEnum = (url: string): string => {
-    // Check for base64 data URI
-    if (url.startsWith('data:')) {
-      const mimeMatch = url.match(/data:([^;]+)/);
-      if (!mimeMatch) {
-        return 'IMAGE_JPEG'; // fallback for malformed data URI
-      }
-
-      const mime = mimeMatch[1];
-
-      if (mime === 'image/jpeg') {
-        return 'IMAGE_JPEG';
-      } else if (mime === 'image/png') {
-        return 'IMAGE_PNG';
-      } else if (mime === 'image/webp') {
-        return 'IMAGE_WEBP';
-      } else if (mime === 'image/avif') {
-        return 'IMAGE_AVIF';
-      } else if (mime === 'video/mp4') {
-        return 'VIDEO_MP4';
-      } else if (mime === 'video/webm') {
-        return 'VIDEO_WEBM';
-      } else {
-        return 'IMAGE_JPEG'; // fallback for unknown mime types
-      }
-    }
-
-    // Fallback for file URLs (e.g., https://.../file.png)
-    // Remove query parameters and fragments before extracting extension
     const cleanUrl = url.split('?')[0].split('#')[0];
     const ext = cleanUrl.split('.').pop()?.toLowerCase();
 
@@ -352,7 +317,7 @@ export default function OrgPostCard({
         style={{
           width: '100%',
           maxWidth: '600px',
-          margin: '20px auto', // center horizontally + spacing between posts
+          margin: '20px auto',
         }}
         data-testid="post-item"
         onClick={handleCardClick}
@@ -427,12 +392,75 @@ export default function OrgPostCard({
           </Card>
         </div>
 
-        {modalVisible && (
-          <div className={styles.modalOrgPostCard} data-testid="post-modal">
-            <div className={styles.modalContentOrgPostCard}>
-              <div className={styles.modalImage}>
+        {/* Bootstrap Modal for Post Details */}
+        <Modal
+          show={modalVisible}
+          onHide={() => setModalVisible(false)}
+          size="lg"
+          centered
+          data-testid="post-modal"
+        >
+          <Modal.Header>
+            <Modal.Title>Post Details</Modal.Title>
+            <div className="d-flex align-items-center ms-auto">
+              <Dropdown className="me-2">
+                <Dropdown.Toggle
+                  variant="link"
+                  id="dropdown-more-options"
+                  className="p-0 border-0 text-dark"
+                  data-testid="more-options-button"
+                  aria-label="Post options menu"
+                  bsPrefix="btn"
+                  as="button"
+                  style={{ background: 'none', border: 'none' }}
+                >
+                  <MoreVert />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu align="end" data-testid="post-menu">
+                  <Dropdown.Item onClick={toggleShowEditModal}>
+                    {tCommon('edit')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={toggleShowDeleteModal}
+                    data-testid="delete-option"
+                  >
+                    {t('deletePost')}
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={togglePostPin}
+                    data-testid="pin-post-button"
+                  >
+                    {isPinned ? 'Unpin post' : 'Pin post'}
+                  </Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item data-testid="close-menu-option">
+                    {tCommon('close')}
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+              <Button
+                variant="link"
+                className="p-1 text-dark ms-2"
+                aria-label="Close"
+                data-testid="close-modal-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setModalVisible(false);
+                }}
+                style={{ lineHeight: '1' }}
+              >
+                <Close fontSize="small" />
+              </Button>
+            </div>
+          </Modal.Header>
+
+          <Modal.Body>
+            <div className="row">
+              <div className="col-md-6 mb-3 mb-md-0">
                 {videoAttachment ? (
-                  <video controls autoPlay loop muted>
+                  <video controls autoPlay loop muted className="w-100">
                     <source
                       src={videoAttachment.name}
                       type={videoAttachment.mimeType}
@@ -442,25 +470,25 @@ export default function OrgPostCard({
                   <img
                     src={imageAttachment?.name || AboutImg}
                     alt="Post content"
+                    className="w-100"
+                    style={{ borderRadius: '8px' }}
                   />
                 )}
               </div>
 
-              <div className={styles.modalInfo}>
+              <div className="col-md-6">
                 <div className={styles.infodiv}>
-                  <p>{post.caption}</p>
-                  <br />
-                  <p>
-                    Dated:{' '}
+                  <p className="mb-3">{post.caption}</p>
+                  <p className="mb-3">
+                    <strong>Dated:</strong>{' '}
                     {new Date(post.createdAt).toLocaleDateString(undefined, {
                       day: '2-digit',
                       month: 'long',
                       year: 'numeric',
                     })}
                   </p>
-                  <br />
                   <Card.Text className={styles.creatorInfo}>
-                    {'Author '}:{'  '}
+                    <strong>Author:</strong>{' '}
                     {post.creatorId ? (
                       userLoading ? (
                         <span className="text-muted">
@@ -474,59 +502,24 @@ export default function OrgPostCard({
                     )}
                   </Card.Text>
                   {post.updatedAt && (
-                    <p>
-                      Last updated: {new Date(post.updatedAt).toLocaleString()}
+                    <p className="mt-3">
+                      <strong>Last updated:</strong>{' '}
+                      {new Date(post.updatedAt).toLocaleString()}
                     </p>
                   )}
                 </div>
               </div>
-
-              <button
-                className={styles.moreOptionsButton}
-                onClick={handleMoreOptionsClick}
-                data-testid="more-options-button"
-                aria-label="Post options menu"
-              >
-                <MoreVert />
-              </button>
-              <button
-                className={styles.closeButtonOrgPostCard}
-                onClick={handleCloseModal}
-                data-testid="close-modal-button"
-              >
-                <Close />
-              </button>
             </div>
-          </div>
-        )}
+          </Modal.Body>
+        </Modal>
 
-        {menuVisible && (
-          <div className={styles.menuModal} data-testid="post-menu">
-            <div className={styles.menuContent}>
-              <ul className={styles.menuOptions}>
-                <li onClick={toggleShowEditModal}>{tCommon('edit')}</li>
-                <li onClick={toggleShowDeleteModal} data-testid="delete-option">
-                  {t('deletePost')}
-                </li>
-                <li onClick={togglePostPin} data-testid="pin-post-button">
-                  {isPinned ? 'Unpin post' : 'Pin post'}
-                </li>
-                <li
-                  onClick={(): void => setMenuVisible(false)}
-                  data-testid="close-menu-option"
-                >
-                  {tCommon('close')}
-                </li>
-              </ul>
-            </div>
-          </div>
-        )}
-
+        {/* Edit Post Modal */}
         <Modal
           show={showEditModal}
           onHide={toggleShowEditModal}
           backdrop="static"
           centered
+          backdropClassName="bg-dark"
         >
           <Modal.Header closeButton className={styles.modalHeader}>
             <Modal.Title>{t('editPost')}</Modal.Title>
@@ -624,6 +617,7 @@ export default function OrgPostCard({
           </Form>
         </Modal>
 
+        {/* Delete Post Modal */}
         <DeletePostModal
           show={showDeleteModal}
           onHide={toggleShowDeleteModal}

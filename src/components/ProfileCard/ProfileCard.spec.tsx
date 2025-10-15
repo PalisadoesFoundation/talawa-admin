@@ -108,6 +108,127 @@ describe('ProfileDropdown Component', () => {
     );
     expect(screen.getByText('Admin')).toBeInTheDocument();
   });
+
+  test('handles image load error', () => {
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const image = screen.getByAltText('profile picture');
+    act(() => {
+      image.dispatchEvent(new Event('error'));
+    });
+
+    // Verify the broken image is hidden from view
+    expect(image).not.toBeVisible();
+  });
+
+  test('renders Avatar when userImage is null string', () => {
+    setItem('UserImage', 'null');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+    expect(screen.queryByAltText('profile picture')).not.toBeInTheDocument();
+  });
+
+  test('truncates long names', () => {
+    setItem('name', 'This is a very long name that should be truncated');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toMatch(/\.\.\.$/);
+    // Verify the text is actually shorter than the input
+    expect(displayName.textContent?.length || 0).toBeLessThan(
+      'This is a very long name that should be truncated'.length,
+    );
+    // Optional: verify it starts with expected prefix (truncated at 17 chars + ...)
+    expect(displayName.textContent).toMatch(/^This is a very lo/);
+  });
+
+  test('handles null name', () => {
+    setItem('name', null);
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe(' ');
+    // Verify other component elements still render correctly
+    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(screen.getByText('User')).toBeInTheDocument();
+  });
+
+  test('handles empty string name', () => {
+    setItem('name', '');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe(' ');
+    // Verify other component elements still render correctly
+    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(screen.getByText('User')).toBeInTheDocument();
+  });
+
+  test('handles single name', () => {
+    setItem('name', 'John');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayName = screen.getByTestId('display-name');
+    expect(displayName.textContent).toBe('John ');
+    // Verify other component elements still render correctly
+    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(screen.getByText('User')).toBeInTheDocument();
+  });
 });
 
 describe('Member screen routing testing', () => {

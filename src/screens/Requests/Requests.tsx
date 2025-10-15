@@ -318,7 +318,7 @@ const Requests = (): JSX.Element => {
               >
                 <Table aria-label={t('membershipRequestsTable')} role="grid">
                   <TableHead>
-                    <TableRow role="row">
+                    <TableRow>
                       {headerTitles.map((title: string, index: number) => {
                         return (
                           <TableCell

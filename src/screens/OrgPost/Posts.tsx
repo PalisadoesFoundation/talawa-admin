@@ -17,13 +17,13 @@
  */
 import React, { useState } from 'react';
 import type { ApolloError } from '@apollo/client';
-import { Modal, Box, IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import PinnedPostsStory from './PinnedPostsStory';
+import { Close } from '@mui/icons-material';
 
 interface InterfaceOrganizationData {
   organization?: {
@@ -108,7 +108,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           key={post.id}
           post={{
             id: post.id,
-            caption: post.caption,
+            caption: post.caption || null,
             createdAt,
             pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
             creatorId: post.creator?.id || null,
@@ -166,13 +166,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
     return (
       <>
-        {/* Pinned Posts Stories */}
-        <PinnedPostsStory
-          pinnedPosts={pinnedPosts}
-          onStoryClick={handleStoryClick}
-          data-testid="story-pinned-post-1"
-        />
-
         <div
           data-testid="filtered-posts-container"
           style={{
@@ -187,54 +180,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           {/* Filtered Posts */}
           {filtered.map((edge: InterfacePostEdge) => renderPostCard(edge.node))}
         </div>
-
-        {/* Pinned Post Modal */}
-        {selectedPinnedPost && (
-          <Modal
-            open={showPinnedPostModal}
-            onClose={handleClosePinnedModal}
-            data-testid="pinned-post-modal"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backdropFilter: 'blur(3px)',
-            }}
-          >
-            <Box
-              sx={{
-                width: '100%',
-                maxWidth: 600,
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                outline: 'none',
-                position: 'relative',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                padding: '20px',
-              }}
-            >
-              <IconButton
-                onClick={handleClosePinnedModal}
-                data-testid="close-pinned-post-button"
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  backgroundColor: 'rgba(0,0,0,0.1)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.2)',
-                  },
-                }}
-              >
-                <Close />
-              </IconButton>
-
-              {/* Render the pinned post */}
-              {renderPostCard(selectedPinnedPost)}
-            </Box>
-          </Modal>
-        )}
       </>
     );
   }
@@ -246,64 +191,9 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
     return (
       <>
-        {/* Pinned Posts Stories */}
-        <PinnedPostsStory
-          pinnedPosts={pinnedPosts}
-          onStoryClick={handleStoryClick}
-          data-testid="story-pinned-post-1"
-        />
-
         <div data-testid="dropdown">
           {displayPosts.map((post) => renderPostCard(post))}
         </div>
-
-        {/* Pinned Post Modal */}
-        {selectedPinnedPost && (
-          <Modal
-            open={showPinnedPostModal}
-            onClose={handleClosePinnedModal}
-            data-testid="pinned-post-modal"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backdropFilter: 'blur(3px)',
-            }}
-          >
-            <Box
-              sx={{
-                width: '100%',
-                maxWidth: 600,
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                outline: 'none',
-                position: 'relative',
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                padding: '20px',
-              }}
-            >
-              <IconButton
-                onClick={handleClosePinnedModal}
-                data-testid="close-pinned-post-button"
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  backgroundColor: 'rgba(0,0,0,0.1)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.2)',
-                  },
-                }}
-              >
-                <Close />
-              </IconButton>
-
-              {/* Render the pinned post */}
-              {renderPostCard(selectedPinnedPost)}
-            </Box>
-          </Modal>
-        )}
       </>
     );
   }
@@ -331,48 +221,45 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
         <Modal
-          open={showPinnedPostModal}
+          show={showPinnedPostModal}
+          onHide={handleClosePinnedModal}
           data-testid="pinned-post-modal"
-          onClose={handleClosePinnedModal}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+          centered
+          size="lg"
+          backdrop="static"
+          style={{
             backdropFilter: 'blur(3px)',
           }}
         >
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: 800,
+          <Modal.Body
+            style={{
               maxHeight: '90vh',
               overflowY: 'auto',
-              outline: 'none',
-              position: 'relative',
-              backgroundColor: 'white',
-              borderRadius: '8px',
               padding: '20px',
+              position: 'relative',
             }}
           >
-            <IconButton
+            <Button
+              variant="light"
               onClick={handleClosePinnedModal}
               data-testid="close-pinned-post-button"
-              sx={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
+              className="position-absolute top-0 end-0 m-2 btn-close-custom"
+              style={{
                 backgroundColor: 'rgba(0,0,0,0.1)',
-                '&:hover': {
-                  backgroundColor: 'rgba(0,0,0,0.2)',
-                },
+                border: 'none',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Close />
-            </IconButton>
-
+              <Close sx={{ fontSize: 20 }} />
+            </Button>
             {/* Render the pinned post */}
             {renderPostCard(selectedPinnedPost)}
-          </Box>
+          </Modal.Body>
         </Modal>
       )}
     </>

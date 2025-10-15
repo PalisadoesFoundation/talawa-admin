@@ -11,7 +11,7 @@
  * @returns The rendered LeftDrawer component.
  */
 
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
@@ -41,13 +41,6 @@ const leftDrawer = ({
 
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') === 'true';
-
-  // Initialize drawer state only once
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, []); // Empty dependency array since we only want to run this once
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {

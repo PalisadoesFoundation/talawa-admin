@@ -36,28 +36,25 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
+  GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
 } from 'GraphQl/Queries/Queries';
-import AdminsIcon from 'assets/svgs/admin.svg?react';
-import BlockedUsersIcon from 'assets/svgs/blockedUser.svg?react';
-import EventsIcon from 'assets/svgs/events.svg?react';
-import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
-import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
 import { Navigate, useNavigate, useParams } from 'react-router';
 // import { Navigate, useNavigate, useParams } from 'react-router';
 // import gold from 'assets/images/gold.png';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
 import { toast } from 'react-toastify';
+import DashboardStats from './components/DashboardStats';
+import UpcomingEventsCard from './components/UpcomingEventsCard';
 import type {
   IEvent,
   InterfaceOrganizationMembersConnectionEdgePg,
   InterfaceOrganizationPg,
-  InterfaceOrganizationEventsConnectionEdgePg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
@@ -73,6 +70,7 @@ function OrganizationDashboard(): JSX.Element {
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
+  const [venueCount, setVenueCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
@@ -85,6 +83,7 @@ function OrganizationDashboard(): JSX.Element {
   // const peopleLink = `/orgpeople/${orgId}`;
   const postsLink = `/orgpost/${orgId}`;
   const eventsLink = `/orgevents/${orgId}`;
+  const venuesLink = `/orgvenues/${orgId}`;
   const blockUserLink = `/blockuser/${orgId}`;
   const requestLink = `/requests/${orgId}`;
 
@@ -107,6 +106,7 @@ function OrganizationDashboard(): JSX.Element {
   const hasFetchedAllMembers = useRef(false);
   const hasFetchedAllEvents = useRef(false);
   const hasFetchedAllBlockedUsers = useRef(false);
+  const hasFetchedAllVenues = useRef(false);
 
   const {
     data: orgMemberData,
@@ -173,22 +173,34 @@ function OrganizationDashboard(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  const {
+    data: orgVenuesData,
+    loading: orgVenuesLoading,
+    error: orgVenuesError,
+    fetchMore: fetchMoreVenues,
+  } = useQuery(GET_ORGANIZATION_VENUES_PG, {
+    variables: { id: orgId, first: 32, after: null },
+    notifyOnNetworkStatusChange: true,
+  });
+
   useEffect(() => {
     if (orgEventsData && !hasFetchedAllEvents.current) {
       const now = new Date();
 
       const allEvents = orgEventsData.organization.events.edges;
 
-      const newTotalEventCount = allEvents.length;
+      const currentTotalEventCount = allEvents.length;
 
       const upcomingEvents = allEvents.filter((event: IEvent) => {
         // Filter events that start after the current date
         return new Date(event?.node?.startAt) > now;
       });
 
-      setEventCount((prevCount) => prevCount + newTotalEventCount);
+      // Set to actual total count since fetchMore accumulates results
+      setEventCount(currentTotalEventCount);
 
-      setUpcomingEvents((prevEvents) => [...prevEvents, ...upcomingEvents]);
+      // For upcoming events, we need to replace with new filtered results
+      setUpcomingEvents(upcomingEvents);
 
       if (orgEventsData.organization.events.pageInfo.hasNextPage) {
         fetchMore({
@@ -206,10 +218,11 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
-      const newBlockedUserCount =
+      const currentBlockedUserCount =
         orgBlockedUsersData.organization.blockedUsers.edges.length;
 
-      setBlockedCount((prevCount) => prevCount + newBlockedUserCount);
+      // Set to actual total count since fetchMore accumulates results
+      setBlockedCount(currentBlockedUserCount);
 
       if (orgBlockedUsersData.organization.blockedUsers.pageInfo.hasNextPage) {
         fetchMoreBlockedUsers({
@@ -225,6 +238,27 @@ function OrganizationDashboard(): JSX.Element {
       }
     }
   }, [orgBlockedUsersData, fetchMoreBlockedUsers, orgId]);
+
+  useEffect(() => {
+    if (orgVenuesData && !hasFetchedAllVenues.current) {
+      const currentVenueCount = orgVenuesData.organization.venues.edges.length;
+
+      // Set to actual total count since fetchMore accumulates results
+      setVenueCount(currentVenueCount);
+
+      if (orgVenuesData.organization.venues.pageInfo.hasNextPage) {
+        fetchMoreVenues({
+          variables: {
+            id: orgId,
+            first: 32,
+            after: orgVenuesData.organization.venues.pageInfo.endCursor,
+          },
+        });
+      } else {
+        hasFetchedAllVenues.current = true;
+      }
+    }
+  }, [orgVenuesData, fetchMoreVenues, orgId]);
 
   /**
    * Query to fetch vvolunteer rankings.
@@ -275,7 +309,8 @@ function OrganizationDashboard(): JSX.Element {
       orgPostsError ||
       orgMemberError ||
       orgEventsError ||
-      orgBlockedUsersError
+      orgBlockedUsersError ||
+      orgVenuesError
     ) {
       toast.error(tErrors('errorLoading', { entity: '' }));
       navigate('/');
@@ -286,184 +321,83 @@ function OrganizationDashboard(): JSX.Element {
     orgMemberError,
     orgEventsError,
     orgBlockedUsersError,
+    orgVenuesError,
   ]);
 
   return (
     <>
       <Row className="mt-4">
         <Col xl={8}>
-          {orgMemberLoading ||
-          orgPostsLoading ||
-          orgEventsLoading ||
-          orgBlockedUsersLoading ? (
-            <Row style={{ display: 'flex' }}>
-              {[...Array(6)].map((_, index) => {
-                return (
-                  <Col
-                    xs={6}
-                    sm={4}
-                    className="mb-4"
-                    key={`orgLoading_${index}`}
-                    data-testid="fallback-ui"
-                  >
-                    <DashboardCardLoading />
-                  </Col>
-                );
-              })}
-            </Row>
-          ) : (
-            <Row style={{ display: 'flex' }}>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                data-testid="membersCount"
-                onClick={(): void => {
-                  // navigate(peopleLink);
-                }}
-              >
-                <DashBoardCard
-                  count={memberCount}
-                  title={tCommon('members')}
-                  icon={<UsersIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                data-testid="adminsCount"
-                onClick={(): void => {
-                  // navigate(peopleLink);
-                }}
-              >
-                <DashBoardCard
-                  count={adminCount}
-                  title={tCommon('admins')}
-                  icon={<AdminsIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                data-testid="postsCount"
-                onClick={async (): Promise<void> => {
-                  await navigate(postsLink);
-                }}
-              >
-                <DashBoardCard
-                  count={orgPostsData?.organization.postsCount}
-                  title={t('posts')}
-                  icon={<PostsIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                data-testid="eventsCount"
-                onClick={async (): Promise<void> => {
-                  await navigate(eventsLink);
-                }}
-              >
-                <DashBoardCard
-                  count={eventCount}
-                  title={t('events')}
-                  icon={<EventsIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                data-testid="blockedUsersCount"
-                onClick={async (): Promise<void> => {
-                  await navigate(blockUserLink);
-                }}
-              >
-                <DashBoardCard
-                  count={blockedCount}
-                  title={t('blockedUsers')}
-                  icon={<BlockedUsersIcon fill="#555555" />}
-                />
-              </Col>
-              <Col
-                xs={6}
-                sm={4}
-                role="button"
-                className="mb-4"
-                onClick={async (): Promise<void> => {
-                  await navigate(requestLink);
-                }}
-              >
-                <DashBoardCard
-                  count={
-                    membershipRequestData?.organization?.membershipRequests?.filter(
-                      (request: { status: string }) =>
-                        request.status === 'pending',
-                    )?.length
-                  }
-                  title={tCommon('requests')}
-                  icon={<UsersIcon fill="#555555" />}
-                />
-              </Col>
-            </Row>
-          )}
-          <Row>
-            <Col lg={6} className="mb-4 ">
-              <Card border="0" className="rounded-4 ">
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
-                  <Button
-                    size="sm"
-                    variant="light"
-                    data-testid="viewAllEvents"
-                    onClick={async (): Promise<void> => {
-                      await navigate(eventsLink);
+          <DashboardStats
+            memberCount={memberCount}
+            adminCount={adminCount}
+            eventCount={eventCount}
+            venueCount={venueCount}
+            blockedCount={blockedCount}
+            postsCount={orgPostsData?.organization.postsCount}
+            isLoading={
+              orgMemberLoading ||
+              orgPostsLoading ||
+              orgEventsLoading ||
+              orgBlockedUsersLoading ||
+              orgVenuesLoading
+            }
+            onMembersClick={async (): Promise<void> => {
+              // navigate(peopleLink);
+            }}
+            onAdminsClick={async (): Promise<void> => {
+              // navigate(adminLink);
+            }}
+            onPostsClick={async (): Promise<void> => {
+              await navigate(postsLink);
+            }}
+            onEventsClick={async (): Promise<void> => {
+              await navigate(eventsLink);
+            }}
+            onVenuesClick={async (): Promise<void> => {
+              await navigate(venuesLink);
+            }}
+            onBlockedUsersClick={async (): Promise<void> => {
+              await navigate(blockUserLink);
+            }}
+          />
+          {membershipRequestData?.organization &&
+            membershipRequestData?.organization?.membershipRequests.filter(
+              (request: { status: string }) => request.status === 'pending',
+            ).length > 0 && (
+              <Row>
+                <Col xs={6} sm={4} className="mb-4">
+                  <button
+                    type="button"
+                    className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+                    onClick={(): void => {
+                      navigate(requestLink);
                     }}
+                    aria-label={tCommon('requests')}
                   >
-                    {t('viewAll')}
-                  </Button>
-                </div>
-                <Card.Body className={styles.containerBody}>
-                  {orgEventsLoading ? (
-                    [...Array(4)].map((_, index) => (
-                      <CardItemLoading key={`eventLoading_${index}`} />
-                    ))
-                  ) : upcomingEvents?.length === 0 ? (
-                    <div className={styles.emptyContainer}>
-                      <h6>{t('noUpcomingEvents')}</h6>
-                    </div>
-                  ) : (
-                    [...upcomingEvents]
-                      .sort(
-                        (a, b) =>
-                          new Date(a.node.startAt).getTime() -
-                          new Date(b.node.startAt).getTime(),
-                      )
-                      .slice(0, 10)
-                      .map((event) => {
-                        return (
-                          <CardItem
-                            data-testid="cardItem"
-                            type="Event"
-                            key={event.node.id}
-                            startdate={event?.node.startAt}
-                            enddate={event?.node.endAt}
-                            title={event?.node.name}
-                          />
-                        );
-                      })
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
+                    <DashBoardCard
+                      count={
+                        membershipRequestData?.organization?.membershipRequests?.filter(
+                          (request: { status: string }) =>
+                            request.status === 'pending',
+                        )?.length
+                      }
+                      title={tCommon('requests')}
+                      icon={<UsersIcon fill="#555555" />}
+                    />
+                  </button>
+                </Col>
+              </Row>
+            )}
+
+          <Row>
+            <UpcomingEventsCard
+              upcomingEvents={upcomingEvents}
+              eventLoading={orgEventsLoading}
+              onViewAllEventsClick={async (): Promise<void> => {
+                await navigate(eventsLink);
+              }}
+            />
 
             <Col lg={6} className="mb-4 ">
               <Card className="rounded-4 border-2 border-gray-300">
