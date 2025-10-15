@@ -1563,25 +1563,10 @@ describe('EventListCardModals', () => {
     });
 
     test('covers delete handler when data is falsy (line 337)', async () => {
-      // Mock delete mutation to return falsy data
-      const mockDeleteEventWithFalsyData = vi.fn().mockResolvedValue({
-        data: null, // Falsy data
+      // Override the specific mock to return falsy data for this test only
+      mockDeleteStandaloneEvent.mockResolvedValueOnce({
+        data: null,
       });
-
-      const mockMutationResult = {
-        loading: false,
-        called: false,
-        client: {} as unknown,
-        error: undefined,
-        data: undefined,
-        reset: vi.fn(),
-        refetch: vi.fn(),
-      };
-
-      vi.mocked(useMutation).mockReturnValue([
-        mockDeleteEventWithFalsyData,
-        mockMutationResult,
-      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
@@ -1657,25 +1642,10 @@ describe('EventListCardModals', () => {
     });
 
     test('covers registerEventHandler when data is falsy (line 373)', async () => {
-      // Mock register mutation to return falsy data
-      const mockRegisterEventWithFalsyData = vi.fn().mockResolvedValue({
-        data: null, // Falsy data
+      // Override the specific mock to return falsy data for this test only
+      mockRegisterEvent.mockResolvedValueOnce({
+        data: null,
       });
-
-      const mockMutationResult = {
-        loading: false,
-        called: false,
-        client: {} as unknown,
-        error: undefined,
-        data: undefined,
-        reset: vi.fn(),
-        refetch: vi.fn(),
-      };
-
-      vi.mocked(useMutation).mockReturnValue([
-        mockRegisterEventWithFalsyData,
-        mockMutationResult,
-      ] as ReturnType<typeof useMutation>);
 
       renderComponent({
         eventListCardProps: {
