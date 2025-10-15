@@ -396,17 +396,25 @@ describe('GroupChatDetails', () => {
     );
     if (dropdownToggle) await act(async () => fireEvent.click(dropdownToggle));
 
-    const promoteText = await screen.findByText(/Promote to Admin|Demote to Regular/);
+    const promoteText = await screen.findByText(
+      /Promote to Admin|Demote to Regular/,
+    );
     await act(async () => fireEvent.click(promoteText));
 
     // wait for role change toast
-    await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'));
+    await waitFor(() =>
+      expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'),
+    );
 
     const removeBtn = screen.queryByText(/Remove/);
     if (removeBtn) {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
       await act(async () => fireEvent.click(removeBtn));
-      await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Member removed successfully'));
+      await waitFor(() =>
+        expect(toastSuccess).toHaveBeenCalledWith(
+          'Member removed successfully',
+        ),
+      );
     }
   });
 
@@ -496,6 +504,8 @@ describe('GroupChatDetails', () => {
     const trashButton = buttons.find((b) => b.querySelector('svg'));
     if (trashButton) await act(async () => fireEvent.click(trashButton));
 
-    await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'));
+    await waitFor(() =>
+      expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'),
+    );
   });
 });
