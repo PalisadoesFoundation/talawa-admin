@@ -598,13 +598,12 @@ describe('Testing VolunteerGroups Screen', () => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
       });
 
-      // Group 1 has a leader with an image (Teresa Bradley with 'img-url')
-      // Verify that an img element with the correct src exists
-      const leaderImages = screen.getAllByRole('img');
-      const hasImageSource = leaderImages.some(
-        (img) => img.getAttribute('src') === 'img-url',
-      );
-      expect(hasImageSource).toBe(true);
+      // Group 1 has Bruce Trainer as leader with avatarURL: 'img-url'
+      // Verify the leader image is rendered with correct src in the leader column
+      const leaderImage = screen.getByTestId('imageuserId1');
+      expect(leaderImage).toBeInTheDocument();
+      expect(leaderImage).toHaveAttribute('src', 'img-url');
+      expect(leaderImage).toHaveAttribute('alt', 'Assignee');
     });
 
     it('should render leader without image using Avatar component', async () => {
@@ -615,16 +614,24 @@ describe('Testing VolunteerGroups Screen', () => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
       });
 
-      // Verify assigneeName elements exist for all groups
+      // Group 2 and Group 3 have leaders without images (Bruce Garza with avatarURL: null)
+      // These should render Avatar component which generates an img with Data URI
       const assigneeNames = screen.getAllByTestId('assigneeName');
-      expect(assigneeNames.length).toBeGreaterThan(0);
+      expect(assigneeNames.length).toBe(3);
 
-      // Group 2 and Group 3 have leaders without images (avatarURL: null)
-      // These should render Avatar component instead of img tag
-      // Verify the leader names are displayed (Bruce Garza appears twice as leader in groups 2 & 3)
+      // Verify Bruce Garza appears as leader in groups 2 and 3
       const bruceGarzaElements = screen.getAllByText(/Bruce Garza/i);
       expect(bruceGarzaElements.length).toBeGreaterThanOrEqual(2);
-      expect(screen.getByText(/Bruce Trainer/i)).toBeInTheDocument();
+
+      // Verify Avatar-generated images (Data URI) exist for leaders without avatarURL
+      // Avatar component creates images with alt text matching the leader name
+      const allImages = screen.getAllByRole('img');
+      const avatarImages = allImages.filter(
+        (img) =>
+          img.getAttribute('alt') === 'Bruce Garza' &&
+          img.getAttribute('src')?.startsWith('data:'),
+      );
+      expect(avatarImages.length).toBeGreaterThanOrEqual(2);
     });
 
     it('should render the correct number of group rows', async () => {
@@ -663,11 +670,11 @@ describe('Testing VolunteerGroups Screen', () => {
       // Verify the DataGrid is rendered with volunteer groups
       const dataGrid = screen.getByRole('grid');
       expect(dataGrid).toBeInTheDocument();
-      
+
       // Verify that all 3 groups are rendered (from mock data)
       const groupRows = await screen.findAllByTestId('groupName');
       expect(groupRows.length).toBe(3);
-      
+
       // Group 1 has 1 volunteer, Group 2 has 0 volunteers, Group 3 has 1 volunteer
       // Verify the volunteer count column is rendering data (numbers should be visible)
       const allCells = screen.getAllByRole('gridcell');

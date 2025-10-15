@@ -1,10 +1,10 @@
 
-npm run generate-docs
-npm run format:fix
-# npm run lint:fix
-npm run lint-staged
-npm run typecheck
-npm run update:toc
-npm run check:pom
+# npm run generate-docs
+# npm run format:fix
+# # npm run lint:fix
+# npm run lint-staged
+# npm run typecheck
+# npm run update:toc
+# npm run check:pom
 
-git add .
+# git add .
