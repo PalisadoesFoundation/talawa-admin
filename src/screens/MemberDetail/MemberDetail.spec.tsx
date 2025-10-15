@@ -116,20 +116,6 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
  * - Branches: 84.5%
  * - Functions: 100%
  * - Lines: 99.06%
- *
- * Note on Line 148 (uncovered):
- * Line 148 contains a defensive check: `if (dayjs(value).isAfter(dayjs(), 'day')) return;`
- * This prevents future birthdates from being set programmatically. While the DatePicker
- * component has `disableFuture` prop that prevents calendar UI selection of future dates,
- * line 148 adds an additional defensive layer for edge cases like:
- * - Direct DOM manipulation
- * - Browser extensions modifying inputs
- * - Future DatePicker API changes
- * - Race conditions in date parsing
- *
- * This is a best practice defensive programming pattern. The line is difficult to cover
- * through normal testing because the DatePicker's `disableFuture` prevents the `onChange`
- * callback from being invoked with future dates in typical user interactions.
  */
 describe('MemberDetail', () => {
   global.alert = vi.fn();
