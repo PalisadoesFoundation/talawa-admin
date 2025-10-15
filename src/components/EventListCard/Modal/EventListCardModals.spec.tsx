@@ -1116,7 +1116,7 @@ describe('EventListCardModals', () => {
       expect(singleRadio).toBeChecked();
     });
 
-    test('covers deleteEventHandler for standalone events (line 290)', async () => {
+    test('handles deletion of standalone events', async () => {
       const mockDeleteStandaloneEvent = vi.fn().mockResolvedValue({
         data: { deleteEvent: { success: true } },
       });
@@ -1152,7 +1152,7 @@ describe('EventListCardModals', () => {
       );
     });
 
-    test('covers deleteEventHandler for recurring instances - single option (line 299)', async () => {
+    test('handles deletion of recurring event single instance', async () => {
       const mockDeleteSingleInstance = vi.fn().mockResolvedValue({
         data: { deleteRecurringEventInstance: { success: true } },
       });
@@ -1186,7 +1186,7 @@ describe('EventListCardModals', () => {
       expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
     });
 
-    test('covers deleteEventHandler for recurring instances - following option (line 328)', async () => {
+    test('handles deletion of recurring event this and following instances', async () => {
       const mockDeleteFollowingInstances = vi.fn().mockResolvedValue({
         data: { deleteRecurringEventInstances: { success: true } },
       });
@@ -1220,7 +1220,7 @@ describe('EventListCardModals', () => {
       expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
     });
 
-    test('covers deleteEventHandler for recurring instances - entire series option (line 332)', async () => {
+    test('handles deletion of recurring event entire series', async () => {
       const mockDeleteAllInstances = vi.fn().mockResolvedValue({
         data: { deleteRecurringEvent: { success: true } },
       });
@@ -1254,7 +1254,7 @@ describe('EventListCardModals', () => {
       expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
     });
 
-    test('covers toggleDeleteModal function (line 352)', () => {
+    test('toggles delete modal visibility', () => {
       renderComponent();
 
       // The toggle function should be available in the preview modal props
@@ -1269,7 +1269,7 @@ describe('EventListCardModals', () => {
       expect(MockDeleteModal).toHaveBeenCalled();
     });
 
-    test('covers toggleUpdateModal function (line 358)', () => {
+    test('toggles update modal visibility', () => {
       renderComponent();
 
       // The toggleUpdateModal function is defined in the component but not passed to preview modal
@@ -1411,121 +1411,7 @@ describe('EventListCardModals', () => {
       expect(singleRadio).toBeChecked();
     });
 
-    test('covers onChange handler for single update option (line 464)', async () => {
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-          recurrenceRule: {
-            frequency: Frequency.WEEKLY,
-            interval: 1,
-            byDay: ['MO'],
-          },
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-
-      // Change fields that make single option available
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Name',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // Find the single radio button and click it to test onChange handler (covers line 464)
-      const singleRadio = screen.getByLabelText('updateThisInstance');
-      await userEvent.click(singleRadio);
-
-      expect(singleRadio).toBeChecked();
-    });
-
-    test('covers radio button onChange handlers to increase coverage', async () => {
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-          recurrenceRule: {
-            frequency: Frequency.WEEKLY,
-            interval: 1,
-            byDay: ['MO'],
-          },
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-
-      // Change fields to make options available
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Name',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // Test clicking different radio buttons to cover onChange handlers
-      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
-      await userEvent.click(followingRadio);
-      expect(followingRadio).toBeChecked();
-
-      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
-      if (entireSeriesRadio) {
-        await userEvent.click(entireSeriesRadio);
-        expect(entireSeriesRadio).toBeChecked();
-      }
-    });
-
-    test('covers single radio button onChange handler (line 464)', async () => {
-      renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          isRecurringTemplate: false,
-          baseEventId: 'baseEvent1',
-          recurrenceRule: {
-            frequency: Frequency.WEEKLY,
-            interval: 1,
-            byDay: ['MO'],
-          },
-        },
-      });
-
-      const previewProps = MockPreviewModal.mock.calls[0][0];
-
-      // Change fields to make single option available
-      act(() => {
-        previewProps.setFormState({
-          ...previewProps.formState,
-          name: 'Updated Name',
-        });
-      });
-
-      await act(async () => {
-        await previewProps.handleEventUpdate();
-      });
-
-      // First click another option to deselect single
-      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
-      await userEvent.click(followingRadio);
-      expect(followingRadio).toBeChecked();
-
-      // Now click the single radio button to trigger its onChange handler (covers line 464)
-      const singleRadio = screen.getByLabelText('updateThisInstance');
-      await userEvent.click(singleRadio);
-      expect(singleRadio).toBeChecked();
-    });
-
-    test('covers hasRecurrenceChanged when only one recurrence exists (line 138)', async () => {
+    test('detects recurrence change when original recurrence is null but new recurrence exists', async () => {
       // Test case where originalRecurrence is null but recurrence exists
       renderComponent({
         eventListCardProps: {
@@ -1562,7 +1448,7 @@ describe('EventListCardModals', () => {
       ).toBeInTheDocument();
     });
 
-    test('covers hasRecurrenceChanged when originalRecurrence exists but recurrence is null (line 138)', async () => {
+    test('detects recurrence change when original recurrence exists but new recurrence is null', async () => {
       // Test case where originalRecurrence exists but recurrence is null
       renderComponent({
         eventListCardProps: {
@@ -1599,7 +1485,7 @@ describe('EventListCardModals', () => {
       ).toBeInTheDocument();
     });
 
-    test('covers delete handler when data is falsy (line 337)', async () => {
+    test('handles delete failure when mutation returns falsy data', async () => {
       // Override the specific mock to return falsy data for this test only
       mockDeleteStandaloneEvent.mockResolvedValueOnce({
         data: null,
@@ -1628,7 +1514,7 @@ describe('EventListCardModals', () => {
       expect(toast.success).not.toHaveBeenCalled();
     });
 
-    test('covers delete handler when refetchEvents is not provided (line 341)', async () => {
+    test('handles delete success when refetchEvents is not provided', async () => {
       // Test with component that doesn't have refetchEvents prop
       renderComponent({
         eventListCardProps: {
@@ -1656,7 +1542,7 @@ describe('EventListCardModals', () => {
       expect(mockEventListCardProps.refetchEvents).not.toHaveBeenCalled();
     });
 
-    test('covers registerEventHandler when user is already registered (line 365)', async () => {
+    test('handles registration when user is already registered', async () => {
       // Test with user already registered
       renderComponent({
         eventListCardProps: {
@@ -1678,7 +1564,7 @@ describe('EventListCardModals', () => {
       expect(mockRegisterEvent).not.toHaveBeenCalled();
     });
 
-    test('covers registerEventHandler when data is falsy (line 373)', async () => {
+    test('handles registration failure when mutation returns falsy data', async () => {
       // Override the specific mock to return falsy data for this test only
       mockRegisterEvent.mockResolvedValueOnce({
         data: null,
