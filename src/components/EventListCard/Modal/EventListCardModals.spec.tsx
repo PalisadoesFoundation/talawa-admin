@@ -1562,6 +1562,43 @@ describe('EventListCardModals', () => {
       ).toBeInTheDocument();
     });
 
+    test('covers hasRecurrenceChanged when originalRecurrence exists but recurrence is null (line 138)', async () => {
+      // Test case where originalRecurrence exists but recurrence is null
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          }, // Has original recurrence
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set recurrence to null (only originalRecurrence exists, no recurrence)
+      // This will trigger hasRecurrenceChanged() which calls the line 138 condition
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          recurrence: null, // No recurrence in form state
+        });
+      });
+
+      // Trigger the update to call hasRecurrenceChanged function
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The hasRecurrenceChanged function should be called and the branch where !originalRecurrence || !recurrence returns true
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+    });
+
     test('covers delete handler when data is falsy (line 337)', async () => {
       // Override the specific mock to return falsy data for this test only
       mockDeleteStandaloneEvent.mockResolvedValueOnce({
