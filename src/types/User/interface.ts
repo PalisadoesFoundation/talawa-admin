@@ -24,5 +24,6 @@ export interface InterfaceUserAttendee {
     emailAddress: string;
   };
   isRegistered: boolean;
+  createdAt: string;
   time: string;
 }

@@ -39,7 +39,6 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import styles from '../../../style/app-fixed.module.css';
 import { TableRow } from './Row/TableRow';
 import type {
   InterfaceAttendeeCheckIn,
@@ -54,6 +53,7 @@ export const CheckInModal = ({
   show,
   eventId,
   handleClose,
+  onCheckInUpdate,
 }: InterfaceModalProp): JSX.Element => {
   // State to hold the data for the table
   const [tableData, setTableData] = useState<InterfaceTableData[]>([]);
@@ -105,7 +105,10 @@ export const CheckInModal = ({
               id: checkIn.id,
               name: checkIn.user.name || 'Unknown User',
               userId: checkIn.user.id,
-              checkIn: checkIn.checkIn,
+              checkInTime: checkIn.checkInTime,
+              checkOutTime: checkIn.checkOutTime,
+              isCheckedIn: checkIn.isCheckedIn,
+              isCheckedOut: checkIn.isCheckedOut,
               eventId,
               isRecurring: isRecurring,
             },
@@ -124,19 +127,15 @@ export const CheckInModal = ({
       width: 400,
       renderCell: (props) => (
         // Render a custom row component for check-in status
-        <TableRow data={props.value} refetch={checkInRefetch} />
+        <TableRow
+          data={props.value}
+          refetch={checkInRefetch}
+          onCheckInUpdate={onCheckInUpdate}
+          // isRecurring={isRecurring}
+        />
       ),
     },
   ];
-
-  // Show a loading indicator while data is loading
-  if (checkInLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
 
   return (
     <>

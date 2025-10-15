@@ -6,7 +6,7 @@
 
 > `const` **REGISTER\_FOR\_EVENT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L90)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L97)
 
 GraphQL mutation to register current user for an event.
 

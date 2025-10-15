@@ -13,7 +13,10 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
           name: 'John Doe',
           emailAddress: 'john@example.com',
         },
-        checkIn: null,
+        checkInTime: null,
+        checkOutTime: null,
+        isCheckedIn: false,
+        isCheckedOut: false,
       },
       {
         id: 'eventAttendee2',
@@ -22,11 +25,10 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
           name: 'John2 Doe2',
           emailAddress: 'john2@example.com',
         },
-        checkIn: {
-          id: 'checkin1',
-          time: '08:00:00',
-          feedbackSubmitted: false,
-        },
+        checkInTime: '2023-01-01T08:00:00Z',
+        checkOutTime: null,
+        isCheckedIn: true,
+        isCheckedOut: false,
       },
     ],
   },
@@ -70,7 +72,15 @@ export const checkInMutationSuccess = [
     result: {
       data: {
         checkIn: {
-          _id: '123',
+          id: '123',
+          user: {
+            id: 'user123',
+          },
+          checkinTime: '2023-01-01T08:00:00Z',
+          checkoutTime: null,
+          isCheckedIn: true,
+          isCheckedOut: false,
+          feedbackSubmitted: false,
         },
       },
     },

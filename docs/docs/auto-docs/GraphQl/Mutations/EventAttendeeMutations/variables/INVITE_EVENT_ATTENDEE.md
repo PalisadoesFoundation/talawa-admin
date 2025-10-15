@@ -6,7 +6,7 @@
 
 > `const` **INVITE\_EVENT\_ATTENDEE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L146)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L153)
 
 GraphQL mutation to invite a user to an event.
 

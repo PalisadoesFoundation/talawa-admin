@@ -450,7 +450,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -462,8 +462,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'base123',
+        isRecurringEventTemplate: false,
+        baseEvent: { id: 'base123' },
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -475,8 +475,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: null,
+        isRecurringEventTemplate: false,
+        baseEvent: null,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -488,7 +488,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: null,
@@ -501,7 +501,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -524,7 +524,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       setRecurrence: mockSetRecurrence,
@@ -544,7 +544,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
@@ -565,7 +565,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: null,
@@ -594,7 +594,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: existingRecurrence,
@@ -734,7 +734,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
       },
       recurrence: mockRecurrence,
     });
@@ -896,7 +896,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
         },
         recurrence,
       });
@@ -912,7 +912,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
         },
         recurrence,
       });
@@ -923,7 +923,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: 'Custom Rule',
         },
         recurrence: null,
@@ -935,7 +935,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: undefined,
         },
         recurrence: null,
@@ -947,7 +947,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: 'My Custom Rule',
         },
         recurrence: null,
@@ -968,7 +968,7 @@ describe('EventListCardPreviewModal', () => {
         },
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           userRole: UserRole.ADMINISTRATOR,
         },
       });

@@ -47,14 +47,7 @@ import {
   MEMBERS_LIST,
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import {
-  ADD_EVENT_ATTENDEE,
-  REMOVE_EVENT_ATTENDEE,
-} from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
-import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
+import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
@@ -76,7 +69,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
-  const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // Translation hooks
   const { t } = useTranslation('translation', {
@@ -98,13 +90,11 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   }, [eventData]);
 
   // Query hooks to fetch event attendees and organization members
-  const {
-    data: attendeesData,
-    loading: attendeesLoading,
-    refetch: attendeesRefetch,
-  } = useQuery(EVENT_ATTENDEES, { variables: { eventId: eventId } });
+  const { refetch: attendeesRefetch } = useQuery(EVENT_ATTENDEES, {
+    variables: { eventId: eventId },
+  });
 
-  const { data: memberData, loading: memberLoading } = useQuery(MEMBERS_LIST, {
+  const { data: memberData } = useQuery(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 
@@ -134,35 +124,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       });
   };
 
-  // Function to remove a registrant from the event
-  const deleteRegistrant = (userId: string): void => {
-    toast.warn('Removing the attendee...');
-    const removeVariables = isRecurring
-      ? { userId, recurringEventInstanceId: eventId }
-      : { userId, eventId: eventId };
-
-    removeRegistrantMutation({ variables: removeVariables })
-      .then(() => {
-        toast.success(
-          tCommon('removedSuccessfully', { item: 'Attendee' }) as string,
-        );
-        attendeesRefetch(); // Refresh the list of attendees
-      })
-      .catch((err) => {
-        toast.error(t('errorRemovingAttendee') as string);
-        toast.error(err.message);
-      });
-  };
-
-  // Show a loading screen if data is still being fetched
-  if (attendeesLoading || memberLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
-
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
@@ -180,34 +141,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <Modal.Title>Event Registrants</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5 className="mb-2"> Registered Registrants </h5>
-          {!attendeesData?.event?.attendees ||
-          attendeesData.event.attendees.length === 0
-            ? `There are no registered attendees for this event.`
-            : null}
-          <Stack direction="row" className="flex-wrap gap-2">
-            {attendeesData?.event?.attendees?.map((attendee: InterfaceUser) => (
-              <Chip
-                avatar={
-                  <Avatar>{attendee.name?.[0]?.toUpperCase() || 'U'}</Avatar>
-                }
-                label={attendee.name || 'Unknown User'}
-                variant="outlined"
-                key={
-                  (attendee as InterfaceUser & { _id?: string })._id ||
-                  attendee.id
-                }
-                onDelete={(): void =>
-                  deleteRegistrant(
-                    (attendee as InterfaceUser & { _id?: string })._id ||
-                      attendee.id,
-                  )
-                }
-              />
-            )) || []}
-          </Stack>
-          <br />
-
           <Autocomplete
             id="addRegistrant"
             onChange={(_, newMember): void => {

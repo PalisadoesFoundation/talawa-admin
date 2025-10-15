@@ -19,7 +19,7 @@
  * @state
  * - `events`: List of events fetched from the server.
  * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
- * - `startDate`, `endDate`: Start and end dates for the event.
+ * - `startAt`, `endAt`: Start and end dates for the event.
  * - `startTime`, `endTime`: Start and end times for the event.
  * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
  * - `viewType`: Current calendar view type (e.g., month, week).
@@ -116,8 +116,8 @@ export default function events(): JSX.Element {
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
   const [eventLocation, setEventLocation] = React.useState('');
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [startAt, setStartAt] = React.useState<Date | null>(new Date());
+  const [endAt, setEndAt] = React.useState<Date | null>(new Date());
   const [isPublic, setIsPublic] = React.useState(true);
   const [isRegisterable, setIsRegisterable] = React.useState(true);
   const [isRecurring, setIsRecurring] = React.useState(false);
@@ -147,10 +147,10 @@ export default function events(): JSX.Element {
       id: organizationId,
       first: 150,
       after: null,
-      startDate: dayjs(new Date(currentYear, currentMonth, 1))
+      startAt: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endDate: dayjs(new Date(currentYear, currentMonth, 1))
+      endAt: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
@@ -192,15 +192,15 @@ export default function events(): JSX.Element {
         name: eventTitle,
         description: eventDescription,
         startAt: isAllDay
-          ? dayjs(startDate).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-          : dayjs(startDate)
+          ? dayjs(startAt).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+          : dayjs(startAt)
               .hour(parseInt(startTimeParts[0]))
               .minute(parseInt(startTimeParts[1]))
               .second(parseInt(startTimeParts[2]))
               .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
         endAt: isAllDay
-          ? dayjs(endDate).endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-          : dayjs(endDate)
+          ? dayjs(endAt).endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+          : dayjs(endAt)
               .hour(parseInt(endTimeParts[0]))
               .minute(parseInt(endTimeParts[1]))
               .second(parseInt(endTimeParts[2]))
@@ -222,8 +222,8 @@ export default function events(): JSX.Element {
         setEventTitle('');
         setEventDescription('');
         setEventLocation('');
-        setStartDate(new Date());
-        setEndDate(new Date());
+        setStartAt(new Date());
+        setEndAt(new Date());
         setStartTime('08:00:00');
         setEndTime('10:00:00');
       }
@@ -281,11 +281,12 @@ export default function events(): JSX.Element {
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
     (edge: IEventEdge) => ({
-      _id: edge.node.id,
-      name: edge.node.name,
+      id: edge.node.id || '',
+
+      name: edge.node.name || '',
       description: edge.node.description || '',
-      startDate: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-      endDate: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
       startTime: edge.node.allDay
         ? null
         : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
@@ -297,23 +298,21 @@ export default function events(): JSX.Element {
       isPublic: edge.node.isPublic,
       isRegisterable: edge.node.isRegisterable,
       // Add recurring event information
-      isRecurringTemplate: edge.node.isRecurringEventTemplate,
-      baseEventId: edge.node.baseEvent?.id || null,
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
       sequenceNumber: edge.node.sequenceNumber,
       totalCount: edge.node.totalCount,
       hasExceptions: edge.node.hasExceptions,
       progressLabel: edge.node.progressLabel,
       recurrenceDescription: edge.node.recurrenceDescription,
       recurrenceRule: edge.node.recurrenceRule,
-      creator: {
-        _id: '',
+      creator: edge.node.creator || {
+        id: '',
         name: '',
       },
       attendees: [], // Adjust if attendees are added to schema
     }),
-  );
-
-  // Handle errors gracefully
+  ); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
       // Handle rate limiting errors more gracefully - check multiple variations
@@ -434,30 +433,30 @@ export default function events(): JSX.Element {
             <div className={styles.datedivEvents}>
               <div>
                 <DatePicker
-                  label={tCommon('startDate')}
+                  label={tCommon('startAt')}
                   className={styles.dateboxEvents}
-                  value={dayjs(startDate)}
+                  value={dayjs(startAt)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setStartDate(date?.toDate());
-                      setEndDate(date?.toDate());
+                      setStartAt(date?.toDate());
+                      setEndAt(date?.toDate());
                     }
                   }}
-                  data-testid="eventStartDate"
+                  data-testid="eventStartAt"
                 />
               </div>
               <div>
                 <DatePicker
-                  label={tCommon('endDate')}
+                  label={tCommon('endAt')}
                   className={styles.dateboxEvents}
-                  value={dayjs(endDate)}
+                  value={dayjs(endAt)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setEndDate(date?.toDate());
+                      setEndAt(date?.toDate());
                     }
                   }}
-                  minDate={dayjs(startDate)}
-                  data-testid="eventEndDate"
+                  minDate={dayjs(startAt)}
+                  data-testid="eventEndAt"
                 />
               </div>
             </div>

@@ -381,6 +381,7 @@ export const EVENT_REGISTRANTS = gql`
       }
       isRegistered
       isInvited
+      createdAt
     }
   }
 `;
@@ -396,11 +397,10 @@ export const EVENT_CHECKINS = gql`
           name
           emailAddress
         }
-        checkIn {
-          id
-          time
-          feedbackSubmitted
-        }
+        checkInTime
+        checkOutTime
+        isCheckedIn
+        isCheckedOut
       }
     }
   }

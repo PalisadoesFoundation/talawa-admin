@@ -73,7 +73,7 @@ export const mocks = [
 export const errorMocks = [
   {
     request: {
-      query: EVENT_DETAILS,
+      query: EVENT_DETAILS_BASIC,
       variables: { eventId: 'event123' },
     },
     error: new Error('An error occurred'),

@@ -40,8 +40,8 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
+    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
     expect(link).toHaveAttribute('href', '/event/org123/event123');
@@ -66,7 +66,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: { eventId: 'event999' },
         },
         error: new Error('An error occurred'),
       },
@@ -97,6 +97,17 @@ describe('CustomTableCell', () => {
         request: {
           query: EVENT_DETAILS,
           variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: null,
+          },
+        },
+      },
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event999' },
         },
         result: {
           data: {

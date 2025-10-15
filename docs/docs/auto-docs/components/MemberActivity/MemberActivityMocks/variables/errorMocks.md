@@ -20,7 +20,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:73](https://gi
 
 #### request.query
 
-> **query**: `DocumentNode` = `EVENT_DETAILS`
+> **query**: `DocumentNode` = `EVENT_DETAILS_BASIC`
 
 #### request.variables
 

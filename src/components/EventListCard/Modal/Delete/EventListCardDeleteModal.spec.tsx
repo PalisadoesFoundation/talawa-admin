@@ -307,8 +307,8 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // This is a template, not an instance
-          baseEventId: null,
+          isRecurringEventTemplate: true, // This is a template, not an instance
+          baseEvent: null,
         },
       };
 
@@ -339,8 +339,7 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // Template flag takes precedence
-          baseEventId: 'some-base-id',
+          isRecurringEventTemplate: true, // Template flag takes precedence
         },
       };
 

@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
-import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
+import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -93,14 +93,14 @@ describe('Testing Event Card In User portal', () => {
       expect(screen.getByTestId('startTime')).toBeInTheDocument(),
     );
     await waitFor(() =>
-      expect(queryByText(`13 April '23`)).toBeInTheDocument(),
+      expect(queryByText(`13 April 2023`)).toBeInTheDocument(),
     );
     await waitFor(() => expect(queryByText('Ends')).toBeInTheDocument());
     await waitFor(() =>
       expect(screen.getByTestId('endTime')).toBeInTheDocument(),
     );
     await waitFor(() =>
-      expect(queryByText(`15 April '23`)).toBeInTheDocument(),
+      expect(queryByText(`16 April 2023`)).toBeInTheDocument(),
     );
     await waitFor(() => expect(queryByText('Creator')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('Joe David')).toBeInTheDocument());

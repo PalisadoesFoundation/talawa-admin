@@ -366,7 +366,7 @@ function EventListCardModals({
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: eventListCardProps.id,
+            id: eventListCardProps.id,
           },
         });
 

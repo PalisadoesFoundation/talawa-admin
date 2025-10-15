@@ -75,7 +75,14 @@ export const MARK_CHECKOUT = gql`
       }
     ) {
       id
-      time
+      user {
+        id
+      }
+      checkinTime
+      checkoutTime
+      isCheckedIn
+      isCheckedOut
+      feedbackSubmitted
     }
   }
 `;
@@ -198,7 +205,13 @@ export const MARK_CHECKIN = gql`
       }
     ) {
       id
-      time
+      user {
+        id
+      }
+      checkinTime
+      checkoutTime
+      isCheckedIn
+      isCheckedOut
       feedbackSubmitted
     }
   }

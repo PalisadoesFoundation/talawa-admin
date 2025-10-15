@@ -69,7 +69,7 @@ const queryMockWithRegistrant = [
             {
               id: 'user1',
               name: 'John Doe',
-              emailAddress: 'johndoe@example.com',
+              email: 'johndoe@example.com',
               avatarURL: null,
               createdAt: '2023-01-01',
               role: 'attendee',
@@ -98,7 +98,7 @@ const queryMockOrgMembers = [
           {
             id: 'user1',
             name: 'John Doe',
-            emailAddress: 'johndoe@example.com',
+            email: 'johndoe@example.com',
             role: 'member',
             avatarURL: null,
             createdAt: '2023-01-01',
@@ -597,7 +597,7 @@ describe('Testing Event Registrants Modal', () => {
       {
         request: {
           query: EVENT_ATTENDEES,
-          variables: { id: 'event123' },
+          variables: { eventId: 'event123' },
         },
         result: {
           data: {
@@ -608,15 +608,15 @@ describe('Testing Event Registrants Modal', () => {
                   __typename: 'User',
                   id: 'user2',
                   // Intentionally no _id to test the fallback
-                  firstName: 'Jane',
-                  lastName: 'Smith',
+                  name: 'Jane Smith',
+
                   createdAt: '2023-02-01',
                   gender: 'Female',
                   birthDate: '1992-02-02',
                   eventsAttended: [
                     {
                       __typename: 'Event',
-                      _id: 'event123',
+                      id: 'event123',
                     },
                   ],
                 },

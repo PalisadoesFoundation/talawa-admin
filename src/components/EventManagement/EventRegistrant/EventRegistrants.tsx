@@ -43,17 +43,18 @@ import {
   TableRow,
   TableBody,
 } from '@mui/material';
-import { Button, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
-  EVENT_ATTENDEES,
   EVENT_REGISTRANTS,
   EVENT_DETAILS,
+  EVENT_CHECKINS,
 } from 'GraphQl/Queries/Queries';
+import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { useParams } from 'react-router';
-import type { InterfaceMember } from 'types/Event/interface';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';
@@ -62,11 +63,14 @@ function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
   const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
-  const [attendees, setAttendees] = useState<InterfaceMember[]>([]);
+  const [checkedInUsers, setCheckedInUsers] = useState<string[]>([]);
   const [combinedData, setCombinedData] = useState<
-    (InterfaceUserAttendee & Partial<InterfaceMember>)[]
+    (InterfaceUserAttendee & { isCheckedIn?: boolean; name?: string })[]
   >([]);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
+
+  // Mutation for removing a registrant
+  const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
@@ -92,79 +96,124 @@ function EventRegistrants(): JSX.Element {
     onCompleted: (data) => {
       if (data?.getEventAttendeesByEventId) {
         const mappedData = data.getEventAttendeesByEventId.map(
-          (attendee: InterfaceUserAttendee) => ({
+          (attendee: {
+            id: string;
+            user: { id: string; name: string; emailAddress: string };
+            isRegistered: boolean;
+            createdAt: string;
+          }) => ({
             id: attendee.id,
             userId: attendee.user?.id,
             isRegistered: attendee.isRegistered,
             user: attendee.user,
+            createdAt: attendee.createdAt,
+            time: '', // Will be processed in useEffect
           }),
         );
         setRegistrants(mappedData);
       }
     },
   });
-  // Fetch attendees
-  const [getEventAttendees] = useLazyQuery(EVENT_ATTENDEES, {
+
+  // Fetch check-in status
+  const [getEventCheckIns] = useLazyQuery(EVENT_CHECKINS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-and-network',
     onCompleted: (data) => {
-      if (data?.event?.attendees) {
-        setAttendees(data.event.attendees);
+      if (data?.event?.attendeesCheckInStatus) {
+        const checkedInUserIds = data.event.attendeesCheckInStatus
+          .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
+          .map((status: { user: { id: string } }) => status.user.id);
+        setCheckedInUsers(checkedInUserIds);
       }
     },
   });
   // callback function to refresh the data
   const refreshData = useCallback(() => {
     getEventRegistrants();
-    getEventAttendees();
-  }, [getEventRegistrants, getEventAttendees]);
+    getEventCheckIns();
+  }, [getEventRegistrants, getEventCheckIns]);
+
+  // Function to remove a registrant from the event
+  const deleteRegistrant = useCallback(
+    (userId: string): void => {
+      // Check if user is already checked in
+      if (checkedInUsers.includes(userId)) {
+        toast.error('Cannot unregister a user who has already checked in');
+        return;
+      }
+
+      toast.warn('Removing the attendee...');
+      const removeVariables = isRecurring
+        ? { userId, recurringEventInstanceId: eventId }
+        : { userId, eventId: eventId };
+
+      removeRegistrantMutation({ variables: removeVariables })
+        .then(() => {
+          toast.success('Attendee removed successfully');
+          refreshData(); // Refresh the data after removal
+        })
+        .catch((err) => {
+          toast.error('Error removing attendee');
+          toast.error(err.message);
+        });
+    },
+    [
+      isRecurring,
+      eventId,
+      removeRegistrantMutation,
+      refreshData,
+      checkedInUsers,
+    ],
+  );
   useEffect(() => {
     refreshData();
   }, [refreshData]);
-  // Combine registrants and attendees data
+  // Process registrants data with check-in status
   useEffect(() => {
-    if (registrants.length > 0 && attendees.length > 0) {
-      const mergedData = registrants.map((registrant) => {
-        const matchedAttendee = attendees.find(
-          (attendee) => attendee.id === registrant.user.id,
-        );
-        const [date, timeWithMilliseconds] = matchedAttendee?.createdAt
-          ? matchedAttendee.createdAt.split('T')
+    if (registrants.length > 0) {
+      const processedData = registrants.map((registrant) => {
+        const [date, timeWithMilliseconds] = registrant.createdAt
+          ? registrant.createdAt.split('T')
           : ['N/A', 'N/A'];
         const [time] =
           timeWithMilliseconds !== 'N/A'
             ? timeWithMilliseconds.split('.')
             : ['N/A'];
+
+        const isCheckedIn = checkedInUsers.includes(registrant.user.id);
+
         return {
           ...registrant,
-          name: matchedAttendee?.name || 'N/A',
+          name: registrant.user.name || 'N/A',
           createdAt: date,
           time: time,
+          isCheckedIn: isCheckedIn,
         };
       });
-      setCombinedData(mergedData);
+      setCombinedData(processedData);
+    } else {
+      setCombinedData([]);
     }
-  }, [registrants, attendees]);
+  }, [registrants, checkedInUsers]);
   return (
     <div>
-      <div>
+      <div className="d-flex justify-content-between align-items-center">
         {eventId ? (
-          <CheckInWrapper eventId={eventId.toString()} />
+          <CheckInWrapper
+            eventId={eventId.toString()}
+            onCheckInUpdate={refreshData}
+          />
         ) : (
           <CheckInWrapper eventId="" />
         )}
-        <Button
-          data-testid="filter-button"
-          className={`border-1 mx-4 ${styles.createButton} `}
-        >
-          <img
-            src="/images/svg/organization.svg"
-            width={30.63}
-            height={30.63}
-            alt={t('sort')}
+        {eventId && orgId && (
+          <EventRegistrantsWrapper
+            eventId={eventId.toString()}
+            orgId={orgId}
+            onUpdate={refreshData}
           />
-          {t('allRegistrants')}
-        </Button>
+        )}
       </div>
       <TableContainer
         component={Paper}
@@ -201,10 +250,11 @@ function EventRegistrants(): JSX.Element {
                 {t('createdAt')}
               </TableCell>
               <TableCell
-                data-testid="table-header-add-registrant"
+                data-testid="table-header-options"
                 className={styles.customcell}
+                align="center"
               >
-                {t('addRegistrant')}
+                {t('options')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -257,16 +307,26 @@ function EventRegistrants(): JSX.Element {
                       : 'N/A'}
                   </TableCell>
                   <TableCell
-                    align="left"
-                    data-testid={`add-registrant-button-${index}`}
+                    align="center"
+                    data-testid={`registrant-options-${index}`}
                   >
-                    {eventId && orgId && (
-                      <EventRegistrantsWrapper
-                        eventId={eventId.toString()}
-                        orgId={orgId}
-                        onUpdate={refreshData}
-                      />
-                    )}
+                    <button
+                      className={`btn btn-sm ${
+                        data.isCheckedIn
+                          ? 'btn-secondary'
+                          : 'btn-outline-danger'
+                      }`}
+                      onClick={() => deleteRegistrant(data.user.id)}
+                      disabled={data.isCheckedIn}
+                      data-testid={`delete-registrant-${index}`}
+                      title={
+                        data.isCheckedIn
+                          ? 'Cannot unregister checked-in user'
+                          : 'Unregister'
+                      }
+                    >
+                      {data.isCheckedIn ? 'Checked In' : 'Unregister'}
+                    </button>
                   </TableCell>
                 </TableRow>
               ))

@@ -8,6 +8,14 @@ Defined in: [src/types/User/interface.ts:19](https://github.com/PalisadoesFounda
 
 ## Properties
 
+### createdAt
+
+> **createdAt**: `string`
+
+Defined in: [src/types/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L27)
+
+***
+
 ### id
 
 > **id**: `string`
@@ -28,7 +36,7 @@ Defined in: [src/types/User/interface.ts:26](https://github.com/PalisadoesFounda
 
 > **time**: `string`
 
-Defined in: [src/types/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L27)
+Defined in: [src/types/User/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/interface.ts#L28)
 
 ***
 

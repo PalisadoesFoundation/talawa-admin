@@ -7,11 +7,10 @@ export interface InterfaceUser {
 export interface InterfaceAttendeeCheckIn {
   id: string;
   user: InterfaceUser;
-  checkIn: null | {
-    id: string;
-    time: string;
-    feedbackSubmitted: boolean;
-  };
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  isCheckedIn: boolean;
+  isCheckedOut: boolean;
 }
 
 export interface InterfaceAttendeeQueryResponse {
@@ -25,17 +24,17 @@ export interface InterfaceModalProp {
   show: boolean;
   eventId: string;
   handleClose: () => void;
+  onCheckInUpdate?: () => void;
 }
 
 export interface InterfaceTableCheckIn {
   id: string;
   name: string;
   userId: string;
-  checkIn: null | {
-    id: string;
-    time: string;
-    feedbackSubmitted: boolean;
-  };
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  isCheckedIn: boolean;
+  isCheckedOut: boolean;
   eventId: string;
   isRecurring?: boolean;
 }
