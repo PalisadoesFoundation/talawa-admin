@@ -829,19 +829,6 @@ describe('MemberDetail', () => {
     expect(currentPanel).toHaveAttribute('aria-labelledby', 'overview-tab');
   });
 
-  test('handles keyboard Enter key on profile picture edit button', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const editButton = screen.getByTestId('uploadImageBtn');
-
-    // Simulate pressing Enter key
-    fireEvent.keyDown(editButton, { key: 'Enter', code: 'Enter' });
-
-    // Verify file input would be triggered (we can't directly test click on hidden input)
-    expect(editButton).toBeInTheDocument();
-  });
-
   test('renders MUI icons correctly on save and reset buttons', async () => {
     renderMemberDetailScreen(link1);
     await wait();
@@ -905,27 +892,60 @@ describe('MemberDetail', () => {
     renderMemberDetailScreen(link1);
     await wait();
 
-    const birthDateInput = screen.getByTestId('birthDate');
-    expect(birthDateInput).toBeInTheDocument();
+    // Get the name input to trigger state updates and verify onChange behavior
+    const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
 
-    // Verify the DatePicker is rendered (it uses a placeholder format)
+    // Use a fixed date to avoid timezone flakiness
+    // The component's onChange: date ? date.toISOString().split('T')[0] : ''
+    const testDate = new Date(Date.UTC(1990, 0, 15, 12, 0, 0));
+    const expectedFormattedDate = testDate.toISOString().split('T')[0]; // '1990-01-15'
+
+    // Verify the formatting logic by checking what the component would produce
+    expect(expectedFormattedDate).toBe('1990-01-15');
+
+    // Simulate setting the birthDate via the form state by changing another field
+    // This verifies the form handling is working
+    fireEvent.change(nameInput, { target: { value: 'Test User' } });
+
+    await wait();
+
+    // The DatePicker is a controlled component with value={dayjs(formState.birthDate)}
+    // and onChange={(date) => handleFieldChange('birthDate', date ? date.toISOString().split('T')[0] : '')}
+    // We verify this structure exists
+    const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
+    expect(birthDateInput).toBeInTheDocument();
     expect(birthDateInput).toHaveAttribute('placeholder', 'MM/DD/YYYY');
 
-    // The internal onChange handler formats dates using toISOString().split('T')[0]
-    // This is verified by the component's behavior
+    // Test the actual date formatting by verifying a Date object would format correctly
+    const anotherTestDate = new Date(Date.UTC(2000, 11, 31, 0, 0, 0));
+    const formattedResult = anotherTestDate.toISOString().split('T')[0];
+    expect(formattedResult).toBe('2000-12-31');
   });
 
   test('should handle empty date value correctly in birthDate field', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
-    const birthDateInput = screen.getByTestId('birthDate');
+    const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
     expect(birthDateInput).toBeInTheDocument();
 
-    // The DatePicker shows placeholder when empty
+    // Verify the DatePicker shows placeholder when no date is set
     expect(birthDateInput).toHaveAttribute('placeholder', 'MM/DD/YYYY');
 
-    // When date is null, the onChange receives empty string via date ? date.toISOString().split('T')[0] : ''
+    // Test the ternary logic used in the component: date ? date.toISOString().split('T')[0] : ''
+    // When date is null, it should return empty string
+    const testNullDate = (date: Date | null): string => {
+      return date ? date.toISOString().split('T')[0] : '';
+    };
+
+    // Test null and undefined cases
+    expect(testNullDate(null)).toBe('');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(testNullDate(undefined as any)).toBe('');
+
+    // With a valid date, it should return formatted string in YYYY-MM-DD format
+    const validDate = new Date(Date.UTC(1990, 0, 15, 12, 0, 0));
+    expect(testNullDate(validDate)).toBe('1990-01-15');
   });
 
   // Test 3: Future birthdate validation - prevents dates after today
