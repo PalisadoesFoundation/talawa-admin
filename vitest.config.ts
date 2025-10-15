@@ -18,7 +18,7 @@ export default defineConfig({
       exclude: [
         'node_modules',
         'dist',
-        'docs/**',        
+        'docs/**',
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
         'coverage/**',
         '**/index.{js,ts}',
