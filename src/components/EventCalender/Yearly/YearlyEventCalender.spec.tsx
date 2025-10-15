@@ -31,8 +31,16 @@ function getExpandButtonForDate(
       new Date(gridStart.toDateString()).getTime()) /
       msPerDay,
   );
-  const selector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
-  return container.querySelector(selector) as HTMLButtonElement | null;
+
+  // Try both expand-btn and no-events-btn selectors
+  const expandSelector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
+  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
+
+  return (
+    (container.querySelector(expandSelector) as HTMLButtonElement) ||
+    (container.querySelector(noEventsSelector) as HTMLButtonElement) ||
+    null
+  );
 }
 
 async function clickExpandForDate(

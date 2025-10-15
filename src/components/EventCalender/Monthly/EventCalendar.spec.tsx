@@ -546,18 +546,15 @@ describe('Calendar', () => {
 
     // Mock today's date to be January 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
+    globalThis.Date = vi.fn((...args: unknown[]) => {
       if (args.length === 0) {
         return new originalDate(2024, 0, 1); // January 1st, 2024
       }
-      return new (originalDate as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
-    }
-    MockDate.now = originalDate.now;
-    MockDate.parse = originalDate.parse;
-    MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
+      return new originalDate(...(args as ConstructorParameters<typeof Date>));
+    }) as unknown as DateConstructor;
+    globalThis.Date.now = originalDate.now;
+    globalThis.Date.parse = originalDate.parse;
+    globalThis.Date.UTC = originalDate.UTC;
 
     render(
       <Router>

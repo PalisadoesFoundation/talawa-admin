@@ -433,7 +433,7 @@ export default function events(): JSX.Element {
             <div className={styles.datedivEvents}>
               <div>
                 <DatePicker
-                  label={tCommon('startAt')}
+                  label={tCommon('startDate')}
                   className={styles.dateboxEvents}
                   value={dayjs(startAt)}
                   onChange={(date: Dayjs | null): void => {
@@ -447,7 +447,7 @@ export default function events(): JSX.Element {
               </div>
               <div>
                 <DatePicker
-                  label={tCommon('endAt')}
+                  label={tCommon('endDate')}
                   className={styles.dateboxEvents}
                   value={dayjs(endAt)}
                   onChange={(date: Dayjs | null): void => {

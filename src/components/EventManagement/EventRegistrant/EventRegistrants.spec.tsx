@@ -65,9 +65,7 @@ describe('Event Registrants Component', () => {
       expect(screen.getByTestId('table-header-serial')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-registrant')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-created-at')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('table-header-add-registrant'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('table-header-options')).toBeInTheDocument();
     });
   });
 
@@ -135,6 +133,7 @@ describe('Event Registrants Component', () => {
                 },
                 isRegistered: true,
                 isInvited: false,
+                createdAt: '2023-09-25T10:00:00.000Z',
                 __typename: 'EventAttendee',
               },
             ],
@@ -305,7 +304,7 @@ describe('EventRegistrants CSS Tests', () => {
       screen.getByTestId('table-header-registrant'),
       screen.getByTestId('table-header-registered-at'),
       screen.getByTestId('table-header-created-at'),
-      screen.getByTestId('table-header-add-registrant'),
+      screen.getByTestId('table-header-options'),
     ];
     headerCells.forEach((cell) => {
       expect(cell).toHaveClass(styles.customcell);

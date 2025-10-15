@@ -20,7 +20,7 @@ const MOCKS = [
   {
     request: {
       query: REGISTER_EVENT,
-      variables: { eventId: '123' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -154,7 +154,7 @@ describe('Testing Event Card In User portal', () => {
       {
         request: {
           query: REGISTER_EVENT,
-          variables: { eventId: '123' },
+          variables: { id: '123' },
         },
         error: new Error('Failed to register for the event'),
       },

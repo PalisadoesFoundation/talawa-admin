@@ -238,7 +238,7 @@ export const MOCKS = [
   {
     request: {
       query: REGISTER_EVENT,
-      variables: { eventId: '1' },
+      variables: { id: '1' },
     },
     result: {
       data: {

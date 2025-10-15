@@ -391,7 +391,7 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockRegisterEvent).toHaveBeenCalledWith({
-      variables: { eventId: 'event1' },
+      variables: { id: 'event1' },
     });
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered for Test Event',

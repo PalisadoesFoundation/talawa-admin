@@ -69,8 +69,7 @@ const Calendar: React.FC<
   currentYear,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
-  const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today.getDate());
+  const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
@@ -376,6 +375,7 @@ const Calendar: React.FC<
     }
 
     return days.map((date, index) => {
+      const today = new Date();
       const className = [
         date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
         date.toLocaleDateString() === today.toLocaleDateString()
