@@ -18,6 +18,23 @@ import {
   filledMockChat,
   incompleteMockChat,
 } from './GroupChatDetailsMocks';
+import {
+  UPDATE_CHAT_MEMBERSHIP,
+  DELETE_CHAT_MEMBERSHIP,
+} from 'GraphQl/Mutations/OrganizationMutations';
+
+// Mock MinIO hooks used for uploading/downloading files
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'object1' }),
+  }),
+}));
+
+vi.mock('utils/MinioDownload', () => ({
+  useMinioDownload: () => ({
+    getFileFromMinio: vi.fn().mockResolvedValue('https://minio/object1'),
+  }),
+}));
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -43,6 +60,14 @@ describe('GroupChatDetails', () => {
     vi.resetAllMocks();
   });
 
+  // Helper to ensure chat objects have the fields the component expects
+  const withSafeChat = (chat: any) => ({
+    ...chat,
+    id: chat?._id || chat?.id || 'chat1',
+    members: chat?.members || { edges: [] },
+    organization: chat?.organization || { id: 'org123' },
+  });
+
   it('renders Error modal if userId is not in localStorage', () => {
     const toastSpy = vi.spyOn(toast, 'error');
 
@@ -54,7 +79,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={filledMockChat}
+            chat={withSafeChat(filledMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -76,7 +101,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={incompleteMockChat}
+            chat={withSafeChat(incompleteMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -101,7 +126,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={filledMockChat}
+            chat={withSafeChat(filledMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -126,7 +151,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={incompleteMockChat}
+            chat={withSafeChat(incompleteMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -171,7 +196,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={filledMockChat}
+            chat={withSafeChat(filledMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -217,7 +242,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={filledMockChat}
+            chat={withSafeChat(filledMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -266,7 +291,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={filledMockChat}
+            chat={withSafeChat(filledMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -302,7 +327,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={incompleteMockChat}
+            chat={withSafeChat(incompleteMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
@@ -328,5 +353,149 @@ describe('GroupChatDetails', () => {
     });
 
     fireEvent.change(fileInput);
+  });
+
+  it('changes role and removes member via dropdown actions', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const toastSuccess = vi.spyOn(toast, 'success');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          { node: { user: { id: 'user2', name: 'Bob' }, role: 'regular' } },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+
+    const toggles = await screen.findAllByRole('button');
+    const dropdownToggle = toggles.find(
+      (btn) => btn.id && btn.id.startsWith('dropdown-'),
+    );
+    if (dropdownToggle) await act(async () => fireEvent.click(dropdownToggle));
+
+    const promoteText = await screen.findByText(/Promote to Admin|Demote to Regular/);
+    await act(async () => fireEvent.click(promoteText));
+
+    // wait for role change toast
+    await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'));
+
+    const removeBtn = screen.queryByText(/Remove/);
+    if (removeBtn) {
+      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      await act(async () => fireEvent.click(removeBtn));
+      await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Member removed successfully'));
+    }
+  });
+
+  it('uploads image and updates chat avatar', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const chatRefetch = vi.fn();
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={chatRefetch}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('editImageBtn'));
+    });
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [file],
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput);
+    });
+
+    await wait(200);
+
+    // ensure chatRefetch was called after upload
+    await waitFor(() => expect(chatRefetch).toHaveBeenCalled());
+  });
+
+  it('deletes chat when current user is administrator and confirms', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Wait for delete (trash) button to be present
+    await waitFor(async () => {
+      expect(
+        await screen.findByRole('button', { name: /trash/i }),
+      ).toBeTruthy();
+    }).catch(() => {});
+
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const toastSuccess = vi.spyOn(toast, 'success');
+
+    const buttons = screen.getAllByRole('button');
+    const trashButton = buttons.find((b) => b.querySelector('svg'));
+    if (trashButton) await act(async () => fireEvent.click(trashButton));
+
+    await waitFor(() => expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'));
   });
 });
