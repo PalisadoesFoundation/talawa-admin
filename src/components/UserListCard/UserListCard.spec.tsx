@@ -192,10 +192,13 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // Verify errorHandler was called with correct arguments (t function and error)
+    // Verify errorHandler was called with correct arguments (t function and ApolloError)
+    // Apollo Client wraps network errors in ApolloError
     expect(errorHandlerSpy).toHaveBeenCalledWith(
       expect.any(Function),
-      testError,
+      expect.objectContaining({
+        message: expect.stringContaining('Network error'),
+      }),
     );
     expect(toast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
