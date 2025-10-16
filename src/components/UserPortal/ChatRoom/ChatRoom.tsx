@@ -502,40 +502,41 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const sendMessage = async (): Promise<void> => {
     let messageBody = newMessage;
     if (attachmentObjectName) {
-      // If there's an attachment, send the object ID as the body
       messageBody = attachmentObjectName;
     }
 
-    if (editMessage) {
-      await editChatMessage({
-        variables: {
-          input: {
-            id: editMessage.id,
-            body: messageBody,
+    try {
+      if (editMessage) {
+        await editChatMessage({
+          variables: {
+            input: {
+              id: editMessage.id,
+              body: messageBody,
+            },
           },
-        },
-      });
-    } else {
-      await sendMessageToChat({
-        variables: {
-          input: {
-            chatId: props.selectedContact,
-            parentMessageId: replyToDirectMessage?.id,
-            body: messageBody,
+        });
+      } else {
+        await sendMessageToChat({
+          variables: {
+            input: {
+              chatId: props.selectedContact,
+              parentMessageId: replyToDirectMessage?.id,
+              body: messageBody,
+            },
           },
-        },
-      });
+        });
+      }
+      shouldAutoScrollRef.current = true;
+      await chatRefetch();
+      setReplyToDirectMessage(null);
+      setEditMessage(null);
+      setNewMessage('');
+      setAttachment(null);
+      setAttachmentObjectName(null);
+      await props.chatListRefetch({ id: userId as string });
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
-
-    // ensure we auto-scroll to bottom after sending
-    shouldAutoScrollRef.current = true;
-    await chatRefetch();
-    setReplyToDirectMessage(null);
-    setEditMessage(null);
-    setNewMessage('');
-    setAttachment(null);
-    setAttachmentObjectName(null);
-    await props.chatListRefetch({ id: userId as string });
   };
 
   useSubscription(MESSAGE_SENT_TO_CHAT, {
@@ -551,11 +552,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
-        // If the incoming message is from the current user, we should stick to bottom
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
-        // Do not fail the subscription flow if mark-as-read is unsupported
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
           () => {},
         );
@@ -616,7 +615,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       // cache policies are enabled (e.g., bump lastMessage and unread count).
     },
   });
-  // Guarded auto-scroll: only when user is near bottom or we've explicitly requested it
+
   useEffect(() => {
     const el = messagesContainerRef.current;
     if (!el) return;
@@ -627,8 +626,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   }, [chat?.messages?.edges?.length]);
 
-  // If the container isn't scrollable yet but there are more messages,
-  // automatically backfill a few pages so the user can scroll.
   useEffect(() => {
     const el = messagesContainerRef.current;
     if (!el) return;
@@ -740,7 +737,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                       node: INewChat['messages']['edges'][0]['node'];
                     }) => {
                       const message = edge.node;
-                      const isFile = message.body.startsWith('uploads/'); // Check if it's a file reference
+                      const isFile = message.body.startsWith('uploads/');
 
                       return (
                         <div

@@ -181,9 +181,21 @@ const mockUnreadChatsRefetch = {
   },
 };
 
+// Provide enough CHATS_LIST mocks to cover:
+// 1) initial load, 2) refetch on 'all' filter effect, 3) switching back to 'all'
 const mocks = [
   mockChatsList,
   mockChatsListRefetch,
+  // Third CHATS_LIST mock for switching back to 'all'
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  // Fourth CHATS_LIST mock for group filter test
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
   mockUnreadChats,
   mockUnreadChatsRefetch,
 ];

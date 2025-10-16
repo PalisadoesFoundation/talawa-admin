@@ -607,7 +607,14 @@ export const SEND_MESSAGE_ERROR_MOCK = {
       },
     },
   },
-  error: new Error('Failed to send message'),
+  result: {
+    errors: [
+      {
+        message: 'Failed to send message',
+        extensions: { code: 'SEND_MESSAGE_FAILED' },
+      },
+    ],
+  },
 };
 
 // Additional mocks for new tests
@@ -717,46 +724,10 @@ const renderChatRoom = (mocks: MockedResponse[] = []) => {
 describe('ChatRoom Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    type WithHandler = Window & {
-      __unhandledRejectionHandler?: (event: PromiseRejectionEvent) => void;
-    };
-    const win = window as WithHandler;
-    win.__unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
-      const reason: unknown = event?.reason;
-      const msg =
-        typeof reason === 'object' && reason && 'message' in reason
-          ? String((reason as { message?: unknown }).message ?? '')
-          : '';
-      if (
-        typeof msg === 'string' &&
-        (msg.includes('Failed to send message') ||
-          msg.includes('mark read not supported'))
-      ) {
-        if (typeof event.preventDefault === 'function') {
-          event.preventDefault();
-        }
-      }
-    };
-    window.addEventListener(
-      'unhandledrejection',
-      win.__unhandledRejectionHandler,
-    );
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    // remove global handler
-    type WithHandler = Window & {
-      __unhandledRejectionHandler?: (event: PromiseRejectionEvent) => void;
-    };
-    const win = window as WithHandler;
-    if (win.__unhandledRejectionHandler) {
-      window.removeEventListener(
-        'unhandledrejection',
-        win.__unhandledRejectionHandler,
-      );
-      delete win.__unhandledRejectionHandler;
-    }
   });
 
   it('renders loading state initially', () => {
@@ -890,11 +861,17 @@ describe('ChatRoom Component', () => {
     fireEvent.change(messageInputErr, { target: { value: 'Test message' } });
     fireEvent.click(sendButtonErr);
 
-    await waitFor(() => {
-      expect(screen.queryByText('Test message')).not.toBeInTheDocument();
-      const inputEl = screen.getByTestId('messageInput') as HTMLInputElement;
-      expect(inputEl.value).toBe('Test message');
-    });
+    // Wait for the mutation to complete (with error)
+    await waitFor(
+      () => {
+        // Verify the message didn't get sent
+        expect(screen.queryByText('Test message')).not.toBeInTheDocument();
+        // The input should still have the message (so user can retry)
+        const inputEl = screen.getByTestId('messageInput') as HTMLInputElement;
+        expect(inputEl.value).toBe('Test message');
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('shows reply UI when Reply is clicked and can be closed', async () => {
