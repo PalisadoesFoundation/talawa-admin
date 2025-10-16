@@ -2,7 +2,11 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type { IItemModalProps } from './ActionItemModal';
+import type {
+  IItemModalProps,
+  IUpdateActionItemForInstanceVariables,
+  ICreateActionItemVariables,
+} from 'types/ActionItems/interface.ts';
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect } from 'vitest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -1029,7 +1033,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Updated notes'
@@ -1173,7 +1177,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Error test notes'
@@ -1243,7 +1247,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Refetch test notes'
@@ -1320,7 +1324,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Hide test notes'
@@ -1395,7 +1399,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Partial update notes'
@@ -1470,7 +1474,7 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.preCompletionNotes === 'Prevent default test'
@@ -1547,7 +1551,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&
@@ -1958,7 +1962,7 @@ describe('orgActionItemsRefetch functionality', () => {
       request: {
         query: CREATE_ACTION_ITEM_MUTATION,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: ICreateActionItemVariables) => {
         return (
           variables.input.assigneeId === 'user1' &&
           variables.input.categoryId === 'cat1' &&
@@ -2173,7 +2177,7 @@ describe('orgActionItemsRefetch functionality', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: any) => {
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
         return (
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&

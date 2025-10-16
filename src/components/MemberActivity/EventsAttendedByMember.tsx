@@ -24,7 +24,7 @@
  */
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
 
@@ -39,8 +39,7 @@ function EventsAttendedByMember({
     data: events,
     loading,
     error,
-  } = useQuery(EVENT_DETAILS, {
-    // EVENT_DETAILS expects { eventId }
+  } = useQuery(EVENT_DETAILS_BASIC, {
     variables: { eventId: eventsId },
   });
 

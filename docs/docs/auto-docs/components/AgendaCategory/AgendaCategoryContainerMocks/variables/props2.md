@@ -8,7 +8,7 @@
 
 Defined in: [src/components/AgendaCategory/AgendaCategoryContainerMocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainerMocks.ts#L36)
 
-## Type declaration
+## Type Declaration
 
 ### agendaCategoryConnection
 

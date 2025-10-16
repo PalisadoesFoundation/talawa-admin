@@ -4,23 +4,23 @@
 
 # Interface: InterfaceTableCheckIn
 
-Defined in: [src/types/CheckIn/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L29)
+Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L30)
 
 ## Properties
 
-### checkIn
+### checkInTime
 
-> **checkIn**: `object`
+> **checkInTime**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L33)
+Defined in: [src/types/CheckIn/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L34)
 
-#### \_id
+***
 
-> **\_id**: `string`
+### checkOutTime
 
-#### time
+> **checkOutTime**: `string`
 
-> **time**: `string`
+Defined in: [src/types/CheckIn/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L35)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/PalisadoesFou
 
 > **eventId**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L37)
+Defined in: [src/types/CheckIn/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L38)
 
 ***
 
@@ -36,7 +36,31 @@ Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/PalisadoesFou
 
 > **id**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L30)
+Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L31)
+
+***
+
+### isCheckedIn
+
+> **isCheckedIn**: `boolean`
+
+Defined in: [src/types/CheckIn/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L36)
+
+***
+
+### isCheckedOut
+
+> **isCheckedOut**: `boolean`
+
+Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L37)
+
+***
+
+### isRecurring?
+
+> `optional` **isRecurring**: `boolean`
+
+Defined in: [src/types/CheckIn/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L39)
 
 ***
 
@@ -44,7 +68,7 @@ Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/PalisadoesFou
 
 > **name**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L31)
+Defined in: [src/types/CheckIn/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L32)
 
 ***
 
@@ -52,4 +76,4 @@ Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/PalisadoesFou
 
 > **userId**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L32)
+Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L33)

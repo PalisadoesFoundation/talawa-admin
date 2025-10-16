@@ -15,8 +15,9 @@ import { errorHandler } from 'utils/errorHandler';
 import EventListCardModals from './EventListCardModals';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
-import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
+import { Frequency, WeekDays } from 'utils/recurrenceUtils/recurrenceTypes';
 import {
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -70,13 +71,17 @@ const MockDeleteModal = EventListCardDeleteModal as Mock;
 
 const mockT = (key: string) => key;
 
-const mockEventListCardProps = {
-  _id: 'event1',
+type MockEventListCardProps = InterfaceEvent & {
+  refetchEvents: Mock;
+};
+
+const mockEventListCardProps: MockEventListCardProps = {
+  id: 'event1',
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startDate: '2024-01-01',
-  endDate: '2024-01-01',
+  startAt: '2024-01-01T10:00:00Z',
+  endAt: '2024-01-01T12:00:00Z',
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -85,10 +90,21 @@ const mockEventListCardProps = {
   attendees: [],
   creator: { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
   userRole: UserRole.ADMINISTRATOR,
-  isRecurringTemplate: false,
-  baseEventId: null,
-  refetchEvents: vi.fn(),
+  isRecurringEventTemplate: false,
+  baseEvent: null,
+  recurrenceRule: null,
+  recurrenceDescription: null,
+  refetchEvents: vi.fn() as Mock,
 };
+
+const buildRecurringEventProps = (
+  overrides: Partial<MockEventListCardProps> = {},
+): MockEventListCardProps => ({
+  ...mockEventListCardProps,
+  isRecurringEventTemplate: false,
+  baseEvent: { id: 'baseEvent1' },
+  ...overrides,
+});
 
 describe('EventListCardModals', () => {
   let mockUpdateStandaloneEvent: Mock;
@@ -375,7 +391,7 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockRegisterEvent).toHaveBeenCalledWith({
-      variables: { eventId: 'event1' },
+      variables: { id: 'event1' },
     });
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered for Test Event',
@@ -411,11 +427,7 @@ describe('EventListCardModals', () => {
 
   test('opens and closes update modal for recurring events', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -438,11 +450,7 @@ describe('EventListCardModals', () => {
 
   test('handles update of a single recurring event instance', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -472,11 +480,7 @@ describe('EventListCardModals', () => {
 
   test('handles update of this and following recurring events', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -510,11 +514,7 @@ describe('EventListCardModals', () => {
 
   test('handles update of an entire recurring event series', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -550,11 +550,7 @@ describe('EventListCardModals', () => {
 
   test('handles update of an entire recurring event series with only name change', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -587,11 +583,7 @@ describe('EventListCardModals', () => {
 
   test('handles update of an entire recurring event series with only description change', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
 
     const previewProps = MockPreviewModal.mock.calls[0][0];
@@ -655,13 +647,12 @@ describe('EventListCardModals', () => {
 
     test('allows update  of recurring instance when recurrenceRule is present', async () => {
       renderComponent({
-        eventListCardProps: {
-          ...mockEventListCardProps,
-          baseEventId: 'baseEvent1',
+        eventListCardProps: buildRecurringEventProps({
           recurrenceRule: {
-            recurrenceEndDate: '2025-01-01T00:00:00.000Z',
+            frequency: Frequency.DAILY,
+            recurrenceEndDate: new Date('2025-01-01T00:00:00.000Z'),
           },
-        },
+        }),
       });
       const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
       act(() => {
@@ -856,11 +847,7 @@ describe('EventListCardModals', () => {
 
   test('handles deletion of a single recurring event instance', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
     const deleteProps = MockDeleteModal.mock.calls[0][0];
 
@@ -875,11 +862,7 @@ describe('EventListCardModals', () => {
 
   test('handles deletion of this and following recurring events', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
     const deleteProps = MockDeleteModal.mock.calls[0][0];
 
@@ -894,11 +877,7 @@ describe('EventListCardModals', () => {
 
   test('handles deletion of an entire recurring event series', async () => {
     renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'baseEvent1',
-      },
+      eventListCardProps: buildRecurringEventProps(),
     });
     const deleteProps = MockDeleteModal.mock.calls[0][0];
 
@@ -936,15 +915,13 @@ describe('EventListCardModals', () => {
 
   describe('updateOption logic', () => {
     test('switches to "following" when recurrence changes, making "single" invalid', async () => {
-      const recurringEventProps = {
-        ...mockEventListCardProps,
-        baseEventId: 'baseEvent1',
+      const recurringEventProps = buildRecurringEventProps({
         recurrenceRule: {
           frequency: Frequency.WEEKLY,
           interval: 1,
-          byDay: ['MO'],
+          byDay: [WeekDays.MO],
         },
-      };
+      });
       renderComponent({ eventListCardProps: recurringEventProps });
 
       // Initial state: updateOption is 'single'
@@ -1009,12 +986,9 @@ describe('EventListCardModals', () => {
     testCases.forEach(({ description, expectedFrequency }) => {
       test(`should detect ${expectedFrequency} for "${description}"`, async () => {
         renderComponent({
-          eventListCardProps: {
-            ...mockEventListCardProps,
-            isRecurringTemplate: false,
-            baseEventId: 'baseEvent1',
+          eventListCardProps: buildRecurringEventProps({
             recurrenceDescription: description,
-          },
+          }),
         });
 
         const previewProps = MockPreviewModal.mock.calls[0][0];

@@ -6,4 +6,4 @@
 
 > **InterfaceUpdateEventModalProps** = [`IUpdateEventModalProps`](../interfaces/IUpdateEventModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L221)
+Defined in: [src/types/Event/interface.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L252)
