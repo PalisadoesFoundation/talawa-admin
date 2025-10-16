@@ -550,14 +550,15 @@ describe('Calendar Component', () => {
   });
 
   it('collapses expanded event list when clicked again', async () => {
-    const todayDate = new Date();
+    // Use January 15th of current year to ensure it's visible in the calendar
+    const eventDate = new Date(new Date().getFullYear(), 0, 15, 12, 0, 0);
     const mockEvent = {
       ...mockEventData[0],
-      startDate: todayDate.toISOString(),
-      endDate: todayDate.toISOString(),
+      startDate: eventDate.toISOString(),
+      endDate: eventDate.toISOString(),
     };
 
-    renderWithRouterAndPath(
+    const { container } = renderWithRouterAndPath(
       <Calendar
         eventData={[mockEvent]}
         refetchEvents={mockRefetchEvents}
@@ -572,22 +573,33 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify the component rendered correctly
-    expect(screen.getByText('January')).toBeInTheDocument();
-    expect(
-      screen.getByText(new Date().getFullYear().toString()),
-    ).toBeInTheDocument();
+    // Find the expand button for the event date
+    const expandButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+    expect(expandButtons.length).toBeGreaterThan(0);
 
-    // Test event data filtering and processing
-    // This covers the filterData function logic
-    expect(mockEvent._id).toBe('1');
-    expect(mockEvent.location).toBe('Test Location');
-    expect(mockEvent.description).toBe('Test Description');
+    const expandButton = expandButtons[0];
 
-    // Test that the component handles event data correctly
-    // This covers the event state management and rendering
-    const dayElements = screen.getAllByTestId('day');
-    expect(dayElements.length).toBeGreaterThan(0);
+    // Click to expand
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
+
+    // Verify event list is expanded - check for event name
+    await waitFor(() => {
+      expect(screen.getByText('Test Event')).toBeInTheDocument();
+    });
+
+    // Click again to collapse
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
+
+    // Verify event list is collapsed - event name should not be visible
+    await waitFor(() => {
+      expect(screen.queryByText('Test Event')).not.toBeInTheDocument();
+    });
   });
 
   it('includes private events for REGULAR users who are org members', async () => {
