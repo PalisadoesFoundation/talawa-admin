@@ -13,6 +13,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import {useLocalStorage} from "../../../utils/useLocalstorage";
 
 vi.mock('react-bootstrap', async () => {
   const actual =
@@ -692,7 +693,8 @@ const renderChatRoom = (mocks: MockedResponse[] = []) => {
     LOAD_MORE_MESSAGES_MOCK,
   ];
   const chatListRefetch = vi.fn();
-  window.localStorage.setItem('Talawa-admin_userId', JSON.stringify('user123'));
+  const { setItem } = useLocalStorage();
+  setItem('userId', 'user123');
   const allMocks = [...mocks, ...defaultMocks];
   const renderResult = render(
     <MockedProvider mocks={allMocks} addTypename={false}>
@@ -715,9 +717,6 @@ const renderChatRoom = (mocks: MockedResponse[] = []) => {
 describe('ChatRoom Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // swallow expected unhandled promise rejections caused by mocked Apollo errors
-    // (some tests intentionally mock network errors; without this listener Vitest
-    // reports them as unhandled and fails the run).
     type WithHandler = Window & {
       __unhandledRejectionHandler?: (event: PromiseRejectionEvent) => void;
     };
