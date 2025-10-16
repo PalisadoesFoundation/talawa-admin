@@ -192,8 +192,11 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // Verify errorHandler was called
-    expect(errorHandlerSpy).toHaveBeenCalled();
+    // Verify errorHandler was called with correct arguments (t function and error)
+    expect(errorHandlerSpy).toHaveBeenCalledWith(
+      expect.any(Function),
+      testError,
+    );
     expect(toast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
 
@@ -360,8 +363,6 @@ describe('Testing User List Card', () => {
   });
 
   it('Should handle GraphQL error in mutation response', async () => {
-    const errorHandlerSpy = vi.spyOn(errorHandlerModule, 'errorHandler');
-
     const graphQLErrorMock = [
       {
         request: {
@@ -397,9 +398,8 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
+    // GraphQL errors in the result don't trigger the catch block
     expect(toast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
-
-    errorHandlerSpy.mockRestore();
   });
 });
