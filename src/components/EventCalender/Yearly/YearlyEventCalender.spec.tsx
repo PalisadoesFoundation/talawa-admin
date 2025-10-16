@@ -149,11 +149,16 @@ describe('Calendar Component', () => {
     expect(getByText('January')).toBeInTheDocument();
     expect(getByText('December')).toBeInTheDocument();
 
-    // Check weekday headers (M, T, W, T, F, S, S)
-    const weekdays = ['M', 'T', 'W', 'F', 'S'];
-    weekdays.forEach((day) => {
-      const elements = screen.getAllByText(day);
-      expect(elements.length).toBeGreaterThanOrEqual(12); // At least 12 (one for each month)
+    // Check weekday headers - verify header containers exist with 7 weekdays each
+    const weekdayHeaders = screen.getAllByTestId('weekday-header');
+    expect(weekdayHeaders.length).toBe(12); // One header row for each month
+
+    // Verify each header row contains 7 weekday cells
+    weekdayHeaders.forEach((header) => {
+      const weekdayCells = Array.from(
+        header.querySelectorAll('[data-testid^="weekday-"]'),
+      );
+      expect(weekdayCells.length).toBe(7);
     });
 
     const days = getAllByTestId('day');
@@ -253,7 +258,7 @@ describe('Calendar Component', () => {
     // Test expansion with no events (should show "No Event Available!")
     const noEventButtons = screen.getAllByTestId(/no-events-btn-/);
     expect(noEventButtons.length).toBeGreaterThan(0);
-    
+
     // Click to expand first no-event button
     await act(async () => {
       fireEvent.click(noEventButtons[0]);
@@ -413,11 +418,11 @@ describe('Calendar Component', () => {
     // Calendar should be rendered with all 12 months
     expect(screen.getByText('January')).toBeInTheDocument();
     expect(screen.getByText('December')).toBeInTheDocument();
-    
+
     // Find all buttons (either expand-btn or no-events-btn)
     const allButtons = screen.queryAllByTestId(/btn-0-/);
     expect(allButtons.length).toBeGreaterThan(0);
-    
+
     // Click first button to test expansion functionality
     await act(async () => {
       fireEvent.click(allButtons[0]);
@@ -425,7 +430,9 @@ describe('Calendar Component', () => {
 
     // After clicking, should have either "Close" or "No Event Available!" message
     await waitFor(() => {
-      const expanded = screen.queryByText('Close') || screen.queryByText('No Event Available!');
+      const expanded =
+        screen.queryByText('Close') ||
+        screen.queryByText('No Event Available!');
       expect(expanded).toBeInTheDocument();
     });
   });
@@ -507,7 +514,7 @@ describe('Calendar Component', () => {
   it('filters events for REGULAR users who are organization members', async () => {
     const todayYear = today.getFullYear();
     const testDate = new Date(todayYear, 5, 15);
-    
+
     const events = [
       {
         ...mockEventData[0],
@@ -558,13 +565,16 @@ describe('Calendar Component', () => {
 
   it('filters events for REGULAR users who are NOT organization members', async () => {
     const todayYear = today.getFullYear();
-    const testDate = new Date(todayYear, 5, 15);
-    
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+    // Create event for today to ensure it's on the calendar
+    const testDate = new Date(todayYear, todayMonth, todayDate, 0, 0, 0, 0);
+
     const events = [
       {
         ...mockEventData[0],
         _id: 'event1',
-        name: 'Public Event',
+        name: 'Public Event for Non-Members',
         isPublic: true,
         startDate: testDate.toISOString(),
         endDate: testDate.toISOString(),
@@ -572,7 +582,7 @@ describe('Calendar Component', () => {
       {
         ...mockEventData[0],
         _id: 'event2',
-        name: 'Private Event',
+        name: 'Private Event Filtered',
         isPublic: false,
         startDate: testDate.toISOString(),
         endDate: testDate.toISOString(),
@@ -603,16 +613,55 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify calendar rendered - only public events should be visible for non-members
+    // Verify calendar rendered
     expect(screen.getByText('January')).toBeInTheDocument();
     expect(screen.getByText('December')).toBeInTheDocument();
+
+    // Verify role-based filtering: The component should filter events correctly
+    // For non-members, private events should be filtered out and only public events visible
+    // Check that expand buttons exist for today's month
+    const allExpandButtons = screen.queryAllByTestId(/expand-btn-/);
+    const allNoEventButtons = screen.queryAllByTestId(/no-events-btn-/);
+
+    // The calendar should have rendered with buttons (either expand or no-event)
+    expect(allExpandButtons.length + allNoEventButtons.length).toBeGreaterThan(
+      0,
+    );
+
+    // Verify filtering logic by checking that private event name is not in DOM
+    // (it should be filtered out for non-members before rendering)
+    expect(
+      screen.queryByText('Private Event Filtered'),
+    ).not.toBeInTheDocument();
+
+    // If there are any expand buttons, clicking them should not show the private event
+    if (allExpandButtons.length > 0) {
+      await act(async () => {
+        fireEvent.click(allExpandButtons[0]);
+      });
+
+      // After expansion, private event should still not be visible
+      await waitFor(() => {
+        expect(
+          screen.queryByText('Private Event Filtered'),
+        ).not.toBeInTheDocument();
+      });
+    }
   });
 
   it('handles expand button clicks to test event expansion logic', async () => {
     // Create an event that will be on the calendar
     // Set time to midnight to ensure dayjs.isSame() works
-    const testDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0);
-    
+    const testDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
+
     const testEvent = {
       ...mockEventData[0],
       _id: 'event-test',
@@ -635,8 +684,10 @@ describe('Calendar Component', () => {
     });
 
     // Find all expand buttons (for days with events)
-    const allButtons = container.querySelectorAll('[data-testid^="expand-btn-"]');
-    
+    const allButtons = container.querySelectorAll(
+      '[data-testid^="expand-btn-"]',
+    );
+
     // If there are expand buttons with events, test the onClick handler
     if (allButtons.length > 0) {
       // Click the first expand button
@@ -654,7 +705,7 @@ describe('Calendar Component', () => {
         fireEvent.click(allButtons[0]);
       });
     }
-    
+
     // Verify calendar rendered properly
     expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     expect(screen.getByText('January')).toBeInTheDocument();
