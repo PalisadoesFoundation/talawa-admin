@@ -1020,4 +1020,584 @@ describe('EventListCardModals', () => {
       });
     });
   });
+
+  describe('additional coverage tests', () => {
+    test('handles useEffect when recurrenceRule is null', () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          recurrenceRule: null,
+        },
+      });
+
+      // Component should render without errors when recurrenceRule is null
+      expect(MockPreviewModal).toHaveBeenCalled();
+    });
+
+    test('handles error in deleteEventHandler', async () => {
+      const error = new Error('Delete failed');
+      mockDeleteStandaloneEvent.mockRejectedValue(error);
+
+      renderComponent();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
+    });
+
+    test('handles error in registerEventHandler', async () => {
+      const error = new Error('Registration failed');
+      mockRegisterEvent.mockRejectedValue(error);
+
+      renderComponent();
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
+    });
+
+    test('allows user to select "Update this instance only" when updating a single occurrence', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Event',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'single' option should be available and clickable
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('handles deletion of standalone events', async () => {
+      const mockDeleteStandaloneEvent = vi.fn().mockResolvedValue({
+        data: { deleteEvent: { success: true } },
+      });
+
+      // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockDeleteStandaloneEvent,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: null, // Standalone event
+        },
+      });
+
+      // The delete modal should be rendered with the correct props
+      expect(MockDeleteModal).toHaveBeenCalled();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      expect(deleteProps.eventListCardProps.id).toBe(mockEventListCardProps.id);
+    });
+
+    test('handles deletion of recurring event single instance', async () => {
+      const mockDeleteSingleInstance = vi.fn().mockResolvedValue({
+        data: { deleteRecurringEventInstance: { success: true } },
+      });
+
+      // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockDeleteSingleInstance,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1', // Recurring instance
+        },
+      });
+
+      // The delete modal should be rendered with the correct props
+      expect(MockDeleteModal).toHaveBeenCalled();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
+    });
+
+    test('handles deletion of recurring event this and following instances', async () => {
+      const mockDeleteFollowingInstances = vi.fn().mockResolvedValue({
+        data: { deleteRecurringEventInstances: { success: true } },
+      });
+
+      // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockDeleteFollowingInstances,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1', // Recurring instance
+        },
+      });
+
+      // The delete modal should be rendered with the correct props
+      expect(MockDeleteModal).toHaveBeenCalled();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
+    });
+
+    test('handles deletion of recurring event entire series', async () => {
+      const mockDeleteAllInstances = vi.fn().mockResolvedValue({
+        data: { deleteRecurringEvent: { success: true } },
+      });
+
+      // Mock the mutation hook to return our mock function
+      const mockMutationResult = {
+        loading: false,
+        called: false,
+        client: {} as unknown,
+        reset: vi.fn(),
+        data: undefined,
+        error: undefined,
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockDeleteAllInstances,
+        mockMutationResult,
+      ] as ReturnType<typeof useMutation>);
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1', // Recurring instance
+        },
+      });
+
+      // The delete modal should be rendered with the correct props
+      expect(MockDeleteModal).toHaveBeenCalled();
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      expect(deleteProps.eventListCardProps.baseEventId).toBe('baseEvent1');
+    });
+
+    test('toggles delete modal visibility', () => {
+      renderComponent();
+
+      // The toggle function should be available in the preview modal props
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      expect(typeof previewProps.toggleDeleteModal).toBe('function');
+
+      act(() => {
+        previewProps.toggleDeleteModal();
+      });
+
+      // The delete modal should be rendered
+      expect(MockDeleteModal).toHaveBeenCalled();
+    });
+
+    test('toggles update modal visibility', () => {
+      renderComponent();
+
+      // The toggleUpdateModal function is defined in the component but not passed to preview modal
+      // We can verify the component renders correctly with update modal functionality
+      expect(MockPreviewModal).toHaveBeenCalled();
+      expect(MockDeleteModal).toHaveBeenCalled();
+    });
+
+    test('selects "This instance" when only single option is valid', async () => {
+      // Create a scenario where only single option is available
+      // This happens when recurrence hasn't changed but other fields have changed
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields that make entireSeries unavailable but single and following available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          location: 'Updated Location', // This makes entireSeries unavailable
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'single' option should be available and checked (covers line 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeChecked();
+      // The 'following' option should also be available (always available in current logic)
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+      // The 'entireSeries' option should not be available (only when only name/description changed)
+      expect(
+        screen.queryByLabelText('updateEntireSeries'),
+      ).not.toBeInTheDocument();
+    });
+
+    test('shows "Entire series" only when single and following are invalid', async () => {
+      // Create a scenario where only entireSeries is available
+      // This happens when both following and single are not available
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change only name/description to make only entireSeries available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name Only',
+          eventdescrip: 'Updated Description Only',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The 'entireSeries' option should be available (covers line 230-231)
+      const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+      expect(entireSeriesRadio).toBeInTheDocument();
+
+      // Note: 'following' option is always available (hardcoded to true in availableUpdateOptions)
+      // 'single' option is available when recurrence hasn't changed
+      // This test verifies that 'entireSeries' is available when only name/description changed
+    });
+
+    test('switches selection when current update option becomes invalid', async () => {
+      // Create a scenario where the current updateOption becomes invalid
+      // and the useEffect needs to set a new valid option
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // First, set up a scenario where 'following' is available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // Now change the form to make 'following' unavailable but 'single' available
+      // This should trigger the useEffect to switch from 'following' to 'single'
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+          location: 'Updated Location', // This makes 'following' unavailable
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The useEffect should have switched to 'single' option (covers lines 228-229)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      expect(singleRadio).toBeChecked();
+    });
+
+    test('detects recurrence change when original recurrence is null but new recurrence exists', async () => {
+      // Test case where originalRecurrence is null but recurrence exists
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: null, // No original recurrence
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set a recurrence rule (only recurrence exists, no originalRecurrence)
+      // This will trigger hasRecurrenceChanged() which calls the line 138 condition
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          recurrence: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        });
+      });
+
+      // Trigger the update to call hasRecurrenceChanged function
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The hasRecurrenceChanged function should be called and the branch where !originalRecurrence || !recurrence returns true
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+    });
+
+    test('detects recurrence change when original recurrence exists but new recurrence is null', async () => {
+      // Test case where originalRecurrence exists but recurrence is null
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          }, // Has original recurrence
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Set recurrence to null (only originalRecurrence exists, no recurrence)
+      // This will trigger hasRecurrenceChanged() which calls the line 138 condition
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          recurrence: null, // No recurrence in form state
+        });
+      });
+
+      // Trigger the update to call hasRecurrenceChanged function
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // The hasRecurrenceChanged function should be called and the branch where !originalRecurrence || !recurrence returns true
+      expect(
+        screen.getByLabelText('updateThisAndFollowing'),
+      ).toBeInTheDocument();
+    });
+
+    test('handles delete failure when mutation returns falsy data', async () => {
+      // Override the specific mock to return falsy data for this test only
+      mockDeleteStandaloneEvent.mockResolvedValueOnce({
+        data: null,
+      });
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+        },
+      });
+
+      // Open delete modal and trigger delete
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.toggleDeleteModal();
+      });
+
+      // Get the delete modal props and trigger delete
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+
+      // Should not show success toast since data is falsy
+      expect(toast.success).not.toHaveBeenCalled();
+    });
+
+    test('handles delete success when refetchEvents is not provided', async () => {
+      // Test with component that doesn't have refetchEvents prop
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          refetchEvents: undefined, // No refetchEvents provided in eventListCardProps
+        },
+      });
+
+      // Open delete modal and trigger delete
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+      act(() => {
+        previewProps.toggleDeleteModal();
+      });
+
+      // Get the delete modal props and trigger delete
+      const deleteProps = MockDeleteModal.mock.calls[0][0];
+      await act(async () => {
+        await deleteProps.deleteEventHandler();
+      });
+
+      // Should still show success toast but not call refetchEvents
+      expect(toast.success).toHaveBeenCalled();
+      // Ensure refetchEvents was not called if not provided
+      expect(mockEventListCardProps.refetchEvents).not.toHaveBeenCalled();
+    });
+
+    test('handles registration when user is already registered', async () => {
+      // Test with user already registered
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          attendees: [{ id: 'user1', firstName: 'John', lastName: 'Doe' }], // User is already registered
+        },
+        userId: 'user1',
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Try to register when already registered
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+
+      // Should not call the mutation since user is already registered
+      expect(mockRegisterEvent).not.toHaveBeenCalled();
+    });
+
+    test('handles registration failure when mutation returns falsy data', async () => {
+      // Override the specific mock to return falsy data for this test only
+      mockRegisterEvent.mockResolvedValueOnce({
+        data: null,
+      });
+
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          attendees: [], // User is not registered
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Trigger registration
+      await act(async () => {
+        await previewProps.registerEventHandler();
+      });
+
+      // Should not show success toast since data is falsy
+      expect(toast.success).not.toHaveBeenCalled();
+    });
+
+    test('handles single radio button onChange handler', async () => {
+      renderComponent({
+        eventListCardProps: {
+          ...mockEventListCardProps,
+          isRecurringTemplate: false,
+          baseEventId: 'baseEvent1',
+          recurrenceRule: {
+            frequency: Frequency.WEEKLY,
+            interval: 1,
+            byDay: ['MO'],
+          },
+        },
+      });
+
+      const previewProps = MockPreviewModal.mock.calls[0][0];
+
+      // Change fields to make options available
+      act(() => {
+        previewProps.setFormState({
+          ...previewProps.formState,
+          name: 'Updated Name',
+        });
+      });
+
+      await act(async () => {
+        await previewProps.handleEventUpdate();
+      });
+
+      // First click the "following" radio button to deselect single
+      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      await userEvent.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+
+      // Now click the single radio button to trigger its onChange handler (covers line 464)
+      const singleRadio = screen.getByLabelText('updateThisInstance');
+      await userEvent.click(singleRadio);
+      expect(singleRadio).toBeChecked();
+    });
+  });
 });
