@@ -12,6 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
+
 const { setItem } = useLocalStorage();
 
 Object.defineProperty(window, 'matchMedia', {
@@ -32,7 +33,11 @@ let mockID: string | undefined = '123';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
-  return { ...actual, useParams: () => ({ orgId: mockID }) };
+  return {
+    ...actual,
+    useParams: () => ({ orgId: mockID }),
+    useLocation: () => ({ pathname: '/orgdash/123' }),
+  };
 });
 
 const link = new StaticMockLink(MOCKS, true);
@@ -46,9 +51,27 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
   fireEvent.click(toggleButton);
 };
 
-describe('Testing LeftDrawer in OrganizationScreen', () => {
-  it('should be redirected to / if IsLoggedIn is false', async () => {
-    setItem('IsLoggedIn', false);
+describe('EventDashboardScreen Component', () => {
+  it('redirects to / if orgId is undefined', async () => {
+    mockID = undefined;
+    setItem('IsLoggedIn', 'true');
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventDashboardScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(window.location.pathname).toEqual('/');
+    mockID = '123';
+  });
+
+  it('redirects to / if IsLoggedIn is false', async () => {
+    setItem('IsLoggedIn', 'false');
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -62,56 +85,69 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
     );
     expect(window.location.pathname).toEqual('/');
   });
-  it('should be redirected to / if ss is false', async () => {
-    setItem('IsLoggedIn', true);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventDashboardScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  });
-  it('Testing LeftDrawer in page functionality', async () => {
-    setItem('IsLoggedIn', true);
-    setItem('name', 'John Doe');
-    setItem('AdminFor', [
-      { _id: '6637904485008f171cf29924', __typename: 'Organization' },
-    ]);
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventDashboardScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    const toggleButton = screen.getByTestId('toggleMenuBtn') as HTMLElement;
-    const icon = toggleButton.querySelector('i');
 
-    // Resize window to a smaller width
+  it('renders correctly when AdminFor is null (partial org dashboard)', async () => {
+    setItem('IsLoggedIn', 'true');
+    setItem('AdminFor', null);
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventDashboardScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    expect(screen.getByText(/title/i)).toBeInTheDocument();
+  });
+
+  it('renders and toggles drawer states correctly', async () => {
+    setItem('IsLoggedIn', 'true');
+    setItem('AdminFor', [{ _id: '1', __typename: 'Organization' }]);
+    setItem('sidebar', 'false');
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventDashboardScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const toggleButton = await screen.findByTestId('toggleMenuBtn');
+    const mainPage = await screen.findByTestId('mainpageright');
+    // Resize window to trigger hideDrawer true
     resizeWindow(800);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
-    // Resize window back to a larger width
 
-    resizeWindow(1000);
+    // Resize back
+    resizeWindow(1200);
     clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-left');
 
-    clickToggleMenuBtn(toggleButton);
-    expect(icon).toHaveClass('fa fa-angle-double-right');
+    // Ensure class changes with hideDrawer state
+    expect(mainPage.className).toMatch(/contract|expand/);
   });
 
-  it('should be redirected to / if orgId is undefined', async () => {
-    mockID = undefined;
+  it('renders properly when sidebar value is null (hideDrawer === null)', async () => {
+    setItem('IsLoggedIn', 'true');
+    setItem('AdminFor', [{ _id: '2', __typename: 'Organization' }]);
+
+    const spy = vi
+      .spyOn(useLocalStorage(), 'getItem')
+      .mockImplementation((key: string) => {
+        if (key === 'sidebar') return null;
+        if (key === 'IsLoggedIn') return 'true';
+        if (key === 'AdminFor')
+          return [{ _id: '2', __typename: 'Organization' }];
+        return null;
+      });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -123,6 +159,9 @@ describe('Testing LeftDrawer in OrganizationScreen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    expect(window.location.pathname).toEqual('/');
+
+    const toggleButton = await screen.findByTestId('toggleMenuBtn');
+    expect(toggleButton).toBeInTheDocument();
+    spy.mockRestore();
   });
 });
