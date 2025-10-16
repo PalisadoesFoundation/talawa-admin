@@ -261,7 +261,7 @@ describe('Calendar Component', () => {
     });
 
     // Test expansion with no events (should show "No Event Available!")
-    const noEventButtons = screen.getAllByTestId(/no-events-btn-/);
+    const noEventButtons = screen.getAllByTestId(/^no-events-btn-/);
     expect(noEventButtons.length).toBeGreaterThan(0);
 
     // Click to expand first no-event button
@@ -377,7 +377,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles event expansion with various event scenarios', async () => {
-    const currentYear = today.getFullYear();
+    const currentYear = new Date().getFullYear();
     const multiMonthEvents = [
       {
         ...mockEventData[0],
@@ -501,7 +501,7 @@ describe('Calendar Component', () => {
     });
 
     // Find a no-event button
-    const noEventButtons = screen.getAllByTestId(/no-events-btn-/);
+    const noEventButtons = screen.getAllByTestId(/^no-events-btn-/);
     expect(noEventButtons.length).toBeGreaterThan(0);
 
     // Click to expand
@@ -527,9 +527,8 @@ describe('Calendar Component', () => {
   });
 
   it('filters events for REGULAR users who are organization members', async () => {
-    const todayYear = today.getFullYear();
     // Use January (month 0) to match the frozen system time
-    const testDate = new Date(todayYear, 0, 15);
+    const testDate = new Date(new Date().getFullYear(), 0, 15);
 
     const events = [
       {
@@ -609,11 +608,17 @@ describe('Calendar Component', () => {
   });
 
   it('filters events for REGULAR users who are NOT organization members', async () => {
-    const todayYear = today.getFullYear();
-    const todayMonth = today.getMonth();
-    const todayDate = today.getDate();
-    // Create event for today to ensure it's on the calendar
-    const testDate = new Date(todayYear, todayMonth, todayDate, 0, 0, 0, 0);
+    // Create event for "today" based on the frozen system time
+    const now = new Date();
+    const testDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0,
+    );
 
     const events = [
       {
@@ -730,7 +735,7 @@ describe('Calendar Component', () => {
       endDate: testDate.toISOString(),
     };
 
-    const { container } = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[testEvent]}
         refetchEvents={mockRefetchEvents}
@@ -744,9 +749,7 @@ describe('Calendar Component', () => {
     });
 
     // Find all expand buttons (for days with events)
-    const allButtons = container.querySelectorAll(
-      '[data-testid^="expand-btn-"]',
-    );
+    const allButtons = screen.queryAllByTestId(/^expand-btn-/);
 
     // If there are expand buttons with events, test the onClick handler
     if (allButtons.length > 0) {
