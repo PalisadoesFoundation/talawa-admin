@@ -224,7 +224,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   }, []);
 
   const { getItem, setItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') || getItem('id');
 
   useEffect(() => {
     if (props.selectedContact) {

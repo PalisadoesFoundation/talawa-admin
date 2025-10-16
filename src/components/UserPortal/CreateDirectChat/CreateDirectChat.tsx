@@ -220,7 +220,8 @@ export default function createDirectChatModal({
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { orgId: organizationId } = useParams();
 
-  const userId: string | null = getItem('userId');
+  // Support both 'userId' (for regular users) and 'id' (for admins)
+  const userId: string | null = getItem('userId') || getItem('id');
 
   const [userName, setUserName] = useState('');
 

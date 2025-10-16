@@ -97,7 +97,8 @@ export default function groupChatDetails({
   //storage
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  // Support both 'userId' (for regular users) and 'id' (for admins)
+  const userId = getItem('userId') || getItem('id');
 
   useEffect(() => {
     if (!userId) {
