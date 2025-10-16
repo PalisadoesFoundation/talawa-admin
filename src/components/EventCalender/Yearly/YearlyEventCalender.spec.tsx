@@ -562,8 +562,8 @@ describe('Calendar Component', () => {
     const eventDate = new Date(new Date().getFullYear(), 0, 15, 12, 0, 0);
     const mockEvent = {
       ...mockEventData[0],
-      startAt: todayDate.toISOString(),
-      endAt: todayDate.toISOString(),
+      startAt: eventDate.toISOString(),
+      endAt: eventDate.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(
