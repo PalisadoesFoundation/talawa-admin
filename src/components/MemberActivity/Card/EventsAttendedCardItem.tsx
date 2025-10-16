@@ -38,6 +38,7 @@ import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceCardItem {
   title: string;
@@ -51,6 +52,11 @@ export interface InterfaceCardItem {
 
 const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
   const { title, startdate, location, orgId, eventId } = props;
+  const { getItem } = useLocalStorage();
+
+  // Check if user is administrator - only administrators can navigate to event details
+  const userRole = getItem('role');
+  const isAdministrator = userRole === 'administrator';
 
   return (
     <Card
@@ -120,30 +126,32 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
               </div>
             )}
           </Col>
-          <Col xs={2} md={1} className="text-end">
-            <Link
-              to={`/event/${orgId}/${eventId}`}
-              state={{ id: eventId }}
-              className="text-decoration-none"
-            >
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center"
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  backgroundColor: '#e3f2fd',
-                  transition: 'all 0.2s ease',
-                }}
+          {isAdministrator && (
+            <Col xs={2} md={1} className="text-end">
+              <Link
+                to={`/event/${orgId}/${eventId}`}
+                state={{ id: eventId }}
+                className="text-decoration-none"
               >
-                <MdChevronRight
-                  className="text-primary"
-                  size={18}
-                  data-testid="ChevronRightIcon"
-                  style={{ transition: 'color 0.2s ease' }}
-                />
-              </div>
-            </Link>
-          </Col>
+                <div
+                  className="rounded-circle d-flex align-items-center justify-content-center"
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    backgroundColor: '#e3f2fd',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <MdChevronRight
+                    className="text-primary"
+                    size={18}
+                    data-testid="ChevronRightIcon"
+                    style={{ transition: 'color 0.2s ease' }}
+                  />
+                </div>
+              </Link>
+            </Col>
+          )}
         </Row>
       </Card.Body>
       {/* Decorative accent bar */}
