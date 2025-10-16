@@ -12,7 +12,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-// import { toast } from 'react-toastify';
+
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -577,10 +577,6 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
-
-    // expect(toast.success).toHaveBeenCalledWith(
-    //   'Event created and posted successfully.',
-    // );
   });
 
   it('Create event works as expected when event is an all day event.', async () => {
@@ -623,10 +619,6 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
     await wait();
-
-    // expect(toast.success).toHaveBeenCalledWith(
-    //   'Event created and posted successfully.',
-    // );
   });
 
   it('Switch to calendar view works as expected.', async () => {
@@ -645,11 +637,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    // await wait();
-
-    // await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    // await userEvent.click(screen.getByTestId('modeBtn1'));
 
     await wait();
     const calenderView = 'Calendar View';

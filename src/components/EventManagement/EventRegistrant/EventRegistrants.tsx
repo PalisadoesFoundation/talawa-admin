@@ -85,7 +85,6 @@ function EventRegistrants(): JSX.Element {
     }
   }, [eventData]);
 
-  // Create proper GraphQL variables based on event type
   const registrantVariables = isRecurring
     ? { recurringEventInstanceId: eventId }
     : { eventId: eventId };

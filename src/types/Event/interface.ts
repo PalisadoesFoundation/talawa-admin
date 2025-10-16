@@ -207,6 +207,38 @@ export interface IEventsAttendedMemberModalProps {
   eventsPerPage?: number;
 }
 
+export interface IEventEdge {
+  node: {
+    id: string;
+    name: string;
+    description?: string | null;
+    startAt: string;
+    endAt: string;
+    allDay: boolean;
+    location?: string | null;
+    isPublic: boolean;
+    isRegisterable: boolean;
+    // Recurring event fields
+    isRecurringEventTemplate?: boolean;
+    baseEvent?: {
+      id: string;
+      name: string;
+    } | null;
+    sequenceNumber?: number | null;
+    totalCount?: number | null;
+    hasExceptions?: boolean;
+    progressLabel?: string | null;
+    // New recurrence description fields
+    recurrenceDescription?: string | null;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
+    creator?: {
+      id: string;
+      name: string;
+    };
+  };
+  cursor: string;
+}
+
 // Legacy interface exports for backward compatibility
 export type InterfaceMember = IMember;
 export type InterfaceEvent = IEvent;
@@ -216,6 +248,7 @@ export type InterfaceCalendarProps = ICalendarProps;
 export type InterfaceEventHeaderProps = IEventHeaderProps;
 export type InterfaceDeleteEventModalProps = IDeleteEventModalProps;
 export type InterfacePreviewEventModalProps = IPreviewEventModalProps;
+export type InterfaceEventEdge = IEventEdge;
 export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
 export type InterfaceAttendanceStatisticsModalProps =
   IAttendanceStatisticsModalProps;

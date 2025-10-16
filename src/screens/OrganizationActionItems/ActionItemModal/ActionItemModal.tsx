@@ -28,6 +28,10 @@ interface IUpdateActionForInstanceInput {
   preCompletionNotes?: string;
 }
 import type { InterfaceUser } from 'types/User/interface';
+import type {
+  IFormStateType,
+  IItemModalProps,
+} from 'types/ActionItems/interface.ts';
 
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -40,29 +44,6 @@ import {
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
-
-interface IFormStateType {
-  assignedAt: Date;
-  categoryId: string;
-  assigneeId: string;
-  eventId?: string;
-  preCompletionNotes: string;
-  postCompletionNotes: string | null;
-  isCompleted: boolean;
-}
-
-export interface IItemModalProps {
-  isOpen: boolean;
-  hide: () => void;
-  orgId: string;
-  eventId: string | undefined;
-  actionItemsRefetch: () => void;
-  orgActionItemsRefetch?: () => void;
-  actionItem: IActionItemInfo | null;
-  editMode: boolean;
-  isRecurring?: boolean;
-  baseEvent?: { id: string } | null;
-}
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,

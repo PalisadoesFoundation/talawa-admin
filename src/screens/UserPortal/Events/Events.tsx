@@ -65,46 +65,13 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import type { IEventEdge } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 
 const timeToDayJs = (time: string): Dayjs => {
   const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
   return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
 };
-
-// Define the type for an event edge
-interface IEventEdge {
-  node: {
-    id: string;
-    name: string;
-    description?: string | null;
-    startAt: string;
-    endAt: string;
-    allDay: boolean;
-    location?: string | null;
-    isPublic: boolean;
-    isRegisterable: boolean;
-    // Recurring event fields
-    isRecurringEventTemplate?: boolean;
-    baseEvent?: {
-      id: string;
-      name: string;
-    } | null;
-    sequenceNumber?: number | null;
-    totalCount?: number | null;
-    hasExceptions?: boolean;
-    progressLabel?: string | null;
-    // New recurrence description fields
-    recurrenceDescription?: string | null;
-    recurrenceRule?: InterfaceRecurrenceRule | null;
-    creator?: {
-      id: string;
-      name: string;
-    };
-  };
-  cursor: string;
-}
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });

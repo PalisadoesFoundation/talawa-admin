@@ -39,6 +39,7 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import styles from 'style/app-fixed.module.css';
 
 export interface InterfaceCardItem {
   title: string;
@@ -60,38 +61,19 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
 
   return (
     <Card
-      className="border-0 rounded-4 shadow-sm mb-3 overflow-hidden position-relative"
+      className={`border-0 rounded-4 shadow-sm mb-3 overflow-hidden position-relative ${styles.eventsAttendedCard}`}
       data-testid="EventsAttendedCard"
-      style={{
-        transition: 'all 0.3s ease',
-        background: 'linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%)',
-        border: '1px solid #e3f2fd',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.1)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-      }}
     >
       <Card.Body className="p-3">
         <Row className="align-items-center g-0">
           <Col xs={3} md={3} className="text-center">
             <div
-              className="rounded-3 d-inline-block p-2"
-              style={{
-                background: 'linear-gradient(135deg, #A8C7FA 0%, #A8C7FA 100%)',
-                color: '#555',
-                minWidth: '60px',
-              }}
+              className={`rounded-3 d-inline-block p-2 ${styles.eventsAttendedCardDate}`}
             >
               {startdate && dayjs(startdate).isValid() ? (
                 <>
                   <div
-                    className="fs-7 fw-bold mb-1"
-                    style={{ fontSize: '0.75rem' }}
+                    className={`fs-7 fw-bold mb-1 ${styles.eventsAttendedCardDateMonth}`}
                   >
                     {dayjs(startdate).format('MMM').toUpperCase()}
                   </div>
@@ -100,7 +82,9 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
                   </div>
                 </>
               ) : (
-                <div className="fs-7 fw-bold" style={{ fontSize: '0.75rem' }}>
+                <div
+                  className={`fs-7 fw-bold ${styles.eventsAttendedCardDateNA}`}
+                >
                   Date N/A
                 </div>
               )}
@@ -108,8 +92,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           </Col>
           <Col xs={7} md={8} className="ps-3">
             <h6
-              className="mb-2 fw-semibold text-dark"
-              style={{ fontSize: '1rem' }}
+              className={`mb-2 fw-semibold text-dark ${styles.eventsAttendedCardTitle}`}
             >
               {title}
             </h6>
@@ -120,7 +103,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
                   size={16}
                   data-testid="LocationOnIcon"
                 />
-                <span className="small" style={{ fontSize: '0.85rem' }}>
+                <span className={`small ${styles.eventsAttendedCardLocation}`}>
                   {location}
                 </span>
               </div>
@@ -134,19 +117,12 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
                 className="text-decoration-none"
               >
                 <div
-                  className="rounded-circle d-flex align-items-center justify-content-center"
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    backgroundColor: '#e3f2fd',
-                    transition: 'all 0.2s ease',
-                  }}
+                  className={`rounded-circle d-flex align-items-center justify-content-center ${styles.eventsAttendedCardChevron}`}
                 >
                   <MdChevronRight
-                    className="text-primary"
+                    className={`text-primary ${styles.eventsAttendedCardChevronIcon}`}
                     size={18}
                     data-testid="ChevronRightIcon"
-                    style={{ transition: 'color 0.2s ease' }}
                   />
                 </div>
               </Link>
@@ -155,16 +131,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
         </Row>
       </Card.Body>
       {/* Decorative accent bar */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '4px',
-          height: '100%',
-          background: 'linear-gradient(135deg,  #A8C7FA 0%,  #A8C7FA 100%)',
-        }}
-      />
+      <div className={styles.eventsAttendedCardAccent} />
     </Card>
   );
 };
