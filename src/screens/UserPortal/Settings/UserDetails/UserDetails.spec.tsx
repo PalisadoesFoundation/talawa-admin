@@ -187,7 +187,7 @@ describe('UserDetailsForm', () => {
 
     const birthDateInput = screen.getByLabelText(mockT('birthDate'));
     const today = new Date();
-    const maxDate = new Intl.DateTimeFormat('en-CA').format(today);
+    const maxDate = today.toISOString().split('T')[0]; // This returns YYYY-MM-DD format
 
     expect(birthDateInput).toHaveAttribute('max', maxDate);
   });

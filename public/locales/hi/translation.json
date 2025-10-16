@@ -1103,6 +1103,7 @@
     "registrant": "पंजीकृत व्यक्ति",
     "registeredAt": "पंजीकरण तिथि",
     "createdAt": "निर्माण तिथि",
+    "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
   },

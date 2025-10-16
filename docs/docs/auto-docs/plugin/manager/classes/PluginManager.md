@@ -8,9 +8,9 @@ Defined in: [src/plugin/manager.ts:15](https://github.com/PalisadoesFoundation/t
 
 ## Constructors
 
-### new PluginManager()
+### Constructor
 
-> **new PluginManager**(`apolloClient`?): `PluginManager`
+> **new PluginManager**(`apolloClient?`): `PluginManager`
 
 Defined in: [src/plugin/manager.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L22)
 
@@ -130,7 +130,7 @@ Defined in: [src/plugin/manager.ts:124](https://github.com/PalisadoesFoundation/
 
 ### getPluginComponent()
 
-> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
+> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{ \}\>
 
 Defined in: [src/plugin/manager.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L132)
 
@@ -146,7 +146,7 @@ Defined in: [src/plugin/manager.ts:132](https://github.com/PalisadoesFoundation/
 
 #### Returns
 
-`ComponentType`\<\{\}\>
+`ComponentType`\<\{ \}\>
 
 ***
 

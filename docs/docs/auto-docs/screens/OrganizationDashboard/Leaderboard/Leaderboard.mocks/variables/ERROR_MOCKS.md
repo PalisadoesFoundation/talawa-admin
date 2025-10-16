@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/OrganizationDashboard/Leaderboard/Leaderboard.mocks.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationDashboard/Leaderboard/Leaderboard.mocks.ts#L183)
 
-## Type declaration
+## Type Declaration
 
 ### error
 
