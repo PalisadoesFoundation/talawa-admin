@@ -19,7 +19,7 @@
  * @state
  * - `events`: List of events fetched from the server.
  * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
- * - `startDate`, `endDate`: Start and end dates for the event.
+ * - `startAt`, `endAt`: Start and end dates for the event.
  * - `startTime`, `endTime`: Start and end times for the event.
  * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
  * - `viewType`: Current calendar view type (e.g., month, week).
@@ -49,7 +49,7 @@ import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
-  ORGANIZATION_EVENTS_CONNECTION,
+  GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
@@ -65,6 +65,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { IEventEdge } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 
 const timeToDayJs = (time: string): Dayjs => {
@@ -79,12 +80,11 @@ export default function events(): JSX.Element {
   const { getItem } = useLocalStorage();
 
   // State variables to manage event details and UI
-  const [events, setEvents] = React.useState([]);
   const [eventTitle, setEventTitle] = React.useState('');
   const [eventDescription, setEventDescription] = React.useState('');
   const [eventLocation, setEventLocation] = React.useState('');
-  const [startDate, setStartDate] = React.useState<Date | null>(new Date());
-  const [endDate, setEndDate] = React.useState<Date | null>(new Date());
+  const [startAt, setStartAt] = React.useState<Date | null>(new Date());
+  const [endAt, setEndAt] = React.useState<Date | null>(new Date());
   const [isPublic, setIsPublic] = React.useState(true);
   const [isRegisterable, setIsRegisterable] = React.useState(true);
   const [isRecurring, setIsRecurring] = React.useState(false);
@@ -105,8 +105,26 @@ export default function events(): JSX.Element {
   };
 
   // Query to fetch events for the organization
-  const { data, refetch } = useQuery(ORGANIZATION_EVENTS_CONNECTION, {
-    variables: { organization_id: organizationId, title_contains: '' },
+  const {
+    data,
+    error: eventDataError,
+    refetch,
+  } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
+    variables: {
+      id: organizationId,
+      first: 150,
+      after: null,
+      startAt: dayjs(new Date(currentYear, currentMonth, 1))
+        .startOf('month')
+        .toISOString(),
+      endAt: dayjs(new Date(currentYear, currentMonth, 1))
+        .endOf('month')
+        .toISOString(),
+      includeRecurring: true,
+    },
+    notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
   });
 
   // Query to fetch organization details
@@ -120,13 +138,8 @@ export default function events(): JSX.Element {
   // Get user details from local storage
   const userId = getItem('id') as string;
 
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor = getItem('AdminFor') as string[] | null;
-  const userRole = superAdmin
-    ? 'SUPERADMIN'
-    : Array.isArray(adminFor) && adminFor.length > 0
-      ? 'ADMIN'
-      : 'USER';
+  const storedRole = getItem('role') as string | null;
+  const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
 
   /**
    * Handles the form submission for creating a new event.
@@ -139,22 +152,36 @@ export default function events(): JSX.Element {
   ): Promise<void> => {
     e.preventDefault();
     try {
+      const startTimeParts = startTime.split(':');
+      const endTimeParts = endTime.split(':');
+
+      const input = {
+        name: eventTitle,
+        description: eventDescription,
+        startAt: isAllDay
+          ? dayjs(startAt).startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+          : dayjs(startAt)
+              .hour(parseInt(startTimeParts[0]))
+              .minute(parseInt(startTimeParts[1]))
+              .second(parseInt(startTimeParts[2]))
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        endAt: isAllDay
+          ? dayjs(endAt).endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+          : dayjs(endAt)
+              .hour(parseInt(endTimeParts[0]))
+              .minute(parseInt(endTimeParts[1]))
+              .second(parseInt(endTimeParts[2]))
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        organizationId,
+        allDay: isAllDay,
+        location: eventLocation,
+        isPublic,
+        isRegisterable,
+        // Note: recurrence and createChat might need to be handled differently
+      };
+
       const { data: createEventData } = await create({
-        variables: {
-          title: eventTitle,
-          description: eventDescription,
-          isPublic,
-          recurring: isRecurring,
-          isRegisterable: isRegisterable,
-          organizationId,
-          startDate: dayjs(startDate).format('YYYY-MM-DD'),
-          endDate: dayjs(endDate).format('YYYY-MM-DD'),
-          allDay: isAllDay,
-          location: eventLocation,
-          startTime: !isAllDay ? startTime + 'Z' : null,
-          endTime: !isAllDay ? endTime + 'Z' : null,
-          createChat: createChatCheck,
-        },
+        variables: { input },
       });
       if (createEventData) {
         toast.success(t('eventCreated') as string);
@@ -162,8 +189,8 @@ export default function events(): JSX.Element {
         setEventTitle('');
         setEventDescription('');
         setEventLocation('');
-        setStartDate(new Date());
-        setEndDate(new Date());
+        setStartAt(new Date());
+        setEndAt(new Date());
         setStartTime('08:00:00');
         setEndTime('10:00:00');
       }
@@ -218,12 +245,60 @@ export default function events(): JSX.Element {
     setEventDescription(event.target.value);
   };
 
-  // Update the list of events when the data from the query changes
+  // Normalize event data for EventCalendar with proper typing
+  const events = (data?.organization?.events?.edges || []).map(
+    (edge: IEventEdge) => ({
+      id: edge.node.id || '',
+
+      name: edge.node.name || '',
+      description: edge.node.description || '',
+      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+      startTime: edge.node.allDay
+        ? null
+        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+      endTime: edge.node.allDay
+        ? null
+        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      // Add recurring event information
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: edge.node.creator || {
+        id: '',
+        name: '',
+      },
+      attendees: [], // Adjust if attendees are added to schema
+    }),
+  ); // Handle errors gracefully
   React.useEffect(() => {
-    if (data) {
-      setEvents(data.eventsByOrganizationConnection);
+    if (eventDataError) {
+      // Handle rate limiting errors more gracefully - check multiple variations
+      const isRateLimitError =
+        eventDataError.message?.toLowerCase().includes('too many requests') ||
+        eventDataError.message?.toLowerCase().includes('rate limit') ||
+        eventDataError.message?.includes('Please try again later');
+
+      if (isRateLimitError) {
+        // Just suppress rate limit errors silently
+        return;
+      }
+
+      // For other errors (like empty results), just log them but don't redirect
+      console.warn('Non-critical error in user events page:', {
+        eventDataError: eventDataError.message,
+      });
     }
-  }, [data]);
+  }, [eventDataError]);
 
   /**
    * Shows the modal for creating a new event.
@@ -262,6 +337,7 @@ export default function events(): JSX.Element {
       <EventCalendar
         viewType={viewType}
         eventData={events}
+        refetchEvents={refetch}
         orgData={orgData}
         userRole={userRole}
         userId={userId}
@@ -326,28 +402,28 @@ export default function events(): JSX.Element {
                 <DatePicker
                   label={tCommon('startDate')}
                   className={styles.dateboxEvents}
-                  value={dayjs(startDate)}
+                  value={dayjs(startAt)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setStartDate(date?.toDate());
-                      setEndDate(date?.toDate());
+                      setStartAt(date?.toDate());
+                      setEndAt(date?.toDate());
                     }
                   }}
-                  data-testid="eventStartDate"
+                  data-testid="eventStartAt"
                 />
               </div>
               <div>
                 <DatePicker
                   label={tCommon('endDate')}
                   className={styles.dateboxEvents}
-                  value={dayjs(endDate)}
+                  value={dayjs(endAt)}
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
-                      setEndDate(date?.toDate());
+                      setEndAt(date?.toDate());
                     }
                   }}
-                  minDate={dayjs(startDate)}
-                  data-testid="eventEndDate"
+                  minDate={dayjs(startAt)}
+                  data-testid="eventEndAt"
                 />
               </div>
             </div>

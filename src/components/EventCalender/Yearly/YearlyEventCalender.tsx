@@ -171,9 +171,8 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
         ].join(' ');
 
         const eventsForDate =
-          events?.filter((event) =>
-            dayjs(event.startDate).isSame(date, 'day'),
-          ) || [];
+          events?.filter((event) => dayjs(event.startAt).isSame(date, 'day')) ||
+          [];
 
         const toggleExpand = (index: string): void => {
           setExpandedY((prev) => (prev === index ? null : index));
@@ -183,13 +182,13 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
           <EventListCard
             refetchEvents={refetchEvents}
             userRole={userRole}
-            key={event._id}
-            _id={event._id}
+            key={event.id}
+            id={event.id}
             location={event.location}
             name={event.name}
             description={event.description}
-            startDate={event.startDate}
-            endDate={event.endDate}
+            startAt={event.startAt}
+            endAt={event.endAt}
             startTime={event.startTime}
             endTime={event.endTime}
             allDay={event.allDay}

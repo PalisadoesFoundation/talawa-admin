@@ -9,7 +9,7 @@
  * @param data.userId - The unique identifier for the user.
  * @param data.eventId - The unique identifier for the event.
  * @param data.name - The name of the user.
- * @param data.checkIn - The check-in status of the user.
+ * @param data.isCheckedIn - Whether the user is currently checked in.
  * @param refetch - A function to refetch the data after a mutation.
  *
  * @returns A JSX element that displays buttons for checking in or downloading a tag.
@@ -28,7 +28,7 @@
  *     userId: '123',
  *     eventId: '456',
  *     name: 'John Doe',
- *     checkIn: null,
+ *     isCheckedIn: false,
  *   }}
  *   refetch={() => fetchData()}
  * />
@@ -47,20 +47,28 @@ import { useTranslation } from 'react-i18next';
 export const TableRow = ({
   data,
   refetch,
+  onCheckInUpdate,
 }: {
   data: InterfaceTableCheckIn;
   refetch: () => void;
+  onCheckInUpdate?: () => void;
 }): JSX.Element => {
   const [checkInMutation] = useMutation(MARK_CHECKIN);
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
   const markCheckIn = (): void => {
+    const variables = data.isRecurring
+      ? { userId: data.userId, recurringEventInstanceId: data.eventId }
+      : { userId: data.userId, eventId: data.eventId };
+
     checkInMutation({
-      variables: { userId: data.userId, eventId: data.eventId },
+      variables: variables,
     })
       .then(() => {
         toast.success(t('checkedInSuccessfully') as string);
         refetch();
+        // Call the callback to refresh data in parent component (EventRegistrants)
+        onCheckInUpdate?.();
       })
       .catch((err) => {
         toast.error(t('errorCheckingIn') as string);
@@ -92,7 +100,7 @@ export const TableRow = ({
       }
       inputs.push({ name: data.name.trim() });
       const pdf = await generate({ template: tagTemplate, inputs });
-      const blob = new Blob([new Uint8Array(pdf.buffer)], {
+      const blob = new Blob([pdf.buffer as ArrayBuffer], {
         type: 'application/pdf',
       });
       const url = URL.createObjectURL(blob);
@@ -108,7 +116,7 @@ export const TableRow = ({
 
   return (
     <>
-      {data.checkIn !== null ? (
+      {data.isCheckedIn ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
             Checked In
@@ -119,8 +127,7 @@ export const TableRow = ({
         </div>
       ) : (
         <Button
-          variant="contained"
-          color="success"
+          style={{ backgroundColor: '#A8C7FA', color: '#555' }}
           onClick={markCheckIn}
           className="m-2 p-2"
         >

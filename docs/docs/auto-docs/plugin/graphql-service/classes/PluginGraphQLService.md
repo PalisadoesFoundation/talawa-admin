@@ -8,7 +8,7 @@ Defined in: [src/plugin/graphql-service.ts:72](https://github.com/PalisadoesFoun
 
 ## Constructors
 
-### new PluginGraphQLService()
+### Constructor
 
 > **new PluginGraphQLService**(`apolloClient`): `PluginGraphQLService`
 

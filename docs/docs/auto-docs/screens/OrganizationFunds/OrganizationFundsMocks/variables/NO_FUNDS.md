@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/OrganizationFunds/OrganizationFundsMocks.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/OrganizationFundsMocks.ts#L128)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

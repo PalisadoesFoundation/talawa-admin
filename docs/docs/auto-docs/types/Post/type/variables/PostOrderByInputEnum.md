@@ -8,7 +8,7 @@
 
 Defined in: [src/types/Post/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L32)
 
-## Type declaration
+## Type Declaration
 
 ### COMMENT\_COUNT\_ASC
 

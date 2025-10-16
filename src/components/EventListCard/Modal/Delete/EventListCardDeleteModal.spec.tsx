@@ -10,11 +10,11 @@ import i18n from 'utils/i18nForTest';
 // Mock props for standalone event
 const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
   eventListCardProps: {
-    _id: 'standalone-event-1',
+    id: 'standalone-event-1',
     name: 'Standalone Event',
     description: 'A standalone event',
-    startDate: '2024-01-01',
-    endDate: '2024-01-01',
+    startAt: '2024-01-01T10:00:00Z',
+    endAt: '2024-01-01T11:00:00Z',
     startTime: '10:00:00',
     endTime: '11:00:00',
     allDay: false,
@@ -28,8 +28,8 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
       emailAddress: 'john@example.com',
     },
     // Standalone event fields
-    isRecurringTemplate: false,
-    baseEventId: null,
+    isRecurringEventTemplate: false,
+    baseEvent: null,
     sequenceNumber: null,
     totalCount: null,
     hasExceptions: false,
@@ -45,11 +45,11 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
 // Mock props for recurring event instance
 const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
   eventListCardProps: {
-    _id: 'recurring-instance-1',
+    id: 'recurring-instance-1',
     name: 'Daily Meeting',
     description: 'Daily team meeting',
-    startDate: '2024-01-01',
-    endDate: '2024-01-01',
+    startAt: '2024-01-01T09:00:00Z',
+    endAt: '2024-01-01T10:00:00Z',
     startTime: '09:00:00',
     endTime: '10:00:00',
     allDay: false,
@@ -63,8 +63,8 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
       emailAddress: 'john@example.com',
     },
     // Recurring instance fields
-    isRecurringTemplate: false,
-    baseEventId: 'base-event-123', // This makes it a recurring instance
+    isRecurringEventTemplate: false,
+    baseEvent: { id: 'base-event-123' }, // This makes it a recurring instance
     sequenceNumber: 5,
     totalCount: 10,
     hasExceptions: false,
@@ -307,8 +307,8 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // This is a template, not an instance
-          baseEventId: null,
+          isRecurringEventTemplate: true, // This is a template, not an instance
+          baseEvent: null,
         },
       };
 
@@ -339,8 +339,7 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // Template flag takes precedence
-          baseEventId: 'some-base-id',
+          isRecurringEventTemplate: true, // Template flag takes precedence
         },
       };
 
