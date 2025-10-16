@@ -108,7 +108,6 @@ export default function chat(): JSX.Element {
   } = useQuery(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  // Use new unreadChats endpoint implemented in backend; keep old as fallback if needed
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
 
   // TODO: Update markChatMessagesAsRead to match new schema
@@ -128,7 +127,6 @@ export default function chat(): JSX.Element {
       if (filterType === 'all') {
         const { data } = await chatsListRefetch();
         if (data && data.chatsByUser) {
-          // Filter by organization if orgId is present in route params
           const filteredChats = orgId
             ? data.chatsByUser.filter((chat: GroupChat | NewChatType) => {
                 if (isNewChatType(chat)) {
@@ -143,7 +141,6 @@ export default function chat(): JSX.Element {
       } else if (filterType === 'unread') {
         const { data } = await unreadChatListRefetch();
         if (data && data.unreadChats) {
-          // Filter by organization if orgId is present in route params
           const filteredChats = orgId
             ? data.unreadChats.filter((chat: GroupChat | NewChatType) => {
                 if (isNewChatType(chat)) {
@@ -166,7 +163,6 @@ export default function chat(): JSX.Element {
           const legacy = chat as GroupChat;
           return !!legacy.isGroup || (legacy.users?.length || 0) > 2;
         });
-        // Filter by organization if orgId is present in route params
         const filteredGroups = orgId
           ? groups.filter((chat: GroupChat | NewChatType) => {
               if (isNewChatType(chat)) {
@@ -184,7 +180,6 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
-      // Filter by organization if orgId is present in route params
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter((chat: GroupChat | NewChatType) => {
             if (isNewChatType(chat)) {
@@ -326,7 +321,6 @@ export default function chat(): JSX.Element {
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {
-                        // Derive unread count and last message if present (from unreadChats)
                         const unreadCount = isNewChatType(chat)
                           ? (chat.unreadMessagesCount ?? 0)
                           : 0;
