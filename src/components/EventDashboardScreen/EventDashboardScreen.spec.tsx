@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
@@ -21,8 +21,8 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // Deprecated
-    removeListener: vi.fn(), // Deprecated
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
@@ -36,7 +36,9 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useParams: () => ({ orgId: mockID }),
-    useLocation: () => ({ pathname: '/orgdash/123' }),
+    useLocation: () => ({
+      pathname: mockID ? `/orgdash/${mockID}` : 'orgdash/undefined',
+    }),
   };
 });
 
@@ -55,51 +57,58 @@ describe('EventDashboardScreen Component', () => {
   it('redirects to / if orgId is undefined', async () => {
     mockID = undefined;
     setItem('IsLoggedIn', 'true');
+
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
-    expect(window.location.pathname).toEqual('/');
+
+    // Component should not render the main page container
+    expect(screen.queryByTestId('mainpageright')).not.toBeInTheDocument();
     mockID = '123';
   });
 
   it('redirects to / if IsLoggedIn is false', async () => {
     setItem('IsLoggedIn', 'false');
+
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
-    expect(window.location.pathname).toEqual('/');
+
+    expect(screen.queryByTestId('mainpageright')).not.toBeInTheDocument();
   });
 
-  it('renders correctly when AdminFor is null (partial org dashboard)', async () => {
+  it('renders correctly when AdminFor is null', async () => {
     setItem('IsLoggedIn', 'true');
     setItem('AdminFor', null);
+
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
+
     expect(screen.getByText(/title/i)).toBeInTheDocument();
   });
 
@@ -110,27 +119,35 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
     const toggleButton = await screen.findByTestId('toggleMenuBtn');
     const mainPage = await screen.findByTestId('mainpageright');
+
+    const initialClass = mainPage.className;
+
     // Resize window to trigger hideDrawer true
     resizeWindow(800);
     clickToggleMenuBtn(toggleButton);
+
+    const afterFirstToggle = mainPage.className;
+    expect(afterFirstToggle).not.toBe(initialClass);
+    expect(afterFirstToggle).toMatch(/expand|contract/);
 
     // Resize back
     resizeWindow(1200);
     clickToggleMenuBtn(toggleButton);
 
-    // Ensure class changes with hideDrawer state
-    expect(mainPage.className).toMatch(/contract|expand/);
+    const afterSecondToggle = mainPage.className;
+    expect(afterSecondToggle).not.toBe(afterFirstToggle);
+    expect(afterSecondToggle).toMatch(/expand|contract/);
   });
 });
