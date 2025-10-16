@@ -5,6 +5,7 @@ import {
   act,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
@@ -160,9 +161,7 @@ describe('Calendar Component', () => {
 
     // Verify each header row contains 7 weekday cells
     weekdayHeaders.forEach((header) => {
-      const weekdayCells = Array.from(
-        header.querySelectorAll('[data-testid^="weekday-"]'),
-      );
+      const weekdayCells = within(header).getAllByTestId(/^weekday-/);
       expect(weekdayCells.length).toBe(7);
     });
 
@@ -681,8 +680,8 @@ describe('Calendar Component', () => {
     // Verify role-based filtering: The component should filter events correctly
     // For non-members, private events should be filtered out and only public events visible
     // Check that expand buttons exist for today's month
-    const allExpandButtons = screen.queryAllByTestId(/expand-btn-/);
-    const allNoEventButtons = screen.queryAllByTestId(/no-events-btn-/);
+    const allExpandButtons = screen.queryAllByTestId(/^expand-btn-/);
+    const allNoEventButtons = screen.queryAllByTestId(/^no-events-btn-/);
 
     // The calendar should have rendered with buttons (either expand or no-event)
     expect(allExpandButtons.length + allNoEventButtons.length).toBeGreaterThan(
