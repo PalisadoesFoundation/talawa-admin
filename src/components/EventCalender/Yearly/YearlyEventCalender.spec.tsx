@@ -61,12 +61,14 @@ describe('Calendar Component', () => {
       description: 'Test Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '10:00',
-      endTime: '11:00',
+      startTime: '10:00:00',
+      endTime: '11:00:00',
       allDay: false,
       isPublic: true,
       isRegisterable: true,
-      attendees: [{ id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' }],
+      attendees: [
+        { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
+      ],
       creator: {
         id: 'creator1',
         name: 'John Doe',
@@ -80,12 +82,14 @@ describe('Calendar Component', () => {
       description: 'Private Description',
       startDate: new Date().toISOString(),
       endDate: new Date().toISOString(),
-      startTime: '12:00',
-      endTime: '13:00',
+      startTime: '12:00:00',
+      endTime: '13:00:00',
       allDay: false,
       isPublic: false,
       isRegisterable: true,
-      attendees: [{ id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' }],
+      attendees: [
+        { id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' },
+      ],
       creator: {
         id: 'creator2',
         name: 'Jane Doe',
@@ -133,6 +137,13 @@ describe('Calendar Component', () => {
     vi.clearAllMocks();
     // Reset the mock implementation for useParams before each test
     vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
+    // Freeze system time to avoid timezone/day boundary flakiness
+    vi.setSystemTime(new Date('2024-01-15T12:00:00Z'));
+  });
+
+  afterEach(() => {
+    // Restore real timers after each test
+    vi.useRealTimers();
   });
 
   it('renders correctly with basic props', async () => {
@@ -318,27 +329,34 @@ describe('Calendar Component', () => {
       },
     ];
 
+    // Rerender with new events - don't re-wrap in Router, it's already established
     rerender(
-      <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Calendar
-            eventData={newMockEvents}
-            refetchEvents={mockRefetchEvents}
-          />
-        </Suspense>
-      </BrowserRouter>,
+      <Calendar eventData={newMockEvents} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButtons = container.querySelectorAll('._btn__more_d00707');
+    // Wait for rerender to complete
+    await waitFor(() => {
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
+    });
 
-    for (const button of Array.from(expandButtons)) {
-      fireEvent.click(button);
+    const expandButtons = screen.queryAllByTestId(/^expand-btn-/);
 
-      const eventList = container.querySelector('._event_list_d00707');
-      if (eventList) {
-        expect(eventList).toBeInTheDocument();
-        break;
+    // Only test expansion if expand buttons exist
+    if (expandButtons.length > 0) {
+      for (const button of expandButtons) {
+        await act(async () => {
+          fireEvent.click(button);
+        });
+
+        const closeButton = screen.queryByText('Close');
+        if (closeButton) {
+          expect(closeButton).toBeInTheDocument();
+          break;
+        }
       }
+    } else {
+      // If no expand buttons, at least verify the calendar still renders with the new data
+      expect(screen.getByText('January')).toBeInTheDocument();
     }
   });
 
@@ -419,8 +437,11 @@ describe('Calendar Component', () => {
     expect(screen.getByText('January')).toBeInTheDocument();
     expect(screen.getByText('December')).toBeInTheDocument();
 
-    // Find all buttons (either expand-btn or no-events-btn)
-    const allButtons = screen.queryAllByTestId(/btn-0-/);
+    // Find all buttons (either expand-btn or no-events-btn) explicitly
+    const allButtons = [
+      ...screen.queryAllByTestId(/^expand-btn-0-/),
+      ...screen.queryAllByTestId(/^no-events-btn-0-/),
+    ];
     expect(allButtons.length).toBeGreaterThan(0);
 
     // Click first button to test expansion functionality
@@ -513,7 +534,8 @@ describe('Calendar Component', () => {
 
   it('filters events for REGULAR users who are organization members', async () => {
     const todayYear = today.getFullYear();
-    const testDate = new Date(todayYear, 5, 15);
+    // Use January (month 0) to match the frozen system time
+    const testDate = new Date(todayYear, 0, 15);
 
     const events = [
       {
@@ -539,11 +561,11 @@ describe('Calendar Component', () => {
       ...mockOrgData,
       members: {
         edges: [
-          { 
-            node: { 
-              id: 'user123', 
-              name: 'Test User', 
-              emailAddress: 'test@example.com' 
+          {
+            node: {
+              id: 'user123',
+              name: 'Test User',
+              emailAddress: 'test@example.com',
             },
             cursor: 'cursor1',
           },
@@ -569,9 +591,27 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify calendar rendered - both public and private events should be filtered for members
+    // Verify calendar rendered - both public and private events should be visible to members
     expect(screen.getByText('January')).toBeInTheDocument();
     expect(screen.getByText('December')).toBeInTheDocument();
+
+    // Expand a day with events and verify private event is visible to a member
+    const expandButtons = screen.queryAllByTestId(/^expand-btn-/);
+
+    // If expand buttons exist (events are present), verify private event visibility
+    if (expandButtons.length > 0) {
+      await act(async () => {
+        fireEvent.click(expandButtons[0]);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Private Event')).toBeInTheDocument();
+      });
+    } else {
+      // If no expand buttons, verify the calendar is still properly rendered
+      // This can happen if event dates don't align with the test date
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
+    }
   });
 
   it('filters events for REGULAR users who are NOT organization members', async () => {
@@ -605,11 +645,11 @@ describe('Calendar Component', () => {
       ...mockOrgData,
       members: {
         edges: [
-          { 
-            node: { 
-              id: 'otherUser', 
-              name: 'Other User', 
-              emailAddress: 'other@example.com' 
+          {
+            node: {
+              id: 'otherUser',
+              name: 'Other User',
+              emailAddress: 'other@example.com',
             },
             cursor: 'cursor1',
           },
@@ -662,11 +702,15 @@ describe('Calendar Component', () => {
         fireEvent.click(allExpandButtons[0]);
       });
 
-      // After expansion, private event should still not be visible
+      // After expansion, private event should be filtered out but public event should be visible
       await waitFor(() => {
         expect(
           screen.queryByText('Private Event Filtered'),
         ).not.toBeInTheDocument();
+        // Assert that public events remain visible for non-members
+        expect(
+          screen.getByText('Public Event for Non-Members'),
+        ).toBeInTheDocument();
       });
     }
   });
@@ -717,14 +761,20 @@ describe('Calendar Component', () => {
         fireEvent.click(allButtons[0]);
       });
 
-      // Wait a bit for any state updates
+      // Validate expansion effect by checking for event title and Close button
       await waitFor(() => {
-        expect(container).toBeInTheDocument();
+        expect(screen.getByText('Test Event')).toBeInTheDocument();
+        expect(screen.getByText('Close')).toBeInTheDocument();
       });
 
       // Click again to test collapse
       await act(async () => {
         fireEvent.click(allButtons[0]);
+      });
+
+      // Verify collapsed state
+      await waitFor(() => {
+        expect(screen.queryByText('Close')).not.toBeInTheDocument();
       });
     }
 
