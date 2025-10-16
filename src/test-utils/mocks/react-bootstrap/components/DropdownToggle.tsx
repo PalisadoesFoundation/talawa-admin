@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Mock Dropdown.Toggle - renders a button and forwards onClick and any props.
+ * Provides a `data-testid` default of `dropdown` unless overridden. Used by
+ * tests that expect a clickable toggle element.
+ */
 export type BtnProps = React.PropsWithChildren<
   React.ButtonHTMLAttributes<HTMLButtonElement> & { 'data-testid'?: string }
 >;

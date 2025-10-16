@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * Mock Dropdown.Item - renders a button representing an item inside a
+ * Dropdown.Menu. For tests we simply forward onClick and any provided props.
+ */
 export type BtnProps = React.PropsWithChildren<
   React.ButtonHTMLAttributes<HTMLButtonElement> & { 'data-testid'?: string }
 >;
