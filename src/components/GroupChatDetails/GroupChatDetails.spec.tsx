@@ -18,10 +18,7 @@ import {
   filledMockChat,
   incompleteMockChat,
 } from './GroupChatDetailsMocks';
-import {
-  UPDATE_CHAT_MEMBERSHIP,
-  DELETE_CHAT_MEMBERSHIP,
-} from 'GraphQl/Mutations/OrganizationMutations';
+import type { NewChatType } from 'types/Chat/interface';
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -60,13 +57,46 @@ describe('GroupChatDetails', () => {
     vi.resetAllMocks();
   });
 
-  // Helper to ensure chat objects have the fields the component expects
-  const withSafeChat = (chat: any) => ({
-    ...chat,
-    id: chat?._id || chat?.id || 'chat1',
-    members: chat?.members || { edges: [] },
-    organization: chat?.organization || { id: 'org123' },
-  });
+  type MaybeChat = Partial<NewChatType> & { _id?: string };
+
+  const withSafeChat = (raw: unknown): NewChatType => {
+    const chat = (raw as MaybeChat) || {};
+    const orgId = chat.organization?.id ?? 'org123';
+    const createdAtValue = (chat as { createdAt?: string | Date }).createdAt;
+    const updatedAtValue = (chat as { updatedAt?: string | null }).updatedAt;
+
+    return {
+      id: (chat as { _id?: string; id?: string })._id ?? chat.id ?? 'chat1',
+      name: chat.name ?? '',
+      description: chat.description,
+      avatarMimeType: chat.avatarMimeType,
+      avatarURL: chat.avatarURL,
+      isGroup: chat.isGroup ?? true,
+      createdAt:
+        typeof createdAtValue === 'string'
+          ? createdAtValue
+          : createdAtValue instanceof Date
+            ? createdAtValue.toISOString()
+            : new Date(0).toISOString(),
+      updatedAt:
+        typeof updatedAtValue === 'string' || updatedAtValue === null
+          ? updatedAtValue
+          : null,
+      unreadMessagesCount: chat.unreadMessagesCount,
+      hasUnread: chat.hasUnread,
+      firstUnreadMessageId: chat.firstUnreadMessageId,
+      lastMessage: chat.lastMessage,
+      organization: {
+        id: orgId,
+        name: chat.organization?.name ?? '',
+        countryCode: chat.organization?.countryCode,
+      },
+      creator: chat.creator,
+      updater: chat.updater,
+      members: chat.members ?? { edges: [] },
+      messages: chat.messages ?? { edges: [] },
+    };
+  };
 
   it('renders Error modal if userId is not in localStorage', () => {
     const toastSpy = vi.spyOn(toast, 'error');

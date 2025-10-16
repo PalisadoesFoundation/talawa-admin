@@ -13,50 +13,75 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-// Mock Dropdown from react-bootstrap to render items in place so tests can
-// reliably query menu items by data-testid. Other react-bootstrap exports
-// are left intact.
+
+/* eslint-disable react/no-multi-comp */
 vi.mock('react-bootstrap', async () => {
-  const actual = await vi.importActual('react-bootstrap');
-  const Dropdown = (props: any) => <div {...props}>{props.children}</div>;
-  Dropdown.Toggle = (props: any) => (
+  const actual =
+    await vi.importActual<typeof import('react-bootstrap')>('react-bootstrap');
+  type DivProps = React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>;
+  type BtnProps = React.PropsWithChildren<
+    React.ButtonHTMLAttributes<HTMLButtonElement> & { 'data-testid'?: string }
+  >;
+
+  const Dropdown: React.FC<DivProps> & {
+    Toggle: React.FC<BtnProps>;
+    Menu: React.FC<DivProps>;
+    Item: React.FC<BtnProps>;
+  } = (({ children, ...rest }: DivProps) => (
+    <div {...rest}>{children}</div>
+  )) as unknown as React.FC<DivProps> & {
+    Toggle: React.FC<BtnProps>;
+    Menu: React.FC<DivProps>;
+    Item: React.FC<BtnProps>;
+  };
+
+  const Toggle: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
     <button
       type="button"
-      data-testid={props['data-testid'] || 'dropdown'}
-      onClick={props.onClick}
+      data-testid={
+        (rest as { 'data-testid'?: string })['data-testid'] || 'dropdown'
+      }
+      onClick={onClick}
+      {...rest}
     >
-      {props.children}
+      {children}
     </button>
   );
-  Dropdown.Menu = (props: any) => <div>{props.children}</div>;
-  Dropdown.Item = (props: any) => (
-    <button data-testid={props['data-testid']} onClick={props.onClick}>
-      {props.children}
+  const Menu: React.FC<DivProps> = ({ children, ...rest }) => (
+    <div {...rest}>{children}</div>
+  );
+  const Item: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
+    <button
+      data-testid={(rest as { 'data-testid'?: string })['data-testid']}
+      onClick={onClick}
+      {...rest}
+    >
+      {children}
     </button>
   );
-  return {
-    ...actual,
-    Dropdown,
-  };
-});
 
-// Mock Minio hooks. Factory returns mocked hook implementations.
+  Dropdown.Toggle = Toggle;
+  Dropdown.Menu = Menu;
+  Dropdown.Item = Item;
+
+  return { ...actual, Dropdown };
+});
+/* eslint-enable react/no-multi-comp */
+
 vi.mock('utils/MinioUpload', () => {
   const useMinioUpload = vi.fn(() => ({
-    uploadFileToMinio: async (_file: File) => ({ objectName: 'uploaded_obj' }),
+    uploadFileToMinio: async () => ({ objectName: 'uploaded_obj' }),
   }));
   return { useMinioUpload };
 });
 
 vi.mock('utils/MinioDownload', () => {
   const useMinioDownload = vi.fn(() => ({
-    getFileFromMinio: async (_objectName: string) =>
-      'https://example.com/presigned.jpg',
+    getFileFromMinio: async () => 'https://example.com/presigned.jpg',
   }));
   return { useMinioDownload };
 });
 
-// Import the mocked modules so tests can adjust the mockReturnValueOnce per test
 import * as MinioUpload from 'utils/MinioUpload';
 import * as MinioDownload from 'utils/MinioDownload';
 
@@ -739,35 +764,45 @@ describe('ChatRoom Component', () => {
     // swallow expected unhandled promise rejections caused by mocked Apollo errors
     // (some tests intentionally mock network errors; without this listener Vitest
     // reports them as unhandled and fails the run).
-    (window as any).__unhandledRejectionHandler = (event: any) => {
-      const reason = event?.reason || event;
-      const msg = reason?.message || '';
+    type WithHandler = Window & {
+      __unhandledRejectionHandler?: (event: PromiseRejectionEvent) => void;
+    };
+    const win = window as WithHandler;
+    win.__unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
+      const reason: unknown = event?.reason;
+      const msg =
+        typeof reason === 'object' && reason && 'message' in reason
+          ? String((reason as { message?: unknown }).message ?? '')
+          : '';
       if (
         typeof msg === 'string' &&
         (msg.includes('Failed to send message') ||
           msg.includes('mark read not supported'))
       ) {
-        // prevent Vitest from treating this as an unhandled error
-        try {
-          event.preventDefault && event.preventDefault();
-        } catch (e) {}
+        if (typeof event.preventDefault === 'function') {
+          event.preventDefault();
+        }
       }
     };
     window.addEventListener(
       'unhandledrejection',
-      (window as any).__unhandledRejectionHandler,
+      win.__unhandledRejectionHandler,
     );
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
     // remove global handler
-    if ((window as any).__unhandledRejectionHandler) {
+    type WithHandler = Window & {
+      __unhandledRejectionHandler?: (event: PromiseRejectionEvent) => void;
+    };
+    const win = window as WithHandler;
+    if (win.__unhandledRejectionHandler) {
       window.removeEventListener(
         'unhandledrejection',
-        (window as any).__unhandledRejectionHandler,
+        win.__unhandledRejectionHandler,
       );
-      delete (window as any).__unhandledRejectionHandler;
+      delete win.__unhandledRejectionHandler;
     }
   });
 
@@ -1032,7 +1067,7 @@ describe('ChatRoom Component', () => {
       const getFile = vi.fn();
       const { getByText } = render(
         <MessageImage
-          media={'' as any}
+          media={''}
           organizationId="org123"
           getFileFromMinio={getFile}
         />,
@@ -1124,16 +1159,6 @@ describe('ChatRoom Component', () => {
   });
 
   it('uploads file, shows attachment and removeAttachment clears it', async () => {
-    vi.mocked(MinioUpload).useMinioUpload.mockReturnValueOnce({
-      uploadFileToMinio: async (_file: File) => ({
-        objectName: 'uploaded_obj',
-      }),
-    } as any);
-    vi.mocked(MinioDownload).useMinioDownload.mockReturnValueOnce({
-      getFileFromMinio: async (_objectName: string) =>
-        'https://example.com/presigned.jpg',
-    } as any);
-
     renderChatRoom();
     await waitFor(() =>
       expect(screen.getByText('Hello World')).toBeInTheDocument(),
@@ -1245,7 +1270,6 @@ describe('ChatRoom Component', () => {
       expect(screen.getByTestId('groupChatDetailsModal')).toBeInTheDocument(),
     );
 
-    // close the modal via the header closeButton inside GroupChatDetails
     const closeBtn = within(screen.getByTestId('groupChatDetails')).getByRole(
       'button',
       { name: /close/i },
@@ -1260,7 +1284,6 @@ describe('ChatRoom Component', () => {
   });
 
   it('does not attempt to load more messages when firstMessageCursor is missing', async () => {
-    // Use a default chat response but then simulate load-more call with no first cursor
     renderChatRoom([CHAT_NO_FIRST_CURSOR_MOCK]);
 
     await waitFor(() =>
@@ -1269,25 +1292,15 @@ describe('ChatRoom Component', () => {
 
     const chatContainer = document.getElementById('messages');
     if (chatContainer) {
-      // trigger scroll which would call loadMoreMessages
       fireEvent.scroll(chatContainer, { target: { scrollTop: 0 } });
     }
 
-    // no 'Older message' should be added because the first message cursor was absent
     await waitFor(() =>
       expect(screen.queryByText('Older message')).not.toBeInTheDocument(),
     );
   });
 
   it('sends message with attachment and clears state', async () => {
-    // override module mocks for this test
-    vi.mocked(MinioUpload).useMinioUpload.mockReturnValueOnce({
-      uploadFileToMinio: async () => ({ objectName: 'uploaded_obj' }),
-    } as any);
-    vi.mocked(MinioDownload).useMinioDownload.mockReturnValueOnce({
-      getFileFromMinio: async () => 'https://example.com/presigned.jpg',
-    } as any);
-
     const { chatListRefetch } = renderChatRoom([
       CHAT_BY_ID_AFTER_SEND_MOCK,
       SEND_MESSAGE_UPLOADED_MOCK,
@@ -1303,7 +1316,6 @@ describe('ChatRoom Component', () => {
     Object.defineProperty(fileInput, 'files', { value: [file] });
     fireEvent.change(fileInput);
 
-    // wait for attachment preview
     await waitFor(() =>
       expect(screen.getByAltText('attachment')).toBeInTheDocument(),
     );
@@ -1320,7 +1332,6 @@ describe('ChatRoom Component', () => {
   });
 
   it('appends subscription message and tolerates mark-as-read failure', async () => {
-    // ensure the mark-as-read mutation errors but subscription still appends
     const { chatListRefetch } = renderChatRoom([
       MARK_READ_ERROR_MOCK,
       MESSAGE_SENT_SUBSCRIPTION_MOCK,
@@ -1330,7 +1341,6 @@ describe('ChatRoom Component', () => {
       expect(screen.getByText('Test Chat')).toBeInTheDocument(),
     );
 
-    // the subscription should trigger a refetch; assert the refetch handler was called
     await waitFor(() => expect(chatListRefetch).toHaveBeenCalled());
   });
 });

@@ -1,16 +1,14 @@
 import type { GroupChat, DirectMessage } from 'types/Chat/type';
 import {
-  // mutation used by component to add a user
   CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT,
-} from 'GraphQl/Mutations/OrganizationMutations';
-import {
   UPDATE_CHAT_MEMBERSHIP,
   DELETE_CHAT_MEMBERSHIP,
   DELETE_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+
 /**
  * Mocks for the GroupChatDetails component
  */

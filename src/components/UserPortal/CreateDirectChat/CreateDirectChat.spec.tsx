@@ -33,7 +33,7 @@ const mockUsers = [
     cursor: 'cursor-1',
     node: {
       __typename: 'User',
-      id: '1', // This is the current user
+      id: '1',
       name: 'Current User',
       avatarURL: '',
       role: 'Admin',
