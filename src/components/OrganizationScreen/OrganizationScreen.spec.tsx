@@ -39,7 +39,7 @@ const MOCKS = [
       data: {
         eventsByOrganization: [
           {
-            _id: 'event123',
+            id: 'event123',
             title: 'Test Event Title',
             description: 'Test Description',
             startDate: '2024-01-01',

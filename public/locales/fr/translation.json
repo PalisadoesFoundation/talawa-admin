@@ -1103,6 +1103,7 @@
     "registrant": "Inscrit",
     "registeredAt": "Enregistré le",
     "createdAt": "Créé le",
+    "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
     "noRegistrantsFound": "Aucun inscrit trouvé."
   },

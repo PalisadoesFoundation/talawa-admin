@@ -51,7 +51,8 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
 
   // Check if this is a recurring instance
   const isRecurringInstance =
-    !eventListCardProps.isRecurringTemplate && !!eventListCardProps.baseEventId;
+    !eventListCardProps.isRecurringEventTemplate &&
+    !!eventListCardProps.baseEvent?.id;
 
   const handleDelete = () => {
     if (isRecurringInstance) {
@@ -64,7 +65,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   return (
     <Modal
       size={isRecurringInstance ? 'lg' : 'sm'}
-      id={`deleteEventModal${eventListCardProps._id}`}
+      id={`deleteEventModal${eventListCardProps.id}`}
       show={eventDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"
@@ -74,7 +75,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       <Modal.Header closeButton className={`${styles.modalHeader}`}>
         <Modal.Title
           className="text-white"
-          id={`deleteEventModalLabel${eventListCardProps._id}`}
+          id={`deleteEventModalLabel${eventListCardProps.id}`}
         >
           {t('deleteEvent')}
         </Modal.Title>

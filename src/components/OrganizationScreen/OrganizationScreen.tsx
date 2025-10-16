@@ -91,7 +91,7 @@ const OrganizationScreen = (): JSX.Element => {
     if (isEventPath?.params.eventId && eventsData?.eventsByOrganization) {
       const eventId = isEventPath.params.eventId;
       const event = eventsData.eventsByOrganization.find(
-        (e: InterfaceEvent) => e._id === eventId,
+        (e: InterfaceEvent) => e.id === eventId,
       );
 
       if (!event) {

@@ -56,7 +56,6 @@ import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventA
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/EventManagement/EventRegistrant/EventRegistrants';
-
 /**
  * Tab options for the event management component.
  */

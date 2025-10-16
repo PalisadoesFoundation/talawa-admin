@@ -38,6 +38,7 @@
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -112,9 +113,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     try {
       const response = await addSignUp({
         variables: {
-          ...formData,
+          ID: orgId,
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
           password: '123456',
-          orgId,
         },
       });
 
@@ -133,7 +135,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header closeButton className="bg-success text-white">
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
+        >
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -209,7 +214,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             <Button
               variant="success"
               type="submit"
-              className="w-100"
+              className={`border-1 mx-4 ${styles.addButton}`}
               disabled={isSubmitting}
             >
               {isSubmitting ? (

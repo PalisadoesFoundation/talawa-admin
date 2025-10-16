@@ -1103,6 +1103,7 @@
     "registrant": "注册者",
     "registeredAt": "注册时间",
     "createdAt": "创建时间",
+    "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者"
   },

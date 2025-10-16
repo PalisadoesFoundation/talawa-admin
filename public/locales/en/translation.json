@@ -812,6 +812,7 @@
     "registrant": "Registrant",
     "registeredAt": "Registered At",
     "createdAt": "Created At",
+    "options": "Options",
     "addRegistrant": "Add Registrant",
     "noRegistrantsFound": "No Registrants Found."
   },

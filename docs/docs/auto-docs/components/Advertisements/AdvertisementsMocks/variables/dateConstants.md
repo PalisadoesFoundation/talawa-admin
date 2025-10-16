@@ -8,7 +8,7 @@
 
 Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L116)
 
-## Type declaration
+## Type Declaration
 
 ### create
 

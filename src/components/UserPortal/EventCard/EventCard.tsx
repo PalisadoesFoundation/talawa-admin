@@ -50,7 +50,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
-import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
+import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
@@ -89,7 +89,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: props._id,
+            id: props.id,
           },
         });
         if (data) {
@@ -127,7 +127,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}
-        <b> {dayjs(props.startDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.startAt).format('D MMMM YYYY')}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
@@ -138,7 +138,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}{' '}
-        <b> {dayjs(props.endDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>
         {`${t('creator')} `}
