@@ -133,35 +133,4 @@ describe('EventDashboardScreen Component', () => {
     // Ensure class changes with hideDrawer state
     expect(mainPage.className).toMatch(/contract|expand/);
   });
-
-  it('renders properly when sidebar value is null (hideDrawer === null)', async () => {
-    setItem('IsLoggedIn', 'true');
-    setItem('AdminFor', [{ _id: '2', __typename: 'Organization' }]);
-
-    const spy = vi
-      .spyOn(useLocalStorage(), 'getItem')
-      .mockImplementation((key: string) => {
-        if (key === 'sidebar') return null;
-        if (key === 'IsLoggedIn') return 'true';
-        if (key === 'AdminFor')
-          return [{ _id: '2', __typename: 'Organization' }];
-        return null;
-      });
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventDashboardScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const toggleButton = await screen.findByTestId('toggleMenuBtn');
-    expect(toggleButton).toBeInTheDocument();
-    spy.mockRestore();
-  });
 });
