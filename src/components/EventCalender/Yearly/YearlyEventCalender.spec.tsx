@@ -66,11 +66,11 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
-      attendees: [{ _id: 'user1' }],
+      attendees: [{ id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' }],
       creator: {
-        firstName: 'John',
-        lastName: 'Doe',
-        _id: 'creator1',
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
       },
     },
     {
@@ -85,11 +85,11 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
-      attendees: [{ _id: 'user2' }],
+      attendees: [{ id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' }],
       creator: {
-        firstName: 'Jane',
-        lastName: 'Doe',
-        _id: 'creator2',
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
       },
     },
   ];
@@ -539,8 +539,19 @@ describe('Calendar Component', () => {
       ...mockOrgData,
       members: {
         edges: [
-          { node: { id: 'user123', firstName: 'Test', lastName: 'User' } },
+          { 
+            node: { 
+              id: 'user123', 
+              name: 'Test User', 
+              emailAddress: 'test@example.com' 
+            },
+            cursor: 'cursor1',
+          },
         ],
+        pageInfo: {
+          hasNextPage: false,
+          endCursor: 'cursor1',
+        },
       },
     };
 
@@ -594,8 +605,19 @@ describe('Calendar Component', () => {
       ...mockOrgData,
       members: {
         edges: [
-          { node: { id: 'otherUser', firstName: 'Other', lastName: 'User' } },
+          { 
+            node: { 
+              id: 'otherUser', 
+              name: 'Other User', 
+              emailAddress: 'other@example.com' 
+            },
+            cursor: 'cursor1',
+          },
         ],
+        pageInfo: {
+          hasNextPage: false,
+          endCursor: 'cursor1',
+        },
       },
     };
 
