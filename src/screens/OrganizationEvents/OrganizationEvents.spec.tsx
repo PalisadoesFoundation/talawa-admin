@@ -980,13 +980,7 @@ describe('Organisation Events Page', () => {
     // debouncedSetYear(year);
 
     // Find navigation elements in the calendar that would trigger month change
-    const navigationElements = screen.getAllByRole('button');
-    const nextButton = navigationElements.find(
-      (button) =>
-        button.textContent?.includes('›') ||
-        button.textContent?.includes('next') ||
-        button.getAttribute('data-testid')?.includes('next'),
-    );
+    const nextButton = screen.getByTestId('nextmonthordate');
 
     if (nextButton) {
       // Click next month button to trigger handleMonthChange

@@ -66,6 +66,10 @@ export interface ICreateActionItemInput {
   isTemplate?: boolean;
 }
 
+export interface ICreateActionItemVariables {
+  input: ICreateActionItemInput;
+}
+
 export interface IUpdateActionItemInput {
   id: string;
   assigneeId?: string;
@@ -81,4 +85,42 @@ export interface IDeleteActionItemInput {
 
 export interface IMarkActionItemAsPendingInput {
   id: string;
+}
+
+export interface IFormStateType {
+  assignedAt: Date;
+  categoryId: string;
+  assigneeId: string;
+  eventId?: string;
+  preCompletionNotes: string;
+  postCompletionNotes: string | null;
+  isCompleted: boolean;
+}
+
+export interface IItemModalProps {
+  isOpen: boolean;
+  hide: () => void;
+  orgId: string;
+  eventId: string | undefined;
+  actionItemsRefetch: () => void;
+  orgActionItemsRefetch?: () => void;
+  actionItem: IActionItemInfo | null;
+  editMode: boolean;
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
+}
+
+export interface IUpdateActionItemForInstanceInput {
+  actionId: string;
+  preCompletionNotes?: string;
+  postCompletionNotes?: string;
+  isCompleted?: boolean;
+  eventId?: string;
+  assigneeId?: string;
+  categoryId?: string;
+  assignedAt?: string;
+}
+
+export interface IUpdateActionItemForInstanceVariables {
+  input: IUpdateActionItemForInstanceInput;
 }

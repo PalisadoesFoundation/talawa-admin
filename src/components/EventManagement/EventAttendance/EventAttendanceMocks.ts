@@ -1,39 +1,40 @@
 import { EVENT_ATTENDEES, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 export const MOCKEVENT = {
-  _id: 'event123',
-  title: 'Test Event',
-  // Also provide current schema-compatible fields for components/queries that expect them
+  id: 'event123',
   name: 'Test Event',
   description: 'This is a test event description',
-  startDate: '2030-05-01',
-  endDate: '2030-05-02',
-  // Duplicate date-time fields for newer queries expecting startAt/endAt
+  location: 'Test Location',
+  allDay: false,
+  isPublic: true,
+  isRegisterable: true,
   startAt: '2030-05-01T09:00:00.000Z',
   endAt: '2030-05-02T17:00:00.000Z',
-  startTime: '09:00:00',
-  endTime: '17:00:00',
-  allDay: false,
-  location: 'Test Location',
-  recurring: true,
-  baseRecurringEvent: {
-    _id: 'recurringEvent123',
+  createdAt: '2030-04-01T00:00:00.000Z',
+  updatedAt: '2030-04-01T00:00:00.000Z',
+  recurrenceRule: {
+    id: 'recurringEvent123',
+  },
+  creator: {
+    id: 'creator123',
+    name: 'Creator Name',
+    emailAddress: 'creator@example.com',
+  },
+  updater: {
+    id: 'updater123',
+    name: 'Updater Name',
+    emailAddress: 'updater@example.com',
   },
   organization: {
-    _id: 'org456',
-    members: [
-      { _id: 'member1', firstName: 'John', lastName: 'Doe' },
-      { _id: 'member2', firstName: 'Jane', lastName: 'Smith' },
-    ],
+    id: 'org456',
+    name: 'Test Organization',
   },
-  attendees: [{ _id: 'user1' }, { _id: 'user2' }],
 };
 
 export const MOCKDETAIL = [
   {
     request: {
       query: EVENT_DETAILS,
-      // Align variable name with query definition: GetEvent($eventId: String!)
       variables: { eventId: 'event123' },
     },
     result: {
@@ -48,46 +49,44 @@ export const MOCKS = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      // EVENT_ATTENDEES($id: ID!) requires an id variable
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
         event: {
           attendees: [
             {
-              _id: '6589386a2caa9d8d69087484',
-              firstName: 'Bruce',
-              lastName: 'Garza',
-              gender: null,
-              birthDate: null,
+              id: '6589386a2caa9d8d69087484',
+              name: 'Bruce Garza',
+              emailAddress: 'bruce@example.com',
+              avatarURL: null,
               createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
               eventsAttended: [
                 {
-                  __typename: 'Event',
-                  _id: '660fdf7d2c1ef6c7db1649ad',
+                  id: '660fdf7d2c1ef6c7db1649ad',
                 },
                 {
-                  __typename: 'Event',
-                  _id: '660fdd562c1ef6c7db1644f7',
+                  id: '660fdd562c1ef6c7db1644f7',
                 },
               ],
-              __typename: 'User',
             },
             {
-              _id: '6589386a2caa9d8d69087485',
-              firstName: 'Jane',
-              lastName: 'Smith',
-              gender: null,
-              birthDate: null,
+              id: '6589386a2caa9d8d69087485',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+              avatarURL: null,
               createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
               eventsAttended: [
                 {
-                  __typename: 'Event',
-                  _id: '660fdf7d2c1ef6c7db1649ad',
+                  id: '660fdf7d2c1ef6c7db1649ad',
                 },
               ],
-              __typename: 'User',
             },
           ],
         },
@@ -100,7 +99,7 @@ export const MOCKS_ERROR = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     error: new Error('An error occurred'),
   },

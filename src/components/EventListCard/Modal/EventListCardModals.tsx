@@ -87,10 +87,10 @@ function EventListCardModals({
     'single' | 'following' | 'entireSeries'
   >('single');
   const [eventStartDate, setEventStartDate] = useState(
-    new Date(eventListCardProps.startDate),
+    new Date(eventListCardProps.startAt),
   );
   const [eventEndDate, setEventEndDate] = useState(
-    new Date(eventListCardProps.endDate),
+    new Date(eventListCardProps.endAt),
   );
   // Initialize recurrence with default pattern for recurring events
   const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
@@ -238,8 +238,8 @@ function EventListCardModals({
   // This function is called when the update button is clicked
   const handleEventUpdate = async (): Promise<void> => {
     const isRecurringInstance =
-      !eventListCardProps.isRecurringTemplate &&
-      !!eventListCardProps.baseEventId;
+      !eventListCardProps.isRecurringEventTemplate &&
+      !!eventListCardProps.baseEvent?.id;
 
     if (isRecurringInstance) {
       setEventUpdateModalIsOpen(true);
@@ -282,15 +282,15 @@ function EventListCardModals({
 
       // Check if this is a recurring instance
       const isRecurringInstance =
-        !eventListCardProps.isRecurringTemplate &&
-        !!eventListCardProps.baseEventId;
+        !eventListCardProps.isRecurringEventTemplate &&
+        !!eventListCardProps.baseEvent?.id;
 
       if (!isRecurringInstance) {
         // Standalone event
         const result = await deleteStandaloneEvent({
           variables: {
             input: {
-              id: eventListCardProps._id,
+              id: eventListCardProps.id,
             },
           },
         });
@@ -302,7 +302,7 @@ function EventListCardModals({
             const singleResult = await deleteSingleInstance({
               variables: {
                 input: {
-                  id: eventListCardProps._id,
+                  id: eventListCardProps.id,
                 },
               },
             });
@@ -313,7 +313,7 @@ function EventListCardModals({
             const followingResult = await deleteThisAndFollowing({
               variables: {
                 input: {
-                  id: eventListCardProps._id,
+                  id: eventListCardProps.id,
                 },
               },
             });
@@ -324,7 +324,7 @@ function EventListCardModals({
             const allResult = await deleteEntireSeries({
               variables: {
                 input: {
-                  id: eventListCardProps.baseEventId,
+                  id: eventListCardProps.baseEvent?.id,
                 },
               },
             });
@@ -366,7 +366,7 @@ function EventListCardModals({
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: eventListCardProps._id,
+            id: eventListCardProps.id,
           },
         });
 
@@ -386,7 +386,7 @@ function EventListCardModals({
   const openEventDashboard = (): void => {
     const userPath =
       eventListCardProps.userRole === UserRole.REGULAR ? 'user/' : '';
-    navigate(`/${userPath}event/${orgId}/${eventListCardProps._id}`);
+    navigate(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
   };
 
   return (
@@ -434,7 +434,7 @@ function EventListCardModals({
       {/* update modal */}
       <Modal
         size="lg"
-        id={`updateEventModal${eventListCardProps._id}`}
+        id={`updateEventModal${eventListCardProps.id}`}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
@@ -444,7 +444,7 @@ function EventListCardModals({
         <Modal.Header closeButton className={`${styles.modalHeader}`}>
           <Modal.Title
             className="text-white"
-            id={`updateEventModalLabel${eventListCardProps._id}`}
+            id={`updateEventModalLabel${eventListCardProps.id}`}
           >
             {t('updateEvent')}
           </Modal.Title>

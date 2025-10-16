@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L124)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

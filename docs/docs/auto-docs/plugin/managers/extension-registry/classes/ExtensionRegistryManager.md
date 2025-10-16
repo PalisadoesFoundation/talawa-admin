@@ -8,7 +8,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 ## Constructors
 
-### new ExtensionRegistryManager()
+### Constructor
 
 > **new ExtensionRegistryManager**(): `ExtensionRegistryManager`
 
