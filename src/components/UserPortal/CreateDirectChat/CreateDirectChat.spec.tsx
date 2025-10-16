@@ -14,6 +14,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import * as ErrorHandler from 'utils/errorHandler';
+import type { GroupChat } from 'types/Chat/type';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -213,18 +214,15 @@ describe('CreateDirectChatModal', () => {
   test('should render users and allow creating a new direct chat', async () => {
     renderComponent();
 
-    // Wait for users to load and verify the list
     const userRows = await screen.findAllByTestId('user');
     expect(userRows.length).toBe(2);
     expect(userRows[0]).toHaveTextContent('Test User 2');
     expect(userRows[1]).toHaveTextContent('Test User 3');
     expect(screen.queryByText('Current User')).not.toBeInTheDocument();
 
-    // Click the add button for a user
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]); // Click add for Test User 2
+    fireEvent.click(addButtons[0]);
 
-    // Assert that mutations and functions were called
     await waitFor(() => {
       expect(chatsListRefetch).toHaveBeenCalled();
     });
@@ -234,16 +232,13 @@ describe('CreateDirectChatModal', () => {
   test('should allow searching for a user', async () => {
     renderComponent();
 
-    // Wait for initial list
     await screen.findAllByTestId('user');
 
-    // Search for a user
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
     fireEvent.change(searchInput, { target: { value: 'Test User 2' } });
     fireEvent.click(searchButton);
 
-    // Assert that the list is filtered
     await waitFor(async () => {
       const userRows = await screen.findAllByTestId('user');
       expect(userRows.length).toBe(1);
@@ -253,26 +248,47 @@ describe('CreateDirectChatModal', () => {
   });
 
   test('should prevent creating a duplicate chat', async () => {
-    const existingChats = [
+    const existingChats: GroupChat[] = [
       {
-        users: [{ _id: '1' }, { _id: 'user-2' }], // Pre-existing chat with user-2
+        _id: 'existing-chat-1',
+        isGroup: false,
+        name: 'Current User & Test User 2',
+        image: undefined,
+        messages: [],
+        admins: [],
+        users: [
+          {
+            _id: '1',
+            createdAt: new Date('2023-01-01T00:00:00Z'),
+            email: 'user1@example.com',
+            firstName: 'Current',
+            lastName: 'User',
+          },
+          {
+            _id: 'user-2',
+            createdAt: new Date('2023-01-01T00:00:00Z'),
+            email: 'user2@example.com',
+            firstName: 'Test',
+            lastName: 'User2',
+          },
+        ],
+        unseenMessagesByUsers: '',
+        description: 'A direct chat conversation',
+        createdAt: new Date('2023-01-01T00:00:00Z'),
       },
-    ] as any;
+    ];
 
     renderComponent({ chats: existingChats });
 
-    // Wait for users to load
     const userRows = await screen.findAllByTestId('user');
     expect(userRows[0]).toHaveTextContent('Test User 2');
 
-    // Click the add button for the user already in a chat
     const addButtons = await screen.findAllByTestId('addBtn');
     fireEvent.click(addButtons[0]);
 
-    // Assert that the error handler was called and chat was not created
     await waitFor(() => {
       expect(errorHandlerSpy).toHaveBeenCalledWith(
-        expect.any(Function), // the t function
+        expect.any(Function),
         expect.any(Error),
       );
     });

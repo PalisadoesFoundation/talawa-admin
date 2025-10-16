@@ -14,59 +14,14 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-/* eslint-disable react/no-multi-comp */
 vi.mock('react-bootstrap', async () => {
   const actual =
     await vi.importActual<typeof import('react-bootstrap')>('react-bootstrap');
-  type DivProps = React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>;
-  type BtnProps = React.PropsWithChildren<
-    React.ButtonHTMLAttributes<HTMLButtonElement> & { 'data-testid'?: string }
-  >;
-
-  const Dropdown: React.FC<DivProps> & {
-    Toggle: React.FC<BtnProps>;
-    Menu: React.FC<DivProps>;
-    Item: React.FC<BtnProps>;
-  } = (({ children, ...rest }: DivProps) => (
-    <div {...rest}>{children}</div>
-  )) as unknown as React.FC<DivProps> & {
-    Toggle: React.FC<BtnProps>;
-    Menu: React.FC<DivProps>;
-    Item: React.FC<BtnProps>;
-  };
-
-  const Toggle: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
-    <button
-      type="button"
-      data-testid={
-        (rest as { 'data-testid'?: string })['data-testid'] || 'dropdown'
-      }
-      onClick={onClick}
-      {...rest}
-    >
-      {children}
-    </button>
+  const mocks = await vi.importActual(
+    '../../../test-utils/mocks/react-bootstrap',
   );
-  const Menu: React.FC<DivProps> = ({ children, ...rest }) => (
-    <div {...rest}>{children}</div>
-  );
-  const Item: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
-    <button
-      data-testid={(rest as { 'data-testid'?: string })['data-testid']}
-      onClick={onClick}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
-
-  Dropdown.Toggle = Toggle;
-  Dropdown.Menu = Menu;
-  Dropdown.Item = Item;
-
-  return { ...actual, Dropdown };
+  return { ...actual, ...mocks };
 });
-/* eslint-enable react/no-multi-comp */
 
 vi.mock('utils/MinioUpload', () => {
   const useMinioUpload = vi.fn(() => ({
@@ -82,8 +37,7 @@ vi.mock('utils/MinioDownload', () => {
   return { useMinioDownload };
 });
 
-import * as MinioUpload from 'utils/MinioUpload';
-import * as MinioDownload from 'utils/MinioDownload';
+// Note: no direct imports from Minio modules are necessary; they are mocked above
 
 import ChatRoom, { MessageImage } from './ChatRoom';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
