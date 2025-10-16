@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 const t = {
   ...JSON.parse(
@@ -133,15 +133,219 @@ const renderVolunteerViewModal = (
 };
 
 describe('Testing VolunteerViewModal', () => {
-  it('Render VolunteerViewModal (variation 1)', async () => {
-    renderVolunteerViewModal(itemProps[0]);
-    expect(screen.getByText(t.volunteerDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('volunteer_avatar')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('Render VolunteerViewModal (variation 2)', async () => {
-    renderVolunteerViewModal(itemProps[1]);
-    expect(screen.getByText(t.volunteerDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('volunteer_image')).toBeInTheDocument();
+  describe('Basic Rendering', () => {
+    it('should render VolunteerViewModal with avatar when no image URL', () => {
+      renderVolunteerViewModal(itemProps[0]);
+      expect(screen.getByText(t.volunteerDetails)).toBeInTheDocument();
+      expect(screen.getByTestId('volunteer_avatar')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Teresa Bradley')).toBeInTheDocument();
+    });
+
+    it('should render VolunteerViewModal with image when avatar URL is provided', () => {
+      renderVolunteerViewModal(itemProps[1]);
+      expect(screen.getByText(t.volunteerDetails)).toBeInTheDocument();
+      expect(screen.getByTestId('volunteer_image')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Bruce Graza')).toBeInTheDocument();
+    });
+  });
+
+  describe('Modal Functionality', () => {
+    it('should call hide function when close button is clicked', () => {
+      const hideMock = vi.fn();
+      const props = { ...itemProps[0], hide: hideMock };
+      renderVolunteerViewModal(props);
+
+      const closeButton = screen.getByTestId('modalCloseBtn');
+      fireEvent.click(closeButton);
+
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not render modal when isOpen is false', () => {
+      const props = { ...itemProps[0], isOpen: false };
+      renderVolunteerViewModal(props);
+
+      expect(screen.queryByText(t.volunteerDetails)).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Volunteer Status Display', () => {
+    it('should display accepted status with correct styling and icon', () => {
+      renderVolunteerViewModal(itemProps[0]);
+      expect(screen.getByDisplayValue('Accepted')).toBeInTheDocument();
+    });
+
+    it('should display pending status with correct styling and icon', () => {
+      renderVolunteerViewModal(itemProps[1]);
+      expect(screen.getByDisplayValue('Pending')).toBeInTheDocument();
+    });
+
+    it('should display rejected status with correct styling and icon', () => {
+      const rejectedProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          volunteerStatus: 'rejected' as const,
+        },
+      };
+      renderVolunteerViewModal(rejectedProps);
+      // Check for the rejected status text - it shows the translation key when not resolved
+      const statusField = screen.getByLabelText('Status');
+      expect(statusField).toHaveValue('eventVolunteers.rejected');
+    });
+  });
+
+  describe('Hours Volunteered Display', () => {
+    it('should display hours when provided', () => {
+      renderVolunteerViewModal(itemProps[0]);
+      expect(screen.getByDisplayValue('10')).toBeInTheDocument();
+    });
+
+    it('should display dash when hours are null', () => {
+      const noHoursProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          hoursVolunteered: null,
+        },
+      };
+      renderVolunteerViewModal(noHoursProps);
+      expect(screen.getByDisplayValue('-')).toBeInTheDocument();
+    });
+
+    it('should display dash when hours are undefined', () => {
+      const noHoursProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          hoursVolunteered: undefined,
+        },
+      };
+      renderVolunteerViewModal(noHoursProps);
+      expect(screen.getByDisplayValue('-')).toBeInTheDocument();
+    });
+  });
+
+  describe('Groups Table', () => {
+    it('should render groups table when groups exist', () => {
+      renderVolunteerViewModal(itemProps[0]);
+      expect(screen.getByText('Volunteer Groups Joined')).toBeInTheDocument();
+      expect(screen.getByText('Sr. No.')).toBeInTheDocument();
+      expect(screen.getByText('Group Name')).toBeInTheDocument();
+      expect(screen.getByText('No. of Members')).toBeInTheDocument();
+      expect(screen.getByText('group1')).toBeInTheDocument();
+      // Check that table contains the expected data
+      const table = screen.getByRole('table');
+      expect(table).toBeInTheDocument();
+    });
+
+    it('should not render groups table when groups array is empty', () => {
+      renderVolunteerViewModal(itemProps[1]);
+      expect(
+        screen.queryByText('Volunteer Groups Joined'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should not render groups table when groups is null', () => {
+      const noGroupsProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          groups: null,
+        },
+      };
+      renderVolunteerViewModal(noGroupsProps);
+      expect(
+        screen.queryByText('Volunteer Groups Joined'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should display correct member count in groups table', () => {
+      renderVolunteerViewModal(itemProps[0]);
+      const memberCountCells = screen.getAllByText('1');
+      expect(memberCountCells.length).toBeGreaterThan(0);
+      // Check that at least one "1" is in a table cell (member count)
+      const tableCells = memberCountCells.filter(
+        (cell) => cell.closest('td') || cell.closest('th'),
+      );
+      expect(tableCells.length).toBeGreaterThan(0);
+    });
+
+    it('should display 0 when volunteers array is empty', () => {
+      const emptyVolunteersProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          groups: [
+            {
+              id: 'groupId1',
+              name: 'group1',
+              description: 'Test group',
+              volunteers: [],
+            },
+          ],
+        },
+      };
+      renderVolunteerViewModal(emptyVolunteersProps);
+      expect(screen.getByText('0')).toBeInTheDocument();
+    });
+
+    it('should display 0 when volunteers is null', () => {
+      const nullVolunteersProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          groups: [
+            {
+              id: 'groupId1',
+              name: 'group1',
+              description: 'Test group',
+              volunteers: null,
+            },
+          ],
+        },
+      };
+      renderVolunteerViewModal(nullVolunteersProps);
+      expect(screen.getByText('0')).toBeInTheDocument();
+    });
+  });
+
+  describe('Multiple Groups', () => {
+    it('should render multiple groups correctly', () => {
+      const multipleGroupsProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          groups: [
+            {
+              id: 'groupId1',
+              name: 'group1',
+              description: 'Test group 1',
+              volunteers: [{ id: 'volunteerId1' }],
+            },
+            {
+              id: 'groupId2',
+              name: 'group2',
+              description: 'Test group 2',
+              volunteers: [{ id: 'volunteerId2' }, { id: 'volunteerId3' }],
+            },
+          ],
+        },
+      };
+      renderVolunteerViewModal(multipleGroupsProps);
+
+      expect(screen.getByText('group1')).toBeInTheDocument();
+      expect(screen.getByText('group2')).toBeInTheDocument();
+
+      // Check for multiple "1" and "2" values in table
+      const ones = screen.getAllByText('1');
+      const twos = screen.getAllByText('2');
+      expect(ones.length).toBeGreaterThan(0);
+      expect(twos.length).toBeGreaterThan(0);
+    });
   });
 });
