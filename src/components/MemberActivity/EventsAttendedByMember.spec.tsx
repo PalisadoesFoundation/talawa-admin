@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
 
 describe('EventsAttendedByMember', () => {
@@ -55,7 +55,7 @@ describe('EventsAttendedByMember', () => {
     const fallbackMocks = [
       {
         request: {
-          query: EVENT_DETAILS,
+          query: EVENT_DETAILS_BASIC,
           variables: { eventId: 'event123' },
         },
         result: {

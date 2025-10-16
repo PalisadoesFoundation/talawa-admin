@@ -8,11 +8,11 @@
 
 Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L12)
 
-## Type declaration
+## Type Declaration
 
 #### & .MuiDataGrid-cell:focus
 
-> **MuiDataGrid-cell:focus**: `object`
+> **& .MuiDataGrid-cell:focus**: `object`
 
 #### & .MuiDataGrid-cell:focus.outline
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-main
 
-> **MuiDataGrid-main**: `object`
+> **& .MuiDataGrid-main**: `object`
 
 #### & .MuiDataGrid-main.borderRadius
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-root
 
-> **MuiDataGrid-root**: `object`
+> **& .MuiDataGrid-root**: `object`
 
 #### & .MuiDataGrid-root.borderRadius
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-row:hover
 
-> **MuiDataGrid-row:hover**: `object`
+> **& .MuiDataGrid-row:hover**: `object`
 
 #### & .MuiDataGrid-row:hover.backgroundColor
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-row.Mui-hovered
 
-> **Mui-hovered**: `object`
+> **& .MuiDataGrid-row.Mui-hovered**: `object`
 
 #### & .MuiDataGrid-row.Mui-hovered.backgroundColor
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-topContainer
 
-> **MuiDataGrid-topContainer**: `object`
+> **& .MuiDataGrid-topContainer**: `object`
 
 #### & .MuiDataGrid-topContainer.position
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-virtualScrollerContent
 
-> **MuiDataGrid-virtualScrollerContent**: `object`
+> **& .MuiDataGrid-virtualScrollerContent**: `object`
 
 #### & .MuiDataGrid-virtualScrollerContent.marginTop
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### &.MuiDataGrid-root .MuiDataGrid-cell:focus-within
 
-> **MuiDataGrid-cell:focus-within**: `object`
+> **&.MuiDataGrid-root .MuiDataGrid-cell:focus-within**: `object`
 
 #### &.MuiDataGrid-root .MuiDataGrid-cell:focus-within.outline
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### &.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within
 
-> **MuiDataGrid-columnHeader:focus-within**: `object`
+> **&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within**: `object`
 
 #### &.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within.outline
 

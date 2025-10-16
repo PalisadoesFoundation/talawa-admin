@@ -2,31 +2,29 @@ import {
   DELETE_STANDALONE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 
 export const eventData = [
   {
-    _id: '1',
+    id: '1',
     name: 'Event 1',
     description: 'This is event 1',
-    startDate: '2022-05-01',
-    endDate: '2022-05-01',
+    startAt: '2022-05-01T10:00:00Z',
+    endAt: '2022-05-01T12:00:00Z',
     location: 'New York',
     startTime: '10:00',
     endTime: '12:00',
     allDay: false,
     isPublic: true,
     isRegisterable: true,
-    viewType: ViewType.DAY,
     attendees: [],
     creator: {},
   },
   {
-    _id: '2',
+    id: '2',
     name: 'Event 2',
     description: 'This is event 2',
-    startDate: '2022-05-03',
-    endDate: '2022-05-03',
+    startAt: '2022-05-03T14:00:00Z',
+    endAt: '2022-05-03T16:00:00Z',
     location: 'Los Angeles',
     startTime: '14:00',
     endTime: '16:00',
