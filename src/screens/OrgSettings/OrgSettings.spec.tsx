@@ -113,9 +113,10 @@ describe('Organisation Settings Page', () => {
 
     expect(screen.getByTestId('generalTab')).toBeInTheDocument();
 
-    // Check if general settings button exists and has active class
+    // Check if general settings button exists
     const generalButton = screen.getByTestId('generalSettings');
     expect(generalButton).toBeInTheDocument();
+    expect(generalButton.className).toMatch(/_activeTabBtn_/);
   });
 
   it('should set document title correctly', async () => {
