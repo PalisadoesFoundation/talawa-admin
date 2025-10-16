@@ -38,6 +38,7 @@ import React, { useEffect, useState } from 'react';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Button, Dropdown } from 'react-bootstrap';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
@@ -71,6 +72,7 @@ export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
   const { getItem, setItem } = useLocalStorage();
+  const { orgId } = useParams<{ orgId: string }>();
 
   const [chats, setChats] = useState<Array<GroupChat | NewChatType>>([]);
   const [selectedContact, setSelectedContact] = useState('');
@@ -126,12 +128,32 @@ export default function chat(): JSX.Element {
       if (filterType === 'all') {
         const { data } = await chatsListRefetch();
         if (data && data.chatsByUser) {
-          setChats(data.chatsByUser);
+          // Filter by organization if orgId is present in route params
+          const filteredChats = orgId
+            ? data.chatsByUser.filter((chat: GroupChat | NewChatType) => {
+                if (isNewChatType(chat)) {
+                  return chat.organization?.id === orgId;
+                }
+                const legacy = chat as GroupChat;
+                return legacy.organization?._id === orgId;
+              })
+            : data.chatsByUser;
+          setChats(filteredChats);
         }
       } else if (filterType === 'unread') {
         const { data } = await unreadChatListRefetch();
         if (data && data.unreadChats) {
-          setChats(data.unreadChats);
+          // Filter by organization if orgId is present in route params
+          const filteredChats = orgId
+            ? data.unreadChats.filter((chat: GroupChat | NewChatType) => {
+                if (isNewChatType(chat)) {
+                  return chat.organization?.id === orgId;
+                }
+                const legacy = chat as GroupChat;
+                return legacy.organization?._id === orgId;
+              })
+            : data.unreadChats;
+          setChats(filteredChats);
         }
       } else if (filterType === 'group') {
         const { data } = await chatsListRefetch();
@@ -144,7 +166,17 @@ export default function chat(): JSX.Element {
           const legacy = chat as GroupChat;
           return !!legacy.isGroup || (legacy.users?.length || 0) > 2;
         });
-        setChats(groups);
+        // Filter by organization if orgId is present in route params
+        const filteredGroups = orgId
+          ? groups.filter((chat: GroupChat | NewChatType) => {
+              if (isNewChatType(chat)) {
+                return chat.organization?.id === orgId;
+              }
+              const legacy = chat as GroupChat;
+              return legacy.organization?._id === orgId;
+            })
+          : groups;
+        setChats(filteredGroups);
       }
     }
     getChats();
@@ -152,7 +184,17 @@ export default function chat(): JSX.Element {
 
   React.useEffect(() => {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
-      setChats(chatsListData.chatsByUser);
+      // Filter by organization if orgId is present in route params
+      const filteredChats = orgId
+        ? chatsListData.chatsByUser.filter((chat: GroupChat | NewChatType) => {
+            if (isNewChatType(chat)) {
+              return chat.organization?.id === orgId;
+            }
+            const legacy = chat as GroupChat;
+            return legacy.organization?._id === orgId;
+          })
+        : chatsListData.chatsByUser;
+      setChats(filteredChats);
     }
   }, [chatsListData, filterType]);
 
