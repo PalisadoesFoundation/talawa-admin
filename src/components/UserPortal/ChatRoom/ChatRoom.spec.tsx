@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import {useLocalStorage} from "../../../utils/useLocalstorage";
+import { useLocalStorage } from '../../../utils/useLocalstorage';
 
 vi.mock('react-bootstrap', async () => {
   const actual =
