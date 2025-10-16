@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
-import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
+import { MemoryRouter, useParams } from 'react-router-dom';
 import { UserRole } from 'types/Event/interface';
 
 // Mock the react-router-dom module
@@ -33,7 +33,6 @@ vi.mock('react-router-dom', async () => {
     Navigate: MockNavigate,
     // Make sure to preserve the actual routers
     MemoryRouter: actual.MemoryRouter,
-    BrowserRouter: actual.BrowserRouter,
   };
 });
 
@@ -141,13 +140,8 @@ describe('Calendar Component', () => {
     vi.setSystemTime(new Date('2024-01-15T12:00:00Z'));
   });
 
-  afterEach(() => {
-    // Restore real timers after each test
-    vi.useRealTimers();
-  });
-
   it('renders correctly with basic props', async () => {
-    const { getByText, getAllByTestId, container } = renderWithRouterAndPath(
+    const { getByText, getAllByTestId } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
@@ -314,7 +308,7 @@ describe('Calendar Component', () => {
       endDate: new Date().toISOString(),
     };
 
-    const { rerender, container } = renderWithRouterAndPath(
+    const { rerender } = renderWithRouterAndPath(
       <Calendar eventData={[mockEvent]} refetchEvents={mockRefetchEvents} />,
     );
 
