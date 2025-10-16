@@ -989,6 +989,9 @@ describe('MemberDetail', () => {
         'Invalid file type. Please upload a JPEG, PNG, or GIF.',
       );
     });
+
+    // Clear mock before next validation test
+    vi.clearAllMocks();
   });
 
   test('should handle file size too large on avatar upload', async () => {
