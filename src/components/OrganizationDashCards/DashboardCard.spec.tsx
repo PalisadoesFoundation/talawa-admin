@@ -13,17 +13,15 @@ const propsWithoutCount = {
 };
 
 describe('Testing the Dashboard Card', () => {
-  test('should render props and text elements For event card', () => {
+  test('should render props and text elements correctly', () => {
     render(<DashboardCard {...props} />);
-
-    expect(screen.getByTestId('cardTitle')).toContainHTML('Example Title');
-    expect(screen.getByTestId('cardCount')).toContainHTML('100');
+    expect(screen.getByTestId('cardTitle')).toHaveTextContent('Example Title');
+    expect(screen.getByTestId('cardCount')).toHaveTextContent('100');
   });
 
   test('renders count to 0 when count is missing', () => {
     render(<DashboardCard {...propsWithoutCount} />);
-
-    expect(screen.getByTestId('cardTitle')).toContainHTML('Example Title');
-    expect(screen.getByTestId('cardCount')).toContainHTML('0');
+    expect(screen.getByTestId('cardTitle')).toHaveTextContent('Example Title');
+    expect(screen.getByTestId('cardCount')).toHaveTextContent('0');
   });
 });
