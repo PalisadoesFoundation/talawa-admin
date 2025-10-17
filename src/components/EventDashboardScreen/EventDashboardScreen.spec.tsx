@@ -54,7 +54,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 };
 
 describe('EventDashboardScreen Component', () => {
-  it('redirects to / if orgId is undefined', async () => {
+  it('does not render main content when orgId is undefined', async () => {
     mockID = undefined;
     setItem('IsLoggedIn', 'true');
 
@@ -75,7 +75,7 @@ describe('EventDashboardScreen Component', () => {
     mockID = '123';
   });
 
-  it('redirects to / if IsLoggedIn is false', async () => {
+  it('does not render main content when IsLoggedIn is false', async () => {
     setItem('IsLoggedIn', 'false');
 
     render(
@@ -109,7 +109,7 @@ describe('EventDashboardScreen Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
   });
 
   it('renders and toggles drawer states correctly', async () => {
@@ -149,5 +149,7 @@ describe('EventDashboardScreen Component', () => {
     const afterSecondToggle = mainPage.className;
     expect(afterSecondToggle).not.toBe(afterFirstToggle);
     expect(afterSecondToggle).toMatch(/expand|contract/);
+
+    resizeWindow(1024);
   });
 });
