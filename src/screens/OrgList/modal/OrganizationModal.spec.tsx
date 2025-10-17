@@ -254,7 +254,6 @@ describe('OrganizationModal Component', () => {
     });
   });
 
-
   test('description field should not accept more than 200 characters', async () => {
     setup();
     const descInput = screen.getByTestId(
