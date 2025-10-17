@@ -141,6 +141,8 @@ describe('Testing VolunteerCreateModal', () => {
 
     // Open again: since filterSelectedOptions is true, the selected option should be filtered out
     fireEvent.mouseDown(memberInputField);
+    
+    // 'John Doe' should NOT be in the list now, but other options like 'Jane Smith' should be
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     expect(await screen.findByText('Jane Smith')).toBeInTheDocument();
     // Input value remains the same; isOptionEqualToValue is used internally for filtering
