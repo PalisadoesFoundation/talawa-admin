@@ -149,7 +149,7 @@ describe('EventDashboardScreen Component', () => {
     const afterSecondToggle = mainPage.className;
     expect(afterSecondToggle).not.toBe(afterFirstToggle);
     expect(afterSecondToggle).toMatch(/expand|contract/);
-    
+
     resizeWindow(1024);
   });
 });
