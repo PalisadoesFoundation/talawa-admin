@@ -23,7 +23,7 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import { FaBars, FaBell } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 
@@ -146,6 +146,13 @@ const leftDrawer = ({
           'communityProfileBtn',
         )}
 
+        {renderDrawerItem(
+          '/notification',
+          <SettingsIcon />,
+          t('notification'),
+          'notificationBtn',
+        )}
+
         {/* Plugin Settings Section */}
         {pluginDrawerItems?.length > 0 && (
           <>
@@ -230,80 +237,6 @@ const leftDrawer = ({
       </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
-        <div className={styles.optionList}>
-          <NavLink to={'/orglist'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="organizationsBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <OrganizationsIcon fontSize={25} stroke={'#000000'} />
-                </div>
-                {!hideDrawer && t('my organizations')}
-              </button>
-            )}
-          </NavLink>
-
-          {superAdmin && (
-            <NavLink to={'/users'} onClick={handleLinkClick}>
-              {({ isActive }) => (
-                <button
-                  className={`${
-                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                  }`}
-                  data-testid="rolesBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <RolesIcon fill="none" />
-                  </div>
-                  {t('users')}
-                </button>
-              )}
-            </NavLink>
-          )}
-
-          <NavLink to={'/CommunityProfile'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                } ${styles.sidebarText}`}
-                data-testid="communityProfileBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <SettingsIcon fill="none" fontSize={25} />
-                </div>
-                {!hideDrawer && t('communityProfile')}
-              </button>
-            )}
-          </NavLink>
-          <NavLink to={'/notification'} onClick={handleLinkClick}>
-            {({ isActive }) => (
-              <button
-                className={`${
-                  isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-                }`}
-                data-testid="notificationBtn"
-              >
-                <div className={styles.iconWrapper}>
-                  <FaBell
-                    style={{
-                      width: 25,
-                      height: 25,
-                      color: isActive
-                        ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)',
-                    }}
-                  />
-                </div>
-                {!hideDrawer && tCommon('notifications')}
-              </button>
-            )}
-          </NavLink>
-        </div>
         {drawerContent}
       </div>
       <div className={styles.userSidebarOrgFooter}>

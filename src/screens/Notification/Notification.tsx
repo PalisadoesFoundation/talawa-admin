@@ -31,7 +31,7 @@ const Notification: React.FC = () => {
   const userId = getItem('id');
 
   const [page, setPage] = useState<number>(0);
-  const pageSize = 7;
+  const pageSize = 6;
 
   const skip = page * pageSize;
 
@@ -78,7 +78,6 @@ const Notification: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}></h1>
       <div className={styles.listWrapper}>
         <ListGroup variant="flush">
           {isLoading ? (

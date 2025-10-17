@@ -34,7 +34,7 @@ const mocks = (
       variables: {
         userId: 'user-1',
         input: {
-          first: 7,
+          first: 6,
           skip: 0,
         },
       },
@@ -42,7 +42,7 @@ const mocks = (
     result: {
       data: {
         user: {
-          notifications: notifications.slice(0, 7),
+          notifications: notifications.slice(0, 6),
         },
       },
     },
@@ -53,7 +53,7 @@ const mocks = (
       variables: {
         userId: 'user-1',
         input: {
-          first: 7,
+          first: 6,
           skip: 0,
         },
       },
@@ -61,7 +61,7 @@ const mocks = (
     result: {
       data: {
         user: {
-          notifications: notifications.slice(0, 7),
+          notifications: notifications.slice(0, 6),
         },
       },
     },
@@ -72,15 +72,15 @@ const mocks = (
       variables: {
         userId: 'user-1',
         input: {
-          first: 7,
-          skip: 7,
+          first: 6,
+          skip: 6,
         },
       },
     },
     result: {
       data: {
         user: {
-          notifications: notifications.slice(7, 14),
+          notifications: notifications.slice(6, 14),
         },
       },
     },
@@ -92,15 +92,15 @@ const mocks = (
       variables: {
         userId: 'user-1',
         input: {
-          first: 7,
-          skip: 7,
+          first: 6,
+          skip: 6,
         },
       },
     },
     result: {
       data: {
         user: {
-          notifications: notifications.slice(7, 14),
+          notifications: notifications.slice(6, 14),
         },
       },
     },
@@ -179,7 +179,7 @@ describe('Notification Component', () => {
     const refetchMock = {
       request: {
         query: GET_USER_NOTIFICATIONS,
-        variables: { userId: 'user-1', input: { first: 7, skip: 0 } },
+        variables: { userId: 'user-1', input: { first: 6, skip: 0 } },
       },
       result: {
         data: {
@@ -194,10 +194,10 @@ describe('Notification Component', () => {
     const initialGet = {
       request: {
         query: GET_USER_NOTIFICATIONS,
-        variables: { userId: 'user-1', input: { first: 7, skip: 0 } },
+        variables: { userId: 'user-1', input: { first: 6, skip: 0 } },
       },
       result: {
-        data: { user: { notifications: notifications.slice(0, 7) } },
+        data: { user: { notifications: notifications.slice(0, 6) } },
       },
     };
 
@@ -245,7 +245,7 @@ describe('Notification Component', () => {
 
     fireEvent.click(await screen.findByText('Next'));
 
-    // second page should contain Notification 8 (index 7)
+    // second page should contain Notification 8 (index 6)
     await screen.findByText('Notification 8');
 
     fireEvent.click(await screen.findByText('Prev'));
@@ -283,9 +283,9 @@ describe('Notification Component', () => {
     await screen.findByText('Notification 1');
 
     await waitFor(() => {
-      // 3 notifications + 4 empty = 7
+      // 3 notifications + 4 empty = 6
       const items = container.querySelectorAll('[class*="notificationItem"]');
-      expect(items.length).toBe(7);
+      expect(items.length).toBe(6);
     });
   });
 

@@ -60,6 +60,7 @@ const map: InterfaceMapType = {
   pledges: 'userPledges',
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
+  notification: 'notification',
 };
 
 const UserScreen = (): React.JSX.Element => {
