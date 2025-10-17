@@ -133,7 +133,9 @@ describe('ChangeLanguageDropDown', () => {
 
   it('handles avatar processing error gracefully', async () => {
     // Mock urlToFile to throw an error
-    (urlToFile as jest.Mock).mockRejectedValue(new Error('Avatar processing failed'));
+    (urlToFile as jest.Mock).mockRejectedValue(
+      new Error('Avatar processing failed'),
+    );
 
     // Mock console.log to verify error logging
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -162,7 +164,10 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith('Error processing avatar:', expect.any(Error));
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error processing avatar:',
+        expect.any(Error),
+      );
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
     });
@@ -198,7 +203,10 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith('Error in changing language', expect.any(Error));
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error in changing language',
+        expect.any(Error),
+      );
     });
 
     consoleSpy.mockRestore();
