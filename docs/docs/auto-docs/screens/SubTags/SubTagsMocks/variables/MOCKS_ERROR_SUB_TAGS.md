@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/SubTags/SubTagsMocks.ts:489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/SubTags/SubTagsMocks.ts#L489)
 
-## Type declaration
+## Type Declaration
 
 ### error
 

@@ -516,14 +516,6 @@ export const UNLIKE_POST = gql`
   }
 `;
 
-export const REGISTER_EVENT = gql`
-  mutation registerForEvent($eventId: ID!) {
-    registerForEvent(id: $eventId) {
-      _id
-    }
-  }
-`;
-
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
     $facebookURL: String
@@ -634,6 +626,11 @@ export {
 export {
   ADD_EVENT_ATTENDEE,
   MARK_CHECKIN,
+  MARK_CHECKOUT,
+  REGISTER_FOR_EVENT,
+  REGISTER_EVENT_ATTENDEE,
+  INVITE_EVENT_ATTENDEE,
+  UNREGISTER_FOR_EVENT_BY_USER,
   REMOVE_EVENT_ATTENDEE,
 } from './EventAttendeeMutations';
 

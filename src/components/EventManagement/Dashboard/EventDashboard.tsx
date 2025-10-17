@@ -95,12 +95,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const eventListCardProps: InterfaceEvent = {
     userRole: userRole,
     key: eventData.event.id,
-    _id: eventData.event.id,
+    id: eventData.event.id,
     location: eventData.event.location || '',
     name: eventData.event.name,
     description: eventData.event.description || '',
-    startDate: eventData.event.startAt,
-    endDate: eventData.event.endAt,
+    startAt: eventData.event.startAt,
+    endAt: eventData.event.endAt,
     // Fix: Extract actual time values instead of null
     startTime: eventData.event.allDay
       ? '00:00'

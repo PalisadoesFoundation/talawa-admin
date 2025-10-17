@@ -23,16 +23,15 @@ export const FilterPeriod = {
 
 export interface IMember {
   createdAt: string;
-  firstName: string;
-  lastName: string;
-  email: `${string}@${string}.${string}`;
-  gender: string;
+  name: string;
+  emailAddress: `${string}@${string}.${string}`;
+  natalSex: string;
   eventsAttended?: {
-    _id: string;
+    id: string;
   }[];
   birthDate: Date;
-  __typename: string;
-  _id: string;
+  role: string;
+  id: string;
   tagsAssignedWith: {
     edges: {
       cursor: string;
@@ -46,14 +45,14 @@ export interface IMember {
 export interface IEvent {
   userRole?: string;
   key?: string;
-  _id: string;
+  id: string;
   location: string;
   name: string;
   description: string;
-  startDate: string;
-  endDate: string;
-  startTime: string | null;
-  endTime: string | null;
+  startAt: string;
+  endAt: string;
+  startTime?: string | null;
+  endTime?: string | null;
   allDay: boolean;
   userId?: string;
   isPublic: boolean;
@@ -63,16 +62,15 @@ export interface IEvent {
   averageFeedbackScore?: number;
   feedback?: Feedback[];
   // Recurring event fields
-  isMaterialized?: boolean;
-  isRecurringTemplate?: boolean;
-  recurringEventId?: string | null;
-  instanceStartTime?: string | null;
-  baseEventId?: string | null;
+  isRecurringEventTemplate?: boolean;
+  baseEvent?: {
+    id: string;
+  } | null;
   sequenceNumber?: number | null;
   totalCount?: number | null;
   hasExceptions?: boolean;
   progressLabel?: string | null;
-  // New recurrence description field
+
   recurrenceDescription?: string | null;
   recurrenceRule?: InterfaceRecurrenceRule | null;
 }
@@ -209,6 +207,38 @@ export interface IEventsAttendedMemberModalProps {
   eventsPerPage?: number;
 }
 
+export interface IEventEdge {
+  node: {
+    id: string;
+    name: string;
+    description?: string | null;
+    startAt: string;
+    endAt: string;
+    allDay: boolean;
+    location?: string | null;
+    isPublic: boolean;
+    isRegisterable: boolean;
+    // Recurring event fields
+    isRecurringEventTemplate?: boolean;
+    baseEvent?: {
+      id: string;
+      name: string;
+    } | null;
+    sequenceNumber?: number | null;
+    totalCount?: number | null;
+    hasExceptions?: boolean;
+    progressLabel?: string | null;
+    // New recurrence description fields
+    recurrenceDescription?: string | null;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
+    creator?: {
+      id: string;
+      name: string;
+    };
+  };
+  cursor: string;
+}
+
 // Legacy interface exports for backward compatibility
 export type InterfaceMember = IMember;
 export type InterfaceEvent = IEvent;
@@ -218,6 +248,7 @@ export type InterfaceCalendarProps = ICalendarProps;
 export type InterfaceEventHeaderProps = IEventHeaderProps;
 export type InterfaceDeleteEventModalProps = IDeleteEventModalProps;
 export type InterfacePreviewEventModalProps = IPreviewEventModalProps;
+export type InterfaceEventEdge = IEventEdge;
 export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
 export type InterfaceAttendanceStatisticsModalProps =
   IAttendanceStatisticsModalProps;

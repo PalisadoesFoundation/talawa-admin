@@ -6,9 +6,9 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L32)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L34)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
@@ -38,25 +38,29 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **event**: `object` = `MOCKEVENT`
 
-#### result.data.event.\_id
-
-> **\_id**: `string` = `'event123'`
-
 #### result.data.event.allDay
 
 > **allDay**: `boolean` = `false`
 
-#### result.data.event.attendees
+#### result.data.event.createdAt
 
-> **attendees**: `object`[]
+> **createdAt**: `string` = `'2030-04-01T00:00:00.000Z'`
 
-#### result.data.event.baseRecurringEvent
+#### result.data.event.creator
 
-> **baseRecurringEvent**: `object`
+> **creator**: `object`
 
-#### result.data.event.baseRecurringEvent.\_id
+#### result.data.event.creator.emailAddress
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **emailAddress**: `string` = `'creator@example.com'`
+
+#### result.data.event.creator.id
+
+> **id**: `string` = `'creator123'`
+
+#### result.data.event.creator.name
+
+> **name**: `string` = `'Creator Name'`
 
 #### result.data.event.description
 
@@ -66,13 +70,17 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **endAt**: `string` = `'2030-05-02T17:00:00.000Z'`
 
-#### result.data.event.endDate
+#### result.data.event.id
 
-> **endDate**: `string` = `'2030-05-02'`
+> **id**: `string` = `'event123'`
 
-#### result.data.event.endTime
+#### result.data.event.isPublic
 
-> **endTime**: `string` = `'17:00:00'`
+> **isPublic**: `boolean` = `true`
+
+#### result.data.event.isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 #### result.data.event.location
 
@@ -86,30 +94,42 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **organization**: `object`
 
-#### result.data.event.organization.\_id
+#### result.data.event.organization.id
 
-> **\_id**: `string` = `'org456'`
+> **id**: `string` = `'org456'`
 
-#### result.data.event.organization.members
+#### result.data.event.organization.name
 
-> **members**: `object`[]
+> **name**: `string` = `'Test Organization'`
 
-#### result.data.event.recurring
+#### result.data.event.recurrenceRule
 
-> **recurring**: `boolean` = `true`
+> **recurrenceRule**: `object`
+
+#### result.data.event.recurrenceRule.id
+
+> **id**: `string` = `'recurringEvent123'`
 
 #### result.data.event.startAt
 
 > **startAt**: `string` = `'2030-05-01T09:00:00.000Z'`
 
-#### result.data.event.startDate
+#### result.data.event.updatedAt
 
-> **startDate**: `string` = `'2030-05-01'`
+> **updatedAt**: `string` = `'2030-04-01T00:00:00.000Z'`
 
-#### result.data.event.startTime
+#### result.data.event.updater
 
-> **startTime**: `string` = `'09:00:00'`
+> **updater**: `object`
 
-#### result.data.event.title
+#### result.data.event.updater.emailAddress
 
-> **title**: `string` = `'Test Event'`
+> **emailAddress**: `string` = `'updater@example.com'`
+
+#### result.data.event.updater.id
+
+> **id**: `string` = `'updater123'`
+
+#### result.data.event.updater.name
+
+> **name**: `string` = `'Updater Name'`

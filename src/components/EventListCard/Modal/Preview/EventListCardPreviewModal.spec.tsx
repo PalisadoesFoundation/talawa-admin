@@ -15,6 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
 import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
 
@@ -33,12 +34,12 @@ const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
 const mockEventListCardProps = {
-  _id: 'event123',
+  id: 'event123',
   name: 'Test Event',
   description: 'Test event description',
   location: 'Test Location',
-  startDate: '2024-01-15',
-  endDate: '2024-01-15',
+  startAt: '2024-01-15T10:00:00Z',
+  endAt: '2024-01-15T12:00:00Z',
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -51,8 +52,8 @@ const mockEventListCardProps = {
     emailAddress: 'john@example.com',
   },
   userRole: UserRole.ADMINISTRATOR,
-  isRecurringTemplate: false,
-  baseEventId: null,
+  isRecurringEventTemplate: false,
+  baseEvent: null,
 };
 
 const mockFormState = {
@@ -113,7 +114,7 @@ const renderComponent = (props = {}) => {
 describe('EventListCardPreviewModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (CustomRecurrenceModal as jest.Mock).mockImplementation(() => (
+    (CustomRecurrenceModal as Mock).mockImplementation(() => (
       <div data-testid="mock-custom-recurrence-modal" />
     ));
   });
@@ -450,7 +451,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -462,8 +463,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: 'base123',
+        isRecurringEventTemplate: false,
+        baseEvent: { id: 'base123' },
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -475,8 +476,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: false,
-        baseEventId: null,
+        isRecurringEventTemplate: false,
+        baseEvent: null,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -488,7 +489,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: null,
@@ -501,7 +502,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
     });
@@ -524,7 +525,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       setRecurrence: mockSetRecurrence,
@@ -544,7 +545,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
@@ -565,7 +566,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: null,
@@ -594,7 +595,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
       },
       recurrence: existingRecurrence,
@@ -734,7 +735,7 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        isRecurringTemplate: true,
+        isRecurringEventTemplate: true,
       },
       recurrence: mockRecurrence,
     });
@@ -896,7 +897,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
         },
         recurrence,
       });
@@ -912,7 +913,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
         },
         recurrence,
       });
@@ -923,7 +924,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: 'Custom Rule',
         },
         recurrence: null,
@@ -935,7 +936,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: undefined,
         },
         recurrence: null,
@@ -947,7 +948,7 @@ describe('EventListCardPreviewModal', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           recurrenceDescription: 'My Custom Rule',
         },
         recurrence: null,
@@ -968,7 +969,7 @@ describe('EventListCardPreviewModal', () => {
         },
         eventListCardProps: {
           ...mockEventListCardProps,
-          isRecurringTemplate: true,
+          isRecurringEventTemplate: true,
           userRole: UserRole.ADMINISTRATOR,
         },
       });
@@ -978,8 +979,7 @@ describe('EventListCardPreviewModal', () => {
       const mockSetRecurrence = vi.fn();
       renderWithRecurrenceModal({ setRecurrence: mockSetRecurrence });
 
-      const customModalProps = (CustomRecurrenceModal as jest.Mock).mock
-        .calls[0][0];
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
       const updateFn = (prev: InterfaceRecurrenceRule) => ({
         ...prev,
         interval: 2,
@@ -998,8 +998,7 @@ describe('EventListCardPreviewModal', () => {
       const mockSetRecurrence = vi.fn();
       renderWithRecurrenceModal({ setRecurrence: mockSetRecurrence });
 
-      const customModalProps = (CustomRecurrenceModal as jest.Mock).mock
-        .calls[0][0];
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
       const newRecurrence = { frequency: Frequency.DAILY, interval: 5 };
       customModalProps.setRecurrenceRuleState(newRecurrence);
 
@@ -1010,8 +1009,7 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventEndDate = vi.fn();
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
-      const customModalProps = (CustomRecurrenceModal as jest.Mock).mock
-        .calls[0][0];
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
       const newDate = new Date('2024-05-10');
       const updateFn = () => newDate;
       customModalProps.setEndDate(updateFn);
@@ -1028,12 +1026,34 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventEndDate = vi.fn();
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
-      const customModalProps = (CustomRecurrenceModal as jest.Mock).mock
-        .calls[0][0];
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
       const newDate = new Date('2024-05-10');
       customModalProps.setEndDate(newDate);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(newDate);
+    });
+
+    test('should call setCustomRecurrenceModalIsOpen with false when hideCustomRecurrenceModal is called', () => {
+      const mockSetCustomRecurrenceModalIsOpen = vi.fn();
+      renderWithRecurrenceModal({
+        setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
+      });
+
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
+      customModalProps.hideCustomRecurrenceModal();
+
+      expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(false);
+    });
+
+    test('should pass translation function to CustomRecurrenceModal', () => {
+      renderWithRecurrenceModal();
+
+      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
+
+      // Verify the t function is passed and works correctly
+      expect(customModalProps.t).toBeDefined();
+      expect(typeof customModalProps.t).toBe('function');
+      expect(customModalProps.t('testKey')).toBe('testKey');
     });
   });
 

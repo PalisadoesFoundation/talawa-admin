@@ -32,7 +32,7 @@ const membership2 = {
   event: {
     _id: 'eventId',
     name: 'Event 2',
-    startDate: '2044-11-31',
+    startDate: '2044-11-30',
     recurrenceRule: null,
   },
   volunteer: {
@@ -50,6 +50,80 @@ const membership2 = {
     name: 'Group 1',
   },
 };
+const membership3 = {
+  _id: 'membershipId3',
+  id: 'membershipId3',
+  status: 'invited',
+  createdAt: '2024-10-30T10:18:05.851Z',
+  event: {
+    _id: 'eventId',
+    name: 'Event 2',
+    startDate: '2044-11-30',
+    recurrenceRule: {
+      id: 'recurrenceRuleId3',
+    },
+  },
+  volunteer: {
+    _id: 'volunteerId1',
+    user: {
+      _id: 'userId',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: null,
+    },
+  },
+  group: {
+    name: 'Group 2',
+    _id: 'groupId2',
+    id: 'groupId2',
+  },
+};
+const membership4 = {
+  _id: 'membershipId4',
+  id: 'membershipId4',
+  status: 'invited',
+  createdAt: '2024-10-30T10:18:05.851Z',
+  event: {
+    _id: 'eventId',
+    name: 'Event 2',
+    startDate: '2044-11-30',
+    recurrenceRule: null,
+  },
+  volunteer: {
+    _id: 'volunteerId1',
+    user: {
+      _id: 'userId',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: null,
+    },
+  },
+  group: null,
+};
+const membership5 = {
+  _id: 'membershipId5',
+  id: 'membershipId5',
+  status: 'invited',
+  createdAt: '2024-10-30T10:18:05.851Z',
+  event: {
+    _id: 'eventId',
+    name: 'Event 2',
+    startDate: '2044-11-30',
+    recurrenceRule: {
+      id: 'recurrenceRuleId5',
+    },
+  },
+  volunteer: {
+    _id: 'volunteerId1',
+    user: {
+      _id: 'userId',
+      firstName: 'John',
+      lastName: 'Doe',
+      image: null,
+    },
+  },
+  group: null,
+};
 
 export const MOCKS = [
   {
@@ -64,7 +138,13 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getVolunteerMembership: [membership1, membership2],
+        getVolunteerMembership: [
+          membership1,
+          membership2,
+          membership3,
+          membership4,
+          membership5,
+        ],
       },
     },
   },
@@ -257,5 +337,82 @@ export const UPDATE_ERROR_MOCKS = [
       },
     },
     error: new Error('Mock Graphql UPDATE_VOLUNTEER_MEMBERSHIP Error'),
+  },
+];
+
+// Separate mocks for testing invitation subject text based on group/individual and recurrence rule
+export const GROUP_RECURRING_MOCKS = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          userId: 'userId',
+          status: 'invited',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership3], // Group with recurring event
+      },
+    },
+  },
+];
+
+export const GROUP_NON_RECURRING_MOCKS = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          userId: 'userId',
+          status: 'invited',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership2], // Group with recurrenceRule: null
+      },
+    },
+  },
+];
+
+export const INDIVIDUAL_RECURRING_MOCKS = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          userId: 'userId',
+          status: 'invited',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership5], // Individual with recurring event
+      },
+    },
+  },
+];
+
+export const INDIVIDUAL_NON_RECURRING_MOCKS = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          userId: 'userId',
+          status: 'invited',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership4], // Individual with recurrenceRule: null
+      },
+    },
   },
 ];
