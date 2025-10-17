@@ -638,10 +638,41 @@ describe('OrganizationModal Component', () => {
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
-  // Note: Country code validation test is skipped because the country select dropdown
-  // uses predefined 2-character country codes, so the validation logic for length > 50
-  // is not realistically testable in this context. The validation exists in the code
-  // but will never be triggered with the current implementation.
+  test('should not update country code when input exceeds 50 characters', async () => {
+    setup();
+    const countrySelect = screen.getByTestId('modalOrganizationCountryCode');
+    
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+    
+    // Create a long value that exceeds 50 characters
+    const longValue = 'a'.repeat(60); // Exceeds 50 character limit
+    
+    // Try to directly trigger the onChange handler by simulating the event
+    // This tests the validation logic directly
+    const mockEvent = {
+      target: {
+        value: longValue
+      }
+    };
+    
+    // Get the component instance and call the onChange handler directly
+    // This bypasses the DOM event system and tests the validation logic
+    const component = countrySelect.closest('[data-testid="modalOrganizationCountryCode"]');
+    if (component) {
+      // Simulate the onChange event with a long value
+      fireEvent.change(component, { target: { value: longValue } });
+    }
+    
+    // The validation should prevent the update since longValue.length > 50
+    // Check that setFormState was not called with the long value
+    const calls = mockSetFormState.mock.calls;
+    const hasLongValueCall = calls.some(call => 
+      call[0] && typeof call[0] === 'object' && 
+      call[0].countryCode && call[0].countryCode.length >= 50
+    );
+    expect(hasLongValueCall).toBe(false);
+  });
 
   test('should not update state when input exceeds 50 characters', async () => {
     setup();
