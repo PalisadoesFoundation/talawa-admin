@@ -118,7 +118,7 @@ const renderVolunteerViewModal = (
   props: InterfaceVolunteerViewModal,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false}>
+    <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider>
@@ -210,7 +210,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: 0,
+          hoursVolunteered: null,
         },
       };
       renderVolunteerViewModal(noHoursProps);
@@ -222,7 +222,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: 0,
+          hoursVolunteered: undefined,
         },
       };
       renderVolunteerViewModal(noHoursProps);
