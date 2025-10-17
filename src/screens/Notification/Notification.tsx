@@ -1,3 +1,6 @@
+/*
+ * this file holds the Notification screen where users can view and manage their notifications
+ */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -49,7 +52,6 @@ const Notification: React.FC = () => {
           input: { notificationIds },
         },
       });
-      // wait for refetch to complete so the UI reflects the updated read state
       await refetch({ userId, input: { first: pageSize, skip } });
     } catch (error) {
       console.error('Error marking notifications as read:', error);

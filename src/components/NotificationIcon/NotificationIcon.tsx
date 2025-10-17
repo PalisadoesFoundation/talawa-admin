@@ -1,3 +1,7 @@
+/*
+ * this file holds the NotificationIcon component which displays a notification
+ * bell icon with unread count and a dropdown of recent notifications
+ */
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
