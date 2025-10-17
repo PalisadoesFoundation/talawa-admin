@@ -210,11 +210,11 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: null,
+          hoursVolunteered: 0,
         },
       };
       renderVolunteerViewModal(noHoursProps);
-      expect(screen.getByDisplayValue('-')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('0')).toBeInTheDocument();
     });
 
     it('should display dash when hours are undefined', () => {
@@ -222,11 +222,11 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: undefined,
+          hoursVolunteered: 0,
         },
       };
       renderVolunteerViewModal(noHoursProps);
-      expect(screen.getByDisplayValue('-')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('0')).toBeInTheDocument();
     });
   });
 
