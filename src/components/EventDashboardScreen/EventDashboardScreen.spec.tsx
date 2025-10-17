@@ -56,7 +56,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 describe('EventDashboardScreen Component', () => {
   it('does not render main content when orgId is undefined', async () => {
     mockID = undefined;
-    setItem('IsLoggedIn', true);
+    setItem('IsLoggedIn', 'true');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -76,7 +76,7 @@ describe('EventDashboardScreen Component', () => {
   });
 
   it('does not render main content when IsLoggedIn is false', async () => {
-    setItem('IsLoggedIn', false);
+    setItem('IsLoggedIn', 'false');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -94,7 +94,7 @@ describe('EventDashboardScreen Component', () => {
   });
 
   it('renders correctly when AdminFor is null', async () => {
-    setItem('IsLoggedIn', true);
+    setItem('IsLoggedIn', 'true');
     setItem('AdminFor', null);
 
     render(
@@ -113,7 +113,7 @@ describe('EventDashboardScreen Component', () => {
   });
 
   it('renders and toggles drawer states correctly', async () => {
-    setItem('IsLoggedIn', true);
+    setItem('IsLoggedIn', 'true');
     setItem('AdminFor', [{ _id: '1', __typename: 'Organization' }]);
     setItem('sidebar', false);
 
