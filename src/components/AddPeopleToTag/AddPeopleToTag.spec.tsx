@@ -473,7 +473,12 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(translations.errorOccurredWhileLoadingMembers),
+        screen.getByText((content, element) => {
+          return (
+            element?.tagName.toLowerCase() === 'h6' &&
+            content.includes(translations.errorOccurredWhileLoadingMembers)
+          );
+        }),
       ).toBeInTheDocument();
     });
 
@@ -546,21 +551,34 @@ describe('Organisation Tags Page', () => {
   it('Search input trims whitespace from values', async () => {
     renderAddPeopleToTagModal(props, link);
 
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.firstName),
+      ).toBeInTheDocument();
+    });
+
     const firstNameInput = screen.getByPlaceholderText(
       translations.firstName,
     ) as HTMLInputElement;
 
-    // Type value with leading and trailing spaces
-    await userEvent.type(firstNameInput, '   test   ');
-
-    // Wait for component to process the input
-    await waitFor(() => {
-      // The input should have the value with spaces (DOM value)
-      expect(firstNameInput.value).toBe('   test   ');
+    // Type value with leading and trailing spaces using fireEvent for immediate processing
+    fireEvent.change(firstNameInput, {
+      target: { value: '   usersToAssignTo   ' },
     });
 
-    // Component internally trims via setMemberToAssignToSearchFirstName(e.target.value.trim())
-    // This is validated by the existing search tests which verify the trimmed query executes
+    // Wait for the component to process the trimmed search
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      // Should find members matching the trimmed search 'usersToAssignTo'
+      expect(members.length).toBeGreaterThan(0);
+    });
+
+    // Verify the component's trim logic works by checking search results
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'usersToAssignTo',
+      );
+    });
   });
 
   it('Empty state displays when no members match search', async () => {
