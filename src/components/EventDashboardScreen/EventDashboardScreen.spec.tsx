@@ -37,7 +37,7 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : 'orgdash/undefined',
+      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
     }),
   };
 });
@@ -54,7 +54,7 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 };
 
 describe('EventDashboardScreen Component', () => {
-  it('redirects to / if orgId is undefined', async () => {
+  it('does not render main content when orgId is undefined', async () => {
     mockID = undefined;
     setItem('IsLoggedIn', 'true');
 
@@ -75,7 +75,7 @@ describe('EventDashboardScreen Component', () => {
     mockID = '123';
   });
 
-  it('redirects to / if IsLoggedIn is false', async () => {
+  it('does not render main content when IsLoggedIn is false', async () => {
     setItem('IsLoggedIn', 'false');
 
     render(
@@ -115,7 +115,7 @@ describe('EventDashboardScreen Component', () => {
   it('renders and toggles drawer states correctly', async () => {
     setItem('IsLoggedIn', 'true');
     setItem('AdminFor', [{ _id: '1', __typename: 'Organization' }]);
-    setItem('sidebar', 'false');
+    setItem('sidebar', false);
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -149,5 +149,7 @@ describe('EventDashboardScreen Component', () => {
     const afterSecondToggle = mainPage.className;
     expect(afterSecondToggle).not.toBe(afterFirstToggle);
     expect(afterSecondToggle).toMatch(/expand|contract/);
+
+    resizeWindow(1024);
   });
 });
