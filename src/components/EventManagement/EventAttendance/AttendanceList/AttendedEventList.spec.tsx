@@ -12,7 +12,7 @@ import { MOCKEVENT, MOCKDETAIL } from '../EventAttendanceMocks';
 
 describe('Testing AttendedEventList', () => {
   const props = {
-    _id: 'event123',
+    id: 'event123',
   };
 
   it('Component renders and displays event details correctly', async () => {
@@ -30,7 +30,7 @@ describe('Testing AttendedEventList', () => {
 
     await waitFor(() => {
       expect(queryByText('Test Event')).toBeInTheDocument();
-      expect(queryByText(formatDate(MOCKEVENT.startDate))).toBeInTheDocument();
+      expect(queryByText(formatDate(MOCKEVENT.startAt))).toBeInTheDocument();
       expect(queryByTitle('Event Date')).toBeInTheDocument();
     });
   });

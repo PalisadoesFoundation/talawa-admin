@@ -38,8 +38,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
-import { EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
-import styles from '../../../style/app-fixed.module.css';
+import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { TableRow } from './Row/TableRow';
 import type {
   InterfaceAttendeeCheckIn,
@@ -54,9 +53,11 @@ export const CheckInModal = ({
   show,
   eventId,
   handleClose,
+  onCheckInUpdate,
 }: InterfaceModalProp): JSX.Element => {
   // State to hold the data for the table
   const [tableData, setTableData] = useState<InterfaceTableData[]>([]);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
 
   // State for search filter input
   const [userFilterQuery, setUserFilterQuery] = useState('');
@@ -66,39 +67,56 @@ export const CheckInModal = ({
     items: [{ field: 'userName', operator: 'contains', value: '' }],
   });
 
+  // First, get event details to determine if it's recurring or standalone
+  const { data: eventData } = useQuery(EVENT_DETAILS, {
+    variables: { eventId: eventId },
+    fetchPolicy: 'cache-first',
+  });
+
   // Query to get check-in data from the server
   const {
     data: checkInData,
     loading: checkInLoading,
     refetch: checkInRefetch,
   } = useQuery(EVENT_CHECKINS, {
-    variables: { id: eventId },
+    variables: { eventId: eventId },
   });
+
+  // Determine event type from event data
+  useEffect(() => {
+    if (eventData?.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+    }
+  }, [eventData]);
 
   // Effect runs whenever checkInData, eventId, or checkInLoading changes
   useEffect(() => {
     checkInRefetch(); // Refetch data when component mounts or updates
     if (checkInLoading) {
       setTableData([]); // Clear table data while loading
-    } else {
+    } else if (checkInData?.event?.attendeesCheckInStatus) {
       // Map the check-in data to table rows
       setTableData(
         checkInData.event.attendeesCheckInStatus.map(
           (checkIn: InterfaceAttendeeCheckIn) => ({
-            userName: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
-            id: checkIn._id,
+            userName: checkIn.user.name || 'Unknown User',
+            id: checkIn.id,
             checkInData: {
-              id: checkIn._id,
-              name: `${checkIn.user.firstName} ${checkIn.user.lastName}`,
-              userId: checkIn.user._id,
-              checkIn: checkIn.checkIn,
+              id: checkIn.id,
+              name: checkIn.user.name || 'Unknown User',
+              userId: checkIn.user.id,
+              checkInTime: checkIn.checkInTime,
+              checkOutTime: checkIn.checkOutTime,
+              isCheckedIn: checkIn.isCheckedIn,
+              isCheckedOut: checkIn.isCheckedOut,
               eventId,
+              isRecurring: isRecurring,
             },
           }),
         ),
       );
     }
-  }, [checkInData, eventId, checkInLoading]);
+  }, [checkInData, eventId, checkInLoading, isRecurring]);
 
   // Define columns for the DataGrid
   const columns: GridColDef[] = [
@@ -109,19 +127,15 @@ export const CheckInModal = ({
       width: 400,
       renderCell: (props) => (
         // Render a custom row component for check-in status
-        <TableRow data={props.value} refetch={checkInRefetch} />
+        <TableRow
+          data={props.value}
+          refetch={checkInRefetch}
+          onCheckInUpdate={onCheckInUpdate}
+          // isRecurring={isRecurring}
+        />
       ),
     },
   ];
-
-  // Show a loading indicator while data is loading
-  if (checkInLoading) {
-    return (
-      <>
-        <div className={styles.loader}></div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -132,8 +146,14 @@ export const CheckInModal = ({
         centered
         size="lg"
       >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white" data-testid="modal-title">
+        <Modal.Header
+          closeButton
+          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
+        >
+          <Modal.Title
+            className="text-tableHeader-color"
+            data-testid="modal-title"
+          >
             Event Check In Management
           </Modal.Title>
         </Modal.Header>

@@ -28,6 +28,18 @@ Defined in: [src/types/CheckIn/interface.ts:26](https://github.com/PalisadoesFou
 
 ***
 
+### onCheckInUpdate()?
+
+> `optional` **onCheckInUpdate**: () => `void`
+
+Defined in: [src/types/CheckIn/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L27)
+
+#### Returns
+
+`void`
+
+***
+
 ### show
 
 > **show**: `boolean`

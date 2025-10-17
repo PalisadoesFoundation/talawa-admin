@@ -175,8 +175,8 @@ export const UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION = gql`
 `;
 
 export const REGISTER_EVENT = gql`
-  mutation registerForEvent($eventId: ID!) {
-    registerForEvent(id: $eventId) {
+  mutation registerForEvent($id: ID!) {
+    registerForEvent(id: $id) {
       id
     }
   }

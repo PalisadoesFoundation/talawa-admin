@@ -1,8 +1,5 @@
 import {
   DELETE_STANDALONE_EVENT_MUTATION,
-  DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
-  DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
-  DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   REGISTER_EVENT,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
@@ -241,7 +238,7 @@ export const MOCKS = [
   {
     request: {
       query: REGISTER_EVENT,
-      variables: { eventId: '1' },
+      variables: { id: '1' },
     },
     result: {
       data: {

@@ -214,9 +214,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
   // Check if this is a recurring event (either template or instance)
   const isRecurringEvent =
-    eventListCardProps.isRecurringTemplate ||
-    (!eventListCardProps.isRecurringTemplate &&
-      !!eventListCardProps.baseEventId);
+    eventListCardProps.isRecurringEventTemplate ||
+    (!eventListCardProps.isRecurringEventTemplate &&
+      !!eventListCardProps.baseEvent?.id);
 
   // For update purposes, allow recurrence changes on recurring instances
   const canChangeRecurrence = isRecurringEvent;

@@ -8,7 +8,7 @@
 
 Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L8)
 
-## Type declaration
+## Type Declaration
 
 ### DAILY
 

@@ -1,21 +1,21 @@
 export interface InterfaceUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
+  id: string;
+  name: string;
+  emailAddress: string;
 }
 
 export interface InterfaceAttendeeCheckIn {
-  _id: string;
+  id: string;
   user: InterfaceUser;
-  checkIn: null | {
-    _id: string;
-    time: string;
-  };
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  isCheckedIn: boolean;
+  isCheckedOut: boolean;
 }
 
 export interface InterfaceAttendeeQueryResponse {
   event: {
-    _id: string;
+    id: string;
     attendeesCheckInStatus: InterfaceAttendeeCheckIn[];
   };
 }
@@ -24,17 +24,19 @@ export interface InterfaceModalProp {
   show: boolean;
   eventId: string;
   handleClose: () => void;
+  onCheckInUpdate?: () => void;
 }
 
 export interface InterfaceTableCheckIn {
   id: string;
   name: string;
   userId: string;
-  checkIn: null | {
-    _id: string;
-    time: string;
-  };
+  checkInTime: string | null;
+  checkOutTime: string | null;
+  isCheckedIn: boolean;
+  isCheckedOut: boolean;
   eventId: string;
+  isRecurring?: boolean;
 }
 
 export interface InterfaceTableData {
