@@ -37,7 +37,7 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : 'orgdash/undefined',
+      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
     }),
   };
 });
