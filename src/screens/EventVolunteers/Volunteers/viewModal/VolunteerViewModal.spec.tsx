@@ -250,7 +250,7 @@ describe('Testing VolunteerViewModal', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('should not render groups table when groups is null', () => {
+    it('should not render groups table when groups array is empty', () => {
       const noGroupsProps = {
         ...itemProps[0],
         volunteer: {
@@ -294,7 +294,7 @@ describe('Testing VolunteerViewModal', () => {
       expect(screen.getByText('0')).toBeInTheDocument();
     });
 
-    it('should display 0 when volunteers is null', () => {
+    it('should display 0 when volunteers array is empty', () => {
       const nullVolunteersProps = {
         ...itemProps[0],
         volunteer: {
@@ -341,11 +341,14 @@ describe('Testing VolunteerViewModal', () => {
       expect(screen.getByText('group1')).toBeInTheDocument();
       expect(screen.getByText('group2')).toBeInTheDocument();
 
-      // Check for multiple "1" and "2" values in table
-      const ones = screen.getAllByText('1');
-      const twos = screen.getAllByText('2');
-      expect(ones.length).toBeGreaterThan(0);
-      expect(twos.length).toBeGreaterThan(0);
+      // Verify correct member counts for each group in the table
+      const table = screen.getByRole('table');
+      const rows = screen.getAllByRole('row');
+
+      // First group row should show 1 member (row index 1 after header)
+      expect(rows[1]).toHaveTextContent('1');
+      // Second group row should show 2 members (row index 2)
+      expect(rows[2]).toHaveTextContent('2');
     });
   });
 });
