@@ -40,7 +40,7 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') === 'true';
+  const superAdmin = getItem('role') !== 'regular';
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
