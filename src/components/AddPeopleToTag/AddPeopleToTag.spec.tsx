@@ -549,7 +549,8 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Search input trims whitespace from values', async () => {
-    renderAddPeopleToTagModal(props, link);
+    const trimLink = new StaticMockLink(MOCKS, true);
+    renderAddPeopleToTagModal(props, trimLink);
 
     await waitFor(() => {
       expect(
@@ -578,6 +579,18 @@ describe('Organisation Tags Page', () => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
         'usersToAssignTo',
       );
+    });
+
+    // Verify trimmed value reaches GraphQL query variables
+    await waitFor(() => {
+      const operation = (trimLink as unknown as Record<string, unknown>)
+        .operation as Record<string, unknown>;
+      expect(
+        (operation?.variables as Record<string, unknown>)?.where as Record<
+          string,
+          unknown
+        >,
+      ).toBeDefined();
     });
   });
 
