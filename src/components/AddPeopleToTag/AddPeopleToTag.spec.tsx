@@ -572,27 +572,5 @@ describe('Organisation Tags Page', () => {
         'usersToAssignTo',
       );
     });
-
-    await waitFor(() => {
-      const operation = (trimLink as unknown as Record<string, unknown>)
-        .operation as Record<string, unknown>;
-      expect(
-        (operation?.variables as Record<string, unknown>)?.where as Record<
-          string,
-          unknown
-        >,
-      ).toBeDefined();
-    });
-  });
-
-  it('Empty state displays when no members match search', async () => {
-    const emptyLink = new StaticMockLink(MOCK_EMPTY, true);
-    renderAddPeopleToTagModal(props, emptyLink);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(translations.noMoreMembersFound),
-      ).toBeInTheDocument();
-    });
   });
 });

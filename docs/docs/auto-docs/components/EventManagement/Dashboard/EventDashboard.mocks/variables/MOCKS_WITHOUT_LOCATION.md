@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITHOUT\_LOCATION**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L69)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L50)
 
 ## Type Declaration
 
@@ -92,7 +92,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:69
 
 #### result.data.event.location
 
-> **location**: `any` = `null`
+> **location**: `string` = `'India'`
 
 #### result.data.event.name
 

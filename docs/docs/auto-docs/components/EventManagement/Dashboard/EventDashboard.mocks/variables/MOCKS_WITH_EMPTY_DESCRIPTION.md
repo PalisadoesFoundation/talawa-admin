@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITH\_EMPTY\_DESCRIPTION**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L102)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L54)
 
 ## Type Declaration
 
@@ -68,7 +68,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:10
 
 #### result.data.event.description
 
-> **description**: `string` = `''`
+> **description**: `string` = `'Test Description'`
 
 #### result.data.event.endAt
 

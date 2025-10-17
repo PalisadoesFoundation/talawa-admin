@@ -1,6 +1,12 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  act,
+  waitFor,
+  fireEvent,
+  cleanup,
+} from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
@@ -53,18 +59,10 @@ vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
 
+const mockLocalStorage = vi.fn();
+
 vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: (key: string) => {
-      const storage: { [key: string]: string } = {
-        userId: 'user123',
-        role: 'administrator',
-      };
-      return storage[key] || null;
-    },
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-  }),
+  default: () => mockLocalStorage(),
 }));
 
 vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
@@ -78,7 +76,11 @@ vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
   }) => (
     <div data-testid="event-list-card-modals">
       {eventModalIsOpen && (
-        <button data-testid="close-modal-button" onClick={hideViewModal}>
+        <button
+          type="button"
+          data-testid="close-modal-button"
+          onClick={hideViewModal}
+        >
           Close Modal
         </button>
       )}
@@ -107,11 +109,22 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 
 describe('Testing Event Dashboard Screen', () => {
   beforeEach(() => {
+    mockLocalStorage.mockReturnValue({
+      getItem: (key: string) => {
+        const storage: { [key: string]: string } = {
+          userId: 'user123',
+          role: 'administrator',
+        };
+        return storage[key] || null;
+      },
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    });
     vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
