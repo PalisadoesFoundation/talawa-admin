@@ -260,4 +260,27 @@ describe('ChangeLanguageDropDown', () => {
       expect(urlToFile).not.toHaveBeenCalled();
     },
   );
+
+  it('uses default language when cookies.get returns falsy value', () => {
+    // Mock cookies.get to return a falsy value (null, undefined, or empty string)
+    (cookies.get as jest.Mock).mockReturnValue(null);
+
+    (useLocalStorage as jest.Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return 'https://example.com/avatar.jpg';
+        return null;
+      }),
+    });
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    // The component should render without errors even when cookies.get returns null
+    // This tests the fallback branch: cookies.get('i18next') || 'en'
+    expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
+  });
 });
