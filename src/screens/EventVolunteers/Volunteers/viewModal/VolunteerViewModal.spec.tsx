@@ -216,6 +216,18 @@ describe('Testing VolunteerViewModal', () => {
       renderVolunteerViewModal(noHoursProps);
       expect(screen.getByDisplayValue('0')).toBeInTheDocument();
     });
+
+    it('should display dash when hours are null', () => {
+      const nullHoursProps = {
+        ...itemProps[0],
+        volunteer: {
+          ...itemProps[0].volunteer,
+          hoursVolunteered: null as any,
+        },
+      };
+      renderVolunteerViewModal(nullHoursProps);
+      expect(screen.getByDisplayValue('-')).toBeInTheDocument();
+    });
   });
 
   describe('Groups Table', () => {
