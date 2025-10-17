@@ -51,10 +51,27 @@ jobs:
       - name: Check for documentation changes
         id: verify-changed-files
         run: |
-          git diff --exit-code docs/ || echo "changed=true" >> $GITHUB_OUTPUT
+          if git diff --quiet docs/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "✅ Documentation is already up to date"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "📝 Documentation changes detected"
+          fi
 
-      - name: Commit and Push Documentation
-        if: steps.verify-changed-files.outputs.changed == 'true'
+      - name: Check if PR is from a fork
+        id: check-fork
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            echo "is_fork=true" >> $GITHUB_OUTPUT
+            echo "🔀 PR is from a fork"
+          else
+            echo "is_fork=false" >> $GITHUB_OUTPUT
+            echo "🏠 PR is from the main repository"
+          fi
+
+      - name: Commit and Push Documentation (Non-Fork Only)
+        if: steps.verify-changed-files.outputs.changed == 'true' && steps.check-fork.outputs.is_fork == 'false'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -62,12 +79,31 @@ jobs:
           git commit -m "docs: auto-generate documentation [skip ci]"
           git push
 
-      - name: Documentation Status
+      - name: Fail if documentation is outdated (Fork PRs)
+        if: steps.verify-changed-files.outputs.changed == 'true' && steps.check-fork.outputs.is_fork == 'true'
         run: |
-          if [ "${{ steps.verify-changed-files.outputs.changed }}" == "true" ]; then
+          echo "❌ Error: Documentation is out of date"
+          echo ""
+          echo "The automated documentation needs to be regenerated."
+          echo "Please run the following commands locally and commit the changes:"
+          echo ""
+          echo "  npm run generate-docs"
+          echo "  git add docs/"
+          echo "  git commit -m \"docs: update automated documentation\""
+          echo "  git push"
+          echo ""
+          echo "Note: Run 'git commit --no-verify' if pre-commit hooks cause issues."
+          exit 1
+
+      - name: Documentation Status Summary
+        if: always()
+        run: |
+          if [ "${{ steps.verify-changed-files.outputs.changed }}" == "false" ]; then
+            echo "✅ Documentation is up to date"
+          elif [ "${{ steps.check-fork.outputs.is_fork }}" == "false" ]; then
             echo "✅ Documentation generated and committed successfully"
           else
-            echo "✅ Documentation is already up to date"
+            echo "⚠️  Documentation needs to be updated by contributor"
           fi
 
   Code-Quality-Checks:
@@ -233,7 +269,7 @@ jobs:
             '^docker/Dockerfile.dev$'
             '^docker/Dockerfile.prod$'
             '^config/docker/setup/nginx.conf$'
-            '^config/docker/setup/nginx.prod.conf$'
+            '^config/docker/setup/nginx.conf.prod$'
             'CODEOWNERS$'
             'LICENSE$'
             'setup.ts$'
