@@ -254,20 +254,6 @@ describe('OrganizationModal Component', () => {
     });
   });
 
-  test('name field should not accept more than 50 characters', async () => {
-    setup();
-    const nameInput = screen.getByTestId(
-      'modalOrganizationName',
-    ) as HTMLInputElement;
-    const longText = 'a'.repeat(60);
-
-    await userEvent.type(nameInput, longText);
-
-    // Since the component limits input at 50 chars, we check the last setFormState call
-    const lastCall =
-      mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
-    expect(lastCall[0].name.length).toBeLessThanOrEqual(50);
-  });
 
   test('description field should not accept more than 200 characters', async () => {
     setup();
@@ -612,6 +598,6 @@ describe('OrganizationModal Component', () => {
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
-  // Note: Individual field validation tests are now covered by the loop test above
-  // which tests all fields systematically and is more maintainable
+  // Note: Most field validation tests are covered by the loop test above.
+  // The description field retains its individual test due to its unique 200-character limit.
 });
