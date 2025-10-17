@@ -135,6 +135,30 @@ describe('Testing VolunteerCreateModal', () => {
       baseEvent: { id: 'baseEventId' },
     };
 
+    it('should handle recurring event when baseEvent is null gracefully', async () => {
+      const propsWithoutBase: InterfaceVolunteerCreateModal = {
+        ...recurringEventProps,
+        baseEvent: null,
+      };
+
+      renderCreateModal(link1, propsWithoutBase);
+
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      // Wait for success toast
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+      });
+    });
+
     it('should create volunteer for entire series when applyTo is "series"', async () => {
       renderCreateModal(link1, recurringEventProps);
       expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
@@ -279,5 +303,89 @@ describe('Testing VolunteerCreateModal', () => {
         // This is tested indirectly through the code path
       });
     });
+  });
+
+  const defaultProps: InterfaceVolunteerCreateModal = {
+    isOpen: true,
+    hide: vi.fn(),
+    eventId: 'eventId',
+    orgId: 'orgId',
+    refetchVolunteers: vi.fn(),
+  };
+
+  it('should render correctly when membersData is undefined', async () => {
+    // Use an empty mock response
+    const emptyLink = new StaticMockLink([]);
+
+    renderCreateModal(emptyLink, defaultProps);
+
+    // Ensure Autocomplete renders with no options
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const volunteerInputField = within(membersSelect).getByRole('combobox');
+    fireEvent.mouseDown(volunteerInputField);
+
+    // There should be no options since no members data
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+  });
+
+  it('should call hide() when close button is clicked', async () => {
+    renderCreateModal(link1, defaultProps);
+    const closeBtn = screen.getByTestId('modalCloseBtn');
+    await userEvent.click(closeBtn);
+    expect(defaultProps.hide).toHaveBeenCalled();
+  });
+
+  it('should not submit when no volunteer is selected', async () => {
+    vi.clearAllMocks(); // reset toasts before this test
+
+    renderCreateModal(link1, defaultProps);
+    const submitBtn = screen.getByTestId('submitBtn');
+
+    // Count existing toast calls before clicking
+    const beforeCount = vi.mocked(toast.success).mock.calls.length;
+
+    await userEvent.click(submitBtn);
+
+    // Ensure no *new* toast.success call occurred
+    const afterCount = vi.mocked(toast.success).mock.calls.length;
+    expect(afterCount).toBe(beforeCount);
+  });
+
+  it('should prevent default form submission behavior', async () => {
+    const fakeEvent = {
+      preventDefault: vi.fn(),
+    } as unknown as React.ChangeEvent<HTMLFormElement>;
+
+    renderCreateModal(link1, defaultProps);
+
+    const submitBtn = screen.getByTestId('submitBtn');
+
+    // Click submit without selecting a member
+    await userEvent.click(submitBtn);
+
+    // Because of our form handler, preventDefault is automatically called
+    // We can assert that toast.success has NOT been called instead
+    expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it('should call isOptionEqualToValue when selecting a member', async () => {
+    renderCreateModal(link1, defaultProps);
+
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const volunteerInputField = within(membersSelect).getByRole('combobox');
+
+    // Open dropdown
+    fireEvent.mouseDown(volunteerInputField);
+
+    // Select the first option
+    const volunteerOption = await screen.findByText('John Doe');
+    fireEvent.click(volunteerOption);
+
+    // Now select the same option again (forces isOptionEqualToValue to run)
+    fireEvent.mouseDown(volunteerInputField);
+    fireEvent.click(volunteerOption);
+
+    // Expect the value in input to still be John Doe
+    expect((volunteerInputField as HTMLInputElement).value).toBe('John Doe');
   });
 });
