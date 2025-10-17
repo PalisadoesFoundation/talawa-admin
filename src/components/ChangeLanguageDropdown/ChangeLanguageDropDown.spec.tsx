@@ -130,4 +130,160 @@ describe('ChangeLanguageDropDown', () => {
       expect(option).toBeInTheDocument();
     });
   });
+
+  it('handles avatar processing error gracefully', async () => {
+    // Mock urlToFile to throw an error
+    (urlToFile as jest.Mock).mockRejectedValue(new Error('Avatar processing failed'));
+
+    // Mock console.log to verify error logging
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    // Create mocks that expect no avatar in the mutation
+    const mocksWithoutAvatar = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es' } },
+        },
+        result: { data: { updateUser: { id: mockUserId } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith('Error processing avatar:', expect.any(Error));
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it('handles mutation error gracefully', async () => {
+    // Mock the mutation to throw an error
+    const errorMocks = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
+        },
+        error: new Error('Mutation failed'),
+      },
+    ];
+
+    // Mock console.log to verify error logging
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith('Error in changing language', expect.any(Error));
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it('handles non-string userImage gracefully', async () => {
+    // Mock userImage to be a non-string value
+    (useLocalStorage as jest.Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return { invalid: 'object' }; // Non-string value
+        return null;
+      }),
+    });
+
+    // Create mocks that expect no avatar in the mutation
+    const mocksWithoutAvatar = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es' } },
+        },
+        result: { data: { updateUser: { id: mockUserId } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+    });
+
+    // Verify urlToFile was not called since userImage is not a string
+    expect(urlToFile).not.toHaveBeenCalled();
+  });
+
+  it('handles language change without avatar when userImage is null', async () => {
+    // Mock userImage to be null
+    (useLocalStorage as jest.Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return null;
+        return null;
+      }),
+    });
+
+    const mocksWithoutAvatar = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es' } },
+        },
+        result: { data: { updateUser: { id: mockUserId } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+    });
+
+    // Verify urlToFile was not called since userImage is null
+    expect(urlToFile).not.toHaveBeenCalled();
+  });
 });
