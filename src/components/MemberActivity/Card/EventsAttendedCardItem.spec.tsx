@@ -4,6 +4,14 @@ import { BrowserRouter } from 'react-router';
 import EventAttendedCard from './EventsAttendedCardItem';
 import { vi } from 'vitest';
 
+// Mock useLocalStorage
+const mockGetItem = vi.fn();
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: mockGetItem,
+  }),
+}));
+
 interface InterfaceEventAttendedCardProps {
   type: 'Event';
   title: string;
@@ -35,6 +43,8 @@ describe('EventAttendedCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default to administrator role
+    mockGetItem.mockReturnValue('administrator');
   });
 
   it('renders event details correctly', () => {
@@ -46,19 +56,41 @@ describe('EventAttendedCard', () => {
     expect(screen.getByText('Test Location')).toBeInTheDocument();
   });
 
-  it('renders link with correct path', () => {
-    renderComponent();
-    const link = screen.getByRole('link');
-    expect(link).toHaveAttribute('href', '/event/org123/event456');
+  describe('Administrator user', () => {
+    beforeEach(() => {
+      mockGetItem.mockReturnValue('administrator');
+    });
+
+    it('renders link with correct path for administrator', () => {
+      renderComponent();
+      const link = screen.getByRole('link');
+      expect(link).toHaveAttribute('href', '/event/org123/event456');
+    });
+
+    it('renders chevron right icon for administrator', () => {
+      renderComponent();
+      expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
+    });
+  });
+
+  describe('Regular user', () => {
+    beforeEach(() => {
+      mockGetItem.mockReturnValue('regular');
+    });
+
+    it('does not render link for regular user', () => {
+      renderComponent();
+      expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    });
+
+    it('does not render chevron right icon for regular user', () => {
+      renderComponent();
+      expect(screen.queryByTestId('ChevronRightIcon')).not.toBeInTheDocument();
+    });
   });
 
   it('renders location icon', () => {
     renderComponent();
     expect(screen.getByTestId('LocationOnIcon')).toBeInTheDocument();
-  });
-
-  it('renders chevron right icon', () => {
-    renderComponent();
-    expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
   });
 });

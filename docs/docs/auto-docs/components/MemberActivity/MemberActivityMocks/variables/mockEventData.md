@@ -8,7 +8,7 @@
 
 Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L3)
 
-## Type declaration
+## Type Declaration
 
 ### event
 
@@ -26,13 +26,25 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **attendees**: `object`[]
 
-#### event.baseRecurringEvent
+#### event.createdAt
 
-> **baseRecurringEvent**: `object`
+> **createdAt**: `string` = `'2030-01-01T00:00:00Z'`
 
-#### event.baseRecurringEvent.\_id
+#### event.creator
 
-> **\_id**: `string` = `'base123'`
+> **creator**: `object`
+
+#### event.creator.emailAddress
+
+> **emailAddress**: `string` = `'john@example.com'`
+
+#### event.creator.id
+
+> **id**: `string` = `'user1'`
+
+#### event.creator.name
+
+> **name**: `string` = `'John Doe'`
 
 #### event.description
 
@@ -42,13 +54,25 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
 
-#### event.endDate
-
-> **endDate**: `string` = `'2030-01-02'`
-
 #### event.endTime
 
 > **endTime**: `string` = `'17:00'`
+
+#### event.id
+
+> **id**: `string` = `'event123'`
+
+#### event.isPublic
+
+> **isPublic**: `boolean` = `true`
+
+#### event.isRecurringEventTemplate
+
+> **isRecurringEventTemplate**: `boolean` = `true`
+
+#### event.isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 #### event.location
 
@@ -62,25 +86,25 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 > **organization**: `object`
 
-#### event.organization.\_id
+#### event.organization.id
 
-> **\_id**: `string` = `'org123'`
+> **id**: `string` = `'org123'`
 
-#### event.organization.members
+#### event.organization.name
 
-> **members**: `object`[]
+> **name**: `string` = `'Test Org'`
 
-#### event.recurring
+#### event.recurrenceRule
 
-> **recurring**: `boolean` = `true`
+> **recurrenceRule**: `object`
+
+#### event.recurrenceRule.id
+
+> **id**: `string` = `'rule123'`
 
 #### event.startAt
 
 > **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
-
-#### event.startDate
-
-> **startDate**: `string` = `'2030-01-01'`
 
 #### event.startTime
 
@@ -89,3 +113,23 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 #### event.title
 
 > **title**: `string` = `'Test Event'`
+
+#### event.updatedAt
+
+> **updatedAt**: `string` = `'2030-01-01T00:00:00Z'`
+
+#### event.updater
+
+> **updater**: `object`
+
+#### event.updater.emailAddress
+
+> **emailAddress**: `string` = `'john@example.com'`
+
+#### event.updater.id
+
+> **id**: `string` = `'user1'`
+
+#### event.updater.name
+
+> **name**: `string` = `'John Doe'`

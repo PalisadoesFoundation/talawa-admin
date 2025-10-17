@@ -32,6 +32,9 @@ export const CURRENT_USER = gql`
       state
       updatedAt
       workPhoneNumber
+      eventsAttended {
+        id
+      }
     }
   }
 `;
@@ -287,6 +290,13 @@ export const EVENT_DETAILS = gql`
       endAt
       createdAt
       updatedAt
+      isRecurringEventTemplate
+      baseEvent {
+        id
+      }
+      recurrenceRule {
+        id
+      }
       creator {
         id
         name
@@ -305,32 +315,49 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
+export const EVENT_DETAILS_BASIC = gql`
+  query GetEventBasic($eventId: String!) {
+    event(input: { id: $eventId }) {
+      id
+      name
+      location
+      startAt
+      organization {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const RECURRING_EVENTS = gql`
   query RecurringEvents($baseRecurringEventId: ID!) {
     getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
-      _id
-      startDate
-      title
+      id
+      startAt
+      name
       attendees {
-        _id
-        gender
+        id
+        natalSex
       }
     }
   }
 `;
 
 export const EVENT_ATTENDEES = gql`
-  query Event($id: ID!) {
-    event(id: $id) {
+  query Event($eventId: String!) {
+    event(input: { id: $eventId }) {
       attendees {
-        _id
-        firstName
-        lastName
+        id
+        name
+        emailAddress
+        avatarURL
         createdAt
-        gender
+        role
+        natalSex
         birthDate
         eventsAttended {
-          _id
+          id
         }
       }
     }
@@ -338,32 +365,104 @@ export const EVENT_ATTENDEES = gql`
 `;
 
 export const EVENT_REGISTRANTS = gql`
-  query GetEventAttendeesByEventId($eventId: ID!) {
-    getEventAttendeesByEventId(eventId: $eventId) {
-      userId
+  query GetEventAttendeesByEventId(
+    $eventId: ID
+    $recurringEventInstanceId: ID
+  ) {
+    getEventAttendeesByEventId(
+      eventId: $eventId
+      recurringEventInstanceId: $recurringEventInstanceId
+    ) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
       isRegistered
-      _id
+      isInvited
+      createdAt
     }
   }
 `;
 
 export const EVENT_CHECKINS = gql`
-  query eventCheckIns($id: ID!) {
-    event(id: $id) {
-      _id
+  query eventCheckIns($eventId: String!) {
+    event(input: { id: $eventId }) {
+      id
       attendeesCheckInStatus {
-        _id
+        id
         user {
-          _id
-          firstName
-          lastName
+          id
+          name
+          emailAddress
         }
-        checkIn {
-          _id
-          time
-        }
+        checkInTime
+        checkOutTime
+        isCheckedIn
+        isCheckedOut
       }
     }
+  }
+`;
+
+export const GET_EVENT_ATTENDEE = gql`
+  query GetEventAttendee(
+    $userId: ID!
+    $eventId: ID
+    $recurringEventInstanceId: ID
+  ) {
+    getEventAttendee(
+      userId: $userId
+      eventId: $eventId
+      recurringEventInstanceId: $recurringEventInstanceId
+    ) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
+      isInvited
+      isRegistered
+      isCheckedIn
+      isCheckedOut
+    }
+  }
+`;
+
+export const GET_EVENT_INVITES_BY_USER_ID = gql`
+  query GetEventInvitesByUserId($userId: ID!) {
+    getEventInvitesByUserId(userId: $userId) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
+      event {
+        id
+        name
+        startAt
+        endAt
+      }
+      isInvited
+      isRegistered
+    }
+  }
+`;
+
+export const HAS_SUBMITTED_FEEDBACK = gql`
+  query HasSubmittedFeedback(
+    $userId: ID!
+    $eventId: ID
+    $recurringEventInstanceId: ID
+  ) {
+    hasSubmittedFeedback(
+      userId: $userId
+      eventId: $eventId
+      recurringEventInstanceId: $recurringEventInstanceId
+    )
   }
 `;
 
@@ -566,6 +665,79 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
   }
 `;
 
+export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
+  query GetOrganizationEventsUserPortal(
+    $id: String!
+    $first: Int
+    $after: String
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+  ) {
+    organization(input: { id: $id }) {
+      events(
+        first: $first
+        after: $after
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+      ) {
+        edges {
+          node {
+            id
+            name
+            description
+            startAt
+            endAt
+            allDay
+            location
+            isPublic
+            isRegisterable
+            # Recurring event fields
+            isRecurringEventTemplate
+            baseEvent {
+              id
+              name
+            }
+            sequenceNumber
+            totalCount
+            hasExceptions
+            progressLabel
+            # New recurrence description fields
+            recurrenceDescription
+            recurrenceRule {
+              id
+              frequency
+              interval
+              recurrenceStartDate
+              recurrenceEndDate
+              count
+              byDay
+              byMonth
+              byMonthDay
+            }
+            # Attachments
+            attachments {
+              url
+              mimeType
+            }
+            # Organization
+            organization {
+              id
+              name
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_POSTS_PG = gql`
   query GetOrganizationPosts($id: String!, $first: Int) {
     organization(input: { id: $id }) {
@@ -601,6 +773,7 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     avatarURL
     createdAt
     updatedAt
+    isUserRegistrationRequired
   }
 `;
 
@@ -894,7 +1067,7 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
         createdAt
         firstName
         lastName
-        gender
+        natalSex
         eventsAttended {
           _id
           endDate

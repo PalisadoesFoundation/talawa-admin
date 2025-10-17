@@ -16,6 +16,10 @@ Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:47](https://github.co
 
 [`InterfaceTableCheckIn`](../../../../../../types/CheckIn/interface/interfaces/InterfaceTableCheckIn.md)
 
+#### onCheckInUpdate?
+
+() => `void`
+
 #### refetch
 
 () => `void`
