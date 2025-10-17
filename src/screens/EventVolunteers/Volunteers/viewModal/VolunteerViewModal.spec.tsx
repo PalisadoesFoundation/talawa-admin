@@ -210,7 +210,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: null,
+          hoursVolunteered: 0,
         },
       };
       renderVolunteerViewModal(noHoursProps);
@@ -222,7 +222,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: undefined,
+          hoursVolunteered: 0,
         },
       };
       renderVolunteerViewModal(noHoursProps);
@@ -255,7 +255,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          groups: null,
+          groups: [],
         },
       };
       renderVolunteerViewModal(noGroupsProps);
@@ -304,7 +304,7 @@ describe('Testing VolunteerViewModal', () => {
               id: 'groupId1',
               name: 'group1',
               description: 'Test group',
-              volunteers: null,
+              volunteers: [],
             },
           ],
         },
