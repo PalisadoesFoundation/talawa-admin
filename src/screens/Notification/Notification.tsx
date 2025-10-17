@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   GET_USER_NOTIFICATIONS,
@@ -49,7 +49,8 @@ const Notification: React.FC = () => {
           input: { notificationIds },
         },
       });
-      refetch({ userId, input: { first: pageSize, skip } });
+      // wait for refetch to complete so the UI reflects the updated read state
+      await refetch({ userId, input: { first: pageSize, skip } });
     } catch (error) {
       console.error('Error marking notifications as read:', error);
     }
@@ -66,11 +67,6 @@ const Notification: React.FC = () => {
   const handlePrev = async () => {
     setPage((p) => Math.max(0, p - 1));
   };
-
-  useEffect(() => {
-    if (!userId) return;
-    refetch({ userId, input: { first: pageSize, skip: page * pageSize } });
-  }, [page, pageSize, userId]);
 
   const isLoading = loading;
 

@@ -137,7 +137,9 @@
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.15s ease, transform 0.08s ease;
+  transition:
+    background-color 0.15s ease,
+    transform 0.08s ease;
 }
 
 .paginationButton:hover:not(:disabled) {
