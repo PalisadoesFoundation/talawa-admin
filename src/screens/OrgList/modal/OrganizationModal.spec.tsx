@@ -608,4 +608,112 @@ describe('OrganizationModal Component', () => {
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
+
+  // Tests to cover the uncovered lines (141, 156, 184, 202, 217, 235, 253)
+  test('should not update description when input exceeds 200 characters', async () => {
+    setup();
+    const descInput = screen.getByTestId('modalOrganizationDescription');
+    const longText = 'a'.repeat(250); // Exceeds 200 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(descInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('should not update name when input exceeds 50 characters', async () => {
+    setup();
+    const nameInput = screen.getByTestId('modalOrganizationName');
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(nameInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  // Note: Country code validation test is skipped because the country select dropdown
+  // uses predefined 2-character country codes, so the validation logic for length > 50
+  // is not realistically testable in this context. The validation exists in the code
+  // but will never be triggered with the current implementation.
+
+  test('should not update state when input exceeds 50 characters', async () => {
+    setup();
+    const stateInput = screen.getByTestId('modalOrganizationState');
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(stateInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('should not update city when input exceeds 50 characters', async () => {
+    setup();
+    const cityInput = screen.getByTestId('modalOrganizationCity');
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(cityInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('should not update postal code when input exceeds 50 characters', async () => {
+    setup();
+    const postalCodeInput = screen.getByTestId('modalOrganizationPostalCode');
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(postalCodeInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('should not update address line 1 when input exceeds 50 characters', async () => {
+    setup();
+    const addressLine1Input = screen.getByTestId(
+      'modalOrganizationAddressLine1',
+    );
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(addressLine1Input, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('should not update address line 2 when input exceeds 50 characters', async () => {
+    setup();
+    const addressLine2Input = screen.getByTestId(
+      'modalOrganizationAddressLine2',
+    );
+    const longText = 'a'.repeat(60); // Exceeds 50 character limit
+
+    // Clear any previous calls
+    mockSetFormState.mockClear();
+
+    fireEvent.change(addressLine2Input, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
 });
