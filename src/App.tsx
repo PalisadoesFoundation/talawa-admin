@@ -309,7 +309,6 @@ function App(): React.ReactElement {
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
             <Route path="/user/settings" element={<Settings />} />
-            <Route path="/user/notification" element={<Notification />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (
@@ -342,6 +341,7 @@ function App(): React.ReactElement {
                 path="/user/leaveOrg/:orgId"
                 element={<LeaveOrganization />}
               />
+              <Route path="/user/notification" element={<Notification />} />
               <Route
                 path="/user/volunteer/:orgId"
                 element={<VolunteerManagement />}

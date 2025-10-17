@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -32,7 +32,11 @@ const NotificationIcon = () => {
     skip: !userId,
   });
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const unreadCount: number = (
+    (data?.user?.notifications as InterfaceNotification[]) || []
+  ).filter((n: InterfaceNotification) => !n.isRead).length;
   useEffect(() => {
     setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);
@@ -44,7 +48,17 @@ const NotificationIcon = () => {
         id="dropdown-basic"
         className={styles.iconButton}
       >
-        <NotificationsIcon style={{ color: '#3b3b3b' }} />
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <NotificationsIcon style={{ color: '#3b3b3b' }} />
+          {unreadCount > 0 && (
+            <span
+              className={styles.unreadBadge}
+              title={`${unreadCount} unread`}
+            >
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
+        </div>
       </Dropdown.Toggle>
 
       <Dropdown.Menu className={styles.glassMenu}>
@@ -55,9 +69,16 @@ const NotificationIcon = () => {
             <Dropdown.Item
               key={notification.id}
               className={styles.notificationItem}
-              onClick={() =>
-                notification.navigation && navigate(notification.navigation)
-              }
+              onClick={() => {
+                if (notification.navigation) {
+                  navigate(notification.navigation);
+                  return;
+                }
+                const path = location.pathname || '';
+                const isUserPortal =
+                  path.startsWith('/user/') || path.startsWith('/user');
+                navigate(isUserPortal ? '/user/notification' : '/notification');
+              }}
               style={{
                 cursor: notification.navigation ? 'pointer' : 'default',
               }}
@@ -76,7 +97,14 @@ const NotificationIcon = () => {
           <Dropdown.Item>No new notifications</Dropdown.Item>
         )}
         <Dropdown.Divider />
-        <Dropdown.Item onClick={() => navigate('/notification')}>
+        <Dropdown.Item
+          onClick={() => {
+            const path = location.pathname || '';
+            const isUserPortal =
+              path.startsWith('/user/') || path.startsWith('/user');
+            navigate(isUserPortal ? '/user/notification' : '/notification');
+          }}
+        >
           View all notifications
         </Dropdown.Item>
       </Dropdown.Menu>

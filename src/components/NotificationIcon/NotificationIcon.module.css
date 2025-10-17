@@ -70,3 +70,21 @@
   box-shadow: none !important;
   outline: none !important;
 }
+
+.unreadBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #d63031; /* red badge */
+  color: #fff;
+  border-radius: 12px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}

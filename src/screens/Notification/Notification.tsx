@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   GET_USER_NOTIFICATIONS,
@@ -22,15 +22,21 @@ const Notification: React.FC = () => {
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
 
-  const { loading, error, data, refetch } = useQuery(GET_USER_NOTIFICATIONS, {
+  const [page, setPage] = useState<number>(0);
+  const pageSize = 7;
+
+  const skip = page * pageSize;
+
+  const { loading, data, refetch } = useQuery(GET_USER_NOTIFICATIONS, {
     variables: {
       userId: userId,
       input: {
-        first: 100,
-        skip: 0,
+        first: pageSize,
+        skip: skip,
       },
     },
     skip: !userId,
+    fetchPolicy: 'network-only',
   });
   console.log('Notification data:', data);
 
@@ -43,61 +49,126 @@ const Notification: React.FC = () => {
           input: { notificationIds },
         },
       });
-      refetch();
+      refetch({ userId, input: { first: pageSize, skip } });
     } catch (error) {
       console.error('Error marking notifications as read:', error);
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  const notifications: InterfaceNotification[] =
+    data?.user?.notifications || [];
 
-  const notifications = data?.user?.notifications || [];
+  const handleNext = async () => {
+    if (notifications.length < pageSize) return;
+    setPage((p) => p + 1);
+  };
+
+  const handlePrev = async () => {
+    setPage((p) => Math.max(0, p - 1));
+  };
+
+  useEffect(() => {
+    if (!userId) return;
+    refetch({ userId, input: { first: pageSize, skip: page * pageSize } });
+  }, [page, pageSize, userId]);
+
+  const isLoading = loading;
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}></h1>
-      <ListGroup variant="flush">
-        {notifications.length > 0 ? (
-          notifications.map((notification: InterfaceNotification) => (
-            <ListGroup.Item
-              key={notification.id}
-              className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''}`}
-            >
-              <div className={styles.profileSection}>
-                <FaUserCircle size={28} color="#8a99b3" />
-              </div>
-              <Link
-                to={notification.navigation || '#'}
-                className={styles.notificationLink}
-                style={{ flex: 1, minWidth: 0 }}
+      <div className={styles.listWrapper}>
+        <ListGroup variant="flush">
+          {isLoading ? (
+            Array.from({ length: pageSize }).map((_, idx) => (
+              <ListGroup.Item
+                key={`skeleton-${idx}`}
+                className={styles.notificationItem}
               >
+                <div className={styles.profileSection} />
                 <div className={styles.notificationContent}>
-                  <div className={styles.notificationTitle}>
-                    {notification.title}
-                  </div>
-                  <div className={styles.notificationBody}>
-                    {notification.body}
-                  </div>
+                  <div className={styles.skeletonTitle} />
+                  <div className={styles.skeletonBody} />
                 </div>
-              </Link>
-              {!notification.isRead && (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleMarkAsRead([notification.id])}
+                <div style={{ width: 92 }} />
+              </ListGroup.Item>
+            ))
+          ) : notifications.length === 0 ? (
+            <div className={styles.noNotifications}>You're all caught up!</div>
+          ) : (
+            Array.from({ length: pageSize }).map((_, idx) => {
+              const notification = notifications[idx];
+              if (notification) {
+                return (
+                  <ListGroup.Item
+                    key={notification.id}
+                    className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''}`}
+                  >
+                    <div className={styles.profileSection}>
+                      <FaUserCircle size={28} color="#8a99b3" />
+                    </div>
+                    <Link
+                      to={notification.navigation || '#'}
+                      className={styles.notificationLink}
+                      style={{ flex: 1, minWidth: 0 }}
+                    >
+                      <div className={styles.notificationContent}>
+                        <div className={styles.notificationTitle}>
+                          {notification.title}
+                        </div>
+                        <div className={styles.notificationBody}>
+                          {notification.body}
+                        </div>
+                      </div>
+                    </Link>
+                    {!notification.isRead && (
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        className={styles.markButton}
+                        onClick={() => handleMarkAsRead([notification.id])}
+                      >
+                        Mark as Read
+                      </Button>
+                    )}
+                  </ListGroup.Item>
+                );
+              }
+
+              return (
+                <ListGroup.Item
+                  key={`empty-${idx}`}
+                  className={styles.notificationItem}
                 >
-                  Mark as Read
-                </Button>
-              )}
-            </ListGroup.Item>
-          ))
-        ) : (
-          <ListGroup.Item className={styles.noNotifications}>
-            No notifications found.
-          </ListGroup.Item>
-        )}
-      </ListGroup>
+                  <div className={styles.profileSection} />
+                  <div className={styles.notificationContent}>
+                    <div className={styles.notificationTitle}>&nbsp;</div>
+                    <div className={styles.notificationBody}>&nbsp;</div>
+                  </div>
+                  <div style={{ width: 92 }} />
+                </ListGroup.Item>
+              );
+            })
+          )}
+        </ListGroup>
+
+        <div className={styles.paginationFooter}>
+          <button
+            className={styles.paginationButton}
+            onClick={handlePrev}
+            disabled={page === 0}
+          >
+            Prev
+          </button>
+          <button
+            className={styles.paginationButton}
+            onClick={handleNext}
+            disabled={notifications.length < pageSize}
+          >
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

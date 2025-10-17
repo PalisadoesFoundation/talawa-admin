@@ -50,11 +50,7 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import {
-  ORGANIZATION_LIST,
-  ALL_ORGANIZATIONS_PG,
-  CURRENT_USER,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 import OrgListCard from 'components/OrgListCard/OrgListCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
@@ -67,7 +63,6 @@ import type {
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
@@ -117,7 +112,7 @@ function orgList(): JSX.Element {
     setdialogModalIsOpen(true);
   }
 
-  const { getItem } = useLocalStorage();
+  // localStorage helper used elsewhere in this component
   const role = getItem('role');
   const adminFor:
     | string
@@ -320,30 +315,33 @@ function orgList(): JSX.Element {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainerSearchBar}>
-        <InputGroup className={styles.maxWidth}>
-          <Form.Control
-            placeholder={t('searchOrganizations')}
-            id="searchUserOrgs"
-            type="text"
-            className={styles.inputField}
-            value={typedValue}
-            onChange={handleChangeFilter}
-            onKeyUp={handleSearchByEnter}
-            data-testid="searchInput"
-          />
-        </InputGroup>
+        <div className={styles.inputOrgList}>
+          <InputGroup className={styles.maxWidth}>
+            <Form.Control
+              placeholder={t('searchOrganizations')}
+              id="searchUserOrgs"
+              type="text"
+              className={styles.inputField}
+              value={typedValue}
+              onChange={handleChangeFilter}
+              onKeyUp={handleSearchByEnter}
+              data-testid="searchInput"
+            />
+          </InputGroup>
+        </div>
 
         <div className={styles.btnsBlock}>
-          <NotificationIcon />
-
           <InputGroup.Text
             className={styles.searchButton}
             style={{ cursor: 'pointer' }}
             onClick={handleSearchByBtnClick}
             data-testid="searchBtn"
+            title={t('search')}
           >
             <SearchOutlined className={styles.colorWhite} />
           </InputGroup.Text>
+
+          <NotificationIcon />
 
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <div className={styles.btnsBlockSearchBar}>

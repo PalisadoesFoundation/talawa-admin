@@ -23,7 +23,7 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaBell } from 'react-icons/fa';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 
@@ -280,8 +280,7 @@ const leftDrawer = ({
               </button>
             )}
           </NavLink>
-
-          {/* <NavLink to={'/notification'} onClick={handleLinkClick}>
+          <NavLink to={'/notification'} onClick={handleLinkClick}>
             {({ isActive }) => (
               <button
                 className={`${
@@ -290,19 +289,20 @@ const leftDrawer = ({
                 data-testid="notificationBtn"
               >
                 <div className={styles.iconWrapper}>
-                  <RolesIcon
-                    fill="none"
-                    stroke={
-                      isActive
+                  <FaBell
+                    style={{
+                      width: 25,
+                      height: 25,
+                      color: isActive
                         ? 'var(--sidebar-icon-stroke-active)'
-                        : 'var(--sidebar-icon-stroke-inactive)'
-                    }
+                        : 'var(--sidebar-icon-stroke-inactive)',
+                    }}
                   />
                 </div>
-                {t('notifications')}
+                {!hideDrawer && tCommon('notifications')}
               </button>
             )}
-          </NavLink> */}
+          </NavLink>
         </div>
         {drawerContent}
       </div>
