@@ -250,7 +250,7 @@ describe('Testing VolunteerViewModal', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('should not render groups table when groups array is empty', () => {
+    it('should not render groups table when groups array is empty (noGroupsProps)', () => {
       const noGroupsProps = {
         ...itemProps[0],
         volunteer: {
@@ -294,7 +294,7 @@ describe('Testing VolunteerViewModal', () => {
       expect(screen.getByText('0')).toBeInTheDocument();
     });
 
-    it('should display 0 when volunteers array is empty', () => {
+    it('should display 0 when volunteers array is empty (nullVolunteersProps)', () => {
       const nullVolunteersProps = {
         ...itemProps[0],
         volunteer: {
@@ -342,7 +342,6 @@ describe('Testing VolunteerViewModal', () => {
       expect(screen.getByText('group2')).toBeInTheDocument();
 
       // Verify correct member counts for each group in the table
-      const table = screen.getByRole('table');
       const rows = screen.getAllByRole('row');
 
       // First group row should show 1 member (row index 1 after header)
