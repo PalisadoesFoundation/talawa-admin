@@ -77,7 +77,11 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add docs/
           git commit -m "docs: auto-generate documentation [skip ci]"
-          git push
+          if ! git push; then
+            echo "::error::Failed to push documentation changes. This may indicate concurrent commits."
+            git log --oneline -5
+            exit 1
+          fi
 
       - name: Fail if documentation is outdated (Fork PRs)
         if: steps.verify-changed-files.outputs.changed == 'true' && steps.check-fork.outputs.is_fork == 'true'
