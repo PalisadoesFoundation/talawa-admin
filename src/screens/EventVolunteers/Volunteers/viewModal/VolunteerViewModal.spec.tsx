@@ -222,7 +222,7 @@ describe('Testing VolunteerViewModal', () => {
         ...itemProps[0],
         volunteer: {
           ...itemProps[0].volunteer,
-          hoursVolunteered: null as any,
+          hoursVolunteered: null as unknown as number,
         },
       };
       renderVolunteerViewModal(nullHoursProps);
