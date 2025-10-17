@@ -495,8 +495,6 @@ describe('Organisation Tags Page', () => {
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
     });
-
-    expect(screen.getAllByTestId('clearSelectedMember')[0]).toBeInTheDocument();
   });
 
   it('Modal renders with correct structure', async () => {
@@ -555,14 +553,14 @@ describe('Organisation Tags Page', () => {
     // Type value with leading and trailing spaces
     await userEvent.type(firstNameInput, '   test   ');
 
-    // The component's onChange handler should trim the value via .trim()
+    // Wait for component to process the input
     await waitFor(() => {
-      // Verify the input accepts the value and component processes it
-      expect(firstNameInput).toBeInTheDocument();
+      // The input should have the value with spaces (DOM value)
+      expect(firstNameInput.value).toBe('   test   ');
     });
 
     // Component internally trims via setMemberToAssignToSearchFirstName(e.target.value.trim())
-    // This is covered by the existing search tests which verify the trimmed query executes
+    // This is validated by the existing search tests which verify the trimmed query executes
   });
 
   it('Empty state displays when no members match search', async () => {
