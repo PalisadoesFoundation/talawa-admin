@@ -205,19 +205,7 @@ describe('Testing VolunteerViewModal', () => {
       expect(screen.getByDisplayValue('10')).toBeInTheDocument();
     });
 
-    it('should display dash when hours are null', () => {
-      const noHoursProps = {
-        ...itemProps[0],
-        volunteer: {
-          ...itemProps[0].volunteer,
-          hoursVolunteered: 0,
-        },
-      };
-      renderVolunteerViewModal(noHoursProps);
-      expect(screen.getByDisplayValue('0')).toBeInTheDocument();
-    });
-
-    it('should display dash when hours are undefined', () => {
+    it('should display 0 when hours are 0', () => {
       const noHoursProps = {
         ...itemProps[0],
         volunteer: {
@@ -252,13 +240,9 @@ describe('Testing VolunteerViewModal', () => {
 
     it('should display correct member count in groups table', () => {
       renderVolunteerViewModal(itemProps[0]);
-      const memberCountCells = screen.getAllByText('1');
-      expect(memberCountCells.length).toBeGreaterThan(0);
-      // Check that at least one "1" is in a table cell (member count)
-      const tableCells = memberCountCells.filter(
-        (cell) => cell.closest('td') || cell.closest('th'),
-      );
-      expect(tableCells.length).toBeGreaterThan(0);
+      const rows = screen.getAllByRole('row');
+      // Verify the data row contains the member count (row index 1, after header)
+      expect(rows[1]).toHaveTextContent('1');
     });
 
     it('should display 0 when volunteers array is empty', () => {
