@@ -276,12 +276,14 @@ describe('OrganizationModal Component', () => {
     ) as HTMLInputElement;
     const longText = 'a'.repeat(250);
 
-    await userEvent.type(descInput, longText);
+    // Clear any previous calls
+    mockSetFormState.mockClear();
 
-    // Check the last setFormState call
-    const lastCall =
-      mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
-    expect(lastCall[0].description.length).toBeLessThanOrEqual(200);
+    // Use fireEvent.change to test the validation logic directly
+    fireEvent.change(descInput, { target: { value: longText } });
+
+    // Should not call setFormState when input exceeds limit
+    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should handle country selection correctly', async () => {
@@ -397,14 +399,15 @@ describe('OrganizationModal Component', () => {
       setup();
       const input = screen.getByTestId(fieldId);
       const longText = 'a'.repeat(maxLength + 10);
-      // const expectedText = 'a'.repeat(maxLength - 1);
 
-      await userEvent.type(input, longText);
+      // Clear any previous calls
+      mockSetFormState.mockClear();
 
-      const lastCall =
-        mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
-      expect(lastCall[0][formKey].length).toBeLessThanOrEqual(maxLength);
-      expect(lastCall[0][formKey]).not.toEqual(longText);
+      // Use fireEvent.change to test the validation logic directly
+      fireEvent.change(input, { target: { value: longText } });
+
+      // Should not call setFormState when input exceeds limit
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });
   test('should handle valid image upload', async () => {
@@ -609,142 +612,6 @@ describe('OrganizationModal Component', () => {
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
-  // Tests to cover the uncovered lines (141, 156, 184, 202, 217, 235, 253)
-  test('should not update description when input exceeds 200 characters', async () => {
-    setup();
-    const descInput = screen.getByTestId('modalOrganizationDescription');
-    const longText = 'a'.repeat(250); // Exceeds 200 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(descInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update name when input exceeds 50 characters', async () => {
-    setup();
-    const nameInput = screen.getByTestId('modalOrganizationName');
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(nameInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update country code when input exceeds 50 characters', async () => {
-    setup();
-    const countrySelect = screen.getByTestId('modalOrganizationCountryCode');
-    
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-    
-    // Create a long value that exceeds 50 characters
-    const longValue = 'a'.repeat(60); // Exceeds 50 character limit
-    
-    // Try to directly trigger the onChange handler by simulating the event
-    // This tests the validation logic directly
-    const mockEvent = {
-      target: {
-        value: longValue
-      }
-    };
-    
-    // Get the component instance and call the onChange handler directly
-    // This bypasses the DOM event system and tests the validation logic
-    const component = countrySelect.closest('[data-testid="modalOrganizationCountryCode"]');
-    if (component) {
-      // Simulate the onChange event with a long value
-      fireEvent.change(component, { target: { value: longValue } });
-    }
-    
-    // The validation should prevent the update since longValue.length > 50
-    // Check that setFormState was not called with the long value
-    const calls = mockSetFormState.mock.calls;
-    const hasLongValueCall = calls.some(call => 
-      call[0] && typeof call[0] === 'object' && 
-      call[0].countryCode && call[0].countryCode.length >= 50
-    );
-    expect(hasLongValueCall).toBe(false);
-  });
-
-  test('should not update state when input exceeds 50 characters', async () => {
-    setup();
-    const stateInput = screen.getByTestId('modalOrganizationState');
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(stateInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update city when input exceeds 50 characters', async () => {
-    setup();
-    const cityInput = screen.getByTestId('modalOrganizationCity');
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(cityInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update postal code when input exceeds 50 characters', async () => {
-    setup();
-    const postalCodeInput = screen.getByTestId('modalOrganizationPostalCode');
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(postalCodeInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update address line 1 when input exceeds 50 characters', async () => {
-    setup();
-    const addressLine1Input = screen.getByTestId(
-      'modalOrganizationAddressLine1',
-    );
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(addressLine1Input, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('should not update address line 2 when input exceeds 50 characters', async () => {
-    setup();
-    const addressLine2Input = screen.getByTestId(
-      'modalOrganizationAddressLine2',
-    );
-    const longText = 'a'.repeat(60); // Exceeds 50 character limit
-
-    // Clear any previous calls
-    mockSetFormState.mockClear();
-
-    fireEvent.change(addressLine2Input, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
+  // Note: Individual field validation tests are now covered by the loop test above
+  // which tests all fields systematically and is more maintainable
 });
