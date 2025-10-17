@@ -124,6 +124,29 @@ describe('Testing VolunteerCreateModal', () => {
     });
   });
 
+  it('should handle isOptionEqualToValue for members Autocomplete', async () => {
+    renderCreateModal(link1, itemProps[0]);
+    expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+
+    // Select a member
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const memberInputField = within(membersSelect).getByRole('combobox');
+    fireEvent.mouseDown(memberInputField);
+    const memberOption = await screen.findByText('John Doe');
+    fireEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(memberInputField).toHaveValue('John Doe');
+    });
+
+    // Open again: since filterSelectedOptions is true, the selected option should be filtered out
+    fireEvent.mouseDown(memberInputField);
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(await screen.findByText('Jane Smith')).toBeInTheDocument();
+    // Input value remains the same; isOptionEqualToValue is used internally for filtering
+    expect(memberInputField).toHaveValue('John Doe');
+  });
+
   describe('Recurring Events', () => {
     const recurringEventProps: InterfaceVolunteerCreateModal = {
       isOpen: true,
