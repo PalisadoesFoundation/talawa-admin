@@ -1,6 +1,9 @@
-/*
- * this file holds the NotificationIcon component which displays a notification
- * bell icon with unread count and a dropdown of recent notifications
+/**
+ * NotificationIcon component
+ *
+ * A small, friendly notification bell used in the app header. It shows the
+ * unread count and a compact dropdown of the most recent notifications so
+ * users can quickly preview or navigate to them.
  */
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';

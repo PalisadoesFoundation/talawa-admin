@@ -1,5 +1,10 @@
-/*
- * this file holds the Notification screen where users can view and manage their notifications
+/**
+ * Notification screen
+ *
+ * Presents a paginated list of the user's notifications with lightweight
+ * actions (mark as read). The UI shows skeletons while loading and keeps
+ * the layout stable by rendering empty placeholders when there are fewer
+ * items than the page size.
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -41,7 +46,6 @@ const Notification: React.FC = () => {
     skip: !userId,
     fetchPolicy: 'network-only',
   });
-  console.log('Notification data:', data);
 
   const [markAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
 
