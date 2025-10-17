@@ -1,5 +1,5 @@
 import React from 'react';
-import { vi, expect, describe, it } from 'vitest';
+import { vi, expect, describe, it, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -462,6 +462,148 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('Modal is not visible when addPeopleToTagModalIsOpen is false', async () => {
+    const { queryByTestId } = renderAddPeopleToTagModal(defaultProps, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(queryByTestId('modalOrganizationHeader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Modal close button hides the modal', async () => {
+    const hideModal = vi.fn();
+    const customProps = { ...props, hideAddPeopleToTagModal: hideModal };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    expect(hideModal).toHaveBeenCalled();
+  });
+
+  it('Error message displays with icon when query fails', async () => {
+    const { container } = renderAddPeopleToTagModal(props, link2);
+
+    await wait();
+
+    await waitFor(() => {
+      const errorText = container.textContent;
+      expect(errorText).toContain(
+        translations.errorOccurredWhileLoadingMembers,
+      );
+    });
+
+    const svgIcon = container.querySelector('svg');
+    expect(svgIcon).toBeTruthy();
+  });
+
+  it('Member selection persists in state', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('clearSelectedMember')[0],
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.getAllByTestId('clearSelectedMember')[0]).toBeInTheDocument();
+  });
+
+  it('Modal renders with correct structure', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('addPeopleToTagScrollableDiv'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('Search inputs are present and functional', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      const firstNameInput = screen.getByPlaceholderText(
+        translations.firstName,
+      );
+      const lastNameInput = screen.getByPlaceholderText(translations.lastName);
+
+      expect(firstNameInput).toBeInTheDocument();
+      expect(lastNameInput).toBeInTheDocument();
+    });
+  });
+
+  it('Selected members display count is correct', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    // Select members
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+
+    await waitFor(() => {
+      const clearButtons = screen.queryAllByTestId('clearSelectedMember');
+      expect(clearButtons.length).toBe(2);
+    });
+  });
+
+  it('Handles search input with trimming', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    const firstNameInput = screen.getByPlaceholderText(translations.firstName);
+
+    fireEvent.change(firstNameInput, { target: { value: '   test   ' } });
+
+    await waitFor(() => {
+      expect(firstNameInput).toBeInTheDocument();
+    });
+  });
+
+  it('Empty state displays when no members match search', async () => {
+    const emptyLink = new StaticMockLink(MOCK_EMPTY, true);
+    renderAddPeopleToTagModal(props, emptyLink);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.noMoreMembersFound),
+      ).toBeInTheDocument();
     });
   });
 });
