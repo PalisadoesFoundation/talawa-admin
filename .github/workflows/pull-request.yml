@@ -129,7 +129,7 @@ jobs:
 
       - name: Lint docs/src directory
         working-directory: ./docs
-        run: npx eslint src/ --max-warnings=0        
+        run: npx eslint src/ --max-warnings=0
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
