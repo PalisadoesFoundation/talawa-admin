@@ -263,25 +263,6 @@ describe('Testing VolunteerViewModal', () => {
       renderVolunteerViewModal(emptyVolunteersProps);
       expect(screen.getByText('0')).toBeInTheDocument();
     });
-
-    it('should display 0 when volunteers array is empty (nullVolunteersProps)', () => {
-      const nullVolunteersProps = {
-        ...itemProps[0],
-        volunteer: {
-          ...itemProps[0].volunteer,
-          groups: [
-            {
-              id: 'groupId1',
-              name: 'group1',
-              description: 'Test group',
-              volunteers: [],
-            },
-          ],
-        },
-      };
-      renderVolunteerViewModal(nullVolunteersProps);
-      expect(screen.getByText('0')).toBeInTheDocument();
-    });
   });
 
   describe('Multiple Groups', () => {
