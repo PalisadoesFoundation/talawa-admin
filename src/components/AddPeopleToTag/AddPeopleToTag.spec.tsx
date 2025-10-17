@@ -313,7 +313,6 @@ describe('Organisation Tags Page', () => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
 
-    // select members and assign them
     await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
@@ -473,11 +472,8 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText((content, element) => {
-          return (
-            element?.tagName.toLowerCase() === 'h6' &&
-            content.includes(translations.errorOccurredWhileLoadingMembers)
-          );
+        screen.getByRole('heading', {
+          name: new RegExp(translations.errorOccurredWhileLoadingMembers),
         }),
       ).toBeInTheDocument();
     });
@@ -562,26 +558,21 @@ describe('Organisation Tags Page', () => {
       translations.firstName,
     ) as HTMLInputElement;
 
-    // Type value with leading and trailing spaces using fireEvent for immediate processing
     fireEvent.change(firstNameInput, {
       target: { value: '   usersToAssignTo   ' },
     });
 
-    // Wait for the component to process the trimmed search
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
-      // Should find members matching the trimmed search 'usersToAssignTo'
       expect(members.length).toBeGreaterThan(0);
     });
 
-    // Verify the component's trim logic works by checking search results
     await waitFor(() => {
       expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
         'usersToAssignTo',
       );
     });
 
-    // Verify trimmed value reaches GraphQL query variables
     await waitFor(() => {
       const operation = (trimLink as unknown as Record<string, unknown>)
         .operation as Record<string, unknown>;
