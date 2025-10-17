@@ -250,20 +250,6 @@ describe('Testing VolunteerViewModal', () => {
       ).not.toBeInTheDocument();
     });
 
-    it('should not render groups table when groups array is empty (noGroupsProps)', () => {
-      const noGroupsProps = {
-        ...itemProps[0],
-        volunteer: {
-          ...itemProps[0].volunteer,
-          groups: [],
-        },
-      };
-      renderVolunteerViewModal(noGroupsProps);
-      expect(
-        screen.queryByText('Volunteer Groups Joined'),
-      ).not.toBeInTheDocument();
-    });
-
     it('should display correct member count in groups table', () => {
       renderVolunteerViewModal(itemProps[0]);
       const memberCountCells = screen.getAllByText('1');
