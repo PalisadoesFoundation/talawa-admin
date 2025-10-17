@@ -212,86 +212,52 @@ describe('ChangeLanguageDropDown', () => {
     consoleSpy.mockRestore();
   });
 
-  it('handles non-string userImage gracefully', async () => {
-    // Mock userImage to be a non-string value
-    (useLocalStorage as jest.Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
-        if (key === 'id') return mockUserId;
-        if (key === 'UserImage') return { invalid: 'object' }; // Non-string value
-        return null;
-      }),
-    });
+  it.each([
+    { userImage: null, description: 'null' },
+    { userImage: { invalid: 'object' }, description: 'non-string object' },
+    { userImage: undefined, description: 'undefined' },
+  ])(
+    'handles language change without avatar when userImage is $description',
+    async ({ userImage }) => {
+      // Mock userImage to be the specified invalid value
+      (useLocalStorage as jest.Mock).mockReturnValue({
+        getItem: vi.fn((key) => {
+          if (key === 'id') return mockUserId;
+          if (key === 'UserImage') return userImage;
+          return null;
+        }),
+      });
 
-    // Create mocks that expect no avatar in the mutation
-    const mocksWithoutAvatar = [
-      {
-        request: {
-          query: UPDATE_CURRENT_USER_MUTATION,
-          variables: { input: { naturalLanguageCode: 'es' } },
+      // Create mocks that expect no avatar in the mutation
+      const mocksWithoutAvatar = [
+        {
+          request: {
+            query: UPDATE_CURRENT_USER_MUTATION,
+            variables: { input: { naturalLanguageCode: 'es' } },
+          },
+          result: { data: { updateUser: { id: mockUserId } } },
         },
-        result: { data: { updateUser: { id: mockUserId } } },
-      },
-    ];
+      ];
 
-    render(
-      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
-        <ChangeLanguageDropDown />
-      </MockedProvider>,
-    );
+      render(
+        <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+          <ChangeLanguageDropDown />
+        </MockedProvider>,
+      );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+      const dropdown = screen.getByTestId('language-dropdown-btn');
+      fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+      const spanishOption = screen.getByTestId('change-language-btn-es');
+      fireEvent.click(spanishOption);
 
-    await waitFor(() => {
-      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
-      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
-    });
+      await waitFor(() => {
+        expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+        expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+      });
 
-    // Verify urlToFile was not called since userImage is not a string
-    expect(urlToFile).not.toHaveBeenCalled();
-  });
-
-  it('handles language change without avatar when userImage is null', async () => {
-    // Mock userImage to be null
-    (useLocalStorage as jest.Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
-        if (key === 'id') return mockUserId;
-        if (key === 'UserImage') return null;
-        return null;
-      }),
-    });
-
-    const mocksWithoutAvatar = [
-      {
-        request: {
-          query: UPDATE_CURRENT_USER_MUTATION,
-          variables: { input: { naturalLanguageCode: 'es' } },
-        },
-        result: { data: { updateUser: { id: mockUserId } } },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
-        <ChangeLanguageDropDown />
-      </MockedProvider>,
-    );
-
-    const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
-
-    const spanishOption = screen.getByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
-
-    await waitFor(() => {
-      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
-      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
-    });
-
-    // Verify urlToFile was not called since userImage is null
-    expect(urlToFile).not.toHaveBeenCalled();
-  });
+      // Verify urlToFile was not called since userImage is not a valid string
+      expect(urlToFile).not.toHaveBeenCalled();
+    },
+  );
 });
