@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCKS\_WITH\_TIME
+# Variable: MOCKS\_WITHOUT\_LOCATION
 
-> `const` **MOCKS\_WITH\_TIME**: `object`[]
+> `const` **MOCKS\_WITHOUT\_LOCATION**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L40)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L50)
 
 ## Type Declaration
 
