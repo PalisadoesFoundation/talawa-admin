@@ -3086,42 +3086,246 @@ describe('VenueModal', () => {
     });
   });
 
-  test('handles clearImageInput when fileInputRef is null', async () => {
-    // Mock fileInputRef to be null
-    const mockFileInputRef = { current: null };
-    
-    // Create a custom component that uses the mocked ref
-    const TestComponent = () => {
-      const [imagePreviewUrl, setImagePreviewUrl] = React.useState('blob:test-url');
-      
-      const clearImageInput = React.useCallback(() => {
-        setImagePreviewUrl(null);
-        if (mockFileInputRef.current) {
-          mockFileInputRef.current.value = '';
-        }
-      }, []);
-
-      return (
-        <div>
-          <button onClick={clearImageInput} data-testid="clear-button">
-            Clear
-          </button>
-          {imagePreviewUrl && <div data-testid="image-preview">Preview</div>}
-        </div>
-      );
+  test('covers line 134 - update success when name unchanged', async () => {
+    const venueData = {
+      node: {
+        id: 'venue1',
+        name: 'Original Name',
+        description: 'Original description',
+        capacity: 100,
+        image: null,
+      },
     };
 
-    render(<TestComponent />);
+    // CRITICAL: This mock MUST return data.updateVenue
+    const updateMock = {
+      request: {
+        query: UPDATE_VENUE_MUTATION,
+        variables: {
+          id: 'venue1',
+          capacity: 150,
+          description: 'Updated description',
+          // NO name field - because it's unchanged
+        },
+      },
+      result: {
+        data: {
+          updateVenue: {  // This MUST exist to cover line 134
+            id: 'venue1',
+            name: 'Original Name',
+            description: 'Updated description',
+            capacity: 150,
+          },
+        },
+      },
+    };
 
-    // Verify image preview is shown
-    expect(screen.getByTestId('image-preview')).toBeInTheDocument();
+    const editProps = {
+      show: true,
+      onHide: vi.fn(),
+      refetchVenues: vi.fn(),
+      orgId: 'orgId',
+      venueData: venueData,
+      edit: true,
+    };
 
-    // Click clear button
-    fireEvent.click(screen.getByTestId('clear-button'));
+    render(
+      <MockedProvider mocks={[updateMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...editProps} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
 
-    // Verify image preview is cleared
     await waitFor(() => {
-      expect(screen.queryByTestId('image-preview')).not.toBeInTheDocument();
+      expect(screen.getByDisplayValue('Original Name')).toBeInTheDocument();
     });
+
+    // DON'T change the name - keep it as 'Original Name'
+    // Only change capacity and description
+    const capacityInput = screen.getByDisplayValue('100');
+    const descInput = screen.getByDisplayValue('Original description');
+
+    await act(async () => {
+      fireEvent.change(capacityInput, { target: { value: '150' } });
+      fireEvent.change(descInput, { target: { value: 'Updated description' } });
+    });
+
+    const updateBtn = screen.getByTestId('updateVenueBtn');
+    
+    await act(async () => {
+      fireEvent.click(updateBtn);
+    });
+
+    // Wait for the success path to execute
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('covers line 169 - create venue success', async () => {
+    // CRITICAL: Mock MUST return data.createVenue
+    const createMock = {
+      request: {
+        query: CREATE_VENUE_MUTATION,
+        variables: {
+          name: 'Brand New Venue',
+          capacity: 200,
+          description: 'Test description',
+          organizationId: 'orgId',
+        },
+      },
+      result: {
+        data: {
+          createVenue: {  // This MUST exist to cover line 169
+            id: 'new-venue-123',
+            name: 'Brand New Venue',
+            capacity: 200,
+            description: 'Test description',
+          },
+        },
+      },
+    };
+
+    const createProps = {
+      show: true,
+      onHide: vi.fn(),
+      refetchVenues: vi.fn(),
+      orgId: 'orgId',
+      edit: false,  // CREATE mode, not edit
+    };
+
+    render(
+      <MockedProvider mocks={[createMock]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...createProps} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    // Fill the form
+    await act(async () => {
+      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
+        target: { value: 'Brand New Venue' },
+      });
+      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
+        target: { value: '200' },
+      });
+      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Description/i), {
+        target: { value: 'Test description' },
+      });
+    });
+
+    const createBtn = screen.getByTestId('createVenueBtn');
+    
+    await act(async () => {
+      fireEvent.click(createBtn);
+    });
+
+    // Wait for the success to be called
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('covers line 198 - blob URL cleanup when clearing image', async () => {
+    // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const createObjectURLMock = vi.fn(() => 'blob:http://localhost:3000/test-uuid');
+    const revokeObjectURLMock = vi.fn();
+    
+    global.URL.createObjectURL = createObjectURLMock;
+    global.URL.revokeObjectURL = revokeObjectURLMock;
+
+    const props = {
+      show: true,
+      onHide: vi.fn(),
+      refetchVenues: vi.fn(),
+      orgId: 'orgId',
+      edit: false,
+    };
+
+    const { unmount } = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    // Upload a file to create the blob URL
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+
+    // Verify blob URL was created
+    await waitFor(() => {
+      expect(createObjectURLMock).toHaveBeenCalledWith(file);
+      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+    });
+
+    // Now click the clear button to trigger clearImageInput
+    const clearBtn = screen.getByTestId('closeimage');
+    
+    await act(async () => {
+      fireEvent.click(clearBtn);
+    });
+
+    // Verify line 198 was executed - revokeObjectURL should be called
+    expect(revokeObjectURLMock).toHaveBeenCalledWith('blob:http://localhost:3000/test-uuid');
+
+    unmount();
+  });
+
+  test('covers line 223 - blob URL cleanup on unmount', async () => {
+    // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const createObjectURLMock = vi.fn(() => 'blob:http://localhost:3000/unmount-test');
+    const revokeObjectURLMock = vi.fn();
+    
+    global.URL.createObjectURL = createObjectURLMock;
+    global.URL.revokeObjectURL = revokeObjectURLMock;
+
+    const props = {
+      show: true,
+      onHide: vi.fn(),
+      refetchVenues: vi.fn(),
+      orgId: 'orgId',
+      edit: false,
+    };
+
+    const { unmount } = render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...props} />
+        </I18nextProvider>
+      </MockedProvider>
+    );
+
+    // Upload a file to create the blob URL
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [file] } });
+    });
+
+    // Verify blob URL was created
+    await waitFor(() => {
+      expect(createObjectURLMock).toHaveBeenCalled();
+      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+    });
+
+    // Clear the mock call history
+    revokeObjectURLMock.mockClear();
+
+    // Unmount the component to trigger the useEffect cleanup (line 223)
+    await act(async () => {
+      unmount();
+    });
+
+    // Verify line 223 was executed
+    expect(revokeObjectURLMock).toHaveBeenCalledWith('blob:http://localhost:3000/unmount-test');
   });
 });
