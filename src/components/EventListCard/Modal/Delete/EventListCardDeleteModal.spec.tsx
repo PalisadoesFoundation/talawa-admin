@@ -169,6 +169,40 @@ describe('EventListCardDeleteModal', () => {
       );
     });
 
+    it('should update delete option when switching back to "Delete only this instance"', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <EventListCardDeleteModal {...mockRecurringEventProps} />
+        </I18nextProvider>,
+      );
+
+      // First select a different option (following) to ensure single is not selected
+      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      await user.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
+
+      // Now click the "single" radio button to trigger onChange (Line 94)
+      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      await user.click(singleRadio);
+
+      // Verify single is now checked and others are not
+      expect(singleRadio).toBeChecked();
+      expect(followingRadio).not.toBeChecked();
+      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+
+      // Click delete button to verify the correct option is passed
+      const deleteButton = screen.getByTestId('deleteEventBtn');
+      await user.click(deleteButton);
+
+      // Verify deleteEventHandler was called with "single"
+      expect(mockRecurringEventProps.deleteEventHandler).toHaveBeenCalledWith(
+        'single',
+      );
+    });
+
     it('should update delete option when "Delete this and following" radio is selected (Line 100)', async () => {
       const user = userEvent.setup();
 
