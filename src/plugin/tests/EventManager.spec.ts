@@ -344,34 +344,30 @@ describe('EventManager', () => {
       consoleSpy.mockRestore();
     });
 
-    it('should use fallback set when internal listeners map has no entry (covers else branch in on)', () => {
-      // Simulate a case where get(event) returns undefined even after set was attempted
-      // We can't directly manipulate the private map, but calling on with a valid event
-      // and callback should exercise the normal path. To force the "else" branch
-      // we rely on timing/implementation: ensure on handles setting when get returns undefined.
-
+    it('should register listener via public API and call it on emit (avoids private map manipulation)', () => {
       const cb = vi.fn();
-      // Force the Map.get to return undefined so the else branch executes.
-      const map = (
-        eventManager as unknown as {
-          eventListeners: Map<string, Array<(...args: unknown[]) => void>>;
-        }
-      ).eventListeners;
-      const originalGet = map.get;
-      const setSpy = vi.spyOn(map, 'set');
 
-      // make get always return undefined to hit the else branch
-      map.get = () => undefined;
+      // Spy on Map.prototype.set to ensure the EventManager attempts to set listeners
+      // without reaching into its private map implementation directly.
+      const setSpy = vi.spyOn(Map.prototype, 'set');
 
       eventManager.on('fallback-event', cb);
 
-      // verify that the fallback set with [cb] was called
-      expect(setSpy).toHaveBeenCalledWith('fallback-event', [cb]);
+      // The public API should result in Map.prototype.set being called for registration
+      expect(setSpy).toHaveBeenCalled();
 
-      // restore
-      map.get = originalGet;
+      // Emitting the event should call the registered callback
+      eventManager.emit('fallback-event');
+      expect(cb).toHaveBeenCalledTimes(1);
+
       setSpy.mockRestore();
     });
+
+    // not testing the unreachable `else` branch inside
+    // EventManager.on that depends on Map#get returning `undefined` after
+    // `has` — this is an internal edge-case that's hard to trigger via the
+    // public API without mocking global Map behaviour and can make tests
+    // brittle. We prefer testing observable public behaviour only.
 
     it('should log error and return when emitting with invalid event name', () => {
       const consoleSpy = vi
