@@ -312,4 +312,137 @@ describe('EventManager', () => {
       });
     });
   });
+
+  describe('Utility methods and invalid inputs', () => {
+    it('should log error for invalid on inputs', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // invalid event name
+      expect(() => eventManager.on('', vi.fn())).not.toThrow();
+      // invalid callback
+      // @ts-expect-error testing runtime invalid input
+      expect(() => eventManager.on('test-event', null)).not.toThrow();
+
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should log error for invalid off inputs', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // invalid event name
+      expect(() => eventManager.off('', vi.fn())).not.toThrow();
+      // invalid callback
+      // @ts-expect-error testing runtime invalid input
+      expect(() => eventManager.off('test-event', undefined)).not.toThrow();
+
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should use fallback set when internal listeners map has no entry (covers else branch in on)', () => {
+      // Simulate a case where get(event) returns undefined even after set was attempted
+      // We can't directly manipulate the private map, but calling on with a valid event
+      // and callback should exercise the normal path. To force the "else" branch
+      // we rely on timing/implementation: ensure on handles setting when get returns undefined.
+
+      const cb = vi.fn();
+      // Force the Map.get to return undefined so the else branch executes.
+      const map = (
+        eventManager as unknown as {
+          eventListeners: Map<string, Array<(...args: unknown[]) => void>>;
+        }
+      ).eventListeners;
+      const originalGet = map.get;
+      const setSpy = vi.spyOn(map, 'set');
+
+      // make get always return undefined to hit the else branch
+      map.get = () => undefined;
+
+      eventManager.on('fallback-event', cb);
+
+      // verify that the fallback set with [cb] was called
+      expect(setSpy).toHaveBeenCalledWith('fallback-event', [cb]);
+
+      // restore
+      map.get = originalGet;
+      setSpy.mockRestore();
+    });
+
+    it('should log error and return when emitting with invalid event name', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      expect(() => eventManager.emit('')).not.toThrow();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Invalid event name provided for emission',
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should remove all listeners for a specific event', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      eventManager.on('a', cb1);
+      eventManager.on('b', cb2);
+
+      eventManager.removeAllListeners('a');
+
+      eventManager.emit('a');
+      eventManager.emit('b');
+
+      expect(cb1).not.toHaveBeenCalled();
+      expect(cb2).toHaveBeenCalledTimes(1);
+    });
+
+    it('should remove all listeners when called without event', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      eventManager.on('a', cb1);
+      eventManager.on('b', cb2);
+
+      eventManager.removeAllListeners();
+
+      eventManager.emit('a');
+      eventManager.emit('b');
+
+      expect(cb1).not.toHaveBeenCalled();
+      expect(cb2).not.toHaveBeenCalled();
+    });
+
+    it('should report correct listener count and events', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      expect(eventManager.getListenerCount('x')).toBe(0);
+      expect(eventManager.getEvents()).toEqual([]);
+
+      eventManager.on('x', cb1);
+      eventManager.on('x', cb2);
+      eventManager.on('y', cb1);
+
+      expect(eventManager.getListenerCount('x')).toBe(2);
+      expect(eventManager.getListenerCount('y')).toBe(1);
+
+      const events = eventManager.getEvents();
+      expect(events).toContain('x');
+      expect(events).toContain('y');
+
+      // remove listeners of x one by one and verify updates
+      eventManager.off('x', cb1);
+      expect(eventManager.getListenerCount('x')).toBe(1);
+
+      eventManager.off('x', cb2);
+      expect(eventManager.getListenerCount('x')).toBe(0);
+      expect(eventManager.getEvents()).not.toContain('x');
+    });
+  });
 });
