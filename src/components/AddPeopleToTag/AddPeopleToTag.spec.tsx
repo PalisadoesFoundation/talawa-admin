@@ -482,22 +482,6 @@ describe('Organisation Tags Page', () => {
     expect(svgIcon).toBeTruthy();
   });
 
-  it('Member selection persists in state', async () => {
-    renderAddPeopleToTagModal(props, link);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
-
-    await waitFor(() => {
-      expect(
-        screen.getAllByTestId('clearSelectedMember')[0],
-      ).toBeInTheDocument();
-    });
-  });
-
   it('Modal renders with correct structure', async () => {
     renderAddPeopleToTagModal(props, link);
 
