@@ -52,7 +52,7 @@ const dashBoardCard = (props: {
             >
               {count ?? 0}
             </span>
-            &nbsp;
+            {/* &nbsp; */}
             <span
               data-testid="cardTitle"
               className={styles.cardBodySecondaryText}
