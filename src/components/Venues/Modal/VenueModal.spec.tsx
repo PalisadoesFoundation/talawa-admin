@@ -2635,6 +2635,139 @@ describe('VenueModal', () => {
           });
         });
 
+        test('handles error with fallback message when translation returns undefined', async () => {
+          // Mock useTranslation to return undefined for venueNameExists
+          const mockT = vi.fn((key: string) => {
+            if (key === 'venueNameExists') return undefined;
+            return key;
+          });
+
+          // Mock useTranslation globally
+          vi.mocked(useTranslation).mockReturnValue({
+            t: mockT,
+            i18n: {} as any,
+            ready: true,
+          });
+
+          const errorMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                capacity: 100,
+                description: 'Test description',
+                organizationId: 'orgId',
+              },
+            },
+            error: new Error('alreadyExists'),
+          };
+
+          renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
+
+          await act(async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+              target: { value: 'Test Venue' },
+            });
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              {
+                target: { value: 'Test description' },
+              },
+            );
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith(
+              'A venue with this name already exists',
+            );
+          });
+        });
+
+        test('handles form submission with attachments in create mode', async () => {
+          const createVenueWithAttachmentsMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                capacity: 100,
+                description: 'Test description',
+                organizationId: 'orgId',
+                attachments: [{}], // Mock attachment
+              },
+            },
+            result: { data: { createVenue: { id: 'newVenue' } } },
+          };
+
+          renderVenueModal(
+            defaultProps,
+            new StaticMockLink([createVenueWithAttachmentsMock], true),
+          );
+
+          // Upload a file to create attachments
+          const file = new File(['test'], 'test.png', { type: 'image/png' });
+          const fileInput = screen.getByTestId('venueImgUrl');
+
+          await act(async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+              target: { value: 'Test Venue' },
+            });
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              {
+                target: { value: 'Test description' },
+              },
+            );
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
+            fireEvent.change(fileInput, {
+              target: { files: [file] },
+            });
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledWith('venueCreated');
+          });
+        });
+
+        test('handles clearImageInput when fileInputRef is null', async () => {
+          // Mock fileInputRef to be null
+          const mockFileInputRef = { current: null };
+          vi.spyOn(React, 'useRef').mockReturnValue(mockFileInputRef);
+
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+          // Upload a file first to make the clear button appear
+          const file = new File(['test'], 'test.png', { type: 'image/png' });
+          const fileInput = screen.getByTestId('venueImgUrl');
+
+          await act(async () => {
+            fireEvent.change(fileInput, {
+              target: { files: [file] },
+            });
+          });
+
+          // Click the clear button
+          const clearButton = screen.getByTestId('closeimage');
+          await act(async () => {
+            fireEvent.click(clearButton);
+          });
+
+          // Should not throw an error when fileInputRef.current is null
+          expect(clearButton).toBeInTheDocument();
+        });
+
         test('handles file input ref clearing in clearImageInput', async () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
