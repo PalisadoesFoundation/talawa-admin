@@ -153,3 +153,4 @@ describe('EventDashboardScreen Component', () => {
     resizeWindow(1024);
   });
 });
+
