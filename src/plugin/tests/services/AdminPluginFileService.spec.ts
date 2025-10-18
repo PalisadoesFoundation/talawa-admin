@@ -1,13 +1,7 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import {
-  AdminPluginFileService,
-  PluginFileValidationResult,
-  PluginInstallationResult,
-  InstalledPlugin,
-} from '../../services/AdminPluginFileService';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { AdminPluginFileService } from '../../services/AdminPluginFileService';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
-import type { IPluginDetails } from '../../types';
 
 // Mock InternalFileWriter
 vi.mock('../../services/InternalFileWriter', () => ({
@@ -71,8 +65,8 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail if required manifest fields are missing', () => {
-      const badManifest = { ...validManifest };
-      delete (badManifest as any).main;
+      const badManifest = { ...validManifest } as Partial<AdminPluginManifest>;
+      delete badManifest.main;
       const files = {
         ...validFiles,
         'manifest.json': JSON.stringify(badManifest),
@@ -98,13 +92,17 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail for null files', () => {
-      const result = service.validatePluginFiles(null as any);
+      const result = service.validatePluginFiles(
+        null as unknown as Record<string, string>,
+      );
       expect(result.valid).toBe(false);
       expect(result.error).toMatch(/No files provided/);
     });
 
     it('should fail for non-object files', () => {
-      const result = service.validatePluginFiles('not an object' as any);
+      const result = service.validatePluginFiles(
+        'not an object' as unknown as Record<string, string>,
+      );
       expect(result.valid).toBe(false);
       expect(result.error).toMatch(/No files provided/);
     });
@@ -122,7 +120,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail for null pluginId', () => {
-      const result = service.validatePluginId(null as any);
+      const result = service.validatePluginId(null as unknown as string);
       expect(result.valid).toBe(false);
     });
 
@@ -675,14 +673,16 @@ describe('AdminPluginFileService', () => {
 
     it('should use logical OR fallbacks for manifest fields when missing', async () => {
       // Manifest with empty strings to ensure fallbacks are used
-      const emptyFieldsManifest = {
+      const emptyFieldsManifest: Partial<AdminPluginManifest> & {
+        main: string;
+      } = {
         pluginId: '',
         name: '',
         version: '',
         description: '',
         author: '',
         main: 'index.js',
-      } as any;
+      };
 
       const mockFiles = {
         'manifest.json': JSON.stringify(emptyFieldsManifest),
@@ -690,7 +690,7 @@ describe('AdminPluginFileService', () => {
 
       mockInternalFileWriter.readPluginFiles.mockResolvedValue({
         success: true,
-        manifest: emptyFieldsManifest,
+        manifest: emptyFieldsManifest as AdminPluginManifest,
         files: mockFiles,
       });
 
