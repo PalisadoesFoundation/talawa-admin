@@ -150,6 +150,7 @@ describe('EventDashboardScreen Component', () => {
     expect(afterSecondToggle).not.toBe(afterFirstToggle);
     expect(afterSecondToggle).toMatch(/expand|contract/);
 
+    // Resize back to default
     resizeWindow(1024);
   });
 });
