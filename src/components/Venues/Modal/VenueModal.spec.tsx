@@ -2537,12 +2537,18 @@ describe('VenueModal', () => {
             fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
               target: { value: 'Test Venue' },
             });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-              target: { value: 'Test description' },
-            });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-              target: { value: '100' },
-            });
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              {
+                target: { value: 'Test description' },
+              },
+            );
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
             fireEvent.click(screen.getByTestId('createVenueBtn'));
           });
 
@@ -2564,21 +2570,24 @@ describe('VenueModal', () => {
             error: new Error('alreadyExists'),
           };
 
-          renderVenueModal(
-            defaultProps,
-            new StaticMockLink([errorMock], true),
-          );
+          renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
           await act(async () => {
             fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
               target: { value: 'Test Venue' },
             });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-              target: { value: 'Test description' },
-            });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-              target: { value: '100' },
-            });
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              {
+                target: { value: 'Test description' },
+              },
+            );
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
             fireEvent.click(screen.getByTestId('createVenueBtn'));
           });
 
@@ -2609,14 +2618,19 @@ describe('VenueModal', () => {
 
           await act(async () => {
             // Clear the description field
-            fireEvent.change(screen.getByDisplayValue('Updated description for venue 1'), {
-              target: { value: '' },
-            });
+            fireEvent.change(
+              screen.getByDisplayValue('Updated description for venue 1'),
+              {
+                target: { value: '' },
+              },
+            );
             fireEvent.click(screen.getByTestId('updateVenueBtn'));
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith('Venue details updated successfully');
+            expect(toast.success).toHaveBeenCalledWith(
+              'Venue details updated successfully',
+            );
           });
         });
 
@@ -2640,7 +2654,7 @@ describe('VenueModal', () => {
           });
 
           // Verify the file input value is cleared
-          expect(fileInput.value).toBe('');
+          expect((fileInput as HTMLInputElement).value).toBe('');
         });
 
         test('handles form submission with null description in edit mode', async () => {
@@ -2663,14 +2677,19 @@ describe('VenueModal', () => {
 
           await act(async () => {
             // Set description to null/undefined to test the fallback
-            fireEvent.change(screen.getByDisplayValue('Updated description for venue 1'), {
-              target: { value: '' },
-            });
+            fireEvent.change(
+              screen.getByDisplayValue('Updated description for venue 1'),
+              {
+                target: { value: '' },
+              },
+            );
             fireEvent.click(screen.getByTestId('updateVenueBtn'));
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith('Venue details updated successfully');
+            expect(toast.success).toHaveBeenCalledWith(
+              'Venue details updated successfully',
+            );
           });
         });
 
@@ -2697,17 +2716,25 @@ describe('VenueModal', () => {
             fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
               target: { value: 'Test Venue' },
             });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-              target: { value: '' }, // Empty description
-            });
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-              target: { value: '100' },
-            });
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              {
+                target: { value: '' }, // Empty description
+              },
+            );
+            fireEvent.change(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              {
+                target: { value: '100' },
+              },
+            );
             fireEvent.click(screen.getByTestId('createVenueBtn'));
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith('organizationVenues.venueCreated');
+            expect(toast.success).toHaveBeenCalledWith(
+              'organizationVenues.venueCreated',
+            );
           });
         });
       });
