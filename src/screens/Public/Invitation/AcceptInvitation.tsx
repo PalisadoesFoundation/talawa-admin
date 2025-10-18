@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 // login/signup handled by existing `LoginPage`.
 
 const STORAGE_KEY = 'pendingInvitationToken';
+const AUTH_TOKEN_KEY = 'Talawa-admin_token';
 
 const AcceptInvitation = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
@@ -79,7 +80,12 @@ const AcceptInvitation = (): JSX.Element => {
     run();
   }, [token, verify]);
 
-  const isAuthenticated = !!localStorage.getItem('token');
+  // Check authentication status - since we do a full page redirect from login,
+  // we only need to check once when the component mounts
+  const [isAuthenticated] = useState(() =>
+    Boolean(localStorage.getItem(AUTH_TOKEN_KEY)),
+  );
+
   // currentEmail is intentionally not used because server returns masked email only
 
   // Since the verify mutation now returns a masked email (for privacy), we cannot
@@ -104,7 +110,7 @@ const AcceptInvitation = (): JSX.Element => {
     if (!invite) return;
     setIsSubmitting(true);
     try {
-      const input = { token: invite.invitationToken };
+      const input = { invitationToken: invite.invitationToken };
       const { data } = await accept({ variables: { input } });
       if (data && data.acceptEventInvitation) {
         toast.success(t('accepted', { defaultValue: 'Invitation accepted' }));
@@ -223,8 +229,8 @@ const AcceptInvitation = (): JSX.Element => {
                       onClick={() => {
                         // Help the user sign in as a different account: clear token/email and
                         // preserve the pending invitation token so they can resume after login.
-                        localStorage.removeItem('token');
-                        localStorage.removeItem('email');
+                        localStorage.removeItem(AUTH_TOKEN_KEY);
+                        localStorage.removeItem('Talawa-admin_email');
                         if (invite?.invitationToken) {
                           localStorage.setItem(
                             STORAGE_KEY,

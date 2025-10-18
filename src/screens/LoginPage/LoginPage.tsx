@@ -132,6 +132,10 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
+  // Capture the pending invitation token early, before any localStorage.clear() calls
+  const [pendingInvitationToken] = useState(() =>
+    localStorage.getItem('pendingInvitationToken'),
+  );
   const location = useLocation();
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
@@ -201,17 +205,17 @@ const loginPage = (): JSX.Element => {
     }
   }, [orgData]);
 
-  useEffect(() => {
-    async function loadResource(): Promise<void> {
-      try {
-        await fetch(BACKEND_URL as string);
-      } catch (error) {
-        errorHandler(t, error);
-      }
-    }
+  // useEffect(() => {
+  //   async function loadResource(): Promise<void> {
+  //     try {
+  //       await fetch(BACKEND_URL as string);
+  //     } catch (error) {
+  //       errorHandler(t, error);
+  //     }
+  //   }
 
-    loadResource();
-  }, []);
+  //   loadResource();
+  // }, []);
 
   const verifyRecaptcha = async (
     recaptchaToken: string | null,
@@ -304,13 +308,16 @@ const loginPage = (): JSX.Element => {
               setItem('IsLoggedIn', 'TRUE');
               setItem('name', signUpData.signUp.user?.name || '');
               setItem('email', signUpData.signUp.user?.emailAddress || '');
-              const pendingToken = localStorage.getItem(
-                'pendingInvitationToken',
-              );
-              if (pendingToken) {
+              // Check component state for pending token (captured on mount)
+              if (pendingInvitationToken) {
+                // Remove the pending token and perform a full-page redirect to the
+                // invitation URL. Using window.location ensures we don't lose the
+                // pending flow to any competing client-side navigations or HMR
+                // handlers that might run immediately after setting session state.
                 localStorage.removeItem('pendingInvitationToken');
-                navigate(`/event/invitation/${pendingToken}`);
                 startSession();
+                window.location.href = `/event/invitation/${pendingInvitationToken}`;
+                return;
               }
             }
           }
@@ -378,14 +385,17 @@ const loginPage = (): JSX.Element => {
         }
 
         // If there is a pending invitation token from the public invite flow, resume it
-        const pendingToken = localStorage.getItem('pendingInvitationToken');
-        if (pendingToken) {
+        // We check the component state (captured on mount) rather than localStorage
+        // because localStorage may have been cleared by session management code.
+        if (pendingInvitationToken) {
           localStorage.removeItem('pendingInvitationToken');
-          navigate(`/event/invitation/${pendingToken}`);
-        } else {
-          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+          startSession();
+          // Use a full-page redirect to avoid client-side routing races
+          window.location.href = `/event/invitation/${pendingInvitationToken}`;
+          return;
         }
         startSession();
+        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(tErrors('notFound') as string);
       }
