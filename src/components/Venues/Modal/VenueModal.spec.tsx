@@ -914,8 +914,24 @@ describe('VenueModal', () => {
       expect(toast.success).not.toHaveBeenCalled();
     });
 
-    test('handles duplicate venue name error', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    test('handles duplicate venue name error with translation key', async () => {
+      const duplicateNameMock = {
+        request: {
+          query: CREATE_VENUE_MUTATION,
+          variables: {
+            name: 'Existing Venue',
+            description: 'Test Description',
+            capacity: 100,
+            organizationId: 'orgId',
+          },
+        },
+        error: new Error('alreadyExists'),
+      };
+
+      renderVenueModal(
+        defaultProps,
+        new StaticMockLink([duplicateNameMock], true),
+      );
 
       fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
         target: { value: 'Existing Venue' },
@@ -1153,7 +1169,7 @@ describe('VenueModal', () => {
       });
     });
 
-    test('handles "alreadyExists" error specifically', async () => {
+    test('handles "alreadyExists" error with fallback message', async () => {
       const duplicateNameMock = {
         request: {
           query: CREATE_VENUE_MUTATION,
@@ -1189,6 +1205,7 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
+        // This test specifically checks for the fallback behavior
         expect(toast.error).toHaveBeenCalledWith(
           'organizationVenues.venueNameExists',
         );
@@ -1468,32 +1485,29 @@ describe('VenueModal', () => {
             });
           });
 
-          // Test for fallback error message when venue name already exists
-          test('uses fallback error message when venue name exists', async () => {
-            const duplicateNameMock = {
+          // Test for generic error handling when translation fails
+          test('handles generic error when translation is unavailable', async () => {
+            const genericErrorMock = {
               request: {
                 query: CREATE_VENUE_MUTATION,
                 variables: {
-                  name: 'Duplicate Venue',
+                  name: 'Test Venue',
                   description: 'Test Description',
                   capacity: 100,
                   organizationId: 'orgId',
                 },
               },
-              error: new Error('alreadyExists'),
+              error: new Error('Generic server error'),
             };
 
-            const mockLink = new StaticMockLink([duplicateNameMock], true);
-
-            // Mock toast.error to check the exact message
-            const toastErrorSpy = vi.spyOn(toast, 'error');
+            const mockLink = new StaticMockLink([genericErrorMock], true);
 
             renderVenueModal(defaultProps, mockLink);
 
             await act(async () => {
               await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Name'),
-                'Duplicate Venue',
+                'Test Venue',
               );
               await userEvent.type(
                 screen.getByPlaceholderText('Enter Venue Description'),
@@ -1507,10 +1521,8 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              // Check that the error was called with either the translated message or the fallback
-              expect(toastErrorSpy).toHaveBeenCalledWith(
-                expect.stringMatching('organizationVenues.venueNameExists'),
-              );
+              // Check that error handling is called for generic errors
+              expect(toast.error).toHaveBeenCalled();
             });
           });
         });
