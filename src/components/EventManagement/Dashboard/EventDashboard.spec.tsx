@@ -1,12 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  act,
-  waitFor,
-  fireEvent,
-  cleanup,
-} from '@testing-library/react';
+import { render, act, waitFor, fireEvent } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
@@ -24,7 +18,7 @@ import {
   MOCKS_WITH_EMPTY_DESCRIPTION,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';
+import { vi, expect, it, describe, beforeEach } from 'vitest';
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
 const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
@@ -121,10 +115,6 @@ describe('Testing Event Dashboard Screen', () => {
       removeItem: vi.fn(),
     });
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    cleanup();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
