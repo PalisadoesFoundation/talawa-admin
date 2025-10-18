@@ -2742,4 +2742,59 @@ describe('VenueModal', () => {
       });
     });
   });
+
+  test('submits venue WITH attachments successfully', async () => {
+    // Use a flexible link that doesn't strictly match File objects
+    const mutationSpy = vi.fn().mockResolvedValue({
+      data: { createVenue: { id: 'newVenue' } },
+    });
+
+    const flexibleLink = new ApolloLink((operation) => {
+      // Capture the variables to verify attachments are included
+      const variables = operation.variables;
+
+      // Verify attachments exist in the variables
+      if (variables.attachments && variables.attachments.length > 0) {
+        expect(variables.attachments[0]).toBeInstanceOf(File);
+      }
+
+      mutationSpy(variables);
+      return Observable.of({
+        data: { createVenue: { id: 'newVenue' } },
+      });
+    });
+
+    render(
+      <MockedProvider link={flexibleLink} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...defaultProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Fill form
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    // Upload a file
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+    await userEvent.upload(fileInput, file);
+
+    // Submit
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(mutationSpy).toHaveBeenCalled();
+      const callArgs = mutationSpy.mock.calls[0][0];
+      expect(callArgs.attachments).toBeDefined();
+      expect(callArgs.attachments.length).toBe(1);
+    });
+  });
 });
