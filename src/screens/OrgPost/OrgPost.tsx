@@ -435,6 +435,7 @@ function OrgPost(): JSX.Element {
                 variant="success"
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
+                data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
@@ -486,6 +487,7 @@ function OrgPost(): JSX.Element {
               className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
+              data-cy="modalTitle"
               autoComplete="off"
               required
               value={postformState.posttitle}
@@ -503,6 +505,7 @@ function OrgPost(): JSX.Element {
               className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
+              data-cy="modalinfo"
               autoComplete="off"
               required
               value={postformState.postinfo}
@@ -525,6 +528,7 @@ function OrgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              data-cy="addMediaField"
               className={`mb-3 ${styles.inputField}`}
             />
 
@@ -605,6 +609,7 @@ function OrgPost(): JSX.Element {
               id="pinPost"
               type="checkbox"
               data-testid="pinPost"
+              data-cy="pinPost"
               defaultChecked={postformState.pinPost}
               onChange={(): void =>
                 setPostFormState({
@@ -629,6 +634,7 @@ function OrgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
+              data-cy="createPostBtn"
               className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}
