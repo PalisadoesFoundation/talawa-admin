@@ -2484,6 +2484,232 @@ describe('VenueModal', () => {
             'Capacity must be a positive number!',
           );
         });
+
+        test('handles updateVenue mutation with falsy result data', async () => {
+          const falsyResultMock = {
+            request: {
+              query: UPDATE_VENUE_MUTATION,
+              variables: {
+                id: 'venue1',
+                capacity: 100,
+                description: 'Updated description',
+              },
+            },
+            result: { data: { updateVenue: null } }, // Falsy result
+          };
+
+          renderVenueModal(
+            editProps,
+            new StaticMockLink([falsyResultMock], true),
+          );
+
+          await act(async () => {
+            fireEvent.change(screen.getByDisplayValue('100'), {
+              target: { value: '100' },
+            });
+            fireEvent.click(screen.getByTestId('updateVenueBtn'));
+          });
+
+          // Should not show success toast when result is falsy
+          expect(toast.success).not.toHaveBeenCalled();
+        });
+
+        test('handles createVenue mutation with falsy result data', async () => {
+          const falsyResultMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                capacity: 100,
+                description: 'Test description',
+                organizationId: 'orgId',
+              },
+            },
+            result: { data: { createVenue: null } }, // Falsy result
+          };
+
+          renderVenueModal(
+            defaultProps,
+            new StaticMockLink([falsyResultMock], true),
+          );
+
+          await act(async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+              target: { value: 'Test Venue' },
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+              target: { value: 'Test description' },
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+              target: { value: '100' },
+            });
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          // Should not show success toast when result is falsy
+          expect(toast.success).not.toHaveBeenCalled();
+        });
+
+        test('handles error with fallback message when translation fails', async () => {
+          const errorMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                capacity: 100,
+                description: 'Test description',
+                organizationId: 'orgId',
+              },
+            },
+            error: new Error('alreadyExists'),
+          };
+
+          renderVenueModal(
+            defaultProps,
+            new StaticMockLink([errorMock], true),
+          );
+
+          await act(async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+              target: { value: 'Test Venue' },
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+              target: { value: 'Test description' },
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+              target: { value: '100' },
+            });
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith(
+              'organizationVenues.venueNameExists',
+            );
+          });
+        });
+
+        test('handles empty description in form submission', async () => {
+          const emptyDescriptionMock = {
+            request: {
+              query: UPDATE_VENUE_MUTATION,
+              variables: {
+                id: 'venue1',
+                capacity: 100,
+                description: '', // Empty description
+              },
+            },
+            result: { data: { updateVenue: { id: 'venue1' } } },
+          };
+
+          renderVenueModal(
+            editProps,
+            new StaticMockLink([emptyDescriptionMock], true),
+          );
+
+          await act(async () => {
+            // Clear the description field
+            fireEvent.change(screen.getByDisplayValue('Updated description for venue 1'), {
+              target: { value: '' },
+            });
+            fireEvent.click(screen.getByTestId('updateVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledWith('Venue details updated successfully');
+          });
+        });
+
+        test('handles file input ref clearing in clearImageInput', async () => {
+          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+          // Upload a file first
+          const file = new File(['test'], 'test.png', { type: 'image/png' });
+          const fileInput = screen.getByTestId('venueImgUrl');
+
+          await act(async () => {
+            fireEvent.change(fileInput, {
+              target: { files: [file] },
+            });
+          });
+
+          // Click the clear button
+          const clearButton = screen.getByTestId('closeimage');
+          await act(async () => {
+            fireEvent.click(clearButton);
+          });
+
+          // Verify the file input value is cleared
+          expect(fileInput.value).toBe('');
+        });
+
+        test('handles form submission with null description in edit mode', async () => {
+          const updateVenueWithNullDescriptionMock = {
+            request: {
+              query: UPDATE_VENUE_MUTATION,
+              variables: {
+                id: 'venue1',
+                capacity: 100,
+                description: '', // Empty description from null
+              },
+            },
+            result: { data: { updateVenue: { id: 'venue1' } } },
+          };
+
+          renderVenueModal(
+            editProps,
+            new StaticMockLink([updateVenueWithNullDescriptionMock], true),
+          );
+
+          await act(async () => {
+            // Set description to null/undefined to test the fallback
+            fireEvent.change(screen.getByDisplayValue('Updated description for venue 1'), {
+              target: { value: '' },
+            });
+            fireEvent.click(screen.getByTestId('updateVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledWith('Venue details updated successfully');
+          });
+        });
+
+        test('handles form submission with null description in create mode', async () => {
+          const createVenueWithNullDescriptionMock = {
+            request: {
+              query: CREATE_VENUE_MUTATION,
+              variables: {
+                name: 'Test Venue',
+                capacity: 100,
+                description: '', // Empty description from null
+                organizationId: 'orgId',
+              },
+            },
+            result: { data: { createVenue: { id: 'newVenue' } } },
+          };
+
+          renderVenueModal(
+            defaultProps,
+            new StaticMockLink([createVenueWithNullDescriptionMock], true),
+          );
+
+          await act(async () => {
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+              target: { value: 'Test Venue' },
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+              target: { value: '' }, // Empty description
+            });
+            fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+              target: { value: '100' },
+            });
+            fireEvent.click(screen.getByTestId('createVenueBtn'));
+          });
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalledWith('organizationVenues.venueCreated');
+          });
+        });
       });
     });
   });
