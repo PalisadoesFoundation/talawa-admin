@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { toast } from 'react-toastify';
@@ -280,13 +280,13 @@ const renderVenueModal = (
 ): RenderResult => {
   return render(
     <MockedProvider addTypename={false} link={link}>
-      <BrowserRouter>
+      <MemoryRouter initialEntries={['/']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...props} />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     </MockedProvider>,
   );
 };
@@ -2598,6 +2598,7 @@ describe('VenueModal', () => {
           });
         });
 
+
         test('handles empty description in form submission', async () => {
           const emptyDescriptionMock = {
             request: {
@@ -2656,6 +2657,7 @@ describe('VenueModal', () => {
           // Verify the file input value is cleared
           expect((fileInput as HTMLInputElement).value).toBe('');
         });
+
 
         test('handles form submission with null description in edit mode', async () => {
           const updateVenueWithNullDescriptionMock = {
@@ -2737,6 +2739,7 @@ describe('VenueModal', () => {
             );
           });
         });
+
       });
     });
   });
