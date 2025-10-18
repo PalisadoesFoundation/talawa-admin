@@ -2805,8 +2805,8 @@ describe('VenueModal', () => {
         query: UPDATE_VENUE_MUTATION,
         variables: {
           id: 'venue1',
-          capacity: 150,  // Changed
-          description: 'Changed description',  // Changed
+          capacity: 150, // Changed
+          description: 'Changed description', // Changed
           // NO name field here - this is crucial!
         },
       },
@@ -2846,7 +2846,7 @@ describe('VenueModal', () => {
 
   test('updates venue with changed name and attachments', async () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
-    
+
     // Create a flexible mock using ApolloLink
     const mutationSpy = vi.fn().mockReturnValue(
       Observable.of({
@@ -2858,19 +2858,19 @@ describe('VenueModal', () => {
             capacity: 100,
           },
         },
-      })
+      }),
     );
 
     const flexibleLink = new ApolloLink((operation) => {
       const vars = operation.variables;
-      
+
       // Verify the operation includes all expected fields
       expect(vars.id).toBe('venue1');
       expect(vars.name).toBe('New Venue Name');
       expect(vars.capacity).toBe(100);
       expect(vars.attachments).toBeDefined();
       expect(vars.attachments[0]).toBeInstanceOf(File);
-      
+
       return mutationSpy();
     });
 
@@ -2879,7 +2879,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Change name (this triggers the full update path with name included)
@@ -2906,7 +2906,7 @@ describe('VenueModal', () => {
 
   test('creates venue with attachments successfully', async () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
-    
+
     const mutationSpy = vi.fn().mockReturnValue(
       Observable.of({
         data: {
@@ -2917,12 +2917,12 @@ describe('VenueModal', () => {
             capacity: 100,
           },
         },
-      })
+      }),
     );
 
     const flexibleLink = new ApolloLink((operation) => {
       const vars = operation.variables;
-      
+
       // Verify all fields including attachments
       expect(vars.name).toBe('New Venue');
       expect(vars.capacity).toBe(100);
@@ -2931,7 +2931,7 @@ describe('VenueModal', () => {
       expect(vars.attachments).toBeDefined();
       expect(vars.attachments.length).toBe(1);
       expect(vars.attachments[0]).toBeInstanceOf(File);
-      
+
       return mutationSpy();
     });
 
@@ -2940,7 +2940,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Fill form
@@ -2974,7 +2974,8 @@ describe('VenueModal', () => {
   test('clears blob URL when clearing image preview', async () => {
     // Setup spies BEFORE rendering
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
-    const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL')
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
       .mockReturnValue('blob:http://localhost/test-blob');
 
     const { unmount } = render(
@@ -2982,7 +2983,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Upload file to create blob URL
@@ -3003,7 +3004,9 @@ describe('VenueModal', () => {
     });
 
     // Verify blob URL was revoked
-    expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:http://localhost/test-blob');
+    expect(revokeObjectURLSpy).toHaveBeenCalledWith(
+      'blob:http://localhost/test-blob',
+    );
 
     unmount();
     revokeObjectURLSpy.mockRestore();
@@ -3012,7 +3015,8 @@ describe('VenueModal', () => {
 
   test('cleans up blob URL when component unmounts', async () => {
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
-    const createObjectURLSpy = vi.spyOn(URL, 'createObjectURL')
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
       .mockReturnValue('blob:http://localhost/unmount-test');
 
     const { unmount } = render(
@@ -3020,7 +3024,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Upload file
@@ -3042,7 +3046,9 @@ describe('VenueModal', () => {
     unmount();
 
     // Verify cleanup was called
-    expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:http://localhost/unmount-test');
+    expect(revokeObjectURLSpy).toHaveBeenCalledWith(
+      'blob:http://localhost/unmount-test',
+    );
 
     revokeObjectURLSpy.mockRestore();
     createObjectURLSpy.mockRestore();
@@ -3110,7 +3116,8 @@ describe('VenueModal', () => {
       },
       result: {
         data: {
-          updateVenue: {  // This MUST exist to cover line 134
+          updateVenue: {
+            // This MUST exist to cover line 134
             id: 'venue1',
             name: 'Original Name',
             description: 'Updated description',
@@ -3134,7 +3141,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     await waitFor(() => {
@@ -3152,7 +3159,7 @@ describe('VenueModal', () => {
     });
 
     const updateBtn = screen.getByTestId('updateVenueBtn');
-    
+
     await act(async () => {
       fireEvent.click(updateBtn);
     });
@@ -3177,7 +3184,8 @@ describe('VenueModal', () => {
       },
       result: {
         data: {
-          createVenue: {  // This MUST exist to cover line 169
+          createVenue: {
+            // This MUST exist to cover line 169
             id: 'new-venue-123',
             name: 'Brand New Venue',
             capacity: 200,
@@ -3192,7 +3200,7 @@ describe('VenueModal', () => {
       onHide: vi.fn(),
       refetchVenues: vi.fn(),
       orgId: 'orgId',
-      edit: false,  // CREATE mode, not edit
+      edit: false, // CREATE mode, not edit
     };
 
     render(
@@ -3200,7 +3208,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...createProps} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Fill the form
@@ -3211,13 +3219,16 @@ describe('VenueModal', () => {
       fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
         target: { value: '200' },
       });
-      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Description/i), {
-        target: { value: 'Test description' },
-      });
+      fireEvent.change(
+        screen.getByPlaceholderText(/Enter Venue Description/i),
+        {
+          target: { value: 'Test description' },
+        },
+      );
     });
 
     const createBtn = screen.getByTestId('createVenueBtn');
-    
+
     await act(async () => {
       fireEvent.click(createBtn);
     });
@@ -3230,9 +3241,11 @@ describe('VenueModal', () => {
 
   test('covers line 198 - blob URL cleanup when clearing image', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
-    const createObjectURLMock = vi.fn(() => 'blob:http://localhost:3000/test-uuid');
+    const createObjectURLMock = vi.fn(
+      () => 'blob:http://localhost:3000/test-uuid',
+    );
     const revokeObjectURLMock = vi.fn();
-    
+
     global.URL.createObjectURL = createObjectURLMock;
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
@@ -3249,7 +3262,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Upload a file to create the blob URL
@@ -3268,22 +3281,26 @@ describe('VenueModal', () => {
 
     // Now click the clear button to trigger clearImageInput
     const clearBtn = screen.getByTestId('closeimage');
-    
+
     await act(async () => {
       fireEvent.click(clearBtn);
     });
 
     // Verify line 198 was executed - revokeObjectURL should be called
-    expect(revokeObjectURLMock).toHaveBeenCalledWith('blob:http://localhost:3000/test-uuid');
+    expect(revokeObjectURLMock).toHaveBeenCalledWith(
+      'blob:http://localhost:3000/test-uuid',
+    );
 
     unmount();
   });
 
   test('covers line 223 - blob URL cleanup on unmount', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
-    const createObjectURLMock = vi.fn(() => 'blob:http://localhost:3000/unmount-test');
+    const createObjectURLMock = vi.fn(
+      () => 'blob:http://localhost:3000/unmount-test',
+    );
     const revokeObjectURLMock = vi.fn();
-    
+
     global.URL.createObjectURL = createObjectURLMock;
     global.URL.revokeObjectURL = revokeObjectURLMock;
 
@@ -3300,7 +3317,7 @@ describe('VenueModal', () => {
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>
-      </MockedProvider>
+      </MockedProvider>,
     );
 
     // Upload a file to create the blob URL
@@ -3326,6 +3343,8 @@ describe('VenueModal', () => {
     });
 
     // Verify line 223 was executed
-    expect(revokeObjectURLMock).toHaveBeenCalledWith('blob:http://localhost:3000/unmount-test');
+    expect(revokeObjectURLMock).toHaveBeenCalledWith(
+      'blob:http://localhost:3000/unmount-test',
+    );
   });
 });
