@@ -282,7 +282,7 @@ describe('AdminPluginFileService', () => {
       // Spy on console.error to assert it was called (optional)
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
@@ -335,7 +335,7 @@ describe('AdminPluginFileService', () => {
 
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       const result = await service.getInstalledPlugins();
       expect(result).toEqual([]);
