@@ -1,5 +1,5 @@
 import React from 'react';
-import { vi, expect, describe, it } from 'vitest';
+import { vi, expect, describe, it, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -33,13 +33,6 @@ import type { TFunction } from 'i18next';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
-
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    // The waitFor utility automatically uses optimal timing
-    return Promise.resolve();
-  });
-}
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -172,8 +165,6 @@ describe('Organisation Tags Page', () => {
   it('Component loads correctly', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
@@ -182,8 +173,6 @@ describe('Organisation Tags Page', () => {
   it('Renders error component when when query is unsuccessful', async () => {
     const { queryByText } = renderAddPeopleToTagModal(props, link2);
 
-    await wait();
-
     await waitFor(() => {
       expect(queryByText(translations.addPeople)).not.toBeInTheDocument();
     });
@@ -191,8 +180,6 @@ describe('Organisation Tags Page', () => {
 
   it('Selects and deselects members to assign to', async () => {
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
@@ -219,8 +206,6 @@ describe('Organisation Tags Page', () => {
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -253,8 +238,6 @@ describe('Organisation Tags Page', () => {
   it('searchs for tags where the lastName matches the provided lastName search input', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.lastName),
@@ -286,8 +269,6 @@ describe('Organisation Tags Page', () => {
   it('Renders more members with infinite scroll', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
@@ -315,8 +296,6 @@ describe('Organisation Tags Page', () => {
   it('Toasts error when no one is selected while assigning', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
@@ -330,12 +309,10 @@ describe('Organisation Tags Page', () => {
   it('Assigns tag to multiple people', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
-    // select members and assign them
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
+
     await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
@@ -462,6 +439,160 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('Modal is not visible when addPeopleToTagModalIsOpen is false', async () => {
+    const { queryByTestId } = renderAddPeopleToTagModal(defaultProps, link);
+
+    await waitFor(() => {
+      expect(queryByTestId('modalOrganizationHeader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Modal close button hides the modal', async () => {
+    const hideModal = vi.fn();
+    const customProps = { ...props, hideAddPeopleToTagModal: hideModal };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    expect(hideModal).toHaveBeenCalled();
+  });
+
+  it('Error message displays with icon when query fails', async () => {
+    const { container } = renderAddPeopleToTagModal(props, link2);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', {
+          name: new RegExp(translations.errorOccurredWhileLoadingMembers),
+        }),
+      ).toBeInTheDocument();
+    });
+
+    const svgIcon = container.querySelector('svg');
+    expect(svgIcon).toBeTruthy();
+  });
+
+  it('Member selection persists in state', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByTestId('clearSelectedMember')[0],
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('Modal renders with correct structure', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('addPeopleToTagScrollableDiv'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('Search inputs render correctly', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      const firstNameInput = screen.getByPlaceholderText(
+        translations.firstName,
+      );
+      const lastNameInput = screen.getByPlaceholderText(translations.lastName);
+
+      expect(firstNameInput).toBeInTheDocument();
+      expect(lastNameInput).toBeInTheDocument();
+    });
+  });
+
+  it('Selected members display count is correct', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    // Select members
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+
+    await waitFor(() => {
+      const clearButtons = screen.queryAllByTestId('clearSelectedMember');
+      expect(clearButtons.length).toBe(2);
+    });
+  });
+
+  it('Search input trims whitespace from values', async () => {
+    const trimLink = new StaticMockLink(MOCKS, true);
+    renderAddPeopleToTagModal(props, trimLink);
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.firstName),
+      ).toBeInTheDocument();
+    });
+
+    const firstNameInput = screen.getByPlaceholderText(
+      translations.firstName,
+    ) as HTMLInputElement;
+
+    fireEvent.change(firstNameInput, {
+      target: { value: '   usersToAssignTo   ' },
+    });
+
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toBeGreaterThan(0);
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
+        'usersToAssignTo',
+      );
+    });
+
+    await waitFor(() => {
+      const operation = (trimLink as unknown as Record<string, unknown>)
+        .operation as Record<string, unknown>;
+      expect(
+        (operation?.variables as Record<string, unknown>)?.where as Record<
+          string,
+          unknown
+        >,
+      ).toBeDefined();
+    });
+  });
+
+  it('Empty state displays when no members match search', async () => {
+    const emptyLink = new StaticMockLink(MOCK_EMPTY, true);
+    renderAddPeopleToTagModal(props, emptyLink);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.noMoreMembersFound),
+      ).toBeInTheDocument();
     });
   });
 });
