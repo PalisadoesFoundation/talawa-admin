@@ -297,6 +297,22 @@ const loginPage = (): JSX.Element => {
               signOrg: '',
             });
             SignupRecaptchaRef.current?.reset();
+            // If signup returned an authentication token, set session and resume pending invite
+            if (signUpData.signUp && signUpData.signUp.authenticationToken) {
+              const authToken = signUpData.signUp.authenticationToken;
+              setItem('token', authToken);
+              setItem('IsLoggedIn', 'TRUE');
+              setItem('name', signUpData.signUp.user?.name || '');
+              setItem('email', signUpData.signUp.user?.emailAddress || '');
+              const pendingToken = localStorage.getItem(
+                'pendingInvitationToken',
+              );
+              if (pendingToken) {
+                localStorage.removeItem('pendingInvitationToken');
+                navigate(`/event/invitation/${pendingToken}`);
+                startSession();
+              }
+            }
           }
         } catch (error) {
           errorHandler(t, error);
@@ -361,7 +377,14 @@ const loginPage = (): JSX.Element => {
           setItem('userId', loggedInUserId);
         }
 
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        // If there is a pending invitation token from the public invite flow, resume it
+        const pendingToken = localStorage.getItem('pendingInvitationToken');
+        if (pendingToken) {
+          localStorage.removeItem('pendingInvitationToken');
+          navigate(`/event/invitation/${pendingToken}`);
+        } else {
+          navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        }
         startSession();
       } else {
         toast.warn(tErrors('notFound') as string);
