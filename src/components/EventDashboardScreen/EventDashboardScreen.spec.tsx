@@ -153,5 +153,3 @@ describe('EventDashboardScreen Component', () => {
     resizeWindow(1024);
   });
 });
-
-// Added based on recent edits in VolunteerCreateModal.spec.tsx
