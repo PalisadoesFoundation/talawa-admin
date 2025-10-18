@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITHOUT\_TIME**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L42)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L36)
 
 ## Type Declaration
 
@@ -44,7 +44,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:42
 
 #### result.data.event.allDay
 
-> **allDay**: `boolean` = `false`
+> **allDay**: `boolean` = `true`
 
 #### result.data.event.attendees
 
@@ -72,11 +72,11 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:42
 
 #### result.data.event.endAt
 
-> **endAt**: `string` = `'2024-01-02T17:00:00Z'`
+> **endAt**: `string` = `'2024-01-02T00:00:00Z'`
 
 #### result.data.event.endTime
 
-> **endTime**: `string` = `'17:00:00'`
+> **endTime**: `any` = `null`
 
 #### result.data.event.id
 
@@ -100,8 +100,8 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:42
 
 #### result.data.event.startAt
 
-> **startAt**: `string` = `'2024-01-01T09:00:00Z'`
+> **startAt**: `string` = `'2024-01-01T00:00:00Z'`
 
 #### result.data.event.startTime
 
-> **startTime**: `string` = `'09:00:00'`
+> **startTime**: `any` = `null`

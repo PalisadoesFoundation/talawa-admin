@@ -46,19 +46,9 @@ const dashBoardCard = (props: {
             <div className={`${styles.cardbodyIcon}`}>{icon}</div>
           </Col>
           <Col className={`${styles.contentCol}`}>
-            <span
-              data-testid="cardCount"
-              className={`${styles.cardBodyNumber}`}
-            >
-              {count ?? 0}
-            </span>
+            <span className={`${styles.cardBodyNumber}`}>{count ?? 0}</span>
             &nbsp;
-            <span
-              data-testid="cardTitle"
-              className={styles.cardBodySecondaryText}
-            >
-              {title}
-            </span>
+            <span className={styles.cardBodySecondaryText}>{title}</span>
           </Col>
         </Row>
       </Card.Body>

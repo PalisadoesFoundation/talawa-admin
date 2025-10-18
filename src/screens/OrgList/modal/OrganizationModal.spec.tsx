@@ -254,6 +254,21 @@ describe('OrganizationModal Component', () => {
     });
   });
 
+  test('name field should not accept more than 50 characters', async () => {
+    setup();
+    const nameInput = screen.getByTestId(
+      'modalOrganizationName',
+    ) as HTMLInputElement;
+    const longText = 'a'.repeat(60);
+
+    await userEvent.type(nameInput, longText);
+
+    // Since the component limits input at 50 chars, we check the last setFormState call
+    const lastCall =
+      mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
+    expect(lastCall[0].name.length).toBeLessThanOrEqual(50);
+  });
+
   test('description field should not accept more than 200 characters', async () => {
     setup();
     const descInput = screen.getByTestId(
@@ -261,14 +276,12 @@ describe('OrganizationModal Component', () => {
     ) as HTMLInputElement;
     const longText = 'a'.repeat(250);
 
-    // Clear any previous calls
-    mockSetFormState.mockClear();
+    await userEvent.type(descInput, longText);
 
-    // Use fireEvent.change to test the validation logic directly
-    fireEvent.change(descInput, { target: { value: longText } });
-
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Check the last setFormState call
+    const lastCall =
+      mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
+    expect(lastCall[0].description.length).toBeLessThanOrEqual(200);
   });
 
   test('should handle country selection correctly', async () => {
@@ -384,15 +397,14 @@ describe('OrganizationModal Component', () => {
       setup();
       const input = screen.getByTestId(fieldId);
       const longText = 'a'.repeat(maxLength + 10);
+      // const expectedText = 'a'.repeat(maxLength - 1);
 
-      // Clear any previous calls
-      mockSetFormState.mockClear();
+      await userEvent.type(input, longText);
 
-      // Use fireEvent.change to test the validation logic directly
-      fireEvent.change(input, { target: { value: longText } });
-
-      // Should not call setFormState when input exceeds limit
-      expect(mockSetFormState).not.toHaveBeenCalled();
+      const lastCall =
+        mockSetFormState.mock.calls[mockSetFormState.mock.calls.length - 1];
+      expect(lastCall[0][formKey].length).toBeLessThanOrEqual(maxLength);
+      expect(lastCall[0][formKey]).not.toEqual(longText);
     });
   });
   test('should handle valid image upload', async () => {
@@ -596,7 +608,4 @@ describe('OrganizationModal Component', () => {
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
-
-  // Note: Most field validation tests are covered by the loop test above.
-  // The description field retains its individual test due to its unique 200-character limit.
 });

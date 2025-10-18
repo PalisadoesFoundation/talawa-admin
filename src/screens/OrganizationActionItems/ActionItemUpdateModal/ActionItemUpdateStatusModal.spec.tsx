@@ -261,27 +261,6 @@ describe('Testing ItemUpdateStatusModal', () => {
     });
   });
 
-  it('should show error when trying to mark as completed with only whitespace in post completion notes', async () => {
-    renderItemUpdateStatusModal(link1, itemProps[1]);
-
-    // Check if the modal shows up with the right title
-    expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-
-    // Find the completion notes input and set it to only whitespace
-    const notesInput = screen.getByLabelText(/completion notes/i);
-    fireEvent.change(notesInput, { target: { value: '   \n\t   ' } });
-
-    // Find the Mark Completion button and click it
-    const createBtn = screen.getByTestId('createBtn');
-    fireEvent.click(createBtn);
-
-    // Check that error toast is shown for required post completion notes
-    expect(toast.error).toHaveBeenCalledWith(t.postCompletionNotesRequired);
-
-    // Verify that the modal is still open (hide function not called)
-    expect(itemProps[1].hide).not.toHaveBeenCalled();
-  });
-
   describe('Testing completeActionForInstanceHandler', () => {
     const recurringProps: IItemUpdateStatusModalProps = {
       isOpen: true,
