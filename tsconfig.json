@@ -26,5 +26,12 @@
     "jsx": "react-jsx"
   },
   "include": ["src", "src/App.tsx", "setup.ts"],
-  "exclude": ["node_modules", "dist", "vitest.config.ts", "docs/node_modules", "docs/build", "docs/.docusaurus"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "vitest.config.ts",
+    "docs/node_modules",
+    "docs/build",
+    "docs/.docusaurus"
+  ]
 }
