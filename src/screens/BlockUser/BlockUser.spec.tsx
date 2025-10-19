@@ -1128,7 +1128,6 @@ describe('BlockUser Component', () => {
       await screen.findByText('Bob Johnson');
 
       const unblockBtn = screen.getByTestId('blockUser3');
-      fireEvent.click(unblockBtn);
       await act(async () => {
         fireEvent.click(unblockBtn);
       });
