@@ -11,6 +11,9 @@ import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import inquirer from 'inquirer';
 
+vi.mock('./backupEnvFile/backupEnvFile', () => ({
+  backupEnvFile: vi.fn().mockResolvedValue(undefined),
+}));
 vi.mock('inquirer');
 vi.mock('dotenv');
 vi.mock('fs');
