@@ -17,8 +17,7 @@ const HomeCallToAction = () => {
         href="https://github.com/PalisadoesFoundation/talawa-admin"
         buttonClassName="custom-button"
         target="_blank"
-        rel="noopener noreferrer"
-        aria-label="View Talawa Admin on GitHub"
+        ariaLabel="View Talawa Admin on GitHub"
       >
         GitHub
       </ActionButton>
