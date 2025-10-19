@@ -1113,7 +1113,7 @@ describe('BlockUser Component', () => {
 
       await flushPromises();
 
-      const blockedUsersOption = await screen.findByText(/blockedUsers/i);
+      const blockedUsersOption = await screen.findByText('blockedUsers');
       fireEvent.click(blockedUsersOption);
 
       await flushPromises();
