@@ -223,7 +223,6 @@ const UPDATE_SUCCESS_MOCKS = [
           redditURL: null,
           slackURL: null,
           updatedAt: null,
-          updater: null,
           websiteURL: null,
           xURL: null,
           youtubeURL: null,
@@ -252,6 +251,33 @@ const UPDATE_SUCCESS_MOCKS = [
       data: {
         updateCommunity: {
           id: '123',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_COMMUNITY_DATA_PG,
+    },
+    result: {
+      data: {
+        community: {
+          createdAt: null,
+          facebookURL: null,
+          githubURL: null,
+          id: '123',
+          inactivityTimeoutDuration: null,
+          instagramURL: null,
+          linkedinURL: null,
+          logoMimeType: null,
+          logoURL: null,
+          name: 'Test Name',
+          redditURL: null,
+          slackURL: null,
+          updatedAt: null,
+          websiteURL: 'https://test.com',
+          xURL: null,
+          youtubeURL: null,
         },
       },
     },
@@ -527,6 +553,8 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('should show success toast when profile is updated successfully', async () => {
+    // Spy on toast.success to make sure we can observe calls
+    const toastSuccessSpy = vi.spyOn(toast, 'success');
     render(
       <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
@@ -549,8 +577,14 @@ describe('Testing Community Profile Screen', () => {
     expect(submitButton).not.toBeDisabled();
     await userEvent.click(submitButton);
 
-    await wait();
+    await waitFor(
+      () => {
+        expect(toastSuccessSpy).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
 
+    expect(errorHandler).not.toHaveBeenCalled();
     expect(submitButton).toBeInTheDocument();
   });
 
