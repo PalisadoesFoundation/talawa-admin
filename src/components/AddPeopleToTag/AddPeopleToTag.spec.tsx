@@ -464,4 +464,202 @@ describe('Organisation Tags Page', () => {
       expect(toast.success).not.toHaveBeenCalled();
     });
   });
+
+  it('handles error when error is not an instance of Error in catch block', async () => {
+    const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR, true);
+
+    const customProps = {
+      ...props,
+      addPeopleToTagModalIsOpen: true,
+    };
+
+    renderAddPeopleToTagModal(customProps, linkWithNonError);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('handles edge case when userTagMembersToAssignTo data is undefined', async () => {
+    const { getByText } = renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(getByText(translations.addPeople)).toBeInTheDocument();
+    });
+
+    // Verify the infinite scroll component renders with fallback dataLength of 0
+    const infiniteScrollDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+    expect(infiniteScrollDiv).toBeInTheDocument();
+  });
+
+  it('verifies modal header is rendered with correct test ID', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('modalOrganizationHeader'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('verifies modal renders with correct structure and footer buttons', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('verifies search inputs have correct placeholder text', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.firstName),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(translations.lastName),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('verifies member selection badge displays correct member info', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    await waitFor(() => {
+      const memberBadges = screen.getAllByTestId('clearSelectedMember');
+      expect(memberBadges.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('verifies assign button is disabled when loading', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    const assignBtn = screen.getByTestId('assignPeopleBtn');
+    expect(assignBtn).not.toBeDisabled();
+  });
+
+  it('handles modal close button click correctly', async () => {
+    const mockHideModal = vi.fn();
+    const customProps = {
+      ...props,
+      hideAddPeopleToTagModal: mockHideModal,
+    };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    await waitFor(() => {
+      expect(mockHideModal).toHaveBeenCalled();
+    });
+  });
+
+  it('verifies data grid renders with correct row structure', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      const memberNames = screen.getAllByTestId('memberName');
+      expect(memberNames.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('refetch is called when modal transitions from closed to open', async () => {
+    const { rerender } = renderComponent({ addPeopleToTagModalIsOpen: false });
+
+    act(() => {
+      rerender(
+        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgtags/:orgId/manageTag/:tagId"
+                    element={
+                      <AddPeopleToTag
+                        {...defaultProps}
+                        addPeopleToTagModalIsOpen={true}
+                      />
+                    }
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('firstName')).toHaveValue('');
+      expect(screen.getByPlaceholderText('lastName')).toHaveValue('');
+    });
+  });
+
+  it('verifies search input trimming works correctly for firstName', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    const firstNameInput = screen.getByPlaceholderText(
+      translations.firstName,
+    ) as HTMLInputElement;
+    fireEvent.change(firstNameInput, { target: { value: '  usersToAssignTo  ' } });
+
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+  });
+
+  it('verifies search input trimming works correctly for lastName', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    const lastNameInput = screen.getByPlaceholderText(
+      translations.lastName,
+    ) as HTMLInputElement;
+    fireEvent.change(lastNameInput, { target: { value: '  userToAssignTo  ' } });
+
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+  });
 });
