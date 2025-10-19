@@ -17,8 +17,8 @@ import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import * as useLocalStorageModule from 'utils/useLocalstorage';
 
-const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
-const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
+const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, false);
+const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, false);
 
 // We want to disable all forms of caching so that we do not need to define a custom merge function in testing for the network requests
 const defaultOptions: DefaultOptions = {
@@ -56,23 +56,19 @@ const createEventMock = (overrides: Record<string, unknown> = {}) => [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
           startAt: '2024-01-01T09:00:00Z',
           endAt: '2024-01-02T17:00:00Z',
-          startTime: '09:00:00',
-          endTime: '17:00:00',
           allDay: false,
           location: 'India',
           isPublic: true,
           isRegisterable: true,
-          attendees: [],
           creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
+            id: 'creator1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
           },
           ...overrides,
         },
@@ -189,7 +185,7 @@ describe('Testing Event Dashboard Screen', () => {
         },
       },
     ];
-    const mockLink = new StaticMockLink(MOCK_NO_EVENT, true);
+    const mockLink = new StaticMockLink(MOCK_NO_EVENT, false);
     const { getByTestId, queryByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -210,12 +206,12 @@ describe('Testing Event Dashboard Screen', () => {
           variables: { eventId: 'event123' },
         },
         result: {
-          data: null,
+          data: { event: null },
         },
       },
     ];
 
-    const mockLink = new StaticMockLink(MOCK_UNDEFINED_EVENT, true);
+    const mockLink = new StaticMockLink(MOCK_UNDEFINED_EVENT, false);
     const { getByTestId, queryByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -227,7 +223,7 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should display N/A for missing location', async () => {
     const MOCK_NO_LOCATION = createEventMock({ location: null });
-    const mockLink = new StaticMockLink(MOCK_NO_LOCATION, true);
+    const mockLink = new StaticMockLink(MOCK_NO_LOCATION, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -325,7 +321,7 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should display empty description when description is null', async () => {
     const MOCK_NO_DESCRIPTION = createEventMock({ description: null });
-    const mockLink = new StaticMockLink(MOCK_NO_DESCRIPTION, true);
+    const mockLink = new StaticMockLink(MOCK_NO_DESCRIPTION, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -367,7 +363,7 @@ describe('Testing Event Dashboard Screen', () => {
       },
     });
 
-    const mockLink = new StaticMockLink(MOCK_ALLDAY_EVENT, true);
+    const mockLink = new StaticMockLink(MOCK_ALLDAY_EVENT, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -391,7 +387,7 @@ describe('Testing Event Dashboard Screen', () => {
       location: 'Downtown',
     });
 
-    const mockLink = new StaticMockLink(MOCK_MIDNIGHT_EVENT, true);
+    const mockLink = new StaticMockLink(MOCK_MIDNIGHT_EVENT, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -411,7 +407,7 @@ describe('Testing Event Dashboard Screen', () => {
       location: 'Office',
     });
 
-    const mockLink = new StaticMockLink(MOCK_SINGLE_DIGIT, true);
+    const mockLink = new StaticMockLink(MOCK_SINGLE_DIGIT, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -432,7 +428,7 @@ describe('Testing Event Dashboard Screen', () => {
       isRegisterable: false,
     });
 
-    const mockLink = new StaticMockLink(MOCK_AFTERNOON, true);
+    const mockLink = new StaticMockLink(MOCK_AFTERNOON, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();
@@ -450,7 +446,7 @@ describe('Testing Event Dashboard Screen', () => {
       location: null,
     });
 
-    const mockLink = new StaticMockLink(MOCK_MINIMAL_EVENT, true);
+    const mockLink = new StaticMockLink(MOCK_MINIMAL_EVENT, false);
     const { getByTestId } = renderEventDashboard(mockLink);
 
     await wait();

@@ -507,9 +507,7 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('modalOrganizationHeader'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     });
   });
 
@@ -519,7 +517,9 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
   });
@@ -577,7 +577,9 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
     });
 
     await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
@@ -639,7 +641,9 @@ describe('Organisation Tags Page', () => {
     const firstNameInput = screen.getByPlaceholderText(
       translations.firstName,
     ) as HTMLInputElement;
-    fireEvent.change(firstNameInput, { target: { value: '  usersToAssignTo  ' } });
+    fireEvent.change(firstNameInput, {
+      target: { value: '  usersToAssignTo  ' },
+    });
 
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
@@ -655,7 +659,9 @@ describe('Organisation Tags Page', () => {
     const lastNameInput = screen.getByPlaceholderText(
       translations.lastName,
     ) as HTMLInputElement;
-    fireEvent.change(lastNameInput, { target: { value: '  userToAssignTo  ' } });
+    fireEvent.change(lastNameInput, {
+      target: { value: '  userToAssignTo  ' },
+    });
 
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
