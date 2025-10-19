@@ -1,6 +1,12 @@
 # Dependencies
 /node_modules
 
+# Docusaurus
+.docusaurus/
+build/
+.cache/
+node_modules/
+
 # Production
 /build
 
