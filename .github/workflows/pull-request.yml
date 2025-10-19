@@ -21,7 +21,7 @@ env:
 
 jobs:
   Code-Quality-Checks:
-    name: Performs linting, formatting, type-checking, checking for different source and target branch
+    name: Performs linting, formatting, type-checking, unused file detection, checking for different source and target branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -104,6 +104,9 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
+      - name: Check for unused files
+        run: npx knip --include files
+
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
@@ -112,7 +115,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Get PR labels
         id: check-labels
@@ -123,9 +126,9 @@ jobs:
             echo "skip=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-          
+
           LABELS="$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels --jq '.[].name' | tr '\n' ' ')"
-          
+
           if echo "$LABELS" | grep -qw "ignore-sensitive-files-pr"; then
             echo "::notice::Skipping sensitive files check due to 'ignore-sensitive-files-pr' label."
             echo "skip=true" >> $GITHUB_OUTPUT
@@ -198,6 +201,7 @@ jobs:
             '.*.credentials$'
             '.nojekyll$'
             'yarn.lock$'
+            'knip.json$'
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'
