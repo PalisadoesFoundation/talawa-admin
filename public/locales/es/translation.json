@@ -1106,6 +1106,7 @@
     "registrant": "Registrado",
     "registeredAt": "Registrado en",
     "createdAt": "Creado en",
+    "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados"
   },

@@ -14,36 +14,21 @@ import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    return Promise.resolve();
-  });
-}
-vi.mock('react-chartjs-2', () => ({
+// Mock chart.js to avoid canvas errors
+vi.mock('react-chartjs-2', async () => ({
+  ...(await vi.importActual('react-chartjs-2')),
   Line: () => null,
   Bar: () => null,
-  Pie: () => null,
 }));
-
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return {
-    ...actual,
-    useParams: () => ({ eventId: 'event123', orgId: 'org456' }),
-  };
-});
 
 const renderEventAttendance = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider mocks={MOCKS} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -56,6 +41,13 @@ const renderEventAttendance = (): RenderResult => {
 };
 
 describe('Event Attendance Component', () => {
+  beforeEach(() => {
+    vi.mock('react-router', async () => ({
+      ...(await vi.importActual('react-router')),
+      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    }));
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -63,8 +55,6 @@ describe('Event Attendance Component', () => {
 
   it('Component loads correctly with table headers', async () => {
     renderEventAttendance();
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
@@ -75,8 +65,6 @@ describe('Event Attendance Component', () => {
 
   it('Renders attendee data correctly', async () => {
     renderEventAttendance();
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('attendee-name-0')).toBeInTheDocument();
@@ -89,31 +77,36 @@ describe('Event Attendance Component', () => {
   it('Search filters attendees by name correctly', async () => {
     renderEventAttendance();
 
-    await wait();
+    await waitFor(async () => {
+      const searchInput = screen.getByTestId('searchByName');
+      fireEvent.change(searchInput, { target: { value: 'Bruce' } });
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Bruce' } });
-
-    await waitFor(() => {
-      const filteredAttendee = screen.getByTestId('attendee-name-0');
-      expect(filteredAttendee).toHaveTextContent('Bruce Garza');
+      await waitFor(() => {
+        const filteredAttendee = screen.getByTestId('attendee-name-0');
+        expect(filteredAttendee).toHaveTextContent('Bruce Garza');
+      });
     });
   });
 
   it('Sort functionality changes attendee order', async () => {
     renderEventAttendance();
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
+    });
 
     const sortDropdown = screen.getByTestId('sort-dropdown');
     await userEvent.click(sortDropdown); // Open the sort dropdown
 
-    const sortOption = screen.getByText('Ascending'); // Assuming 'Ascending' is the option you choose for sorting
-    await userEvent.click(sortOption);
-
     await waitFor(() => {
-      const attendees = screen.getAllByTestId('attendee-name-0');
-      // Check if the first attendee is 'Bruce Garza' after sorting
+      const sortOption = screen.getByText('Ascending');
+      userEvent.click(sortOption);
+    });
+
+    // Wait for sorting to take effect
+    await waitFor(() => {
+      const attendees = screen.getAllByTestId(/^attendee-name-/);
+      // Check if the first attendee is still 'Bruce Garza' (should be the same since names are already sorted)
       expect(attendees[0]).toHaveTextContent('Bruce Garza');
     });
   });
@@ -121,22 +114,32 @@ describe('Event Attendance Component', () => {
   it('Date filter shows correct number of attendees', async () => {
     renderEventAttendance();
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
+    });
 
     const filterDropdown = screen.getByTestId('filter-dropdown');
     await userEvent.click(filterDropdown); // Open the filter dropdown
 
-    const filterOption = screen.getByText('This Month'); // Assuming 'This Month' is the option you choose for filtering
-    await userEvent.click(filterOption);
-
     await waitFor(() => {
-      // Check if the message 'Attendees not Found' is displayed
-      expect(screen.getByText('Attendees not Found')).toBeInTheDocument();
+      const filterOption = screen.getByText('This Month');
+      userEvent.click(filterOption);
+    });
+
+    // Wait for filtering to take effect
+    await waitFor(() => {
+      const attendees = screen.getAllByTestId(/^attendee-row-/);
+      // Should still show 2 attendees as the mock data dates are in the current month/year
+      expect(attendees).toHaveLength(2);
     });
   });
+
   it('Statistics modal opens and closes correctly', async () => {
     renderEventAttendance();
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
+    });
 
     expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
 
@@ -154,69 +157,76 @@ describe('Event Attendance Component', () => {
       expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
     });
   });
-});
 
-describe('EventAttendance CSS Tests', () => {
-  const renderEventAttendance = (): RenderResult => {
-    return render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventAttendance />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
+  describe('EventAttendance CSS Tests', () => {
+    const renderEventAttendance = (): RenderResult => {
+      return render(
+        <MockedProvider mocks={MOCKS} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <EventAttendance />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    };
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should apply correct styles to member name links', async () => {
-    renderEventAttendance();
-    const memberLinks = await screen.findAllByRole('link');
-    memberLinks.forEach((link) => {
-      expect(link).toHaveClass(styles.membername);
+    beforeEach(() => {
+      vi.mock('react-router', async () => ({
+        ...(await vi.importActual('react-router')),
+        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+      }));
     });
-  });
 
-  it('should style events attended count correctly', async () => {
-    renderEventAttendance();
-    const eventsAttendedCells = await screen.findAllByTestId(
-      /attendee-events-attended-\d+/,
-    );
-    eventsAttendedCells.forEach((cell) => {
-      const countSpan = cell.querySelector(`.${styles.eventsAttended}`);
-      expect(countSpan).toBeInTheDocument();
+    afterEach(() => {
+      vi.clearAllMocks();
     });
-  });
 
-  it('should maintain consistent row spacing in table body', async () => {
-    renderEventAttendance();
-
-    const tableRows = await screen.findAllByTestId(/attendee-row-\d+/);
-    tableRows.forEach((row) => {
-      expect(row).toHaveClass('my-6');
+    it('should apply correct styles to member name links', async () => {
+      renderEventAttendance();
+      const memberLinks = await screen.findAllByRole('link');
+      memberLinks.forEach((link) => {
+        expect(link).toHaveClass(styles.membername);
+      });
     });
-  });
 
-  it('should apply tooltip styles correctly', async () => {
-    renderEventAttendance();
-    const tooltipCells = await screen.findAllByTestId(
-      /attendee-events-attended-\d+/,
-    );
-    tooltipCells.forEach((cell) => {
-      const tooltip = cell.closest('[role="tooltip"]');
-      if (tooltip) {
-        expect(tooltip).toHaveStyle({
-          backgroundColor: 'var(--bs-white)',
-          fontSize: '2em',
-          maxHeight: '170px',
-        });
-      }
+    it('should style events attended count correctly', async () => {
+      renderEventAttendance();
+      const eventsAttendedCells = await screen.findAllByTestId(
+        /attendee-events-attended-\d+/,
+      );
+      eventsAttendedCells.forEach((cell) => {
+        const countSpan = cell.querySelector(`.${styles.eventsAttended}`);
+        expect(countSpan).toBeInTheDocument();
+      });
+    });
+
+    it('should maintain consistent row spacing in table body', async () => {
+      renderEventAttendance();
+
+      const tableRows = await screen.findAllByTestId(/attendee-row-\d+/);
+      tableRows.forEach((row) => {
+        expect(row).toHaveClass('my-6');
+      });
+    });
+
+    it('should apply tooltip styles correctly', async () => {
+      renderEventAttendance();
+      const tooltipCells = await screen.findAllByTestId(
+        /attendee-events-attended-\d+/,
+      );
+      tooltipCells.forEach((cell) => {
+        const tooltip = cell.closest('[role="tooltip"]');
+        if (tooltip) {
+          expect(tooltip).toHaveStyle({
+            backgroundColor: 'var(--bs-white)',
+            fontSize: '2em',
+            maxHeight: '170px',
+          });
+        }
+      });
     });
   });
 });

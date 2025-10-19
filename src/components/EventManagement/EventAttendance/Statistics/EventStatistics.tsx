@@ -56,6 +56,7 @@ import {
   Title,
   Tooltip as ChartToolTip,
   Legend,
+  Filler,
 } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router';
@@ -77,6 +78,7 @@ ChartJS.register(
   Title,
   ChartToolTip,
   Legend,
+  Filler,
 );
 
 export const AttendanceStatisticsModal: React.FC<
@@ -89,11 +91,10 @@ export const AttendanceStatisticsModal: React.FC<
   const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
   const [loadRecurringEvents, { data: recurringData }] =
     useLazyQuery(RECURRING_EVENTS);
-  const isEventRecurring = eventData?.event?.recurring;
   const currentEventIndex = useMemo(() => {
     if (!recurringData?.getRecurringEvents || !eventId) return -1;
     return recurringData.getRecurringEvents.findIndex(
-      (event: InterfaceEvent) => event._id === eventId,
+      (event: InterfaceEvent) => event.id === eventId,
     );
   }, [recurringData, eventId]);
   useEffect(() => {
@@ -106,6 +107,7 @@ export const AttendanceStatisticsModal: React.FC<
     () => recurringData?.getRecurringEvents || [],
     [recurringData],
   );
+  const showTrends = filteredRecurringEvents.length > 1;
   const totalEvents = filteredRecurringEvents.length;
   const totalPages = Math.ceil(totalEvents / eventsPerPage);
 
@@ -124,7 +126,8 @@ export const AttendanceStatisticsModal: React.FC<
   );
   const chartOptions: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
+    aspectRatio: 2,
     animation: false,
     scales: { y: { beginAtZero: true } },
     plugins: {
@@ -134,7 +137,7 @@ export const AttendanceStatisticsModal: React.FC<
             const label = context.dataset.label || '';
             const value = context.parsed.y;
             const isCurrentEvent =
-              paginatedRecurringEvents[context.dataIndex]._id === eventId;
+              paginatedRecurringEvents[context.dataIndex].id === eventId;
             return isCurrentEvent
               ? `${label}: ${value} (Current Event)`
               : `${label}: ${value}`;
@@ -148,9 +151,9 @@ export const AttendanceStatisticsModal: React.FC<
       paginatedRecurringEvents.map((event: InterfaceEvent) => {
         const date = (() => {
           try {
-            const eventDate = new Date(event.startDate);
+            const eventDate = new Date(event.startAt);
             if (Number.isNaN(eventDate.getTime())) {
-              console.error(`Invalid date for event: ${event._id}`);
+              console.error(`Invalid date for event: ${event.id}`);
 
               return 'Invalid date';
             }
@@ -160,7 +163,7 @@ export const AttendanceStatisticsModal: React.FC<
             });
           } catch (error) {
             console.error(
-              `Error formatting date for event: ${event._id}`,
+              `Error formatting date for event: ${event.id}`,
               error,
             );
 
@@ -168,7 +171,7 @@ export const AttendanceStatisticsModal: React.FC<
           }
         })();
         // Highlight the current event in the label
-        return event._id === eventId ? `→ ${date}` : date;
+        return event.id === eventId ? `→ ${date}` : date;
       }),
     [paginatedRecurringEvents, eventId],
   );
@@ -177,7 +180,7 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       paginatedRecurringEvents.map(
         (event: InterfaceEvent) =>
-          event.attendees.filter((attendee) => attendee.gender === 'MALE')
+          event.attendees.filter((attendee) => attendee.natalSex === 'male')
             .length,
       ),
     [paginatedRecurringEvents],
@@ -187,7 +190,7 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       paginatedRecurringEvents.map(
         (event: InterfaceEvent) =>
-          event.attendees.filter((attendee) => attendee.gender === 'FEMALE')
+          event.attendees.filter((attendee) => attendee.natalSex === 'female')
             .length,
       ),
     [paginatedRecurringEvents],
@@ -199,7 +202,9 @@ export const AttendanceStatisticsModal: React.FC<
         (event: InterfaceEvent) =>
           event.attendees.filter(
             (attendee) =>
-              attendee.gender === 'OTHER' || attendee.gender === null,
+              attendee.natalSex === 'other' ||
+              attendee.natalSex === 'intersex' ||
+              attendee.natalSex === null,
           ).length,
       ),
     [paginatedRecurringEvents],
@@ -265,13 +270,13 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       selectedCategory === 'Gender'
         ? [
-            memberData.filter((member) => member.gender === 'MALE').length,
-            memberData.filter((member) => member.gender === 'FEMALE').length,
+            memberData.filter((member) => member.natalSex === 'male').length,
+            memberData.filter((member) => member.natalSex === 'female').length,
             memberData.filter(
               (member) =>
-                member.gender === 'OTHER' ||
-                member.gender === null ||
-                member.gender === '',
+                member.natalSex === 'intersex' ||
+                member.natalSex === null ||
+                member.natalSex === '',
             ).length,
           ]
         : [
@@ -360,16 +365,24 @@ export const AttendanceStatisticsModal: React.FC<
   };
   useEffect(() => {
     if (eventId) {
-      loadEventDetails({ variables: { id: eventId } });
+      loadEventDetails({ variables: { eventId: eventId } });
     }
   }, [eventId, loadEventDetails]);
   useEffect(() => {
-    if (eventId && orgId && eventData?.event?.baseRecurringEvent?._id) {
-      loadRecurringEvents({
-        variables: {
-          baseRecurringEventId: eventData?.event?.baseRecurringEvent?._id,
-        },
-      });
+    if (eventId && orgId && eventData?.event) {
+      // If this is a recurring event template, use its own ID
+      // If this is a recurring event instance, use the base event ID
+      const baseEventId = eventData.event.isRecurringEventTemplate
+        ? eventData.event.id
+        : eventData.event.baseEvent?.id;
+
+      if (baseEventId) {
+        loadRecurringEvents({
+          variables: {
+            baseRecurringEventId: baseEventId,
+          },
+        });
+      }
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
   return (
@@ -378,11 +391,14 @@ export const AttendanceStatisticsModal: React.FC<
       onHide={handleClose}
       className="attendance-modal"
       centered
-      size={isEventRecurring ? 'xl' : 'lg'}
+      size={showTrends ? 'xl' : 'lg'}
       data-testid="attendance-modal"
     >
-      <Modal.Header closeButton className="bg-success">
-        <Modal.Title className="text-white" data-testid="modal-title">
+      <Modal.Header
+        closeButton
+        style={{ backgroundColor: 'var(--tableHeader-bg)' }}
+      >
+        <Modal.Title data-testid="modal-title">
           {t('historical_statistics')}
         </Modal.Title>
       </Modal.Header>
@@ -394,14 +410,16 @@ export const AttendanceStatisticsModal: React.FC<
           className={`${styles.positionedTopRight} w-100 d-flex justify-content-end align-baseline position-absolute`}
         ></div>
         <div className="w-100 border border-success d-flex flex-row rounded">
-          {isEventRecurring ? (
+          {showTrends ? (
             <div
               className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
+              style={{ height: '400px' }}
             >
               <Line
                 data={chartData}
                 options={chartOptions}
                 className={`${styles.paddingBottom30}`}
+                height={400}
               />
               <div
                 className={`${styles.topRightCorner} px-1 border border-success w-30`}
@@ -543,7 +561,7 @@ export const AttendanceStatisticsModal: React.FC<
             Export Data
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            {isEventRecurring && (
+            {showTrends && (
               <Dropdown.Item data-testid="trends-export" eventKey="trends">
                 Trends
               </Dropdown.Item>

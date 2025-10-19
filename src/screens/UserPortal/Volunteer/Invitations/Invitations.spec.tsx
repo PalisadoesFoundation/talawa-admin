@@ -18,6 +18,10 @@ import {
   EMPTY_MOCKS,
   ERROR_MOCKS,
   UPDATE_ERROR_MOCKS,
+  GROUP_RECURRING_MOCKS,
+  GROUP_NON_RECURRING_MOCKS,
+  INDIVIDUAL_RECURRING_MOCKS,
+  INDIVIDUAL_NON_RECURRING_MOCKS,
 } from './Invitations.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -176,7 +180,7 @@ describe('Testing Invvitations Screen', () => {
 
     fireEvent.click(filterAll);
     const inviteSubject = await screen.findAllByTestId('inviteSubject');
-    expect(inviteSubject).toHaveLength(2);
+    expect(inviteSubject).toHaveLength(5);
   });
 
   it('Filter Invitations (group)', async () => {
@@ -263,7 +267,7 @@ describe('Testing Invvitations Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
-    expect(acceptBtn).toHaveLength(2);
+    expect(acceptBtn).toHaveLength(5);
 
     // Accept Request
     await userEvent.click(acceptBtn[0]);
@@ -279,7 +283,7 @@ describe('Testing Invvitations Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     const rejectBtn = await screen.findAllByTestId('rejectBtn');
-    expect(rejectBtn).toHaveLength(2);
+    expect(rejectBtn).toHaveLength(5);
 
     // Reject Request
     await userEvent.click(rejectBtn[0]);
@@ -302,6 +306,58 @@ describe('Testing Invvitations Screen', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('Invitation subject rendering based on type and recurrence', () => {
+    it('should display group invitation recurring subject for group invitations with recurrence rule', async () => {
+      const groupRecurringLink = new StaticMockLink(GROUP_RECURRING_MOCKS);
+      renderInvitations(groupRecurringLink);
+
+      await waitFor(() => {
+        const inviteSubject = screen.getByTestId('inviteSubject');
+        expect(inviteSubject).toHaveTextContent(
+          t.groupInvitationRecurringSubject,
+        );
+      });
+    });
+
+    it('should display group invitation subject for group invitations without recurrence rule', async () => {
+      const groupNonRecurringLink = new StaticMockLink(
+        GROUP_NON_RECURRING_MOCKS,
+      );
+      renderInvitations(groupNonRecurringLink);
+
+      await waitFor(() => {
+        const inviteSubject = screen.getByTestId('inviteSubject');
+        expect(inviteSubject).toHaveTextContent(t.groupInvitationSubject);
+      });
+    });
+
+    it('should display event invitation recurring subject for individual invitations with recurrence rule', async () => {
+      const individualRecurringLink = new StaticMockLink(
+        INDIVIDUAL_RECURRING_MOCKS,
+      );
+      renderInvitations(individualRecurringLink);
+
+      await waitFor(() => {
+        const inviteSubject = screen.getByTestId('inviteSubject');
+        expect(inviteSubject).toHaveTextContent(
+          t.eventInvitationRecurringSubject,
+        );
+      });
+    });
+
+    it('should display event invitation subject for individual invitations without recurrence rule', async () => {
+      const individualNonRecurringLink = new StaticMockLink(
+        INDIVIDUAL_NON_RECURRING_MOCKS,
+      );
+      renderInvitations(individualNonRecurringLink);
+
+      await waitFor(() => {
+        const inviteSubject = screen.getByTestId('inviteSubject');
+        expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
+      });
     });
   });
 });

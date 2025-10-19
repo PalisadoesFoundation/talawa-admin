@@ -4462,12 +4462,6 @@ form label,
   font-weight: 600;
 }
 
-.cardBody {
-  padding: 1.25rem 1rem 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .cardLabel {
   font-weight: bold;
   padding-bottom: 1px;
@@ -7248,7 +7242,6 @@ form {
   display: flex;
   width: 100% !important;
   justify-content: center;
-  align-items: center;
 }
 
 .cardHeading {
@@ -9547,4 +9540,59 @@ form {
   overflow: hidden;
   white-space: nowrap;
 }
+
+/* Events Attended Card Item Styles */
+.eventsAttendedCard {
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  border: 1px solid #e3f2fd;
+}
+
+.eventsAttendedCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.eventsAttendedCardDate {
+  background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+  color: #555;
+  min-width: 60px;
+}
+
+.eventsAttendedCardDateMonth {
+  font-size: 0.75rem;
+}
+
+.eventsAttendedCardTitle {
+  font-size: 1rem;
+}
+
+.eventsAttendedCardLocation {
+  font-size: 0.85rem;
+}
+
+.eventsAttendedCardDateNA {
+  font-size: 0.75rem;
+}
+
+.eventsAttendedCardChevron {
+  width: 32px;
+  height: 32px;
+  background-color: #e3f2fd;
+  transition: all 0.2s ease;
+}
+
+.eventsAttendedCardChevronIcon {
+  transition: color 0.2s ease;
+}
+
+.eventsAttendedCardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+}
+
 /* ----------------------------------------------------- */

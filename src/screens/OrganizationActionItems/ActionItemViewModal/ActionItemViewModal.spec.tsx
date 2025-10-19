@@ -79,11 +79,11 @@ const mockMembers = [
 ];
 
 const mockEvent: InterfaceEvent = {
-  _id: 'eventId1',
+  id: 'eventId1',
   name: 'Test Event',
   description: 'Test event description',
-  startDate: '2024-01-01',
-  endDate: '2024-01-02',
+  startAt: '2024-01-01T10:00:00Z',
+  endAt: '2024-01-02T18:00:00Z',
   startTime: '10:00',
   endTime: '18:00',
   location: 'Test Location',

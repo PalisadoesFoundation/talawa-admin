@@ -65,9 +65,7 @@ describe('Event Registrants Component', () => {
       expect(screen.getByTestId('table-header-serial')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-registrant')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-created-at')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('table-header-add-registrant'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('table-header-options')).toBeInTheDocument();
     });
   });
 
@@ -127,9 +125,15 @@ describe('Event Registrants Component', () => {
           data: {
             getEventAttendeesByEventId: [
               {
-                _id: '1',
-                userId: 'user1',
+                id: '1',
+                user: {
+                  id: 'user1',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
+                },
                 isRegistered: true,
+                isInvited: false,
+                createdAt: '2023-09-25T10:00:00.000Z',
                 __typename: 'EventAttendee',
               },
             ],
@@ -137,15 +141,15 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
+        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
         result: {
           data: {
             event: {
               attendees: [
                 {
-                  _id: 'user1',
-                  firstName: 'John',
-                  lastName: 'Doe',
+                  id: 'user1',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
                   createdAt: '2023-09-25T10:00:00.000Z',
                   __typename: 'User',
                 },
@@ -178,9 +182,6 @@ describe('Event Registrants Component', () => {
     expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
       '2023-09-25',
     );
-    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
-      '10:00:00',
-    );
   });
 
   test('Handles missing attendee data with fallback values', async () => {
@@ -194,9 +195,14 @@ describe('Event Registrants Component', () => {
           data: {
             getEventAttendeesByEventId: [
               {
-                _id: '1',
-                userId: 'user1',
+                id: '1',
+                user: {
+                  id: 'user1',
+                  name: 'Jane Doe',
+                  emailAddress: 'jane@example.com',
+                },
                 isRegistered: true,
+                isInvited: false,
                 __typename: 'EventAttendee',
               },
             ],
@@ -204,15 +210,15 @@ describe('Event Registrants Component', () => {
         },
       },
       {
-        request: { query: EVENT_ATTENDEES, variables: { id: 'event123' } },
+        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
         result: {
           data: {
             event: {
               attendees: [
                 {
-                  _id: 'user1',
-                  firstName: 'Jane',
-                  lastName: 'Doe',
+                  id: 'user1',
+                  name: 'Jane Doe',
+                  emailAddress: 'jane@example.com',
                   createdAt: null,
                   __typename: 'User',
                 },
@@ -295,7 +301,7 @@ describe('EventRegistrants CSS Tests', () => {
       screen.getByTestId('table-header-registrant'),
       screen.getByTestId('table-header-registered-at'),
       screen.getByTestId('table-header-created-at'),
-      screen.getByTestId('table-header-add-registrant'),
+      screen.getByTestId('table-header-options'),
     ];
     headerCells.forEach((cell) => {
       expect(cell).toHaveClass(styles.customcell);

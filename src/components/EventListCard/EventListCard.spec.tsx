@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -87,19 +87,6 @@ const renderEventListCard = (
 };
 
 describe('Testing Event List Card', () => {
-  const updateData = {
-    name: 'Updated name',
-    description: 'This is a new update',
-    isPublic: true,
-    isRegisterable: true,
-    allDay: false,
-    location: 'New Delhi',
-    startDate: '2022-03-18',
-    endDate: '2022-03-20',
-    startTime: '09:00:00',
-    endTime: '17:00:00',
-  };
-
   beforeAll(() => {
     vi.mock('react-router', async () => ({
       ...(await vi.importActual('react-router')),
@@ -118,12 +105,12 @@ describe('Testing Event List Card', () => {
           <BrowserRouter>
             <EventListCard
               key="123"
-              _id="1"
+              id="1"
               name=""
               location=""
               description=""
-              startDate="2022-03-19"
-              endDate="2022-03-26"
+              startAt="2022-03-19T02:00:00Z"
+              endAt="2022-03-26T06:00:00Z"
               startTime="02:00"
               endTime="06:00"
               allDay={true}

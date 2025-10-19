@@ -66,7 +66,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: { eventId: 'event999' },
         },
         error: new Error('An error occurred'),
       },
@@ -104,15 +104,28 @@ describe('CustomTableCell', () => {
           },
         },
       },
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event999' },
+        },
+        result: {
+          data: {
+            event: null,
+          },
+        },
+      },
     ];
 
     render(
       <MockedProvider mocks={noEventMock} addTypename={false}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <BrowserRouter>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event999" />
+            </tbody>
+          </table>
+        </BrowserRouter>
       </MockedProvider>,
     );
 
