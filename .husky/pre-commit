@@ -1,9 +1,16 @@
-
 npm run generate-docs
 npm run format:fix
 # npm run lint:fix
 npm run lint-staged
 npm run typecheck
+
+# Check docs TypeScript and ESLint if directory exists
+if [ -d "docs/src" ]; then
+  echo "Checking docs/src directory..."
+  (cd docs && npm run typecheck) || { echo "❌ TypeScript check failed in docs/src"; exit 1; }
+  npx eslint 'docs/src/**/*.{ts,tsx}' --max-warnings=0 || { echo "❌ ESLint check failed in docs/src"; exit 1; }
+fi
+
 npm run update:toc
 npm run check:pom
 

@@ -20,7 +20,6 @@ export default [
       'fix-readme-links.js',
       'fix-repo-url.js',
       'src/components/CheckIn/tagTemplate.ts',
-      'docs/**',
       '*.md',
       'docker/**',
       'config/docker/setup/nginx*.conf',

@@ -76,16 +76,26 @@ jobs:
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run typecheck
+        run: |
+          npm run typecheck
+          if [ -d "docs" ]; then
+            (cd docs && npm install && npm run typecheck)
+          fi
 
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES}
+        run: |
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "$CHANGED_FILES" | xargs npx eslint
+          fi
+          if [ -d "docs/src" ]; then
+            npx eslint 'docs/src/**/*.{ts,tsx}'
+          fi
 
       - name: Check for TSDoc comments
-        run: npm run check-tsdoc # Run the TSDoc check script
+        run: npm run check-tsdoc
 
       - name: Check for localStorage Usage
         run: npx tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
