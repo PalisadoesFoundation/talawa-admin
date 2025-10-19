@@ -104,30 +104,54 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
-  Docs-Quality-Checks:
+Docs-Quality-Checks:
     name: Check TypeScript and ESLint in docs/src directory
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if docs files changed
+        id: docs-changes
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Check if any docs files changed
+          DOCS_CHANGED=$(git diff --name-only $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep '^docs/' || echo "")
+          
+          if [ -n "$DOCS_CHANGED" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ Docs files changed, running checks"
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "⏭️  No docs files changed, skipping checks"
+          fi
 
       - name: Set up Node.js
+        if: steps.docs-changes.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
 
       - name: Install Root Dependencies
+        if: steps.docs-changes.outputs.changed == 'true'
         run: npm ci
 
       - name: Install Docs Dependencies
+        if: steps.docs-changes.outputs.changed == 'true'
         working-directory: ./docs
         run: npm ci
 
       - name: TypeCheck docs/src directory
+        if: steps.docs-changes.outputs.changed == 'true'
         working-directory: ./docs
         run: npx tsc --noEmit
 
       - name: Lint docs/src directory
+        if: steps.docs-changes.outputs.changed == 'true'
         working-directory: ./docs
         run: npx eslint src/ --max-warnings=0
 
