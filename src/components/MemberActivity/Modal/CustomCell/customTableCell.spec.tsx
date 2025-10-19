@@ -302,7 +302,9 @@ describe('CustomTableCell', () => {
 
     await waitFor(() => screen.getByTestId('custom-row'));
 
-    expect(screen.getByText('Event with Undefined Attendees')).toBeInTheDocument();
+    expect(
+      screen.getByText('Event with Undefined Attendees'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
