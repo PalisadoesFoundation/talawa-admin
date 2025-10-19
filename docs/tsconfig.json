@@ -1,9 +1,6 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-      "types": [
-        "@docusaurus/module-type-aliases",
-        "@docusaurus/types"
-      ]
-    }
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["@docusaurus/module-type-aliases", "@docusaurus/types"]
   }
+}
