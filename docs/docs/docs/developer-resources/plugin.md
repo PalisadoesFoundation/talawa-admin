@@ -1,3 +1,12 @@
+---
+id: plugin
+title: Plugin
+slug: /developer-resources/plugin
+sidebar_position: 7
+---
+
+
+
 # Talawa Admin Plugin System Architecture
 
 ## Overview
