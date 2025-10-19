@@ -1031,11 +1031,14 @@ describe('BlockUser Component', () => {
       await screen.findByText('John Doe');
 
       const blockButton = screen.getByTestId('blockUser1');
-      fireEvent.click(blockButton);
+      await act(async () => {
+        fireEvent.click(blockButton);
+      });
       await flushPromises();
 
       await waitFor(() => {
         expect(toast.success).not.toHaveBeenCalledWith('blockedSuccessfully');
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
 
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1109,12 +1112,16 @@ describe('BlockUser Component', () => {
 
       const sortingButton = await screen.findByTestId('userFilter');
 
-      fireEvent.click(sortingButton);
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
 
       await flushPromises();
 
       const blockedUsersOption = await screen.findByText('blockedUsers');
-      fireEvent.click(blockedUsersOption);
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
 
       await flushPromises();
 
@@ -1122,15 +1129,16 @@ describe('BlockUser Component', () => {
 
       const unblockBtn = screen.getByTestId('blockUser3');
       fireEvent.click(unblockBtn);
-      await flushPromises();
+      await act(async () => {
+        fireEvent.click(unblockBtn);
+      });
 
       await waitFor(() => {
         expect(toast.success).not.toHaveBeenCalledWith(
           'Un-BlockedSuccessfully',
         );
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
-
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
     });
   });
 
