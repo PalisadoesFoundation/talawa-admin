@@ -30,7 +30,7 @@ codecov
 /.env
 /.env-*
 /.env_*
-/.env_*
+/.env.*
 .backup/
 
 # Log files
