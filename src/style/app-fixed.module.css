@@ -4462,12 +4462,6 @@ form label,
   font-weight: 600;
 }
 
-.cardBody {
-  padding: 1.25rem 1rem 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .cardLabel {
   font-weight: bold;
   padding-bottom: 1px;
