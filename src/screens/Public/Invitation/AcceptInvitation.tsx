@@ -9,11 +9,7 @@ import { Button, Spinner } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-
-// NOTE: This component assumes the app has an authentication mechanism exposed
-// via localStorage keys used elsewhere (e.g., 'token' and current user email can be
-// read from a central place). We'll use minimal checks and prefer redirecting to
-// login/signup handled by existing `LoginPage`.
+import { useLocalStorage } from '../../../utils/useLocalstorage';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'Talawa-admin_token';
@@ -25,11 +21,12 @@ const AcceptInvitation = (): JSX.Element => {
     keyPrefix: 'public.invitation',
   });
 
+  const u = useLocalStorage();
+
   const [verify] = useMutation(VERIFY_EVENT_INVITATION);
   const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
-  // New verify mutation returns masked invitee email and ids instead of full objects
   type InviteMetadata = {
     invitationToken: string;
     inviteeEmailMasked?: string | null;
@@ -49,7 +46,7 @@ const AcceptInvitation = (): JSX.Element => {
     const run = async () => {
       setLoading(true);
       setError(null);
-      const tok = token || (localStorage.getItem(STORAGE_KEY) as string | null);
+      const tok = token || (u.getItem(STORAGE_KEY) as string | null);
       if (!tok) {
         setError('Invalid invitation token');
         setLoading(false);
@@ -57,7 +54,6 @@ const AcceptInvitation = (): JSX.Element => {
       }
 
       try {
-        // mutation now expects `{ input: { invitationToken } }`
         const { data } = await verify({
           variables: {
             input: {
@@ -80,29 +76,18 @@ const AcceptInvitation = (): JSX.Element => {
     run();
   }, [token, verify]);
 
-  // Check authentication status - since we do a full page redirect from login,
-  // we only need to check once when the component mounts
-  const [isAuthenticated] = useState(() =>
-    Boolean(localStorage.getItem(AUTH_TOKEN_KEY)),
-  );
+  const [isAuthenticated] = useState(() => Boolean(u.getItem(AUTH_TOKEN_KEY)));
 
-  // currentEmail is intentionally not used because server returns masked email only
-
-  // Since the verify mutation now returns a masked email (for privacy), we cannot
-  // reliably compare the full email on the client. Instead, if a masked email is
-  // provided we require an explicit user confirmation (checkbox) before enabling
-  // the Accept button. If no masked email is present, treat it as open to any
-  // authenticated user.
   const requiresConfirmation = Boolean(invite?.inviteeEmailMasked);
   const [confirmIsInvitee, setConfirmIsInvitee] = useState(false);
 
   const handleLogin = () => {
-    if (token) localStorage.setItem(STORAGE_KEY, token);
+    if (token) u.setItem(STORAGE_KEY, token);
     navigate('/');
   };
 
   const handleSignup = () => {
-    if (token) localStorage.setItem(STORAGE_KEY, token);
+    if (token) u.setItem(STORAGE_KEY, token);
     navigate('/register');
   };
 
@@ -114,7 +99,7 @@ const AcceptInvitation = (): JSX.Element => {
       const { data } = await accept({ variables: { input } });
       if (data && data.acceptEventInvitation) {
         toast.success(t('accepted', { defaultValue: 'Invitation accepted' }));
-        localStorage.removeItem(STORAGE_KEY);
+        u.removeItem(STORAGE_KEY);
         if (invite.eventId) {
           navigate(
             `/user/event/${invite.organizationId || ''}/${invite.eventId}`,
@@ -227,15 +212,10 @@ const AcceptInvitation = (): JSX.Element => {
                     <Button
                       variant="outline-secondary"
                       onClick={() => {
-                        // Help the user sign in as a different account: clear token/email and
-                        // preserve the pending invitation token so they can resume after login.
-                        localStorage.removeItem(AUTH_TOKEN_KEY);
-                        localStorage.removeItem('Talawa-admin_email');
+                        u.removeItem(AUTH_TOKEN_KEY);
+                        u.removeItem('Talawa-admin_email');
                         if (invite?.invitationToken) {
-                          localStorage.setItem(
-                            STORAGE_KEY,
-                            invite.invitationToken,
-                          );
+                          u.setItem(STORAGE_KEY, invite.invitationToken);
                         }
                         navigate('/');
                       }}

@@ -61,11 +61,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import {
-  BACKEND_URL,
-  REACT_APP_USE_RECAPTCHA,
-  RECAPTCHA_SITE_KEY,
-} from 'Constant/constant';
+import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
@@ -94,7 +90,7 @@ const loginPage = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -134,7 +130,7 @@ const loginPage = (): JSX.Element => {
   const [organizations, setOrganizations] = useState([]);
   // Capture the pending invitation token early, before any localStorage.clear() calls
   const [pendingInvitationToken] = useState(() =>
-    localStorage.getItem('pendingInvitationToken'),
+    getItem('pendingInvitationToken'),
   );
   const location = useLocation();
   const passwordValidationRegExp = {
@@ -301,19 +297,13 @@ const loginPage = (): JSX.Element => {
               signOrg: '',
             });
             SignupRecaptchaRef.current?.reset();
-            // If signup returned an authentication token, set session and resume pending invite
             if (signUpData.signUp && signUpData.signUp.authenticationToken) {
               const authToken = signUpData.signUp.authenticationToken;
               setItem('token', authToken);
               setItem('IsLoggedIn', 'TRUE');
               setItem('name', signUpData.signUp.user?.name || '');
               setItem('email', signUpData.signUp.user?.emailAddress || '');
-              // Check component state for pending token (captured on mount)
               if (pendingInvitationToken) {
-                // Remove the pending token and perform a full-page redirect to the
-                // invitation URL. Using window.location ensures we don't lose the
-                // pending flow to any competing client-side navigations or HMR
-                // handlers that might run immediately after setting session state.
                 localStorage.removeItem('pendingInvitationToken');
                 startSession();
                 window.location.href = `/event/invitation/${pendingInvitationToken}`;
