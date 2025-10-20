@@ -30,7 +30,8 @@ codecov
 /.env
 /.env-*
 /.env_*
-/.env_*
+/.env.*
+.backup/
 
 # Log files
 npm-debug.log*
