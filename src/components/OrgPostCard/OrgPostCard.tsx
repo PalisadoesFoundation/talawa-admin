@@ -325,6 +325,7 @@ export default function OrgPostCard({
         <div className={styles.cardsOrgPostCard}>
           <Card
             className={styles.cardOrgPostCard}
+            data-cy="postCardContainer"
             style={{
               borderRadius: '12px',
               overflow: 'hidden',
@@ -418,7 +419,10 @@ export default function OrgPostCard({
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu align="end" data-testid="post-menu">
-                  <Dropdown.Item onClick={toggleShowEditModal}>
+                  <Dropdown.Item
+                    onClick={toggleShowEditModal}
+                    data-cy="edit-option"
+                  >
                     {tCommon('edit')}
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -541,6 +545,7 @@ export default function OrgPostCard({
                   required
                   className={styles.inputField}
                   placeholder={t('enterCaption')}
+                  data-cy="editCaptionInput"
                 />
               </Form.Group>
 
@@ -552,6 +557,7 @@ export default function OrgPostCard({
                   accept="image/*"
                   onChange={handleImageUpload}
                   className={styles.inputField}
+                  data-cy="image-upload-input"
                 />
                 {postFormState.attachments
                   .filter((a) => a.mimeType.startsWith('image/'))
@@ -610,6 +616,7 @@ export default function OrgPostCard({
                 variant="primary"
                 type="submit"
                 data-testid="update-post-submit"
+                data-cy="update-post-submit"
               >
                 Save
               </Button>

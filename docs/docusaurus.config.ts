@@ -100,6 +100,12 @@ const config: Config = {
             target: '_self',
           },
           {
+            label: 'Community',
+            position: 'left',
+            to: 'https://community.talawa.io',
+            target: '_self',
+          },
+          {
             label: 'Demo',
             position: 'left',
             to: 'https://demo.talawa.io/',

@@ -11,7 +11,7 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_BASIC_DATA,
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
@@ -102,7 +102,7 @@ const createUserListMock = (
 
 const createOrganizationsMock = (orgId: string) => {
   return {
-    request: { query: ORGANIZATIONS_LIST, variables: { id: orgId } },
+    request: { query: GET_ORGANIZATION_BASIC_DATA, variables: { id: orgId } },
     result: {
       data: { organization: { id: orgId, name: 'Test Organization' } },
     },
