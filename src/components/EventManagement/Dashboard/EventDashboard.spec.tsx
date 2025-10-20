@@ -15,7 +15,7 @@ import { MOCKS_WITHOUT_TIME, MOCKS_WITH_TIME } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, expect, it, describe, beforeEach } from 'vitest';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import useLocalStorage from 'utils/useLocalstorage';
+import * as useLocalStorageModule from 'utils/useLocalstorage';
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
 const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
@@ -67,6 +67,7 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 describe('Testing Event Dashboard Screen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
@@ -283,13 +284,19 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle administrator user role correctly', async () => {
     // Mock localStorage to return administrator role
-    const mockGetItem = vi.fn((key: string) => {
-      if (key === 'userId' || key === 'id') return 'user123';
-      if (key === 'role') return 'administrator';
-      return null;
-    });
+    const mockLocalStorage = {
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId' || key === 'id') return 'user123';
+        if (key === 'role') return 'administrator';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      getStorageKey: vi.fn(),
+    };
 
-    vi.spyOn(useLocalStorage(), 'getItem').mockImplementation(mockGetItem);
+    vi.spyOn(useLocalStorageModule, 'default').mockReturnValue(mockLocalStorage);
 
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
@@ -300,13 +307,19 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle regular user role correctly', async () => {
     // Mock localStorage to return regular role
-    const mockGetItem = vi.fn((key: string) => {
-      if (key === 'userId' || key === 'id') return 'user123';
-      if (key === 'role') return 'user';
-      return null;
-    });
+    const mockLocalStorage = {
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId' || key === 'id') return 'user123';
+        if (key === 'role') return 'user';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      getStorageKey: vi.fn(),
+    };
 
-    vi.spyOn(useLocalStorage(), 'getItem').mockImplementation(mockGetItem);
+    vi.spyOn(useLocalStorageModule, 'default').mockReturnValue(mockLocalStorage);
 
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
@@ -575,13 +588,19 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should verify user role defaults to REGULAR when role is not administrator', async () => {
     // Test when role is something other than 'administrator'
-    const mockGetItem = vi.fn((key: string) => {
-      if (key === 'userId' || key === 'id') return 'user123';
-      if (key === 'role') return 'moderator';
-      return null;
-    });
+    const mockLocalStorage = {
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId' || key === 'id') return 'user123';
+        if (key === 'role') return 'moderator';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      getStorageKey: vi.fn(),
+    };
 
-    vi.spyOn(useLocalStorage(), 'getItem').mockImplementation(mockGetItem);
+    vi.spyOn(useLocalStorageModule, 'default').mockReturnValue(mockLocalStorage);
 
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
@@ -593,9 +612,15 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle null userId from localStorage', async () => {
     // Test when userId/id are not available in localStorage
-    const mockGetItem = vi.fn(() => null);
+    const mockLocalStorage = {
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clear: vi.fn(),
+      getStorageKey: vi.fn(),
+    };
 
-    vi.spyOn(useLocalStorage(), 'getItem').mockImplementation(mockGetItem);
+    vi.spyOn(useLocalStorageModule, 'default').mockReturnValue(mockLocalStorage);
 
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
