@@ -1,13 +1,9 @@
 ---
 id: plugin
-title: Plugin
+title: Plugin System
 slug: /developer-resources/plugin
-sidebar_position: 7
+sidebar_position: 4
 ---
-
-
-
-# Talawa Admin Plugin System Architecture
 
 ## Overview
 
@@ -25,14 +21,14 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ---
 
-## Architecture Overview
+### Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Plugin System Core                       │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐   │
-│  │   Manager   │──│   Registry   │──│   GraphQL Service│   │
-│  └─────────────┘  └──────────────┘  └──────────────────┘   │
+│                     Plugin System Core                      │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────────┐    │
+│  │   Manager   │──│   Registry   │──│   GraphQL Service│    │
+│  └─────────────┘  └──────────────┘  └──────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
                             │
         ┌───────────────────┼───────────────────┐
@@ -53,7 +49,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ## Core Files
 
-### 1. `index.ts` - Main Entry Point
+### 1. `index.ts` - Main Entry Point - 
 
 **Purpose**: Central export hub for the entire plugin system.
 
@@ -219,7 +215,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ## Managers Directory
 
-### 8. `managers/discovery.ts` - Discovery Manager
+### 1. `managers/discovery.ts` - Discovery Manager
 
 **Purpose**: Handles plugin discovery, manifest loading, and component loading.
 
@@ -252,7 +248,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ---
 
-### 9. `managers/extension-registry.ts` - Extension Registry Manager
+### 2. `managers/extension-registry.ts` - Extension Registry Manager
 
 **Purpose**: Manages registration and retrieval of plugin extension points.
 
@@ -294,7 +290,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ---
 
-### 10. `managers/event-manager.ts` - Event Manager
+### 3. `managers/event-manager.ts` - Event Manager
 
 **Purpose**: Pub/sub event system for plugin lifecycle and inter-plugin communication.
 
@@ -322,7 +318,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ---
 
-### 11. `managers/lifecycle.ts` - Lifecycle Manager
+### 4. `managers/lifecycle.ts` - Lifecycle Manager
 
 **Purpose**: Manages complete plugin lifecycle from loading to unloading.
 
@@ -367,7 +363,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ## Components Directory
 
-### 12. `components/PluginInjector.tsx` - Component Injector
+### 1. `components/PluginInjector.tsx` - Component Injector
 
 **Purpose**: Renders plugin components at designated injection points throughout the UI.
 
@@ -395,7 +391,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ## Routes Directory
 
-### 13. `routes/PluginRoutes.tsx` - Dynamic Route Registration
+### 1. `routes/PluginRoutes.tsx` - Dynamic Route Registration
 
 **Purpose**: Dynamically renders React Router routes from plugin manifests.
 
@@ -418,7 +414,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ---
 
-### 14. `routes/PluginRouteRenderer.tsx` - Individual Route Renderer
+### 2. `routes/PluginRouteRenderer.tsx` - Individual Route Renderer
 
 **Purpose**: Renders individual plugin routes using the component registry.
 
@@ -438,7 +434,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ## Services Directory
 
-### 15. `services/AdminPluginFileService.ts` - Plugin Installation Service
+### 1. `services/AdminPluginFileService.ts` - Plugin Installation Service
 
 **Purpose**: Production-ready service for installing and managing plugin files.
 
@@ -469,7 +465,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ---
 
-### 16. `services/InternalFileWriter.ts` - File System Service
+### 2. `services/InternalFileWriter.ts` - File System Service
 
 **Purpose**: Low-level file system operations for plugin management.
 
@@ -501,7 +497,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 
 ## Vite Directory
 
-### 17. `vite/internalFileWriterPlugin.ts` - Vite Development Plugin
+### 1. `vite/internalFileWriterPlugin.ts` - Vite Development Plugin
 
 **Purpose**: Vite plugin that enables file system operations during development.
 

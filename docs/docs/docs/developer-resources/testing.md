@@ -2,7 +2,7 @@
 id: testing
 title: Testing
 slug: /developer-resources/testing
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 ## Introduction
