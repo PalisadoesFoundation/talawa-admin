@@ -449,3 +449,97 @@ export const MOCK_NO_DATA = [
     },
   },
 ];
+
+export const MOCK_SUCCESS_WITH_REFETCH = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          usersToAssignTo: {
+            edges: [
+              {
+                node: { _id: '1', firstName: 'Test', lastName: 'User' },
+                cursor: 'cursor1',
+              },
+              {
+                node: { _id: '2', firstName: 'Another', lastName: 'Member' },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: 'cursor2' },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_PEOPLE_TO_TAG,
+      variables: { tagId: '1', userIds: ['1', '2'] },
+    },
+    result: {
+      data: {
+        addPeopleToUserTag: {
+          _id: '1',
+          tagName: 'Test Tag',
+        },
+      },
+    },
+  },
+];
+
+export const MOCK_BUTTON_STYLING_TEST = [
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+      },
+    },
+    result: {
+      data: {
+        getUsersToAssignTo: {
+          name: 'tag1',
+          usersToAssignTo: {
+            edges: [
+              {
+                node: { _id: '1', firstName: 'StyleTest', lastName: 'User' },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: 'cursor1' },
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ADD_PEOPLE_TO_TAG,
+      variables: { tagId: '1', userIds: ['1'] },
+    },
+    result: {
+      data: {
+        addPeopleToUserTag: {
+          _id: '1',
+        },
+      },
+    },
+  },
+];

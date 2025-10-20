@@ -34,13 +34,6 @@ import type { TFunction } from 'i18next';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    // The waitFor utility automatically uses optimal timing
-    return Promise.resolve();
-  });
-}
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -172,8 +165,6 @@ describe('Organisation Tags Page', () => {
   it('Component loads correctly', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
@@ -182,8 +173,6 @@ describe('Organisation Tags Page', () => {
   it('Renders error component when when query is unsuccessful', async () => {
     const { queryByText } = renderAddPeopleToTagModal(props, link2);
 
-    await wait();
-
     await waitFor(() => {
       expect(queryByText(translations.addPeople)).not.toBeInTheDocument();
     });
@@ -191,8 +180,6 @@ describe('Organisation Tags Page', () => {
 
   it('Selects and deselects members to assign to', async () => {
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
@@ -219,8 +206,6 @@ describe('Organisation Tags Page', () => {
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -253,8 +238,6 @@ describe('Organisation Tags Page', () => {
   it('searchs for tags where the lastName matches the provided lastName search input', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.lastName),
@@ -286,8 +269,6 @@ describe('Organisation Tags Page', () => {
   it('Renders more members with infinite scroll', async () => {
     const { getByText } = renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
@@ -315,8 +296,6 @@ describe('Organisation Tags Page', () => {
   it('Toasts error when no one is selected while assigning', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
@@ -329,8 +308,6 @@ describe('Organisation Tags Page', () => {
 
   it('Assigns tag to multiple people', async () => {
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     // select members and assign them
     await waitFor(() => {
@@ -462,6 +439,185 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('verifies modal header is rendered with correct test ID', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    });
+  });
+
+  it('verifies modal renders with correct structure and footer buttons', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('verifies search inputs have correct placeholder text', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.firstName),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(translations.lastName),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('verifies member selection badge displays correct member info', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    await waitFor(() => {
+      const memberBadges = screen.getAllByTestId('clearSelectedMember');
+      expect(memberBadges).toHaveLength(1);
+    });
+  });
+
+  it('verifies member names render in data grid', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      const memberNames = screen.getAllByTestId('memberName');
+      expect(memberNames).toHaveLength(10);
+    });
+  });
+
+  it('verifies assign button is enabled by default', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    const assignBtn = screen.getByTestId('assignPeopleBtn');
+    expect(assignBtn).toBeEnabled();
+  });
+
+  it('handles modal close button click correctly', async () => {
+    const mockHideModal = vi.fn();
+    const customProps = {
+      ...props,
+      hideAddPeopleToTagModal: mockHideModal,
+    };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    await waitFor(() => {
+      expect(mockHideModal).toHaveBeenCalled();
+    });
+  });
+
+  it('refetch is called when modal transitions from closed to open', async () => {
+    const { rerender } = renderComponent({
+      addPeopleToTagModalIsOpen: false,
+    });
+
+    act(() => {
+      rerender(
+        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgtags/:orgId/manageTag/:tagId"
+                    element={
+                      <AddPeopleToTag
+                        {...defaultProps}
+                        addPeopleToTagModalIsOpen={true}
+                      />
+                    }
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('firstName')).toHaveValue('');
+      expect(screen.getByPlaceholderText('lastName')).toHaveValue('');
+    });
+  });
+
+  it('verifies search input trimming works correctly for firstName', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    const firstNameInput = screen.getByPlaceholderText(
+      translations.firstName,
+    ) as HTMLInputElement;
+    fireEvent.change(firstNameInput, {
+      target: { value: '  usersToAssignTo  ' },
+    });
+
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+  });
+
+  it('verifies search input trimming works correctly for lastName', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    const lastNameInput = screen.getByPlaceholderText(
+      translations.lastName,
+    ) as HTMLInputElement;
+    fireEvent.change(lastNameInput, {
+      target: { value: '  userToAssignTo  ' },
+    });
+
+    await waitFor(() => {
+      const members = screen.getAllByTestId('memberName');
+      expect(members.length).toEqual(2);
+    });
+  });
+
+  it('verifies button has correct styling when member is selected (danger variant)', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    await waitFor(() => {
+      const deselectBtn = screen.getAllByTestId('deselectMemberBtn')[0];
+      expect(deselectBtn).toHaveClass('btn-danger');
+      expect(deselectBtn).toHaveClass('btn-sm');
+    });
+  });
+
+  it('verifies button has correct styling when member is not selected (primary variant)', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await waitFor(() => {
+      const selectBtn = screen.getAllByTestId('selectMemberBtn')[0];
+      expect(selectBtn).toBeInTheDocument();
+      expect(selectBtn).toHaveClass('btn-primary');
+      expect(selectBtn).toHaveClass('btn-sm');
+      expect(selectBtn).not.toHaveClass('btn-danger');
     });
   });
 });
