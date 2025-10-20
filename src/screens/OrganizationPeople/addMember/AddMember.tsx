@@ -56,7 +56,7 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_BASIC_DATA,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
@@ -208,7 +208,7 @@ function AddMember(): JSX.Element {
   const {
     data: organizationData,
   }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
-    useQuery(ORGANIZATIONS_LIST, { variables: { id: currentUrl } });
+    useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
 
   // const {
   //   data: allUsersData,
