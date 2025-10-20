@@ -1040,8 +1040,6 @@ describe('BlockUser Component', () => {
         expect(toast.success).not.toHaveBeenCalledWith('blockedSuccessfully');
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
-
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
     it('handles falsy unblock mutation response', async () => {
