@@ -576,7 +576,7 @@ describe('AgendaItemsUpdateModal', () => {
     expect(urlLink.textContent).toContain('...');
   });
 
-  test('handles null agendaItemCategories correctly', async () => {
+  test('handles undefined agendaItemCategories correctly', async () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
@@ -584,9 +584,7 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={
-                    null as unknown as typeof mockAgendaItemCategories | null
-                  }
+                  agendaItemCategories={undefined}
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState1}
