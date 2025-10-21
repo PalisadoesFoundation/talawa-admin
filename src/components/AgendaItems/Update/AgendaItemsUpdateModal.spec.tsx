@@ -365,9 +365,11 @@ describe('AgendaItemsUpdateModal', () => {
     );
     expect(setFormStateCall).toBeDefined();
 
-    const result = setFormStateCall[0](formStateWithEmptyValues);
-    expect(result.urls).toEqual(['https://example.com', 'https://test.com']);
-    expect(result.attachments).toEqual(['attachment1', 'attachment2']);
+    if (setFormStateCall) {
+      const result = setFormStateCall[0](formStateWithEmptyValues);
+      expect(result.urls).toEqual(['https://example.com', 'https://test.com']);
+      expect(result.attachments).toEqual(['attachment1', 'attachment2']);
+    }
   });
 
   test('handles empty URL input correctly', async () => {
