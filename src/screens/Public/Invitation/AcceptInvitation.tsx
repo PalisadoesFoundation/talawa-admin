@@ -1,3 +1,7 @@
+/**
+ * Screen to verify and accept an event invitation.
+ * Verifies a token, shows invite details, and allows the user to accept the invitation.
+ */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useMutation } from '@apollo/client';
