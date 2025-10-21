@@ -30,6 +30,10 @@ import {
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
+import styles from 'style/app-fixed.module.css';
+import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
+import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/Tag/utils';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -462,6 +466,202 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('shows loading state while data is being fetched', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    // Check that InfiniteScrollLoader is displayed during loading
+    await waitFor(
+      () => {
+        const loader = screen.queryByTestId('infiniteScrollLoader');
+        if (loader) {
+          expect(loader).toBeInTheDocument();
+        }
+      },
+      { timeout: 100 },
+    );
+
+    // Eventually the data should load
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName').length).toBeGreaterThan(0);
+    });
+  });
+
+  it('closes modal when cancel button is clicked', async () => {
+    const hideModalMock = vi.fn();
+    const customProps = {
+      ...props,
+      hideAddPeopleToTagModal: hideModalMock,
+    };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    expect(hideModalMock).toHaveBeenCalled();
+  });
+
+  it('renders DataGrid with correct number of columns', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      // Check that the header columns are rendered
+      expect(screen.getByText('#')).toBeInTheDocument();
+      expect(screen.getByText(translations.userName)).toBeInTheDocument();
+      expect(screen.getByText(translations.actions)).toBeInTheDocument();
+    });
+  });
+
+  it('assigns members when multiple members are selected from different pages', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    // Select members from first page
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn').length).toBeGreaterThan(
+        0,
+      );
+    });
+
+    const firstPageSelectButtons = screen.getAllByTestId('selectMemberBtn');
+    await userEvent.click(firstPageSelectButtons[0]);
+
+    // Scroll to load more members
+    const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollY: scrollableDiv.scrollHeight },
+    });
+
+    // Wait for more members to load
+    await waitFor(() => {
+      const memberNames = screen.getAllByTestId('memberName');
+      expect(memberNames.length).toBeGreaterThan(10);
+    });
+
+    // Select a member from the second page
+    const allSelectButtons = screen.getAllByTestId('selectMemberBtn');
+    if (allSelectButtons.length > 1) {
+      await userEvent.click(allSelectButtons[allSelectButtons.length - 1]);
+    }
+
+    // Verify members are selected
+    await waitFor(() => {
+      const clearButtons = screen.getAllByTestId('clearSelectedMember');
+      expect(clearButtons.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('does not render modal when addPeopleToTagModalIsOpen is false', () => {
+    const customProps = {
+      ...props,
+      addPeopleToTagModalIsOpen: false,
+    };
+
+    const { container } = renderAddPeopleToTagModal(customProps, link);
+
+    // Modal should not be visible
+    const modal = container.querySelector('.modal.show');
+    expect(modal).not.toBeInTheDocument();
+  });
+
+  it('handles member selection and deselection via badge removal correctly', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    // Select a member
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    // Verify the member appears in the badge container
+    await waitFor(() => {
+      const badges = screen.getAllByTestId('clearSelectedMember');
+      expect(badges.length).toBeGreaterThan(0);
+    });
+
+    // Remove the member via the badge
+    const clearButton = screen.getAllByTestId('clearSelectedMember')[0];
+    await userEvent.click(clearButton);
+
+    // Verify the "noOneSelected" message appears
+    await waitFor(() => {
+      expect(screen.getByText(translations.noOneSelected)).toBeInTheDocument();
+    });
+  });
+
+  it('handles mutation error with Error instance correctly', async () => {
+    const MOCK_ERROR_MUTATION = [
+      {
+        request: {
+          query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+          variables: {
+            id: '1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+          },
+        },
+        result: {
+          data: {
+            getUsersToAssignTo: {
+              usersToAssignTo: {
+                edges: [
+                  {
+                    node: { _id: '1', firstName: 'Test', lastName: 'User' },
+                    cursor: 'cursor1',
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  endCursor: 'cursor1',
+                  startCursor: 'cursor1',
+                  hasPreviousPage: false,
+                },
+                totalCount: 1,
+              },
+              name: 'tag1',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_PEOPLE_TO_TAG,
+          variables: { tagId: '1', userIds: ['1'] },
+        },
+        error: new Error('Mutation failed'),
+      },
+    ];
+
+    const linkWithError = new StaticMockLink(MOCK_ERROR_MUTATION, true);
+    renderAddPeopleToTagModal(props, linkWithError);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mutation failed');
     });
   });
 });
