@@ -60,7 +60,10 @@ import type {
   InterfaceTagUsersToAssignToQuery,
   InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/Tag/interface';
-import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
+import {
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+  dataGridStyle,
+} from 'utils/organizationTagsUtils';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,

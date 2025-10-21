@@ -30,10 +30,9 @@ import {
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
-import styles from 'style/app-fixed.module.css';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/Tag/utils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -303,9 +302,24 @@ describe('Organisation Tags Page', () => {
 
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
-    // Set scroll position to the bottom
+    // Set up realistic scroll properties to trigger infinite scroll
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
+    // Trigger scroll event with scrollTop property
     fireEvent.scroll(addPeopleToTagScrollableDiv, {
-      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
+      target: { scrollTop: 700 },
     });
 
     await waitFor(() => {
@@ -444,8 +458,24 @@ describe('Organisation Tags Page', () => {
     });
 
     const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+    
+    // Set up realistic scroll properties
+    Object.defineProperty(scrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(scrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(scrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
     fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: 99999 },
+      target: { scrollTop: 700 },
     });
 
     await waitFor(() => {
@@ -469,21 +499,22 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('shows loading state while data is being fetched', async () => {
+  it('renders modal with correct structure and fetches data successfully', async () => {
     renderAddPeopleToTagModal(props, link);
 
-    // Check that InfiniteScrollLoader is displayed during loading
-    await waitFor(
-      () => {
-        const loader = screen.queryByTestId('infiniteScrollLoader');
-        if (loader) {
-          expect(loader).toBeInTheDocument();
-        }
-      },
-      { timeout: 100 },
-    );
+    await wait();
 
-    // Eventually the data should load
+    // Verify modal structure is rendered correctly
+    await waitFor(() => {
+      expect(screen.getByText(translations.addPeople)).toBeInTheDocument();
+      expect(screen.getByTestId('searchByFirstName')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByLastName')).toBeInTheDocument();
+      expect(screen.getByTestId('addPeopleToTagScrollableDiv')).toBeInTheDocument();
+      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+    });
+
+    // Verify data loads successfully
     await waitFor(() => {
       expect(screen.getAllByTestId('memberName').length).toBeGreaterThan(0);
     });
@@ -539,10 +570,31 @@ describe('Organisation Tags Page', () => {
     const firstPageSelectButtons = screen.getAllByTestId('selectMemberBtn');
     await userEvent.click(firstPageSelectButtons[0]);
 
+    // Verify first member is selected
+    await waitFor(() => {
+      expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
+    });
+
     // Scroll to load more members
     const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+    
+    // Set up realistic scroll properties
+    Object.defineProperty(scrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(scrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(scrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
     fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
+      target: { scrollTop: 700 },
     });
 
     // Wait for more members to load
@@ -557,10 +609,14 @@ describe('Organisation Tags Page', () => {
       await userEvent.click(allSelectButtons[allSelectButtons.length - 1]);
     }
 
-    // Verify members are selected
+    // Verify both members are selected and first member is still selected
     await waitFor(() => {
       const clearButtons = screen.getAllByTestId('clearSelectedMember');
-      expect(clearButtons.length).toBeGreaterThanOrEqual(1);
+      expect(clearButtons.length).toBeGreaterThanOrEqual(2);
+      
+      // Verify first member is still marked as deselected (has deselectMemberBtn)
+      const deselectButtons = screen.getAllByTestId('deselectMemberBtn');
+      expect(deselectButtons.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -591,16 +647,17 @@ describe('Organisation Tags Page', () => {
     // Verify the member appears in the badge container
     await waitFor(() => {
       const badges = screen.getAllByTestId('clearSelectedMember');
-      expect(badges.length).toBeGreaterThan(0);
+      expect(badges.length).toBe(1);
     });
 
     // Remove the member via the badge
     const clearButton = screen.getAllByTestId('clearSelectedMember')[0];
     await userEvent.click(clearButton);
 
-    // Verify the "noOneSelected" message appears
+    // Verify all badges are removed (count becomes zero)
     await waitFor(() => {
-      expect(screen.getByText(translations.noOneSelected)).toBeInTheDocument();
+      const badges = screen.queryAllByTestId('clearSelectedMember');
+      expect(badges.length).toBe(0);
     });
   });
 
