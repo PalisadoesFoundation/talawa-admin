@@ -603,7 +603,7 @@ describe('AgendaItemsUpdateModal', () => {
     expect(autocomplete).toBeInTheDocument();
   });
 
-  test('handles undefined agendaItemCategories correctly', async () => {
+  test('handles undefined agendaItemCategories gracefully', async () => {
     render(
       <MockedProvider addTypename={false}>
         <Provider store={store}>
