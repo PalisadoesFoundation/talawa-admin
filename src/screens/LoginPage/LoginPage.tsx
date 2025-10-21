@@ -61,11 +61,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import {
-  BACKEND_URL,
-  REACT_APP_USE_RECAPTCHA,
-  RECAPTCHA_SITE_KEY,
-} from 'Constant/constant';
+import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
@@ -132,7 +128,6 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
-  // Capture the pending invitation token early, before any localStorage.clear() calls
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -180,7 +175,6 @@ const loginPage = (): JSX.Element => {
 
   const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
   useEffect(() => {
-    // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
@@ -308,13 +302,7 @@ const loginPage = (): JSX.Element => {
               setItem('IsLoggedIn', 'TRUE');
               setItem('name', signUpData.signUp.user?.name || '');
               setItem('email', signUpData.signUp.user?.emailAddress || '');
-              // Check component state for pending token (captured on mount)
               if (pendingInvitationToken) {
-                // Remove the pending token and perform a full-page redirect to the
-                // invitation URL. Using window.location ensures we don't lose the
-                // pending flow to any competing client-side navigations or HMR
-                // handlers that might run immediately after setting session state.
-                // Remove the pending token using useLocalStorage hook
                 removeItem('pendingInvitationToken');
                 startSession();
                 window.location.href = `/event/invitation/${pendingInvitationToken}`;

@@ -11,11 +11,6 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
 
-// NOTE: This component assumes the app has an authentication mechanism exposed
-// via localStorage keys used elsewhere (e.g., 'token' and current user email can be
-// read from a central place). We'll use minimal checks and prefer redirecting to
-// login/signup handled by existing `LoginPage`.
-
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
 
@@ -32,7 +27,6 @@ const AcceptInvitation = (): JSX.Element => {
   const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
-  // New verify mutation returns masked invitee email and ids instead of full objects
   type InviteMetadata = {
     invitationToken: string;
     inviteeEmailMasked?: string | null;
@@ -60,7 +54,6 @@ const AcceptInvitation = (): JSX.Element => {
       }
 
       try {
-        // mutation now expects `{ input: { invitationToken } }`
         const { data } = await verify({
           variables: {
             input: {
@@ -83,17 +76,7 @@ const AcceptInvitation = (): JSX.Element => {
     run();
   }, [token, verify]);
 
-  // Check authentication status - since we do a full page redirect from login,
-  // we only need to check once when the component mounts
   const [isAuthenticated] = useState(() => Boolean(getItem(AUTH_TOKEN_KEY)));
-
-  // currentEmail is intentionally not used because server returns masked email only
-
-  // Since the verify mutation now returns a masked email (for privacy), we cannot
-  // reliably compare the full email on the client. Instead, if a masked email is
-  // provided we require an explicit user confirmation (checkbox) before enabling
-  // the Accept button. If no masked email is present, treat it as open to any
-  // authenticated user.
   const requiresConfirmation = Boolean(invite?.inviteeEmailMasked);
   const [confirmIsInvitee, setConfirmIsInvitee] = useState(false);
 
@@ -228,8 +211,6 @@ const AcceptInvitation = (): JSX.Element => {
                     <Button
                       variant="outline-secondary"
                       onClick={() => {
-                        // Help the user sign in as a different account: clear token/email and
-                        // preserve the pending invitation token so they can resume after login.
                         removeItem(AUTH_TOKEN_KEY);
                         removeItem('Talawa-admin_email');
                         if (invite?.invitationToken) {
