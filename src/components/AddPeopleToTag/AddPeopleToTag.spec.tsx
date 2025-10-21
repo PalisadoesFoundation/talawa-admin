@@ -668,9 +668,8 @@ describe('Organisation Tags Page', () => {
 
     // Select a member from the second page
     const allSelectButtons = screen.getAllByTestId('selectMemberBtn');
-    if (allSelectButtons.length > 1) {
-      await userEvent.click(allSelectButtons[allSelectButtons.length - 1]);
-    }
+    expect(allSelectButtons.length).toBeGreaterThan(1);
+    await userEvent.click(allSelectButtons[allSelectButtons.length - 1]);
 
     // Verify both members are selected and first member is still selected
     await waitFor(() => {
