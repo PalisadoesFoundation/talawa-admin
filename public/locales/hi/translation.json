@@ -967,7 +967,9 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "overview": "अवलोकन",
+    "tags": "टैग"
   },
   "people": {
     "title": "लोग",

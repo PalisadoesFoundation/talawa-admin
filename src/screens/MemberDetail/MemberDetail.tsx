@@ -77,6 +77,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const currentId = location.state?.id || getItem('id') || id;
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'events' | 'tags'>(
+    'overview',
+  );
 
   document.title = t('title');
 
@@ -271,224 +274,473 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           setShow={setShow}
         />
       )}
-      <Row className="g-4 mt-1">
-        <Col md={6}>
-          {/* Personal Details Card */}
-          <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            >
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
-              <Button
-                variant="light"
-                size="sm"
-                disabled
-                className="rounded-pill fw-bolder"
-              >
-                {userData?.currentUser?.role === 'administrator'
-                  ? 'Admin'
-                  : 'User'}
-              </Button>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Col lg={12} className="mb-2">
-                <div className="text-center mb-3">
-                  <div className="position-relative d-inline-block">
-                    {formState?.avatarURL ? (
-                      <img
-                        className="rounded-circle"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          objectFit: 'cover',
-                        }}
-                        src={sanitizeAvatars(
-                          selectedAvatar,
-                          formState.avatarURL,
+
+      {/* Tab Navigation */}
+      <div className={styles.tabNavigation}>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'overview' ? styles.tabButtonActive : ''}`}
+          onClick={() => setActiveTab('overview')}
+          data-testid="overviewTab"
+        >
+          <i className="fa fa-th me-2" aria-hidden="true"></i>
+          {t('overview')}
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'events' ? styles.tabButtonActive : ''}`}
+          onClick={() => setActiveTab('events')}
+          data-testid="eventsTab"
+        >
+          <i className="fa fa-calendar me-2" aria-hidden="true"></i>
+          {t('events')}
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'tags' ? styles.tabButtonActive : ''}`}
+          onClick={() => setActiveTab('tags')}
+          data-testid="tagsTab"
+        >
+          <i className="fa fa-tags me-2" aria-hidden="true"></i>
+          {t('tags')}
+        </button>
+      </div>
+
+      {/* Overview Tab */}
+      {activeTab === 'overview' && (
+        <>
+          <Row className="g-4 mt-1 px-4">
+            <Col md={6}>
+              {/* Personal Details Card */}
+              <Card className={styles.memberDetailCard}>
+                <Card.Header className={styles.memberDetailCardHeader}>
+                  <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+                  <Button
+                    variant="light"
+                    size="sm"
+                    disabled
+                    className="rounded-pill fw-bolder"
+                  >
+                    {userData?.currentUser?.role === 'administrator'
+                      ? 'Admin'
+                      : 'User'}
+                  </Button>
+                </Card.Header>
+                <Card.Body className={styles.memberDetailCardBody}>
+                  <Col lg={12} className="mb-2">
+                    <div className="text-center mb-3">
+                      <div className="position-relative d-inline-block">
+                        {formState?.avatarURL ? (
+                          <img
+                            className="rounded-circle"
+                            style={{
+                              width: '60px',
+                              height: '60px',
+                              objectFit: 'cover',
+                            }}
+                            src={sanitizeAvatars(
+                              selectedAvatar,
+                              formState.avatarURL,
+                            )}
+                            alt="User"
+                            data-testid="profile-picture"
+                            crossOrigin="anonymous" // to avoid Cors
+                          />
+                        ) : (
+                          <Avatar
+                            name={formState.name}
+                            alt="User Image"
+                            size={60}
+                            dataTestId="profile-picture"
+                            radius={150}
+                          />
                         )}
-                        alt="User"
-                        data-testid="profile-picture"
-                        crossOrigin="anonymous" // to avoid Cors
-                      />
-                    ) : (
-                      <Avatar
-                        name={formState.name}
-                        alt="User Image"
-                        size={60}
-                        dataTestId="profile-picture"
-                        radius={150}
-                      />
-                    )}
-                    <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
-                      onClick={() => fileInputRef.current?.click()}
-                      data-testid="uploadImageBtn"
-                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                      title="Edit profile picture"
-                      role="button"
-                      aria-label="Edit profile picture"
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && fileInputRef.current?.click()
-                      }
+                        <i
+                          className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                          onClick={() => fileInputRef.current?.click()}
+                          data-testid="uploadImageBtn"
+                          style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+                          title="Edit profile picture"
+                          role="button"
+                          aria-label="Edit profile picture"
+                          tabIndex={0}
+                          onKeyDown={(e) =>
+                            e.key === 'Enter' && fileInputRef.current?.click()
+                          }
+                        />
+                      </div>
+                    </div>
+                    <Form.Control
+                      accept="image/*"
+                      id="postphoto"
+                      name="photo"
+                      type="file"
+                      className={styles.cardControl}
+                      data-testid="fileInput"
+                      multiple={false}
+                      ref={fileInputRef}
+                      onChange={handleFileUpload}
+                      style={{ display: 'none' }}
                     />
-                  </div>
-                </div>
-                <Form.Control
-                  accept="image/*"
-                  id="postphoto"
-                  name="photo"
-                  type="file"
-                  className={styles.cardControl}
-                  data-testid="fileInput"
-                  multiple={false}
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  style={{ display: 'none' }}
-                />
+                  </Col>
+                  <Row className="g-3">
+                    <Col md={6}>
+                      <label htmlFor="name" className="form-label">
+                        {tCommon('name')}
+                      </label>
+                      <input
+                        id="name"
+                        value={formState.name}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="name"
+                        data-testid="inputName"
+                        onChange={(e) =>
+                          handleFieldChange('name', e.target.value)
+                        }
+                        required
+                        placeholder={tCommon('name')}
+                      />
+                    </Col>
+                    <Col md={6} data-testid="gender">
+                      <label htmlFor="gender" className="form-label">
+                        {t('gender')}
+                      </label>
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={genderEnum}
+                        fieldName="natalSex"
+                        handleChange={(e) =>
+                          handleFieldChange('natalSex', e.target.value)
+                        }
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="birthDate" className="form-label">
+                        {t('birthDate')}
+                      </label>
+                      <DatePicker
+                        className={`${styles.dateboxMemberDetail} w-100`}
+                        value={dayjs(formState.birthDate)}
+                        onChange={(date) =>
+                          handleFieldChange(
+                            'birthDate',
+                            date ? date.toISOString().split('T')[0] : '',
+                          )
+                        }
+                        data-testid="birthDate"
+                        slotProps={{
+                          textField: {
+                            inputProps: {
+                              'data-testid': 'birthDate',
+                              'aria-label': t('birthDate'),
+                            },
+                          },
+                        }}
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="grade" className="form-label">
+                        {t('educationGrade')}
+                      </label>
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={educationGradeEnum}
+                        fieldName="educationGrade"
+                        handleChange={(e) =>
+                          handleFieldChange('educationGrade', e.target.value)
+                        }
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="empStatus" className="form-label">
+                        {t('employmentStatus')}
+                      </label>
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={employmentStatusEnum}
+                        fieldName="employmentStatus"
+                        handleChange={(e) =>
+                          handleFieldChange('employmentStatus', e.target.value)
+                        }
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="maritalStatus" className="form-label">
+                        {t('maritalStatus')}
+                      </label>
+                      <DynamicDropDown
+                        formState={formState}
+                        setFormState={setFormState}
+                        fieldOptions={maritalStatusEnum}
+                        fieldName="maritalStatus"
+                        handleChange={(e) =>
+                          handleFieldChange('maritalStatus', e.target.value)
+                        }
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="password" className="form-label">
+                        {tCommon('password')}
+                      </label>
+                      <input
+                        id="password"
+                        value={formState.password}
+                        className={`form-control ${styles.inputColor}`}
+                        type="password"
+                        name="password"
+                        onChange={(e) =>
+                          handleFieldChange('password', e.target.value)
+                        }
+                        data-testid="inputPassword"
+                        placeholder="* * * * * * * *"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="description" className="form-label">
+                        {tCommon('description')}
+                      </label>
+                      <input
+                        id="description"
+                        value={formState.description}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="description"
+                        data-testid="inputDescription"
+                        onChange={(e) =>
+                          handleFieldChange('description', e.target.value)
+                        }
+                        required
+                        placeholder="Enter description"
+                      />
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+
+            <Col md={6}>
+              <Card className={styles.memberDetailCard}>
+                <Card.Header className={styles.memberDetailCardHeader}>
+                  <h3 className="m-0">{t('contactInfoHeading')}</h3>
+                </Card.Header>
+                <Card.Body className={styles.memberDetailCardBody}>
+                  <Row className="g-3">
+                    <Col md={12}>
+                      <label htmlFor="email" className="form-label">
+                        {tCommon('email')}
+                      </label>
+                      <input
+                        id="email"
+                        value={userData?.currentUser?.emailAddress}
+                        className={`form-control ${styles.inputColor}`}
+                        type="email"
+                        name="email"
+                        data-testid="inputEmail"
+                        disabled
+                        placeholder={tCommon('email')}
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="phoneNumber" className="form-label">
+                        {t('mobilePhoneNumber')}
+                      </label>
+                      <input
+                        id="mobilePhoneNumber"
+                        value={formState.mobilePhoneNumber}
+                        className={`form-control ${styles.inputColor}`}
+                        type="tel"
+                        name="mobilePhoneNumber"
+                        data-testid="inputMobilePhoneNumber"
+                        onChange={(e) =>
+                          handleFieldChange('mobilePhoneNumber', e.target.value)
+                        }
+                        placeholder="Ex. +1234567890"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="phoneNumber" className="form-label">
+                        {t('workPhoneNumber')}
+                      </label>
+                      <input
+                        id="workPhoneNumber"
+                        value={formState.workPhoneNumber}
+                        className={`form-control ${styles.inputColor}`}
+                        type="tel"
+                        data-testid="inputWorkPhoneNumber"
+                        name="workPhoneNumber"
+                        onChange={(e) =>
+                          handleFieldChange('workPhoneNumber', e.target.value)
+                        }
+                        placeholder="Ex. +1234567890"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="phoneNumber" className="form-label">
+                        {t('homePhoneNumber')}
+                      </label>
+                      <input
+                        id="homePhoneNumber"
+                        value={formState.homePhoneNumber}
+                        className={`form-control ${styles.inputColor}`}
+                        type="tel"
+                        data-testid="inputHomePhoneNumber"
+                        name="homePhoneNumber"
+                        onChange={(e) =>
+                          handleFieldChange('homePhoneNumber', e.target.value)
+                        }
+                        placeholder="Ex. +1234567890"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="address" className="form-label">
+                        {t('addressLine1')}
+                      </label>
+                      <input
+                        id="addressLine1"
+                        value={formState.addressLine1}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="addressLine1"
+                        data-testid="addressLine1"
+                        onChange={(e) =>
+                          handleFieldChange('addressLine1', e.target.value)
+                        }
+                        placeholder="Ex. Lane 2"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="address" className="form-label">
+                        {t('addressLine2')}
+                      </label>
+                      <input
+                        id="addressLine2"
+                        value={formState.addressLine2}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="addressLine2"
+                        data-testid="addressLine2"
+                        onChange={(e) =>
+                          handleFieldChange('addressLine2', e.target.value)
+                        }
+                        placeholder="Ex. Lane 2"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <label htmlFor="address" className="form-label">
+                        {t('postalCode')}
+                      </label>
+                      <input
+                        id="postalCode"
+                        value={formState.postalCode}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="postalCode"
+                        data-testid="inputPostalCode"
+                        onChange={(e) =>
+                          handleFieldChange('postalCode', e.target.value)
+                        }
+                        placeholder="Ex. 12345"
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="city" className="form-label">
+                        {t('city')}
+                      </label>
+                      <input
+                        id="city"
+                        value={formState.city}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="city"
+                        data-testid="inputCity"
+                        onChange={(e) =>
+                          handleFieldChange('city', e.target.value)
+                        }
+                        placeholder="Enter city name"
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label htmlFor="state" className="form-label">
+                        {t('state')}
+                      </label>
+                      <input
+                        id="state"
+                        value={formState.state}
+                        className={`form-control ${styles.inputColor}`}
+                        type="text"
+                        name="state"
+                        data-testid="inputState"
+                        onChange={(e) =>
+                          handleFieldChange('state', e.target.value)
+                        }
+                        placeholder="Enter state name"
+                      />
+                    </Col>
+                    <Col md={12}>
+                      <Form.Label htmlFor="country" className="form-label">
+                        {tCommon('country')}
+                      </Form.Label>
+                      <Form.Select
+                        id="country"
+                        value={formState.countryCode}
+                        className={`${styles.inputColor}`}
+                        data-testid="inputCountry"
+                        onChange={(e) =>
+                          handleFieldChange('countryCode', e.target.value)
+                        }
+                      >
+                        <option value="" disabled>
+                          Select {tCommon('country')}
+                        </option>
+                        {[...countryOptions]
+                          .sort((a, b) => a.label.localeCompare(b.label))
+                          .map((country) => (
+                            <option
+                              key={country.value.toUpperCase()}
+                              value={country.value.toLowerCase()}
+                              aria-label={`Select ${country.label} as your country`}
+                            >
+                              {country.label}
+                            </option>
+                          ))}
+                      </Form.Select>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+            {isUpdated && (
+              <Col md={12}>
+                <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+                  <Button
+                    variant="outline-secondary"
+                    onClick={resetChanges}
+                    data-testid="resetChangesBtn"
+                  >
+                    {tCommon('resetChanges')}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+                    onClick={handleUserUpdate}
+                    data-testid="saveChangesBtn"
+                  >
+                    {tCommon('saveChanges')}
+                  </Button>
+                </Card.Footer>
               </Col>
-              <Row className="g-3">
-                <Col md={6}>
-                  <label htmlFor="name" className="form-label">
-                    {tCommon('name')}
-                  </label>
-                  <input
-                    id="name"
-                    value={formState.name}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="name"
-                    data-testid="inputName"
-                    onChange={(e) => handleFieldChange('name', e.target.value)}
-                    required
-                    placeholder={tCommon('name')}
-                  />
-                </Col>
-                <Col md={6} data-testid="gender">
-                  <label htmlFor="gender" className="form-label">
-                    {t('gender')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={genderEnum}
-                    fieldName="natalSex"
-                    handleChange={(e) =>
-                      handleFieldChange('natalSex', e.target.value)
-                    }
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="birthDate" className="form-label">
-                    {t('birthDate')}
-                  </label>
-                  <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
-                    value={dayjs(formState.birthDate)}
-                    onChange={(date) =>
-                      handleFieldChange(
-                        'birthDate',
-                        date ? date.toISOString().split('T')[0] : '',
-                      )
-                    }
-                    data-testid="birthDate"
-                    slotProps={{
-                      textField: {
-                        inputProps: {
-                          'data-testid': 'birthDate',
-                          'aria-label': t('birthDate'),
-                        },
-                      },
-                    }}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="grade" className="form-label">
-                    {t('educationGrade')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={educationGradeEnum}
-                    fieldName="educationGrade"
-                    handleChange={(e) =>
-                      handleFieldChange('educationGrade', e.target.value)
-                    }
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="empStatus" className="form-label">
-                    {t('employmentStatus')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={employmentStatusEnum}
-                    fieldName="employmentStatus"
-                    handleChange={(e) =>
-                      handleFieldChange('employmentStatus', e.target.value)
-                    }
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="maritalStatus" className="form-label">
-                    {t('maritalStatus')}
-                  </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={maritalStatusEnum}
-                    fieldName="maritalStatus"
-                    handleChange={(e) =>
-                      handleFieldChange('maritalStatus', e.target.value)
-                    }
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="password" className="form-label">
-                    {tCommon('password')}
-                  </label>
-                  <input
-                    id="password"
-                    value={formState.password}
-                    className={`form-control ${styles.inputColor}`}
-                    type="password"
-                    name="password"
-                    onChange={(e) =>
-                      handleFieldChange('password', e.target.value)
-                    }
-                    data-testid="inputPassword"
-                    placeholder="* * * * * * * *"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="description" className="form-label">
-                    {tCommon('description')}
-                  </label>
-                  <input
-                    id="description"
-                    value={formState.description}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="description"
-                    data-testid="inputDescription"
-                    onChange={(e) =>
-                      handleFieldChange('description', e.target.value)
-                    }
-                    required
-                    placeholder="Enter description"
-                  />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-          <Col>
-            <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-              <Card.Header
-                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-              >
+            )}
+          </Row>
+        </>
+      )}
+
+      {/* Events Tab */}
+      {activeTab === 'events' && (
+        <Row className="mb-4 mt-1 px-4">
+          <Col xs={12}>
+            <Card className={styles.memberDetailCard}>
+              <Card.Header className={styles.memberDetailCardHeader}>
                 <h3 className="m-0" data-testid="eventsAttended-title">
                   {t('eventsAttended')}
                 </h3>
@@ -502,9 +754,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   {t('viewAll')}
                 </Button>
               </Card.Header>
-              <Card.Body
-                className={`${styles.cardBody} px-4 ${styles.scrollableCardBody}`}
-              >
+              <Card.Body className={styles.memberDetailCardBody}>
                 {!userData?.currentUser?.eventsAttended?.length ? (
                   <div
                     className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
@@ -526,239 +776,28 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Card.Body>
             </Card>
           </Col>
-        </Col>
+        </Row>
+      )}
 
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`py-3 px-4 ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            >
-              <h3 className="m-0">{t('contactInfoHeading')}</h3>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Row className="g-3">
-                <Col md={12}>
-                  <label htmlFor="email" className="form-label">
-                    {tCommon('email')}
-                  </label>
-                  <input
-                    id="email"
-                    value={userData?.currentUser?.emailAddress}
-                    className={`form-control ${styles.inputColor}`}
-                    type="email"
-                    name="email"
-                    data-testid="inputEmail"
-                    disabled
-                    placeholder={tCommon('email')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('mobilePhoneNumber')}
-                  </label>
-                  <input
-                    id="mobilePhoneNumber"
-                    value={formState.mobilePhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    name="mobilePhoneNumber"
-                    data-testid="inputMobilePhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('mobilePhoneNumber', e.target.value)
-                    }
-                    placeholder="Ex. +1234567890"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('workPhoneNumber')}
-                  </label>
-                  <input
-                    id="workPhoneNumber"
-                    value={formState.workPhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    data-testid="inputWorkPhoneNumber"
-                    name="workPhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('workPhoneNumber', e.target.value)
-                    }
-                    placeholder="Ex. +1234567890"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('homePhoneNumber')}
-                  </label>
-                  <input
-                    id="homePhoneNumber"
-                    value={formState.homePhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    data-testid="inputHomePhoneNumber"
-                    name="homePhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('homePhoneNumber', e.target.value)
-                    }
-                    placeholder="Ex. +1234567890"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="address" className="form-label">
-                    {t('addressLine1')}
-                  </label>
-                  <input
-                    id="addressLine1"
-                    value={formState.addressLine1}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="addressLine1"
-                    data-testid="addressLine1"
-                    onChange={(e) =>
-                      handleFieldChange('addressLine1', e.target.value)
-                    }
-                    placeholder="Ex. Lane 2"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="address" className="form-label">
-                    {t('addressLine2')}
-                  </label>
-                  <input
-                    id="addressLine2"
-                    value={formState.addressLine2}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="addressLine2"
-                    data-testid="addressLine2"
-                    onChange={(e) =>
-                      handleFieldChange('addressLine2', e.target.value)
-                    }
-                    placeholder="Ex. Lane 2"
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="address" className="form-label">
-                    {t('postalCode')}
-                  </label>
-                  <input
-                    id="postalCode"
-                    value={formState.postalCode}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="postalCode"
-                    data-testid="inputPostalCode"
-                    onChange={(e) =>
-                      handleFieldChange('postalCode', e.target.value)
-                    }
-                    placeholder="Ex. 12345"
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="city" className="form-label">
-                    {t('city')}
-                  </label>
-                  <input
-                    id="city"
-                    value={formState.city}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="city"
-                    data-testid="inputCity"
-                    onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder="Enter city name"
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="state" className="form-label">
-                    {t('state')}
-                  </label>
-                  <input
-                    id="state"
-                    value={formState.state}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="state"
-                    data-testid="inputState"
-                    onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder="Enter state name"
-                  />
-                </Col>
-                <Col md={12}>
-                  <Form.Label htmlFor="country" className="form-label">
-                    {tCommon('country')}
-                  </Form.Label>
-                  <Form.Select
-                    id="country"
-                    value={formState.countryCode}
-                    className={`${styles.inputColor}`}
-                    data-testid="inputCountry"
-                    onChange={(e) =>
-                      handleFieldChange('countryCode', e.target.value)
-                    }
-                  >
-                    <option value="" disabled>
-                      Select {tCommon('country')}
-                    </option>
-                    {[...countryOptions]
-                      .sort((a, b) => a.label.localeCompare(b.label))
-                      .map((country) => (
-                        <option
-                          key={country.value.toUpperCase()}
-                          value={country.value.toLowerCase()}
-                          aria-label={`Select ${country.label} as your country`}
-                        >
-                          {country.label}
-                        </option>
-                      ))}
-                  </Form.Select>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-        {isUpdated && (
-          <Col md={12}>
-            <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
-              <Button
-                variant="outline-secondary"
-                onClick={resetChanges}
-                data-testid="resetChangesBtn"
-              >
-                {tCommon('resetChanges')}
-              </Button>
-              <Button
-                variant="outline"
-                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-                onClick={handleUserUpdate}
-                data-testid="saveChangesBtn"
-              >
-                {tCommon('saveChanges')}
-              </Button>
-            </Card.Footer>
+      {/* Tags Tab */}
+      {activeTab === 'tags' && (
+        <Row className="mb-4 mt-1 px-4">
+          <Col xs={12}>
+            <Card className={styles.memberDetailCard}>
+              <Card.Header className={styles.memberDetailCardHeader}>
+                <h3 className="m-0" data-testid="tagsAssigned-title">
+                  {t('tagsAssigned')}
+                </h3>
+              </Card.Header>
+              <Card.Body
+                id="tagsAssignedScrollableDiv"
+                data-testid="tagsAssignedScrollableDiv"
+                className={styles.memberDetailCardBody}
+              ></Card.Body>
+            </Card>
           </Col>
-        )}
-      </Row>
-      <Row className="mb-4">
-        <Col xs={12} lg={6}>
-          <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
-            <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            >
-              <h3 className="m-0" data-testid="tagsAssigned-title">
-                {t('tagsAssigned')}
-              </h3>
-            </Card.Header>
-            <Card.Body
-              id="tagsAssignedScrollableDiv"
-              data-testid="tagsAssignedScrollableDiv"
-              className={`${styles.cardBody} pe-0`}
-            ></Card.Body>
-          </Card>
-        </Col>
-      </Row>
+        </Row>
+      )}
     </LocalizationProvider>
   );
 };

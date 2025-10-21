@@ -1008,6 +1008,8 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
+    "overview": "Overview",
+    "tags": "Tags",
     "noTagsAssigned": "No Tags Assigned"
   },
   "people": {

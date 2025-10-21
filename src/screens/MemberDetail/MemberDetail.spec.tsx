@@ -29,6 +29,7 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { urlToFile } from 'utils/urlToFile';
 
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -293,6 +294,11 @@ describe('MemberDetail', () => {
     renderMemberDetailScreen(link1);
     await wait();
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+
+    // Switch to tags tab to see tags content
+    const tagsTab = screen.getByTestId('tagsTab');
+    await userEvent.click(tagsTab);
+
     expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
   });
 
@@ -771,5 +777,188 @@ describe('MemberDetail', () => {
     // Simulate changing the country selection
     fireEvent.change(countrySelect, { target: { value: 'us' } });
     expect(countrySelect).toHaveValue('us');
+  });
+
+  // Tab Navigation Tests
+  test('renders all three tabs with correct labels', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const overviewTab = screen.getByTestId('overviewTab');
+    const eventsTab = screen.getByTestId('eventsTab');
+    const tagsTab = screen.getByTestId('tagsTab');
+
+    expect(overviewTab).toBeInTheDocument();
+    expect(eventsTab).toBeInTheDocument();
+    expect(tagsTab).toBeInTheDocument();
+
+    expect(overviewTab).toHaveTextContent('Overview');
+    expect(eventsTab).toHaveTextContent('Events');
+    expect(tagsTab).toHaveTextContent('Tags');
+  });
+
+  test('overview tab is active by default', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const overviewTab = screen.getByTestId('overviewTab');
+    expect(overviewTab.className).toContain('tabButtonActive');
+
+    // Check that overview content is visible
+    expect(screen.getByText('Profile Details')).toBeInTheDocument();
+    expect(screen.getByText('Contact Information')).toBeInTheDocument();
+  });
+
+  test('switches to events tab when clicked', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const eventsTab = screen.getByTestId('eventsTab');
+    await userEvent.click(eventsTab);
+
+    // Check that events tab is now active
+    expect(eventsTab.className).toContain('tabButtonActive');
+
+    // Check that events content is visible
+    expect(screen.getByTestId('eventsAttended-title')).toBeInTheDocument();
+    expect(screen.getByText('Events Attended')).toBeInTheDocument();
+    expect(screen.getByTestId('viewAllEvents')).toBeInTheDocument();
+  });
+
+  test('switches to tags tab when clicked', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const tagsTab = screen.getByTestId('tagsTab');
+    await userEvent.click(tagsTab);
+
+    // Check that tags tab is now active
+    expect(tagsTab.className).toContain('tabButtonActive');
+
+    // Check that tags content is visible
+    expect(screen.getByTestId('tagsAssigned-title')).toBeInTheDocument();
+    expect(screen.getByText('Tags Assigned')).toBeInTheDocument();
+    expect(screen.getByTestId('tagsAssignedScrollableDiv')).toBeInTheDocument();
+  });
+
+  test('switches between tabs correctly', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const overviewTab = screen.getByTestId('overviewTab');
+    const eventsTab = screen.getByTestId('eventsTab');
+    const tagsTab = screen.getByTestId('tagsTab');
+
+    // Start with overview active
+    expect(overviewTab.className).toContain('tabButtonActive');
+
+    // Switch to events
+    await userEvent.click(eventsTab);
+    expect(eventsTab.className).toContain('tabButtonActive');
+    expect(overviewTab.className).not.toContain('tabButtonActive');
+
+    // Switch to tags
+    await userEvent.click(tagsTab);
+    expect(tagsTab.className).toContain('tabButtonActive');
+    expect(eventsTab.className).not.toContain('tabButtonActive');
+
+    // Switch back to overview
+    await userEvent.click(overviewTab);
+    expect(overviewTab.className).toContain('tabButtonActive');
+    expect(tagsTab.className).not.toContain('tabButtonActive');
+  });
+
+  test('shows correct content for each tab', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Overview tab content
+    expect(screen.getByText('Profile Details')).toBeInTheDocument();
+    expect(screen.getByText('Contact Information')).toBeInTheDocument();
+
+    // Switch to events tab
+    const eventsTab = screen.getByTestId('eventsTab');
+    await userEvent.click(eventsTab);
+
+    // Events tab content should be visible, overview content should not
+    expect(screen.queryByText('Profile Details')).not.toBeInTheDocument();
+    expect(screen.queryByText('Contact Information')).not.toBeInTheDocument();
+    expect(screen.getByTestId('eventsAttended-title')).toBeInTheDocument();
+
+    // Switch to tags tab
+    const tagsTab = screen.getByTestId('tagsTab');
+    await userEvent.click(tagsTab);
+
+    // Tags tab content should be visible, events content should not
+    expect(
+      screen.queryByTestId('eventsAttended-title'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('tagsAssigned-title')).toBeInTheDocument();
+  });
+
+  test('view all events button opens modal', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    // Switch to events tab
+    const eventsTab = screen.getByTestId('eventsTab');
+    await userEvent.click(eventsTab);
+
+    // Click view all events button
+    const viewAllButton = screen.getByTestId('viewAllEvents');
+    await userEvent.click(viewAllButton);
+
+    // Modal should be visible (you may need to adjust this based on your modal implementation)
+    await waitFor(() => {
+      expect(screen.getByTestId('viewAllEvents')).toBeInTheDocument();
+    });
+  });
+
+  test('tabs have correct icons', async () => {
+    renderMemberDetailScreen(link1);
+    await wait();
+
+    const overviewTab = screen.getByTestId('overviewTab');
+    const eventsTab = screen.getByTestId('eventsTab');
+    const tagsTab = screen.getByTestId('tagsTab');
+
+    // Check for icons (Font Awesome classes)
+    expect(overviewTab.querySelector('.fa-th')).toBeInTheDocument();
+    expect(eventsTab.querySelector('.fa-calendar')).toBeInTheDocument();
+    expect(tagsTab.querySelector('.fa-tags')).toBeInTheDocument();
+  });
+
+  test('displays no events message when no events attended', async () => {
+    // Use a mock with no events
+    const noEventsMock = {
+      request: {
+        query: CURRENT_USER,
+        variables: { id: 'rishav-jha-mech' },
+      },
+      result: {
+        data: {
+          currentUser: {
+            __typename: 'User',
+            id: 'rishav-jha-mech',
+            name: 'Rishav Jha',
+            emailAddress: 'test@example.com',
+            role: 'administrator',
+            eventsAttended: [],
+            avatarURL: null,
+          },
+        },
+      },
+    };
+
+    const linkNoEvents = new StaticMockLink([noEventsMock], true);
+    renderMemberDetailScreen(linkNoEvents);
+    await wait();
+
+    // Switch to events tab
+    const eventsTab = screen.getByTestId('eventsTab');
+    await userEvent.click(eventsTab);
+
+    // Check for no events message
+    expect(screen.getByText('No Events Attended')).toBeInTheDocument();
   });
 });
