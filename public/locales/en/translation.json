@@ -109,6 +109,7 @@
     "pluginSettings": "Plugin Settings",
     "requests": "Membership Requests",
     "communityProfile": "Community Profile",
+    "notification": "Notifications",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "users",
@@ -137,6 +138,9 @@
     "plugins": "Plugins",
     "logout": "logout",
     "close": "close"
+  },
+  "notification": {
+    "title": "Notifications"
   },
   "orgList": {
     "title": "Organizations",

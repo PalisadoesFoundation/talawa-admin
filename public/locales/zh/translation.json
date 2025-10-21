@@ -109,6 +109,7 @@
     "pluginSettings": "插件设置",
     "requests": "会员申请",
     "communityProfile": "社区资料",
+    "notification": "通知",
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
@@ -137,6 +138,9 @@
     "plugins": "插件",
     "logout": "登出",
     "close": "关闭"
+  },
+  "notification": {
+    "title": "通知"
   },
   "orgList": {
     "title": "塔拉瓦组织",
