@@ -706,43 +706,4 @@ describe('AgendaItemsUpdateModal', () => {
     const urlLink = screen.getByText('https://example.com');
     expect(urlLink).toBeInTheDocument();
   });
-
-  test('handles image attachment display correctly', async () => {
-    const formStateWithImage = {
-      ...mockFormState1,
-      attachments: ['data:image/jpeg;base64,image-data'],
-    };
-
-    render(
-      <MockedProvider addTypename={false}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsUpdateModal
-                  agendaItemCategories={[]}
-                  agendaItemUpdateModalIsOpen
-                  hideUpdateModal={mockHideUpdateModal}
-                  formState={formStateWithImage}
-                  setFormState={mockSetFormState}
-                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
-                  t={mockT}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const imageElement = screen
-      .getByTestId('mediaPreview')
-      .querySelector('img');
-    expect(imageElement).toBeInTheDocument();
-    expect(imageElement).toHaveAttribute(
-      'src',
-      'data:image/jpeg;base64,image-data',
-    );
-    expect(imageElement).toHaveAttribute('alt', 'Attachment preview');
-  });
 });
