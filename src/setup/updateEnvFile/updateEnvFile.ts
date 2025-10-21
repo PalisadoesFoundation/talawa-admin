@@ -1,16 +1,24 @@
 import fs from 'fs';
 
+// Utility function to escape regex metacharacters
+const escapeRegex = (string: string): string => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 // Standard function to write parameters with comments
 const writeEnvParameter = (key: string, value: string, comment: string): void => {
   try {
     const envPath = '.env';
     let content = fs.readFileSync(envPath, 'utf8');
     
+    // Escape the key to prevent regex injection
+    const escapedKey = escapeRegex(key);
+    
     // Remove any existing entries for this key (including commented versions)
-    const keyPattern = new RegExp(`(^|\\n)#[^\\n]*\\n${key}=.*?(?=\\n|$)`, 'gm');
+    const keyPattern = new RegExp(`(^|\n)#[^\n]*\n${escapedKey}=.*?(?=\n|$)`, 'gm');
     content = content.replace(keyPattern, '');
     
-    const standaloneKeyPattern = new RegExp(`(^|\\n)${key}=.*?(?=\\n|$)`, 'gm');
+    const standaloneKeyPattern = new RegExp(`(^|\\n)${escapedKey}=.*?(?=\\n|$)`, 'gm');
     content = content.replace(standaloneKeyPattern, '');
     
     // Ensure content ends with newline for proper spacing
@@ -43,8 +51,10 @@ const updateEnvFile = (key: string, value: string | number, comment?: string): v
     }
     
     // Fallback for backward compatibility (no comment provided)
+    // Escape the key to prevent regex injection
+    const escapedKey = escapeRegex(key);
     const currentEnvContent = fs.readFileSync('.env', 'utf8');
-    const keyRegex = new RegExp(`^${key}=.*$`, 'm');
+    const keyRegex = new RegExp(`^${escapedKey}=.*$`, 'm');
     
     if (keyRegex.test(currentEnvContent)) {
       const updatedEnvContent = currentEnvContent.replace(

@@ -73,17 +73,49 @@ export async function main(): Promise<void> {
           name: 'dockerApiUrl',
           message: 'Enter the Talawa API URL for Docker environment:',
           default: 'http://host.docker.internal:4000/graphql',
-          validate: (input: string) =>
-            input.startsWith('http') ? true : 'Please enter a valid URL.',
+          validate: (input: string) => {
+            try {
+              const url = new URL(input);
+              if (!['http:', 'https:'].includes(url.protocol)) {
+                return 'Please enter a valid URL.';
+              }
+              if (!url.hostname) {
+                return 'Please enter a valid URL.';
+              }
+              return true;
+            } catch {
+              return 'Please enter a valid URL.';
+            }
+          },
         },
       ]);
 
+      // Clear non-Docker env vars when using Docker
+      writeEnvParameter(
+        'REACT_APP_TALAWA_URL',
+        '',
+        'Talawa API GraphQL endpoint URL'
+      );
+      writeEnvParameter(
+        'REACT_APP_BACKEND_WEBSOCKET_URL',
+        '',
+        'WebSocket URL for real-time communication'
+      );
+
+      // Write Docker-specific env var
       writeEnvParameter(
         'REACT_APP_DOCKER_TALAWA_URL',
         dockerApiUrl,
         'Talawa API URL for Docker environment'
       );
     } else {
+      // Clear Docker env var when not using Docker
+      writeEnvParameter(
+        'REACT_APP_DOCKER_TALAWA_URL',
+        '',
+        'Talawa API URL for Docker environment'
+      );
+
       await askAndUpdatePort();
       await askAndUpdateTalawaApiUrl();
     }
@@ -99,4 +131,7 @@ export async function main(): Promise<void> {
   }
 }
 
-main();
+// Make the module import-safe by guarding the call
+if (process.env.NODE_ENV !== 'test') {
+  main();
+}
