@@ -458,7 +458,7 @@ describe('Organisation Tags Page', () => {
     });
 
     const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
-    
+
     // Set up realistic scroll properties
     Object.defineProperty(scrollableDiv, 'scrollHeight', {
       configurable: true,
@@ -499,24 +499,87 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('renders modal with correct structure and fetches data successfully', async () => {
-    renderAddPeopleToTagModal(props, link);
+  it('shows loading state while data is being fetched', async () => {
+    // Create a mock with delay to catch loading state
+    const delayedMocks = [
+      {
+        request: {
+          query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+          variables: {
+            id: '1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+          },
+        },
+        delay: 30, // Add delay so we can catch the loading state
+        result: {
+          data: {
+            getUsersToAssignTo: {
+              __typename: 'UserTag',
+              name: 'tag1',
+              usersToAssignTo: {
+                __typename: 'UserTagUsersConnection',
+                edges: [
+                  {
+                    __typename: 'UserTagUsersConnectionEdge',
+                    node: {
+                      __typename: 'User',
+                      _id: '1',
+                      firstName: 'Test',
+                      lastName: 'User',
+                    },
+                    cursor: '1',
+                  },
+                ],
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: '1',
+                  startCursor: '1',
+                  hasPreviousPage: false,
+                },
+                totalCount: 1,
+              },
+            },
+          },
+        },
+      },
+    ];
 
-    await wait();
+    render(
+      <MockedProvider cache={cache} mocks={delayedMocks}>
+        <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route
+                  path="/orgtags/:orgId/manageTag/:tagId"
+                  element={<AddPeopleToTag {...props} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
 
-    // Verify modal structure is rendered correctly
+    // Assert that loader appears while data is being fetched
+    const loader = await screen.findByTestId('infiniteScrollLoader');
+    expect(loader).toBeInTheDocument();
+
+    // Assert that loader disappears after data loads
     await waitFor(() => {
-      expect(screen.getByText(translations.addPeople)).toBeInTheDocument();
-      expect(screen.getByTestId('searchByFirstName')).toBeInTheDocument();
-      expect(screen.getByTestId('searchByLastName')).toBeInTheDocument();
-      expect(screen.getByTestId('addPeopleToTagScrollableDiv')).toBeInTheDocument();
-      expect(screen.getByTestId('closeAddPeopleToTagModal')).toBeInTheDocument();
-      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('infiniteScrollLoader'),
+      ).not.toBeInTheDocument();
     });
 
-    // Verify data loads successfully
+    // Verify data is displayed
     await waitFor(() => {
-      expect(screen.getAllByTestId('memberName').length).toBeGreaterThan(0);
+      expect(screen.getByText('Test User')).toBeInTheDocument();
     });
   });
 
@@ -577,7 +640,7 @@ describe('Organisation Tags Page', () => {
 
     // Scroll to load more members
     const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
-    
+
     // Set up realistic scroll properties
     Object.defineProperty(scrollableDiv, 'scrollHeight', {
       configurable: true,
@@ -613,7 +676,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       const clearButtons = screen.getAllByTestId('clearSelectedMember');
       expect(clearButtons.length).toBeGreaterThanOrEqual(2);
-      
+
       // Verify first member is still marked as deselected (has deselectMemberBtn)
       const deselectButtons = screen.getAllByTestId('deselectMemberBtn');
       expect(deselectButtons.length).toBeGreaterThanOrEqual(2);
