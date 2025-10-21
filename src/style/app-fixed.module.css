@@ -2813,7 +2813,6 @@ form label,
 .tabNavigation {
   display: flex;
   gap: 0.75rem;
-  background-color: transparent;
   padding: 1rem;
   border-radius: 8px;
   margin: 0 1.5rem;

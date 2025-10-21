@@ -724,8 +724,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {tCommon('resetChanges')}
                   </Button>
                   <Button
-                    variant="outline"
-                    style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+                    variant="light"
+                    className={`${styles.actionsButton} ${styles.hoverShadowOnly}`}
                     onClick={handleUserUpdate}
                     data-testid="saveChangesBtn"
                   >
