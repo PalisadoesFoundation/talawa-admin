@@ -676,7 +676,7 @@ describe('Organisation Tags Page', () => {
       const clearButtons = screen.getAllByTestId('clearSelectedMember');
       expect(clearButtons.length).toBeGreaterThanOrEqual(2);
 
-      // Verify first member is still marked as deselected (has deselectMemberBtn)
+       // Verify first member is still selected (has deselectMemberBtn)
       const deselectButtons = screen.getAllByTestId('deselectMemberBtn');
       expect(deselectButtons.length).toBeGreaterThanOrEqual(2);
     });
