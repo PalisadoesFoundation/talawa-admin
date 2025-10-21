@@ -2856,17 +2856,17 @@ form label,
 
 .memberDetailCard {
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--cardHeader-border);
+  box-shadow: var(--hover-shadow);
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: var(--box-bg);
 }
 
 .memberDetailCardHeader {
   padding: 1rem 1.5rem;
   background-color: var(--tableHeader-bg);
   color: var(--tableHeader-color);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2876,7 +2876,7 @@ form label,
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #555555;
+  color: var(--secondText-color);
 }
 
 .memberDetailCardBody {

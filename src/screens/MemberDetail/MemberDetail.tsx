@@ -278,6 +278,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       {/* Tab Navigation */}
       <div className={styles.tabNavigation}>
         <button
+          type="button"
           className={`${styles.tabButton} ${activeTab === 'overview' ? styles.tabButtonActive : ''}`}
           onClick={() => setActiveTab('overview')}
           data-testid="overviewTab"
@@ -286,6 +287,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           {t('overview')}
         </button>
         <button
+          type="button"
           className={`${styles.tabButton} ${activeTab === 'events' ? styles.tabButtonActive : ''}`}
           onClick={() => setActiveTab('events')}
           data-testid="eventsTab"
@@ -294,6 +296,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           {t('events')}
         </button>
         <button
+          type="button"
           className={`${styles.tabButton} ${activeTab === 'tags' ? styles.tabButtonActive : ''}`}
           onClick={() => setActiveTab('tags')}
           data-testid="tagsTab"

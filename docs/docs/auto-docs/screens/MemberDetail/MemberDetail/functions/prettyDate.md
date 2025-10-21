@@ -6,7 +6,7 @@
 
 > **prettyDate**(`param`): `string`
 
-Defined in: [src/screens/MemberDetail/MemberDetail.tsx:805](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L805)
+Defined in: [src/screens/MemberDetail/MemberDetail.tsx:808](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L808)
 
 ## Parameters
 
