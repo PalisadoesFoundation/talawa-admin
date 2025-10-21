@@ -2838,7 +2838,8 @@ form label,
 }
 
 .tabButton:focus-visible {
-  outline: 2px solid var(--inActiveTab-outline-focus, var(--activeTab-outline-focus));
+  outline: 2px solid
+    var(--inActiveTab-outline-focus, var(--activeTab-outline-focus));
   outline-offset: 2px;
 }
 
