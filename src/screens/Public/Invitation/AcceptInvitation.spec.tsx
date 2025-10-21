@@ -36,7 +36,7 @@ const renderComponent = (
 ) => {
   mockUseLocalStorage.mockReturnValue({
     getItem: (key: string) => {
-      if (key === 'Talawa-admin_token') return authToken;
+      if (key === 'token') return authToken;
       // by default tests expect no pending token in storage unless explicitly set
       if (key === 'pendingInvitationToken') return null;
       return null;
@@ -333,9 +333,7 @@ describe('AcceptInvitation', () => {
       });
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
-        expect(mockUseLocalStorage().removeItem).toHaveBeenCalledWith(
-          'Talawa-admin_token',
-        );
+        expect(mockUseLocalStorage().removeItem).toHaveBeenCalledWith('token');
       });
     });
   });
