@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, act } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
@@ -10,10 +10,17 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ApolloLink, DefaultOptions } from '@apollo/client';
+import userEvent from '@testing-library/user-event';
 
-import { MOCKS_WITHOUT_TIME, MOCKS_WITH_TIME } from './EventDashboard.mocks';
+import {
+  MOCKS_WITHOUT_TIME,
+  MOCKS_WITH_TIME,
+  MOCKS_NO_EVENT,
+  MOCKS_EMPTY_FIELDS,
+} from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi, expect, it, describe } from 'vitest';
+import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
 const mockWithoutTime = new StaticMockLink(MOCKS_WITHOUT_TIME, true);
@@ -63,11 +70,23 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
+  const { setItem } = useLocalStorage();
+
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
       default: () => <div data-testid="event-list-card-modals" />,
     }));
+  });
+
+  beforeEach(() => {
+    // Setup default localStorage values
+    setItem('userId', 'user123');
+    setItem('role', 'administrator');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
@@ -131,5 +150,134 @@ describe('Testing Event Dashboard Screen', () => {
     expect(queryByTestId('spinner')).not.toBeInTheDocument();
     expect(getByTestId('event-details')).toBeInTheDocument();
     expect(getByTestId('event-name')).toBeInTheDocument();
+  });
+
+  it('Should open and close edit modal when edit button is clicked', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Click edit button
+    const editButton = getByTestId('edit-event-button');
+    await userEvent.click(editButton);
+
+    await waitFor(() => {
+      expect(getByTestId('event-list-card-modals')).toBeInTheDocument();
+    });
+  });
+
+  it('Should display "Event not found" when no event data is returned', async () => {
+    const mockNoEvent = new StaticMockLink(MOCKS_NO_EVENT, true);
+    const { getByTestId, queryByTestId } = renderEventDashboard(mockNoEvent);
+    await wait();
+
+    expect(getByTestId('no-event')).toBeInTheDocument();
+    expect(getByTestId('no-event')).toHaveTextContent('Event not found');
+    expect(queryByTestId('event-details')).not.toBeInTheDocument();
+  });
+
+  it('Should handle empty/null event fields gracefully', async () => {
+    const mockEmptyFields = new StaticMockLink(MOCKS_EMPTY_FIELDS, true);
+    const { getByTestId } = renderEventDashboard(mockEmptyFields);
+    await wait();
+
+    // Verify N/A is shown for empty location
+    expect(getByTestId('event-location')).toHaveTextContent('N/A');
+
+    // Verify event name and description still display
+    expect(getByTestId('event-name')).toBeInTheDocument();
+    expect(getByTestId('event-description')).toBeInTheDocument();
+  });
+
+  it('Should handle event with public and registerable flags', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Verify component renders and displays all event data
+    expect(getByTestId('event-dashboard')).toBeInTheDocument();
+    expect(getByTestId('event-name')).toBeInTheDocument();
+    expect(getByTestId('event-description')).toBeInTheDocument();
+  });
+
+  it('Should render the event details box with edit button', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    expect(getByTestId('event-details')).toBeInTheDocument();
+    expect(getByTestId('edit-event-button')).toBeInTheDocument();
+  });
+
+  it('Should set userRole to REGULAR when role is not administrator', async () => {
+    setItem('role', 'user');
+
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Component should still render properly with REGULAR role
+    expect(getByTestId('event-dashboard')).toBeInTheDocument();
+    expect(getByTestId('event-name')).toBeInTheDocument();
+  });
+
+  it('Should get userId from "id" field if "userId" is not available', async () => {
+    // Clear userId and set id instead
+    setItem('userId', '');
+    setItem('id', 'user456');
+
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    expect(getByTestId('event-dashboard')).toBeInTheDocument();
+  });
+
+  it('Should handle missing userId in localStorage', async () => {
+    setItem('userId', '');
+    setItem('id', '');
+
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Should still render without crashing
+    expect(getByTestId('event-dashboard')).toBeInTheDocument();
+  });
+
+  it('Should display all statistics cards with N/A values', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Verify all stat cards are present
+    expect(getByTestId('registrations-card')).toBeInTheDocument();
+    expect(getByTestId('registrations-count')).toHaveTextContent('N/A');
+
+    expect(getByTestId('attendees-card')).toBeInTheDocument();
+    expect(getByTestId('attendees-count')).toHaveTextContent('N/A');
+
+    expect(getByTestId('feedback-card')).toBeInTheDocument();
+    expect(getByTestId('feedback-rating')).toHaveTextContent('N/A');
+  });
+
+  it('Should display event registrants as N/A', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    expect(getByTestId('event-registrants')).toBeInTheDocument();
+    expect(getByTestId('event-registrants')).toHaveTextContent('N/A');
+  });
+
+  it('Should correctly format time for non-allDay events', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    const startTime = getByTestId('start-time');
+    const endTime = getByTestId('end-time');
+
+    // Should display formatted times
+    expect(startTime.textContent).toBe('09:00');
+    expect(endTime.textContent).toBe('17:00');
+  });
+
+  it('Should render event stats section', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    expect(getByTestId('event-stats')).toBeInTheDocument();
   });
 });

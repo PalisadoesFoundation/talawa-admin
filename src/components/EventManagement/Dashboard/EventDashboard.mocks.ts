@@ -65,3 +65,50 @@ export const MOCKS_WITHOUT_TIME = [
     },
   },
 ];
+
+export const MOCKS_NO_EVENT = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: null,
+      },
+    },
+  },
+];
+
+export const MOCKS_EMPTY_FIELDS = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          id: 'event123',
+          name: 'Test Event',
+          description: '',
+          startAt: '2024-01-01T09:00:00Z',
+          endAt: '2024-01-02T17:00:00Z',
+          startTime: '09:00:00',
+          endTime: '17:00:00',
+          allDay: false,
+          location: '',
+          isPublic: true,
+          isRegisterable: true,
+          attendees: [],
+          creator: {
+            _id: 'creator1',
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+      },
+    },
+  },
+];
