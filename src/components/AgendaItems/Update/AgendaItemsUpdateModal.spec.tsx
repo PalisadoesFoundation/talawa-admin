@@ -584,7 +584,9 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={null as any}
+                  agendaItemCategories={
+                    null as unknown as typeof mockAgendaItemCategories | null
+                  }
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState1}
@@ -611,7 +613,11 @@ describe('AgendaItemsUpdateModal', () => {
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <AgendaItemsUpdateModal
-                  agendaItemCategories={undefined as any}
+                  agendaItemCategories={
+                    undefined as unknown as
+                      | typeof mockAgendaItemCategories
+                      | undefined
+                  }
                   agendaItemUpdateModalIsOpen
                   hideUpdateModal={mockHideUpdateModal}
                   formState={mockFormState1}
