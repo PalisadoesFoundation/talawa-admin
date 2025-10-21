@@ -61,7 +61,11 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+  BACKEND_URL,
+} from 'Constant/constant';
 import {
   RECAPTCHA_MUTATION,
   SIGNUP_MUTATION,
@@ -199,17 +203,17 @@ const loginPage = (): JSX.Element => {
     }
   }, [orgData]);
 
-  // useEffect(() => {
-  //   async function loadResource(): Promise<void> {
-  //     try {
-  //       await fetch(BACKEND_URL as string);
-  //     } catch (error) {
-  //       errorHandler(t, error);
-  //     }
-  //   }
+  useEffect(() => {
+    async function loadResource(): Promise<void> {
+      try {
+        await fetch(BACKEND_URL as string);
+      } catch (error) {
+        errorHandler(t, error);
+      }
+    }
 
-  //   loadResource();
-  // }, []);
+    loadResource();
+  }, []);
 
   const verifyRecaptcha = async (
     recaptchaToken: string | null,
