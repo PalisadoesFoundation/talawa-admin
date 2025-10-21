@@ -1,14 +1,8 @@
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from '../askForTalawaApiUrl/askForTalawaApiUrl';
-import updateEnvFile from '../updateEnvFile/updateEnvFile';
+import { writeEnvParameter } from '../updateEnvFile/updateEnvFile';
+import { checkConnection } from '../checkConnection/checkConnection';
 
-// Mock implementation of checkConnection
-const checkConnection = async (): Promise<boolean> => {
-  // Simulate checking connection
-  return true; // Replace with actual connection check logic
-};
-
-// Function to ask for Docker port
 export const askForDocker = async (): Promise<string> => {
   const answers = await inquirer.prompt<{ dockerAppPort: string }>([
     {
@@ -29,7 +23,6 @@ export const askForDocker = async (): Promise<string> => {
   return answers.dockerAppPort;
 };
 
-// Function to ask and update Talawa API URL
 export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
   try {
     const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt([
@@ -46,6 +39,7 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
       let isConnected = false;
       let retryCount = 0;
       const MAX_RETRIES = 3;
+      
       while (!isConnected && retryCount < MAX_RETRIES) {
         try {
           endpoint = await askForTalawaApiUrl();
@@ -53,7 +47,7 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
           if (!['http:', 'https:'].includes(url.protocol)) {
             throw new Error('Invalid URL protocol. Must be http or https');
           }
-          isConnected = await checkConnection();
+          isConnected = await checkConnection(endpoint);
           if (!isConnected) {
             console.log(
               `Connection attempt ${retryCount + 1}/${MAX_RETRIES} failed`,
@@ -65,21 +59,32 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
         }
         retryCount++;
       }
+      
       if (!isConnected) {
         throw new Error(
           'Failed to establish connection after maximum retry attempts',
         );
       }
-      updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
+      
+      writeEnvParameter(
+        'REACT_APP_TALAWA_URL',
+        endpoint,
+        'Talawa API GraphQL endpoint URL'
+      );
+      
       const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
       try {
         const wsUrl = new URL(websocketUrl);
         if (!['ws:', 'wss:'].includes(wsUrl.protocol)) {
           throw new Error('Invalid WebSocket protocol');
         }
-        updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
+        writeEnvParameter(
+          'REACT_APP_BACKEND_WEBSOCKET_URL',
+          websocketUrl,
+          'WebSocket URL for real-time communication'
+        );
       } catch {
-        throw new Error('Invalid WebSocket URL generated: ');
+        throw new Error('Invalid WebSocket URL generated');
       }
 
       if (endpoint.includes('localhost')) {
@@ -89,13 +94,41 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
           if (!['http:', 'https:'].includes(url.protocol)) {
             throw new Error('Invalid Docker URL protocol');
           }
+          writeEnvParameter(
+            'REACT_APP_DOCKER_TALAWA_URL',
+            dockerUrl,
+            'Talawa API URL for Docker environment'
+          );
         } catch {
           throw new Error('Invalid Docker URL generated');
         }
-        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+      } else {
+        writeEnvParameter(
+          'REACT_APP_DOCKER_TALAWA_URL',
+          '',
+          'Talawa API URL for Docker environment'
+        );
       }
+    } else {
+      // Set empty values if user declines
+      writeEnvParameter(
+        'REACT_APP_TALAWA_URL',
+        '',
+        'Talawa API GraphQL endpoint URL'
+      );
+      writeEnvParameter(
+        'REACT_APP_BACKEND_WEBSOCKET_URL',
+        '',
+        'WebSocket URL for real-time communication'
+      );
+      writeEnvParameter(
+        'REACT_APP_DOCKER_TALAWA_URL',
+        '',
+        'Talawa API URL for Docker environment'
+      );
     }
   } catch (error) {
     console.error('Error setting up Talawa API URL:', error);
+    throw error;
   }
 };

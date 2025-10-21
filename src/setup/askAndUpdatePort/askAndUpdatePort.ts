@@ -1,8 +1,7 @@
-import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
+import { writeEnvParameter } from 'setup/updateEnvFile/updateEnvFile';
 import { askForCustomPort } from 'setup/askForCustomPort/askForCustomPort';
 import inquirer from 'inquirer';
 
-// Ask and update the custom port
 const askAndUpdatePort = async (): Promise<void> => {
   const { shouldSetCustomPortResponse } = await inquirer.prompt([
     {
@@ -20,7 +19,17 @@ const askAndUpdatePort = async (): Promise<void> => {
       throw new Error('Port must be between 1024 and 65535');
     }
 
-    updateEnvFile('PORT', String(customPort));
+    writeEnvParameter(
+      'PORT',
+      String(customPort),
+      'Port for development server without Docker'
+    );
+  } else {
+    writeEnvParameter(
+      'PORT',
+      '4321',
+      'Port for development server without Docker'
+    );
   }
 };
 

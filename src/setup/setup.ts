@@ -4,11 +4,10 @@ import inquirer from 'inquirer';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
-import updateEnvFile from './updateEnvFile/updateEnvFile';
+import updateEnvFile, { writeEnvParameter } from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 
-// Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
     const { shouldUseRecaptcha } = await inquirer.prompt([
@@ -26,16 +25,17 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
           type: 'input',
           name: 'recaptchaSiteKeyInput',
           message: 'Enter your reCAPTCHA site key:',
-          validate: (input: string): boolean | string => {
-            return (
-              validateRecaptcha(input) ||
-              'Invalid reCAPTCHA site key. Please try again.'
-            );
-          },
+          validate: (input: string): boolean | string =>
+            validateRecaptcha(input) ||
+            'Invalid reCAPTCHA site key. Please try again.',
         },
       ]);
 
-      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+      writeEnvParameter('REACT_APP_USE_RECAPTCHA', 'yes', 'Enable or disable reCAPTCHA protection');
+      writeEnvParameter('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput, 'Your reCAPTCHA site key for frontend validation');
+    } else {
+      writeEnvParameter('REACT_APP_USE_RECAPTCHA', 'no', 'Enable or disable reCAPTCHA protection');
+      writeEnvParameter('REACT_APP_RECAPTCHA_SITE_KEY', '', 'Your reCAPTCHA site key for frontend validation');
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
@@ -43,37 +43,47 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
   }
 };
 
-// Ask and set up logging errors in the console
 const askAndSetLogErrors = async (): Promise<void> => {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
-    message:
-      'Would you like to log Compiletime and Runtime errors in the console?',
+    message: 'Would you like to log Compiletime and Runtime errors in the console?',
     default: true,
   });
 
-  if (shouldLogErrors) {
-    updateEnvFile('ALLOW_LOGS', 'YES');
-  }
+  writeEnvParameter('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO', 'Enable or disable error logging in console');
 };
 
-// Main function to run the setup process
 export async function main(): Promise<void> {
   try {
-    if (!checkEnvFile()) {
-      return;
-    }
+    if (!checkEnvFile()) return;
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
     modifyEnvFile();
     await askAndSetDockerOption();
+
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
-    // Only run these commands if Docker is NOT used
-    if (!useDocker) {
+    if (useDocker) {
+      const { dockerApiUrl } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'dockerApiUrl',
+          message: 'Enter the Talawa API URL for Docker environment:',
+          default: 'http://host.docker.internal:4000/graphql',
+          validate: (input: string) =>
+            input.startsWith('http') ? true : 'Please enter a valid URL.',
+        },
+      ]);
+
+      writeEnvParameter(
+        'REACT_APP_DOCKER_TALAWA_URL',
+        dockerApiUrl,
+        'Talawa API URL for Docker environment'
+      );
+    } else {
       await askAndUpdatePort();
       await askAndUpdateTalawaApiUrl();
     }
@@ -81,9 +91,7 @@ export async function main(): Promise<void> {
     await askAndSetRecaptcha();
     await askAndSetLogErrors();
 
-    console.log(
-      '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
-    );
+    console.log('\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉');
   } catch (error) {
     console.error('\n❌ Setup failed:', error);
     console.log('\nPlease try again or contact support if the issue persists.');

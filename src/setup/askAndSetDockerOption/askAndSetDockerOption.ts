@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
-import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
+import updateEnvFile, { writeEnvParameter } from 'setup/updateEnvFile/updateEnvFile';
 import { askForDocker } from 'setup/askForDocker/askForDocker';
 
-// Function to manage Docker setup
 const askAndSetDockerOption = async (): Promise<void> => {
   const { useDocker } = await inquirer.prompt([
     {
@@ -15,22 +14,44 @@ const askAndSetDockerOption = async (): Promise<void> => {
 
   if (useDocker) {
     console.log('Setting up with Docker...');
-    updateEnvFile('USE_DOCKER', 'YES');
-    const answers = await askForDocker();
-    const DOCKER_PORT_NUMBER = answers;
-    updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
+    
+    writeEnvParameter(
+      'USE_DOCKER',
+      'YES',
+      'Enable Docker-based deployment'
+    );
+    
+    const dockerPort = await askForDocker();
+    
+    writeEnvParameter(
+      'DOCKER_PORT',
+      String(dockerPort),
+      'Port for Docker container'
+    );
 
     const DOCKER_NAME = 'talawa-admin';
     console.log(`
         
           Run the commands below after setup:-
                 1. docker build -t ${DOCKER_NAME} .
-                2. docker run -d -p ${DOCKER_PORT_NUMBER}:${DOCKER_PORT_NUMBER} ${DOCKER_NAME}
+                2. docker run -d -p ${dockerPort}:${dockerPort} ${DOCKER_NAME}
                 
        `);
   } else {
     console.log('Setting up without Docker...');
-    updateEnvFile('USE_DOCKER', 'NO');
+    
+    writeEnvParameter(
+      'USE_DOCKER',
+      'NO',
+      'Enable Docker-based deployment'
+    );
+    
+    // Set empty PORT initially (will be configured in askAndUpdatePort)
+    writeEnvParameter(
+      'PORT',
+      '',
+      'Port for development server without Docker'
+    );
   }
 };
 
