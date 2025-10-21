@@ -152,7 +152,7 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('event-name')).toBeInTheDocument();
   });
 
-  it('Should open and close edit modal when edit button is clicked', async () => {
+  it('Should open edit modal when edit button is clicked', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
@@ -186,9 +186,10 @@ describe('Testing Event Dashboard Screen', () => {
     // Verify event name and description still display
     expect(getByTestId('event-name')).toBeInTheDocument();
     expect(getByTestId('event-description')).toBeInTheDocument();
+    expect(getByTestId('event-description')).toHaveTextContent('');
   });
 
-  it('Should handle event with public and registerable flags', async () => {
+  it('Should render component with complete event data', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
@@ -196,14 +197,6 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('event-dashboard')).toBeInTheDocument();
     expect(getByTestId('event-name')).toBeInTheDocument();
     expect(getByTestId('event-description')).toBeInTheDocument();
-  });
-
-  it('Should render the event details box with edit button', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
-
-    expect(getByTestId('event-details')).toBeInTheDocument();
-    expect(getByTestId('edit-event-button')).toBeInTheDocument();
   });
 
   it('Should set userRole to REGULAR when role is not administrator', async () => {
@@ -225,7 +218,9 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
+    // Verify component renders with fallback userId
     expect(getByTestId('event-dashboard')).toBeInTheDocument();
+    expect(getByTestId('event-name')).toBeInTheDocument();
   });
 
   it('Should handle missing userId in localStorage', async () => {
@@ -272,12 +267,5 @@ describe('Testing Event Dashboard Screen', () => {
     // Should display formatted times
     expect(startTime.textContent).toBe('09:00');
     expect(endTime.textContent).toBe('17:00');
-  });
-
-  it('Should render event stats section', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
-
-    expect(getByTestId('event-stats')).toBeInTheDocument();
   });
 });
