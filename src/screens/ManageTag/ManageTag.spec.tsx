@@ -54,7 +54,15 @@ const translations = {
 
 // Mock InfiniteScroll component
 vi.mock('react-infinite-scroll-component', () => ({
-  default: function InfiniteScroll({ children, next, hasMore }: { children: React.ReactNode; next: () => void; hasMore: boolean }) {
+  default: function InfiniteScroll({
+    children,
+    next,
+    hasMore,
+  }: {
+    children: React.ReactNode;
+    next: () => void;
+    hasMore: boolean;
+  }) {
     return (
       <div data-testid="infinite-scroll-mock">
         {children}
