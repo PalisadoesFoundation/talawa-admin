@@ -5,48 +5,7 @@ import {
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-
-// Helper function to build assigned users data structure
-const buildAssignedUsers = (
-  overrides?: Partial<{
-    name: string;
-    edges: Array<{
-      node: { _id: string; firstName: string; lastName: string };
-      cursor: string;
-    }>;
-    pageInfo: {
-      startCursor: string | null;
-      endCursor: string | null;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-    totalCount: number;
-    ancestorTags: Array<{ _id: string; name: string }>;
-  }>,
-) => ({
-  name: 'tag1',
-  usersAssignedTo: {
-    edges: [
-      {
-        node: {
-          _id: '1',
-          firstName: 'member',
-          lastName: '1',
-        },
-        cursor: '1',
-      },
-    ],
-    pageInfo: {
-      startCursor: '1',
-      endCursor: '1',
-      hasNextPage: false,
-      hasPreviousPage: false,
-    },
-    totalCount: 1,
-  },
-  ancestorTags: [],
-  ...overrides,
-});
+import { buildAssignedUsers } from './ManageTagMockUtils';
 
 export const MOCKS_SUCCESS_UNASSIGN_USER_TAG = [
   {
@@ -182,8 +141,8 @@ export const MOCKS_WITH_ANCESTOR_TAGS = [
       data: {
         getAssignedUsers: buildAssignedUsers({
           ancestorTags: [
-            { _id: 'parent1', name: 'Parent Tag 1' },
-            { _id: 'parent2', name: 'Parent Tag 2' },
+            { _id: 'parent1', name: 'Parent Tag 1', __typename: 'UserTag' },
+            { _id: 'parent2', name: 'Parent Tag 2', __typename: 'UserTag' },
           ],
         }),
       },

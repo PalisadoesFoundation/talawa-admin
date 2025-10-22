@@ -29,7 +29,7 @@ import {
 import {
   MOCKS_NULL_USERS_ASSIGNED_TO,
   MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY,
-  MOCKS_NULL_EDGES_ARRAY,
+  MOCKS_EMPTY_EDGES_ARRAY,
   MOCKS_NULL_PAGE_INFO,
   MOCKS_NULL_ANCESTOR_TAGS,
   MOCKS_UNDEFINED_DATA,
@@ -85,7 +85,7 @@ const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION, true);
 const link8 = new StaticMockLink(MOCKS_NON_ERROR_OBJECT, true);
 const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO, true);
 const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY, true);
-const link11 = new StaticMockLink(MOCKS_NULL_EDGES_ARRAY, true);
+const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY, true);
 const link12 = new StaticMockLink(MOCKS_NULL_PAGE_INFO, true);
 const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, true);
 const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA, true);
