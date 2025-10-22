@@ -4,7 +4,6 @@ import type { RenderResult } from '@testing-library/react';
 import {
   act,
   cleanup,
-  fireEvent,
   render,
   screen,
   waitFor,
