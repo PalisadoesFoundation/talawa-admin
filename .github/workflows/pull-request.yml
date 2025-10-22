@@ -796,7 +796,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
-          target: 'https://localhost:4321'
+          target: 'http://localhost:4321'
 
       - name: Upload ZAP Report
         if: always()
