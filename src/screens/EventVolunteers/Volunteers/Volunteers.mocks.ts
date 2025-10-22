@@ -77,6 +77,36 @@ const volunteer2: InterfaceEventVolunteerInfo = {
   groups: [],
 };
 
+const volunteer3: InterfaceEventVolunteerInfo = {
+  id: 'volunteerId3',
+  hasAccepted: false,
+  volunteerStatus: 'rejected' as const,
+  hoursVolunteered: 5,
+  isPublic: true,
+  isTemplate: false,
+  isInstanceException: false,
+  createdAt: '2023-01-01T00:00:00Z',
+  updatedAt: '2023-01-01T00:00:00Z',
+  user: {
+    id: 'userId5',
+    name: 'Alice Johnson',
+    avatarURL: null,
+  },
+  event: {
+    id: 'eventId',
+    name: 'Test Event',
+  },
+  creator: {
+    id: 'userId1',
+    name: 'Creator Name',
+  },
+  updater: {
+    id: 'userId1',
+    name: 'Updater Name',
+  },
+  groups: [],
+};
+
 const eventResponseWrapper = (volunteers: InterfaceEventVolunteerInfo[]) => ({
   id: 'eventId',
   recurrenceRule: null,
@@ -100,7 +130,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        event: eventResponseWrapper([volunteer1, volunteer2]),
+        event: eventResponseWrapper([volunteer1, volunteer2, volunteer3]),
       },
     },
   },
@@ -119,7 +149,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        event: eventResponseWrapper([volunteer2, volunteer1]),
+        event: eventResponseWrapper([volunteer2, volunteer3, volunteer1]),
       },
     },
   },
@@ -138,7 +168,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        event: eventResponseWrapper([volunteer1, volunteer2]),
+        event: eventResponseWrapper([volunteer1, volunteer3, volunteer2]),
       },
     },
   },
