@@ -166,8 +166,8 @@ function ManageTag(): JSX.Element {
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.pageInfo
-            .endCursor,
+          userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
+            ?.endCursor,
       },
       updateQuery: (
         prevResult: { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers },
@@ -187,8 +187,9 @@ function ManageTag(): JSX.Element {
             usersAssignedTo: {
               ...fetchMoreResult.getAssignedUsers.usersAssignedTo,
               edges: [
-                ...prevResult.getAssignedUsers.usersAssignedTo.edges,
-                ...fetchMoreResult.getAssignedUsers.usersAssignedTo.edges,
+                ...(prevResult.getAssignedUsers.usersAssignedTo?.edges ?? []),
+                ...(fetchMoreResult.getAssignedUsers.usersAssignedTo?.edges ??
+                  []),
               ],
             },
           },
@@ -290,14 +291,14 @@ function ManageTag(): JSX.Element {
   }
 
   const userTagAssignedMembers =
-    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo.edges.map(
+    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.edges?.map(
       (edge) => edge.node,
     ) ?? [];
 
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
   const orgUserTagAncestors = [
-    ...(userTagAssignedMembersData?.getAssignedUsers.ancestorTags ?? []),
+    ...(userTagAssignedMembersData?.getAssignedUsers?.ancestorTags ?? []),
     { _id: currentTagId, name: currentTagName },
   ];
 
@@ -324,7 +325,7 @@ function ManageTag(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+        return <div>{params.row?.id ?? ''}</div>;
       },
     },
     {
@@ -337,7 +338,7 @@ function ManageTag(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
-            {params.row.firstName + ' ' + params.row.lastName}
+            {(params.row?.firstName ?? '') + ' ' + (params.row?.lastName ?? '')}
           </div>
         );
       },
@@ -356,7 +357,7 @@ function ManageTag(): JSX.Element {
           <div>
             <Link
               to={`/member/${orgId}`}
-              state={{ id: params.row._id }}
+              state={{ id: params.row?._id }}
               data-testid="viewProfileBtn"
             >
               <div
@@ -370,7 +371,7 @@ function ManageTag(): JSX.Element {
               size="sm"
               variant="danger"
               onClick={() => {
-                setUnassignUserId(params.row._id);
+                setUnassignUserId(params.row?._id);
                 toggleUnassignUserTagModal();
               }}
               data-testid="unassignTagBtn"
@@ -469,7 +470,7 @@ function ManageTag(): JSX.Element {
                     next={loadMoreAssignedMembers}
                     hasMore={
                       userTagAssignedMembersData?.getAssignedUsers
-                        .usersAssignedTo.pageInfo.hasNextPage ?? false
+                        .usersAssignedTo?.pageInfo?.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
@@ -494,12 +495,14 @@ function ManageTag(): JSX.Element {
                       getRowClassName={() => `${styles.rowBackgrounds}`}
                       autoHeight
                       rowHeight={65}
-                      rows={userTagAssignedMembers?.map(
-                        (assignedMembers, index) => ({
-                          id: index + 1,
-                          ...assignedMembers,
-                        }),
-                      )}
+                      rows={
+                        userTagAssignedMembers?.map(
+                          (assignedMembers, index) => ({
+                            id: index + 1,
+                            ...assignedMembers,
+                          }),
+                        ) ?? []
+                      }
                       columns={columns}
                       isRowSelectable={() => false}
                     />
