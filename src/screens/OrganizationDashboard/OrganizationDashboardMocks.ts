@@ -295,43 +295,6 @@ export const MOCKS = [
       loading: false,
     },
   },
-  // Duplicate blocked users mock for tests that re-render or navigate
-  {
-    request: {
-      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
-    },
-    result: {
-      data: {
-        organization: {
-          blockedUsers: {
-            edges: [
-              {
-                node: {
-                  id: 'blockedUser1',
-                  name: 'Blocked User 1',
-                  emailAddress: 'blocked1@example.com',
-                  role: 'member',
-                },
-                cursor: 'cursor1',
-              },
-              {
-                node: {
-                  id: 'blockedUser2',
-                  name: 'Blocked User 2',
-                  emailAddress: 'blocked2@example.com',
-                  role: 'member',
-                },
-                cursor: 'cursor2',
-              },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      },
-      loading: false,
-    },
-  },
 ];
 
 export const EMPTY_MOCKS = [
