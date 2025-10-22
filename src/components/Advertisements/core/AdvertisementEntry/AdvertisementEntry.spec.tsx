@@ -701,7 +701,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startAt: new Date(),
                   id: '1',
                   attachments: [
-                    { url: 'test-video.mp4', mimeType: 'videos/mp4' },
+                    { url: 'test-video.mp4', mimeType: 'video/mp4' },
                   ],
                   name: 'Video Ad',
                   createdAt: new Date(),
