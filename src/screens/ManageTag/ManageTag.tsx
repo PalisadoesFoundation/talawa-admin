@@ -219,10 +219,7 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      /* istanbul ignore else */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
@@ -257,10 +254,7 @@ function ManageTag(): JSX.Element {
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      /* istanbul ignore else */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
@@ -273,10 +267,7 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      /* istanbul ignore else */
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
+      toast.error((error as Error).message);
     }
   };
 
