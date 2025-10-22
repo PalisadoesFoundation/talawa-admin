@@ -11,6 +11,6 @@ export type Comment = {
   updatedAt: Date;
 };
 
-export type CommentInput = {
+type CommentInput = {
   text: string;
 };

@@ -165,7 +165,7 @@ export const UPDATE_MOCK = [
   },
 ];
 
-export const errorMock = [
+const errorMock = [
   {
     request: {
       query: UPDATE_CURRENT_USER_MUTATION,

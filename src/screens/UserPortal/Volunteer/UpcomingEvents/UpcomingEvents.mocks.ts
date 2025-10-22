@@ -351,7 +351,7 @@ export const RECURRING_MODAL_MOCKS = [
 ];
 
 // Mocks for testing edge cases with events without baseEventId
-export const EDGE_CASE_MOCKS = [
+const EDGE_CASE_MOCKS = [
   {
     ...eventsQuery,
     result: {

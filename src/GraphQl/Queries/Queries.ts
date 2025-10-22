@@ -233,7 +233,7 @@ export const USER_LIST_FOR_TABLE = gql`
   }
 `;
 
-export const USER_LIST_REQUEST = gql`
+const USER_LIST_REQUEST = gql`
   query Users(
     $firstName_contains: String
     $lastName_contains: String
@@ -406,7 +406,7 @@ export const EVENT_CHECKINS = gql`
   }
 `;
 
-export const GET_EVENT_ATTENDEE = gql`
+const GET_EVENT_ATTENDEE = gql`
   query GetEventAttendee(
     $userId: ID!
     $eventId: ID
@@ -431,7 +431,7 @@ export const GET_EVENT_ATTENDEE = gql`
   }
 `;
 
-export const GET_EVENT_INVITES_BY_USER_ID = gql`
+const GET_EVENT_INVITES_BY_USER_ID = gql`
   query GetEventInvitesByUserId($userId: ID!) {
     getEventInvitesByUserId(userId: $userId) {
       id
@@ -452,7 +452,7 @@ export const GET_EVENT_INVITES_BY_USER_ID = gql`
   }
 `;
 
-export const HAS_SUBMITTED_FEEDBACK = gql`
+const HAS_SUBMITTED_FEEDBACK = gql`
   query HasSubmittedFeedback(
     $userId: ID!
     $eventId: ID
@@ -565,7 +565,7 @@ export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
   }
 `;
 
-export const IS_USER_BLOCKED = gql`
+const IS_USER_BLOCKED = gql`
   query IsUserBlockedInOrganization($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
       blockedUsers(first: $first, after: $after) {
@@ -910,7 +910,7 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
-export const BLOCK_PAGE_MEMBER_LIST = gql`
+const BLOCK_PAGE_MEMBER_LIST = gql`
   query Organizations(
     $orgId: ID!
     $firstName_contains: String
@@ -1110,7 +1110,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 `;
 
 // to take the list of the admins of a particular
-export const ADMIN_LIST = gql`
+const ADMIN_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
@@ -1266,7 +1266,7 @@ export const GET_COMMUNITY_DATA_PG = gql`
   }
 `;
 
-export const GET_COMMUNITY_DATA = gql`
+const GET_COMMUNITY_DATA = gql`
   query CommunityInfo {
     community {
       id

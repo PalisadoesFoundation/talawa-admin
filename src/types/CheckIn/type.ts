@@ -13,7 +13,7 @@ export type CheckIn = {
   user: User;
 };
 
-export type CheckInInput = {
+type CheckInInput = {
   allotedRoom?: string; // Optional
   allotedSeat?: string; // Optional
   eventId: string;

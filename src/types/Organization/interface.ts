@@ -37,7 +37,7 @@ export interface InterfaceOrganizationCardStartProps {
   name: string;
 }
 
-export interface InterfaceOrgPostCardProps {
+interface InterfaceOrgPostCardProps {
   postID: string;
   id: string;
   postTitle: string;

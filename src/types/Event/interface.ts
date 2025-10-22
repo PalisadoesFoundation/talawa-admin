@@ -4,7 +4,7 @@ import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTy
 
 import type { User, Feedback } from 'types/Event/type';
 
-export const Role = {
+const Role = {
   USER: 'USER',
   SUPERADMIN: 'SUPERADMIN',
   ADMIN: 'ADMIN',
@@ -248,8 +248,8 @@ export type InterfaceCalendarProps = ICalendarProps;
 export type InterfaceEventHeaderProps = IEventHeaderProps;
 export type InterfaceDeleteEventModalProps = IDeleteEventModalProps;
 export type InterfacePreviewEventModalProps = IPreviewEventModalProps;
-export type InterfaceEventEdge = IEventEdge;
-export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
+type InterfaceEventEdge = IEventEdge;
+type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
 export type InterfaceAttendanceStatisticsModalProps =
   IAttendanceStatisticsModalProps;
 export type InterfaceEventsAttendedMemberModalProps =

@@ -37,13 +37,13 @@ export type AdvertisementEdge = {
   node?: Advertisement;
 };
 
-export type AdvertisementsConnection = {
+type AdvertisementsConnection = {
   edges?: AdvertisementEdge[];
   pageInfo?: DefaultConnectionPageInfo;
   totalCount?: number;
 };
 
-export type CreateAdvertisementInput = {
+type CreateAdvertisementInput = {
   name: string;
   description?: string;
   type: AdvertisementType;
@@ -53,6 +53,6 @@ export type CreateAdvertisementInput = {
   attachments: File[];
 };
 
-export type CreateAdvertisementPayload = {
+type CreateAdvertisementPayload = {
   advertisement?: Advertisement;
 };

@@ -51,13 +51,13 @@ export type Feedback = {
   updatedAt: Date;
 };
 
-export type FeedbackInput = {
+type FeedbackInput = {
   eventId: string;
   rating: number;
   review?: string; // Optional
 };
 
-export type EventInput = {
+type EventInput = {
   allDay: boolean;
   description: string;
   endDate?: Date; //Optional
@@ -75,12 +75,12 @@ export type EventInput = {
   title: string;
 };
 
-export type EventAttendeeInput = {
+type EventAttendeeInput = {
   eventId: string;
   userId: string;
 };
 
-export type EventVolunteer = {
+type EventVolunteer = {
   id: string;
   hasAccepted: boolean;
   hoursVolunteered: number;
@@ -93,13 +93,13 @@ export type EventVolunteer = {
   updater?: User; //Optional
 };
 
-export type EventVolunteerInput = {
+type EventVolunteerInput = {
   eventId: string;
   userId: string;
   groupId?: string; //Optional for compatibility
 };
 
-export type UpdateEventVolunteerInput = {
+type UpdateEventVolunteerInput = {
   assignments?: string[]; //Optional
   hasAccepted?: boolean; //Optional
   isPublic?: boolean; //Optional
@@ -110,7 +110,7 @@ export const EventVolunteerResponseEnum = {
   YES: 'YES',
 } as const;
 
-export type EventVolunteerResponse =
+type EventVolunteerResponse =
   (typeof EventVolunteerResponseEnum)[keyof typeof EventVolunteerResponseEnum];
 
 export const EventOrderByInputEnum = {
@@ -135,10 +135,10 @@ export const EventOrderByInputEnum = {
   title_ASC: 'title_ASC',
   title_DESC: 'title_DESC',
 } as const;
-export type EventOrderByInput =
+type EventOrderByInput =
   (typeof EventOrderByInputEnum)[keyof typeof EventOrderByInputEnum];
 
-export type EventWhereInput = {
+type EventWhereInput = {
   description?: string; //Optional
   description_contains?: string; //Optional
   description_in?: string[]; //non-nullable

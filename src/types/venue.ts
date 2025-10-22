@@ -9,7 +9,7 @@ export type Venue = {
   organization: Organization;
 };
 
-export type VenueInput = {
+type VenueInput = {
   capacity: number;
   description?: string;
   file?: string;
@@ -17,7 +17,7 @@ export type VenueInput = {
   organizationId: string;
 };
 
-export type EditVenueInput = {
+type EditVenueInput = {
   capacity?: number; // Optional
   description?: string; // Optional
   file?: string; // Optional

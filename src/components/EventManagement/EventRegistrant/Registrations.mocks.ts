@@ -75,7 +75,7 @@ export const REGISTRANTS_MOCKS = [
   },
 ];
 
-export const REGISTRANTS_MOCKS_ERROR = [
+const REGISTRANTS_MOCKS_ERROR = [
   {
     // Error mock for EVENT_REGISTRANTS query
     request: {

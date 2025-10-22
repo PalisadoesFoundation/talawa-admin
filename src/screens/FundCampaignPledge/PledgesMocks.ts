@@ -385,7 +385,7 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
   },
 ];
 
-export const EMPTY_MOCKS = [
+const EMPTY_MOCKS = [
   memberList,
   {
     request: {

@@ -308,7 +308,7 @@ export const getActiveAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
-export const createAdSuccessMock = [
+const createAdSuccessMock = [
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -338,7 +338,7 @@ export const deleteAdvertisementMocks = [
   ),
 ];
 
-export const infiniteScrollMocks: IAdvertisementListMock[] = [
+const infiniteScrollMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({
     isCompleted: true,
     edges: [

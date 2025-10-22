@@ -19,7 +19,7 @@ export type Post = {
   videoUrl?: string; // Optional
 };
 
-export type PostInput = {
+type PostInput = {
   _id?: string; // Optional
   imageUrl?: string; // Optional
   organizationId: string;
@@ -48,17 +48,17 @@ export const PostOrderByInputEnum = {
   VIDEO_URL_DESC: 'videoUrl_DESC',
 } as const;
 
-export type PostOrderByInput =
+type PostOrderByInput =
   (typeof PostOrderByInputEnum)[keyof typeof PostOrderByInputEnum];
 
-export type PostUpdateInput = {
+type PostUpdateInput = {
   imageUrl?: string; //Optional
   text?: string; //Optional
   title?: string; //Optional
   videoUrl?: string; //Optional
 };
 
-export type PostWhereInput = {
+type PostWhereInput = {
   //All optional and non-nullable
   id?: string;
   id_contains?: string;
@@ -80,7 +80,7 @@ export type PostWhereInput = {
   title_starts_with?: string;
 };
 
-export type PostComments = {
+type PostComments = {
   id: string;
   creator: {
     id: string;
@@ -93,7 +93,7 @@ export type PostComments = {
   text: string;
 }[];
 
-export type PostLikes = {
+type PostLikes = {
   name: string;
   id: string;
 }[];

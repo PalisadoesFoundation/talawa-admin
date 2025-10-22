@@ -16,7 +16,7 @@ export const holidays: InterfaceHoliday[] = [
   { name: 'Christmas Day', date: '12-25', month: 'December' },
 ];
 
-export const FilterPeriod = {
+const FilterPeriod = {
   ThisMonth: 'This Month',
   ThisYear: 'This Year',
   All: 'All',
@@ -47,7 +47,7 @@ export const months: string[] = [
   'December',
 ];
 
-export const hours: string[] = [
+const hours: string[] = [
   '12 AM',
   '01 AM',
   '02 AM',

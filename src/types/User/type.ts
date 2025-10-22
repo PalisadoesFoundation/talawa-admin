@@ -25,13 +25,13 @@ export type Address = {
   state?: string;
 };
 
-export type UserPhone = {
+type UserPhone = {
   home?: string;
   mobile?: string;
   work?: string;
 };
 
-export type UserInput = {
+type UserInput = {
   appLanguageCode: string;
   email: string;
   firstName: string;
@@ -40,7 +40,7 @@ export type UserInput = {
   selectedOrganization: string;
 };
 
-export type AppUserProfile = {
+type AppUserProfile = {
   _id: string; // ID in GraphQL maps to string in TypeScript
   adminFor: Organization[];
   appLanguageCode: string;
@@ -51,7 +51,7 @@ export type AppUserProfile = {
   userId: User;
 };
 
-export type CreateUserFamilyInput = {
+type CreateUserFamilyInput = {
   title: string;
   userIds: string[];
 };

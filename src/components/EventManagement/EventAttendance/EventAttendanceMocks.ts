@@ -95,7 +95,7 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR = [
+const MOCKS_ERROR = [
   {
     request: {
       query: EVENT_ATTENDEES,

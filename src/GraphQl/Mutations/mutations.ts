@@ -63,7 +63,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
 `;
 
 // fragment for defining the Address input type.
-export const ADDRESS_DETAILS_FRAGMENT = gql`
+const ADDRESS_DETAILS_FRAGMENT = gql`
   fragment AddressDetails on AddressInput {
     city: String
     countryCode: String
@@ -111,7 +111,7 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
 
 // to update the details of the user
 
-export const UPDATE_USER_MUTATION = gql`
+const UPDATE_USER_MUTATION = gql`
   mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
     updateCurrentUser(input: $input) {
       addressLine1
@@ -374,7 +374,7 @@ export const ADD_ADMIN_MUTATION = gql`
   }
 `;
 
-export const ADD_MEMBER_MUTATION = gql`
+const ADD_MEMBER_MUTATION = gql`
   mutation CreateMember($orgid: ID!, $userid: ID!) {
     createMember(input: { organizationId: $orgid, userId: $userid }) {
       organization {
@@ -493,7 +493,7 @@ export const UPDATE_POST_VOTE = gql`
   }
 `;
 
-export const LIKE_POST = gql`
+const LIKE_POST = gql`
   mutation createPostVote($input: MutationCreatePostVoteInput!) {
     createPostVote(input: $input) {
       id
@@ -508,7 +508,7 @@ export const LIKE_POST = gql`
   }
 `;
 
-export const UNLIKE_POST = gql`
+const UNLIKE_POST = gql`
   mutation deletePostVote($input: MutationDeletePostVoteInput!) {
     deletePostVote(input: $input) {
       id

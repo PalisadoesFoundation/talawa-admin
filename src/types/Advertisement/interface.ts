@@ -29,7 +29,7 @@ export interface InterfaceFormStateTypes {
   existingAttachments?: string | undefined; //Keep existing media URL for previews
 }
 
-export interface InterfaceAddOnEntryProps {
+interface InterfaceAddOnEntryProps {
   id: string;
   name?: string;
   existingAttachments?: string;

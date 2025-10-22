@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const AgendaItemByOrganization = gql`
+const AgendaItemByOrganization = gql`
   query AgendaItemByOrganization($organizationId: ID!) {
     agendaItemByOrganization(organizationId: $organizationId) {
       _id

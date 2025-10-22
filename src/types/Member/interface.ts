@@ -26,7 +26,7 @@ export interface InterfaceMemberInfo {
   createdAt: string;
 }
 
-export interface InterfaceMembersList {
+interface InterfaceMembersList {
   organizations: {
     id: string;
     members: InterfaceMemberInfo[];

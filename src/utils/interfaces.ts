@@ -362,7 +362,7 @@ export interface InterfaceUserType {
  * @property {string} user.role - The role of the user.
  * @property {string} user.emailAddressAddress - The email address of the user.
  */
-export interface InterfaceUserTypePG {
+interface InterfaceUserTypePG {
   user: {
     id: string;
     name: string;
@@ -441,7 +441,7 @@ export interface InterfaceBaseEvent {
  * @property {string} organizations._id - The unique identifier of the organization.
  * @property {InterfaceMemberInfo[]} organizations.members - An array of member information for the organization.
  */
-export interface InterfaceMembersList {
+interface InterfaceMembersList {
   organizations: {
     _id: string;
     members: InterfaceMemberInfo[];
@@ -489,7 +489,7 @@ export interface InterfaceMemberInfo {
  * @property {string} createdAt - The creation date of the organization.
  * @property {InterfaceAddress} address - The address of the organization.
  */
-export interface InterfaceOrgConnectionInfoType {
+interface InterfaceOrgConnectionInfoType {
   _id: string;
   image: string | null;
   creator: {
@@ -517,7 +517,7 @@ export interface InterfaceOrgConnectionInfoType {
  * @description Defines the structure for organization connection information with PostgreSQL-specific fields.
  * @property {InterfaceOrgInfoTypePG[]} organizations - An array of organization information.
  */
-export interface InterfaceOrgConnectionInfoTypePG {
+interface InterfaceOrgConnectionInfoTypePG {
   organizations: InterfaceOrgInfoTypePG[];
 }
 
@@ -1273,7 +1273,7 @@ export interface InterfaceVenuePg {
  * @property {number} first - The maximum number of items to return from the beginning.
  * @property {number} last - The maximum number of items to return from the end.
  */
-export interface InterfacePaginationArgs {
+interface InterfacePaginationArgs {
   after: string;
   before: string;
   first: number;
@@ -1385,7 +1385,7 @@ export interface InterfaceQueryOrganizationListObject {
  * @property {string | null} postvideo - The URL of the post's video, or null.
  * @property {boolean} pinned - Indicates if the post is pinned.
  */
-export interface InterfacePostForm {
+interface InterfacePostForm {
   posttitle: string;
   postinfo: string;
   postphoto: string | null;
@@ -1411,7 +1411,7 @@ export interface InterfacePostForm {
  * @property {boolean} posts.pageInfo.hasNextPage - Indicates if there is a next page.
  * @property {boolean} posts.pageInfo.hasPreviousPage - Indicates if there is a previous page.
  */
-export interface InterfaceQueryOrganizationPostListItem {
+interface InterfaceQueryOrganizationPostListItem {
   posts: {
     edges: {
       node: {
@@ -1600,7 +1600,7 @@ export interface InterfaceQueryUserTagsMembersToAssignTo {
  * @property {boolean} advertisements.pageInfo.hasPreviousPage - Indicates if there is a previous page.
  * @property {number} advertisements.totalCount - The total count of advertisements.
  */
-export interface InterfaceQueryOrganizationAdvertisementListItem {
+interface InterfaceQueryOrganizationAdvertisementListItem {
   advertisements: {
     edges: {
       node: {
@@ -1866,7 +1866,7 @@ export interface InterfacePledgeInfo {
  * @property {string} startAt - The start date of the pledge.
  * @property {InterfaceUserInfoPG[]} pledges - An array of user information associated with the pledges.
  */
-export interface InterfacePledgeInfoPG {
+interface InterfacePledgeInfoPG {
   id: string;
   campaign?: {
     id: string;
@@ -1922,7 +1922,7 @@ export interface InterfaceQueryOrganizationEventListItem
  * @property {object[]} organizationsBlockedBy - An array of organizations that have blocked this member.
  * @property {string} organizationsBlockedBy._id - The unique identifier of the blocking organization.
  */
-export interface InterfaceQueryBlockPageMemberListItem {
+interface InterfaceQueryBlockPageMemberListItem {
   _id: string;
   firstName: string;
   lastName: string;
@@ -2195,7 +2195,7 @@ export interface InterfaceCreatePledge {
  * @property {string} organizations.membershipRequests.user.lastName - The last name of the user.
  * @property {string} organizations.membershipRequests.user.emailAddress - The email address of the user.
  */
-export interface InterfaceQueryMembershipRequestsListItem {
+interface InterfaceQueryMembershipRequestsListItem {
   organizations: {
     id: string;
     membershipRequests: {
@@ -2567,7 +2567,7 @@ export interface InterfaceVolunteerRank {
   };
 }
 
-export interface InterfaceUserEvents {
+interface InterfaceUserEvents {
   id: string;
   name: string;
   description: string | null;

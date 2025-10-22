@@ -104,8 +104,11 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
-      - name: Check for unused files
-        run: npx knip --include files
+      - name: Check for unused files and exports in src and docs/src
+        run: npx knip --include files,exports
+
+      - name: Check for unused dependencies in repo
+        run: npx knip --config knip.deps.json --include dependencies,devDependencies
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}

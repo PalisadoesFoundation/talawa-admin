@@ -29,7 +29,7 @@ export interface InterfaceVolunteerData {
  * @property {'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY'} [scope] - Optional scope for recurring events.
  * @property {string} [recurringEventInstanceId] - Optional instance ID for recurring events.
  */
-export interface InterfaceVolunteerGroupData {
+interface InterfaceVolunteerGroupData {
   eventId: string | undefined;
   leaderId?: string;
   name: string;

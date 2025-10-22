@@ -1,6 +1,6 @@
 import type { User } from 'types/User/type';
 import type { Comment } from 'types/Comment/type';
-export interface InterfacePostCard {
+interface InterfacePostCard {
   _id: string;
   creator: Partial<User>;
   postedAt: string;
@@ -20,7 +20,7 @@ export interface InterfacePostCreator {
   lastName?: string;
 }
 
-export interface InterfacePostNode {
+interface InterfacePostNode {
   id: string;
   caption: string;
   text?: string;
@@ -42,7 +42,7 @@ export interface InterfacePageInfo {
   hasPreviousPage: boolean;
 }
 
-export interface InterfacePostConnection {
+interface InterfacePostConnection {
   edges: InterfacePostEdge[];
   pageInfo: InterfacePageInfo;
 }
@@ -61,7 +61,7 @@ export interface InterfaceOrganizationPostListData {
 }
 
 // Define the proper interface for the mutation input
-export interface InterfaceMutationCreatePostInput {
+interface InterfaceMutationCreatePostInput {
   caption: string;
   organizationId: string;
   isPinned: boolean;

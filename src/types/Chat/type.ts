@@ -32,7 +32,7 @@ export type GroupChat = {
   lastMessageId?: string; // Optional
 };
 
-export type ChatInput = {
+type ChatInput = {
   isGroup: boolean;
   organizationId?: string;
   userIds: string[];

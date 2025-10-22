@@ -11,7 +11,7 @@ export interface IActionItemCategoryInfo {
   organizationId: string;
 }
 
-export interface IActionItemCategoryList {
+interface IActionItemCategoryList {
   actionItemCategoriesByOrganization: IActionItemCategoryInfo[];
 }
 

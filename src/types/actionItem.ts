@@ -29,14 +29,14 @@ export type ActionItemCategory = {
   updatedAt: Date;
 };
 
-export type CreateActionItemInput = {
+type CreateActionItemInput = {
   assigneeId: string;
   dueDate?: Date; // Optional
   eventId?: string; // Optional
   preCompletionNotes?: string; // Optional
 };
 
-export type UpdateActionItemInput = {
+type UpdateActionItemInput = {
   assigneeId?: string; // Optional
   completionDate?: Date; // Optional
   dueDate?: Date; // Optional

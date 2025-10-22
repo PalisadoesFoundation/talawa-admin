@@ -94,7 +94,7 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR_MUTATION = [
+const MOCKS_ERROR_MUTATION = [
   {
     request: {
       query: CREATE_AGENDA_ITEM_MUTATION,

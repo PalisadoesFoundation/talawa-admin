@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": [
+    "src/index.tsx",
+    "src/setup/setup.ts",
+    "config/vite.config.ts",
+    "scripts/**/*.{ts,js}",
+    "eslint.config.js",
+    "cypress.config.ts",
+    "vitest.config.ts",
+    "commitlint.config.js",
+    "docs/docusaurus.config.ts"
+  ],
+  "project": ["**/*.{ts,tsx,js,jsx}"],
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "**/*.d.ts"
+  ],
+  "ignoreDependencies": [
+    "@mui/private-theming",
+    "@graphql-tools/*",
+    "@types/inquirer",
+    "@types/node-fetch",
+    "@types/react-bootstrap",
+    "@types/react-router-dom",
+    "@vitest/eslint-plugin"
+  ]
+}

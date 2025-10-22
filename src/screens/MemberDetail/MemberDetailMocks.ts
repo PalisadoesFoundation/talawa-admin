@@ -103,7 +103,7 @@ export const MOCKS2 = [
     },
   },
 ];
-export const MOCKS3 = [
+const MOCKS3 = [
   {
     request: {
       query: CURRENT_USER,

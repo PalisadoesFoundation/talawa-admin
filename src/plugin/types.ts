@@ -159,7 +159,7 @@ export enum ExtensionPointType {
 }
 
 // Plugin Store Component Props
-export interface IPluginStoreProps {
+interface IPluginStoreProps {
   userPermissions?: string[];
   isAdmin?: boolean;
 }
@@ -180,7 +180,7 @@ export interface IPluginModalProps {
   uninstallPlugin: (plugin: IPluginMeta) => void;
 }
 
-export interface IPluginDrawerItemsProps {
+interface IPluginDrawerItemsProps {
   userPermissions?: string[];
   isAdmin?: boolean;
   className?: string;
@@ -189,13 +189,13 @@ export interface IPluginDrawerItemsProps {
   onItemClick?: (item: IDrawerExtension) => void;
 }
 
-export interface IPluginRouterProps {
+interface IPluginRouterProps {
   userPermissions?: string[];
   isAdmin?: boolean;
 }
 
 // Plugin Lifecycle Types
-export interface IPluginLifecycle {
+interface IPluginLifecycle {
   onActivate?: () => Promise<void>;
   onDeactivate?: () => Promise<void>;
   onInstall?: () => Promise<void>;

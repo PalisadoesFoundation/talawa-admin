@@ -51,7 +51,7 @@ export type OrganizationCustomField = {
   type: string;
 };
 
-export type OrganizationInput = {
+type OrganizationInput = {
   address: AddressInput;
   apiUrl?: string; // Optional
   attendees?: string; // Optional
