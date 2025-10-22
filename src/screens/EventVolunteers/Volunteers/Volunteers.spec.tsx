@@ -648,17 +648,16 @@ describe('Testing Volunteers Screen', () => {
       expect(images.length).toBe(1);
     });
 
-    it('should cover final return statement in volunteers useMemo (line 237)', async () => {
+    it('should verify component renders successfully with default "All" status', async () => {
       renderVolunteers(link1);
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
       });
 
-      // Initial render covers the default "All" status which returns filteredVolunteers
-      // through the first if condition. The final return statement (line 237) is a
-      // fallback that would execute if none of the status conditions match.
-      // In TypeScript, this acts as a safety net for the function.
+      // Initial render with default "All" status returns filteredVolunteers
+      // through the first if condition in the volunteers useMemo.
+      // This test ensures all volunteers are displayed when no filter is applied.
 
       await waitFor(() => {
         const volunteerNames = screen.queryAllByTestId('volunteerName');
