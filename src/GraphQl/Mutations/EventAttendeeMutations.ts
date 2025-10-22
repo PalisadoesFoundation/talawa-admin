@@ -65,7 +65,7 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  * @returns The check-out record.
  */
 
-const MARK_CHECKOUT = gql`
+export const MARK_CHECKOUT = gql`
   mutation checkOut($userId: ID!, $eventId: ID, $recurringEventInstanceId: ID) {
     checkOut(
       data: {
@@ -94,7 +94,7 @@ const MARK_CHECKOUT = gql`
  * @returns The event attendee record.
  */
 
-const REGISTER_FOR_EVENT = gql`
+export const REGISTER_FOR_EVENT = gql`
   mutation registerForEvent($id: ID!) {
     registerForEvent(id: $id) {
       id
@@ -117,7 +117,7 @@ const REGISTER_FOR_EVENT = gql`
  * @returns The event attendee record.
  */
 
-const REGISTER_EVENT_ATTENDEE = gql`
+export const REGISTER_EVENT_ATTENDEE = gql`
   mutation registerEventAttendee(
     $userId: ID!
     $eventId: ID
@@ -150,7 +150,7 @@ const REGISTER_EVENT_ATTENDEE = gql`
  * @returns The event attendee record.
  */
 
-const INVITE_EVENT_ATTENDEE = gql`
+export const INVITE_EVENT_ATTENDEE = gql`
   mutation inviteEventAttendee(
     $userId: ID!
     $eventId: ID
@@ -181,7 +181,7 @@ const INVITE_EVENT_ATTENDEE = gql`
  * @returns Success indicator.
  */
 
-const UNREGISTER_FOR_EVENT_BY_USER = gql`
+export const UNREGISTER_FOR_EVENT_BY_USER = gql`
   mutation unregisterForEventByUser($id: ID!) {
     unregisterForEventByUser(id: $id)
   }

@@ -25,7 +25,7 @@ export const GET_ALL_PLUGINS = gql`
  * @param id - The ID of the plugin to retrieve.
  * @returns The plugin object with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.
  */
-const GET_PLUGIN_BY_ID = gql`
+export const GET_PLUGIN_BY_ID = gql`
   query GetPluginById($input: QueryPluginInput!) {
     getPluginById(input: $input) {
       id
@@ -45,7 +45,7 @@ const GET_PLUGIN_BY_ID = gql`
  * @returns The list of advertisements with details such as ID, name, type, organization ID, link, start date, and end date.
  */
 
-const ADVERTISEMENTS_GET = gql`
+export const ADVERTISEMENTS_GET = gql`
   query getAdvertisements {
     advertisementsConnection {
       edges {

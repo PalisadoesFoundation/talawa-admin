@@ -10,7 +10,12 @@
     "src/**/*.test.{ts,tsx,js,jsx}",
     "src/**/*.spec.{ts,tsx,js,jsx}",
     "docs/src/**/*.test.{ts,tsx,js,jsx}",
-    "docs/src/**/*.spec.{ts,tsx,js,jsx}"
+    "docs/src/**/*.spec.{ts,tsx,js,jsx}",
+    "src/GraphQl/**/index.ts",
+    "src/GraphQl/Mutations/mutations.ts",
+    "src/GraphQl/Queries/Queries.ts",
+    "src/utils/**/index.ts",
+    "src/plugin/index.ts"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
