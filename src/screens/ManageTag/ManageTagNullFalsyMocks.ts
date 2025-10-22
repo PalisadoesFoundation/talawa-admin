@@ -23,9 +23,11 @@ export const MOCKS_NULL_USERS_ASSIGNED_TO = [
     },
     result: {
       data: {
-        getAssignedUsers: buildAssignedUsers({
-          usersAssignedTo: undefined,
-        }),
+        getAssignedUsers: {
+          name: 'tag1',
+          usersAssignedTo: null,
+          ancestorTags: [],
+        },
       },
     },
   },
@@ -64,40 +66,10 @@ export const MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY = [
   },
 ];
 
-export const MOCKS_EMPTY_EDGES_ARRAY = [
-  {
-    request: {
-      query: USER_TAGS_ASSIGNED_MEMBERS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: {
-          firstName: { starts_with: '' },
-          lastName: { starts_with: '' },
-        },
-        sortedBy: { id: 'DESCENDING' },
-      },
-    },
-    result: {
-      data: {
-        getAssignedUsers: buildAssignedUsers({
-          usersAssignedTo: {
-            edges: [],
-            pageInfo: {
-              startCursor: null,
-              endCursor: null,
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 0,
-          },
-        }),
-      },
-    },
-  },
-];
+// Alias for semantic clarity - represents empty edges scenario
+export const MOCKS_EMPTY_EDGES_ARRAY = MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY;
 
-export const MOCKS_NULL_PAGE_INFO = [
+export const MOCKS_EMPTY_PAGE_INFO = [
   {
     request: {
       query: USER_TAGS_ASSIGNED_MEMBERS,

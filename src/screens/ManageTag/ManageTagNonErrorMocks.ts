@@ -248,7 +248,7 @@ export const MOCKS_INFINITE_SCROLL_PAGINATION = [
   },
 ];
 
-export const MOCKS_NON_ERROR_OBJECT = [
+export const MOCKS_ERROR_OBJECT = [
   {
     request: {
       query: USER_TAGS_ASSIGNED_MEMBERS,

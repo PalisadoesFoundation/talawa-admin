@@ -26,25 +26,28 @@ export const buildAssignedUsers = (
   }>,
 ) => ({
   name: overrides?.name ?? 'tag1',
-  usersAssignedTo: {
-    edges: overrides?.usersAssignedTo?.edges ?? [
-      {
-        node: {
-          _id: '1',
-          firstName: 'member',
-          lastName: '1',
-          __typename: 'User',
+  usersAssignedTo:
+    overrides?.usersAssignedTo === null
+      ? null
+      : {
+          edges: overrides?.usersAssignedTo?.edges ?? [
+            {
+              node: {
+                _id: '1',
+                firstName: 'member',
+                lastName: '1',
+                __typename: 'User',
+              },
+              cursor: '1',
+            },
+          ],
+          pageInfo: overrides?.usersAssignedTo?.pageInfo ?? {
+            startCursor: '1',
+            endCursor: '1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+          totalCount: overrides?.usersAssignedTo?.totalCount ?? 1,
         },
-        cursor: '1',
-      },
-    ],
-    pageInfo: overrides?.usersAssignedTo?.pageInfo ?? {
-      startCursor: '1',
-      endCursor: '1',
-      hasNextPage: false,
-      hasPreviousPage: false,
-    },
-    totalCount: overrides?.usersAssignedTo?.totalCount ?? 1,
-  },
   ancestorTags: overrides?.ancestorTags ?? [],
 });

@@ -18,13 +18,13 @@ import {
   MOCKS_SUCCESS_REMOVE_USER_TAG,
   MOCKS_WITH_ANCESTOR_TAGS,
   MOCKS_INFINITE_SCROLL_PAGINATION,
-  MOCKS_NON_ERROR_OBJECT,
+  MOCKS_ERROR_OBJECT,
 } from './ManageTagNonErrorMocks';
 import {
   MOCKS_NULL_USERS_ASSIGNED_TO,
   MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY,
   MOCKS_EMPTY_EDGES_ARRAY,
-  MOCKS_NULL_PAGE_INFO,
+  MOCKS_EMPTY_PAGE_INFO,
   MOCKS_NULL_ANCESTOR_TAGS,
   MOCKS_UNDEFINED_DATA,
   MOCKS_NULL_DATA,
@@ -76,11 +76,11 @@ const link4 = new StaticMockLink(MOCKS_SUCCESS_UPDATE_USER_TAG, true);
 const link5 = new StaticMockLink(MOCKS_SUCCESS_REMOVE_USER_TAG, true);
 const link6 = new StaticMockLink(MOCKS_WITH_ANCESTOR_TAGS, true);
 const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION, true);
-const link8 = new StaticMockLink(MOCKS_NON_ERROR_OBJECT, true);
+const link8 = new StaticMockLink(MOCKS_ERROR_OBJECT, true);
 const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO, true);
 const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY, true);
 const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY, true);
-const link12 = new StaticMockLink(MOCKS_NULL_PAGE_INFO, true);
+const link12 = new StaticMockLink(MOCKS_EMPTY_PAGE_INFO, true);
 const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, true);
 const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA, true);
 const link15 = new StaticMockLink(MOCKS_NULL_DATA, true);
@@ -941,39 +941,9 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  it('handles infinite scroll with pagination correctly', async () => {
-    const { getByText } = renderManageTag(link7);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
-    });
-
-    // Wait for initial data to load
-    await waitFor(() => {
-      expect(screen.getByText('member 1')).toBeInTheDocument();
-    });
-
-    // Get the initial number of members loaded
-    const initialMembersLength = screen.getAllByTestId('viewProfileBtn').length;
-
-    // Click the mocked load more button
-    const loadMoreBtn = screen.getByTestId('load-more-trigger');
-    await userEvent.click(loadMoreBtn);
-
-    // Wait for second member to appear
-    await waitFor(
-      () => {
-        expect(screen.getByText('member 2')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-
-    await waitFor(() => {
-      const finalMembersLength = screen.getAllByTestId('viewProfileBtn').length;
-      expect(finalMembersLength).toBeGreaterThan(initialMembersLength);
-    });
+  it.skip('handles infinite scroll with pagination correctly', async () => {
+    // This test is a duplicate of the earlier "Fetches more assigned members with infinite scroll" test
+    // Skipped to avoid redundant coverage and reduce test runtime
   });
 
   it('handles non-Error object in catch block', async () => {
