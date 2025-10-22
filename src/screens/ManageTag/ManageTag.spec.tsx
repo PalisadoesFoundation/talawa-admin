@@ -491,7 +491,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, true);
+    const searchLink = new StaticMockLink(mocks, false);
 
     renderManageTag(searchLink);
 
@@ -641,7 +641,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, true);
+    const searchLink = new StaticMockLink(mocks, false);
 
     renderManageTag(searchLink);
 
