@@ -220,6 +220,7 @@ export const MOCKS = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -230,6 +231,7 @@ export const MOCKS = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: null,
               },
             },
           ],
@@ -257,6 +259,43 @@ export const MOCKS = [
       loading: false,
     },
   },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+      variables: { id: 'orgId', first: 32, after: null },
+    },
+    result: {
+      data: {
+        organization: {
+          blockedUsers: {
+            edges: [
+              {
+                node: {
+                  id: 'blockedUser1',
+                  name: 'Blocked User 1',
+                  emailAddress: 'blocked1@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'blockedUser2',
+                  name: 'Blocked User 2',
+                  emailAddress: 'blocked2@example.com',
+                  role: 'member',
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
+  // Duplicate blocked users mock for tests that re-render or navigate
   {
     request: {
       query: GET_ORGANIZATION_BLOCKED_USERS_PG,
@@ -431,6 +470,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -441,6 +481,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: 'https://example.com/avatar2.jpg',
               },
             },
             {
@@ -451,6 +492,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user3',
                 name: 'Pending User 3',
                 emailAddress: 'user3@example.com',
+                avatarURL: null,
               },
             },
             {
@@ -461,6 +503,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user4',
                 name: 'Rejected User',
                 emailAddress: 'rejected@example.com',
+                avatarURL: null,
               },
             },
           ],
