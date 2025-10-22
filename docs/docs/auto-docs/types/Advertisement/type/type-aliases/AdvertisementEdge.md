@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: AdvertisementEdge
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Advertisement/type.ts:35](https://github.com/PalisadoesFo
 
 Defined in: [src/types/Advertisement/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L36)
 
-***
+---
 
 ### node?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ILeftDrawerProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:51](https://github.c
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L54)
 
-***
+---
 
 ### orgId
 
@@ -22,7 +22,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:54](https://github.c
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L52)
 
-***
+---
 
 ### setHideDrawer
 
@@ -30,7 +30,7 @@ Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:52](https://github.c
 
 Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L55)
 
-***
+---
 
 ### targets
 

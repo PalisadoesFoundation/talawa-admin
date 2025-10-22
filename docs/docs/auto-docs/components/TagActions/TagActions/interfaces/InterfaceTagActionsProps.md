@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagActionsProps
 
@@ -18,7 +18,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:67](https://github.com/Pal
 
 `void`
 
-***
+---
 
 ### t
 
@@ -26,7 +26,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:67](https://github.com/Pal
 
 Defined in: [src/components/TagActions/TagActions.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L69)
 
-***
+---
 
 ### tagActionsModalIsOpen
 
@@ -34,7 +34,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:69](https://github.com/Pal
 
 Defined in: [src/components/TagActions/TagActions.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L66)
 
-***
+---
 
 ### tagActionType
 
@@ -42,7 +42,7 @@ Defined in: [src/components/TagActions/TagActions.tsx:66](https://github.com/Pal
 
 Defined in: [src/components/TagActions/TagActions.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L68)
 
-***
+---
 
 ### tCommon
 

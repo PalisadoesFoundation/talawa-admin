@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCreatePledge
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2179](https://github.com/PalisadoesFoundati
 
 The amount of the pledge.
 
-***
+---
 
 ### pledgeCurrency
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2180](https://github.com/PalisadoesFoundati
 
 The currency of the pledge.
 
-***
+---
 
 ### pledgeEndDate
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2182](https://github.com/PalisadoesFoundati
 
 The end date of the pledge.
 
-***
+---
 
 ### pledgeStartDate
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2181](https://github.com/PalisadoesFoundati
 
 The start date of the pledge.
 
-***
+---
 
 ### pledgeUsers
 

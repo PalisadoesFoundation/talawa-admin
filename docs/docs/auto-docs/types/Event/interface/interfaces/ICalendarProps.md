@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ICalendarProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:107](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L115)
 
-***
+---
 
 ### currentYear?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:115](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L116)
 
-***
+---
 
 ### eventData
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L108)
 
-***
+---
 
 ### onMonthChange()?
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### orgData?
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L110)
 
-***
+---
 
 ### refetchEvents()?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/interface.ts:109](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### userId?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/interface.ts:109](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L112)
 
-***
+---
 
 ### userRole?
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L111)
 
-***
+---
 
 ### viewType?
 

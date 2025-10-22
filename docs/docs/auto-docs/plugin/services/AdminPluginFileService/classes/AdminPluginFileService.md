@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: AdminPluginFileService
 
@@ -23,7 +23,7 @@ Get all installed plugins from filesystem
 
 `Promise`\<[`InstalledPlugin`](../interfaces/InstalledPlugin.md)[]\>
 
-***
+---
 
 ### getPlugin()
 
@@ -43,7 +43,7 @@ Get specific plugin from filesystem
 
 `Promise`\<[`InstalledPlugin`](../interfaces/InstalledPlugin.md)\>
 
-***
+---
 
 ### healthCheck()
 
@@ -57,7 +57,7 @@ Health check for the service
 
 `Promise`\<\{ `message`: `string`; `status`: `"error"` \| `"healthy"`; \}\>
 
-***
+---
 
 ### installPlugin()
 
@@ -81,7 +81,7 @@ Install plugin files to filesystem (Production-First)
 
 `Promise`\<[`PluginInstallationResult`](../interfaces/PluginInstallationResult.md)\>
 
-***
+---
 
 ### removePlugin()
 
@@ -101,7 +101,7 @@ Remove plugin from filesystem
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### validatePluginFiles()
 
@@ -121,7 +121,7 @@ Validate plugin files structure
 
 [`PluginFileValidationResult`](../interfaces/PluginFileValidationResult.md)
 
-***
+---
 
 ### validatePluginId()
 
@@ -149,7 +149,7 @@ Validate plugin ID
 
 > **valid**: `boolean`
 
-***
+---
 
 ### getInstance()
 
@@ -163,7 +163,7 @@ Get singleton instance
 
 `AdminPluginFileService`
 
-***
+---
 
 ### getPluginDetails()
 

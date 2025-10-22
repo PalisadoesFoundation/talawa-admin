@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceModalProp
 
@@ -14,7 +14,7 @@ Defined in: [src/types/CheckIn/interface.ts:23](https://github.com/PalisadoesFou
 
 Defined in: [src/types/CheckIn/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L25)
 
-***
+---
 
 ### handleClose()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/CheckIn/interface.ts:26](https://github.com/PalisadoesFou
 
 `void`
 
-***
+---
 
 ### onCheckInUpdate()?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/CheckIn/interface.ts:27](https://github.com/PalisadoesFou
 
 `void`
 
-***
+---
 
 ### show
 

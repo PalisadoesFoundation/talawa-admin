@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCampaignInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1821](https://github.com/PalisadoesFoundati
 
 The creation date of the campaign record.
 
-***
+---
 
 ### currencyCode
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1822](https://github.com/PalisadoesFoundati
 
 The currency code of the campaign.
 
-***
+---
 
 ### endAt
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1820](https://github.com/PalisadoesFoundati
 
 The end date and time of the campaign.
 
-***
+---
 
 ### goalAmount
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundati
 
 The goal amount of the campaign.
 
-***
+---
 
 ### id
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1816](https://github.com/PalisadoesFoundati
 
 The unique identifier of the campaign.
 
-***
+---
 
 ### name
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundati
 
 The name of the campaign.
 
-***
+---
 
 ### startAt
 

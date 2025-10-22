@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: AdvertisementAttachment
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Advertisement/type.ts:30](https://github.com/PalisadoesFo
 
 Defined in: [src/types/Advertisement/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L32)
 
-***
+---
 
 ### url
 

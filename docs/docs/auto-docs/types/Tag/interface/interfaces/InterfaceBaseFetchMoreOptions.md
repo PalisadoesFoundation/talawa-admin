@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceBaseFetchMoreOptions\<T\>
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Tag/interface.ts:47](https://github.com/PalisadoesFoundat
 
 `T`
 
-***
+---
 
 ### variables
 

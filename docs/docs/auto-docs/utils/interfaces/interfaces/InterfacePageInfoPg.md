@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePageInfoPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:640](https://github.com/PalisadoesFoundatio
 
 The cursor for the last item in the current page.
 
-***
+---
 
 ### hasNextPage
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:641](https://github.com/PalisadoesFoundatio
 
 Indicates if there is a next page.
 
-***
+---
 
 ### hasPreviousPage
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:642](https://github.com/PalisadoesFoundatio
 
 Indicates if there is a previous page.
 
-***
+---
 
 ### startCursor
 

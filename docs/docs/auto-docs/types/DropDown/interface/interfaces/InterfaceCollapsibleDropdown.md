@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCollapsibleDropdown
 
@@ -14,7 +14,7 @@ Defined in: [src/types/DropDown/interface.ts:8](https://github.com/PalisadoesFou
 
 Defined in: [src/types/DropDown/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L11)
 
-***
+---
 
 ### showDropdown
 
@@ -22,7 +22,7 @@ Defined in: [src/types/DropDown/interface.ts:11](https://github.com/PalisadoesFo
 
 Defined in: [src/types/DropDown/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L9)
 
-***
+---
 
 ### target
 

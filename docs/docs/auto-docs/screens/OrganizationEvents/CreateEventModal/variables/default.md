@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: default
 
@@ -11,6 +11,7 @@ Defined in: [src/screens/OrganizationEvents/CreateEventModal.tsx:62](https://git
 Modal component for creating new events in an organization
 
 Provides a comprehensive form interface for creating events with features including:
+
 - Basic event details (name, description, location)
 - Date and time selection with all-day option
 - Event visibility and registration settings

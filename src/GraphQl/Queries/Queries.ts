@@ -1345,9 +1345,7 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
-export {
-  AgendaItemByEvent
-} from './AgendaItemQueries';
+export { AgendaItemByEvent } from './AgendaItemQueries';
 
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
@@ -1362,6 +1360,4 @@ export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
-export {
-  USER_CREATED_ORGANIZATIONS,
-} from './OrganizationQueries';
+export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';

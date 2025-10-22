@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFundModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:15](https://githu
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L19)
 
-***
+---
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:17](https://githu
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:17](https://githu
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L16)
 
-***
+---
 
 ### mode
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:16](https://githu
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L21)
 
-***
+---
 
 ### orgId
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:21](https://githu
 
 Defined in: [src/screens/OrganizationFunds/modal/FundModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFunds/modal/FundModal.tsx#L20)
 
-***
+---
 
 ### refetchFunds()
 

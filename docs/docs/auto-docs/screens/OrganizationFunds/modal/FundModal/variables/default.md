@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: default
 
@@ -17,6 +17,7 @@ and other relevant details. Upon submission, it interacts with the GraphQL API t
 or update the fund details and triggers a refetch of the fund data.
 
 ### Props
+
 - `isOpen`: A boolean indicating whether the modal is open or closed.
 - `hide`: A function to close the modal.
 - `refetchFunds`: A function to refetch the fund list after a successful operation.
@@ -25,12 +26,14 @@ or update the fund details and triggers a refetch of the fund data.
 - `mode`: The mode of the modal, either 'edit' or 'create'.
 
 ### State
+
 - `name`: The name of the fund.
 - `description`: The description of the fund.
 - `amount`: The amount associated with the fund.
 - `status`: The status of the fund (e.g., active, archived).
 
 ### Methods
+
 - `handleSubmit()`: Handles form submission, creates or updates the fund, and triggers a refetch of the fund list.
 - `handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)`: Updates the state based on user input.
 
@@ -46,11 +49,13 @@ component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.gree
 class (e.g., .addButton) is now applied.
 
 ### Benefits:
-- **Reduces redundant CSS code.
-- **Improves maintainability by centralizing common styles.
-- **Ensures consistent styling across components.
+
+- \*\*Reduces redundant CSS code.
+- \*\*Improves maintainability by centralizing common styles.
+- \*\*Ensures consistent styling across components.
 
 ### Global CSS Classes used:
+
 - `.switch`
 
 For more details on the reusable classes, refer to the global CSS file.

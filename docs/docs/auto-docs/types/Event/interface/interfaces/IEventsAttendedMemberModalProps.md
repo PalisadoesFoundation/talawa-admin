@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IEventsAttendedMemberModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:203](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L204)
 
-***
+---
 
 ### eventsPerPage?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L207)
 
-***
+---
 
 ### setShow()
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### show
 

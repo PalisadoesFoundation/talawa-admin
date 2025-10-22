@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceDeletePledgeModal
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:43
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:43
 
 Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L42)
 
-***
+---
 
 ### pledge
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:42
 
 Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L44)
 
-***
+---
 
 ### refetchPledge()
 

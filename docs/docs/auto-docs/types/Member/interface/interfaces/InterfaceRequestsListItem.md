@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceRequestsListItem
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
 
-***
+---
 
 ### membershipRequestId
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L11)
 
-***
+---
 
 ### status
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
 
-***
+---
 
 ### user
 

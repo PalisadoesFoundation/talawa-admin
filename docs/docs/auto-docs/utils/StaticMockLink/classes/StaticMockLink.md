@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: StaticMockLink
 
@@ -47,7 +47,7 @@ readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any
 
 Defined in: [src/utils/StaticMockLink.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L37)
 
-***
+---
 
 ### operation?
 
@@ -73,7 +73,7 @@ Defined in: [src/utils/StaticMockLink.ts:50](https://github.com/PalisadoesFounda
 
 `void`
 
-***
+---
 
 ### request()
 

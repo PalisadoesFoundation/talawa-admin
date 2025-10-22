@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: DefaultConnectionPageInfo
 
@@ -16,7 +16,7 @@ Defined in: [src/types/pagination.ts:1](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/pagination.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L5)
 
-***
+---
 
 ### hasNextPage
 
@@ -24,7 +24,7 @@ Defined in: [src/types/pagination.ts:5](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/pagination.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L2)
 
-***
+---
 
 ### hasPreviousPage
 
@@ -32,7 +32,7 @@ Defined in: [src/types/pagination.ts:2](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/pagination.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L3)
 
-***
+---
 
 ### startCursor?
 

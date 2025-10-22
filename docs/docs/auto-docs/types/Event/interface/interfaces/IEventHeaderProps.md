@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IEventHeaderProps
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/interface.ts:121](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### showInviteModal()
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### viewType
 

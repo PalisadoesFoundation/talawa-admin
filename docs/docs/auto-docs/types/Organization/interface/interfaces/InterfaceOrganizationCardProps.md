@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationCardProps
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/Palisadoe
 
 > **state**: `string`
 
-***
+---
 
 ### adminsCount
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L17)
 
-***
+---
 
 ### description
 
@@ -50,7 +50,7 @@ Defined in: [src/types/Organization/interface.ts:17](https://github.com/Palisado
 
 Defined in: [src/types/Organization/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L5)
 
-***
+---
 
 ### id
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Organization/interface.ts:5](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L2)
 
-***
+---
 
 ### image
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Organization/interface.ts:2](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L4)
 
-***
+---
 
 ### isJoined?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Organization/interface.ts:4](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L26)
 
-***
+---
 
 ### members?
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/Palisadoe
 
 > **id**: `string`
 
-***
+---
 
 ### membersCount
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/Palisadoe
 
 Defined in: [src/types/Organization/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L16)
 
-***
+---
 
 ### membershipRequests
 
@@ -114,7 +114,7 @@ Defined in: [src/types/Organization/interface.ts:20](https://github.com/Palisado
 
 > **id**: `string`
 
-***
+---
 
 ### membershipRequestStatus
 
@@ -122,7 +122,7 @@ Defined in: [src/types/Organization/interface.ts:20](https://github.com/Palisado
 
 Defined in: [src/types/Organization/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L18)
 
-***
+---
 
 ### name
 
@@ -130,7 +130,7 @@ Defined in: [src/types/Organization/interface.ts:18](https://github.com/Palisado
 
 Defined in: [src/types/Organization/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L3)
 
-***
+---
 
 ### userRegistrationRequired
 

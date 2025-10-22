@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_ERROR\_SUB\_TAGS
+# Variable: MOCKS_ERROR_SUB_TAGS
 
-> `const` **MOCKS\_ERROR\_SUB\_TAGS**: `object`[]
+> `const` **MOCKS_ERROR_SUB_TAGS**: `object`[]
 
 Defined in: [src/screens/SubTags/SubTagsMocks.ts:489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/SubTags/SubTagsMocks.ts#L489)
 
@@ -50,6 +50,6 @@ Defined in: [src/screens/SubTags/SubTagsMocks.ts:489](https://github.com/Palisad
 
 > **name**: `object`
 
-#### request.variables.where.name.starts\_with
+#### request.variables.where.name.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`

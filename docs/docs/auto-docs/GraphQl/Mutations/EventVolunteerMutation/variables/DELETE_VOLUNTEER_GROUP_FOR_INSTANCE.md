@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_VOLUNTEER\_GROUP\_FOR\_INSTANCE
+# Variable: DELETE_VOLUNTEER_GROUP_FOR_INSTANCE
 
-> `const` **DELETE\_VOLUNTEER\_GROUP\_FOR\_INSTANCE**: `DocumentNode`
+> `const` **DELETE_VOLUNTEER_GROUP_FOR_INSTANCE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L141)
 

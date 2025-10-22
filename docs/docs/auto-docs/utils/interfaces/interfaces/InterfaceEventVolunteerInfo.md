@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEventVolunteerInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2391](https://github.com/PalisadoesFoundati
 
 The creation date of the volunteer record.
 
-***
+---
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2404](https://github.com/PalisadoesFoundati
 
 The user who created this volunteer record.
 
-***
+---
 
 ### event
 
@@ -66,7 +66,7 @@ The event associated with the volunteer.
 
 > **id**: `string`
 
-***
+---
 
 ### groups
 
@@ -90,7 +90,7 @@ Defined in: [src/utils/interfaces.ts:2406](https://github.com/PalisadoesFoundati
 
 > **volunteers**: `object`[]
 
-***
+---
 
 ### hasAccepted
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:2385](https://github.com/PalisadoesFoundati
 
 Indicates if the volunteer has accepted.
 
-***
+---
 
 ### hoursVolunteered
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:2387](https://github.com/PalisadoesFoundati
 
 The number of hours volunteered.
 
-***
+---
 
 ### id
 
@@ -120,7 +120,7 @@ Defined in: [src/utils/interfaces.ts:2384](https://github.com/PalisadoesFoundati
 
 The unique identifier of the event volunteer.
 
-***
+---
 
 ### isInstanceException
 
@@ -128,7 +128,7 @@ The unique identifier of the event volunteer.
 
 Defined in: [src/utils/interfaces.ts:2390](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2390)
 
-***
+---
 
 ### isPublic
 
@@ -138,7 +138,7 @@ Defined in: [src/utils/interfaces.ts:2388](https://github.com/PalisadoesFoundati
 
 Indicates if the volunteer profile is public.
 
-***
+---
 
 ### isTemplate
 
@@ -146,7 +146,7 @@ Indicates if the volunteer profile is public.
 
 Defined in: [src/utils/interfaces.ts:2389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2389)
 
-***
+---
 
 ### updatedAt
 
@@ -156,7 +156,7 @@ Defined in: [src/utils/interfaces.ts:2392](https://github.com/PalisadoesFoundati
 
 The last update date of the volunteer record.
 
-***
+---
 
 ### updater
 
@@ -166,7 +166,7 @@ Defined in: [src/utils/interfaces.ts:2405](https://github.com/PalisadoesFoundati
 
 The user who last updated this volunteer record.
 
-***
+---
 
 ### user
 
@@ -176,7 +176,7 @@ Defined in: [src/utils/interfaces.ts:2393](https://github.com/PalisadoesFoundati
 
 The user information of the volunteer.
 
-***
+---
 
 ### volunteerStatus
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceRemoveUserTagModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:41](https:
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### removeUserTagModalIsOpen
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:41](https:
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L39)
 
-***
+---
 
 ### t
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:39](https:
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L42)
 
-***
+---
 
 ### tCommon
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:42](https:
 
 Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L43)
 
-***
+---
 
 ### toggleRemoveUserTagModal()
 

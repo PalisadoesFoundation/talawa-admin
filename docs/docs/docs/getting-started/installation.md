@@ -36,7 +36,6 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
 3. **For Our Open Source Contributor Software Developers:**
-
    1. Next, we'll fork and clone the `talawa-admin` repository.
    1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
 
@@ -52,6 +51,7 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
       cd talawa-admin
       git checkout develop
       ```
+
       - **Note:** Make sure to check out the `develop` branch
    1. You now have a local copy of the code files.
    1. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
@@ -64,7 +64,6 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
       7. PR_GUIDELINES.md
 
 4. **Talawa Administrators:**
-
    1. Clone the repository to your local computer using this command:
 
       ```bash

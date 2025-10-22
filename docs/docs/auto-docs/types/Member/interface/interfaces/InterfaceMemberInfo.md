@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceMemberInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Member/interface.ts:21](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L25)
 
-***
+---
 
 ### createdAt
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Member/interface.ts:25](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L26)
 
-***
+---
 
 ### emailAddress
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Member/interface.ts:26](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L24)
 
-***
+---
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Member/interface.ts:24](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L22)
 
-***
+---
 
 ### name
 

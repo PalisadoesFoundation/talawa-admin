@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MEMBERSHIP\_REQUEST
+# Variable: MEMBERSHIP_REQUEST
 
-> `const` **MEMBERSHIP\_REQUEST**: `DocumentNode`
+> `const` **MEMBERSHIP_REQUEST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:1130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1130)

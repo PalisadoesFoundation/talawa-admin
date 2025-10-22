@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Tag/interface.ts:50](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Tag/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L51)
 
-***
+---
 
 ### usersToAssignTo
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -12,7 +12,7 @@ Defined in: [src/components/OrgListCard/useDebounce.tsx:31](https://github.com/P
 
 ### T
 
-`T` *extends* (...`args`) => `void`
+`T` _extends_ (...`args`) => `void`
 
 ## Parameters
 

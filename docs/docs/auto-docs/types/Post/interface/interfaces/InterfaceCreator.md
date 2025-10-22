@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCreator
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:75](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L79)
 
-***
+---
 
 ### email
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:79](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L78)
 
-***
+---
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/interface.ts:78](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L76)
 
-***
+---
 
 ### name
 

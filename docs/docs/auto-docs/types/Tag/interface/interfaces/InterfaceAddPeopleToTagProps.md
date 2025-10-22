@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAddPeopleToTagProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Tag/interface.ts:27](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Tag/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L28)
 
-***
+---
 
 ### hideAddPeopleToTagModal()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Tag/interface.ts:29](https://github.com/PalisadoesFoundat
 
 `void`
 
-***
+---
 
 ### refetchAssignedMembersData()
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Tag/interface.ts:30](https://github.com/PalisadoesFoundat
 
 `void`
 
-***
+---
 
 ### t
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Tag/interface.ts:30](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Tag/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L31)
 
-***
+---
 
 ### tCommon
 

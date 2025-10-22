@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ORGANIZATION\_POST\_LIST
+# Variable: ORGANIZATION_POST_LIST
 
-> `const` **ORGANIZATION\_POST\_LIST**: `DocumentNode`
+> `const` **ORGANIZATION_POST_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L16)
 

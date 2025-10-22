@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IActionItemInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/ActionItems/interface.ts:25](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L35)
 
-***
+---
 
 ### assignee
 
@@ -22,7 +22,7 @@ Defined in: [src/types/ActionItems/interface.ts:35](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L47)
 
-***
+---
 
 ### assigneeId
 
@@ -30,7 +30,7 @@ Defined in: [src/types/ActionItems/interface.ts:47](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L27)
 
-***
+---
 
 ### avatarURL?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/ActionItems/interface.ts:27](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L28)
 
-***
+---
 
 ### category
 
@@ -46,7 +46,7 @@ Defined in: [src/types/ActionItems/interface.ts:28](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L51)
 
-***
+---
 
 ### categoryId
 
@@ -54,7 +54,7 @@ Defined in: [src/types/ActionItems/interface.ts:51](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L29)
 
-***
+---
 
 ### completionAt
 
@@ -62,7 +62,7 @@ Defined in: [src/types/ActionItems/interface.ts:29](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L36)
 
-***
+---
 
 ### createdAt
 
@@ -70,7 +70,7 @@ Defined in: [src/types/ActionItems/interface.ts:36](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L37)
 
-***
+---
 
 ### creator
 
@@ -78,7 +78,7 @@ Defined in: [src/types/ActionItems/interface.ts:37](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L48)
 
-***
+---
 
 ### creatorId
 
@@ -86,7 +86,7 @@ Defined in: [src/types/ActionItems/interface.ts:48](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L33)
 
-***
+---
 
 ### event
 
@@ -94,7 +94,7 @@ Defined in: [src/types/ActionItems/interface.ts:33](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L49)
 
-***
+---
 
 ### eventId
 
@@ -102,7 +102,7 @@ Defined in: [src/types/ActionItems/interface.ts:49](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L30)
 
-***
+---
 
 ### hasExceptions?
 
@@ -110,7 +110,7 @@ Defined in: [src/types/ActionItems/interface.ts:30](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L42)
 
-***
+---
 
 ### id
 
@@ -118,7 +118,7 @@ Defined in: [src/types/ActionItems/interface.ts:42](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L26)
 
-***
+---
 
 ### isCompleted
 
@@ -126,7 +126,7 @@ Defined in: [src/types/ActionItems/interface.ts:26](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L39)
 
-***
+---
 
 ### isInstanceException?
 
@@ -134,7 +134,7 @@ Defined in: [src/types/ActionItems/interface.ts:39](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L43)
 
-***
+---
 
 ### isTemplate?
 
@@ -142,7 +142,7 @@ Defined in: [src/types/ActionItems/interface.ts:43](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L44)
 
-***
+---
 
 ### organizationId
 
@@ -150,7 +150,7 @@ Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L32)
 
-***
+---
 
 ### postCompletionNotes
 
@@ -158,7 +158,7 @@ Defined in: [src/types/ActionItems/interface.ts:32](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L41)
 
-***
+---
 
 ### preCompletionNotes
 
@@ -166,7 +166,7 @@ Defined in: [src/types/ActionItems/interface.ts:41](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L40)
 
-***
+---
 
 ### recurringEventInstance
 
@@ -174,7 +174,7 @@ Defined in: [src/types/ActionItems/interface.ts:40](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L50)
 
-***
+---
 
 ### recurringEventInstanceId
 
@@ -182,7 +182,7 @@ Defined in: [src/types/ActionItems/interface.ts:50](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L31)
 
-***
+---
 
 ### updatedAt
 
@@ -190,7 +190,7 @@ Defined in: [src/types/ActionItems/interface.ts:31](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L38)
 
-***
+---
 
 ### updaterId
 

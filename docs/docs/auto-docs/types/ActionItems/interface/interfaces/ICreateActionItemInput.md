@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ICreateActionItemInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/ActionItems/interface.ts:58](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L65)
 
-***
+---
 
 ### assigneeId
 
@@ -22,7 +22,7 @@ Defined in: [src/types/ActionItems/interface.ts:65](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L59)
 
-***
+---
 
 ### categoryId
 
@@ -30,7 +30,7 @@ Defined in: [src/types/ActionItems/interface.ts:59](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L60)
 
-***
+---
 
 ### eventId?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/ActionItems/interface.ts:60](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L61)
 
-***
+---
 
 ### isTemplate?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/ActionItems/interface.ts:61](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L66)
 
-***
+---
 
 ### organizationId
 
@@ -54,7 +54,7 @@ Defined in: [src/types/ActionItems/interface.ts:66](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L63)
 
-***
+---
 
 ### preCompletionNotes?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/ActionItems/interface.ts:63](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L64)
 
-***
+---
 
 ### recurringEventInstanceId?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # PledgeModal
 
@@ -11,8 +11,8 @@ PledgeModal.tsx
 ## Description
 
 This file defines the `PledgeModal` component, which provides a modal interface for creating or editing pledges
-             in a campaign. It includes form fields for selecting pledgers, specifying pledge amounts, currencies, and dates.
-             The component supports internationalization and integrates with GraphQL mutations and queries for data handling.
+in a campaign. It includes form fields for selecting pledgers, specifying pledge amounts, currencies, and dates.
+The component supports internationalization and integrates with GraphQL mutations and queries for data handling.
 
 ## Interfaces
 

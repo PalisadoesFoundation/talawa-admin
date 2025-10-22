@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostCard
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:2134](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2149)
 
-***
+---
 
 ### comments
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:2152](https://github.com/PalisadoesFoundati
 
 > **upVoteCount**: `number`
 
-***
+---
 
 ### creator
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:2137](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### downVoteCount
 
@@ -90,7 +90,7 @@ Defined in: [src/utils/interfaces.ts:2137](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2151)
 
-***
+---
 
 ### fetchPosts()
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:2165](https://github.com/PalisadoesFoundati
 
 `void`
 
-***
+---
 
 ### hasUserVoted
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:2165](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2142)
 
-***
+---
 
 ### id
 
@@ -118,7 +118,7 @@ Defined in: [src/utils/interfaces.ts:2142](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2135)
 
-***
+---
 
 ### image
 
@@ -126,7 +126,7 @@ Defined in: [src/utils/interfaces.ts:2135](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2145)
 
-***
+---
 
 ### isModalView?
 
@@ -134,7 +134,7 @@ Defined in: [src/utils/interfaces.ts:2145](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2136)
 
-***
+---
 
 ### pinnedAt?
 
@@ -142,7 +142,7 @@ Defined in: [src/utils/interfaces.ts:2136](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2144)
 
-***
+---
 
 ### postedAt
 
@@ -150,7 +150,7 @@ Defined in: [src/utils/interfaces.ts:2144](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2143)
 
-***
+---
 
 ### text
 
@@ -158,7 +158,7 @@ Defined in: [src/utils/interfaces.ts:2143](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2148)
 
-***
+---
 
 ### title
 
@@ -166,7 +166,7 @@ Defined in: [src/utils/interfaces.ts:2148](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2147)
 
-***
+---
 
 ### upVoteCount
 
@@ -174,7 +174,7 @@ Defined in: [src/utils/interfaces.ts:2147](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2150)
 
-***
+---
 
 ### video
 

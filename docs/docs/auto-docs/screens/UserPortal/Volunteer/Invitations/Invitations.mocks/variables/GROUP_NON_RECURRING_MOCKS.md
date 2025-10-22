@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GROUP\_NON\_RECURRING\_MOCKS
+# Variable: GROUP_NON_RECURRING_MOCKS
 
-> `const` **GROUP\_NON\_RECURRING\_MOCKS**: `object`[]
+> `const` **GROUP_NON_RECURRING_MOCKS**: `object`[]
 
 Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L363)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCampaignModal
 
@@ -16,11 +16,13 @@ component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.gree
 class (e.g., .addButton) is now applied.
 
 ### Benefits:
-- **Reduces redundant CSS code.
-- **Improves maintainability by centralizing common styles.
-- **Ensures consistent styling across components.
+
+- \*\*Reduces redundant CSS code.
+- \*\*Improves maintainability by centralizing common styles.
+- \*\*Ensures consistent styling across components.
 
 ### Global CSS Classes used:
+
 - `.addButton`
 
 For more details on the reusable classes, refer to the global CSS file.
@@ -33,7 +35,7 @@ For more details on the reusable classes, refer to the global CSS file.
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L49)
 
-***
+---
 
 ### fundId
 
@@ -41,7 +43,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:49](ht
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L47)
 
-***
+---
 
 ### hide()
 
@@ -53,7 +55,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:46](ht
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -61,7 +63,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:46](ht
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L45)
 
-***
+---
 
 ### mode
 
@@ -69,7 +71,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:45](ht
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L51)
 
-***
+---
 
 ### orgId
 
@@ -77,7 +79,7 @@ Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:51](ht
 
 Defined in: [src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationFundCampaign/modal/CampaignModal.tsx#L48)
 
-***
+---
 
 ### refetchCampaign()
 

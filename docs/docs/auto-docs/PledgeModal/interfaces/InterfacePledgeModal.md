@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:78](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L81)
 
-***
+---
 
 ### endDate
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:81](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L85)
 
-***
+---
 
 ### hide()
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:80](https://gi
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:80](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L79)
 
-***
+---
 
 ### mode
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:79](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L86)
 
-***
+---
 
 ### orgId
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:86](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L82)
 
-***
+---
 
 ### pledge
 
@@ -66,7 +66,7 @@ Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:82](https://gi
 
 Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L83)
 
-***
+---
 
 ### refetchPledge()
 

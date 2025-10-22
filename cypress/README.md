@@ -7,11 +7,13 @@ This project uses Cypress for comprehensive end-to-end testing to ensure the app
 Before running Cypress tests, ensure you have the following setup:
 
 ### 1. Talawa API Setup
+
 **Important**: The [Talawa API](https://github.com/PalisadoesFoundation/talawa-api) must be properly installed, configured, and running before executing any Cypress tests. The tests depend on API endpoints being available and functional.
 
 Please follow the complete installation guide at: https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md
 
 ### 2. Application Server
+
 Ensure your local development server is running on `http://localhost:4321`.
 
 ## Directory Structure
@@ -40,8 +42,8 @@ cypress/
 ### Available Commands
 
 ```bash
-# Open Cypress Test Runner (Interactive Mode) 
-# Preferred for Debugging 
+# Open Cypress Test Runner (Interactive Mode)
+# Preferred for Debugging
 npm run cy:open
 
 # Run all tests in headless mode
@@ -51,12 +53,15 @@ npm run cy:run
 ### Running Specific Tests
 
 #### Interactive Mode
+
 For running specific tests with visual feedback, use the Interactive Mode where you can view all test specs and run individual tests:
+
 ```bash
 npm run cy:open
 ```
 
 #### Headless Mode
+
 For running specific tests in headless mode, first manually start your application at `http://localhost:4321`, then use the following commands:
 
 ```bash
@@ -70,6 +75,7 @@ npm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
 ## Writing Tests
 
 ### Page Object Model
+
 This project follows the Page Object Model pattern for better test maintenance:
 
 ```javascript
@@ -79,14 +85,16 @@ import { LoginPage } from '../pageObjects/auth/LoginPage';
 const loginPage = new LoginPage();
 
 it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);;
+  loginPage.verifyLoginPage().login(userData.email, userData.password);
 });
 ```
 
 ### Custom Commands
+
 Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
 
 ### Test Data
+
 Use fixtures for consistent test data:
 
 ```javascript
@@ -101,11 +109,13 @@ cy.fixture('users').then((users) => {
 After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
 
 1. **Run Cypress tests** to collect coverage data:
+
    ```bash
    npm run cy:run
    ```
 
 2. **Generate HTML coverage report** using nyc:
+
    ```bash
    npx nyc --reporter=html
    ```
@@ -116,6 +126,7 @@ After running your Cypress tests, you can generate detailed HTML coverage report
    ```
 
 The HTML report provides an interactive view of:
+
 - Overall coverage percentages (statements, branches, functions, lines)
 - File-by-file coverage breakdown
 - Detailed line-by-line coverage highlighting

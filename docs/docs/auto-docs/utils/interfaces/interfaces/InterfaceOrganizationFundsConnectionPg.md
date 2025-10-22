@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationFundsConnectionPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:997](https://github.com/PalisadoesFoundatio
 
 An array of edges, where each edge contains a cursor and a fund node.
 
-***
+---
 
 ### pageInfo
 

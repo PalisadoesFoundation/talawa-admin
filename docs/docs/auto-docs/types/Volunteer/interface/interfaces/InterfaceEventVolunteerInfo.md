@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEventVolunteerInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Volunteer/interface.ts:279](https://github.com/Palisadoes
 
 The creation date of the volunteer record.
 
-***
+---
 
 ### creator
 
@@ -40,7 +40,7 @@ The user who created this volunteer record.
 
 > **name**: `string`
 
-***
+---
 
 ### event
 
@@ -74,7 +74,7 @@ The event associated with the volunteer.
 
 > **id**: `string`
 
-***
+---
 
 ### groups
 
@@ -100,7 +100,7 @@ Array of groups associated with the volunteer.
 
 > **volunteers**: `object`[]
 
-***
+---
 
 ### hasAccepted
 
@@ -110,7 +110,7 @@ Defined in: [src/types/Volunteer/interface.ts:273](https://github.com/Palisadoes
 
 Indicates if the volunteer has accepted.
 
-***
+---
 
 ### hoursVolunteered
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Volunteer/interface.ts:275](https://github.com/Palisadoes
 
 The number of hours volunteered.
 
-***
+---
 
 ### id
 
@@ -130,7 +130,7 @@ Defined in: [src/types/Volunteer/interface.ts:272](https://github.com/Palisadoes
 
 The unique identifier of the event volunteer.
 
-***
+---
 
 ### isInstanceException
 
@@ -138,7 +138,7 @@ The unique identifier of the event volunteer.
 
 Defined in: [src/types/Volunteer/interface.ts:278](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L278)
 
-***
+---
 
 ### isPublic
 
@@ -148,7 +148,7 @@ Defined in: [src/types/Volunteer/interface.ts:276](https://github.com/Palisadoes
 
 Indicates if the volunteer profile is public.
 
-***
+---
 
 ### isTemplate
 
@@ -156,7 +156,7 @@ Indicates if the volunteer profile is public.
 
 Defined in: [src/types/Volunteer/interface.ts:277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L277)
 
-***
+---
 
 ### updatedAt
 
@@ -166,7 +166,7 @@ Defined in: [src/types/Volunteer/interface.ts:280](https://github.com/Palisadoes
 
 The last update date of the volunteer record.
 
-***
+---
 
 ### updater
 
@@ -184,7 +184,7 @@ The user who last updated this volunteer record.
 
 > **name**: `string`
 
-***
+---
 
 ### user
 
@@ -206,7 +206,7 @@ The user information of the volunteer.
 
 > **name**: `string`
 
-***
+---
 
 ### volunteerStatus
 

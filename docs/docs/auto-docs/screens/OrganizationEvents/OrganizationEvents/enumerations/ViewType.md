@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Enumeration: ViewType
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:84](https://g
 
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L85)
 
-***
+---
 
 ### MONTH
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:85](https://g
 
 Defined in: [src/screens/OrganizationEvents/OrganizationEvents.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/OrganizationEvents.tsx#L86)
 
-***
+---
 
 ### YEAR
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFundInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1785](https://github.com/PalisadoesFoundati
 
 The creation date of the fund record.
 
-***
+---
 
 ### creator
 
@@ -36,7 +36,7 @@ The creator of the fund.
 
 > **name**: `string`
 
-***
+---
 
 ### edges
 
@@ -78,7 +78,7 @@ The edges connection object.
 
 > **startDate**: `string`
 
-***
+---
 
 ### id
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:1779](https://github.com/PalisadoesFoundati
 
 The unique identifier of the fund.
 
-***
+---
 
 ### isArchived
 
@@ -98,7 +98,7 @@ Defined in: [src/utils/interfaces.ts:1783](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is archived.
 
-***
+---
 
 ### isDefault
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:1784](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is the default fund.
 
-***
+---
 
 ### isTaxDeductible
 
@@ -118,7 +118,7 @@ Defined in: [src/utils/interfaces.ts:1782](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is tax deductible.
 
-***
+---
 
 ### name
 
@@ -128,7 +128,7 @@ Defined in: [src/utils/interfaces.ts:1780](https://github.com/PalisadoesFoundati
 
 The name of the fund.
 
-***
+---
 
 ### organization
 
@@ -142,7 +142,7 @@ The organization associated with the fund.
 
 > **name**: `string`
 
-***
+---
 
 ### organizationId
 
@@ -152,7 +152,7 @@ Defined in: [src/utils/interfaces.ts:1786](https://github.com/PalisadoesFoundati
 
 The unique identifier of the associated organization.
 
-***
+---
 
 ### refrenceNumber
 
@@ -162,7 +162,7 @@ Defined in: [src/utils/interfaces.ts:1781](https://github.com/PalisadoesFoundati
 
 The reference number of the fund.
 
-***
+---
 
 ### updater
 

@@ -15,9 +15,9 @@ End-to-End (E2E) testing is performed using **Cypress** to validate the applicat
 
 Before running tests, ensure the following are set up:
 
-* **Talawa API:** The **Talawa API** must be fully installed, configured, and running. Tests depend on its endpoints.
-    * *Installation Guide:* [https://docs-api.talawa.io/docs/installation](https://docs-api.talawa.io/docs/installation)
-* **Application Server:** Your local development server must be running at **`http://localhost:4321`**.
+- **Talawa API:** The **Talawa API** must be fully installed, configured, and running. Tests depend on its endpoints.
+  - _Installation Guide:_ [https://docs-api.talawa.io/docs/installation](https://docs-api.talawa.io/docs/installation)
+- **Application Server:** Your local development server must be running at **`http://localhost:4321`**.
 
 ---
 
@@ -25,21 +25,21 @@ Before running tests, ensure the following are set up:
 
 The tests follow the **Page Object Model** pattern for maintainability.
 
-| Directory | Purpose | Key Component |
-| :--- | :--- | :--- |
-| **`cypress/e2e/`** | End-to-end test specification files, organized by feature. | `login.cy.ts` |
-| **`cypress/fixtures/`** | Static test data (e.g., JSON files). | `users.json` |
+| Directory                  | Purpose                                                          | Key Component       |
+| :------------------------- | :--------------------------------------------------------------- | :------------------ |
+| **`cypress/e2e/`**         | End-to-end test specification files, organized by feature.       | `login.cy.ts`       |
+| **`cypress/fixtures/`**    | Static test data (e.g., JSON files).                             | `users.json`        |
 | **`cypress/pageObjects/`** | **Page Object Model** classes for abstracting page interactions. | `auth/LoginPage.ts` |
-| **`cypress/support/`** | Custom commands and utilities for reusable functionality. | `commands.ts` |
+| **`cypress/support/`**     | Custom commands and utilities for reusable functionality.        | `commands.ts`       |
 
 ---
 
 ### Running Tests
 
-| Mode | Command | Description |
-| :--- | :--- | :--- |
+| Mode                        | Command           | Description                                                      |
+| :-------------------------- | :---------------- | :--------------------------------------------------------------- |
 | **Interactive (Debugging)** | `npm run cy:open` | Opens the Cypress Test Runner for visual feedback and debugging. |
-| **Headless (CI/Run All)** | `npm run cy:run` | Runs all tests in the headless mode. |
+| **Headless (CI/Run All)**   | `npm run cy:run`  | Runs all tests in the headless mode.                             |
 
 ---
 

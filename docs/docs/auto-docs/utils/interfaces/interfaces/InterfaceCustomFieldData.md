@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCustomFieldData
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2361](https://github.com/PalisadoesFoundati
 
 The unique identifier of the custom field (optional).
 
-***
+---
 
 ### name
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2362](https://github.com/PalisadoesFoundati
 
 The name of the custom field.
 
-***
+---
 
 ### organizationId?
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2364](https://github.com/PalisadoesFoundati
 
 The unique identifier of the associated organization (optional).
 
-***
+---
 
 ### type
 

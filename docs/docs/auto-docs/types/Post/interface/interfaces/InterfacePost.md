@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePost
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:82](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L89)
 
-***
+---
 
 ### caption?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L84)
 
-***
+---
 
 ### createdAt
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L85)
 
-***
+---
 
 ### creator?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/interface.ts:85](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L88)
 
-***
+---
 
 ### id
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L83)
 
-***
+---
 
 ### imageUrl?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L90)
 
-***
+---
 
 ### pinned?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L87)
 
-***
+---
 
 ### pinnedAt?
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L86)
 
-***
+---
 
 ### videoUrl?
 

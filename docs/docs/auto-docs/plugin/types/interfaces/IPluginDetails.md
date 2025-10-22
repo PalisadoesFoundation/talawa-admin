@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IPluginDetails
 
@@ -26,7 +26,7 @@ Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginMeta`](IPluginMeta.md).[`author`](IPluginMeta.md#author)
 
-***
+---
 
 ### cdnUrl
 
@@ -34,7 +34,7 @@ Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L100)
 
-***
+---
 
 ### changelog
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/types.ts:107](https://github.com/PalisadoesFoundation/ta
 
 > **version**: `string`
 
-***
+---
 
 ### description
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginMeta`](IPluginMeta.md).[`description`](IPluginMeta.md#description)
 
-***
+---
 
 ### features?
 
@@ -74,7 +74,7 @@ Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L106)
 
-***
+---
 
 ### homepage?
 
@@ -82,7 +82,7 @@ Defined in: [src/plugin/types.ts:106](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L103)
 
-***
+---
 
 ### icon
 
@@ -94,7 +94,7 @@ Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginMeta`](IPluginMeta.md).[`icon`](IPluginMeta.md#icon)
 
-***
+---
 
 ### id
 
@@ -106,7 +106,7 @@ Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginMeta`](IPluginMeta.md).[`id`](IPluginMeta.md#id)
 
-***
+---
 
 ### license?
 
@@ -114,7 +114,7 @@ Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L104)
 
-***
+---
 
 ### name
 
@@ -126,7 +126,7 @@ Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginMeta`](IPluginMeta.md).[`name`](IPluginMeta.md#name)
 
-***
+---
 
 ### readme
 
@@ -134,7 +134,7 @@ Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L101)
 
-***
+---
 
 ### screenshots
 
@@ -142,7 +142,7 @@ Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L102)
 
-***
+---
 
 ### tags?
 
@@ -150,7 +150,7 @@ Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L105)
 
-***
+---
 
 ### version
 

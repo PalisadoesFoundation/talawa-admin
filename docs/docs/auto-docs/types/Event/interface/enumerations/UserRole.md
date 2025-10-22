@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Enumeration: UserRole
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:13](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L14)
 
-***
+---
 
 ### REGULAR
 

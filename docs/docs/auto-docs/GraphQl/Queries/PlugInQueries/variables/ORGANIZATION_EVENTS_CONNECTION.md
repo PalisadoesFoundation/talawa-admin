@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ORGANIZATION\_EVENTS\_CONNECTION
+# Variable: ORGANIZATION_EVENTS_CONNECTION
 
-> `const` **ORGANIZATION\_EVENTS\_CONNECTION**: `DocumentNode`
+> `const` **ORGANIZATION_EVENTS_CONNECTION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L80)
 

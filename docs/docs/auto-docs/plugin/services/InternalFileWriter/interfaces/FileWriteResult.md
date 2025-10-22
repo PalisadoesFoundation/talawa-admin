@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: FileWriteResult
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:10](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L15)
 
-***
+---
 
 ### filesWritten
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L13)
 
-***
+---
 
 ### path
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L12)
 
-***
+---
 
 ### success
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L11)
 
-***
+---
 
 ### writtenFiles
 

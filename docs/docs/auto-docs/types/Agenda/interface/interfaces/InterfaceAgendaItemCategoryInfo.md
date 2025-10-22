@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/interface.ts:3](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Agenda/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L4)
 
-***
+---
 
 ### createdBy
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Agenda/interface.ts:7](https://github.com/PalisadoesFound
 
 > **lastName**: `string`
 
-***
+---
 
 ### description
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Agenda/interface.ts:7](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Agenda/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L6)
 
-***
+---
 
 ### name
 

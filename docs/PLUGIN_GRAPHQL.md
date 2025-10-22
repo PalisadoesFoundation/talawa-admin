@@ -11,6 +11,7 @@ The plugin system now uses GraphQL queries and mutations to manage plugin state,
 ### Queries
 
 #### Get All Plugins
+
 ```graphql
 query GetAllPlugins {
   plugins(input: {}) {
@@ -28,6 +29,7 @@ query GetAllPlugins {
 ### Mutations
 
 #### Create Plugin
+
 ```graphql
 mutation CreatePlugin($input: CreatePluginInput!) {
   createPlugin(input: $input) {
@@ -43,6 +45,7 @@ mutation CreatePlugin($input: CreatePluginInput!) {
 ```
 
 #### Update Plugin
+
 ```graphql
 mutation UpdatePlugin($input: UpdatePluginInput!) {
   updatePlugin(input: $input) {
@@ -58,6 +61,7 @@ mutation UpdatePlugin($input: UpdatePluginInput!) {
 ```
 
 #### Delete Plugin
+
 ```graphql
 mutation DeletePlugin($input: DeletePluginInput!) {
   deletePlugin(input: $input) {
@@ -78,19 +82,28 @@ mutation DeletePlugin($input: DeletePluginInput!) {
 ## Features
 
 ### Pure GraphQL Implementation
+
 The system now uses GraphQL exclusively for plugin management. The local `index.json` file has been completely removed.
 
 ### Synchronization
+
 Plugin activation/deactivation and installation/uninstallation are now synchronized between the local plugin manager and the GraphQL backend.
 
 ### Real-time Updates
+
 The plugin store UI automatically updates when GraphQL operations complete, providing immediate feedback to users.
 
 ## Usage in Components
 
 ### Using Hooks
+
 ```typescript
-import { useGetAllPlugins, useCreatePlugin, useUpdatePlugin, useDeletePlugin } from 'plugin/graphql-service';
+import {
+  useGetAllPlugins,
+  useCreatePlugin,
+  useUpdatePlugin,
+  useDeletePlugin,
+} from 'plugin/graphql-service';
 
 function MyComponent() {
   const { data, loading, error } = useGetAllPlugins();
@@ -103,6 +116,7 @@ function MyComponent() {
 ```
 
 ### Using Service Class
+
 ```typescript
 import { PluginGraphQLService } from 'plugin/graphql-service';
 
@@ -122,4 +136,4 @@ const plugins = await service.getAllPlugins();
 - Add subscription support for real-time plugin updates
 - Implement plugin versioning and update notifications
 - Add bulk operations for multiple plugins
-- Enhance error reporting and user feedback 
+- Enhance error reporting and user feedback

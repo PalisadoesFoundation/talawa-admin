@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Requests
 
@@ -11,8 +11,8 @@ Requests.tsx
 ## Description
 
 This file contains the implementation of the Requests component, which displays
-             a list of membership requests for an organization. It includes features like
-             infinite scrolling, search functionality, and role-based access control.
+a list of membership requests for an organization. It includes features like
+infinite scrolling, search functionality, and role-based access control.
 
 ## Requires
 
@@ -79,8 +79,8 @@ Requests
 ## Description
 
 Displays a list of membership requests for an organization. Includes search,
-             infinite scrolling, and role-based access control. Redirects unauthorized users
-             to the organization list page.
+infinite scrolling, and role-based access control. Redirects unauthorized users
+to the organization list page.
 
 ## Example
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUpdateActionItemForInstanceInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/ActionItems/interface.ts:113](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L114)
 
-***
+---
 
 ### assignedAt?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/ActionItems/interface.ts:114](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L121)
 
-***
+---
 
 ### assigneeId?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/ActionItems/interface.ts:121](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L119)
 
-***
+---
 
 ### categoryId?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/ActionItems/interface.ts:119](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L120)
 
-***
+---
 
 ### eventId?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/ActionItems/interface.ts:120](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L118)
 
-***
+---
 
 ### isCompleted?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/ActionItems/interface.ts:118](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L117)
 
-***
+---
 
 ### postCompletionNotes?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/ActionItems/interface.ts:117](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L116)
 
-***
+---
 
 ### preCompletionNotes?
 

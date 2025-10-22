@@ -212,7 +212,6 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
 **File Structure**
 
 - `src/assets/scss/components/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-
   - **\_accordion.scss**
   - **\_alert.scss**
   - **\_badge.scss**
@@ -233,12 +232,10 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
   - **\_spinners.scss**
 
 - `src/assets/scss/content/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-
   - **\_table.scss**
   - **\_typography.scss**
 
 - `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
-
   - **\_check-radios.scss**
   - **\_floating-label.scss**
   - **\_form-control.scss**

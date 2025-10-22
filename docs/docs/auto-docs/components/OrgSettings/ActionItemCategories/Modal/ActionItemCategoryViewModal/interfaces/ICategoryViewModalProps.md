@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ICategoryViewModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L16)
 
-***
+---
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 `void`
 
-***
+---
 
 ### isOpen
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceDonation
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Donation/interface.ts:1](https://github.com/PalisadoesFou
 
 Defined in: [src/types/Donation/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L2)
 
-***
+---
 
 ### amount
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Donation/interface.ts:2](https://github.com/PalisadoesFou
 
 Defined in: [src/types/Donation/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L4)
 
-***
+---
 
 ### nameOfUser
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Donation/interface.ts:4](https://github.com/PalisadoesFou
 
 Defined in: [src/types/Donation/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L3)
 
-***
+---
 
 ### payPalId
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Donation/interface.ts:3](https://github.com/PalisadoesFou
 
 Defined in: [src/types/Donation/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L6)
 
-***
+---
 
 ### updatedAt
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Donation/interface.ts:6](https://github.com/PalisadoesFou
 
 Defined in: [src/types/Donation/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L7)
 
-***
+---
 
 ### userId
 

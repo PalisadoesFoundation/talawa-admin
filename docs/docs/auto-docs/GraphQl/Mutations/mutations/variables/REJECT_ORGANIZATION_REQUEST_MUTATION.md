@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: REJECT\_ORGANIZATION\_REQUEST\_MUTATION
+# Variable: REJECT_ORGANIZATION_REQUEST_MUTATION
 
-> `const` **REJECT\_ORGANIZATION\_REQUEST\_MUTATION**: `DocumentNode`
+> `const` **REJECT_ORGANIZATION_REQUEST_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L20)

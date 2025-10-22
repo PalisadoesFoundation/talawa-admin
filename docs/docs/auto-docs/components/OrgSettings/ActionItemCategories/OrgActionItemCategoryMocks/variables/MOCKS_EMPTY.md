@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS_EMPTY
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS_EMPTY**: `object`[]
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L157)
 

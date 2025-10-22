@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IActionItemCategoryModal
 
@@ -14,7 +14,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L20)
 
-***
+---
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -34,7 +34,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L16)
 
-***
+---
 
 ### mode
 
@@ -42,7 +42,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L21)
 
-***
+---
 
 ### orgId
 
@@ -50,7 +50,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L19)
 
-***
+---
 
 ### refetchCategories()
 

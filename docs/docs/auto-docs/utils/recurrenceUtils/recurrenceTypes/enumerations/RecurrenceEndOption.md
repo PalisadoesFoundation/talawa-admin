@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Enumeration: RecurrenceEndOption
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
-***
+---
 
 ### never
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
 
-***
+---
 
 ### on
 

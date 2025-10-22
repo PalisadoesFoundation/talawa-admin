@@ -3,11 +3,11 @@ import path from 'path';
 
 // List of files to skip
 const filesToSkip = [
-    'index.tsx', 
-    'EventActionItems.tsx',
-    'OrgPostCard.tsx',
-    'UsersTableItem.tsx',
-    'FundCampaignPledge.tsx'
+  'index.tsx',
+  'EventActionItems.tsx',
+  'OrgPostCard.tsx',
+  'UsersTableItem.tsx',
+  'FundCampaignPledge.tsx',
 ];
 
 // Recursively find all .tsx files, excluding files listed in filesToSkip
@@ -53,13 +53,13 @@ async function run() {
   const filesWithoutTsDoc = [];
 
   for (const file of files) {
-    if (!await containsTsDocComment(file)) {
+    if (!(await containsTsDocComment(file))) {
       filesWithoutTsDoc.push(file);
     }
   }
 
   if (filesWithoutTsDoc.length > 0) {
-    filesWithoutTsDoc.forEach(file => {
+    filesWithoutTsDoc.forEach((file) => {
       console.error(`No TSDoc comment found in file: ${file}`);
     });
     process.exit(1);

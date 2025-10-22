@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -11,6 +11,7 @@ Defined in: [src/screens/UserPortal/Volunteer/VolunteerManagement.tsx:79](https:
 `VolunteerManagement` component handles the display and navigation of different event management sections.
 
 It provides a tabbed interface for:
+
 - Viewing upcoming events to volunteer
 - Managing volunteer requests
 - Managing volunteer invitations

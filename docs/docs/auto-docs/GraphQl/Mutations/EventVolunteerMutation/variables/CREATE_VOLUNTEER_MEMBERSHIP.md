@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CREATE\_VOLUNTEER\_MEMBERSHIP
+# Variable: CREATE_VOLUNTEER_MEMBERSHIP
 
-> `const` **CREATE\_VOLUNTEER\_MEMBERSHIP**: `DocumentNode`
+> `const` **CREATE_VOLUNTEER_MEMBERSHIP**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L164)

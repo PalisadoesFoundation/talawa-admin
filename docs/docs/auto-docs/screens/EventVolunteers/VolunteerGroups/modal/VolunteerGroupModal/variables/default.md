@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: default
 
@@ -46,6 +46,7 @@ The `VolunteerGroupModal` component displays a form within a modal dialog for cr
 It includes fields for entering the group name, description, volunteersRequired, and selecting volunteers/leaders.
 
 The modal includes:
+
 - A header with a title indicating the current mode (create or edit) and a close button.
 - A form with:
   - An input field for entering the group name.
@@ -56,6 +57,7 @@ The modal includes:
 - A submit button to create or update the pledge.
 
 On form submission, the component either:
+
 - Calls `updatePledge` mutation to update an existing pledge, or
 - Calls `createPledge` mutation to create a new pledge.
 

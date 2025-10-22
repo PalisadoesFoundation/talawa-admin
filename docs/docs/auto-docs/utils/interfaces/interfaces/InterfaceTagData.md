@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagData
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1453](https://github.com/PalisadoesFoundati
 
 The unique identifier of the tag.
 
-***
+---
 
 ### ancestorTags
 
@@ -40,7 +40,7 @@ An array of ancestor tags.
 
 > **name**: `string`
 
-***
+---
 
 ### childTags
 
@@ -54,7 +54,7 @@ Information about child tags.
 
 > **totalCount**: `number`
 
-***
+---
 
 ### name
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:1454](https://github.com/PalisadoesFoundati
 
 The name of the tag.
 
-***
+---
 
 ### parentTag
 
@@ -78,7 +78,7 @@ The parent tag object.
 
 > **\_id**: `string`
 
-***
+---
 
 ### usersAssignedTo
 

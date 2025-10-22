@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_ENTIRE\_RECURRING\_EVENT\_SERIES\_MUTATION
+# Variable: DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION
 
-> `const` **DELETE\_ENTIRE\_RECURRING\_EVENT\_SERIES\_MUTATION**: `DocumentNode`
+> `const` **DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventMutations.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L87)

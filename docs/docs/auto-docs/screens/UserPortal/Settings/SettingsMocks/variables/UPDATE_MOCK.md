@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_MOCK
+# Variable: UPDATE_MOCK
 
-> `const` **UPDATE\_MOCK**: `object`[]
+> `const` **UPDATE_MOCK**: `object`[]
 
 Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L124)
 

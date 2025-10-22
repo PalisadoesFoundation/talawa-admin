@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
@@ -26,7 +26,7 @@ Callback function to close the modal.
 
 `void`
 
-***
+---
 
 ### reloadMembers()
 
@@ -40,7 +40,7 @@ Callback function to reload members.
 
 `void`
 
-***
+---
 
 ### show
 

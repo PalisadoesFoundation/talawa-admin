@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationSubTagsQuery
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:91](https://github.com/Palisadoe
 
 > **getChildTags**: [`InterfaceQueryUserTagChildTags`](../../interfaces/interfaces/InterfaceQueryUserTagChildTags.md)
 
-***
+---
 
 ### error?
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/Palisadoe
 
 `InterfaceBaseQueryResult.error`
 
-***
+---
 
 ### fetchMore()
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:94](https://github.com/Palisadoe
 
 `void`
 
-***
+---
 
 ### loading
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/Palisadoe
 
 `InterfaceBaseQueryResult.loading`
 
-***
+---
 
 ### refetch()?
 

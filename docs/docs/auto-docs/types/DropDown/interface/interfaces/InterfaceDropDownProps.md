@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceDropDownProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/DropDown/interface.ts:2](https://github.com/PalisadoesFou
 
 Defined in: [src/types/DropDown/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L4)
 
-***
+---
 
 ### btnTextStyle?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/DropDown/interface.ts:4](https://github.com/PalisadoesFou
 
 Defined in: [src/types/DropDown/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L5)
 
-***
+---
 
 ### parentContainerStyle?
 

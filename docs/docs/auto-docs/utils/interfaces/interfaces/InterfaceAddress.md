@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAddress
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2071](https://github.com/PalisadoesFoundati
 
 The city.
 
-***
+---
 
 ### countryCode
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2072](https://github.com/PalisadoesFoundati
 
 The country code.
 
-***
+---
 
 ### dependentLocality
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2073](https://github.com/PalisadoesFoundati
 
 The dependent locality.
 
-***
+---
 
 ### line1
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2074](https://github.com/PalisadoesFoundati
 
 The first line of the address.
 
-***
+---
 
 ### line2
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:2075](https://github.com/PalisadoesFoundati
 
 The second line of the address.
 
-***
+---
 
 ### postalCode
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:2076](https://github.com/PalisadoesFoundati
 
 The postal code.
 
-***
+---
 
 ### sortingCode
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:2077](https://github.com/PalisadoesFoundati
 
 The sorting code.
 
-***
+---
 
 ### state
 

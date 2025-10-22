@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: languages
 
@@ -14,9 +14,9 @@ Defined in: [src/utils/languages.ts:3](https://github.com/PalisadoesFoundation/t
 
 > **code**: `string` = `'en'`
 
-### country\_code
+### country_code
 
-> **country\_code**: `string` = `'gb'`
+> **country_code**: `string` = `'gb'`
 
 ### name
 

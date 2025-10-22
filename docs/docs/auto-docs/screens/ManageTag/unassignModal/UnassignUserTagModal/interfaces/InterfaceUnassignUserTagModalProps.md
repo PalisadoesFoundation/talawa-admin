@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUnassignUserTagModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:39](ht
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### t
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:39](ht
 
 Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L40)
 
-***
+---
 
 ### tCommon
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](ht
 
 Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L41)
 
-***
+---
 
 ### toggleUnassignUserTagModal()
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:38](ht
 
 `void`
 
-***
+---
 
 ### unassignUserTagModalIsOpen
 

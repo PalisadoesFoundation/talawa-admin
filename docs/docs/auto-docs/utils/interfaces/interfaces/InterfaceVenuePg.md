@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVenuePg
 
@@ -30,7 +30,7 @@ The attachments associated with the venue.
 
 > **url**: `string`
 
-***
+---
 
 ### capacity?
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1256](https://github.com/PalisadoesFoundati
 
 The capacity of the venue.
 
-***
+---
 
 ### createdAt
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:1261](https://github.com/PalisadoesFoundati
 
 The creation date of the venue record.
 
-***
+---
 
 ### creator
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1263](https://github.com/PalisadoesFoundati
 
 The user who created this venue.
 
-***
+---
 
 ### description?
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:1255](https://github.com/PalisadoesFoundati
 
 The description of the venue.
 
-***
+---
 
 ### id
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:1253](https://github.com/PalisadoesFoundati
 
 The unique identifier of the venue.
 
-***
+---
 
 ### name
 
@@ -90,7 +90,7 @@ Defined in: [src/utils/interfaces.ts:1254](https://github.com/PalisadoesFoundati
 
 The name of the venue.
 
-***
+---
 
 ### organization
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1265](https://github.com/PalisadoesFoundati
 
 The organization associated with this venue.
 
-***
+---
 
 ### updatedAt
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:1262](https://github.com/PalisadoesFoundati
 
 The last update date of the venue record.
 
-***
+---
 
 ### updater
 

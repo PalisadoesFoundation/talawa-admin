@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationEventsConnectionEdgePg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:953](https://github.com/PalisadoesFoundatio
 
 The cursor for this edge.
 
-***
+---
 
 ### node
 

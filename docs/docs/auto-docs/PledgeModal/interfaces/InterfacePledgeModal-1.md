@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:68](https://github
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L71)
 
-***
+---
 
 ### endDate
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:71](https://github
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L75)
 
-***
+---
 
 ### hide()
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:70](https://github
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:70](https://github
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L69)
 
-***
+---
 
 ### mode
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:69](https://github
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L76)
 
-***
+---
 
 ### pledge
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:76](https://github
 
 Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L73)
 
-***
+---
 
 ### refetchPledge()
 
@@ -70,7 +70,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:74](https://github
 
 `void`
 
-***
+---
 
 ### userId
 

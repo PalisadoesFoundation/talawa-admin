@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: SubTargetType
 
@@ -10,13 +10,13 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/Palis
 
 ## Properties
 
-### comp\_id?
+### comp_id?
 
-> `optional` **comp\_id**: `string`
+> `optional` **comp_id**: `string`
 
 Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L13)
 
-***
+---
 
 ### icon?
 
@@ -24,7 +24,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/Pali
 
 Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L12)
 
-***
+---
 
 ### name?
 
@@ -32,7 +32,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/Pali
 
 Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L10)
 
-***
+---
 
 ### url
 

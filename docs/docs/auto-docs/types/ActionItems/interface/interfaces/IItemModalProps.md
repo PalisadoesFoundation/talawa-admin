@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IItemModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/ActionItems/interface.ts:100](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L107)
 
-***
+---
 
 ### actionItemsRefetch()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/ActionItems/interface.ts:105](https://github.com/Palisado
 
 `void`
 
-***
+---
 
 ### baseEvent?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/ActionItems/interface.ts:110](https://github.com/Palisado
 
 > **id**: `string`
 
-***
+---
 
 ### editMode
 
@@ -46,7 +46,7 @@ Defined in: [src/types/ActionItems/interface.ts:110](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L108)
 
-***
+---
 
 ### eventId
 
@@ -54,7 +54,7 @@ Defined in: [src/types/ActionItems/interface.ts:108](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L104)
 
-***
+---
 
 ### hide()
 
@@ -66,7 +66,7 @@ Defined in: [src/types/ActionItems/interface.ts:102](https://github.com/Palisado
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -74,7 +74,7 @@ Defined in: [src/types/ActionItems/interface.ts:102](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L101)
 
-***
+---
 
 ### isRecurring?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/ActionItems/interface.ts:101](https://github.com/Palisado
 
 Defined in: [src/types/ActionItems/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L109)
 
-***
+---
 
 ### orgActionItemsRefetch()?
 
@@ -94,7 +94,7 @@ Defined in: [src/types/ActionItems/interface.ts:106](https://github.com/Palisado
 
 `void`
 
-***
+---
 
 ### orgId
 

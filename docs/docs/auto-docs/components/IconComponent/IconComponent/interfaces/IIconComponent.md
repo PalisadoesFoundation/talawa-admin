@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IIconComponent
 
@@ -14,7 +14,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:59](https://github.c
 
 Defined in: [src/components/IconComponent/IconComponent.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L61)
 
-***
+---
 
 ### height?
 
@@ -22,7 +22,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:61](https://github.c
 
 Defined in: [src/components/IconComponent/IconComponent.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L62)
 
-***
+---
 
 ### name
 
@@ -30,7 +30,7 @@ Defined in: [src/components/IconComponent/IconComponent.tsx:62](https://github.c
 
 Defined in: [src/components/IconComponent/IconComponent.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/IconComponent/IconComponent.tsx#L60)
 
-***
+---
 
 ### width?
 

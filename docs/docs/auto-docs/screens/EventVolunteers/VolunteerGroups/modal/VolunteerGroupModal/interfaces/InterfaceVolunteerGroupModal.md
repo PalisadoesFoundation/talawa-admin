@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVolunteerGroupModal
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 > **id**: `string`
 
-***
+---
 
 ### eventId
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L64)
 
-***
+---
 
 ### group
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L66)
 
-***
+---
 
 ### hide()
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L62)
 
-***
+---
 
 ### isRecurring?
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L70)
 
-***
+---
 
 ### mode
 
@@ -70,7 +70,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L68)
 
-***
+---
 
 ### orgId
 
@@ -78,7 +78,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L65)
 
-***
+---
 
 ### recurringEventInstanceId?
 
@@ -86,7 +86,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupMod
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L72)
 
-***
+---
 
 ### refetchGroups()
 

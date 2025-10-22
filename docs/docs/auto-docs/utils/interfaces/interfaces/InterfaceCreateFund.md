@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCreateFund
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2090](https://github.com/PalisadoesFoundati
 
 The name of the fund.
 
-***
+---
 
 ### fundRef
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2091](https://github.com/PalisadoesFoundati
 
 The reference for the fund.
 
-***
+---
 
 ### isArchived
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2093](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is archived.
 
-***
+---
 
 ### isDefault
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2092](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is the default.
 
-***
+---
 
 ### isTaxDeductible
 

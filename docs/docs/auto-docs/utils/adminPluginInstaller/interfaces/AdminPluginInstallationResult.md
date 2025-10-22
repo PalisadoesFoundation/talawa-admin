@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: AdminPluginInstallationResult
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:36](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L41)
 
-***
+---
 
 ### installedComponents
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:41](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L40)
 
-***
+---
 
 ### manifest
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:40](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L39)
 
-***
+---
 
 ### pluginId
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:39](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L38)
 
-***
+---
 
 ### success
 

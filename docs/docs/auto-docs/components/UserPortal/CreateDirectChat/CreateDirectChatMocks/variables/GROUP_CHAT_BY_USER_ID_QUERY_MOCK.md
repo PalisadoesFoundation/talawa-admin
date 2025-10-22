@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GROUP\_CHAT\_BY\_USER\_ID\_QUERY\_MOCK
+# Variable: GROUP_CHAT_BY_USER_ID_QUERY_MOCK
 
-> `const` **GROUP\_CHAT\_BY\_USER\_ID\_QUERY\_MOCK**: `InterfaceGQLMock`[]
+> `const` **GROUP_CHAT_BY_USER_ID_QUERY_MOCK**: `InterfaceGQLMock`[]
 
 Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts:484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChatMocks.ts#L484)

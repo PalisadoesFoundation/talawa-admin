@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationCardStartProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Organization/interface.ts:34](https://github.com/Palisado
 
 Defined in: [src/types/Organization/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L36)
 
-***
+---
 
 ### image
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Organization/interface.ts:36](https://github.com/Palisado
 
 Defined in: [src/types/Organization/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L35)
 
-***
+---
 
 ### name
 

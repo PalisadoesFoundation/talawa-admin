@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUpdateActionItemInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/ActionItems/interface.ts:73](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L75)
 
-***
+---
 
 ### categoryId?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/ActionItems/interface.ts:75](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L76)
 
-***
+---
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/ActionItems/interface.ts:76](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L74)
 
-***
+---
 
 ### isCompleted
 
@@ -38,7 +38,7 @@ Defined in: [src/types/ActionItems/interface.ts:74](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L77)
 
-***
+---
 
 ### postCompletionNotes?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/ActionItems/interface.ts:77](https://github.com/Palisadoe
 
 Defined in: [src/types/ActionItems/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L79)
 
-***
+---
 
 ### preCompletionNotes?
 

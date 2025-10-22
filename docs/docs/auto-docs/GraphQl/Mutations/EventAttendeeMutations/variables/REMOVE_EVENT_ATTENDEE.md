@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: REMOVE\_EVENT\_ATTENDEE
+# Variable: REMOVE_EVENT_ATTENDEE
 
-> `const` **REMOVE\_EVENT\_ATTENDEE**: `DocumentNode`
+> `const` **REMOVE_EVENT_ATTENDEE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L39)
 
