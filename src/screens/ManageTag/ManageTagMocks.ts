@@ -5,6 +5,7 @@ import {
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { buildAssignedUsers } from './ManageTagMockUtils';
 
 export const MOCKS = [
   {
@@ -22,8 +23,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
-          name: 'tag1',
+        getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
             edges: [
               {
@@ -31,6 +31,7 @@ export const MOCKS = [
                   _id: '1',
                   firstName: 'member',
                   lastName: '1',
+                  __typename: 'User',
                 },
                 cursor: '1',
               },
@@ -39,6 +40,7 @@ export const MOCKS = [
                   _id: '2',
                   firstName: 'member',
                   lastName: '2',
+                  __typename: 'User',
                 },
                 cursor: '2',
               },
@@ -47,6 +49,7 @@ export const MOCKS = [
                   _id: '3',
                   firstName: 'member',
                   lastName: '3',
+                  __typename: 'User',
                 },
                 cursor: '3',
               },
@@ -55,6 +58,7 @@ export const MOCKS = [
                   _id: '4',
                   firstName: 'member',
                   lastName: '4',
+                  __typename: 'User',
                 },
                 cursor: '4',
               },
@@ -63,6 +67,7 @@ export const MOCKS = [
                   _id: '5',
                   firstName: 'member',
                   lastName: '5',
+                  __typename: 'User',
                 },
                 cursor: '5',
               },
@@ -71,6 +76,7 @@ export const MOCKS = [
                   _id: '6',
                   firstName: 'member',
                   lastName: '6',
+                  __typename: 'User',
                 },
                 cursor: '6',
               },
@@ -79,6 +85,7 @@ export const MOCKS = [
                   _id: '7',
                   firstName: 'member',
                   lastName: '7',
+                  __typename: 'User',
                 },
                 cursor: '7',
               },
@@ -87,6 +94,7 @@ export const MOCKS = [
                   _id: '8',
                   firstName: 'member',
                   lastName: '8',
+                  __typename: 'User',
                 },
                 cursor: '8',
               },
@@ -95,6 +103,7 @@ export const MOCKS = [
                   _id: '9',
                   firstName: 'member',
                   lastName: '9',
+                  __typename: 'User',
                 },
                 cursor: '9',
               },
@@ -103,6 +112,7 @@ export const MOCKS = [
                   _id: '10',
                   firstName: 'member',
                   lastName: '10',
+                  __typename: 'User',
                 },
                 cursor: '10',
               },
@@ -115,8 +125,7 @@ export const MOCKS = [
             },
             totalCount: 12,
           },
-          ancestorTags: [],
-        },
+        }),
       },
     },
   },
@@ -136,8 +145,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
-          name: 'tag1',
+        getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
             edges: [
               {
@@ -145,6 +153,7 @@ export const MOCKS = [
                   _id: '11',
                   firstName: 'member',
                   lastName: '11',
+                  __typename: 'User',
                 },
                 cursor: '11',
               },
@@ -153,6 +162,7 @@ export const MOCKS = [
                   _id: '12',
                   firstName: 'member',
                   lastName: '12',
+                  __typename: 'User',
                 },
                 cursor: '12',
               },
@@ -165,8 +175,7 @@ export const MOCKS = [
             },
             totalCount: 12,
           },
-          ancestorTags: [],
-        },
+        }),
       },
     },
   },
@@ -185,8 +194,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
-          name: 'tag1',
+        getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
             edges: [
               {
@@ -194,6 +202,7 @@ export const MOCKS = [
                   _id: '1',
                   firstName: 'assigned',
                   lastName: 'user1',
+                  __typename: 'User',
                 },
                 cursor: '1',
               },
@@ -202,6 +211,7 @@ export const MOCKS = [
                   _id: '2',
                   firstName: 'assigned',
                   lastName: 'user2',
+                  __typename: 'User',
                 },
                 cursor: '2',
               },
@@ -214,8 +224,7 @@ export const MOCKS = [
             },
             totalCount: 2,
           },
-          ancestorTags: [],
-        },
+        }),
       },
     },
   },
@@ -234,8 +243,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getAssignedUsers: {
-          name: 'tag1',
+        getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
             edges: [
               {
@@ -243,6 +251,7 @@ export const MOCKS = [
                   _id: '2',
                   firstName: 'assigned',
                   lastName: 'user2',
+                  __typename: 'User',
                 },
                 cursor: '2',
               },
@@ -251,6 +260,7 @@ export const MOCKS = [
                   _id: '1',
                   firstName: 'assigned',
                   lastName: 'user1',
+                  __typename: 'User',
                 },
                 cursor: '1',
               },
@@ -263,8 +273,7 @@ export const MOCKS = [
             },
             totalCount: 2,
           },
-          ancestorTags: [],
-        },
+        }),
       },
     },
   },
@@ -280,6 +289,7 @@ export const MOCKS = [
       data: {
         unassignUserTag: {
           _id: '1',
+          __typename: 'UserTag',
         },
       },
     },
@@ -296,6 +306,7 @@ export const MOCKS = [
       data: {
         updateUserTag: {
           _id: '1',
+          __typename: 'UserTag',
         },
       },
     },
@@ -311,6 +322,66 @@ export const MOCKS = [
       data: {
         removeUserTag: {
           _id: '1',
+          __typename: 'UserTag',
+        },
+      },
+    },
+  },
+  // Mock for search functionality - when searching for "assigned user"
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: 'assigned' },
+          lastName: { starts_with: 'user' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          __typename: 'UserTag',
+          name: 'tag1',
+          ancestorTags: [],
+          usersAssignedTo: {
+            __typename: 'UserTagUsersAssignedToConnection',
+            edges: [
+              {
+                __typename: 'UserTagUsersAssignedToEdge',
+                node: {
+                  __typename: 'User',
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                  id: '1',
+                },
+                cursor: '1',
+              },
+              {
+                __typename: 'UserTagUsersAssignedToEdge',
+                node: {
+                  __typename: 'User',
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                  id: '2',
+                },
+                cursor: '2',
+              },
+            ],
+            pageInfo: {
+              __typename: 'PageInfo',
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
         },
       },
     },
