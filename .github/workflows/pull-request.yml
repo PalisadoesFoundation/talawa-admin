@@ -773,6 +773,9 @@ jobs:
         Start-App-Without-Docker,
         Docker-Start-Check,
       ]
+    permissions:
+      contents: read
+      issues: read
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
