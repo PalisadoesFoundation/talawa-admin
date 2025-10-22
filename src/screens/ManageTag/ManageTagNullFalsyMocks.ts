@@ -68,7 +68,7 @@ export const MOCKS_NULL_USERS_ASSIGNED_TO = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          usersAssignedTo: null,
+          usersAssignedTo: undefined,
         }),
       },
     },
@@ -126,7 +126,7 @@ export const MOCKS_NULL_EDGES_ARRAY = [
       data: {
         getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
-            edges: null,
+            edges: [],
             pageInfo: {
               startCursor: null,
               endCursor: null,
@@ -160,7 +160,12 @@ export const MOCKS_NULL_PAGE_INFO = [
         getAssignedUsers: buildAssignedUsers({
           usersAssignedTo: {
             edges: [],
-            pageInfo: null,
+            pageInfo: {
+              startCursor: null,
+              endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
             totalCount: 0,
           },
         }),
@@ -186,7 +191,7 @@ export const MOCKS_NULL_ANCESTOR_TAGS = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          ancestorTags: null,
+          ancestorTags: [],
         }),
       },
     },

@@ -17,7 +17,6 @@ import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import { vi } from 'vitest';
 import ManageTag from './ManageTag';
 import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import {
@@ -55,7 +54,7 @@ const translations = {
 
 // Mock InfiniteScroll component
 vi.mock('react-infinite-scroll-component', () => ({
-  default: function InfiniteScroll({ children, next, hasMore }) {
+  default: function InfiniteScroll({ children, next, hasMore }: { children: React.ReactNode; next: () => void; hasMore: boolean }) {
     return (
       <div data-testid="infinite-scroll-mock">
         {children}
