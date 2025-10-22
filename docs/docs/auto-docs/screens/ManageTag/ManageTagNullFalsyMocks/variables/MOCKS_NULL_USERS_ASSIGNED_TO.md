@@ -2,17 +2,13 @@
 
 ***
 
-# Variable: MOCKS\_ERROR\_ASSIGNED\_MEMBERS
+# Variable: MOCKS\_NULL\_USERS\_ASSIGNED\_TO
 
-> `const` **MOCKS\_ERROR\_ASSIGNED\_MEMBERS**: `object`[]
+> `const` **MOCKS\_NULL\_USERS\_ASSIGNED\_TO**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMocks.ts#L391)
+Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L10)
 
 ## Type Declaration
-
-### error
-
-> **error**: `Error`
 
 ### request
 
@@ -61,3 +57,27 @@ Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/Pal
 #### request.variables.where.lastName.starts\_with
 
 > **starts\_with**: `string` = `''`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.getAssignedUsers
+
+> **getAssignedUsers**: `object`
+
+#### result.data.getAssignedUsers.ancestorTags
+
+> **ancestorTags**: `any`[] = `[]`
+
+#### result.data.getAssignedUsers.name
+
+> **name**: `string` = `'tag1'`
+
+#### result.data.getAssignedUsers.usersAssignedTo
+
+> **usersAssignedTo**: `any` = `null`

@@ -2,17 +2,13 @@
 
 ***
 
-# Variable: MOCKS\_ERROR\_ASSIGNED\_MEMBERS
+# Variable: MOCKS\_NULL\_DATA
 
-> `const` **MOCKS\_ERROR\_ASSIGNED\_MEMBERS**: `object`[]
+> `const` **MOCKS\_NULL\_DATA**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMocks.ts#L391)
+Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L155)
 
 ## Type Declaration
-
-### error
-
-> **error**: `Error`
 
 ### request
 
@@ -61,3 +57,11 @@ Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/Pal
 #### request.variables.where.lastName.starts\_with
 
 > **starts\_with**: `string` = `''`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `any` = `null`
