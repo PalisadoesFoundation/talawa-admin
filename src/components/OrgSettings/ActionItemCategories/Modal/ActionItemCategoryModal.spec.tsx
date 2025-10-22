@@ -299,4 +299,280 @@ describe('Testing Action Item Category Modal', () => {
       screen.queryByTestId('deleteCategoryButton'),
     ).not.toBeInTheDocument();
   });
+
+  describe('Description field handling', () => {
+    it('should update description when input value changes', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      expect(descriptionInput).toHaveValue('This is a test category');
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Updated description' },
+      });
+      expect(descriptionInput).toHaveValue('Updated description');
+    });
+
+    it('should handle empty description in create mode', async () => {
+      const propsWithEmptyDescription = {
+        ...categoryProps[0],
+        category: {
+          ...categoryProps[0].category!,
+          description: '',
+        },
+      };
+      renderCategoryModal(link1, propsWithEmptyDescription);
+      const descriptionInput = screen.getByLabelText('Description');
+      expect(descriptionInput).toHaveValue('');
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New description' },
+      });
+      expect(descriptionInput).toHaveValue('New description');
+    });
+
+    it('should handle description changes in edit mode', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Updated description' },
+      });
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should handle empty description in edit mode', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      fireEvent.change(descriptionInput, { target: { value: '' } });
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+  });
+
+  describe('Form state initialization and useEffect', () => {
+    it('should initialize form with null category', () => {
+      const propsWithNullCategory = {
+        ...categoryProps[0],
+        category: null,
+      };
+      renderCategoryModal(link1, propsWithNullCategory);
+
+      expect(screen.getByLabelText('Name *')).toHaveValue('');
+      expect(screen.getByLabelText('Description')).toHaveValue('');
+      expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
+    });
+
+    it('should initialize form with undefined category', () => {
+      const propsWithUndefinedCategory = {
+        ...categoryProps[0],
+        category: undefined,
+      };
+      renderCategoryModal(link1, propsWithUndefinedCategory);
+
+      expect(screen.getByLabelText('Name *')).toHaveValue('');
+      expect(screen.getByLabelText('Description')).toHaveValue('');
+      expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
+    });
+
+    it('should initialize form with disabled category', () => {
+      const propsWithDisabledCategory = {
+        ...categoryProps[1],
+        category: {
+          ...categoryProps[1].category!,
+          isDisabled: true,
+        },
+      };
+      renderCategoryModal(link1, propsWithDisabledCategory);
+
+      expect(screen.getByTestId('isDisabledSwitch')).toBeChecked();
+    });
+
+    it('should initialize form with empty description category', () => {
+      const propsWithEmptyDescription = {
+        ...categoryProps[1],
+        category: {
+          ...categoryProps[1].category!,
+          description: '',
+        },
+      };
+      renderCategoryModal(link1, propsWithEmptyDescription);
+
+      expect(screen.getByLabelText('Description')).toHaveValue('');
+    });
+  });
+
+  describe('Modal functionality', () => {
+    it('should close modal when close button is clicked', async () => {
+      const mockHide = vi.fn();
+      const propsWithMockHide = {
+        ...categoryProps[0],
+        hide: mockHide,
+      };
+      renderCategoryModal(link1, propsWithMockHide);
+
+      const closeBtn = screen.getByTestId('actionItemCategoryModalCloseBtn');
+      await userEvent.click(closeBtn);
+
+      expect(mockHide).toHaveBeenCalled();
+    });
+
+    it('should display correct modal title', () => {
+      renderCategoryModal(link1, categoryProps[0]);
+      expect(
+        screen.getByText(translations.categoryDetails),
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('Form validation and edge cases', () => {
+    it('should handle form submission with only name change', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const nameInput = screen.getByLabelText('Name *');
+      fireEvent.change(nameInput, { target: { value: 'New Category Name' } });
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should handle form submission with only description change', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New description only' },
+      });
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should handle form submission with all fields changed', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const nameInput = screen.getByLabelText('Name *');
+      const descriptionInput = screen.getByLabelText('Description');
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+
+      fireEvent.change(nameInput, { target: { value: 'Completely New Name' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Completely new description' },
+      });
+      await userEvent.click(isDisabledSwitch);
+
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should handle create mode with all fields filled', async () => {
+      renderCategoryModal(link1, categoryProps[0]);
+      const nameInput = screen.getByLabelText('Name *');
+      const descriptionInput = screen.getByLabelText('Description');
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+
+      fireEvent.change(nameInput, { target: { value: 'New Category' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New description' },
+      });
+      await userEvent.click(isDisabledSwitch);
+
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[0].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulCreation,
+        );
+      });
+    });
+  });
+
+  describe('Error handling edge cases', () => {
+    it('should handle create error with all fields', async () => {
+      renderCategoryModal(link3, categoryProps[0]);
+      const nameInput = screen.getByLabelText('Name *');
+      const descriptionInput = screen.getByLabelText('Description');
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+
+      fireEvent.change(nameInput, { target: { value: 'New Category' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New description' },
+      });
+      await userEvent.click(isDisabledSwitch);
+
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
+    });
+
+    it('should handle update error with partial changes', async () => {
+      renderCategoryModal(link3, categoryProps[1]);
+      const nameInput = screen.getByLabelText('Name *');
+      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+
+      const submitBtn = screen.getByTestId('formSubmitButton');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
+    });
+  });
+
+  describe('Button text and labels', () => {
+    it('should display create button text in create mode', () => {
+      renderCategoryModal(link1, categoryProps[0]);
+      expect(screen.getByText(translations.create)).toBeInTheDocument();
+    });
+
+    it('should display update button text in edit mode', () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      expect(
+        screen.getByText(translations.updateActionItemCategory),
+      ).toBeInTheDocument();
+    });
+
+    it('should display delete button text in edit mode', () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      expect(screen.getByText(translations.delete)).toBeInTheDocument();
+    });
+  });
 });
