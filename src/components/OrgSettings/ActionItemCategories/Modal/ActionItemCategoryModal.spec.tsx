@@ -312,10 +312,13 @@ describe('Testing Action Item Category Modal', () => {
     });
 
     it('should handle empty description in create mode', async () => {
+      if (!categoryProps[0].category) {
+        throw new Error('categoryProps[0].category should not be null');
+      }
       const propsWithEmptyDescription = {
         ...categoryProps[0],
         category: {
-          ...categoryProps[0].category!,
+          ...categoryProps[0].category,
           description: '',
         },
       };
@@ -389,10 +392,13 @@ describe('Testing Action Item Category Modal', () => {
     });
 
     it('should initialize form with disabled category', () => {
+      if (!categoryProps[1].category) {
+        throw new Error('categoryProps[1].category should not be null');
+      }
       const propsWithDisabledCategory = {
         ...categoryProps[1],
         category: {
-          ...categoryProps[1].category!,
+          ...categoryProps[1].category,
           isDisabled: true,
         },
       };
@@ -402,10 +408,13 @@ describe('Testing Action Item Category Modal', () => {
     });
 
     it('should initialize form with empty description category', () => {
+      if (!categoryProps[1].category) {
+        throw new Error('categoryProps[1].category should not be null');
+      }
       const propsWithEmptyDescription = {
         ...categoryProps[1],
         category: {
-          ...categoryProps[1].category!,
+          ...categoryProps[1].category,
           description: '',
         },
       };
