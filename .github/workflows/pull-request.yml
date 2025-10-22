@@ -775,7 +775,7 @@ jobs:
       ]
     permissions:
       contents: read
-      issues: read
+      issues: write
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
