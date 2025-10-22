@@ -146,33 +146,35 @@ export const MOCKS = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          edges: [
-            {
-              node: {
-                _id: '11',
-                firstName: 'member',
-                lastName: '11',
-                __typename: 'User',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '11',
+                  firstName: 'member',
+                  lastName: '11',
+                  __typename: 'User',
+                },
+                cursor: '11',
               },
-              cursor: '11',
-            },
-            {
-              node: {
-                _id: '12',
-                firstName: 'member',
-                lastName: '12',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '12',
+                  firstName: 'member',
+                  lastName: '12',
+                  __typename: 'User',
+                },
+                cursor: '12',
               },
-              cursor: '12',
+            ],
+            pageInfo: {
+              startCursor: '11',
+              endCursor: '12',
+              hasNextPage: false,
+              hasPreviousPage: true,
             },
-          ],
-          pageInfo: {
-            startCursor: '11',
-            endCursor: '12',
-            hasNextPage: false,
-            hasPreviousPage: true,
+            totalCount: 12,
           },
-          totalCount: 12,
         }),
       },
     },
@@ -193,33 +195,35 @@ export const MOCKS = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          edges: [
-            {
-              node: {
-                _id: '1',
-                firstName: 'assigned',
-                lastName: 'user1',
-                __typename: 'User',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                  __typename: 'User',
+                },
+                cursor: '1',
               },
-              cursor: '1',
-            },
-            {
-              node: {
-                _id: '2',
-                firstName: 'assigned',
-                lastName: 'user2',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                  __typename: 'User',
+                },
+                cursor: '2',
               },
-              cursor: '2',
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
-          ],
-          pageInfo: {
-            startCursor: '1',
-            endCursor: '2',
-            hasNextPage: false,
-            hasPreviousPage: false,
+            totalCount: 2,
           },
-          totalCount: 2,
         }),
       },
     },
@@ -240,33 +244,35 @@ export const MOCKS = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          edges: [
-            {
-              node: {
-                _id: '2',
-                firstName: 'assigned',
-                lastName: 'user2',
-                __typename: 'User',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'assigned',
+                  lastName: 'user2',
+                  __typename: 'User',
+                },
+                cursor: '2',
               },
-              cursor: '2',
-            },
-            {
-              node: {
-                _id: '1',
-                firstName: 'assigned',
-                lastName: 'user1',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'assigned',
+                  lastName: 'user1',
+                  __typename: 'User',
+                },
+                cursor: '1',
               },
-              cursor: '1',
+            ],
+            pageInfo: {
+              startCursor: '2',
+              endCursor: '1',
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
-          ],
-          pageInfo: {
-            startCursor: '2',
-            endCursor: '1',
-            hasNextPage: false,
-            hasPreviousPage: false,
+            totalCount: 2,
           },
-          totalCount: 2,
         }),
       },
     },
