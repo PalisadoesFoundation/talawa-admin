@@ -228,6 +228,7 @@ function volunteers(): JSX.Element {
           volunteer.volunteerStatus === 'rejected',
       );
     } else {
+      // status === VolunteerStatus.Accepted
       return filteredVolunteers.filter(
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.volunteerStatus === 'accepted',
