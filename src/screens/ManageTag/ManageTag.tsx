@@ -219,7 +219,10 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      toast.error(errorMessage);
     }
   };
 
@@ -254,7 +257,10 @@ function ManageTag(): JSX.Element {
         setEditUserTagModalIsOpen(false);
       }
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      toast.error(errorMessage);
     }
   };
 
@@ -267,7 +273,10 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      toast.error(errorMessage);
     }
   };
 
