@@ -109,7 +109,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
               </div>
             )}
           </Col>
-          {isAdministrator && (
+          {isAdministrator && orgId && eventId && (
             <Col xs={2} md={1} className="text-end">
               <Link
                 to={`/event/${orgId}/${eventId}`}
