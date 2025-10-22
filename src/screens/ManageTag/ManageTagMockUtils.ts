@@ -10,7 +10,7 @@ export const buildAssignedUsers = (
           _id: string;
           firstName: string;
           lastName: string;
-          __typename: string;
+          __typename?: string;
         };
         cursor: string;
       }>;
@@ -22,12 +22,12 @@ export const buildAssignedUsers = (
       };
       totalCount: number;
     } | null;
-    ancestorTags: Array<{ _id: string; name: string; __typename: string }>;
+    ancestorTags: Array<{ _id: string; name: string; __typename?: string }>;
   }>,
 ) => ({
-  name: 'tag1',
+  name: overrides?.name ?? 'tag1',
   usersAssignedTo: {
-    edges: [
+    edges: overrides?.usersAssignedTo?.edges ?? [
       {
         node: {
           _id: '1',
@@ -38,14 +38,13 @@ export const buildAssignedUsers = (
         cursor: '1',
       },
     ],
-    pageInfo: {
+    pageInfo: overrides?.usersAssignedTo?.pageInfo ?? {
       startCursor: '1',
       endCursor: '1',
       hasNextPage: false,
       hasPreviousPage: false,
     },
-    totalCount: 1,
+    totalCount: overrides?.usersAssignedTo?.totalCount ?? 1,
   },
-  ancestorTags: [],
-  ...overrides,
+  ancestorTags: overrides?.ancestorTags ?? [],
 });

@@ -1,13 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -66,7 +60,7 @@ vi.mock('react-infinite-scroll-component', () => ({
       <div data-testid="infinite-scroll-mock">
         {children}
         {hasMore && (
-          <button data-testid="load-more-trigger" onClick={next}>
+          <button type="button" data-testid="load-more-trigger" onClick={next}>
             Load More
           </button>
         )}

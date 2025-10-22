@@ -24,105 +24,107 @@ export const MOCKS = [
     result: {
       data: {
         getAssignedUsers: buildAssignedUsers({
-          edges: [
-            {
-              node: {
-                _id: '1',
-                firstName: 'member',
-                lastName: '1',
-                __typename: 'User',
+          usersAssignedTo: {
+            edges: [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'member',
+                  lastName: '1',
+                  __typename: 'User',
+                },
+                cursor: '1',
               },
-              cursor: '1',
-            },
-            {
-              node: {
-                _id: '2',
-                firstName: 'member',
-                lastName: '2',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '2',
+                  firstName: 'member',
+                  lastName: '2',
+                  __typename: 'User',
+                },
+                cursor: '2',
               },
-              cursor: '2',
-            },
-            {
-              node: {
-                _id: '3',
-                firstName: 'member',
-                lastName: '3',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '3',
+                  firstName: 'member',
+                  lastName: '3',
+                  __typename: 'User',
+                },
+                cursor: '3',
               },
-              cursor: '3',
-            },
-            {
-              node: {
-                _id: '4',
-                firstName: 'member',
-                lastName: '4',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '4',
+                  firstName: 'member',
+                  lastName: '4',
+                  __typename: 'User',
+                },
+                cursor: '4',
               },
-              cursor: '4',
-            },
-            {
-              node: {
-                _id: '5',
-                firstName: 'member',
-                lastName: '5',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '5',
+                  firstName: 'member',
+                  lastName: '5',
+                  __typename: 'User',
+                },
+                cursor: '5',
               },
-              cursor: '5',
-            },
-            {
-              node: {
-                _id: '6',
-                firstName: 'member',
-                lastName: '6',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '6',
+                  firstName: 'member',
+                  lastName: '6',
+                  __typename: 'User',
+                },
+                cursor: '6',
               },
-              cursor: '6',
-            },
-            {
-              node: {
-                _id: '7',
-                firstName: 'member',
-                lastName: '7',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '7',
+                  firstName: 'member',
+                  lastName: '7',
+                  __typename: 'User',
+                },
+                cursor: '7',
               },
-              cursor: '7',
-            },
-            {
-              node: {
-                _id: '8',
-                firstName: 'member',
-                lastName: '8',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '8',
+                  firstName: 'member',
+                  lastName: '8',
+                  __typename: 'User',
+                },
+                cursor: '8',
               },
-              cursor: '8',
-            },
-            {
-              node: {
-                _id: '9',
-                firstName: 'member',
-                lastName: '9',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '9',
+                  firstName: 'member',
+                  lastName: '9',
+                  __typename: 'User',
+                },
+                cursor: '9',
               },
-              cursor: '9',
-            },
-            {
-              node: {
-                _id: '10',
-                firstName: 'member',
-                lastName: '10',
-                __typename: 'User',
+              {
+                node: {
+                  _id: '10',
+                  firstName: 'member',
+                  lastName: '10',
+                  __typename: 'User',
+                },
+                cursor: '10',
               },
-              cursor: '10',
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '10',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
-          ],
-          pageInfo: {
-            startCursor: '1',
-            endCursor: '10',
-            hasNextPage: true,
-            hasPreviousPage: false,
+            totalCount: 12,
           },
-          totalCount: 12,
         }),
       },
     },
