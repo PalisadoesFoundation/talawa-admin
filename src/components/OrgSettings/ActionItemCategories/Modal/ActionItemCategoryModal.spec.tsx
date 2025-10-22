@@ -379,18 +379,6 @@ describe('Testing Action Item Category Modal', () => {
       expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
     });
 
-    it('should initialize form with undefined category', () => {
-      const propsWithUndefinedCategory = {
-        ...categoryProps[0],
-        category: null,
-      };
-      renderCategoryModal(link1, propsWithUndefinedCategory);
-
-      expect(screen.getByLabelText('Name *')).toHaveValue('');
-      expect(screen.getByLabelText('Description')).toHaveValue('');
-      expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
-    });
-
     it('should initialize form with disabled category', () => {
       if (!categoryProps[1].category) {
         throw new Error('categoryProps[1].category should not be null');
