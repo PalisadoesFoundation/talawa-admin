@@ -28,10 +28,7 @@ export type {
   IExtensionRegistry,
   PluginStatus,
   ExtensionPointType,
-  IPluginStoreProps,
   IPluginModalProps,
-  IPluginDrawerItemsProps,
-  IPluginRouterProps,
 } from './types';
 
 export {

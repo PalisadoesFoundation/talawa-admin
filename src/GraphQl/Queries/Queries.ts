@@ -1346,14 +1346,12 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
 export {
-  AgendaItemByEvent,
-  AgendaItemByOrganization,
+  AgendaItemByEvent
 } from './AgendaItemQueries';
 
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
-  ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_EVENTS_CONNECTION,
 } from './PlugInQueries';
@@ -1365,6 +1363,5 @@ export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
 export {
-  ORGANIZATION_ADMINS_LIST,
   USER_CREATED_ORGANIZATIONS,
 } from './OrganizationQueries';

@@ -144,7 +144,7 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
+const GET_POSTS_BY_ORG = gql`
   query GetPostsByOrganization($input: GetPostsByOrgInput!) {
     postsByOrganization(input: $input) {
       id
@@ -161,7 +161,7 @@ export const GET_POSTS_BY_ORG = gql`
   }
 `;
 
-export const FILTERED_ORGANIZATION_POSTS = gql`
+const FILTERED_ORGANIZATION_POSTS = gql`
   query FilteredOrganizationPosts(
     $input: QueryOrganizationInput!
     $title_contains: String
@@ -375,7 +375,7 @@ export const USER_CREATED_ORGANIZATIONS = gql`
  * @returns The list of admins associated with the organization.
  */
 
-export const ORGANIZATION_ADMINS_LIST = gql`
+const ORGANIZATION_ADMINS_LIST = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
       _id
@@ -396,7 +396,7 @@ export const ORGANIZATION_ADMINS_LIST = gql`
  * @param id - The ID of the organization for which members are being retrieved.
  * @returns The list of members associated with the organization.
  */
-export const ORGANIZATION_FUNDS = gql`
+const ORGANIZATION_FUNDS = gql`
   query Organizations($id: ID!) {
     organizations(id: $id) {
       funds {
