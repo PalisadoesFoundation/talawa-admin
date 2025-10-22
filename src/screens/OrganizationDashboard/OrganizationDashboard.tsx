@@ -303,7 +303,6 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * UseEffect to handle errors and navigate if necessary.
    */
-  console.log(membershipRequestData);
   useEffect(() => {
     if (
       errorPost ||

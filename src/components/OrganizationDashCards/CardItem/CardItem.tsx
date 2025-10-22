@@ -55,17 +55,15 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
         {type != 'Event' && (
-          <div className={`${styles.CardItemImage}`}>
-            <img
-              src={image}
-              alt=""
-              crossOrigin="anonymous"
-              style={{
-                height: '6.75rem',
-                width: '6.75rem',
-                borderRadius: '8px',
-              }}
-            />
+          <div className={styles.CardItemImage}>
+            {image ? (
+              <img
+                src={image}
+                alt={`${title} avatar`}
+                crossOrigin="anonymous"
+                className={styles.CardItemImage}
+              />
+            ) : null}
           </div>
         )}
 
