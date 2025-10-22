@@ -379,7 +379,7 @@ describe('Testing Action Item Category Modal', () => {
     it('should initialize form with undefined category', () => {
       const propsWithUndefinedCategory = {
         ...categoryProps[0],
-        category: undefined,
+        category: null,
       };
       renderCategoryModal(link1, propsWithUndefinedCategory);
 
