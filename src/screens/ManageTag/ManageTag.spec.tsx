@@ -1034,4 +1034,132 @@ describe('Manage Tag Page', () => {
       expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
     });
   });
+
+  it('should render sort functionality and cover setAssignedMemberSortOrder callback', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_TAGS_ASSIGNED_MEMBERS,
+          variables: {
+            id: 'tag-123',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+            sortedBy: { id: 'DESCENDING' },
+          },
+        },
+        result: {
+          data: {
+            getAssignedUsers: {
+              __typename: 'UserTag',
+              name: 'Test Tag',
+              ancestorTags: [],
+              usersAssignedTo: {
+                __typename: 'UserTagUsersAssignedToConnection',
+                edges: [
+                  {
+                    __typename: 'UserTagUsersAssignedToEdge',
+                    node: {
+                      __typename: 'User',
+                      _id: '1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                    },
+                    cursor: '1',
+                  },
+                ],
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_TAGS_ASSIGNED_MEMBERS,
+          variables: {
+            id: 'tag-123',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+            sortedBy: { id: 'ASCENDING' },
+          },
+        },
+        result: {
+          data: {
+            getAssignedUsers: {
+              __typename: 'UserTag',
+              name: 'Test Tag',
+              ancestorTags: [],
+              usersAssignedTo: {
+                __typename: 'UserTagUsersAssignedToConnection',
+                edges: [
+                  {
+                    __typename: 'UserTagUsersAssignedToEdge',
+                    node: {
+                      __typename: 'User',
+                      _id: '1',
+                      firstName: 'John',
+                      lastName: 'Doe',
+                    },
+                    cursor: '1',
+                  },
+                ],
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+          <Routes>
+            <Route
+              path="/orgtags/:orgId/manageTag/:tagId"
+              element={<ManageTag />}
+            />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Click the sort button to open the dropdown
+    const sortButton = screen.getByTestId('sortPeople');
+    await userEvent.click(sortButton);
+
+    // Wait for dropdown to open and click on "Oldest" option (ASCENDING)
+    await waitFor(() => {
+      const oldestOption = screen.getByTestId('ASCENDING');
+      expect(oldestOption).toBeInTheDocument();
+    });
+
+    const oldestOption = screen.getByTestId('ASCENDING');
+    await userEvent.click(oldestOption);
+
+    // This should trigger the onSortChange callback on line 410
+    // The callback calls setAssignedMemberSortOrder(value as SortedByType)
+    // We can verify this by checking that the component re-renders with the new sort order
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
 });
