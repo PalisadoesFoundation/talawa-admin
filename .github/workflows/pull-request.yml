@@ -775,7 +775,6 @@ jobs:
       ]
     permissions:
       contents: read
-      issues: write
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -800,6 +799,7 @@ jobs:
         uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'http://localhost:4321'
+          token: ''
 
       - name: Upload ZAP Report
         if: always()
