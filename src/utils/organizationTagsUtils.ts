@@ -110,8 +110,7 @@ export interface InterfaceTagAssignedMembersQuery
   ) => void;
 }
 
-interface InterfaceTagUsersToAssignToQuery
-  extends InterfaceBaseQueryResult {
+interface InterfaceTagUsersToAssignToQuery extends InterfaceBaseQueryResult {
   data?: {
     getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
   };
