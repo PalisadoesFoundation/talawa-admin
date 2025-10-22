@@ -227,14 +227,12 @@ function volunteers(): JSX.Element {
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.volunteerStatus === 'rejected',
       );
-    } else if (status === VolunteerStatus.Accepted) {
+    } else {
       return filteredVolunteers.filter(
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.volunteerStatus === 'accepted',
       );
     }
-
-    return filteredVolunteers;
   }, [eventData, status, searchTerm]);
 
   if (volunteersLoading) {
