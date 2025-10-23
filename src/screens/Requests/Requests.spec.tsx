@@ -967,7 +967,7 @@ describe('Testing Requests screen', () => {
     // The initial render has 9 rows (1 header + 8 data rows)
     // Since infinite scroll might not trigger properly in tests, adjust expectation
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThanOrEqual(9);
+    expect(rows.length).toBeGreaterThan(9);
     expect(screen.getByText('User7 Test')).toBeInTheDocument();
     expect(screen.getByText('User8 Test')).toBeInTheDocument();
   });

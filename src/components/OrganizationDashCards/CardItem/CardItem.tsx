@@ -31,11 +31,13 @@
  * - Icons for location and date are imported as React components.
  * - Styling is applied using CSS modules from `app-fixed.module.css`.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
+import Avatar from 'components/Avatar/Avatar';
+import DefaultImg from 'assets/images/defaultImg.png';
 
 export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
@@ -51,19 +53,39 @@ export interface InterfaceCardItem {
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, enddate, time, location, image } =
     props;
+  const [imgOk, setImgOk] = useState(true);
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
-        {type != 'Event' && (
+        {type !== 'Event' && (
           <div className={styles.CardItemImage}>
-            {image ? (
+            {image && imgOk ? (
               <img
                 src={image}
                 alt={`${title} avatar`}
                 crossOrigin="anonymous"
                 className={styles.CardItemImage}
+                loading="lazy"
+                decoding="async"
+                onError={() => setImgOk(false)}
               />
-            ) : null}
+            ) : type === 'MembershipRequest' ? (
+              <Avatar
+                data-testid="display-img"
+                avatarStyle={styles.CardItemImage}
+                name={`${title}`}
+                alt=""
+              />
+            ) : (
+              <img
+                src={DefaultImg}
+                alt={`${title}`}
+                crossOrigin="anonymous"
+                className={styles.CardItemImage}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
           </div>
         )}
 
