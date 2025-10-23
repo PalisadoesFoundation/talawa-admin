@@ -31,7 +31,7 @@
  * - Icons for location and date are imported as React components.
  * - Styling is applied using CSS modules from `app-fixed.module.css`.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
@@ -54,6 +54,14 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, enddate, time, location, image } =
     props;
   const [imgOk, setImgOk] = useState(true);
+
+  // Reset imgOk when image prop changes to allow retrying with new URL
+  useEffect(() => {
+    if (image) {
+      setImgOk(true);
+    }
+  }, [image]);
+
   return (
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
