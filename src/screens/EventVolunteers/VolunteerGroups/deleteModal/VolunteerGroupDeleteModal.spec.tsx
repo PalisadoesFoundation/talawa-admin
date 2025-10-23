@@ -286,81 +286,57 @@ describe('Testing Group Delete Modal', () => {
     });
   });
 
-  it('Hides radio buttons for non-template or instance exception groups', async () => {
-    const nonTemplateProps: InterfaceDeleteVolunteerGroupModal = {
-      isOpen: true,
-      hide: vi.fn(),
-      refetchGroups: vi.fn(),
-      group: {
-        id: 'groupId',
-        name: 'Group 1',
-        description: 'desc',
-        volunteersRequired: null,
-        isTemplate: false, // Not a template
-        isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
-        creator: {
-          id: 'creatorId1',
-          name: 'Wilt Shepherd',
-          emailAddress: 'wilt@example.com',
+  test.each([
+    {
+      description: 'non-template groups',
+      isTemplate: false,
+      isInstanceException: false,
+    },
+    {
+      description: 'instance exception groups',
+      isTemplate: true,
+      isInstanceException: true,
+    },
+  ])(
+    'Hides radio buttons for $description',
+    async ({ isTemplate, isInstanceException }) => {
+      const props: InterfaceDeleteVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        refetchGroups: vi.fn(),
+        group: {
+          id: 'groupId',
+          name: 'Group 1',
+          description: 'desc',
+          volunteersRequired: null,
+          isTemplate,
+          isInstanceException,
+          createdAt: '2024-10-25T16:16:32.978Z',
+          creator: {
+            id: 'creatorId1',
+            name: 'Wilt Shepherd',
+            emailAddress: 'wilt@example.com',
+          },
+          leader: {
+            id: 'userId',
+            name: 'Teresa Bradley',
+            emailAddress: 'teresa@example.com',
+          },
+          volunteers: [],
+          event: { id: 'eventId' },
         },
-        leader: {
-          id: 'userId',
-          name: 'Teresa Bradley',
-          emailAddress: 'teresa@example.com',
-        },
-        volunteers: [],
-        event: { id: 'eventId' },
-      },
-    };
+      };
 
-    renderGroupDeleteModal(link1, nonTemplateProps);
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
+      renderGroupDeleteModal(link1, props);
+      expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    // Radio buttons should not be displayed
-    expect(screen.queryByText(t.applyTo)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('deleteApplyToSeries')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId('deleteApplyToInstance'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('Hides radio buttons for instance exception groups', async () => {
-    const instanceExceptionProps: InterfaceDeleteVolunteerGroupModal = {
-      isOpen: true,
-      hide: vi.fn(),
-      refetchGroups: vi.fn(),
-      group: {
-        id: 'groupId',
-        name: 'Group 1',
-        description: 'desc',
-        volunteersRequired: null,
-        isTemplate: true,
-        isInstanceException: true, // Is an instance exception
-        createdAt: '2024-10-25T16:16:32.978Z',
-        creator: {
-          id: 'creatorId1',
-          name: 'Wilt Shepherd',
-          emailAddress: 'wilt@example.com',
-        },
-        leader: {
-          id: 'userId',
-          name: 'Teresa Bradley',
-          emailAddress: 'teresa@example.com',
-        },
-        volunteers: [],
-        event: { id: 'eventId' },
-      },
-    };
-
-    renderGroupDeleteModal(link1, instanceExceptionProps);
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
-
-    // Radio buttons should not be displayed
-    expect(screen.queryByText(t.applyTo)).not.toBeInTheDocument();
-    expect(screen.queryByTestId('deleteApplyToSeries')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId('deleteApplyToInstance'),
-    ).not.toBeInTheDocument();
-  });
+      expect(screen.queryByText(t.applyTo)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('deleteApplyToSeries'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('deleteApplyToInstance'),
+      ).not.toBeInTheDocument();
+    },
+  );
 });
