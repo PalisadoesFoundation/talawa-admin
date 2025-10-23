@@ -199,6 +199,8 @@ describe('Testing Group Delete Modal', () => {
   });
 
   it('Deletes group for specific instance when isRecurring and applyTo is instance', async () => {
+    // Tests that selecting "this event only" for a recurring event calls
+    // DELETE_VOLUNTEER_GROUP_FOR_INSTANCE instead of the default mutation
     const recurringGroupProps: InterfaceDeleteVolunteerGroupModal = {
       isOpen: true,
       hide: vi.fn(),
