@@ -118,26 +118,16 @@ describe('Testing Group Delete Modal', () => {
     });
   });
 
-  it('Close Delete Modal', async () => {
+  test.each([
+    { testId: 'deletenobtn', description: 'no button' },
+    { testId: 'modalCloseBtn', description: 'close button' },
+  ])('Close Delete Modal using $description', async ({ testId }) => {
     renderGroupDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const noBtn = screen.getByTestId('deletenobtn');
-    expect(noBtn).toBeInTheDocument();
-    await userEvent.click(noBtn);
-
-    await waitFor(() => {
-      expect(itemProps[0].hide).toHaveBeenCalled();
-    });
-  });
-
-  it('Close Delete Modal using close button', async () => {
-    renderGroupDeleteModal(link1, itemProps[0]);
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
-
-    const closeBtn = screen.getByTestId('modalCloseBtn');
-    expect(closeBtn).toBeInTheDocument();
-    await userEvent.click(closeBtn);
+    const btn = screen.getByTestId(testId);
+    expect(btn).toBeInTheDocument();
+    await userEvent.click(btn);
 
     await waitFor(() => {
       expect(itemProps[0].hide).toHaveBeenCalled();
