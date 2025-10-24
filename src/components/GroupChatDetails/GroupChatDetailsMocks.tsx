@@ -1,9 +1,14 @@
 import type { GroupChat, DirectMessage } from 'types/Chat/type';
 import {
-  ADD_USER_TO_GROUP_CHAT,
+  CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT,
+  UPDATE_CHAT_MEMBERSHIP,
+  DELETE_CHAT_MEMBERSHIP,
+  DELETE_CHAT,
 } from 'GraphQl/Mutations/OrganizationMutations';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+
 /**
  * Mocks for the GroupChatDetails component
  */
@@ -133,35 +138,178 @@ export const mocks = [
       },
     },
   },
+  // Organization members mock for name search 'Disha'
   {
     request: {
-      query: ADD_USER_TO_GROUP_CHAT,
-      variables: { chatId: 'chat1' }, // Match test variables
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
     },
-    result: { data: { addUserToGroupChat: { _id: 'chat1', success: true } } },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
   },
+  // Organization members mock for name search 'Smith'
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Smith' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+  // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails when opening the add-user modal
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // Mock for creating chat membership (adding a user)
+  {
+    request: {
+      query: CREATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user3', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    result: { data: { createChatMembership: { id: 'chat1', success: true } } },
+  },
+  // Mock for update triggered by MinIO upload (object1)
   {
     request: {
       query: UPDATE_CHAT,
-      variables: { input: { _id: 'chat1', image: '', name: 'Group name' } },
+      variables: {
+        input: { id: 'chat1', avatar: { uri: 'object1' }, name: 'Test Group' },
+      },
     },
-    result: { data: { updateChat: { _id: 'chat1', success: true } } },
+    result: { data: { updateChat: { id: 'chat1', success: true } } },
+  },
+  // Mock for updating chat membership (role change)
+  {
+    request: {
+      query: UPDATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user2', chatId: 'chat1', role: 'administrator' },
+      },
+    },
+    result: { data: { updateChatMembership: { id: 'chat1', success: true } } },
+  },
+  // Fallback mock for updating chat membership
+  {
+    request: { query: UPDATE_CHAT_MEMBERSHIP },
+    result: { data: { updateChatMembership: { id: 'chat1', success: true } } },
+  },
+  // Mock for deleting chat membership (remove member)
+  {
+    request: {
+      query: DELETE_CHAT_MEMBERSHIP,
+      variables: { input: { memberId: 'user2', chatId: 'chat1' } },
+    },
+    result: { data: { deleteChatMembership: { id: 'chat1', success: true } } },
+  },
+  // Accept updateChat with id instead of _id to match component usage
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: {
+        input: { id: 'chat1', avatar: { uri: '' }, name: 'Group name' },
+      },
+    },
+    result: { data: { updateChat: { id: 'chat1', success: true } } },
+  },
+  // Specific mock for name-only update triggered by editTitle flow
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: { input: { id: 'chat1', name: 'New Group name' } },
+    },
+    result: { data: { updateChat: { id: 'chat1', success: true } } },
   },
   {
     request: {
       query: UPDATE_CHAT,
       variables: {
         input: {
-          _id: 'chat1',
-          image: 'https://example.com/group_image.jpg',
+          id: 'chat1',
+          avatar: { uri: 'https://example.com/group_image.jpg' },
           name: 'New Group name',
         },
       },
     },
-    result: { data: { updateChat: { _id: 'chat2', success: true } } },
+    result: { data: { updateChat: { id: 'chat1', success: true } } },
   },
+  // Fallback mock for any other UPDATE_CHAT variables (no variables -> matches any)
   {
-    request: { query: UPDATE_CHAT, variables: {} },
-    result: { data: { updateChat: { _id: 'chat3', success: true } } },
+    request: { query: UPDATE_CHAT },
+    result: { data: { updateChat: { id: 'chat3', success: true } } },
+  },
+  // Mock for deleting chat
+  {
+    request: {
+      query: DELETE_CHAT,
+      variables: { input: { id: 'chat1' } },
+    },
+    result: { data: { deleteChat: { id: 'chat1', success: true } } },
   },
 ];

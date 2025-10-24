@@ -124,8 +124,9 @@ function App(): React.ReactElement {
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
     return (
-      data?.currentUser?.appUserProfile?.adminFor?.map((org: any) => org._id) ||
-      []
+      data?.currentUser?.appUserProfile?.adminFor?.map(
+        (org: { _id: string }) => org._id,
+      ) || []
     );
   }, [data?.currentUser?.appUserProfile?.adminFor]);
 
@@ -287,6 +288,7 @@ function App(): React.ReactElement {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              <Route path="/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route

@@ -1,6 +1,10 @@
 .chatAreaContainer {
   padding: 10px;
   flex-grow: 1;
+  height: 100%;
+  min-height: 0; /* allow inner flex children to shrink and scroll */
+  display: flex;
+  flex-direction: column;
   /* background-color: rgba(196, 255, 211, 0.3); */
 }
 
@@ -139,6 +143,16 @@
 
 .chatMessages {
   margin: 10px 0;
+  flex: 1; /* take up available space within the flex column */
+  min-height: 0; /* allow the child to shrink and become scrollable in flex */
+  overflow-y: auto; /* enable vertical scrolling */
+  display: flex;
+  flex-direction: column;
+}
+
+.loadMoreBar {
+  text-align: center;
+  padding: 6px;
 }
 
 .userDetails .subtitle {

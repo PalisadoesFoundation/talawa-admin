@@ -18,6 +18,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Venues', url: '/orgvenues/undefined' },
         { name: 'Action Items', url: '/orgactionitems/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
+        { name: 'Chat', url: '/orgchat/undefined' },
         {
           name: 'Block/Unblock',
           url: '/blockuser/undefined',
@@ -29,7 +30,11 @@ describe('Testing Routes reducer', () => {
         { name: 'Settings', url: '/orgsetting/undefined' },
       ],
       components: [
-        { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
+        {
+          name: 'My Organizations',
+          comp_id: 'orglist',
+          component: 'OrgList',
+        },
         {
           name: 'Dashboard',
           comp_id: 'orgdash',
@@ -60,8 +65,21 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgactionitems',
           component: 'OrganizationActionItems',
         },
-        { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
-        { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Posts',
+          comp_id: 'orgpost',
+          component: 'OrgPost',
+        },
+        {
+          name: 'Chat',
+          comp_id: 'orgchat',
+          component: 'Chat',
+        },
+        {
+          name: 'Block/Unblock',
+          comp_id: 'blockuser',
+          component: 'BlockUser',
+        },
         {
           name: 'Advertisement',
           comp_id: 'orgads',
@@ -82,8 +100,16 @@ describe('Testing Routes reducer', () => {
           comp_id: 'requests',
           component: 'Requests',
         },
-        { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
-        { name: '', comp_id: 'member', component: 'MemberDetail' },
+        {
+          name: 'Settings',
+          comp_id: 'orgsetting',
+          component: 'OrgSettings',
+        },
+        {
+          name: '',
+          comp_id: 'member',
+          component: 'MemberDetail',
+        },
       ],
     });
   });
@@ -104,6 +130,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Venues', url: '/orgvenues/orgId' },
         { name: 'Action Items', url: '/orgactionitems/orgId' },
         { name: 'Posts', url: '/orgpost/orgId' },
+        { name: 'Chat', url: '/orgchat/orgId' },
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
@@ -144,6 +171,7 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationActionItems',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+        { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
           name: 'Advertisement',

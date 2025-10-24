@@ -44,12 +44,15 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Form, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
-  ADD_USER_TO_GROUP_CHAT,
   UPDATE_CHAT,
+  CREATE_CHAT_MEMBERSHIP,
+  UPDATE_CHAT_MEMBERSHIP,
+  DELETE_CHAT,
+  DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -57,18 +60,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Search, Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
-import { FaCheck, FaX } from 'react-icons/fa6';
-import convertToBase64 from 'utils/convertToBase64';
+import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -93,7 +97,8 @@ export default function groupChatDetails({
   //storage
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  // Support both 'userId' (for regular users) and 'id' (for admins)
+  const userId = getItem('userId') || getItem('id');
 
   useEffect(() => {
     if (!userId) {
@@ -122,12 +127,59 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [selectedImage, setSelectedImage] = useState(chat?.image || '');
+  const [, setSelectedImage] = useState(chat?.avatarURL || '');
+
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   //mutations
 
-  const [addUser] = useMutation(ADD_USER_TO_GROUP_CHAT);
+  const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
+  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
+  const [deleteChat] = useMutation(DELETE_CHAT);
+  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
+
+  const currentUserRole = chat.members.edges.find(
+    (edge) => edge.node.user.id === userId,
+  )?.node.role;
+
+  const handleRoleChange = async (memberId: string, newRole: string) => {
+    try {
+      await updateChatMembership({
+        variables: {
+          input: {
+            memberId,
+            chatId: chat.id,
+            role: newRole,
+          },
+        },
+      });
+      await chatRefetch();
+      toast.success('Role updated successfully');
+    } catch (error) {
+      toast.error('Failed to update role');
+      console.error(error);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    try {
+      await deleteChatMembership({
+        variables: {
+          input: {
+            memberId,
+            chatId: chat.id,
+          },
+        },
+      });
+      await chatRefetch();
+      toast.success('Member removed successfully');
+    } catch (error) {
+      toast.error('Failed to remove member');
+      console.error(error);
+    }
+  };
 
   //modal
 
@@ -144,24 +196,33 @@ export default function groupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+  } = useQuery(ORGANIZATION_MEMBERS, {
+    variables: {
+      input: { id: chat.organization?.id },
+      first: 20,
+      after: null,
+      where: {},
+    },
   });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({ variables: { userId, chatId: chat._id } });
+    await addUser({
+      variables: {
+        input: { memberId: userId, chatId: chat.id, role: 'regular' },
+      },
+    });
   };
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    const [firstName, lastName] = userName.split(' ');
+    const trimmedName = userName.trim();
 
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
-    };
-
-    allUsersRefetch({ ...newFilterData });
+    allUsersRefetch({
+      input: { id: chat.organization?.id },
+      first: 20,
+      after: null,
+      where: trimmedName ? { name_contains: trimmedName } : {},
+    });
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -174,20 +235,23 @@ export default function groupChatDetails({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setSelectedImage(base64);
-      // Add variables to updateChat call
+    if (file && chat.organization?.id) {
+      const { objectName } = await uploadFileToMinio(
+        file,
+        chat.organization.id,
+      );
+      const url = await getFileFromMinio(objectName, chat.organization.id);
+      setSelectedImage(url);
       await updateChat({
         variables: {
           input: {
-            _id: chat._id,
-            image: base64,
+            id: chat.id,
+            avatar: { uri: objectName },
             name: chatName,
           },
         },
       });
-      await chatRefetch();
+      await chatRefetch({ input: { id: chat.id } });
       setSelectedImage('');
     } else {
       setSelectedImage('');
@@ -203,7 +267,34 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="groupChatDetails">
-          <Modal.Title>{t('groupInfo')}</Modal.Title>
+          <div className="d-flex justify-content-between w-100">
+            <Modal.Title>{t('groupInfo')}</Modal.Title>
+            {currentUserRole === 'administrator' && (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={async () => {
+                  if (
+                    window.confirm('Are you sure you want to delete this chat?')
+                  ) {
+                    try {
+                      await deleteChat({
+                        variables: { input: { id: chat.id } },
+                      });
+                      toast.success('Chat deleted successfully');
+                      toggleGroupChatDetailsModal();
+                      // Maybe navigate away or refetch chats
+                    } catch (error) {
+                      toast.error('Failed to delete chat');
+                      console.error(error);
+                    }
+                  }
+                }}
+              >
+                <FaTrash />
+              </Button>
+            )}
+          </div>
         </Modal.Header>
         <Modal.Body>
           <input
@@ -215,8 +306,8 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {chat?.image ? (
-              <img className={styles.chatImage} src={chat?.image} alt="" />
+            {chat?.avatarURL ? (
+              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
@@ -245,14 +336,13 @@ export default function groupChatDetails({
                     await updateChat({
                       variables: {
                         input: {
-                          _id: chat._id,
-                          image: selectedImage ? selectedImage : '',
+                          id: chat.id,
                           name: chatName,
                         },
                       },
                     });
                     setEditChatTitle(false);
-                    await chatRefetch();
+                    await chatRefetch({ input: { id: chat.id } });
                   }}
                 />
                 <FaX
@@ -277,57 +367,107 @@ export default function groupChatDetails({
             )}
 
             <p>
-              {chat?.users.length} {t('members')}
+              {chat?.members.edges.length} {t('members')}
             </p>
             <p>{chat?.description}</p>
           </div>
 
           <div>
             <h5>
-              {chat.users.length} {t('members')}
+              {chat.members.edges.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
-              {chat.admins
-                .map((admin) => admin._id)
-                .includes(userId as string) && (
-                <ListGroup.Item
-                  data-testid="addMembers"
-                  className={styles.listItem}
-                  onClick={() => {
-                    openAddUserModal();
-                  }}
-                >
-                  <Add /> {t('addMembers')}
-                </ListGroup.Item>
-              )}
-              {chat.users.map(
-                (user: {
-                  _id: string;
-                  firstName: string;
-                  lastName: string;
-                }) => (
+              <ListGroup.Item
+                data-testid="addMembers"
+                className={styles.listItem}
+                onClick={() => {
+                  openAddUserModal();
+                }}
+              >
+                <Add /> {t('addMembers')}
+              </ListGroup.Item>
+              {chat.members.edges.map((edge) => {
+                const user = edge.node.user;
+                const role = edge.node.role;
+                const isCurrentUser = user.id === userId;
+                const canManage =
+                  currentUserRole === 'administrator' && !isCurrentUser;
+                const canRemove = canManage && role === 'regular';
+                return (
                   <ListGroup.Item
                     className={styles.groupMembersList}
-                    key={user._id}
+                    key={user.id}
                   >
-                    <div className={styles.chatUserDetails}>
-                      <Avatar
-                        avatarStyle={styles.membersImage}
-                        name={user.firstName + ' ' + user.lastName}
-                      />
-                      {user.firstName} {user.lastName}
-                    </div>
-
-                    <div>
-                      {chat.admins
-                        .map((admin) => admin._id)
-                        .includes(user._id) && (
-                        <p key={`admin-${user._id}`}>Admin</p>
+                    <div
+                      className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
+                    >
+                      <div className="d-flex align-items-center flex-grow-1">
+                        <Avatar
+                          avatarStyle={styles.membersImage}
+                          name={user.name}
+                        />
+                        <span className="ms-2">{user.name}</span>
+                        <span
+                          className="badge bg-success text-dark ms-2"
+                          style={{ fontSize: '0.75rem' }}
+                        >
+                          {role}
+                        </span>
+                      </div>
+                      {canManage && (
+                        <Dropdown className="ms-auto">
+                          <Dropdown.Toggle
+                            variant="link"
+                            id={`dropdown-${user.id}`}
+                            style={{
+                              color: 'black',
+                              border: 'none',
+                              padding: '0',
+                              background: 'none',
+                              boxShadow: 'none',
+                            }}
+                            className="btn-sm"
+                          >
+                            <BsThreeDotsVertical />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu align="end">
+                            <Dropdown.Item
+                              onClick={() =>
+                                handleRoleChange(
+                                  user.id,
+                                  role === 'administrator'
+                                    ? 'regular'
+                                    : 'administrator',
+                                )
+                              }
+                            >
+                              {role === 'administrator'
+                                ? 'Demote to Regular'
+                                : 'Promote to Admin'}
+                            </Dropdown.Item>
+                            {canRemove && (
+                              <Dropdown.Item
+                                style={{ color: 'red' }}
+                                onClick={() => {
+                                  if (
+                                    window.confirm(
+                                      `Remove ${user.name} from the chat?`,
+                                    )
+                                  ) {
+                                    handleRemoveMember(user.id);
+                                  }
+                                }}
+                              >
+                                Remove
+                              </Dropdown.Item>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
                       )}
                     </div>
                   </ListGroup.Item>
-                ),
-              )}
+                );
+              })}
             </ListGroup>
           </div>
         </Modal.Body>
@@ -383,41 +523,66 @@ export default function groupChatDetails({
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
-                    {console.log(allUsersData)}
                     {allUsersData &&
-                      allUsersData.users.length > 0 &&
-                      allUsersData.users.map(
-                        (
-                          userDetails: InterfaceQueryUserListItem,
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.name}
-                              <br />
-                              {userDetails.emailAddress}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                onClick={async () => {
-                                  await addUserToGroupChat(userDetails.id);
-                                  toggleAddUserModal();
-                                  chatRefetch({ id: chat._id });
-                                }}
-                                data-testid="addUserBtn"
-                              >
-                                {t('add')}
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                      allUsersData.organization?.members?.edges?.length > 0 &&
+                      allUsersData.organization.members.edges
+                        .filter(
+                          ({
+                            node: userDetails,
+                          }: {
+                            node: {
+                              id: string;
+                              name: string;
+                              avatarURL?: string;
+                              role: string;
+                            };
+                          }) =>
+                            userDetails.id !== userId &&
+                            !chat.members.edges.some(
+                              (edge) => edge.node.user.id === userDetails.id,
+                            ),
+                        )
+                        .map(
+                          (
+                            {
+                              node: userDetails,
+                            }: {
+                              node: {
+                                id: string;
+                                name: string;
+                                avatarURL?: string;
+                                role: string;
+                              };
+                            },
+                            index: number,
+                          ) => (
+                            <StyledTableRow
+                              data-testid="user"
+                              key={userDetails.id}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {index + 1}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userDetails.name}
+                                <br />
+                                {userDetails.role || 'Member'}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <Button
+                                  onClick={async () => {
+                                    await addUserToGroupChat(userDetails.id);
+                                    toggleAddUserModal();
+                                    chatRefetch({ input: { id: chat.id } });
+                                  }}
+                                  data-testid="addUserBtn"
+                                >
+                                  {t('add')}
+                                </Button>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ),
+                        )}
                   </TableBody>
                 </Table>
               </TableContainer>

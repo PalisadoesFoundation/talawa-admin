@@ -1,5 +1,15 @@
 /**
- * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
+ * The `chat` component provides a user interface for interacting with contacts and chat rooms w  // TODO: Update markChatMessagesAsRead to match new schema
+  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+  //   variables: { chatId: selectedContact, userId: userId },
+  // });
+
+  useEffect(() => {
+    // TODO: Update markChatMessagesAsRead to match new schema
+    // markChatMessagesAsRead().then(() => {
+    //   chatsListRefetch();
+    // });
+  }, [selectedContact]);organization.
  * It features a contact list with search functionality and displays the chat room for the selected contact.
  * The component uses GraphQL to fetch and manage contact data, and React state to handle user interactions.
  *
@@ -25,24 +35,28 @@
  * @returns  The rendered `chat` component.
  */
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import useLocalStorage from 'utils/useLocalstorage';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Button, Dropdown } from 'react-bootstrap';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import useLocalStorage from 'utils/useLocalstorage';
 import NewChat from 'assets/svgs/newChat.svg?react';
-import styles from 'style/app-fixed.module.css';
-import {
-  CHATS_LIST,
-  GROUP_CHAT_LIST,
-  UNREAD_CHAT_LIST,
-} from 'GraphQl/Queries/PlugInQueries';
+import styles from './Chat.module.css';
+import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
-import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
+// TODO: Update markChatMessagesAsRead to match new schema
+// import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/Chat/type';
+import type { NewChatType } from 'types/Chat/interface';
+
+// Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
+const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {
+  return 'id' in chat && !('_id' in chat);
+};
 interface InterfaceContactCardProps {
   id: string;
   title: string;
@@ -57,12 +71,12 @@ interface InterfaceContactCardProps {
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
+  const { getItem, setItem } = useLocalStorage();
+  const { orgId } = useParams<{ orgId: string }>();
 
-  const [chats, setChats] = useState<GroupChat[]>([]);
+  const [chats, setChats] = useState<Array<GroupChat | NewChatType>>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
-  const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
 
   const [createDirectChatModalisOpen, setCreateDirectChatModalisOpen] =
     useState(false);
@@ -85,55 +99,126 @@ export default function chat(): JSX.Element {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
 
+  const [cursor] = useState<string | null>(null);
+
   const {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, { variables: { id: userId } });
-
-  const { data: groupChatListData, refetch: groupChatListRefetch } =
-    useQuery(GROUP_CHAT_LIST);
-
-  const { data: unreadChatListData, refetch: unreadChatListRefetch } =
-    useQuery(UNREAD_CHAT_LIST);
-
-  const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-    variables: { chatId: selectedContact, userId: userId },
+  } = useQuery(CHATS_LIST, {
+    variables: { first: 10, after: cursor },
   });
+  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
+
+  // TODO: Update markChatMessagesAsRead to match new schema
+  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
+  //   variables: { chatId: selectedContact, userId: userId },
+  // });
 
   useEffect(() => {
-    markChatMessagesAsRead().then(() => {
-      chatsListRefetch({ id: userId });
-    });
+    // TODO: Update markChatMessagesAsRead to match new schema
+    // markChatMessagesAsRead().then(() => {
+    //   chatsListRefetch({ id: userId });
+    // });
   }, [selectedContact]);
 
   React.useEffect(() => {
     async function getChats(): Promise<void> {
       if (filterType === 'all') {
-        await chatsListRefetch();
-        if (chatsListData && chatsListData.chatsByUserId) {
-          setChats(chatsListData.chatsByUserId);
+        const { data } = await chatsListRefetch();
+        if (data && data.chatsByUser) {
+          const filteredChats = orgId
+            ? data.chatsByUser.filter((chat: GroupChat | NewChatType) => {
+                if (isNewChatType(chat)) {
+                  return chat.organization?.id === orgId;
+                }
+                const legacy = chat as GroupChat;
+                return legacy.organization?._id === orgId;
+              })
+            : data.chatsByUser;
+          setChats(filteredChats);
         }
       } else if (filterType === 'unread') {
-        await unreadChatListRefetch();
-        if (unreadChatListData && unreadChatListData.getUnreadChatsByUserId) {
-          setChats(unreadChatListData.getUnreadChatsByUserId);
+        const { data } = await unreadChatListRefetch();
+        if (data && data.unreadChats) {
+          const filteredChats = orgId
+            ? data.unreadChats.filter((chat: GroupChat | NewChatType) => {
+                if (isNewChatType(chat)) {
+                  return chat.organization?.id === orgId;
+                }
+                const legacy = chat as GroupChat;
+                return legacy.organization?._id === orgId;
+              })
+            : data.unreadChats;
+          setChats(filteredChats);
         }
       } else if (filterType === 'group') {
-        await groupChatListRefetch();
-        if (groupChatListData && groupChatListData.getGroupChatsByUserId) {
-          setChats(groupChatListData.getGroupChatsByUserId);
-        }
+        const { data } = await chatsListRefetch();
+        const list: Array<GroupChat | NewChatType> =
+          (data && data.chatsByUser) || [];
+        const groups = list.filter((chat: GroupChat | NewChatType) => {
+          if (isNewChatType(chat)) {
+            return (chat.members?.edges?.length || 0) > 2;
+          }
+          const legacy = chat as GroupChat;
+          return !!legacy.isGroup || (legacy.users?.length || 0) > 2;
+        });
+        const filteredGroups = orgId
+          ? groups.filter((chat: GroupChat | NewChatType) => {
+              if (isNewChatType(chat)) {
+                return chat.organization?.id === orgId;
+              }
+              const legacy = chat as GroupChat;
+              return legacy.organization?._id === orgId;
+            })
+          : groups;
+        setChats(filteredGroups);
       }
     }
     getChats();
   }, [filterType]);
 
   React.useEffect(() => {
-    if (chatsListData && chatsListData?.chatsByUserId.length) {
-      setChats(chatsListData.chatsByUserId);
+    if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
+      const filteredChats = orgId
+        ? chatsListData.chatsByUser.filter((chat: GroupChat | NewChatType) => {
+            if (isNewChatType(chat)) {
+              return chat.organization?.id === orgId;
+            }
+            const legacy = chat as GroupChat;
+            return legacy.organization?._id === orgId;
+          })
+        : chatsListData.chatsByUser;
+      setChats(filteredChats);
     }
-  }, [chatsListData]);
+  }, [chatsListData, filterType]);
+
+  React.useEffect(() => {
+    if (chats.length === 0) return;
+    const stored = getItem('selectedChatId') as string | null;
+    if (stored && !selectedContact) {
+      const exists = chats.some((c) =>
+        isNewChatType(c) ? c.id === stored : c._id === stored,
+      );
+      if (exists) {
+        setSelectedContact(stored);
+        return;
+      }
+    }
+    if (!selectedContact) {
+      const firstChat = chats[0];
+      const firstChatId = isNewChatType(firstChat)
+        ? firstChat.id
+        : firstChat._id;
+      setSelectedContact(firstChatId);
+    }
+  }, [chats, selectedContact, getItem]);
+
+  React.useEffect(() => {
+    if (selectedContact) {
+      setItem('selectedChatId', selectedContact);
+    }
+  }, [selectedContact, setItem]);
 
   return (
     <>
@@ -170,7 +255,9 @@ export default function chat(): JSX.Element {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <div className={styles.contactListContainer}>
+            <div
+              className={`${styles.contactListContainer} d-flex flex-column`}
+            >
               {chatsListLoading ? (
                 <div className={`d-flex flex-row justify-content-center`}>
                   <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
@@ -226,36 +313,42 @@ export default function chat(): JSX.Element {
                   <div
                     data-testid="contactCardContainer"
                     className={styles.contactCardContainer}
+                    style={{
+                      maxHeight: 'calc(100vh - 200px)',
+                      overflowY: 'auto',
+                      flex: 1,
+                    }}
                   >
                     {!!chats.length &&
-                      chats.map((chat: GroupChat) => {
+                      chats.map((chat: GroupChat | NewChatType) => {
+                        const unreadCount = isNewChatType(chat)
+                          ? (chat.unreadMessagesCount ?? 0)
+                          : 0;
+                        const lastMsgBody = isNewChatType(chat)
+                          ? (chat.lastMessage?.body ?? '')
+                          : '';
+
                         const cardProps: InterfaceContactCardProps = {
-                          id: chat._id,
-                          title: !chat.isGroup
-                            ? chat.users[0]?._id === userId
-                              ? `${chat.users[1]?.firstName ?? ''} ${chat.users[1]?.lastName ?? ''}`
-                              : `${chat.users[0]?.firstName ?? ''} ${chat.users[0]?.lastName ?? ''}`
-                            : (chat.name ?? ''),
-                          image: chat.isGroup
-                            ? (chat.image ?? '')
-                            : userId
-                              ? (chat.users[1]?.image ?? '')
-                              : (chat.users[0]?.image ?? ''),
+                          id: isNewChatType(chat) ? chat.id : chat._id,
+                          title: chat.name || 'Chat',
+                          image: isNewChatType(chat)
+                            ? chat.avatarURL || ''
+                            : chat.image || '',
                           setSelectedContact,
                           selectedContact,
-                          isGroup: chat.isGroup,
-                          unseenMessages: Number(
-                            (
-                              JSON.parse(
-                                chat.unseenMessagesByUsers as string,
-                              ) as Record<string, number>
-                            )[userId as string],
-                          ),
-                          lastMessage:
-                            chat.messages[chat.messages.length - 1]
-                              ?.messageContent,
+                          isGroup: isNewChatType(chat)
+                            ? (chat.members?.edges?.length || 0) > 2
+                            : (chat as GroupChat).isGroup ||
+                              ((chat as GroupChat).users?.length || 0) > 2,
+                          unseenMessages: unreadCount,
+                          lastMessage: lastMsgBody,
                         };
-                        return <ContactCard {...cardProps} key={chat._id} />;
+                        return (
+                          <ContactCard
+                            {...cardProps}
+                            key={isNewChatType(chat) ? chat.id : chat._id}
+                          />
+                        );
                       })}
                   </div>
                 </>
@@ -282,7 +375,7 @@ export default function chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
-          chats={chats}
+          chats={chats.filter((c) => !isNewChatType(c)) as GroupChat[]}
         ></CreateDirectChat>
       )}
     </>
