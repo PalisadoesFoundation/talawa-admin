@@ -296,6 +296,18 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText(specialTitle)).toBeInTheDocument();
     });
 
+    it('handles missing time gracefully', () => {
+      const propsWithoutTime = {
+        ...mockProps,
+        time: undefined,
+      };
+      renderComponent(propsWithoutTime);
+      const card = screen.getByTestId('EventsAttendedCard');
+      expect(card).toBeInTheDocument();
+      // Verify component renders without crashing when time is undefined
+      expect(screen.getByText('Test Event')).toBeInTheDocument();
+    });
+
     it('handles empty time gracefully', () => {
       const propsWithEmptyTime = {
         ...mockProps,
