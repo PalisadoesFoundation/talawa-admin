@@ -493,6 +493,40 @@ describe('Testing User Table Item', () => {
     expect(emailCell.className).toContain('requestsTableItemEmail');
   });
 
+  it('displays avatar image when avatarURL is provided', async () => {
+    const props = {
+      request: {
+        membershipRequestId: '123',
+        createdAt: '2021-09-01T00:00:00.000Z',
+        status: 'pending',
+        user: {
+          id: '123',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
+          avatarURL: 'https://example.com/avatar.jpg',
+        },
+      },
+      index: 1,
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <RequestsTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const image = screen.getByAltText('profile picture');
+    expect(image).toBeVisible();
+    expect(image).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+  });
+
   it('handles image load error', async () => {
     const props: {
       request: InterfaceRequestsListItem;
@@ -531,7 +565,8 @@ describe('Testing User Table Item', () => {
       image.dispatchEvent(new Event('error'));
     });
 
-    // Verify the broken image is hidden from view
-    expect(image).not.toBeVisible();
+    await waitFor(() => {
+      expect(image).not.toBeVisible();
+    });
   });
 });
