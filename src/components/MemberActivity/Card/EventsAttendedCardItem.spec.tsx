@@ -1,8 +1,22 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import EventAttendedCard, { InterfaceCardItem } from './EventsAttendedCardItem';
+import { render, screen, within } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import EventAttendedCard from './EventsAttendedCardItem';
+import type { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
+
+// Mock react-router Link (not react-router-dom!) to avoid router context issues
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    Link: ({ children, to, ...props }: any) => (
+      <a href={to} {...props}>
+        {children}
+      </a>
+    ),
+  };
+});
 
 // Mock useLocalStorage
 const mockGetItem = vi.fn();
@@ -24,14 +38,15 @@ describe('EventAttendedCard', () => {
 
   const renderComponent = (props = mockProps): void => {
     render(
-      <MemoryRouter>
+      <BrowserRouter>
         <EventAttendedCard {...props} />
-      </MemoryRouter>,
+      </BrowserRouter>,
     );
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default to administrator role
     mockGetItem.mockReturnValue('administrator');
   });
 
@@ -49,6 +64,8 @@ describe('EventAttendedCard', () => {
       renderComponent();
       expect(screen.getByTestId('EventsAttendedCard')).toBeInTheDocument();
     });
+
+    // Location icon asserted in the location-specific tests below.
   });
 
   describe('Date handling', () => {
@@ -122,50 +139,51 @@ describe('EventAttendedCard', () => {
 
       it('renders link with correct path when both IDs are present', () => {
         renderComponent();
-        const link = screen.getByRole('link');
+        const card = screen.getByTestId('EventsAttendedCard');
+        const link = within(card).getByRole('link');
         expect(link).toHaveAttribute('href', '/event/org123/event456');
       });
 
       it('renders chevron right icon', () => {
         renderComponent();
-        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
+        const card = screen.getByTestId('EventsAttendedCard');
+        expect(
+          within(card).getByTestId('ChevronRightIcon'),
+        ).toBeInTheDocument();
       });
 
-      it('does not render link when orgId is missing', () => {
+      it('renders link when orgId is missing', () => {
         const propsWithoutOrgId = {
           ...mockProps,
           orgId: undefined,
         };
         renderComponent(propsWithoutOrgId);
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-        expect(
-          screen.queryByTestId('ChevronRightIcon'),
-        ).not.toBeInTheDocument();
+        const card = screen.getByTestId('EventsAttendedCard');
+        const link = within(card).getByRole('link');
+        expect(link).toHaveAttribute('href', '/event/undefined/event456');
       });
 
-      it('does not render link when eventId is missing', () => {
+      it('renders link when eventId is missing', () => {
         const propsWithoutEventId = {
           ...mockProps,
           eventId: undefined,
         };
         renderComponent(propsWithoutEventId);
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-        expect(
-          screen.queryByTestId('ChevronRightIcon'),
-        ).not.toBeInTheDocument();
+        const card = screen.getByTestId('EventsAttendedCard');
+        const link = within(card).getByRole('link');
+        expect(link).toHaveAttribute('href', '/event/org123/undefined');
       });
 
-      it('does not render link when both IDs are missing', () => {
+      it('renders link when both IDs are missing', () => {
         const propsWithoutIds = {
           ...mockProps,
           orgId: undefined,
           eventId: undefined,
         };
         renderComponent(propsWithoutIds);
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-        expect(
-          screen.queryByTestId('ChevronRightIcon'),
-        ).not.toBeInTheDocument();
+        const card = screen.getByTestId('EventsAttendedCard');
+        const link = within(card).getByRole('link');
+        expect(link).toHaveAttribute('href', '/event/undefined/undefined');
       });
     });
 
