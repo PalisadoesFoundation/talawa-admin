@@ -497,12 +497,13 @@ function OrganizationDashboard(): JSX.Element {
                       (request: {
                         status: string;
                         membershipRequestId: string;
-                        user: { name: string };
+                        user: { name: string; avatarURL?: string };
                       }) => (
                         <CardItem
                           type="MembershipRequest"
                           key={request.membershipRequestId}
                           title={request.user.name}
+                          image={request.user.avatarURL}
                         />
                       ),
                     )

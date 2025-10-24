@@ -983,6 +983,7 @@ export const MEMBERSHIP_REQUEST = gql`
           id
           name
           emailAddress
+          avatarURL
         }
       }
     }
