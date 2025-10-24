@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import EventAttendedCard, { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
 
