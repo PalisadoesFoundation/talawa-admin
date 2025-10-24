@@ -30,6 +30,9 @@ import {
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
+import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
+import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -299,9 +302,24 @@ describe('Organisation Tags Page', () => {
 
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
-    // Set scroll position to the bottom
+    // Set up realistic scroll properties to trigger infinite scroll
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(addPeopleToTagScrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
+    // Trigger scroll event with scrollTop property
     fireEvent.scroll(addPeopleToTagScrollableDiv, {
-      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
+      target: { scrollTop: 700 },
     });
 
     await waitFor(() => {
@@ -440,8 +458,24 @@ describe('Organisation Tags Page', () => {
     });
 
     const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+
+    // Set up realistic scroll properties
+    Object.defineProperty(scrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(scrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(scrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
     fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: 99999 },
+      target: { scrollTop: 700 },
     });
 
     await waitFor(() => {
@@ -462,6 +496,291 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('shows loading state while data is being fetched', async () => {
+    // Create a mock with delay to catch loading state
+    const delayedMocks = [
+      {
+        request: {
+          query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+          variables: {
+            id: '1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+          },
+        },
+        delay: 30, // Add delay so we can catch the loading state
+        result: {
+          data: {
+            getUsersToAssignTo: {
+              __typename: 'UserTag',
+              name: 'tag1',
+              usersToAssignTo: {
+                __typename: 'UserTagUsersConnection',
+                edges: [
+                  {
+                    __typename: 'UserTagUsersConnectionEdge',
+                    node: {
+                      __typename: 'User',
+                      _id: '1',
+                      firstName: 'Test',
+                      lastName: 'User',
+                    },
+                    cursor: '1',
+                  },
+                ],
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: '1',
+                  startCursor: '1',
+                  hasPreviousPage: false,
+                },
+                totalCount: 1,
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider cache={cache} mocks={delayedMocks}>
+        <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route
+                  path="/orgtags/:orgId/manageTag/:tagId"
+                  element={<AddPeopleToTag {...props} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Assert that loader appears while data is being fetched
+    const loader = await screen.findByTestId('infiniteScrollLoader');
+    expect(loader).toBeInTheDocument();
+
+    // Assert that loader disappears after data loads
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('infiniteScrollLoader'),
+      ).not.toBeInTheDocument();
+    });
+
+    // Verify data is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+  });
+
+  it('closes modal when cancel button is clicked', async () => {
+    const hideModalMock = vi.fn();
+    const customProps = {
+      ...props,
+      hideAddPeopleToTagModal: hideModalMock,
+    };
+
+    renderAddPeopleToTagModal(customProps, link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('closeAddPeopleToTagModal'),
+      ).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('closeAddPeopleToTagModal'));
+
+    expect(hideModalMock).toHaveBeenCalled();
+  });
+
+  it('renders DataGrid with correct number of columns', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    await waitFor(() => {
+      // Check that the header columns are rendered
+      expect(screen.getByText('#')).toBeInTheDocument();
+      expect(screen.getByText(translations.userName)).toBeInTheDocument();
+      expect(screen.getByText(translations.actions)).toBeInTheDocument();
+    });
+  });
+
+  it('assigns members when multiple members are selected from different pages', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    // Select members from first page
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn').length).toBeGreaterThan(
+        0,
+      );
+    });
+
+    const firstPageSelectButtons = screen.getAllByTestId('selectMemberBtn');
+    await userEvent.click(firstPageSelectButtons[0]);
+
+    // Verify first member is selected
+    await waitFor(() => {
+      expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
+    });
+
+    // Scroll to load more members
+    const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
+
+    // Set up realistic scroll properties
+    Object.defineProperty(scrollableDiv, 'scrollHeight', {
+      configurable: true,
+      value: 1000,
+    });
+    Object.defineProperty(scrollableDiv, 'clientHeight', {
+      configurable: true,
+      value: 300,
+    });
+    Object.defineProperty(scrollableDiv, 'scrollTop', {
+      configurable: true,
+      writable: true,
+      value: 700,
+    });
+
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollTop: 700 },
+    });
+
+    // Wait for more members to load
+    await waitFor(() => {
+      const memberNames = screen.getAllByTestId('memberName');
+      expect(memberNames.length).toBeGreaterThan(10);
+    });
+
+    // Select a member from the second page
+    const allSelectButtons = screen.getAllByTestId('selectMemberBtn');
+    expect(allSelectButtons.length).toBeGreaterThan(1);
+    await userEvent.click(allSelectButtons[allSelectButtons.length - 1]);
+
+    // Verify both members are selected and first member is still selected
+    await waitFor(() => {
+      const clearButtons = screen.getAllByTestId('clearSelectedMember');
+      expect(clearButtons.length).toBeGreaterThanOrEqual(2);
+
+      // Verify first member is still selected (has deselectMemberBtn)
+      const deselectButtons = screen.getAllByTestId('deselectMemberBtn');
+      expect(deselectButtons.length).toBeGreaterThanOrEqual(2);
+    });
+  });
+
+  it('does not render modal when addPeopleToTagModalIsOpen is false', () => {
+    const customProps = {
+      ...props,
+      addPeopleToTagModalIsOpen: false,
+    };
+
+    const { container } = renderAddPeopleToTagModal(customProps, link);
+
+    // Modal should not be visible
+    const modal = container.querySelector('.modal.show');
+    expect(modal).not.toBeInTheDocument();
+  });
+
+  it('handles member selection and deselection via badge removal correctly', async () => {
+    renderAddPeopleToTagModal(props, link);
+
+    await wait();
+
+    // Select a member
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+
+    // Verify the member appears in the badge container
+    await waitFor(() => {
+      const badges = screen.getAllByTestId('clearSelectedMember');
+      expect(badges.length).toBe(1);
+    });
+
+    // Remove the member via the badge
+    const clearButton = screen.getAllByTestId('clearSelectedMember')[0];
+    await userEvent.click(clearButton);
+
+    // Verify all badges are removed (count becomes zero)
+    await waitFor(() => {
+      const badges = screen.queryAllByTestId('clearSelectedMember');
+      expect(badges.length).toBe(0);
+    });
+  });
+
+  it('handles mutation error with Error instance correctly', async () => {
+    const MOCK_ERROR_MUTATION = [
+      {
+        request: {
+          query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+          variables: {
+            id: '1',
+            first: TAGS_QUERY_DATA_CHUNK_SIZE,
+            where: {
+              firstName: { starts_with: '' },
+              lastName: { starts_with: '' },
+            },
+          },
+        },
+        result: {
+          data: {
+            getUsersToAssignTo: {
+              usersToAssignTo: {
+                edges: [
+                  {
+                    node: { _id: '1', firstName: 'Test', lastName: 'User' },
+                    cursor: 'cursor1',
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  endCursor: 'cursor1',
+                  startCursor: 'cursor1',
+                  hasPreviousPage: false,
+                },
+                totalCount: 1,
+              },
+              name: 'tag1',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_PEOPLE_TO_TAG,
+          variables: { tagId: '1', userIds: ['1'] },
+        },
+        error: new Error('Mutation failed'),
+      },
+    ];
+
+    const linkWithError = new StaticMockLink(MOCK_ERROR_MUTATION, true);
+    renderAddPeopleToTagModal(props, linkWithError);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
+    });
+
+    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Mutation failed');
     });
   });
 });
