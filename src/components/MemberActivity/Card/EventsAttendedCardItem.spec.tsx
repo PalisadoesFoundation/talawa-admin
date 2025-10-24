@@ -134,38 +134,41 @@ describe('EventAttendedCard', () => {
         expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
       });
 
-      it('renders link with malformed URL when orgId is missing', () => {
+      it('does not render link when orgId is missing', () => {
         const propsWithoutOrgId = {
           ...mockProps,
           orgId: undefined,
         };
         renderComponent(propsWithoutOrgId);
-        const link = screen.getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/undefined/event456');
-        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('ChevronRightIcon'),
+        ).not.toBeInTheDocument();
       });
 
-      it('renders link with malformed URL when eventId is missing', () => {
+      it('does not render link when eventId is missing', () => {
         const propsWithoutEventId = {
           ...mockProps,
           eventId: undefined,
         };
         renderComponent(propsWithoutEventId);
-        const link = screen.getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/org123/undefined');
-        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('ChevronRightIcon'),
+        ).not.toBeInTheDocument();
       });
 
-      it('renders link with malformed URL when both IDs are missing', () => {
+      it('does not render link when both IDs are missing', () => {
         const propsWithoutIds = {
           ...mockProps,
           orgId: undefined,
           eventId: undefined,
         };
         renderComponent(propsWithoutIds);
-        const link = screen.getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/undefined/undefined');
-        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('ChevronRightIcon'),
+        ).not.toBeInTheDocument();
       });
     });
 
