@@ -264,11 +264,7 @@ describe('EventAttendedCard', () => {
         ...mockProps,
         title: '',
       };
-      render(
-        <MemoryRouter>
-          <EventAttendedCard {...propsWithEmptyTitle} />
-        </MemoryRouter>,
-      );
+      renderComponent(propsWithEmptyTitle);
       const titleElement = screen.getByTestId('EventsAttendedCardTitle');
       expect(titleElement).toBeInTheDocument();
       expect(titleElement).toHaveTextContent('');
