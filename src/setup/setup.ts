@@ -37,6 +37,11 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       ]);
 
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+      // mark that reCAPTCHA is enabled
+      updateEnvFile('REACT_APP_USE_RECAPTCHA', 'yes');
+    } else {
+      // explicitly mark reCAPTCHA as disabled
+      updateEnvFile('REACT_APP_USE_RECAPTCHA', 'no');
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
@@ -55,7 +60,7 @@ const askAndSetLogErrors = async (): Promise<void> => {
   });
 
   if (shouldLogErrors) {
-    updateEnvFile('ALLOW_LOGS', 'YES');
+    updateEnvFile('ALLOW_LOGS', 'yes');
   }
 };
 
@@ -73,10 +78,22 @@ export async function main(): Promise<void> {
     modifyEnvFile();
     await askAndSetDockerOption();
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
-    const useDocker = envConfig.USE_DOCKER === 'YES';
+    const useDocker =
+      typeof envConfig.USE_DOCKER === 'string' &&
+      String(envConfig.USE_DOCKER).toLowerCase() === 'yes';
 
-    // Only run these commands if Docker is NOT used
-    if (!useDocker) {
+    // Centralize Docker vs non-Docker env writes
+    if (useDocker) {
+      // Clear non-docker API endpoints and set docker-specific url
+      updateEnvFile('REACT_APP_TALAWA_URL', '');
+      updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', '');
+      updateEnvFile(
+        'REACT_APP_DOCKER_TALAWA_URL',
+        'http://host.docker.internal:4000/graphql',
+      );
+    } else {
+      // Non-docker path: ensure docker-specific var is empty
+      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', '');
       await askAndUpdatePort();
       await askAndUpdateTalawaApiUrl();
     }
@@ -94,4 +111,7 @@ export async function main(): Promise<void> {
   }
 }
 
-main();
+// Run setup only when not in a test environment. This avoids prompting during imports in tests.
+if (process.env.NODE_ENV !== 'test') {
+  main();
+}

@@ -15,7 +15,7 @@ const askAndSetDockerOption = async (): Promise<void> => {
 
   if (useDocker) {
     console.log('Setting up with Docker...');
-    updateEnvFile('USE_DOCKER', 'YES');
+    updateEnvFile('USE_DOCKER', 'yes');
     const answers = await askForDocker();
     const DOCKER_PORT_NUMBER = answers;
     updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
@@ -30,7 +30,7 @@ const askAndSetDockerOption = async (): Promise<void> => {
        `);
   } else {
     console.log('Setting up without Docker...');
-    updateEnvFile('USE_DOCKER', 'NO');
+    updateEnvFile('USE_DOCKER', 'no');
   }
 };
 

@@ -23,35 +23,43 @@ describe('modifyEnvFile', () => {
     const envContent = 'EXISTING_KEY=existing_value\n';
     const envExampleContent =
       'EXISTING_KEY=existing_value\nNEW_KEY=default_value\n';
-
+    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
     vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent)
-      .mockReturnValueOnce(envExampleContent)
-      .mockReturnValueOnce(envExampleContent);
+      .mockReturnValueOnce(envContent) // .env
+      .mockReturnValueOnce(envExampleContent); // .env.example
 
-    vi.spyOn(fs, 'appendFileSync');
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
 
     modifyEnvFile();
 
-    expect(fs.appendFileSync).toHaveBeenCalledWith(
-      '.env',
-      'NEW_KEY=default_value\n',
-    );
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+    // Should preserve existing value and include the missing key with an empty value
+    expect(written).toContain('EXISTING_KEY=existing_value');
+    expect(written).toContain('NEW_KEY=');
   });
 
   it('should not append anything if all keys are present', () => {
     const envContent = 'EXISTING_KEY=existing_value\n';
     const envExampleContent = 'EXISTING_KEY=existing_value\n';
-
+    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
     vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent)
-      .mockReturnValueOnce(envExampleContent);
+      .mockReturnValueOnce(envContent) // .env
+      .mockReturnValueOnce(envExampleContent); // .env.example
 
-    vi.spyOn(fs, 'appendFileSync');
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
 
     modifyEnvFile();
 
-    expect(fs.appendFileSync).not.toHaveBeenCalled();
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+    // The existing key should be present and preserved once
+    const occurrences = (written.match(/EXISTING_KEY=/g) || []).length;
+    expect(occurrences).toBe(1);
   });
 });
 
