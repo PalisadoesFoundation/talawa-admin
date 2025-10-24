@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import EventAttendedCard, { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
 
@@ -24,9 +24,9 @@ describe('EventAttendedCard', () => {
 
   const renderComponent = (props = mockProps): void => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <EventAttendedCard {...props} />
-      </BrowserRouter>,
+      </MemoryRouter>,
     );
   };
 
@@ -265,9 +265,9 @@ describe('EventAttendedCard', () => {
         title: '',
       };
       const { container } = render(
-        <BrowserRouter>
+        <MemoryRouter>
           <EventAttendedCard {...propsWithEmptyTitle} />
-        </BrowserRouter>,
+        </MemoryRouter>,
       );
       const titleElement = container.querySelector('h6');
       expect(titleElement).toBeInTheDocument();
