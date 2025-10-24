@@ -103,6 +103,7 @@ describe('EventAttendedCard', () => {
       };
       renderComponent(propsWithoutLocation);
       expect(screen.queryByTestId('LocationOnIcon')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test Location')).not.toBeInTheDocument();
     });
 
     it('does not render location icon when location is empty', () => {
@@ -112,6 +113,7 @@ describe('EventAttendedCard', () => {
       };
       renderComponent(propsWithEmptyLocation);
       expect(screen.queryByTestId('LocationOnIcon')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test Location')).not.toBeInTheDocument();
     });
   });
 
