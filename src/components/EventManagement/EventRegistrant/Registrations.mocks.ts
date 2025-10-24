@@ -74,14 +74,3 @@ export const REGISTRANTS_MOCKS = [
     },
   },
 ];
-
-export const REGISTRANTS_MOCKS_ERROR = [
-  {
-    // Error mock for EVENT_REGISTRANTS query
-    request: {
-      query: EVENT_REGISTRANTS,
-      variables: { eventId: 'event123' },
-    },
-    error: new Error('An error occurred while fetching registrants'),
-  },
-];

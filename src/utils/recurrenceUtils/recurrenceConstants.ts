@@ -38,11 +38,6 @@ export const endsNever = RecurrenceEndOption.never;
 export const endsOn = RecurrenceEndOption.on;
 export const endsAfter = RecurrenceEndOption.after;
 
-// Array of weekdays Monday to Friday
-export const mondayToFriday = Days.filter(
-  (day) => day !== WeekDays.SA && day !== WeekDays.SU,
-);
-
 // Names of week days for display
 export const dayNames = {
   [WeekDays.SU]: 'Sunday',
@@ -52,17 +47,6 @@ export const dayNames = {
   [WeekDays.TH]: 'Thursday',
   [WeekDays.FR]: 'Friday',
   [WeekDays.SA]: 'Saturday',
-};
-
-// Short names for week days
-export const dayShortNames = {
-  [WeekDays.SU]: 'S',
-  [WeekDays.MO]: 'M',
-  [WeekDays.TU]: 'T',
-  [WeekDays.WE]: 'W',
-  [WeekDays.TH]: 'T',
-  [WeekDays.FR]: 'F',
-  [WeekDays.SA]: 'S',
 };
 
 // Names of months
@@ -80,22 +64,3 @@ export const monthNames = [
   'November',
   'December',
 ];
-
-// Short names of months
-export const monthShortNames = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
-// Days in month (1-31)
-export const monthDays = Array.from({ length: 31 }, (_, i) => i + 1);

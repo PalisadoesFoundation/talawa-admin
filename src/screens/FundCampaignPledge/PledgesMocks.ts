@@ -385,38 +385,6 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
   },
 ];
 
-export const EMPTY_MOCKS = [
-  memberList,
-  {
-    request: {
-      query: FUND_CAMPAIGN_PLEDGE,
-      variables: {
-        where: {
-          id: 'fundCampaignId',
-        },
-        pledgeOrderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            fundId: {
-              name: 'Fund 1',
-            },
-            name: 'Campaign Name',
-            fundingGoal: 1000,
-            currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-01-01',
-            pledges: [],
-          },
-        ],
-      },
-    },
-  },
-];
-
 export const PLEDGE_MODAL_MOCKS = [
   memberList,
   {
