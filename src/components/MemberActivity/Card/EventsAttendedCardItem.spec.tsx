@@ -10,7 +10,11 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    Link: ({ children, to, ...props }: React.PropsWithChildren<{ to: string }>) => (
+    Link: ({
+      children,
+      to,
+      ...props
+    }: React.PropsWithChildren<{ to: string }>) => (
       <a href={to} {...props}>
         {children}
       </a>
@@ -26,7 +30,6 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-
 describe('EventAttendedCard', () => {
   const mockProps: InterfaceCardItem = {
     title: 'Test Event',
@@ -37,7 +40,6 @@ describe('EventAttendedCard', () => {
     eventId: 'event456',
   };
 
-
   const renderComponent = (props = mockProps): void => {
     render(
       <BrowserRouter>
@@ -46,18 +48,15 @@ describe('EventAttendedCard', () => {
     );
   };
 
-
   beforeEach(() => {
     vi.clearAllMocks();
     // Default to administrator role
     mockGetItem.mockReturnValue('administrator');
   });
 
-
   describe('Basic rendering', () => {
     it('renders event details correctly', () => {
       renderComponent();
-
 
       expect(screen.getByText('Test Event')).toBeInTheDocument();
       expect(screen.getByText(/may/i)).toBeInTheDocument();
@@ -65,16 +64,13 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText('Test Location')).toBeInTheDocument();
     });
 
-
     it('renders card with correct test id', () => {
       renderComponent();
       expect(screen.getByTestId('EventsAttendedCard')).toBeInTheDocument();
     });
 
-
     // Location icon asserted in the location-specific tests below.
   });
-
 
   describe('Date handling', () => {
     it('renders valid date correctly', () => {
@@ -82,7 +78,6 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText(/may/i)).toBeInTheDocument();
       expect(screen.getByText('15')).toBeInTheDocument();
     });
-
 
     it('renders "Date N/A" for invalid date', () => {
       const propsWithInvalidDate = {
@@ -93,7 +88,6 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText('Date N/A')).toBeInTheDocument();
     });
 
-
     it('renders "Date N/A" for missing date', () => {
       const propsWithoutDate = {
         ...mockProps,
@@ -102,7 +96,6 @@ describe('EventAttendedCard', () => {
       renderComponent(propsWithoutDate);
       expect(screen.getByText('Date N/A')).toBeInTheDocument();
     });
-
 
     it('renders "Date N/A" for empty date string', () => {
       const propsWithEmptyDate = {
@@ -114,14 +107,12 @@ describe('EventAttendedCard', () => {
     });
   });
 
-
   describe('Location handling', () => {
     it('renders location when present', () => {
       renderComponent();
       expect(screen.getByText('Test Location')).toBeInTheDocument();
       expect(screen.getByTestId('LocationOnIcon')).toBeInTheDocument();
     });
-
 
     it('does not render location icon when location is missing', () => {
       const propsWithoutLocation = {
@@ -132,7 +123,6 @@ describe('EventAttendedCard', () => {
       expect(screen.queryByTestId('LocationOnIcon')).not.toBeInTheDocument();
       expect(screen.queryByText('Test Location')).not.toBeInTheDocument();
     });
-
 
     it('does not render location icon when location is empty', () => {
       const propsWithEmptyLocation = {
@@ -145,13 +135,11 @@ describe('EventAttendedCard', () => {
     });
   });
 
-
   describe('User role handling', () => {
     describe('Administrator user', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue('administrator');
       });
-
 
       it('renders link with correct path when both IDs are present', () => {
         renderComponent();
@@ -160,13 +148,13 @@ describe('EventAttendedCard', () => {
         expect(link).toHaveAttribute('href', '/event/org123/event456');
       });
 
-
       it('renders chevron right icon', () => {
         renderComponent();
         const card = screen.getByTestId('EventsAttendedCard');
-        expect(within(card).getByTestId('ChevronRightIcon')).toBeInTheDocument();
+        expect(
+          within(card).getByTestId('ChevronRightIcon'),
+        ).toBeInTheDocument();
       });
-
 
       it('renders link when orgId is missing', () => {
         const propsWithoutOrgId = {
@@ -179,7 +167,6 @@ describe('EventAttendedCard', () => {
         expect(link).toHaveAttribute('href', '/event/undefined/event456');
       });
 
-
       it('renders link when eventId is missing', () => {
         const propsWithoutEventId = {
           ...mockProps,
@@ -190,7 +177,6 @@ describe('EventAttendedCard', () => {
         const link = within(card).getByRole('link');
         expect(link).toHaveAttribute('href', '/event/org123/undefined');
       });
-
 
       it('renders link when both IDs are missing', () => {
         const propsWithoutIds = {
@@ -205,18 +191,15 @@ describe('EventAttendedCard', () => {
       });
     });
 
-
     describe('Regular user', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue('regular');
       });
 
-
       it('does not render link for regular user', () => {
         renderComponent();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
       });
-
 
       it('does not render chevron right icon for regular user', () => {
         renderComponent();
@@ -226,18 +209,15 @@ describe('EventAttendedCard', () => {
       });
     });
 
-
     describe('Superadmin user', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue('superadmin');
       });
 
-
       it('does not render link for superadmin user', () => {
         renderComponent();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
       });
-
 
       it('does not render chevron right icon for superadmin user', () => {
         renderComponent();
@@ -247,18 +227,15 @@ describe('EventAttendedCard', () => {
       });
     });
 
-
     describe('User role', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue('user');
       });
 
-
       it('does not render link for user role', () => {
         renderComponent();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
       });
-
 
       it('does not render chevron right icon for user role', () => {
         renderComponent();
@@ -268,18 +245,15 @@ describe('EventAttendedCard', () => {
       });
     });
 
-
     describe('Null role', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue(null);
       });
 
-
       it('does not render link for null role', () => {
         renderComponent();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
       });
-
 
       it('does not render chevron right icon for null role', () => {
         renderComponent();
@@ -289,18 +263,15 @@ describe('EventAttendedCard', () => {
       });
     });
 
-
     describe('Undefined role', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue(undefined);
       });
 
-
       it('does not render link for undefined role', () => {
         renderComponent();
         expect(screen.queryByRole('link')).not.toBeInTheDocument();
       });
-
 
       it('does not render chevron right icon for undefined role', () => {
         renderComponent();
@@ -310,7 +281,6 @@ describe('EventAttendedCard', () => {
       });
     });
   });
-
 
   describe('Edge cases', () => {
     it('handles empty title gracefully', () => {
@@ -324,7 +294,6 @@ describe('EventAttendedCard', () => {
       expect(titleElement).toHaveTextContent('');
     });
 
-
     it('handles very long title', () => {
       const longTitle = 'A'.repeat(1000);
       const propsWithLongTitle = {
@@ -334,7 +303,6 @@ describe('EventAttendedCard', () => {
       renderComponent(propsWithLongTitle);
       expect(screen.getByText(longTitle)).toBeInTheDocument();
     });
-
 
     it('handles special characters in title', () => {
       const specialTitle =
@@ -347,7 +315,6 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText(specialTitle)).toBeInTheDocument();
     });
 
-
     it('handles missing time gracefully', () => {
       const propsWithoutTime = {
         ...mockProps,
@@ -359,7 +326,6 @@ describe('EventAttendedCard', () => {
       expect(screen.getByText('Test Event')).toBeInTheDocument();
     });
 
-
     it('handles empty time gracefully', () => {
       const propsWithEmptyTime = {
         ...mockProps,
@@ -369,7 +335,6 @@ describe('EventAttendedCard', () => {
       const card = screen.getByTestId('EventsAttendedCard');
       expect(card).toBeInTheDocument();
     });
-
 
     it('handles very long time string', () => {
       const longTime = 'T'.repeat(1000);
@@ -382,7 +347,6 @@ describe('EventAttendedCard', () => {
       expect(card).toBeInTheDocument();
     });
 
-
     it('handles malformed time format', () => {
       const malformedTime = 'invalid-time-format-25:99:99';
       const propsWithMalformedTime = {
@@ -393,7 +357,6 @@ describe('EventAttendedCard', () => {
       const card = screen.getByTestId('EventsAttendedCard');
       expect(card).toBeInTheDocument();
     });
-
 
     it('handles special characters in time', () => {
       const specialTime = '@#$%^&*()_+-=[]{}|;:,.<>?';
