@@ -295,5 +295,48 @@ describe('EventAttendedCard', () => {
       renderComponent(propsWithSpecialTitle);
       expect(screen.getByText(specialTitle)).toBeInTheDocument();
     });
+
+    it('handles empty time gracefully', () => {
+      const propsWithEmptyTime = {
+        ...mockProps,
+        time: '',
+      };
+      renderComponent(propsWithEmptyTime);
+      const card = screen.getByTestId('EventsAttendedCard');
+      expect(card).toBeInTheDocument();
+    });
+
+    it('handles very long time string', () => {
+      const longTime = 'T'.repeat(1000);
+      const propsWithLongTime = {
+        ...mockProps,
+        time: longTime,
+      };
+      renderComponent(propsWithLongTime);
+      const card = screen.getByTestId('EventsAttendedCard');
+      expect(card).toBeInTheDocument();
+    });
+
+    it('handles malformed time format', () => {
+      const malformedTime = 'invalid-time-format-25:99:99';
+      const propsWithMalformedTime = {
+        ...mockProps,
+        time: malformedTime,
+      };
+      renderComponent(propsWithMalformedTime);
+      const card = screen.getByTestId('EventsAttendedCard');
+      expect(card).toBeInTheDocument();
+    });
+
+    it('handles special characters in time', () => {
+      const specialTime = '@#$%^&*()_+-=[]{}|;:,.<>?';
+      const propsWithSpecialTime = {
+        ...mockProps,
+        time: specialTime,
+      };
+      renderComponent(propsWithSpecialTime);
+      const card = screen.getByTestId('EventsAttendedCard');
+      expect(card).toBeInTheDocument();
+    });
   });
 });
