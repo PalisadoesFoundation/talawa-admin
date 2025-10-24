@@ -264,7 +264,7 @@ describe('EventAttendedCard', () => {
         ...mockProps,
         title: '',
       };
-      const { container } = render(
+      render(
         <MemoryRouter>
           <EventAttendedCard {...propsWithEmptyTitle} />
         </MemoryRouter>,
