@@ -32,7 +32,6 @@ describe('EventAttendedCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default to administrator role
     mockGetItem.mockReturnValue('administrator');
   });
 
@@ -50,8 +49,6 @@ describe('EventAttendedCard', () => {
       renderComponent();
       expect(screen.getByTestId('EventsAttendedCard')).toBeInTheDocument();
     });
-
-    // Location icon asserted in the location-specific tests below.
   });
 
   describe('Date handling', () => {
@@ -304,7 +301,6 @@ describe('EventAttendedCard', () => {
       renderComponent(propsWithoutTime);
       const card = screen.getByTestId('EventsAttendedCard');
       expect(card).toBeInTheDocument();
-      // Verify component renders without crashing when time is undefined
       expect(screen.getByText('Test Event')).toBeInTheDocument();
     });
 
