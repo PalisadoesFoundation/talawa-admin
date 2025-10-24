@@ -269,7 +269,7 @@ describe('EventAttendedCard', () => {
           <EventAttendedCard {...propsWithEmptyTitle} />
         </MemoryRouter>,
       );
-      const titleElement = container.querySelector('h6');
+      const titleElement = screen.getByTestId('EventsAttendedCardTitle');
       expect(titleElement).toBeInTheDocument();
       expect(titleElement).toHaveTextContent('');
     });
