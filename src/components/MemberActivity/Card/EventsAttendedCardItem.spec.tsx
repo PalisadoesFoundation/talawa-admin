@@ -265,7 +265,7 @@ describe('EventAttendedCard', () => {
         title: '',
       };
       renderComponent(propsWithEmptyTitle);
-      const titleElement = screen.getByRole('heading', { level: 6 });
+      const titleElement = screen.getByTestId('EventsAttendedCardTitle');
       expect(titleElement).toBeInTheDocument();
       expect(titleElement).toHaveTextContent('');
     });
