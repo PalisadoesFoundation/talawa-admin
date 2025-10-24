@@ -75,6 +75,7 @@ interface InterfaceRequestsListItem {
   createdAt: string;
   status: string;
   user: {
+    avatarURL?: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -241,6 +242,7 @@ const Requests = (): JSX.Element => {
   // Header titles for the table
   const headerTitles: string[] = [
     t('sl_no'),
+    t('profile'),
     tCommon('name'),
     tCommon('email'),
     t('accept'),
