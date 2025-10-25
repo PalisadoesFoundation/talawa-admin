@@ -6,7 +6,7 @@
  * ## Features:
  * - **Search:** Allows users to search for users by their first name.
  * - **Sorting:** Provides options to sort users by creation date (newest or oldest).
- * - **Filtering:** Enables filtering users based on their roles (admin, superadmin, user, etc.).
+ * - **Filtering:** Enables filtering users based on their roles (admin, user, etc.).
  * - **Pagination:** Utilizes infinite scrolling to load more users as the user scrolls down.
  *
  * ## GraphQL Queries:
@@ -20,7 +20,7 @@
  * - `isLoadingMore`: Indicates if more users are currently being loaded.
  * - `searchByName`: The current search query for user names.
  * - `sortingOption`: The current sorting option (newest or oldest).
- * - `filteringOption`: The current filtering option (admin, superadmin, user, cancel).
+ * - `filteringOption`: The current filtering option (admin, user, cancel).
  * - `displayedUsers`: The list of users currently displayed, filtered and sorted.
  *
  * ## Event Handlers:
@@ -66,7 +66,10 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  USER_LIST_FOR_TABLE,
+} from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -103,36 +106,68 @@ const Users = (): JSX.Element => {
     refetch: refetchUsers,
     error,
   }: {
-    data?: { usersByIds: InterfaceQueryUserListItem[] };
+    data?: {
+      allUsers: {
+        pageInfo: {
+          endCursor: string | null;
+          hasNextPage: boolean;
+          hasPreviousPage?: boolean;
+          startCursor?: string;
+        };
+        edges: {
+          cursor: string;
+          node: InterfaceQueryUserListItem;
+        }[];
+      };
+    };
     loading: boolean;
-    fetchMore: (options: {
-      variables: Record<string, unknown>;
-      updateQuery: (
-        previousQueryResult: { usersByIds: InterfaceQueryUserListItem[] },
-        options: {
-          fetchMoreResult?: { usersByIds: InterfaceQueryUserListItem[] };
-        },
-      ) => { usersByIds: InterfaceQueryUserListItem[] };
-    }) => void;
+    fetchMore: (options: { variables: Record<string, unknown> }) => Promise<{
+      data?: {
+        allUsers: {
+          pageInfo: {
+            endCursor: string | null;
+            hasNextPage: boolean;
+          };
+          edges: {
+            cursor: string;
+            node: InterfaceQueryUserListItem;
+          }[];
+        };
+      };
+    }>;
     refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
-  } = useQuery(USER_LIST, {
+  } = useQuery(USER_LIST_FOR_TABLE, {
     variables: {
-      input: {
-        ids: loggedInUserId,
-      },
+      first: 10,
+      after: null,
+      orgFirst: 6,
     },
     notifyOnNetworkStatusChange: true,
   });
 
-  console.log('GraphQL Query Data:', data); // Log query results
-  console.log('GraphQL Loading State:', loading); // Log loading state
-  console.log('GraphQL Error:', error); // Log any errors
+  const edges = data?.allUsers?.edges ?? [];
+  const pageInfo = data?.allUsers?.pageInfo;
+
+  const [pageInfoState, setPageInfoState] = useState(pageInfo);
 
   useEffect(() => {
-    if (data) {
-      console.log('Setting usersData with:', data.usersByIds);
-      setUsersData(data.usersByIds || []);
+    if (data?.allUsers?.pageInfo) {
+      setPageInfoState(data.allUsers.pageInfo);
+    }
+  }, [data]);
+  console.log(edges);
+
+  console.log('GraphQL Query Data:', data);
+  console.log('GraphQL Loading State:', loading);
+  console.log('GraphQL Error:', error);
+
+  useEffect(() => {
+    if (edges.length > 0) {
+      const newUser = edges.map((edge: any) => edge.node);
+      console.log('Setting usersData with:', newUser);
+      setUsersData(newUser || []);
+      setHasMore(pageInfo?.hasNextPage ?? false);
     }
   }, [data]);
 
@@ -141,8 +176,8 @@ const Users = (): JSX.Element => {
     InterfaceQueryUserListItem[]
   >([]);
 
-  console.log('Current usersData:', usersData); // Log current usersData state
-  console.log('Current displayedUsers:', displayedUsers); // Log current displayedUsers
+  console.log('Current usersData:', usersData);
+  console.log('Current displayedUsers:', displayedUsers);
 
   // Manage loading more state
   useEffect(() => {
@@ -153,10 +188,6 @@ const Users = (): JSX.Element => {
 
     console.log('Managing loading state for:', usersData.length, 'users');
 
-    if (usersData.length < perPageResult) {
-      console.log('Setting hasMore to false');
-      setHasMore(false);
-    }
     let newDisplayedUsers = sortUsers(usersData, sortingOption);
     newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
     console.log('Setting displayedUsers:', newDisplayedUsers);
@@ -175,21 +206,12 @@ const Users = (): JSX.Element => {
     if (!dataOrgs) {
       return;
     }
-
     // Add null check before accessing organizations.length
     if (dataOrgs.organizations?.length === 0) {
       toast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs, t]);
 
-  // Send to orgList page if user is not superadmin
-  // useEffect(() => {
-  //   if (userType != 'SUPERADMIN') {
-  //     window.location.assign('/orglist');
-  //   }
-  // }, []);
-
-  // Manage the loading state
   useEffect(() => {
     if (loading && isLoadingMore == false) {
       setIsLoading(true);
@@ -200,7 +222,7 @@ const Users = (): JSX.Element => {
 
   useEffect(() => {
     if (loadUnqUsers > 0) {
-      loadMoreUsers(displayedUsers.length, loadUnqUsers);
+      loadMoreUsers();
     }
   }, [displayedUsers]);
 
@@ -211,9 +233,10 @@ const Users = (): JSX.Element => {
       return;
     }
     refetchUsers({
-      firstName_contains: value,
-      lastName_contains: '',
-      // Later on we can add several search and filter options
+      first: perPageResult,
+      after: null,
+      orgFirst: 6,
+      name_Icontains: value,
     });
     setHasMore(true);
   };
@@ -221,65 +244,31 @@ const Users = (): JSX.Element => {
   const resetAndRefetch = (): void => {
     refetchUsers({
       first: perPageResult,
-      skip: 0,
-      firstName_contains: '',
-      lastName_contains: '',
-      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
+      after: null,
+      orgFirst: 6,
     });
     setHasMore(true);
   };
-  const loadMoreUsers = (skipValue: number, limitVal: number): void => {
-    console.log('Loading more users. Skip:', skipValue, 'Limit:', limitVal);
+
+  const loadMoreUsers = async (): Promise<void> => {
+    if (!pageInfoState?.hasNextPage || isLoadingMore) return;
     setIsLoadingMore(true);
-    fetchMore({
+
+    const { data: moreData } = await fetchMore({
       variables: {
-        first: limitVal + perPageResult || perPageResult,
-        skip: skipValue - perPageResult >= 0 ? skipValue - perPageResult : 0,
-        filter: searchByName,
-        order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
-      },
-      updateQuery: (
-        prev: { usersByIds: InterfaceQueryUserListItem[] },
-        {
-          fetchMoreResult,
-        }: { fetchMoreResult?: { usersByIds: InterfaceQueryUserListItem[] } },
-      ) => {
-        setIsLoadingMore(false);
-        if (!fetchMoreResult) {
-          console.log('No fetchMoreResult available');
-          return prev;
-        }
-
-        const mergedUsers = [
-          ...(prev.usersByIds || []),
-          ...fetchMoreResult.usersByIds,
-        ];
-
-        const uniqueUsers = Array.from(
-          new Map(mergedUsers.map((user) => [user.id, user])).values(),
-        );
-        console.log('Merged users:', mergedUsers.length);
-        console.log('Unique users:', uniqueUsers.length);
-
-        if (uniqueUsers.length < mergedUsers.length) {
-          const diff = mergedUsers.length - uniqueUsers.length;
-          console.log('Duplicate users found:', diff);
-          setLoadUnqUsers(diff);
-        } else {
-          console.log('No duplicate users found');
-          setLoadUnqUsers(0);
-        }
-
-        if (prev.usersByIds) {
-          if (uniqueUsers.length - prev.usersByIds.length < perPageResult) {
-            console.log('No more users to load');
-            setHasMore(false);
-          }
-        }
-
-        return { usersByIds: uniqueUsers };
+        first: perPageResult,
+        after: pageInfoState?.endCursor,
+        orgFirst: 6,
       },
     });
+
+    const moreEdges = moreData?.allUsers?.edges ?? [];
+    const newUsers = moreEdges.map((edge: any) => edge.node);
+
+    setUsersData((prev) => [...prev, ...newUsers]);
+    setPageInfoState(moreData?.allUsers?.pageInfo);
+    setHasMore(moreData?.allUsers?.pageInfo?.hasNextPage ?? false);
+    setIsLoadingMore(false);
   };
 
   const handleSorting = (option: string): void => {
@@ -311,33 +300,19 @@ const Users = (): JSX.Element => {
   };
 
   const handleFiltering = (option: string): void => {
-    if (option === filteringOption) {
-      return;
-    }
-    setFilteringOption(option);
-    setHasMore(true);
+    if (option !== filteringOption) setFilteringOption(option);
   };
 
   const filterUsers = (
     allUsers: InterfaceQueryUserListItem[],
     filteringOption: string,
   ): InterfaceQueryUserListItem[] => {
-    const filteredUsers = [...allUsers];
-
-    if (filteringOption === 'cancel') {
-      return filteredUsers;
-    }
-    if (filteringOption === 'user') {
-      return allUsers.filter((user) => user.role === 'regular');
-    }
-    if (filteringOption === 'admin') {
-      return allUsers.filter((user) => user.role === 'administrator');
-    }
-    if (filteringOption === 'superAdmin') {
-      return [];
-    }
-
-    return [];
+    if (filteringOption === 'cancel') return allUsers;
+    if (filteringOption === 'user')
+      return allUsers.filter((u) => u.role === 'regular');
+    if (filteringOption === 'admin')
+      return allUsers.filter((u) => u.role === 'administrator');
+    return allUsers;
   };
 
   const headerTitles: string[] = [
@@ -345,7 +320,6 @@ const Users = (): JSX.Element => {
     tCommon('name'),
     tCommon('email'),
     t('joined_organizations'),
-    t('blocked_organizations'),
   ];
 
   return (
@@ -375,7 +349,6 @@ const Users = (): JSX.Element => {
               title: 'Filter by role',
               options: [
                 { label: tCommon('admin'), value: 'admin' },
-                { label: tCommon('superAdmin'), value: 'superAdmin' },
                 { label: tCommon('user'), value: 'user' },
                 { label: tCommon('cancel'), value: 'cancel' },
               ],
@@ -420,14 +393,14 @@ const Users = (): JSX.Element => {
           )}
           <InfiniteScroll
             dataLength={displayedUsers.length}
-            next={() => {
-              loadMoreUsers(displayedUsers.length, perPageResult);
-            }}
+            next={loadMoreUsers}
             loader={
-              <TableLoader
-                noOfCols={headerTitles.length}
-                noOfRows={tableLoaderRowLength}
-              />
+              displayedUsers.length > 0 ? (
+                <TableLoader
+                  noOfCols={headerTitles.length}
+                  noOfRows={tableLoaderRowLength}
+                />
+              ) : null
             }
             hasMore={hasMore}
             className={styles.listBox}
