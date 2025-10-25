@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -779,6 +779,75 @@ describe('Testing Requests screen', () => {
     await wait(500);
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('should handle empty state when organization returns null', async () => {
+    const NULL_FETCH_MORE_MOCKS = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'org1',
+                name: 'Test Organization',
+                addressLine1: '123 Test Street',
+                description: 'Test description',
+                avatarURL: null,
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'user1',
+                      },
+                    },
+                  ],
+                  pageInfo: {
+                    hasNextPage: false,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organization: null,
+          },
+        },
+      },
+    ];
+
+    const linkNullFetchMore = new StaticMockLink(NULL_FETCH_MORE_MOCKS, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkNullFetchMore}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+    });
   });
 
   test('Search functionality should handle special characters', async () => {
