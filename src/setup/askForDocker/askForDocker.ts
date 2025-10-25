@@ -82,18 +82,7 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
         throw new Error('Invalid WebSocket URL generated: ');
       }
 
-      if (endpoint.includes('localhost')) {
-        const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
-        try {
-          const url = new URL(dockerUrl);
-          if (!['http:', 'https:'].includes(url.protocol)) {
-            throw new Error('Invalid Docker URL protocol');
-          }
-        } catch {
-          throw new Error('Invalid Docker URL generated');
-        }
-        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
-      }
+      // Docker-specific URL is handled by the main setup flow when USE_DOCKER is yes.
     }
   } catch (error) {
     console.error('Error setting up Talawa API URL:', error);

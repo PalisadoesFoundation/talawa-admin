@@ -39,7 +39,7 @@ describe('askAndSetDockerOption', () => {
 
     await askAndSetDockerOption();
 
-    expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'YES');
+    expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'yes');
     expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_PORT', 8080);
   });
 
@@ -50,7 +50,7 @@ describe('askAndSetDockerOption', () => {
 
     await askAndSetDockerOption();
 
-    expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'NO');
+    expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'no');
   });
 
   it('should handle errors when askForDocker fails', async () => {

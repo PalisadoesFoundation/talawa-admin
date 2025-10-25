@@ -32,9 +32,9 @@ describe('Talawa Admin Setup', () => {
 
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=no');
 
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
+    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'no' });
 
     processExitSpy = vi.spyOn(process, 'exit').mockImplementation((code) => {
       throw new Error(`process.exit called with code ${code}`);
@@ -63,8 +63,8 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should skip port and API URL setup when Docker is used', async () => {
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
+    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=yes');
+    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'yes' });
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
@@ -74,6 +74,15 @@ describe('Talawa Admin Setup', () => {
 
     expect(askAndUpdatePort).not.toHaveBeenCalled();
     expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
+    // When Docker is used, docker-specific env vars should be written
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_TALAWA_URL',
+      'http://host.docker.internal:4000/graphql',
+    );
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL',
+      'ws://host.docker.internal:4000/graphql',
+    );
   });
 
   it('should handle error logging setup when user opts in', async () => {
@@ -83,7 +92,7 @@ describe('Talawa Admin Setup', () => {
 
     await main();
 
-    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'yes');
   });
 
   it('should exit if env file check fails', async () => {
@@ -136,7 +145,8 @@ describe('Talawa Admin Setup', () => {
     await askAndSetRecaptcha();
 
     expect(inquirer.prompt).toHaveBeenCalledTimes(1);
-    expect(updateEnvFile).not.toHaveBeenCalled();
+    // When user opts out, we explicitly write 'no' to REACT_APP_USE_RECAPTCHA
+    expect(updateEnvFile).toHaveBeenCalledWith('REACT_APP_USE_RECAPTCHA', 'no');
     expect(validateRecaptcha).not.toHaveBeenCalled();
   });
 
@@ -163,6 +173,27 @@ describe('Talawa Admin Setup', () => {
     await askAndSetRecaptcha();
 
     expect(validateRecaptcha).toHaveBeenCalledWith(mockInvalidKey);
+  });
+
+  it('should set reCAPTCHA site key and enable flag when valid key provided', async () => {
+    const mockKey = '1234567890abcdef1234567890abcdef12345678';
+
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: mockKey });
+
+    vi.mocked(validateRecaptcha).mockReturnValue(true);
+
+    await askAndSetRecaptcha();
+
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_RECAPTCHA_SITE_KEY',
+      mockKey,
+    );
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_USE_RECAPTCHA',
+      'yes',
+    );
   });
 
   it('should handle errors during reCAPTCHA setup', async () => {
