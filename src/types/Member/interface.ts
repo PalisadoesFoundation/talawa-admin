@@ -12,6 +12,7 @@ export interface InterfaceRequestsListItem {
   createdAt: string;
   status: string;
   user: {
+    avatarURL?: string;
     emailAddress: string; // Changed from email
     id: string;
     name: string; // Changed from firstName/lastName

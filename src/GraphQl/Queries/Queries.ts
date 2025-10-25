@@ -980,6 +980,7 @@ export const MEMBERSHIP_REQUEST = gql`
         createdAt
         status
         user {
+          avatarURL
           id
           name
           emailAddress

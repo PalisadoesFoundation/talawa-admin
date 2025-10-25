@@ -192,6 +192,7 @@
     "all": "Todos"
   },
   "requests": {
+    "profile": "Perfil",
     "title": "Solicitudes",
     "sl_no": "Núm.",
     "name": "Nombre",

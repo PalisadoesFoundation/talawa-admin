@@ -75,6 +75,7 @@ interface InterfaceRequestsListItem {
   createdAt: string;
   status: string;
   user: {
+    avatarURL?: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -241,6 +242,7 @@ const Requests = (): JSX.Element => {
   // Header titles for the table
   const headerTitles: string[] = [
     t('sl_no'),
+    t('profile'),
     tCommon('name'),
     tCommon('email'),
     t('accept'),
@@ -254,12 +256,7 @@ const Requests = (): JSX.Element => {
         className={`${styles.btnsContainer} gap-4 flex-wrap`}
         data-testid="testComp"
       >
-        <div
-          className={`${styles.input}`}
-          style={{
-            display: userRole === 'administrator' ? 'block' : 'none',
-          }}
-        >
+        <div className={`${styles.input}`}>
           <SearchBar
             placeholder={t('searchRequests')}
             onSearch={handleSearch}
@@ -294,7 +291,7 @@ const Requests = (): JSX.Element => {
             <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
           ) : (
             <InfiniteScroll
-              dataLength={displayedRequests.length ?? 0}
+              dataLength={displayedRequests.length}
               next={loadMoreRequests}
               loader={
                 <TableLoader

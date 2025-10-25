@@ -192,6 +192,7 @@
     "all": "全部"
   },
   "requests": {
+    "profile": "个人资料",
     "title": "会员申请",
     "sl_no": "SL。",
     "accept": "接受",

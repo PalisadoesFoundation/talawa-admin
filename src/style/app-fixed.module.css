@@ -4862,17 +4862,17 @@ form label,
 
 .requestsTableItemIndex {
   padding-inline-start: 2.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsTableItemName {
   padding-inline-start: 1.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsTableItemEmail {
   padding-inline-start: 1.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsAcceptButton {

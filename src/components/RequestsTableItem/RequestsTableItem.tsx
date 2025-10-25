@@ -41,6 +41,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { errorHandler } from 'utils/errorHandler';
 import styles from '../../style/app-fixed.module.css';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
+import Avatar from 'components/Avatar/Avatar';
 
 type Props = {
   request: InterfaceRequestsListItem;
@@ -118,6 +119,29 @@ const RequestsTableItem = (props: Props): JSX.Element => {
       <th scope="row" className={styles.requestsTableItemIndex}>
         {index + 1}.
       </th>
+      <td>
+        {request.user.avatarURL && request.user.avatarURL !== 'null' ? (
+          <img
+            src={request.user.avatarURL}
+            className={styles.userAvatar}
+            alt={`profile picture`}
+            data-testid="display-img"
+            crossOrigin="anonymous"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : (
+          <Avatar
+            data-testid="display-img"
+            size={45}
+            avatarStyle={styles.avatarStyle}
+            name={`${request.user.name}`}
+            alt={`dummy picture`}
+          />
+        )}
+      </td>
       <td className={styles.requestsTableItemName}>{`${request.user.name}`}</td>
       <td className={styles.requestsTableItemEmail}>
         {request.user.emailAddress}
