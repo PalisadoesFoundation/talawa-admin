@@ -207,6 +207,20 @@ describe('updateEnvFile', () => {
     expect(written).toContain('EXISTING_KEY="value\\"with\\\\backslash"');
   });
 
+  it('should allow empty values without quoting', () => {
+    const envContent = '';
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('EMPTY_KEY', '');
+
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+    expect(written).toContain('EMPTY_KEY=');
+  });
+
   it('should remove existing commented key lines when updating', () => {
     const envContent = '# EXISTING_KEY=should_be_removed\nANOTHER=1\n';
     vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);

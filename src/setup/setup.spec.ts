@@ -74,6 +74,15 @@ describe('Talawa Admin Setup', () => {
 
     expect(askAndUpdatePort).not.toHaveBeenCalled();
     expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
+    // When Docker is used, docker-specific env vars should be written
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_TALAWA_URL',
+      'http://host.docker.internal:4000/graphql',
+    );
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL',
+      'ws://host.docker.internal:4000/graphql',
+    );
   });
 
   it('should handle error logging setup when user opts in', async () => {
