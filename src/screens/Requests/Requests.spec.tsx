@@ -782,7 +782,7 @@ describe('Testing Requests screen', () => {
   });
 
   test('should handle empty state when organization returns null', async () => {
-    const NULL_FETCH_MORE_MOCKS = [
+    const NULL_ORGANIZATION_MOCKS = [
       {
         request: {
           query: ORGANIZATION_LIST,
@@ -831,10 +831,13 @@ describe('Testing Requests screen', () => {
       },
     ];
 
-    const linkNullFetchMore = new StaticMockLink(NULL_FETCH_MORE_MOCKS, true);
+    const linkNullOrganization = new StaticMockLink(
+      NULL_ORGANIZATION_MOCKS,
+      true,
+    );
 
     render(
-      <MockedProvider addTypename={false} link={linkNullFetchMore}>
+      <MockedProvider addTypename={false} link={linkNullOrganization}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -848,6 +851,13 @@ describe('Testing Requests screen', () => {
     await waitFor(() => {
       expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
     });
+    // Verify the component renders without crashing
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+
+    // Verify appropriate empty state or error handling
+    expect(
+      screen.getByText(/No Membership Requests Found/i),
+    ).toBeInTheDocument();
   });
 
   test('Search functionality should handle special characters', async () => {
@@ -1173,5 +1183,138 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
     unmount();
+  });
+
+  test('should handle fetchMore with no result returned', async () => {
+    const NO_FETCH_MORE_RESULT_MOCKS = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'org1',
+                name: 'Test Organization',
+                addressLine1: '123 Test Street',
+                description: 'Test description',
+                avatarURL: null,
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'user1',
+                      },
+                    },
+                  ],
+                  pageInfo: {
+                    hasNextPage: false,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'org1',
+              membershipRequests: Array(8).fill({
+                membershipRequestId: '1',
+                createdAt: '2023-01-01T00:00:00Z',
+                status: 'pending',
+                user: {
+                  id: 'user1',
+                  name: 'Test User',
+                  emailAddress: 'test@example.com',
+                },
+              }),
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 8,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: null, // This will cause fetchMoreResult to be falsy
+        },
+      },
+    ];
+
+    const linkNoFetchMoreResult = new StaticMockLink(
+      NO_FETCH_MORE_RESULT_MOCKS,
+      true,
+    );
+
+    render(
+      <MockedProvider addTypename={false} link={linkNoFetchMoreResult}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(500);
+
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
+
+    // Verify initial data is present
+    const testUserElements = screen.getAllByText('Test User');
+    expect(testUserElements.length).toBeGreaterThanOrEqual(1);
+    const initialRowCount = screen.getAllByRole('row').length;
+
+    // Try resilient scroll approach
+    const infiniteScrollDiv = document.querySelector(
+      '[data-testid="infinite-scroll-component"]',
+    );
+
+    if (infiniteScrollDiv) {
+      fireEvent.scroll(infiniteScrollDiv, {
+        target: {
+          scrollTop: infiniteScrollDiv.scrollHeight,
+        },
+      });
+    } else {
+      // Fallback to window scroll
+      fireEvent.scroll(window, {
+        target: {
+          scrollY: document.documentElement.scrollHeight,
+          innerHeight: window.innerHeight,
+          scrollHeight: document.documentElement.scrollHeight,
+        },
+      });
+    }
+
+    await wait(500);
+
+    // Verify row count didn't increase (fetchMore returned null)
+    expect(screen.getAllByRole('row').length).toBe(initialRowCount);
+
+    // Verify original data still present
+    expect(screen.getAllByText('Test User').length).toBeGreaterThanOrEqual(1);
   });
 });
